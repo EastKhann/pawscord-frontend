@@ -225,13 +225,13 @@ const isProductionBuild = import.meta.env.PROD || process.env.NODE_ENV === 'prod
 
 const API_URL_BASE_STRING = (() => {
     // 1. Mobil Uygulama ise gerçek siteye git
-    if (isNative) return "https://pawscord.com";
+    if (isNative) return "https://api.pawscord.com";
 
     // 2. Electron Masaüstü ise
     if (isElectron) {
-        // Production build'de (EXE dağıtımı) pawscord.com kullan
+        // Production build'de (EXE dağıtımı) api.pawscord.com kullan
         // Development'ta localhost kullan
-        return isProductionBuild ? "https://pawscord.com" : `http://127.0.0.1:${DJANGO_PORT}`;
+        return isProductionBuild ? "https://api.pawscord.com" : `http://127.0.0.1:${DJANGO_PORT}`;
     }
 
     // 3. Web Tarayıcısı ise (Chrome/Edge) adres çubuğundaki IP neyse onu kullan.
@@ -240,7 +240,7 @@ const API_URL_BASE_STRING = (() => {
     const hostname = window.location.hostname;
 
     if (hostname.includes('pawscord.com')) {
-        return "https://pawscord.com";
+        return "https://api.pawscord.com";
     }
 
     return `${protocol}//${hostname}:${DJANGO_PORT}`;
@@ -249,7 +249,7 @@ const API_URL_BASE_STRING = (() => {
 // 🔥 FIX: Media dosyaları için ayrı URL (EXE/APK'da production URL kullan)
 const MEDIA_BASE_URL = (() => {
     // EXE veya APK ise MUTLAKA production URL kullan (media dosyaları localhost'ta yok)
-    if (isElectron || isNative) return "https://pawscord.com";
+    if (isElectron || isNative) return "https://www.pawscord.com";
 
     // Web tarayıcısında ise normal API URL'i kullan
     return API_URL_BASE_STRING;

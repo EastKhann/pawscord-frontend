@@ -21,7 +21,7 @@ const usePageTracking = (apiBaseUrl, fetchWithAuth) => {
             try {
                 const sessionId = getOrCreateSessionId();
 
-                await fetch(`${apiBaseUrl}/analytics/track/`, {
+                await fetch(`${apiBaseUrl}/api/analytics/track/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
