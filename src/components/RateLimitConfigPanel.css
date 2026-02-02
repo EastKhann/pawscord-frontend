@@ -1,0 +1,464 @@
+/* frontend/src/components/RateLimitConfigPanel.css */
+
+/* Overlay */
+.rate-limit-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+/* Main Panel */
+.rate-limit-panel {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header */
+.rate-limit-panel .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px 16px 0 0;
+}
+
+.rate-limit-panel .panel-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+.rate-limit-panel .panel-header h2 svg {
+    color: #14b8a6;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.unsaved-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(245, 158, 11, 0.2);
+    border-radius: 8px;
+    color: #f59e0b;
+    font-size: 0.85rem;
+}
+
+.rate-limit-panel .close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.rate-limit-panel .close-btn:hover {
+    background: #ef4444;
+}
+
+/* Body */
+.panel-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.category-sidebar {
+    width: 200px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+.category-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.category-btn.active {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    color: #fff;
+}
+
+.category-btn svg {
+    font-size: 1rem;
+}
+
+/* Config Content */
+.config-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.config-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    margin: 0 0 20px 0;
+    font-size: 1.2rem;
+}
+
+.config-section h3 svg {
+    color: #14b8a6;
+}
+
+.section-desc {
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* Config Toggle */
+.config-toggle {
+    margin-bottom: 24px;
+}
+
+.config-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.config-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Config Grid */
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.config-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.config-item label {
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.config-item input[type="number"] {
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.config-item input:focus {
+    border-color: #14b8a6;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+}
+
+.config-item small {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+/* Info Box */
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 10px;
+    margin-top: 24px;
+}
+
+.info-box svg {
+    color: #3b82f6;
+    margin-top: 2px;
+}
+
+.info-box p {
+    margin: 0;
+    color: #93c5fd;
+    font-size: 0.9rem;
+}
+
+/* Add Exemption */
+.add-exemption {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.add-exemption select,
+.add-exemption input {
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.add-exemption select {
+    width: 120px;
+}
+
+.add-exemption select option {
+    background: #1a1a2e;
+}
+
+.add-exemption input {
+    flex: 1;
+}
+
+.add-exemption button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-exemption button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+}
+
+/* Exemptions List */
+.exemptions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.exemption-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.type-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.type-badge.role {
+    background: rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+}
+
+.type-badge.user {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+}
+
+.type-badge.bot {
+    background: rgba(34, 197, 94, 0.2);
+    color: #86efac;
+}
+
+.exemption-id {
+    flex: 1;
+    color: #fff;
+    font-family: monospace;
+}
+
+.exemption-item .remove-btn {
+    padding: 8px;
+    background: rgba(239, 68, 68, 0.2);
+    border: none;
+    border-radius: 6px;
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.exemption-item .remove-btn:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.no-exemptions {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+/* Footer */
+.panel-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0 0 16px 16px;
+}
+
+.reset-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.reset-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.save-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.save-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(20, 184, 166, 0.4);
+}
+
+.save-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Loading */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rate-limit-panel {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .panel-body {
+        flex-direction: column;
+    }
+
+    .category-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 12px;
+    }
+
+    .category-btn {
+        white-space: nowrap;
+    }
+
+    .category-btn span {
+        display: none;
+    }
+
+    .config-content {
+        padding: 16px;
+    }
+
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .add-exemption {
+        flex-direction: column;
+    }
+
+    .add-exemption select {
+        width: 100%;
+    }
+
+    .panel-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .reset-btn,
+    .save-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

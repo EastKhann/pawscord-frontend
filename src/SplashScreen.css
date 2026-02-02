@@ -1,0 +1,295 @@
+/* frontend/src/SplashScreen.css - Modern Animated Splash */
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    overflow: hidden;
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s 0.2s;
+}
+
+.splash-screen.finished {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.splash-screen.finished .particles,
+.splash-screen.finished .rings-container,
+.splash-screen.finished .logo-glow {
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+}
+
+/* Floating Particles */
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    bottom: -20px;
+    left: var(--x);
+    width: var(--size);
+    height: var(--size);
+    background: rgba(114, 137, 218, 0.6);
+    border-radius: 50%;
+    animation: float-up var(--duration) ease-in-out infinite;
+    animation-delay: var(--delay);
+    filter: blur(1px);
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Animated Rings */
+.rings-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    pointer-events: none;
+}
+
+.ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(114, 137, 218, 0.3);
+    border-radius: 50%;
+    animation: ring-pulse 2s ease-out infinite;
+}
+
+.ring-1 {
+    width: 200px;
+    height: 200px;
+    animation-delay: 0s;
+}
+
+.ring-2 {
+    width: 260px;
+    height: 260px;
+    animation-delay: 0.3s;
+}
+
+.ring-3 {
+    width: 320px;
+    height: 320px;
+    animation-delay: 0.6s;
+}
+
+@keyframes ring-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Logo Container - Tam ortada, rings ile aynı pozisyonda */
+.logo-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(114, 137, 218, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.8;
+    }
+}
+
+/* Logo */
+.splash-logo {
+    position: relative;
+    z-index: 11;
+    width: 180px;
+    height: 180px;
+    opacity: 0;
+    animation: logo-entrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.3s;
+    filter: drop-shadow(0 0 30px rgba(114, 137, 218, 0.6));
+}
+
+@keyframes logo-entrance {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Brand Text */
+.brand-text {
+    position: absolute;
+    top: calc(50% + 120px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+}
+
+.letter {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(114, 137, 218, 0.5);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: letter-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: calc(0.4s + var(--i) * 0.05s);
+}
+
+@keyframes letter-pop {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Loading Bar */
+.loading-bar {
+    position: absolute;
+    top: calc(50% + 170px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.loading-progress {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #7289da, #5865f2, #7289da);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: loading-slide 1.2s ease-in-out infinite, loading-fill 1.5s ease-out forwards;
+}
+
+@keyframes loading-slide {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes loading-fill {
+    0% {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+
+    100% {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+/* Pre-transition state - everything fades nicely */
+.splash-screen.pre-transition .logo-container {
+    animation: logo-exit 0.5s ease-in forwards;
+}
+
+.splash-screen.pre-transition .brand-text {
+    animation: fade-up 0.4s ease-out forwards;
+}
+
+.splash-screen.pre-transition .loading-bar {
+    animation: fade-up 0.3s ease-out forwards;
+}
+
+@keyframes logo-exit {
+    to {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes fade-up {
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}

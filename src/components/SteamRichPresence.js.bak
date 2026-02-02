@@ -1,0 +1,361 @@
+// frontend/src/components/SteamRichPresence.js
+export default SteamRichPresence;
+
+};
+    }
+        fontSize: '12px'
+        color: '#b9bbbe',
+    achievementDesc: {
+    },
+        marginBottom: '4px'
+        fontWeight: '500',
+        fontSize: '14px',
+        color: '#ffffff',
+    achievementName: {
+    },
+        flex: 1
+    achievementInfo: {
+    },
+        borderRadius: '4px'
+        height: '48px',
+        width: '48px',
+    achievementIcon: {
+    },
+        marginBottom: '8px'
+        padding: '8px',
+        gap: '12px',
+        display: 'flex',
+    achievement: {
+    },
+        padding: '16px'
+        borderRadius: '8px',
+        backgroundColor: '#2f3136',
+    achievements: {
+    },
+        fontSize: '12px'
+        color: '#b9bbbe',
+    gameItemTime: {
+    },
+        marginBottom: '4px'
+        fontWeight: '500',
+        fontSize: '14px',
+        color: '#ffffff',
+    gameItemName: {
+    },
+        justifyContent: 'center'
+        flexDirection: 'column',
+        display: 'flex',
+        flex: 1,
+    gameItemInfo: {
+    },
+        objectFit: 'cover'
+        borderRadius: '4px',
+        height: '60px',
+        width: '60px',
+    gameThumb: {
+    },
+        transition: 'background 0.2s'
+        marginBottom: '8px',
+        borderRadius: '4px',
+        padding: '8px',
+        gap: '12px',
+        display: 'flex',
+    gameItem: {
+    },
+        gap: '8px'
+        alignItems: 'center',
+        display: 'flex',
+        marginBottom: '12px',
+        fontWeight: 'bold',
+        fontSize: '14px',
+        color: '#ffffff',
+    sectionTitle: {
+    },
+        padding: '16px'
+        borderRadius: '8px',
+        backgroundColor: '#2f3136',
+    recentGames: {
+    },
+        fontSize: '13px'
+        color: '#b9bbbe',
+        gap: '6px',
+        alignItems: 'center',
+        display: 'flex',
+    gameTime: {
+    },
+        marginBottom: '8px'
+        fontWeight: 'bold',
+        fontSize: '18px',
+        color: '#ffffff',
+    gameName: {
+    },
+        flex: 1
+    gameDetails: {
+    },
+        objectFit: 'cover'
+        borderRadius: '8px',
+        height: '120px',
+        width: '120px',
+    gameImage: {
+    },
+        gap: '16px'
+        display: 'flex',
+    gameInfo: {
+    },
+        marginBottom: '12px'
+        fontWeight: 'bold',
+        fontSize: '14px',
+        color: '#66c0f4',
+        gap: '8px',
+        alignItems: 'center',
+        display: 'flex',
+    gameHeader: {
+    },
+        border: '2px solid #66c0f4'
+        padding: '16px',
+        borderRadius: '8px',
+        backgroundColor: '#2f3136',
+    currentGame: {
+    },
+        color: '#b9bbbe'
+        padding: '40px',
+        textAlign: 'center',
+    empty: {
+    },
+        color: '#b9bbbe'
+        padding: '40px',
+        textAlign: 'center',
+    loading: {
+    },
+        gap: '20px'
+        flexDirection: 'column',
+        display: 'flex',
+    content: {
+    },
+        fontSize: '13px'
+        cursor: 'pointer',
+        borderRadius: '4px',
+        padding: '8px 16px',
+        border: 'none',
+        color: '#ffffff',
+        backgroundColor: '#ed4245',
+    disconnectButton: {
+    },
+        margin: '0 auto'
+        fontWeight: 'bold',
+        fontSize: '14px',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        padding: '12px 24px',
+        border: 'none',
+        color: '#ffffff',
+        backgroundColor: '#66c0f4',
+        gap: '8px',
+        alignItems: 'center',
+        display: 'flex',
+    connectButton: {
+    },
+        margin: '16px 0'
+        fontSize: '14px',
+        color: '#b9bbbe',
+    description: {
+    },
+        margin: 0
+        fontSize: '18px',
+        color: '#ffffff',
+    title: {
+    },
+        gap: '12px'
+        alignItems: 'center',
+        display: 'flex',
+    headerLeft: {
+    },
+        borderBottom: '1px solid #202225'
+        paddingBottom: '16px',
+        marginBottom: '20px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        display: 'flex',
+    header: {
+    },
+        padding: '20px'
+        borderRadius: '8px',
+        backgroundColor: '#36393f',
+    container: {
+    },
+        margin: '0 auto'
+        maxWidth: '400px',
+        textAlign: 'center',
+        padding: '40px',
+        borderRadius: '8px',
+        backgroundColor: '#36393f',
+    connectCard: {
+const styles = {
+
+};
+    );
+        </div>
+            )}
+                <div style={styles.empty}>Henüz oyun oynamadınız</div>
+            ) : (
+                </div>
+                    )}
+                        </div>
+                            ))}
+                                </div>
+                                    </div>
+                                        <div style={styles.achievementDesc}>{achievement.description}</div>
+                                        <div style={styles.achievementName}>{achievement.name}</div>
+                                    <div style={styles.achievementInfo}>
+                                    <img src={achievement.icon} alt={achievement.name} style={styles.achievementIcon} />
+                                <div key={idx} style={styles.achievement}>
+                            {steamData.achievements.map((achievement, idx) => (
+                            </h4>
+                                <span>Son Kazanılan Başarımlar</span>
+                                <FaTrophy size={16} color="#faa61a" />
+                            <h4 style={styles.sectionTitle}>
+                        <div style={styles.achievements}>
+                    {steamData.achievements && (
+                    {/* Achievements */}
+
+                    </div>
+                        ))}
+                            </div>
+                                </div>
+                                    <div style={styles.gameItemTime}>{game.playtime_2weeks}h (2 hafta)</div>
+                                    <div style={styles.gameItemName}>{game.name}</div>
+                                <div style={styles.gameItemInfo}>
+                                <img src={game.image} alt={game.name} style={styles.gameThumb} />
+                            <div key={game.appid} style={styles.gameItem}>
+                        {steamData.recent_games?.map(game => (
+                        <h4 style={styles.sectionTitle}>Son Oynanan Oyunlar</h4>
+                    <div style={styles.recentGames}>
+                    {/* Recent Games */}
+
+                    )}
+                        </div>
+                            </div>
+                                </div>
+                                    </div>
+                                        <span>Oynama süresi: {steamData.current_game.playtime}h</span>
+                                        <FaClock size={12} />
+                                    <div style={styles.gameTime}>
+                                    <div style={styles.gameName}>{steamData.current_game.name}</div>
+                                <div style={styles.gameDetails}>
+                                />
+                                    style={styles.gameImage}
+                                    alt={steamData.current_game.name}
+                                    src={steamData.current_game.image}
+                                <img
+                            <div style={styles.gameInfo}>
+                            </div>
+                                <span>Şu anda oynuyor</span>
+                                <FaGamepad size={20} color="#66c0f4" />
+                            <div style={styles.gameHeader}>
+                        <div style={styles.currentGame}>
+                    {steamData.current_game && (
+                    {/* Current Game */}
+                <div style={styles.content}>
+            ) : steamData ? (
+                <div style={styles.loading}>Yükleniyor...</div>
+            {loading ? (
+
+            </div>
+                </button>
+                    Bağlantıyı Kes
+                <button onClick={disconnectSteam} style={styles.disconnectButton}>
+                </div>
+                    <h3 style={styles.title}>Steam Rich Presence</h3>
+                    <FaSteam size={24} color="#66c0f4" />
+                <div style={styles.headerLeft}>
+            <div style={styles.header}>
+        <div style={styles.container}>
+    return (
+
+    }
+        );
+            </div>
+                </button>
+                    <span>Steam ile Bağlan</span>
+                    <FaSteam size={16} />
+                <button onClick={connectSteam} style={styles.connectButton}>
+                </p>
+                    Steam hesabınızı bağlayarak oynadığınız oyunları arkadaşlarınızla paylaşın
+                <p style={styles.description}>
+                <h3 style={styles.title}>Steam Entegrasyonu</h3>
+                <FaSteam size={48} color="#66c0f4" />
+            <div style={styles.connectCard}>
+        return (
+    if (!connected) {
+
+    };
+        }
+            console.error('Steam disconnect error:', error);
+        } catch (error) {
+            setSteamData(null);
+            setConnected(false);
+            });
+                method: 'POST'
+            await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/disconnect/`, {
+        try {
+
+        if (!confirm('Steam bağlantısını kesmek istediğinize emin misiniz?')) return;
+    const disconnectSteam = async () => {
+
+    };
+        }
+            console.error('Steam connect error:', error);
+        } catch (error) {
+            }
+                window.open(data.auth_url, '_blank');
+                const data = await res.json();
+            if (res.ok) {
+            });
+                method: 'POST'
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/connect/`, {
+        try {
+    const connectSteam = async () => {
+
+    };
+        setLoading(false);
+        }
+            console.error('Steam data error:', error);
+        } catch (error) {
+            }
+                setSteamData(data);
+                const data = await res.json();
+            if (res.ok) {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/presence/`);
+        try {
+        setLoading(true);
+    const loadSteamData = async () => {
+
+    };
+        }
+            console.error('Steam check error:', error);
+        } catch (error) {
+            }
+                }
+                    loadSteamData();
+                if (data.connected) {
+                setConnected(data.connected);
+                const data = await res.json();
+            if (res.ok) {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/status/`);
+        try {
+    const checkSteamConnection = async () => {
+
+    }, [userId]);
+        checkSteamConnection();
+    useEffect(() => {
+
+    const [loading, setLoading] = useState(false);
+    const [connected, setConnected] = useState(false);
+    const [steamData, setSteamData] = useState(null);
+const SteamRichPresence = ({ userId, fetchWithAuth, apiBaseUrl }) => {
+
+import { FaSteam, FaGamepad, FaClock, FaTrophy } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+
+
+

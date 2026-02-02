@@ -1,0 +1,46 @@
+{
+  "appId": "com.dogukan.pawscord.debug",
+  "productName": "Pawscord Debug",
+  "files": [
+    "build/**/*",
+    "node_modules/**/*",
+    "public/electron.js",
+    "package.json"
+  ],
+  "asarUnpack": [
+    "build/**/*"
+  ],
+  "extraMetadata": {
+    "main": "public/electron.js"
+  },
+  "directories": {
+    "buildResources": "public",
+    "output": "dist-debug"
+  },
+  "win": {
+    "target": {
+      "target": "nsis",
+      "arch": [
+        "x64"
+      ]
+    },
+    "icon": "public/logo.ico",
+    "requestedExecutionLevel": "asInvoker"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "deleteAppDataOnUninstall": false,
+    "runAfterFinish": true,
+    "differentialPackage": false,
+    "artifactName": "Pawscord-Debug-Setup-${version}.${ext}",
+    "shortcutName": "Pawscord Debug",
+    "include": "public/installer.nsh",
+    "installerIcon": "public/logo.ico",
+    "uninstallerIcon": "public/logo.ico",
+    "allowElevation": true
+  }
+}

@@ -1,0 +1,323 @@
+/* Custom Status Styles */
+
+/* Display Mode */
+.custom-status-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-secondary, #2f3136);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.custom-status-display:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.4));
+}
+
+.status-emoji {
+    font-size: 18px;
+}
+
+.status-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-normal, #dcddde);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-placeholder {
+    color: var(--text-muted, #72767d);
+    font-size: 14px;
+}
+
+.status-clear-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted, #72767d);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.custom-status-display:hover .status-clear-btn {
+    opacity: 1;
+}
+
+.status-clear-btn:hover {
+    color: var(--text-normal, #dcddde);
+    background: var(--bg-modifier-selected, rgba(79, 84, 92, 0.6));
+}
+
+/* Editor Mode */
+.custom-status-editor {
+    background: var(--bg-secondary, #2f3136);
+    border-radius: 8px;
+    padding: 16px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.status-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-normal, #dcddde);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted, #72767d);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+}
+
+.close-btn:hover {
+    color: var(--text-normal, #dcddde);
+}
+
+/* Input Row */
+.status-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.emoji-selector {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-tertiary, #202225);
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.emoji-selector:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.4));
+}
+
+.status-input {
+    flex: 1;
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text-normal, #dcddde);
+    font-size: 14px;
+    outline: none;
+}
+
+.status-input::placeholder {
+    color: var(--text-muted, #72767d);
+}
+
+.status-input:focus {
+    box-shadow: 0 0 0 2px var(--brand-experiment, #5865f2);
+}
+
+/* Emoji Picker */
+.emoji-picker {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    padding: 8px;
+    background: var(--bg-tertiary, #202225);
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.emoji-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+
+.emoji-btn:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.4));
+}
+
+/* Character Count */
+.character-count {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-muted, #72767d);
+    margin-bottom: 12px;
+}
+
+/* Preset Statuses */
+.preset-statuses {
+    margin-bottom: 16px;
+}
+
+.preset-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted, #72767d);
+    margin-bottom: 8px;
+}
+
+.preset-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.preset-btn {
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--text-normal, #dcddde);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.preset-btn:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.6));
+}
+
+/* Clear After */
+.clear-after-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.clear-after-section label {
+    font-size: 13px;
+    color: var(--text-muted, #72767d);
+}
+
+.clear-after-section select {
+    flex: 1;
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text-normal, #dcddde);
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
+}
+
+.clear-after-section select:focus {
+    box-shadow: 0 0 0 2px var(--brand-experiment, #5865f2);
+}
+
+/* Actions */
+.status-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.btn-secondary {
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    color: var(--text-normal, #dcddde);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-secondary:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.6));
+}
+
+.btn-primary {
+    background: var(--brand-experiment, #5865f2);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-primary:hover {
+    background: var(--brand-experiment-560, #4752c4);
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-secondary, #2f3136);
+    border-radius: 16px;
+    padding: 4px 10px;
+}
+
+.status-badge.small {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+.status-badge.medium {
+    padding: 4px 10px;
+    font-size: 13px;
+}
+
+.status-badge.large {
+    padding: 6px 14px;
+    font-size: 14px;
+}
+
+.badge-emoji {
+    font-size: inherit;
+}
+
+.badge-text {
+    color: var(--text-muted, #72767d);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+/* Status Indicator */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.online-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-primary, #36393f);
+}
+
+.custom-status-emoji {
+    font-size: 14px;
+}

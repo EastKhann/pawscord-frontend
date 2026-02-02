@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "tag": "DIV",
+      "text": "",
+      "title": null,
+      "outerHTML": "<div id=\"root\"></div>",
+      "x": 0,
+      "y": 0,
+      "w": 800,
+      "h": 600
+    }
+  ],
+  "console": [
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+    }
+  ]
+}

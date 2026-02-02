@@ -1,0 +1,330 @@
+/* frontend/src/styles/mobile.css */
+/* 📱 MOBILE-FIRST RESPONSIVE STYLES */
+
+/* ========================================
+   GLOBAL MOBILE OPTIMIZATIONS
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* 🔥 Prevent text selection on mobile (better UX) */
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+    }
+
+    /* 🔥 Optimize touch targets (min 44x44px - Apple HIG) */
+    button, a, input, select, textarea {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* 🔥 Smooth scrolling on iOS */
+    body {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+    }
+}
+
+/* ========================================
+   LAYOUT ADJUSTMENTS
+   ======================================== */
+
+/* 📱 Mobile: Stack everything vertically */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column !important;
+    }
+
+    /* Server list: Horizontal scrollable bar */
+    .server-list {
+        width: 100% !important;
+        height: 60px !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 8px 4px !important;
+    }
+
+    .server-icon {
+        width: 48px !important;
+        height: 48px !important;
+        margin: 0 4px !important;
+    }
+
+    /* Sidebar: Bottom navigation */
+    .sidebar {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        flex-direction: row !important;
+        z-index: 1000 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-right: none !important;
+    }
+
+    /* Main chat area: Full screen */
+    .chat-container {
+        width: 100% !important;
+        height: calc(100vh - 60px - 56px) !important; /* minus top bar and bottom nav */
+        max-width: 100% !important;
+    }
+
+    /* User list: Slide-in drawer */
+    .user-list {
+        position: fixed !important;
+        top: 60px !important;
+        right: -100% !important;
+        width: 80% !important;
+        max-width: 320px !important;
+        height: calc(100vh - 60px) !important;
+        transition: right 0.3s ease !important;
+        z-index: 999 !important;
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .user-list.open {
+        right: 0 !important;
+    }
+}
+
+/* ========================================
+   VOICE CHAT MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Voice panel: Minimized by default on mobile */
+    .voice-chat-panel {
+        position: fixed !important;
+        bottom: 56px !important; /* above bottom nav */
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: 50vh !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+
+    .voice-chat-panel.minimized {
+        height: 60px !important;
+        max-height: 60px !important;
+    }
+
+    .voice-chat-panel.fullscreen {
+        top: 0 !important;
+        bottom: 0 !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+    }
+
+    /* Video grid: 1 column on mobile */
+    .video-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    /* Video cards: Larger on mobile */
+    .video-card {
+        min-height: 200px !important;
+        aspect-ratio: 16/9 !important;
+    }
+}
+
+/* ========================================
+   MESSAGE INPUT MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .message-input-container {
+        position: sticky !important;
+        bottom: 0 !important;
+        background: var(--bg-tertiary) !important;
+        padding: 8px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .message-input {
+        font-size: 16px !important; /* Prevent iOS zoom on focus */
+        min-height: 44px !important;
+        padding: 12px 16px !important;
+    }
+
+    /* 🔥 YENİ: Sol ve sağ buton grupları için özel ayar */
+    .message-input-wrapper {
+        gap: 4px !important;
+    }
+
+    .message-input-actions-left,
+    .message-input-actions-right {
+        gap: 2px !important;
+    }
+
+    /* 🔥 YENİ: Butonları küçült */
+    .message-input-actions-left button,
+    .message-input-actions-right button {
+        font-size: 16px !important;
+        padding: 6px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+    }
+
+    /* 🔥 YENİ: Textarea'ya daha fazla alan ver */
+    .message-input textarea {
+        flex: 1 !important;
+        min-width: 0 !important;
+        font-size: 14px !important;
+        padding: 8px 10px !important;
+    }
+
+    /* 🔥 YENİ: Gereksiz butonları gizle (template, schedule) */
+    .message-input-template-btn,
+    .message-input-schedule-btn {
+        display: none !important;
+    }
+
+    /* Action buttons: Larger touch targets */
+    .message-actions button {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 20px !important;
+    }
+
+    /* Emoji picker: Full width on mobile */
+    .emoji-picker {
+        position: fixed !important;
+        bottom: 56px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-height: 50vh !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+}
+
+/* ========================================
+   MODALS & OVERLAYS
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* All modals: Full screen on mobile */
+    .modal-overlay {
+        align-items: flex-end !important; /* slide from bottom */
+    }
+
+    .modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 90vh !important;
+        max-height: 90vh !important;
+        border-radius: 16px 16px 0 0 !important;
+        margin: 0 !important;
+        animation: slideUpMobile 0.3s ease !important;
+    }
+
+    @keyframes slideUpMobile {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    /* Context menus: Bottom sheet */
+    .context-menu {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        width: 100% !important;
+        border-radius: 16px 16px 0 0 !important;
+        max-height: 60vh !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* ========================================
+   TABLET (768px - 1024px)
+   ======================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Sidebar: Collapsible */
+    .sidebar {
+        width: 240px !important;
+        transition: width 0.3s ease !important;
+    }
+
+    .sidebar.collapsed {
+        width: 72px !important;
+    }
+
+    /* User list: Smaller */
+    .user-list {
+        width: 200px !important;
+    }
+
+    /* Voice panel: Smaller video grid */
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* 🔥 High contrast mode support */
+@media (prefers-contrast: more) {
+    :root {
+        --border-color: #ffffff !important;
+        --text-color: #ffffff !important;
+        --bg-primary: #000000 !important;
+    }
+}
+
+/* 🔥 Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   LANDSCAPE MODE MOBILE
+   ======================================== */
+
+@media (max-width: 896px) and (orientation: landscape) {
+    /* Remove bottom nav in landscape */
+    .sidebar {
+        display: none !important;
+    }
+
+    .chat-container {
+        height: 100vh !important;
+    }
+
+    /* Compact voice panel */
+    .voice-chat-panel {
+        max-height: 40vh !important;
+    }
+}
+
+/* ========================================
+   SAFE AREA (iPhone Notch)
+   ======================================== */
+
+/* Safe area padding sadece belirli elementlere uygulanmalı, tüm app-container'a değil */
+@supports (padding: max(0px)) {
+    .mobile-header {
+        padding-top: max(0px, env(safe-area-inset-top)) !important;
+    }
+
+    .sidebar {
+        padding-bottom: max(0px, env(safe-area-inset-bottom)) !important;
+    }
+}
+

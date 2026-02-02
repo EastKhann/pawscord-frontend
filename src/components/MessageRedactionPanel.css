@@ -1,0 +1,129 @@
+.message-redaction-panel {
+    background: #40444b;
+    border-radius: 8px;
+    padding: 15px;
+    color: #dcddde;
+}
+
+.redaction-header h3 {
+    color: #ffffff;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.redaction-message {
+    background: #2f3136;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.redaction-warning {
+    background: rgba(240, 71, 71, 0.1);
+    border-left: 3px solid #f04747;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.warning-icon {
+    color: #f04747;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.warning-text {
+    color: #dcddde;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.warning-text strong {
+    color: #f04747;
+}
+
+.redaction-form {
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    color: #b9bbbe;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.reason-textarea {
+    width: 100%;
+    background: #2f3136;
+    border: 2px solid #202225;
+    color: #dcddde;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.reason-textarea:focus {
+    outline: none;
+    border-color: #f04747;
+}
+
+.redact-btn {
+    width: 100%;
+    background: #f04747;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.redact-btn:hover:not(:disabled) {
+    background: #d84040;
+}
+
+.redact-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.redaction-info {
+    background: #2f3136;
+    padding: 12px;
+    border-radius: 4px;
+    border-left: 3px solid #5865f2;
+}
+
+.redaction-info h4 {
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    font-size: 12px;
+}
+
+.redaction-info ul {
+    margin: 0;
+    padding-left: 16px;
+    color: #b9bbbe;
+    font-size: 11px;
+    line-height: 1.6;
+}

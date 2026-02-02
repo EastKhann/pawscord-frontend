@@ -1,0 +1,728 @@
+/* frontend/src/components/panels/ExtraFeaturesPanel.css */
+/* 🚀 20 EK YENİ ÖZELLİK STİLLERİ - 26 Ocak 2026 */
+
+/* ========================================
+   BASE STYLES
+======================================== */
+.extra-features-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 16px;
+    padding: 24px;
+    min-height: 500px;
+    color: #fff;
+}
+
+.extra-features-panel .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.extra-features-panel .panel-header h2 {
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.extra-features-panel .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.extra-features-panel .feature-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+}
+
+.extra-features-panel .feature-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #667eea;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.extra-features-panel .feature-emoji {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+}
+
+.extra-features-panel .feature-name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.extra-features-panel .feature-desc {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========================================
+   FEATURE PANEL BASE
+======================================== */
+.feature-panel {
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.feature-panel .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feature-panel .panel-header h3 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.feature-panel .close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.feature-panel .close-btn:hover {
+    background: rgba(255, 100, 100, 0.3);
+}
+
+.feature-panel .panel-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feature-panel .empty {
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    padding: 20px;
+}
+
+.feature-panel .loading {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========================================
+   SCHEDULED MESSAGES
+======================================== */
+.scheduled-messages .scheduled-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.scheduled-messages .scheduled-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scheduled-messages .scheduled-item .time {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.scheduled-messages .add-scheduled {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.scheduled-messages .add-scheduled input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: #fff;
+}
+
+.scheduled-messages .add-scheduled button {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* ========================================
+   MOOD STATUS
+======================================== */
+.mood-status .current-mood {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.mood-status .mood-emoji {
+    font-size: 3rem;
+}
+
+.mood-status .mood-name {
+    font-size: 1.25rem;
+    text-transform: capitalize;
+}
+
+.mood-status .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.mood-status .mood-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 12px 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.mood-status .mood-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mood-status .mood-btn.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: currentColor;
+}
+
+.mood-status .mood-btn .emoji {
+    font-size: 1.5rem;
+}
+
+.mood-status .mood-btn .name {
+    font-size: 0.7rem;
+    text-transform: capitalize;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========================================
+   SERVER TEMPLATES
+======================================== */
+.server-templates .templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.server-templates .template-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s;
+}
+
+.server-templates .template-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.server-templates .template-card h4 {
+    margin: 0 0 12px 0;
+}
+
+.server-templates .rooms,
+.server-templates .roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.server-templates .room-tag {
+    background: rgba(102, 126, 234, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.server-templates .role-tag {
+    background: rgba(118, 75, 162, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.server-templates .template-card button {
+    width: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* ========================================
+   CUSTOM COMMANDS
+======================================== */
+.custom-commands .commands-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.custom-commands .command-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.custom-commands .command-item code {
+    background: rgba(102, 126, 234, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.custom-commands .add-command {
+    display: flex;
+    gap: 8px;
+}
+
+.custom-commands .add-command input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+}
+
+.custom-commands .add-command button {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ========================================
+   SERVER ANALYTICS
+======================================== */
+.server-analytics .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.server-analytics .stat-card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.server-analytics .stat-card .value {
+    display: block;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.server-analytics .stat-card .label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.server-analytics .active-rooms h4 {
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+
+.server-analytics .room-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+/* ========================================
+   MEMBER LEVELS
+======================================== */
+.member-levels .leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.member-levels .member-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.member-levels .member-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.member-levels .member-row.top-1 {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.member-levels .member-row.top-2 {
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.2), rgba(192, 192, 192, 0.05));
+    border: 1px solid rgba(192, 192, 192, 0.3);
+}
+
+.member-levels .member-row.top-3 {
+    background: linear-gradient(90deg, rgba(205, 127, 50, 0.2), rgba(205, 127, 50, 0.05));
+    border: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+.member-levels .rank {
+    font-weight: 700;
+    min-width: 40px;
+    color: #667eea;
+}
+
+.member-levels .username {
+    flex: 1;
+}
+
+.member-levels .level {
+    background: rgba(102, 126, 234, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.member-levels .xp {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+}
+
+/* ========================================
+   WELCOME MESSAGES
+======================================== */
+.welcome-messages .setting-row {
+    margin-bottom: 16px;
+}
+
+.welcome-messages .setting-row label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.welcome-messages .setting-row textarea {
+    width: 100%;
+    min-height: 80px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    resize: vertical;
+    margin-top: 8px;
+}
+
+.welcome-messages .setting-row small {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+}
+
+.welcome-messages .save-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* ========================================
+   PRIVACY SETTINGS
+======================================== */
+.privacy-settings .privacy-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.privacy-settings .privacy-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.privacy-settings .toggle {
+    width: 48px;
+    height: 24px;
+    border-radius: 12px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.privacy-settings .toggle::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    top: 2px;
+    transition: all 0.3s;
+}
+
+.privacy-settings .toggle.off {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.privacy-settings .toggle.off::after {
+    left: 2px;
+}
+
+.privacy-settings .toggle.on {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.privacy-settings .toggle.on::after {
+    left: 26px;
+}
+
+.privacy-settings .save-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 16px;
+}
+
+/* ========================================
+   USER CONNECTIONS
+======================================== */
+.user-connections .connected-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.user-connections .connection-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid;
+    border-radius: 8px;
+}
+
+.user-connections .connection-item .icon {
+    font-size: 1.5rem;
+}
+
+.user-connections .connection-item .platform {
+    font-weight: 600;
+}
+
+.user-connections .connection-item .username {
+    flex: 1;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.user-connections .disconnect-btn {
+    background: rgba(255, 100, 100, 0.2);
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #ff6b6b;
+    cursor: pointer;
+}
+
+.user-connections h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.user-connections .platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+}
+
+.user-connections .platform-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.8rem;
+}
+
+.user-connections .platform-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.user-connections .platform-btn span:first-child {
+    font-size: 1.25rem;
+}
+
+/* ========================================
+   ACTIVITY STATUS
+======================================== */
+.activity-status .activity-types {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.activity-status .type-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.activity-status .type-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.activity-status .type-btn.active {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: #667eea;
+}
+
+.activity-status .type-btn span:first-child {
+    font-size: 1.5rem;
+}
+
+.activity-status input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.activity-status .save-btn {
+    width: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+    .extra-features-panel .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .mood-status .mood-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .server-templates .templates-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .server-analytics .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-status .activity-types {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .user-connections .platforms-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

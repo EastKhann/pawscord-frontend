@@ -1,0 +1,149 @@
+/* frontend/src/components/SpotifyActivity.css */
+/* 🎵 Spotify Activity Styles */
+
+.spotify-activity {
+    background: linear-gradient(135deg, #1db954 0%, #191414 100%);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 8px 0;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.spotify-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    margin-bottom: 10px;
+}
+
+.spotify-logo {
+    font-size: 16px;
+    color: #1db954;
+}
+
+.spotify-content {
+    display: flex;
+    gap: 12px;
+}
+
+.album-art {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.track-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.track-name {
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.artist-name {
+    font-size: 12px;
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #1db954;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.playback-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-icon {
+    font-size: 10px;
+}
+
+.status-icon.playing {
+    color: #1db954;
+    animation: pulse 1s infinite;
+}
+
+.status-icon.paused {
+    opacity: 0.5;
+}
+
+.spotify-link {
+    color: white;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.spotify-link:hover {
+    opacity: 1;
+}
+
+/* Compact Version */
+.spotify-activity-compact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #1db954;
+}
+
+.spotify-activity-compact .spotify-icon {
+    font-size: 14px;
+}
+
+.spotify-activity-compact .track-info {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    color: #b9bbbe;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Dark theme adjustments */
+.theme-dark .spotify-activity {
+    background: linear-gradient(135deg, #1a1a1a 0%, #191414 100%);
+    border: 1px solid #1db954;
+}

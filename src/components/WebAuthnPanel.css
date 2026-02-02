@@ -1,0 +1,230 @@
+.webauthn-panel {
+    background: #2f3136;
+    border-radius: 8px;
+    padding: 20px;
+    color: #dcddde;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.webauthn-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #40444b;
+}
+
+.webauthn-header h2 {
+    color: #ffffff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.shield-icon {
+    color: #43b581;
+    font-size: 28px;
+}
+
+.webauthn-info {
+    background: linear-gradient(135deg, #5865f2, #4752c4);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    color: #ffffff;
+}
+
+.info-icon {
+    font-size: 40px;
+    flex-shrink: 0;
+}
+
+.webauthn-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+}
+
+.webauthn-info p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.webauthn-error {
+    background: #f04747;
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.webauthn-success {
+    background: #43b581;
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.register-key-section {
+    background: #40444b;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.register-key-section h3 {
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.register-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.key-input {
+    flex: 1;
+    background: #2f3136;
+    border: 2px solid #202225;
+    color: #dcddde;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.key-input:focus {
+    outline: none;
+    border-color: #5865f2;
+}
+
+.register-btn {
+    background: #43b581;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.register-btn:hover {
+    background: #3ca374;
+}
+
+.register-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.register-help {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #b9bbbe;
+    font-size: 13px;
+    padding: 10px;
+    background: #2f3136;
+    border-radius: 4px;
+}
+
+.keys-list {
+    margin-top: 25px;
+}
+
+.keys-list h3 {
+    color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty-keys {
+    text-align: center;
+    padding: 40px;
+    color: #72767d;
+    font-style: italic;
+}
+
+.key-item {
+    background: #40444b;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.key-item:hover {
+    background: #36393f;
+    transform: translateX(5px);
+}
+
+.key-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.key-icon {
+    font-size: 24px;
+    color: #43b581;
+}
+
+.key-name {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.key-date {
+    color: #72767d;
+    font-size: 12px;
+}
+
+.remove-key-btn {
+    background: #f04747;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.remove-key-btn:hover {
+    background: #d84040;
+    transform: scale(1.05);
+}

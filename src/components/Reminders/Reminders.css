@@ -1,0 +1,335 @@
+/* Reminders Styles */
+
+.reminders-container {
+    background: var(--bg-secondary, #2f3136);
+    border-radius: 8px;
+    padding: 16px;
+    max-width: 400px;
+}
+
+.reminders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.reminders-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text-normal, #dcddde);
+}
+
+.reminder-count {
+    font-size: 12px;
+    color: var(--text-muted, #72767d);
+    background: var(--bg-tertiary, #202225);
+    padding: 4px 8px;
+    border-radius: 10px;
+}
+
+/* Add Reminder Form */
+.add-reminder-form {
+    margin-bottom: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.time-input {
+    width: 100px;
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    color: var(--text-normal, #dcddde);
+    font-size: 14px;
+    outline: none;
+}
+
+.message-input {
+    flex: 1;
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    color: var(--text-normal, #dcddde);
+    font-size: 14px;
+    outline: none;
+}
+
+.time-input:focus,
+.message-input:focus {
+    box-shadow: 0 0 0 2px var(--brand-experiment, #5865f2);
+}
+
+.time-input::placeholder,
+.message-input::placeholder {
+    color: var(--text-muted, #72767d);
+}
+
+.add-btn {
+    background: var(--brand-experiment, #5865f2);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 14px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.add-btn:hover {
+    background: var(--brand-experiment-560, #4752c4);
+}
+
+/* Quick Times */
+.quick-times {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.quick-time-btn {
+    background: var(--bg-tertiary, #202225);
+    border: none;
+    border-radius: 12px;
+    padding: 4px 10px;
+    color: var(--text-muted, #72767d);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.quick-time-btn:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.4));
+    color: var(--text-normal, #dcddde);
+}
+
+/* Reminders List */
+.reminders-list {
+    margin-bottom: 16px;
+}
+
+.reminders-list.past {
+    opacity: 0.6;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--bg-modifier-accent, rgba(79, 84, 92, 0.48));
+}
+
+.list-header span {
+    font-size: 12px;
+    color: var(--text-muted, #72767d);
+    text-transform: uppercase;
+}
+
+.clear-all-btn {
+    background: none;
+    border: none;
+    color: var(--text-link, #00aff4);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.clear-all-btn:hover {
+    text-decoration: underline;
+}
+
+/* Reminder Item */
+.reminder-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: var(--bg-tertiary, #202225);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    transition: all 0.15s;
+}
+
+.reminder-item:hover {
+    background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.4));
+}
+
+.reminder-item.urgent {
+    border-left: 3px solid #faa61a;
+    animation: urgentPulse 2s ease-in-out infinite;
+}
+
+@keyframes urgentPulse {
+
+    0%,
+    100% {
+        background: var(--bg-tertiary, #202225);
+    }
+
+    50% {
+        background: rgba(250, 166, 26, 0.1);
+    }
+}
+
+.reminder-item.past {
+    opacity: 0.7;
+}
+
+.reminder-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.reminder-message {
+    display: block;
+    font-size: 14px;
+    color: var(--text-normal, #dcddde);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.reminder-time {
+    font-size: 12px;
+    color: var(--text-muted, #72767d);
+}
+
+.reminder-item.urgent .reminder-time {
+    color: #faa61a;
+    font-weight: 500;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted, #72767d);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    transition: all 0.15s;
+}
+
+.reminder-item:hover .remove-btn {
+    opacity: 1;
+}
+
+.remove-btn:hover {
+    background: var(--status-danger, #ed4245);
+    color: white;
+}
+
+/* No Reminders */
+.no-reminders {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--text-muted, #72767d);
+}
+
+.empty-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.no-reminders p {
+    margin: 0 0 8px;
+    color: var(--text-normal, #dcddde);
+}
+
+.help-text {
+    font-size: 12px;
+    font-family: monospace;
+    background: var(--bg-tertiary, #202225);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Reminder Toast */
+.reminder-toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: var(--bg-floating, #18191c);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.toast-icon {
+    font-size: 32px;
+    animation: bellRing 0.5s ease-in-out infinite;
+}
+
+@keyframes bellRing {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(15deg);
+    }
+
+    75% {
+        transform: rotate(-15deg);
+    }
+}
+
+.toast-content {
+    flex: 1;
+}
+
+.toast-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-normal, #dcddde);
+    margin-bottom: 2px;
+}
+
+.toast-message {
+    font-size: 14px;
+    color: var(--text-muted, #72767d);
+}
+
+.toast-dismiss {
+    background: none;
+    border: none;
+    color: var(--text-muted, #72767d);
+    cursor: pointer;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.toast-dismiss:hover {
+    color: var(--text-normal, #dcddde);
+}

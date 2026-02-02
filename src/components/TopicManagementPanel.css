@@ -1,0 +1,151 @@
+.topic-management-panel {
+    background: #40444b;
+    border-radius: 8px;
+    padding: 15px;
+    color: #dcddde;
+}
+
+.topic-header h3 {
+    color: #ffffff;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.topic-message {
+    background: #2f3136;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.current-topic {
+    background: #2f3136;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    border-left: 3px solid #5865f2;
+}
+
+.topic-label {
+    color: #b9bbbe;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.topic-display {
+    color: #ffffff;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.topic-display em {
+    color: #72767d;
+}
+
+.topic-editor {
+    margin-bottom: 15px;
+}
+
+.topic-editor label {
+    display: block;
+    color: #b9bbbe;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.topic-textarea {
+    width: 100%;
+    background: #2f3136;
+    border: 2px solid #202225;
+    color: #dcddde;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.topic-textarea:focus {
+    outline: none;
+    border-color: #5865f2;
+}
+
+.char-count {
+    color: #72767d;
+    font-size: 11px;
+    text-align: right;
+    margin: 4px 0 10px 0;
+}
+
+.save-topic-btn {
+    width: 100%;
+    background: #43b581;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.save-topic-btn:hover:not(:disabled) {
+    background: #3ca374;
+}
+
+.save-topic-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.topic-history h4 {
+    color: #ffffff;
+    font-size: 13px;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item {
+    background: #2f3136;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.history-topic {
+    color: #dcddde;
+    font-size: 13px;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.history-topic em {
+    color: #72767d;
+    font-style: italic;
+}
+
+.history-meta {
+    display: flex;
+    gap: 10px;
+    color: #72767d;
+    font-size: 11px;
+}

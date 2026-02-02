@@ -1,0 +1,338 @@
+/* frontend/src/components/WebAuthnSetup.css */
+
+.webauthn-setup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(4px);
+}
+
+.webauthn-setup-modal {
+    background: #2b2d31;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.webauthn-setup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #3a3c42;
+}
+
+.webauthn-setup-header h2 {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.webauthn-setup-close {
+    background: transparent;
+    border: none;
+    color: #b5b9c0;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.webauthn-setup-close:hover {
+    background: #3a3c42;
+    color: #ffffff;
+}
+
+.webauthn-setup-content {
+    padding: 24px;
+}
+
+/* Info Box */
+.webauthn-setup-info {
+    background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+    padding: 24px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 24px;
+    color: #ffffff;
+}
+
+.webauthn-setup-info h3 {
+    margin: 12px 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.webauthn-setup-info p {
+    margin: 0;
+    opacity: 0.95;
+    font-size: 14px;
+}
+
+/* Messages */
+.webauthn-setup-error,
+.webauthn-setup-success,
+.webauthn-setup-error-box {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.webauthn-setup-error,
+.webauthn-setup-error-box {
+    background: rgba(237, 66, 69, 0.15);
+    border: 1px solid rgba(237, 66, 69, 0.4);
+    color: #f97583;
+}
+
+.webauthn-setup-success {
+    background: rgba(67, 181, 129, 0.15);
+    border: 1px solid rgba(67, 181, 129, 0.4);
+    color: #43b581;
+}
+
+/* Register Button */
+.webauthn-setup-register-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: #5865f2;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+}
+
+.webauthn-setup-register-btn:hover:not(:disabled) {
+    background: #4752c4;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+}
+
+.webauthn-setup-register-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.webauthn-setup-register-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Credentials List */
+.webauthn-setup-credentials {
+    margin-top: 24px;
+}
+
+.webauthn-setup-credentials h3 {
+    color: #b5b9c0;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.webauthn-setup-credential-item {
+    background: #1e1f22;
+    border: 1px solid #3a3c42;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.webauthn-setup-credential-item:hover {
+    border-color: #5865f2;
+    background: #232427;
+}
+
+.webauthn-setup-credential-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.webauthn-setup-credential-icon {
+    color: #5865f2;
+    font-size: 24px;
+}
+
+.webauthn-setup-credential-info strong {
+    color: #ffffff;
+    font-size: 15px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.webauthn-setup-credential-meta {
+    color: #b5b9c0;
+    font-size: 12px;
+}
+
+.webauthn-setup-credential-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.webauthn-setup-btn-edit,
+.webauthn-setup-btn-delete,
+.webauthn-setup-btn-save,
+.webauthn-setup-btn-cancel {
+    background: transparent;
+    border: 1px solid #3a3c42;
+    color: #b5b9c0;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.webauthn-setup-btn-edit:hover {
+    background: #3a3c42;
+    border-color: #5865f2;
+    color: #5865f2;
+}
+
+.webauthn-setup-btn-delete:hover {
+    background: rgba(237, 66, 69, 0.15);
+    border-color: #ed4245;
+    color: #ed4245;
+}
+
+.webauthn-setup-btn-save {
+    border-color: #43b581;
+    color: #43b581;
+}
+
+.webauthn-setup-btn-save:hover {
+    background: rgba(67, 181, 129, 0.15);
+}
+
+.webauthn-setup-btn-cancel:hover {
+    background: rgba(237, 66, 69, 0.15);
+    border-color: #ed4245;
+    color: #ed4245;
+}
+
+/* Edit Row */
+.webauthn-setup-edit-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.webauthn-setup-edit-input {
+    flex: 1;
+    background: #1e1f22;
+    border: 1px solid #3a3c42;
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.webauthn-setup-edit-input:focus {
+    outline: none;
+    border-color: #5865f2;
+}
+
+/* Instructions */
+.webauthn-setup-instructions {
+    background: #1e1f22;
+    border-left: 3px solid #5865f2;
+    padding: 16px;
+    border-radius: 4px;
+    margin-top: 24px;
+}
+
+.webauthn-setup-instructions h4 {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+}
+
+.webauthn-setup-instructions ol {
+    color: #b5b9c0;
+    font-size: 14px;
+    margin: 0;
+    padding-left: 20px;
+}
+
+.webauthn-setup-instructions ol li {
+    margin-bottom: 8px;
+}
+
+.webauthn-setup-instructions ol li:last-child {
+    margin-bottom: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .webauthn-setup-modal {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .webauthn-setup-header,
+    .webauthn-setup-content {
+        padding: 16px;
+    }
+
+    .webauthn-setup-credential-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .webauthn-setup-credential-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+/* Scrollbar Styling */
+.webauthn-setup-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.webauthn-setup-modal::-webkit-scrollbar-track {
+    background: #1e1f22;
+}
+
+.webauthn-setup-modal::-webkit-scrollbar-thumb {
+    background: #3a3c42;
+    border-radius: 4px;
+}
+
+.webauthn-setup-modal::-webkit-scrollbar-thumb:hover {
+    background: #4a4c52;
+}

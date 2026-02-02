@@ -1,0 +1,504 @@
+/* Pin Reminders Panel Styles */
+
+.pin-reminders-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.pin-reminders-panel {
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 750px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 107, 129, 0.2);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: rgba(255, 107, 129, 0.1);
+    border-bottom: 1px solid rgba(255, 107, 129, 0.2);
+}
+
+.panel-header h2 {
+    color: #ff6b81;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.close-btn:hover {
+    background: #ff4757;
+    transform: rotate(90deg);
+}
+
+/* Tabs Bar */
+.tabs-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tabs {
+    display: flex;
+    gap: 5px;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.tab.active {
+    background: linear-gradient(135deg, #ff6b81, #ff4757);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 600;
+}
+
+.create-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #00d26a, #00a550);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.create-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 210, 106, 0.3);
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 15px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+.search-box svg {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Panel Content */
+.panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 25px;
+}
+
+.loading,
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.empty-state svg {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.3;
+}
+
+.empty-state .hint {
+    font-size: 0.85rem;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Reminders List */
+.reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.reminder-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s;
+}
+
+.reminder-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 107, 129, 0.3);
+}
+
+.reminder-card.inactive {
+    opacity: 0.6;
+}
+
+.reminder-content {
+    flex: 1;
+}
+
+.pin-preview {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.pin-preview svg {
+    color: #ff6b81;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.pin-preview p {
+    color: #fff;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.reminder-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.85rem;
+}
+
+.reminder-meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.channel {
+    background: rgba(88, 166, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 15px;
+    color: #58a6ff !important;
+}
+
+.interval {
+    background: rgba(255, 206, 84, 0.2);
+    padding: 4px 10px;
+    border-radius: 15px;
+    color: #ffce54 !important;
+}
+
+.next-trigger {
+    color: #00d26a !important;
+}
+
+.last-triggered {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.last-triggered svg {
+    color: #00d26a;
+}
+
+/* Reminder Actions */
+.reminder-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.toggle-btn,
+.delete-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.1rem;
+}
+
+.toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.toggle-btn.active {
+    background: rgba(0, 210, 106, 0.2);
+    color: #00d26a;
+}
+
+.toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    background: rgba(255, 71, 87, 0.1);
+    color: #ff4757;
+}
+
+.delete-btn:hover {
+    background: #ff4757;
+    color: #fff;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+}
+
+.create-reminder-modal {
+    background: linear-gradient(145deg, #1e1e32, #1a1a2e);
+    border-radius: 16px;
+    padding: 25px;
+    width: 100%;
+    max-width: 450px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 107, 129, 0.3);
+}
+
+.create-reminder-modal h3 {
+    color: #ff6b81;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ff6b81;
+}
+
+.form-group select option {
+    background: #1a1a2e;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 206, 84, 0.1);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.info-box svg {
+    color: #ffce54;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-box p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.create-submit-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #ff6b81, #ff4757);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.create-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 107, 129, 0.3);
+}
+
+/* Scrollbar */
+.panel-content::-webkit-scrollbar,
+.create-reminder-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.panel-content::-webkit-scrollbar-track,
+.create-reminder-modal::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.panel-content::-webkit-scrollbar-thumb,
+.create-reminder-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 107, 129, 0.3);
+    border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pin-reminders-panel {
+        max-height: 95vh;
+    }
+
+    .tabs-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .reminder-card {
+        flex-direction: column;
+    }
+
+    .reminder-actions {
+        flex-direction: row;
+        align-self: flex-end;
+    }
+}

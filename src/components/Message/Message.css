@@ -1,0 +1,152 @@
+/* frontend/src/components/Message/Message.css */
+
+/* Mesajın üzerine gelince çıkan menü kapsayıcısı */
+.message-actions {
+    position: absolute;
+    /* Mesajın hemen üzerinde durması için */
+    top: -35px;
+    /* Mesajın 35px yukarısında durması için */
+    right: 0;
+    /* Sağ hizalı olması için */
+    display: flex;
+    /* İçindeki öğeleri yan yana dizmek için */
+    background-color: var(--message-actions-bg);
+    /* Arka plan rengi, Discord'a benzer */
+    border-radius: 5px;
+    /* Hafif yuvarlak köşeler */
+    padding: 2px 5px;
+    /* İç boşluk */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* Hafif gölge */
+    z-index: 10;
+    /* Diğer elementlerin üzerinde olması için */
+    opacity: 0;
+    /* Başlangıçta gizli */
+    visibility: hidden;
+    /* Başlangıçta gizli */
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    /* Yumuşak geçiş */
+    border: 1px solid var(--border-color);
+    /* Hafif bir kenarlık */
+}
+
+/* Mesajın üzerine gelindiğinde menünün görünür olması */
+.message-content-wrapper:hover .message-actions {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Menüdeki her bir buton */
+.message-action-button {
+    background: none;
+    /* Arka planı yok */
+    border: none;
+    /* Kenarlığı yok */
+    color: var(--text-color-light);
+    /* Simge rengi */
+    padding: 5px;
+    /* Buton içi boşluk */
+    cursor: pointer;
+    /* İşaretçi */
+    font-size: 18px;
+    /* Simgelerin boyutu */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    /* Butonların hafif yuvarlak köşeleri */
+    transition: background-color 0.2s ease, color 0.2s ease;
+    /* Hover geçişleri */
+}
+
+/* Butonların üzerine gelindiğinde */
+.message-action-button:hover {
+    background-color: var(--hover-bg);
+    /* Hafif arka plan rengi */
+    color: var(--primary-color);
+    /* Simge rengi değişimi */
+}
+
+/* Özellikle emoji butonu için bir stil */
+.message-action-button.emoji-button {
+    /* Ek emoji butonu stili gerekirse buraya eklenebilir */
+}
+
+/* Simgelerin kendisi */
+.message-action-button svg {
+    width: 18px;
+    /* SVG simgelerinin genişliği */
+    height: 18px;
+    /* SVG simgelerinin yüksekliği */
+    fill: currentColor;
+    /* SVG rengini parent'ın color'ından al */
+}
+
+/* Emoji simgesi için (eğer bir image olarak yükleniyorsa) */
+.message-action-button img.emoji-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Çift tik için konumlandırma düzeltmesi */
+.message-status {
+    font-size: 12px;
+    color: var(--text-color-light);
+    margin-left: 5px;
+    /* Mesaj metninden biraz uzaklaştır */
+    position: absolute;
+    /* Konumlandırma için */
+    right: 5px;
+    /* Sağdan boşluk */
+    bottom: 0px;
+    /* Mesajın altına yakın */
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .message-actions {
+        top: -30px;
+        padding: 4px 8px;
+        gap: 4px;
+    }
+
+    .message-action-button {
+        padding: 8px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .message-action-button svg,
+    .message-action-button img.emoji-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .message-actions {
+        position: fixed;
+        top: auto;
+        bottom: 60px;
+        right: 10px;
+        left: 10px;
+        justify-content: space-around;
+        border-radius: 12px;
+        padding: 8px 12px;
+    }
+
+    .message-action-button {
+        padding: 10px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .message-action-button svg,
+    .message-action-button img.emoji-icon {
+        width: 22px;
+        height: 22px;
+    }
+}

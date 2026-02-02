@@ -1,0 +1,96 @@
+/* QuickReactionBar.css */
+/* 🎯 Discord-style Hover Reactions */
+
+.quick-reaction-bar {
+    position: absolute;
+    top: -35px;
+    right: 10px;
+    background: linear-gradient(135deg, #2f3136 0%, #36393f 100%);
+    border: 1px solid #4a4d55;
+    border-radius: 12px;
+    padding: 6px 8px;
+    display: none;
+    gap: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    animation: slideDown 0.15s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Show on message hover */
+.message-item:hover .quick-reaction-bar {
+    display: flex;
+}
+
+.quick-reaction-btn,
+.more-reactions-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+}
+
+.quick-reaction-btn:hover {
+    background: #404449;
+    transform: scale(1.15);
+}
+
+.more-reactions-btn {
+    font-size: 16px;
+    color: #b9bbbe;
+}
+
+.more-reactions-btn:hover {
+    background: #404449;
+    color: #fff;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .quick-reaction-bar {
+        top: -40px;
+        right: 5px;
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .quick-reaction-btn,
+    .more-reactions-btn {
+        font-size: 18px;
+        min-width: 36px;
+        height: 36px;
+    }
+}
+
+/* Arrow pointer */
+.quick-reaction-bar::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 20px;
+    width: 12px;
+    height: 12px;
+    background: #2f3136;
+    border-right: 1px solid #4a4d55;
+    border-bottom: 1px solid #4a4d55;
+    transform: rotate(45deg);
+}
+

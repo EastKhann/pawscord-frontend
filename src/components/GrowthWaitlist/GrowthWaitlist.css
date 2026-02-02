@@ -1,0 +1,288 @@
+/* frontend/src/components/GrowthWaitlist/GrowthWaitlist.css */
+
+.growth-waitlist {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.waitlist-container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.waitlist-container h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+.waitlist-form {
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.error-message {
+  background: #fee;
+  border: 2px solid #fcc;
+  color: #c33;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success State */
+.waitlist-success {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.waitlist-success h2 {
+  color: #4caf50;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.position {
+  font-size: 1.3rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.position strong {
+  color: #667eea;
+  font-size: 1.5rem;
+}
+
+.referral-section {
+  background: #f9f9f9;
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.referral-section h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.referral-code {
+  margin: 20px 0;
+}
+
+.referral-code label {
+  display: block;
+  margin-bottom: 8px;
+  color: #666;
+  font-weight: 600;
+}
+
+.referral-code input {
+  width: calc(100% - 140px);
+  padding: 12px;
+  border: 2px solid #667eea;
+  border-radius: 8px 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+}
+
+.referral-code button {
+  width: 140px;
+  padding: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.referral-code button:hover {
+  background: #5568d3;
+}
+
+.referral-stats {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.referral-stats p {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.referral-stats ul {
+  list-style: none;
+  padding: 0;
+}
+
+.referral-stats li {
+  padding: 8px 0;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+
+.referral-stats li:last-child {
+  border-bottom: none;
+}
+
+/* Features Grid */
+.features {
+  margin-top: 30px;
+}
+
+.features h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.feature {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.feature:hover {
+  transform: translateY(-3px);
+  background: #f0f0f0;
+}
+
+.feature .icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.feature span:last-child {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Stats */
+.stats {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px solid #f0f0f0;
+  text-align: center;
+}
+
+.stats p {
+  margin: 8px 0;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .waitlist-container {
+    padding: 25px;
+  }
+
+  .waitlist-container h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .referral-code input,
+  .referral-code button {
+    width: 100%;
+    border-radius: 8px;
+    margin: 5px 0;
+  }
+
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

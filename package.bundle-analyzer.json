@@ -1,0 +1,35 @@
+{
+    "name": "pawscord-frontend-bundle-scripts",
+    "version": "1.0.0",
+    "description": "Additional scripts for bundle analysis",
+    "scripts": {
+        "analyze": "cross-env ANALYZE=true npm run build",
+        "analyze:server": "webpack-bundle-analyzer build/bundle-stats.json",
+        "build:profile": "react-scripts --profile build",
+        "build:stats": "webpack --config webpack.config.js --json > stats.json",
+        "lighthouse": "lighthouse http://localhost:3000 --view",
+        "size-limit": "size-limit",
+        "check-bundle": "node scripts/check-bundle-size.js"
+    },
+    "devDependencies": {
+        "webpack-bundle-analyzer": "^4.10.1",
+        "cross-env": "^7.0.3",
+        "lighthouse": "^11.4.0",
+        "size-limit": "^11.0.1",
+        "@size-limit/preset-app": "^11.0.1"
+    },
+    "size-limit": [
+        {
+            "name": "Main bundle",
+            "path": "build/static/js/*.js",
+            "limit": "200 KB",
+            "gzip": true
+        },
+        {
+            "name": "CSS",
+            "path": "build/static/css/*.css",
+            "limit": "50 KB",
+            "gzip": true
+        }
+    ]
+}

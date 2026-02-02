@@ -1,0 +1,35 @@
+/* frontend/src/components/RichTextEditor.css */
+
+.rich-editor-wrapper {
+    width: 100%;
+    /* Arka planı transparent yapıyoruz ki dış kutuya uysun */
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    padding: 0; /* İç padding'i sıfırlıyoruz */
+    cursor: text;
+    border: none; /* Varsa kenarlığı kaldır */
+    position: relative; /* Slash Menüsü için gerekli */
+}
+
+/* TipTap'in varsayılan sınıfı */
+.ProseMirror {
+    outline: none;
+    min-height: 24px;
+    max-height: 200px; /* Çok uzarsa scroll çıksın */
+    overflow-y: auto;
+    color: #dbdee1;
+    font-size: 1rem;
+    line-height: 1.375rem;
+    width: 100%;
+    padding: 0 5px; /* Yazının kenarlara yapışmaması için hafif boşluk */
+}
+
+/* Placeholder Rengi */
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #949ba4; /* Daha yumuşak bir gri */
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}

@@ -1,0 +1,1055 @@
+/* frontend/src/index.css (MODERN ELEGANT TEMA) */
+
+/* 🔒 OPTIMIZED: Tek Google Fonts import - Inter (Ana font) + Poppins (Başlıklar) */
+/* display=swap: Font yüklenirken fallback göster, render-blocking önle */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
+
+/* 📱 MOBILE RESPONSIVE STYLES */
+@import './styles/mobile.css';
+
+/* ================================================ */
+/* 🎨 PAWSCORD MODERN COLOR SYSTEM */
+/* ================================================ */
+
+:root {
+    /* Premium Brand Colors - Elegant Purple Gradient */
+    --brand-primary: #8b5cf6;
+    --brand-secondary: #6366f1;
+    --brand-accent: #a78bfa;
+
+    /* Gradients - Premium Look */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --gradient-danger: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
+
+    /* Dark Theme - Sophisticated */
+    --bg-app: #0a0a0f;
+    --bg-primary: #0f0f1e;
+    --bg-secondary: #1a1a2e;
+    --bg-tertiary: #16213e;
+    --bg-elevated: #21273d;
+    --bg-hover: rgba(139, 92, 246, 0.1);
+    --bg-active: rgba(139, 92, 246, 0.2);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-hover: rgba(255, 255, 255, 0.15);
+
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #e2e3ee;
+    --text-tertiary: #b8b9c7;
+    --text-muted: #6c6d7d;
+
+    /* Shadows - Layered depth */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
+    --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.3);
+
+    /* Glow Effects */
+    --glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
+    --glow-secondary: 0 0 20px rgba(99, 102, 241, 0.3);
+    --glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
+    --glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+
+    /* Border Radius - Smooth curves */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* Transitions - Smooth interactions */
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================================ */
+/* 🎬 ANIMATIONS */
+/* ================================================ */
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+    }
+}
+
+html,
+body,
+#root {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    /* Modern Background */
+    background: var(--bg-app);
+}
+
+/* Animated Background Gradient */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(ellipse at top left, rgba(139, 92, 246, 0.1), transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.1), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: backgroundPulse 15s ease-in-out infinite;
+}
+
+@keyframes backgroundPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ================================================ */
+/* 🎨 MODERN GLASSMORPHISM COMPONENTS */
+/* ================================================ */
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-normal);
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--glass-border-hover);
+}
+
+/* ================================================ */
+/* 🔘 MODERN BUTTON SYSTEM */
+/* ================================================ */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    transform: translateY(-1px);
+}
+
+/* ================================================ */
+/* 📝 MODERN INPUT SYSTEM */
+/* ================================================ */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    background: var(--glass-bg-hover);
+}
+
+/* ================================================ */
+/* 🎯 MODERN SCROLLBAR */
+/* ================================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--brand-primary), var(--brand-secondary));
+    border-radius: 10px;
+    transition: var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--brand-accent), var(--brand-primary));
+}
+
+/* ================================================ */
+/* ✨ UTILITY ANIMATIONS */
+/* ================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.scale-in {
+    animation: scaleIn 0.3s ease-out;
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ================================================ */
+/* ORIGINAL INDEX.CSS STYLES */
+/* ================================================ */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+    background-color: var(--background-primary);
+    /* 🔥 PREVENT BOUNCE SCROLLING ON iOS */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    /* 🔥 PREVENT TEXT SIZE ADJUSTMENT ON ORIENTATION CHANGE */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+/* ======================================== */
+/* === YENİ RENK PALETİ (SOFT DARK) === */
+/* ======================================== */
+
+:root {
+    color-scheme: dark;
+    /* Discord'un Yeni "Midnight" Tonları */
+    --background-primary: #313338;
+    /* Ana Sohbet Alanı */
+    --background-secondary: #2b2d31;
+    /* Yan Menü */
+    --background-tertiary: #1e1f22;
+    /* Input ve Paneller */
+    --background-accent: #404249;
+    /* Hover (Üzerine gelince) */
+
+    --background-modifier-hover: rgba(79, 84, 92, 0.3);
+    --background-modifier-active: rgba(79, 84, 92, 0.5);
+    --background-mentioned: rgba(88, 101, 242, 0.1);
+
+    --text-primary: #dbdee1;
+    /* Ana Metin */
+    --text-secondary: #949ba4;
+    /* Yan Metin */
+    --text-muted: #787f89;
+    /* Sönük Metin */
+    --text-link: #00a8fc;
+    /* Linkler */
+
+    --text-positive: #23a559;
+    /* Yeşil (Başarılı) */
+    --text-warning: #f0b232;
+    /* Sarı (Uyarı) */
+    --text-danger: #da373c;
+    /* Kırmızı (Hata) */
+
+    --input-background: #383a40;
+    --input-border: #1e1f22;
+
+    --button-primary: #5865f2;
+    /* Ana Buton (Mor/Mavi) */
+    --button-secondary: #4e5058;
+    --button-danger: #da373c;
+
+    --border-primary: #1f2023;
+    --border-mentioned: #5865f2;
+
+    --scrollbar-thumb: #1a1b1e;
+    --scrollbar-track: #2b2d31;
+}
+
+select option {
+    background-color: #2b2d31;
+    color: #dbdee1;
+}
+
+/* Kaydırma Çubuğu (Scrollbar) - Ultra İnce */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(26, 27, 30, 0.6);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(17, 18, 20, 0.8);
+}
+
+/* Mobil Düzenlemeleri */
+.mobile-menu-button {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    /* 🔥 MOBILE-FIRST OPTIMIZATIONS */
+
+    /* Prevent horizontal scroll */
+    html,
+    body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    /* Touch target sizes - minimum 44x44px */
+    button,
+    a,
+    [role="button"],
+    input[type="checkbox"],
+    input[type="radio"] {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 12px;
+    }
+
+    /* Optimize font sizes for mobile */
+    body {
+        font-size: 16px;
+        /* Prevents zoom on iOS input focus */
+    }
+
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+        /* Prevents iOS zoom */
+    }
+
+    /* Sidebar animations */
+    .sidebar-wrapper,
+    .chat-user-list-panel {
+        display: none;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar-wrapper.mobile-visible,
+    .chat-user-list-panel.mobile-visible {
+        display: flex;
+        position: absolute;
+        top: 0;
+        height: 100%;
+        z-index: 2000;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .sidebar-wrapper.mobile-visible {
+        left: 0;
+        width: min(80vw, 280px);
+        /* Responsive width */
+    }
+
+    .chat-user-list-panel.mobile-visible {
+        right: 0;
+        width: min(75vw, 260px);
+    }
+
+    .mobile-menu-button {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+
+    /* 🔥 MOBILE GESTURES - Improve scroll performance */
+    * {
+        -webkit-tap-highlight-color: rgba(88, 101, 242, 0.2);
+        touch-action: manipulation;
+    }
+
+    /* Optimize animations for mobile */
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* Genel Animasyonlar */
+button,
+a,
+input,
+[role="button"] {
+    transition: all 0.2s ease-in-out;
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+/* Tıklama efekti */
+
+/* İngilizce Link Butonu */
+.eng-learn-link {
+    color: var(--text-primary);
+    font-size: 0.9em;
+    text-decoration: none;
+    margin-top: 6px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: var(--background-primary);
+    width: 90%;
+    text-align: center;
+    display: block;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.eng-learn-link:hover {
+    background-color: var(--button-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Markdown (Mesaj İçeriği) Stilleri */
+.messageContent code {
+    background-color: var(--background-tertiary);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: 'Consolas', monospace;
+    color: #e3e5e8;
+}
+
+.messageContent pre {
+    background-color: #2b2d31;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #1e1f22;
+}
+
+.messageContent blockquote {
+    border-left: 4px solid var(--border-mentioned);
+    padding-left: 12px;
+    color: var(--text-secondary);
+}
+
+/* Animasyonlar */
+@keyframes slide-up-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Login Ekranı */
+.login-wrapper {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-primary);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+}
+
+.login-box {
+    background-color: var(--background-secondary);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: slide-up-fade-in 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--background-tertiary);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.login-form input:focus {
+    border-color: var(--button-primary);
+    outline: none;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--button-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: #4752c4;
+}
+
+/* --- CANLI LOGIN SAYFASI STİLLERİ --- */
+
+/* Hareketli Arka Plan */
+.login-container {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #1e1f22;
+    padding: 0;
+    /* Tüm padding'i kaldır */
+}
+
+/* Mobil cihazlar için */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 0;
+        height: 100dvh;
+        /* dvh viewport height kullan */
+    }
+
+    .login-card {
+        margin: 0;
+        padding: 30px 20px;
+        /* Card içi padding'i azalt */
+        max-width: 90%;
+        /* Ekranın %90'ını kullan */
+    }
+}
+
+.background-animate {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    filter: blur(50px);
+    z-index: 0;
+    opacity: 0.6;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Glassmorphism Kart */
+.login-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(30, 31, 34, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Logo ve Başlık */
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #5865f2, #9b59b6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+}
+
+.logo-header h1 {
+    color: white;
+    margin: 0;
+    font-size: 2em;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.logo-header p {
+    color: #b9bbbe;
+    margin-top: 5px;
+    font-size: 0.95em;
+}
+
+/* Input Alanları */
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b9bbbe;
+    z-index: 2;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.input-group input:focus {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: #5865f2;
+    outline: none;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+}
+
+/* Butonlar */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #5865f2, #4752c4);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+}
+
+.submit-btn:active {
+    transform: scale(0.98);
+}
+
+/* Ayırıcı */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #72767d;
+    font-size: 0.85em;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.divider span {
+    padding: 0 10px;
+}
+
+/* Toggle Mode Link */
+.toggle-mode {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #b9bbbe;
+}
+
+.toggle-mode span {
+    color: #00a8fc;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.toggle-mode span:hover {
+    text-decoration: underline;
+}
+
+/* Hata Mesajı */
+.error-message {
+    background: rgba(242, 63, 66, 0.2);
+    border: 1px solid #f23f42;
+    color: #f23f42;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+
+/* Google Butonunu Düzenleyen CSS */
+.google-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    /* Üst boşluğu azalttık */
+
+    /* Butonu ortalayıp %85 oranında küçültüyoruz */
+    transform: scale(0.95);
+    transform-origin: center;
+
+    /* Beyazlıkları gizlemek için */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* Köşeleri daha yumuşak kırp */
+    border-radius: 50px;
+    overflow: hidden;
+
+    /* Arka planı şeffaf yapıyoruz ki beyaz kutu çıkmasın */
+    background-color: transparent !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    /* Hafif gölge ekledik */
+}
+
+/* Eğer Google'ın kendi iframe'ine etki edebilirsek (Bazen çalışır) */
+.google-btn-wrapper iframe {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 24px !important;
+}
+
+/* --- YAZIYOR ANİMASYONU --- */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    font-weight: bold;
+    height: 20px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--text-secondary);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* --- MESAJ VURGULAMA (SCROLL SONRASI) --- */
+@keyframes highlight-message {
+    0% {
+        background-color: rgba(88, 101, 242, 0.3);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.message-highlight {
+    animation: highlight-message 2s ease-out;
+}
+
+.delete-chat-btn {
+    opacity: 0;
+}
+
+div:hover>div>.delete-chat-btn {
+    opacity: 0.5;
+}
+
+.delete-chat-btn:hover {
+    opacity: 1 !important;
+    color: #da373c !important;
+}
+
+/* ================================================ */
+/* 🔥 CONTEXT MENU - ABSOLUTE MAXIMUM Z-INDEX */
+/* ================================================ */
+
+/* 🔥 PORTAL ROOT - MUST BE ABSOLUTE TOP LAYER */
+#portal-root {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    pointer-events: none !important;
+    z-index: 2147483647 !important;
+    /* MAX SAFE INTEGER */
+    overflow: visible !important;
+}
+
+/* Portal children must be clickable */
+#portal-root>* {
+    pointer-events: auto !important;
+    position: fixed !important;
+}
+
+/* Context menu backdrop - tüm varyasyonlar */
+#portal-root>div[style*="background: transparent"],
+#portal-root>div[style*="background:transparent"] {
+    z-index: 2147483646 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    inset: 0 !important;
+    /* modern shorthand for top/left/right/bottom */
+}
+
+/* Context menu itself - ABSOLUTE TOP - tüm selector varyasyonları */
+#portal-root [role="menu"],
+#portal-root div[role="menu"],
+#portal-root>div>div[role="menu"] {
+    z-index: 2147483647 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    overflow: visible !important;
+}
+
+/* Context menu items must be clickable */
+#portal-root [role="menuitem"],
+#portal-root [role="menuitem"] * {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* 🔥 OVERRIDE: Voice Island should be BELOW context menu */
+.voice-island,
+[class*="floating"],
+[class*="FloatingVoiceIsland"] {
+    z-index: 9998 !important;
+    /* Below portal */
+}
+
+/* 🔥 OVERRIDE: Sidebars should be BELOW context menu */
+.sidebar-wrapper,
+.chat-user-list-panel,
+[class*="sidebar"] {
+    z-index: 100 !important;
+    /* Way below portal */
+}
+
+/* 🔥 OVERRIDE: Modals should be BELOW context menu */
+[class*="modal"],
+[role="dialog"] {
+    z-index: 1000 !important;
+    /* Below portal */
+}
+
+/* 🔥 OVERRIDE: Voice Chat Panel should be BELOW context menu */
+[class*="VoiceChat"],
+[class*="voicePanel"] {
+    z-index: 9999 !important;
+    /* Below portal */
+}
