@@ -2,6 +2,7 @@
 // Banner, tema, badge, bağlantı özelleştirme
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api.config';
 import './ProfileCard.css';
 
 // Profile Card Display Component
@@ -9,7 +10,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     useEffect(() => {
         const loadProfile = async () => {
@@ -198,7 +199,7 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
     const [selectedBadges, setSelectedBadges] = useState([]);
     const [newLink, setNewLink] = useState({ name: '', url: '' });
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const loadData = useCallback(async () => {
         try {

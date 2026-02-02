@@ -2,6 +2,7 @@
 // Discord App Directory benzeri
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api.config';
 import './BotMarketplace.css';
 
 // Bot Card Component
@@ -47,7 +48,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
     const [selectedServer, setSelectedServer] = useState(null);
     const [installing, setInstalling] = useState(false);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const loadServers = useCallback(async () => {
         try {
@@ -312,7 +313,7 @@ const BotMarketplace = ({ onClose }) => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const loadBots = useCallback(async () => {
         try {

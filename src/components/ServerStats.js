@@ -2,6 +2,7 @@
 // Grafik, kelime bulutu, aktif saatler, üye sıralaması
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api.config';
 import './ServerStats.css';
 
 const ServerStats = ({ serverId, serverName, onClose }) => {
@@ -17,7 +18,7 @@ const ServerStats = ({ serverId, serverName, onClose }) => {
     const [growthStats, setGrowthStats] = useState(null);
     const [chartDays, setChartDays] = useState(30);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const fetchData = useCallback(async (endpoint) => {
         const token = localStorage.getItem('token');

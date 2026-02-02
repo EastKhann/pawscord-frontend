@@ -944,7 +944,7 @@ const AppContent = () => {
     }, [token, logout]);
 
     // 📊 ANALYTICS: Page view tracking (fetchWithAuth tanımından SONRA!)
-    usePageTracking(API_BASE_URL, fetchWithAuth);
+    usePageTracking();
 
     // 🔗 VANITY URL JOIN HANDLER (fetchWithAuth tanımından SONRA!)
     useEffect(() => {

@@ -2,6 +2,7 @@
 // Discord Events benzeri
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api.config';
 import './EventPlanner.css';
 
 // Event Types
@@ -85,7 +86,7 @@ const CreateEventModal = ({ serverId, voiceChannels, onClose, onCreate }) => {
     });
     const [creating, setCreating] = useState(false);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -370,7 +371,7 @@ const EventPlanner = ({ serverId, serverName, voiceChannels, onClose }) => {
     const [filter, setFilter] = useState('upcoming'); // upcoming, past, all
     const [selectedEvent, setSelectedEvent] = useState(null);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const loadEvents = useCallback(async () => {
         try {

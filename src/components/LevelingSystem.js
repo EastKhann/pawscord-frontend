@@ -2,6 +2,7 @@
 // Discord benzeri seviye sistemi UI
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { API_BASE_URL } from '../config/api.config';
 import './LevelingSystem.css';
 
 // XP Progress Bar Component
@@ -99,7 +100,7 @@ export const Leaderboard = ({ serverId, serverName, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [scope, setScope] = useState(serverId ? 'server' : 'global');
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const loadLeaderboard = useCallback(async () => {
         setLoading(true);
@@ -244,7 +245,7 @@ export const UserLevelCard = ({ username }) => {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     useEffect(() => {
         const loadStats = async () => {
@@ -313,7 +314,7 @@ export const useLeveling = () => {
     const [levelUpData, setLevelUpData] = useState(null);
     const [xpToast, setXpToast] = useState(null);
 
-    const API_URL = window.API_URL || 'https://api.pawscord.com/api';
+    const API_URL = API_BASE_URL;
 
     const loadStats = useCallback(async () => {
         try {

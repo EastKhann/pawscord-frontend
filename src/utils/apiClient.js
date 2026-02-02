@@ -1,4 +1,5 @@
 // frontend/src/utils/apiClient.js
+import { API_BASE_URL } from '../config/api.config';
 
 /**
  * 🌐 API Client Manager
@@ -322,25 +323,9 @@ class APIClient {
     }
 }
 
-// Dynamic API URL detection
-const getApiBaseUrl = () => {
-    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
-    // Use environment variable if available, fallback to auto-detection
-    const envApiUrl = import.meta.env.VITE_API_BASE_URL;
-    if (envApiUrl) return envApiUrl;
-
-    const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
-    const isPawscordDomain = window.location.hostname.includes('pawscord.com');
-    if (isElectron || isPawscordDomain) return 'https://api.pawscord.com';
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return 'http://localhost:8888/api';
-    }
-    return 'https://api.pawscord.com';
-};
-
-// Global instance
+// Global instance - uses centralized config
 export const apiClient = new APIClient({
-    baseURL: getApiBaseUrl(),
+    baseURL: API_BASE_URL,
     timeout: 30000,
     retryAttempts: 3,
     headers: {

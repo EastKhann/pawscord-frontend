@@ -1,6 +1,7 @@
 // frontend/src/hooks/usePageTracking.js
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api.config';
 
 // Session ID oluştur (ilk ziyarette)
 const getOrCreateSessionId = () => {
@@ -12,7 +13,7 @@ const getOrCreateSessionId = () => {
     return sessionId;
 };
 
-const usePageTracking = (apiBaseUrl, fetchWithAuth) => {
+const usePageTracking = () => {
     const location = useLocation();
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const usePageTracking = (apiBaseUrl, fetchWithAuth) => {
             try {
                 const sessionId = getOrCreateSessionId();
 
-                await fetch(`${apiBaseUrl}/api/analytics/track/`, {
+                await fetch(`${API_BASE_URL}/analytics/track/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
