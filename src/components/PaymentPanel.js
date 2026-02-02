@@ -22,7 +22,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     // Buy coins
     const [amount, setAmount] = useState(100);
-    const [paymentMethod, setPaymentMethod] = useState('card');
+    const [paymentMethod, setPaymentMethod] = useState('stripe'); // stripe, crypto, iyzico
 
     // Transfer coins
     const [transferRecipient, setTransferRecipient] = useState('');
@@ -73,9 +73,8 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    amount: parseInt(amount),
-                    payment_method: paymentMethod,
-                    currency: 'USD'
+                    coin_amount: parseInt(amount),
+                    payment_method: paymentMethod
                 })
             });
 
@@ -87,10 +86,16 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
             const data = await response.json();
 
             if (data.success) {
-                toast.success(`Successfully purchased ${amount} coins!`);
-                loadBalance();
-                loadTransactions();
-                setActiveTab('balance');
+                // Redirect to payment provider (Stripe/Coinbase/İyzico)
+                if (data.redirect_url) {
+                    toast.info('Redirecting to payment page...');
+                    window.location.href = data.redirect_url;
+                } else if (data.payment_page_url) {
+                    toast.info('Redirecting to payment page...');
+                    window.location.href = data.payment_page_url;
+                } else {
+                    toast.success(`Payment initiated!`);
+                }
             } else {
                 toast.error(data.error || 'Payment failed');
             }
@@ -233,6 +238,47 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         </div>
                     ) : activeTab === 'buy' ? (
                         <div style={styles.buyView}>
+                            {/* Payment Method Selection */}
+                            <h3 style={styles.sectionTitle}>Choose Payment Method</h3>
+                            <div style={styles.paymentMethods}>
+                                <div
+                                    onClick={() => setPaymentMethod('crypto')}
+                                    style={{
+                                        ...styles.paymentMethodCard,
+                                        ...(paymentMethod === 'crypto' && styles.selectedPaymentMethod)
+                                    }}
+                                >
+                                    <div style={styles.pmIcon}>🪙</div>
+                                    <div style={styles.pmTitle}>Cryptocurrency</div>
+                                    <div style={styles.pmDesc}>Bitcoin, Ethereum, USDC</div>
+                                    <div style={styles.pmBadge}>Global • Fast</div>
+                                </div>
+                                <div
+                                    onClick={() => setPaymentMethod('stripe')}
+                                    style={{
+                                        ...styles.paymentMethodCard,
+                                        ...(paymentMethod === 'stripe' && styles.selectedPaymentMethod)
+                                    }}
+                                >
+                                    <div style={styles.pmIcon}>💳</div>
+                                    <div style={styles.pmTitle}>Credit/Debit Card</div>
+                                    <div style={styles.pmDesc}>Stripe - Visa, Mastercard</div>
+                                    <div style={styles.pmBadge}>Global • Secure</div>
+                                </div>
+                                <div
+                                    onClick={() => setPaymentMethod('iyzico')}
+                                    style={{
+                                        ...styles.paymentMethodCard,
+                                        ...(paymentMethod === 'iyzico' && styles.selectedPaymentMethod)
+                                    }}
+                                >
+                                    <div style={styles.pmIcon}>🇹🇷</div>
+                                    <div style={styles.pmTitle}>Turkish Payment</div>
+                                    <div style={styles.pmDesc}>İyzico - TL payments</div>
+                                    <div style={styles.pmBadge}>Turkey • TRY</div>
+                                </div>
+                            </div>
+
                             <h3 style={styles.sectionTitle}>Select Coin Package</h3>
                             <div style={styles.packages}>
                                 {coinPackages.map((pkg, idx) => (
@@ -257,22 +303,45 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                 ))}
                             </div>
 
-                            <div style={styles.paymentMethod}>
-                                <label style={styles.label}>Payment Method</label>
-                                <select
-                                    value={paymentMethod}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
-                                    style={styles.select}
-                                >
-                                    <option value="card">Credit/Debit Card</option>
-                                    <option value="paypal">PayPal</option>
-                                    <option value="crypto">Cryptocurrency</option>
-                                </select>
-                            </div>
+                            <div style={styles.purchaseSection}>
+                                <div style={styles.paymentInfo}>
+                                    <div style={styles.paymentInfoRow}>
+                                        <span>Selected Package:</span>
+                                        <strong>{amount.toLocaleString()} coins</strong>
+                                    </div>
+                                    <div style={styles.paymentInfoRow}>
+                                        <span>Payment Method:</span>
+                                        <strong>
+                                            {paymentMethod === 'crypto' && '🪙 Crypto'}
+                                            {paymentMethod === 'stripe' && '💳 Card (Stripe)'}
+                                            {paymentMethod === 'iyzico' && '🇹🇷 İyzico (TRY)'}
+                                        </strong>
+                                    </div>
+                                    <div style={styles.paymentInfoRow}>
+                                        <span>Total Price:</span>
+                                        <strong style={{ color: '#faa61a', fontSize: '18px' }}>
+                                            {coinPackages.find(p => p.amount === amount)?.price && (
+                                                paymentMethod === 'iyzico'
+                                                    ? `₺${(coinPackages.find(p => p.amount === amount).price * 35).toFixed(0)}`
+                                                    : `$${coinPackages.find(p => p.amount === amount).price}`
+                                            )}
+                                        </strong>
+                                    </div>
+                                </div>
 
-                            <button onClick={handlePurchase} style={styles.purchaseBtn}>
-                                <FaCreditCard /> Purchase {amount} Coins
-                            </button>
+                                <button onClick={handlePurchase} style={styles.purchaseBtn}>
+                                    <FaCreditCard />
+                                    {paymentMethod === 'crypto' && ' Pay with Crypto'}
+                                    {paymentMethod === 'stripe' && ' Pay with Card'}
+                                    {paymentMethod === 'iyzico' && ' İyzico ile Öde'}
+                                </button>
+
+                                <div style={styles.paymentNote}>
+                                    {paymentMethod === 'crypto' && '🔒 Secure cryptocurrency payment via Coinbase Commerce'}
+                                    {paymentMethod === 'stripe' && '🔒 Secure card payment via Stripe'}
+                                    {paymentMethod === 'iyzico' && '🔒 Güvenli ödeme - İyzico ile korunur'}
+                                </div>
+                            </div>
                         </div>
                     ) : activeTab === 'transfer' ? (
                         <div style={styles.transferView}>
@@ -530,6 +599,79 @@ const styles = {
         padding: '2px 8px',
         backgroundColor: 'rgba(67, 181, 129, 0.1)',
         borderRadius: '4px'
+    },
+    pkgPrice: {
+        fontSize: '18px',
+        fontWeight: '600',
+        color: '#fff'
+    },
+    purchaseSection: {
+        marginTop: '24px'
+    },
+    paymentMethods: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '16px',
+        marginBottom: '32px'
+    },
+    paymentMethodCard: {
+        padding: '20px',
+        background: '#2b2d31',
+        border: '2px solid #40444b',
+        borderRadius: '12px',
+        textAlign: 'center',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease'
+    },
+    selectedPaymentMethod: {
+        background: '#5865f2',
+        borderColor: '#5865f2',
+        transform: 'scale(1.05)',
+        boxShadow: '0 4px 16px rgba(88, 101, 242, 0.3)'
+    },
+    pmIcon: {
+        fontSize: '48px',
+        marginBottom: '12px'
+    },
+    pmTitle: {
+        fontSize: '16px',
+        fontWeight: '600',
+        color: 'white',
+        marginBottom: '6px'
+    },
+    pmDesc: {
+        fontSize: '13px',
+        color: '#b9bbbe',
+        marginBottom: '8px'
+    },
+    pmBadge: {
+        display: 'inline-block',
+        padding: '4px 12px',
+        background: '#40444b',
+        borderRadius: '12px',
+        fontSize: '11px',
+        color: '#43b581',
+        fontWeight: '600'
+    },
+    paymentInfo: {
+        background: '#2b2d31',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '16px'
+    },
+    paymentInfoRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '8px 0',
+        fontSize: '14px',
+        color: '#b9bbbe',
+        borderBottom: '1px solid #40444b'
+    },
+    paymentNote: {
+        textAlign: 'center',
+        fontSize: '12px',
+        color: '#43b581',
+        marginTop: '12px'
     },
     price: {
         fontSize: '18px',
