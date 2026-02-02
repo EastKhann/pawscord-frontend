@@ -327,11 +327,11 @@ const getApiBaseUrl = () => {
     if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
     const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
-    if (isElectron || isPawscordDomain) return 'https://pawscord.com/api';
+    if (isElectron || isPawscordDomain) return 'https://api.pawscord.com';
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         return 'http://localhost:8888/api';
     }
-    return 'https://pawscord.com/api';
+    return 'https://api.pawscord.com';
 };
 
 // Global instance

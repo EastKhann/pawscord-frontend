@@ -27,7 +27,7 @@ const getApiBaseUrl = () => {
     }
 
     // 4. Default to production
-    return 'https://pawscord.com/api';
+    return 'https://api.pawscord.com';
 };
 
 const API_BASE = getApiBaseUrl();

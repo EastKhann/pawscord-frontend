@@ -328,12 +328,12 @@ class OfflineModeManager {
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
         if (isElectron || isPawscordDomain) {
-            return 'https://pawscord.com/api';
+            return 'https://api.pawscord.com';
         }
         if (isLocalhost) {
             return 'http://localhost:8888/api';
         }
-        return 'https://pawscord.com/api';
+        return 'https://api.pawscord.com';
     }
 
     /**
