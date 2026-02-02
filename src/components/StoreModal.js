@@ -36,7 +36,7 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const loadStoreItems = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/store/items/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/store/items/`);
             const data = await response.json();
             setItems(data.items || []);
         } catch (error) {

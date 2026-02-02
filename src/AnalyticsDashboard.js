@@ -74,7 +74,7 @@ const AnalyticsDashboard = ({ onClose, apiBaseUrl, fetchWithAuth }) => {
         setSyncMessage(null);
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/admin/sync-cat-avatars/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/admin/sync-cat-avatars/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

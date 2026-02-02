@@ -26,7 +26,7 @@ const PremiumStoreModal = ({ onClose }) => {
 
     const fetchPremiumStatus = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/premium/status/`, {
+            const response = await fetch(`${API_BASE_URL}/api/premium/status/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -40,7 +40,7 @@ const PremiumStoreModal = ({ onClose }) => {
 
     const fetchStoreItems = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/store/items/`);
+            const response = await fetch(`${API_BASE_URL}/api/store/items/`);
             const data = await response.json();
             setStoreItems(data);
             setLoading(false);
@@ -53,7 +53,7 @@ const PremiumStoreModal = ({ onClose }) => {
     // 🆕 Kullanıcının envanterini çek
     const fetchUserInventory = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/store/inventory/`, {
+            const response = await fetch(`${API_BASE_URL}/api/store/inventory/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -171,7 +171,7 @@ const PremiumStoreModal = ({ onClose }) => {
     const handlePurchase = async (plan, isYearly = false) => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/premium/subscribe/`, {
+            const response = await fetch(`${API_BASE_URL}/api/premium/subscribe/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -204,7 +204,7 @@ const PremiumStoreModal = ({ onClose }) => {
     const handleBuyItem = async (item) => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/store/purchase/`, {
+            const response = await fetch(`${API_BASE_URL}/api/store/purchase/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

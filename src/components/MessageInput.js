@@ -141,7 +141,7 @@ const MessageInput = ({
         const loadDraft = async () => {
             try {
                 const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
-                const response = await fetchWithAuth(`${apiBaseUrl}/drafts/${chatKey}/`);
+                const response = await fetchWithAuth(`${apiBaseUrl}/api/drafts/${chatKey}/`);
 
                 if (response.ok) {
                     const data = await response.json();
@@ -172,7 +172,7 @@ const MessageInput = ({
         draftTimerRef.current = setTimeout(async () => {
             try {
                 const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
-                await fetchWithAuth(`${apiBaseUrl}/drafts/save/`, {
+                await fetchWithAuth(`${apiBaseUrl}/api/drafts/save/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -261,7 +261,7 @@ const MessageInput = ({
         // 🆕 Draft'i temizle
         if (activeChat && fetchWithAuth && apiBaseUrl) {
             const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
-            fetchWithAuth(`${apiBaseUrl}/drafts/${chatKey}/`, {
+            fetchWithAuth(`${apiBaseUrl}/api/drafts/${chatKey}/`, {
                 method: 'DELETE'
             }).catch(console.error);
         }

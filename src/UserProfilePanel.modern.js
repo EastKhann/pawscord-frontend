@@ -72,7 +72,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const check2FAStatus = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.get(`${API_URL}/2fa/methods/`, {
+      const response = await axios.get(`${API_URL}/api/2fa/methods/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setTwoFactorEnabled(response.data?.totp_enabled || false);
@@ -85,7 +85,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, enable2fa: true });
       const token = localStorage.getItem('access_token');
-      const response = await axios.post(`${API_URL}/security/2fa/enable/`, {}, {
+      const response = await axios.post(`${API_URL}/api/security/2fa/enable/`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -103,7 +103,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, verify2fa: true });
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/security/2fa/verify-setup/`, {
+      await axios.post(`${API_URL}/api/security/2fa/verify-setup/`, {
         code: verificationCode
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -126,7 +126,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, disable2fa: true });
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/security/2fa/disable/`, {}, {
+      await axios.post(`${API_URL}/api/security/2fa/disable/`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -158,7 +158,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, changePassword: true });
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/users/change_password/`, {
+      await axios.post(`${API_URL}/api/users/change_password/`, {
         old_password: passwordData.old_password,
         new_password: passwordData.new_password,
       }, {
@@ -180,7 +180,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const fetchEmailVerificationStatus = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.get(`${API_URL}/auth/check-verification/`, {
+      const response = await axios.get(`${API_URL}/api/auth/check-verification/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEmailVerified(response.data?.is_verified || false);
@@ -193,7 +193,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, resendEmail: true });
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/auth/send-verification/`, {}, {
+      await axios.post(`${API_URL}/api/auth/send-verification/`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('✉️ Doğrulama e-postası gönderildi!');
@@ -210,7 +210,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const fetchBadges = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.get(`${API_URL}/user/badges/`, {
+      const response = await axios.get(`${API_URL}/api/user/badges/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBadges(response.data || []);
@@ -230,7 +230,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const fetchThemes = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.get(`${API_URL}/themes/list/`, {
+      const response = await axios.get(`${API_URL}/api/themes/list/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setThemes(response.data || []);
@@ -242,7 +242,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const applyTheme = async (themeName) => {
     try {
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/users/update_profile/`, {
+      await axios.post(`${API_URL}/api/users/update_profile/`, {
         theme: themeName
       }, {
         headers: { Authorization: `Bearer ${token}` }
@@ -260,7 +260,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const fetchSessions = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const response = await axios.get(`${API_URL}/security/sessions/`, {
+      const response = await axios.get(`${API_URL}/api/security/sessions/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSessions(response.data || []);
@@ -272,7 +272,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
   const revokeSession = async (sessionId) => {
     try {
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/security/sessions/${sessionId}/revoke/`, {}, {
+      await axios.post(`${API_URL}/api/security/sessions/${sessionId}/revoke/`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Oturum sonlandırıldı.');
@@ -287,7 +287,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
 
     try {
       const token = localStorage.getItem('access_token');
-      await axios.post(`${API_URL}/security/sessions/revoke-all/`, {}, {
+      await axios.post(`${API_URL}/api/security/sessions/revoke-all/`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Tüm oturumlar sonlandırıldı. Lütfen tekrar giriş yapın.');
@@ -322,7 +322,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, avatar: true });
       const token = localStorage.getItem('access_token');
-      const response = await axios.post(`${API_URL}/users/update_profile/`, formDataToSend, {
+      const response = await axios.post(`${API_URL}/api/users/update_profile/`, formDataToSend, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -343,7 +343,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate }) => {
     try {
       setLoading({ ...loading, saveProfile: true });
       const token = localStorage.getItem('access_token');
-      const response = await axios.post(`${API_URL}/users/update_profile/`, formData, {
+      const response = await axios.post(`${API_URL}/api/users/update_profile/`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

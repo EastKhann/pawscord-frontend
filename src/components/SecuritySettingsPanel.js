@@ -26,7 +26,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const fetchSecurityStatus = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/status/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/status/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -41,7 +41,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const fetch2FAMethods = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/2fa/methods/`, {
+            const response = await fetch(`${apiBaseUrl}/api/2fa/methods/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -55,7 +55,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const fetchSessions = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/sessions/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/sessions/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -69,7 +69,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const fetchIPWhitelist = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/ip-whitelist/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/ip-whitelist/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -83,7 +83,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const enable2FA = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/2fa/enable/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/2fa/enable/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -108,7 +108,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const verify2FASetup = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/2fa/verify-setup/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/2fa/verify-setup/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -140,7 +140,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
         if (!window.confirm('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) return;
 
         try {
-            const response = await fetch(`${apiBaseUrl}/security/2fa/disable/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/2fa/disable/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -165,7 +165,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const getBackupCodes = async () => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/2fa/backup-codes/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/2fa/backup-codes/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -189,7 +189,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const revokeSession = async (sessionId) => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/sessions/${sessionId}/revoke/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/sessions/${sessionId}/revoke/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -215,7 +215,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
         if (!window.confirm('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')) return;
 
         try {
-            const response = await fetch(`${apiBaseUrl}/security/sessions/revoke-all/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/sessions/revoke-all/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -244,7 +244,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
         }
 
         try {
-            const response = await fetch(`${apiBaseUrl}/security/ip-whitelist/add/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/ip-whitelist/add/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -272,7 +272,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
     const removeIPFromWhitelist = async (whitelistId) => {
         try {
-            const response = await fetch(`${apiBaseUrl}/security/ip-whitelist/${whitelistId}/`, {
+            const response = await fetch(`${apiBaseUrl}/api/security/ip-whitelist/${whitelistId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

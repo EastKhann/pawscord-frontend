@@ -29,7 +29,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     const handleDailyClaim = async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/daily-reward/`, { method: 'POST' });
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/store/daily-reward/`, { method: 'POST' });
             let data = null;
             try { data = await res.json(); } catch (_) { data = null; }
             // Log for debugging
@@ -62,15 +62,15 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     };
     // Bakiye ve Ürünleri Çek
     const refreshData = () => {
-        fetchWithAuth(`${apiBaseUrl}/store/balance/`)
+        fetchWithAuth(`${apiBaseUrl}/api/store/balance/`)
             .then(r => r.json())
             .then(d => setBalance(d.coins));
 
-        fetchWithAuth(`${apiBaseUrl}/store/items/`)
+        fetchWithAuth(`${apiBaseUrl}/api/store/items/`)
             .then(r => r.json())
             .then(d => setStoreItems(d));
 
-        fetchWithAuth(`${apiBaseUrl}/store/inventory/`)
+        fetchWithAuth(`${apiBaseUrl}/api/store/inventory/`)
             .then(r => r.json())
             .then(d => setInventory(d));
     };
@@ -89,7 +89,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         if (!window.confirm("Bu ürünü satın almak istiyor musunuz?")) return;
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/buy/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/store/buy/`, {
                 method: 'POST',
                 body: JSON.stringify({ item_id: itemId })
             });
@@ -107,7 +107,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     const handleEquip = async (inventoryId) => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/equip/${inventoryId}/`, { method: 'POST' });
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/store/equip/${inventoryId}/`, { method: 'POST' });
             if (res.ok) {
                 refreshData();
             }
@@ -131,7 +131,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         setLoading(true);
         setTxidResult(null);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/verify-txid/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/store/verify-txid/`, {
                 method: 'POST',
                 body: JSON.stringify({ txid: trimmed })
             });

@@ -115,7 +115,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
         if (!amount) return;
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/transfer/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/store/transfer/`, {
                 method: 'POST',
                 body: JSON.stringify({ target_username: user.username, amount: amount })
             });

@@ -61,7 +61,7 @@ const AdminPanelModal = ({
     // ===== API CALLS =====
     const fetchDetailedStats = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/detailed-stats/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/detailed-stats/`);
             if (res.ok) {
                 const data = await res.json();
                 console.log('🔄 Admin Stats Data:', data);
@@ -82,7 +82,7 @@ const AdminPanelModal = ({
 
     const fetchLiveActivity = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/live-activity/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/live-activity/`);
             if (res.ok) {
                 const data = await res.json();
                 setLiveActivities(data.activities || []);
@@ -94,7 +94,7 @@ const AdminPanelModal = ({
 
     const fetchSecurityAlerts = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/security-alerts/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/security-alerts/`);
             if (res.ok) {
                 const data = await res.json();
                 setSecurityAlerts(data.alerts || []);
@@ -107,7 +107,7 @@ const AdminPanelModal = ({
     const fetchStats = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/stats/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/stats/`);
             if (res.ok) {
                 const data = await res.json();
                 setStats(data);
@@ -133,7 +133,7 @@ const AdminPanelModal = ({
         setLoading(true);
         try {
             const res = await fetchWithAuth(
-                `${apiBaseUrl}/admin/users/?search=${searchQuery}&page=${currentPage}&sort=${sortField}&order=${sortOrder}&status=${filterStatus}`
+                `${apiBaseUrl}/api/admin/users/?search=${searchQuery}&page=${currentPage}&sort=${sortField}&order=${sortOrder}&status=${filterStatus}`
             );
             if (res.ok) {
                 const data = await res.json();
@@ -152,7 +152,7 @@ const AdminPanelModal = ({
 
     const fetchServers = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/servers/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/servers/`);
             if (res.ok) {
                 const data = await res.json();
                 setServers(data.servers || data || []);
@@ -168,7 +168,7 @@ const AdminPanelModal = ({
 
     const fetchLogs = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/logs/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/logs/`);
             if (res.ok) {
                 const data = await res.json();
                 setLogs(data.logs || data || []);
@@ -184,7 +184,7 @@ const AdminPanelModal = ({
 
     const fetchSystemHealth = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/health/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/health/`);
             if (res.ok) {
                 const data = await res.json();
                 setSystemHealth(data);
@@ -208,7 +208,7 @@ const AdminPanelModal = ({
 
     const fetchBannedUsers = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/banned-users/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/banned-users/`);
             if (res.ok) {
                 const data = await res.json();
                 setBannedUsers(data.users || data || []);
@@ -224,7 +224,7 @@ const AdminPanelModal = ({
 
     const fetchDbStats = useCallback(async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/db-stats/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/db-stats/`);
             if (res.ok) {
                 const data = await res.json();
                 setDbStats(data);
@@ -255,7 +255,7 @@ const AdminPanelModal = ({
     // ===== ACTIONS =====
     const handleUserAction = async (action, userId, extra = {}) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/user-action/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/user-action/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action, user_id: userId, ...extra })
@@ -277,7 +277,7 @@ const AdminPanelModal = ({
     const handleBroadcast = async () => {
         if (!announceText.trim()) return;
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/broadcast/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/broadcast/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: announceText })
@@ -295,7 +295,7 @@ const AdminPanelModal = ({
     const handleBackup = async () => {
         setBackupStatus('running');
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/backup/`, { method: 'POST' });
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/backup/`, { method: 'POST' });
             if (res.ok) {
                 setBackupStatus('success');
                 toast.success('✅ Yedekleme tamamlandı!');
@@ -309,7 +309,7 @@ const AdminPanelModal = ({
 
     const handleClearCache = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/clear-cache/`, { method: 'POST' });
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/clear-cache/`, { method: 'POST' });
             if (res.ok) {
                 toast.success('🧹 Cache temizlendi!');
             }
@@ -320,7 +320,7 @@ const AdminPanelModal = ({
 
     const toggleMaintenance = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/admin/maintenance/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/maintenance/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ enabled: !maintenanceMode })

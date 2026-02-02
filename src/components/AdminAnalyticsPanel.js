@@ -26,7 +26,7 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
 
     const fetchStats = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/admin/analytics/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/admin/analytics/`);
             if (response.ok) {
                 const data = await response.json();
                 setStats(data);
