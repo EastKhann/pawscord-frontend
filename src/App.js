@@ -1,37 +1,37 @@
-﻿// frontend/src/App.js
+// frontend/src/App.js
 
 import React, { useState, useEffect, useRef, useCallback, useMemo, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import SparkMD5 from 'spark-md5';
 import './index.css';
-import './styles/modern-theme.css'; // ðŸŽ¨ Modern Elegant Theme
+import './styles/modern-theme.css'; // 🎨 Modern Elegant Theme
 import { Capacitor } from '@capacitor/core';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'; // ðŸ›¡ï¸ ERROR BOUNDARY
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'; // 🛡️ ERROR BOUNDARY
 
-// âš¡ OPTIMIZATION IMPORTS
+// ⚡ OPTIMIZATION IMPORTS
 import { registerServiceWorker, setupInstallPrompt, setupNetworkMonitor } from './utils/pwaHelper';
 import { initializeCSSOptimization } from './utils/criticalCSS';
-import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config'; // ðŸš€ CODE SPLITTING
+import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config'; // 🚀 CODE SPLITTING
 
-// --- Ä°KONLAR (OPTIMIZED) ---
+// --- İKONLAR (OPTIMIZED) ---
 import {
     FaPlusCircle, FaUsers, FaFilm,
     FaGift, FaMicrophone, FaCode,
     FaSearch, FaBroom, FaLock, FaCoffee, FaMagic, FaPaperPlane,
     FaLink, FaThumbtack, FaBellSlash, FaBell, FaTimes, FaPoll, FaPhoneSlash,
-    FaHeadphones, FaVideo, FaDesktop, FaTrash // ðŸ”¥ Ses kontrol ikonlarÄ± eklendi
-} from './utils/iconOptimization'; // âš¡ OPTIMIZATION: -130KB bundle size
+    FaHeadphones, FaVideo, FaDesktop, FaTrash // 🔥 Ses kontrol ikonları eklendi
+} from './utils/iconOptimization'; // ⚡ OPTIMIZATION: -130KB bundle size
 import { loadSavedTheme } from './utils/ThemeManager';
 
 // --- STORE & UTILS ---
 import { useChatStore } from './stores/useChatStore';
 import { encryptMessage } from './utils/encryption';
 import toast from './utils/toast';
-import useResponsive from './hooks/useResponsive'; // ðŸ”¥ RESPONSIVE HOOK
-import { useOptimizedMessages, useOnlineUsers } from './hooks/useOptimizedMessages'; // ðŸš€ PERFORMANS HOOK
-import usePageTracking from './hooks/usePageTracking'; // ðŸ“Š PAGE VIEW TRACKING
-import { useDebounce, useThrottle } from './utils/performanceOptimization'; // âš¡ DEBOUNCE & THROTTLE HOOKS
+import useResponsive from './hooks/useResponsive'; // 🔥 RESPONSIVE HOOK
+import { useOptimizedMessages, useOnlineUsers } from './hooks/useOptimizedMessages'; // 🚀 PERFORMANS HOOK
+import usePageTracking from './hooks/usePageTracking'; // 📊 PAGE VIEW TRACKING
+import { useDebounce, useThrottle } from './utils/performanceOptimization'; // ⚡ DEBOUNCE & THROTTLE HOOKS
 
 // --- CONTEXT ---
 import { useAuth } from './AuthContext';
@@ -39,35 +39,35 @@ import { VoiceProvider, useVoice } from './VoiceContext';
 import { useGlobalWebSocket } from './GlobalWebSocketContext';
 
 // --- CRITICAL COMPONENTS ONLY (Initial load) ---
-const Message = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './Message')); // âš¡ LAZY: Mesaj gÃ¶rÃ¼ntÃ¼leme
-const VirtualMessageList = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './components/VirtualMessageList')); // âš¡ LAZY: Virtual scrolling
-const MessageInput = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './components/MessageInput')); // âš¡ LAZY: Mesaj input
+const Message = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './Message')); // ⚡ LAZY: Mesaj görüntüleme
+const VirtualMessageList = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './components/VirtualMessageList')); // ⚡ LAZY: Virtual scrolling
+const MessageInput = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './components/MessageInput')); // ⚡ LAZY: Mesaj input
 import MaintenanceBanner from './components/MaintenanceBanner';
-import LoadingSpinner from './components/LoadingSpinner'; // ðŸŒ€ Loading indicator
+import LoadingSpinner from './components/LoadingSpinner'; // 🌀 Loading indicator
 
-// âš¡ LAZY LOAD: Voice/Video components (not needed until voice chat)
+// ⚡ LAZY LOAD: Voice/Video components (not needed until voice chat)
 const UserVideoContainer = React.lazy(() => import(/* webpackChunkName: "voice" */ './UserVideoContainer'));
 const VoiceAudioController = React.lazy(() => import(/* webpackChunkName: "voice" */ './VoiceAudioController'));
 const RichTextEditor = React.lazy(() => import(/* webpackChunkName: "editor" */ './components/RichTextEditor'));
 const StickyMessageBanner = React.lazy(() => import(/* webpackChunkName: "features" */ './components/StickyMessageBanner'));
 
-// âš¡ LAZY LOAD: Auth screens (non-critical, load on demand)
-import SplashScreen from './SplashScreen'; // ðŸ”¥ DIRECT IMPORT: Splash screen must load instantly
+// ⚡ LAZY LOAD: Auth screens (non-critical, load on demand)
+import SplashScreen from './SplashScreen'; // 🔥 DIRECT IMPORT: Splash screen must load instantly
 const LoginPage = React.lazy(() => import(/* webpackChunkName: "auth", webpackMode: "lazy" */ './LoginPage'));
 const WelcomeScreen = React.lazy(() => import(/* webpackChunkName: "auth", webpackMode: "lazy" */ './WelcomeScreen'));
 
-// âš¡ OPTIMIZATION: Lazy load modal components (on-demand loading)
+// ⚡ OPTIMIZATION: Lazy load modal components (on-demand loading)
 const ImageModal = React.lazy(() => import(/* webpackMode: "lazy" */ './ImageModal'));
 const UserProfileModal = React.lazy(() => import(/* webpackMode: "lazy" */ './UserProfileModal'));
 const PollCreateModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/PollCreateModal'));
 const CodeSnippetModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/CodeSnippetModal'));
-const AvatarCropper = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AvatarCropper')); // ðŸ“¸ AVATAR CROPPER
+const AvatarCropper = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AvatarCropper')); // 📸 AVATAR CROPPER
 
-// --- AÄžIR BÄ°LEÅžENLER (Lazy Load - Performans Ä°Ã§in) ---
-// Bu bileÅŸenler sadece ihtiyaÃ§ duyulduÄŸunda yÃ¼klenir, aÃ§Ä±lÄ±ÅŸÄ± yavaÅŸlatmaz.
+// --- AĞIR BİLEŞENLER (Lazy Load - Performans İçin) ---
+// Bu bileşenler sadece ihtiyaç duyulduğunda yüklenir, açılışı yavaşlatmaz.
 const CryptoChartModal = React.lazy(() => import(/* webpackMode: "lazy" */ './CryptoChartModal'));
 const CryptoStoreModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/CryptoStoreModal'));
-const PremiumStoreModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/PremiumStoreModal')); // ðŸ”¥ YENÄ°: Premium MaÄŸaza
+const PremiumStoreModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/PremiumStoreModal')); // 🔥 YENİ: Premium Mağaza
 const WhiteboardModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/WhiteboardModal'));
 const SoundboardModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/SoundboardModal'));
 const KanbanBoard = React.lazy(() => import(/* webpackMode: "lazy" */ './components/KanbanBoard'));
@@ -78,46 +78,46 @@ const StickerPicker = React.lazy(() => import(/* webpackMode: "lazy" */ './Stick
 const GifPicker = React.lazy(() => import(/* webpackMode: "lazy" */ './GifPicker'));
 const DJModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/DJModal'));
 const ThemeStoreModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/ThemeStoreModal'));
-// ðŸ†• YENÄ°: Daha fazla lazy loading
+// 🆕 YENİ: Daha fazla lazy loading
 const EncryptionKeyModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/EncryptionKeyModal'));
 const DownloadModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/DownloadModal'));
 const ServerSettingsModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/ServerSettingsModal'));
 const CreateGroupModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/CreateGroupModal'));
-const AdminAnalyticsPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminAnalyticsPanel')); // ðŸ”¥ YENÄ°: Admin Analytics
-const AdminPanelModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminPanelModal')); // ðŸ”¥ Admin Panel Modal
-const WebhooksPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/WebhooksPanel')); // ðŸ”¥ Webhooks Panel
-const VanityURLManager = React.lazy(() => import(/* webpackMode: "lazy" */ './components/VanityURLManager')); // ðŸ”¥ Vanity URL Manager
+const AdminAnalyticsPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminAnalyticsPanel')); // 🔥 YENİ: Admin Analytics
+const AdminPanelModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminPanelModal')); // 🔥 Admin Panel Modal
+const WebhooksPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/WebhooksPanel')); // 🔥 Webhooks Panel
+const VanityURLManager = React.lazy(() => import(/* webpackMode: "lazy" */ './components/VanityURLManager')); // 🔥 Vanity URL Manager
 
-// ï¿½ï¸ MODERATION: Moderation Tools (2026-01-15)
+// �️ MODERATION: Moderation Tools (2026-01-15)
 const AutoModerationDashboard = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AutoModerationDashboard'));
-const AutoModerationPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AutoModerationPanel')); // ðŸ”¥ YENÄ°
+const AutoModerationPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AutoModerationPanel')); // 🔥 YENİ
 const RaidProtectionPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/RaidProtectionPanel'));
 const ReportSystemPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/ReportSystemPanel'));
 const AuditLogPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AuditLogPanel'));
 const UserWarningsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/UserWarningsPanel'));
 
-// ðŸ“š FEATURE: New Feature Panels (2026-01-19)
-const BookmarkPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/BookmarkPanel')); // ðŸ“š Bookmark Organization
-const ReadLaterPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReadLaterPanel')); // ðŸ“– Read Later
-const ChannelPermissionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ChannelPermissionsPanel')); // ðŸ” Channel Permissions
-const MessageThreadsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageThreadsPanel')); // ðŸ’¬ Message Threads
-const ModeratorNotesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ModeratorNotesPanel')); // ðŸ“ Moderator Notes
-const ServerRolesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerRolesPanel')); // ðŸ‘‘ Server Roles
-const NotificationPreferencesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/NotificationPreferencesPanel')); // ðŸ”” Notifications
-const MessageOCRPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageOCRPanel')); // ðŸ” OCR Text Extraction
-const MassActionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MassActionsPanel')); // âš¡ Mass Moderation
-const TimeoutMutePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TimeoutMutePanel')); // â° Timeout/Mute
-const ServerThemesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerThemesPanel')); // ðŸŽ¨ Server Themes
-const KeywordMutesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/KeywordMutesPanel')); // ðŸš« Keyword Filters
-const WelcomeTemplatesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/WelcomeTemplatesPanel')); // ðŸ‘‹ Welcome Messages
-const StickyMessagesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/StickyMessagesPanel')); // ðŸ“Œ Sticky Messages
-const MessageTemplatesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageTemplatesPanel')); // ðŸ“„ Message Templates
-const MessageExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageExportPanel')); // ðŸ’¾ Export History
-const ArchivedRoomsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ArchivedRoomsPanel')); // ðŸ“¦ Archived Channels
-const SlowModePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/SlowModePanel')); // ðŸ¢ Slow Mode
-const EmojiManagementPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EmojiManagementPanel')); // ðŸ˜€ Emoji Management
+// 📚 FEATURE: New Feature Panels (2026-01-19)
+const BookmarkPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/BookmarkPanel')); // 📚 Bookmark Organization
+const ReadLaterPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReadLaterPanel')); // 📖 Read Later
+const ChannelPermissionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ChannelPermissionsPanel')); // 🔐 Channel Permissions
+const MessageThreadsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageThreadsPanel')); // 💬 Message Threads
+const ModeratorNotesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ModeratorNotesPanel')); // 📝 Moderator Notes
+const ServerRolesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerRolesPanel')); // 👑 Server Roles
+const NotificationPreferencesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/NotificationPreferencesPanel')); // 🔔 Notifications
+const MessageOCRPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageOCRPanel')); // 🔍 OCR Text Extraction
+const MassActionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MassActionsPanel')); // ⚡ Mass Moderation
+const TimeoutMutePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TimeoutMutePanel')); // ⏰ Timeout/Mute
+const ServerThemesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerThemesPanel')); // 🎨 Server Themes
+const KeywordMutesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/KeywordMutesPanel')); // 🚫 Keyword Filters
+const WelcomeTemplatesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/WelcomeTemplatesPanel')); // 👋 Welcome Messages
+const StickyMessagesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/StickyMessagesPanel')); // 📌 Sticky Messages
+const MessageTemplatesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageTemplatesPanel')); // 📄 Message Templates
+const MessageExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageExportPanel')); // 💾 Export History
+const ArchivedRoomsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ArchivedRoomsPanel')); // 📦 Archived Channels
+const SlowModePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/SlowModePanel')); // 🐢 Slow Mode
+const EmojiManagementPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EmojiManagementPanel')); // 😀 Emoji Management
 
-// ðŸš€ BATCH 1: Analytics & Tracking (2026-01-19)
+// 🚀 BATCH 1: Analytics & Tracking (2026-01-19)
 const ReactionAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReactionAnalyticsPanel'));
 const LinkClickTrackingPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/LinkClickTrackingPanel'));
 const JoinLeaveLogsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/JoinLeaveLogsPanel'));
@@ -126,69 +126,69 @@ const NicknameHistoryPanel = React.lazy(() => import(/* webpackChunkName: "featu
 const FieldChangeTrackingPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/FieldChangeTrackingPanel'));
 const InviteAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InviteAnalyticsPanel'));
 
-// ðŸš€ BATCH 2: Content & Moderation (2026-01-19)
+// 🚀 BATCH 2: Content & Moderation (2026-01-19)
 const ContentScannerPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ContentScannerPanel'));
 const EphemeralMessagesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EphemeralMessagesPanel'));
 const TopicHistoryPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TopicHistoryPanel'));
 const DraftsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/DraftsPanel'));
 const ServerNicknamesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerNicknamesPanel'));
 
-// ðŸš€ BATCH 3: Server Features (2026-01-19)
+// 🚀 BATCH 3: Server Features (2026-01-19)
 const ServerBoostPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerBoostPanel'));
 const RoomWebhooksPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/RoomWebhooksPanel'));
 const OAuthAppsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/OAuthAppsPanel'));
 const VanityURLPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VanityURLPanel'));
 const AutoRespondersPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AutoRespondersPanel'));
 
-// ðŸš€ BATCH 4: Security & Privacy (2026-01-19)
+// 🚀 BATCH 4: Security & Privacy (2026-01-19)
 const SessionManagementPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/SessionManagementPanel'));
 const GDPRExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/GDPRExportPanel'));
 const DataRetentionPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/DataRetentionPanel'));
 const TwoFactorSetupWizard = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TwoFactorSetupWizard'));
 
-// ðŸš€ BATCH 5: Communication (2026-01-19)
+// 🚀 BATCH 5: Communication (2026-01-19)
 const EnhancedPollsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EnhancedPollsPanel'));
 const VoiceTranscriptsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VoiceTranscriptsPanel'));
 
-// ðŸ’° CRITICAL & HIGH PRIORITY: Payment & Engagement (2026-01-19)
-const PaymentPanel = React.lazy(() => import(/* webpackChunkName: "critical" */ './components/PaymentPanel')); // ðŸ’° Payment System
-const StoreModal = React.lazy(() => import(/* webpackChunkName: "critical" */ './components/StoreModal')); // ðŸ›’ Store
-const DailyRewardsModal = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/DailyRewardsModal')); // ðŸŽ Daily Rewards
-const APIUsagePanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/APIUsagePanel')); // ðŸ“Š API Analytics
-const ExportJobsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ExportJobsPanel')); // ðŸ“¥ Export Jobs
-const ScheduledAnnouncementsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ScheduledAnnouncementsPanel')); // ðŸ“¢ Scheduled Announcements
+// 💰 CRITICAL & HIGH PRIORITY: Payment & Engagement (2026-01-19)
+const PaymentPanel = React.lazy(() => import(/* webpackChunkName: "critical" */ './components/PaymentPanel')); // 💰 Payment System
+const StoreModal = React.lazy(() => import(/* webpackChunkName: "critical" */ './components/StoreModal')); // 🛒 Store
+const DailyRewardsModal = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/DailyRewardsModal')); // 🎁 Daily Rewards
+const APIUsagePanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/APIUsagePanel')); // 📊 API Analytics
+const ExportJobsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ExportJobsPanel')); // 📥 Export Jobs
+const ScheduledAnnouncementsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ScheduledAnnouncementsPanel')); // 📢 Scheduled Announcements
 const InviteExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InviteExportPanel'));
 
-// ðŸš€ BATCH 6: Advanced Search & Analytics (2026-01-19)
+// 🚀 BATCH 6: Advanced Search & Analytics (2026-01-19)
 const AdvancedSearchPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AdvancedSearchPanel'));
 const GrowthMetricsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/GrowthMetricsPanel'));
 const LinkPreviewRenderer = React.lazy(() => import(/* webpackChunkName: "features" */ './components/LinkPreviewRenderer'));
 
-// ðŸš€ BATCH 7: Store & Gamification (2026-01-19)
+// 🚀 BATCH 7: Store & Gamification (2026-01-19)
 const InventoryPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InventoryPanel'));
 const WaitlistPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/WaitlistPanel'));
 const ReferralRewardsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReferralRewardsPanel'));
 
-// ï¿½ðŸ” ROADMAP: Auth & Security Pages
+// �🔐 ROADMAP: Auth & Security Pages
 const VerifyEmailPage = React.lazy(() => import('./pages/VerifyEmailPage'));
 const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
 
-// ðŸ” NEW: 2FA & Email Components
+// 🔐 NEW: 2FA & Email Components
 const TwoFactorSetup = React.lazy(() => import(/* webpackChunkName: "security" */ './components/TwoFactorSetup'));
 const TwoFactorLogin = React.lazy(() => import(/* webpackChunkName: "security" */ './components/TwoFactorLogin'));
 
-// ðŸ”— Vanity URL Invite Screen
+// 🔗 Vanity URL Invite Screen
 const VanityInviteScreen = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VanityInviteScreen'));
 const EmailVerification = React.lazy(() => import(/* webpackChunkName: "security" */ './components/EmailVerification'));
 
-// ðŸ“± NEW: Mobile Components
+// 📱 NEW: Mobile Components
 const MobileNav = React.lazy(() => import(/* webpackChunkName: "mobile" */ './components/MobileNav'));
 const SwipeActions = React.lazy(() => import(/* webpackChunkName: "mobile" */ './components/SwipeActions'));
 const VoiceMessage = React.lazy(() => import(/* webpackChunkName: "mobile" */ './components/VoiceMessage'));
 
-// âš¡ YENÄ°: Additional lazy loading
+// ⚡ YENİ: Additional lazy loading
 const FriendsTab = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './FriendsTab'));
 const RoomList = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './RoomList'));
 const UserProfilePanel = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './UserProfilePanel'));
@@ -197,20 +197,20 @@ const ChatUserList = React.lazy(() => import(/* webpackChunkName: "main-ui" */ '
 const PinnedMessages = React.lazy(() => import(/* webpackChunkName: "features" */ './PinnedMessages'));
 const FloatingVoiceIsland = React.lazy(() => import(/* webpackChunkName: "features" */ './FloatingVoiceIsland'));
 const CinemaPlayer = React.lazy(() => import(/* webpackChunkName: "features" */ './components/CinemaPlayer'));
-const ConnectionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ConnectionsPanel')); // ðŸ”— Platform Connections
-const PasswordSetupModal = React.lazy(() => import(/* webpackChunkName: "auth" */ './components/PasswordSetupModal')); // ðŸ”‘ Google Password Setup
+const ConnectionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ConnectionsPanel')); // 🔗 Platform Connections
+const PasswordSetupModal = React.lazy(() => import(/* webpackChunkName: "auth" */ './components/PasswordSetupModal')); // 🔑 Google Password Setup
 const NotificationDropdown = React.lazy(() => import(/* webpackChunkName: "features" */ './components/NotificationDropdown'));
 
-// ðŸ“Š NEW: Nice-to-Have Analytics Panels (2026-01-30)
-const ReactionStatsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ReactionStatsPanel')); // ðŸ“Š Reaction Statistics
-const ServerHealthPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ServerHealthPanel')); // ðŸ¥ Server Health
-const ChannelAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ChannelAnalyticsPanel')); // ðŸ“ˆ Channel Analytics
-const SmartSuggestionsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/SmartSuggestionsPanel')); // ðŸ¤– AI Suggestions
-const UserPresenceInsightsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/UserPresenceInsightsPanel')); // ðŸ‘¤ User Insights
+// 📊 NEW: Nice-to-Have Analytics Panels (2026-01-30)
+const ReactionStatsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ReactionStatsPanel')); // 📊 Reaction Statistics
+const ServerHealthPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ServerHealthPanel')); // 🏥 Server Health
+const ChannelAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ChannelAnalyticsPanel')); // 📈 Channel Analytics
+const SmartSuggestionsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/SmartSuggestionsPanel')); // 🤖 AI Suggestions
+const UserPresenceInsightsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/UserPresenceInsightsPanel')); // 👤 User Insights
 
-// --- YENÄ° EKLEMELER: Eksik componentler - LAZY LOAD OPTIMIZATION ---
-const UserFooter = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserFooter')); // ðŸ‘¤ KullanÄ±cÄ± footer
-const UserContextMenu = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserContextMenu')); // ðŸ–±ï¸ KullanÄ±cÄ± saÄŸ tÄ±k menÃ¼sÃ¼
+// --- YENİ EKLEMELER: Eksik componentler - LAZY LOAD OPTIMIZATION ---
+const UserFooter = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserFooter')); // 👤 Kullanıcı footer
+const UserContextMenu = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserContextMenu')); // 🖱️ Kullanıcı sağ tık menüsü
 
 //  BATCH 8: New Features (2026-01-28) - Missing Imports Fixed
 const MiniGamesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MiniGamesPanel')); //  Mini Games
@@ -218,29 +218,29 @@ const ProjectCollaborationPanel = React.lazy(() => import(/* webpackChunkName: "
 const AvatarStudioPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AvatarStudioPanel')); //  Avatar Studio
 
 // --- AYARLAR ---
-// Bu kÄ±smÄ± tamamen deÄŸiÅŸtiriyoruz:
+// Bu kısmı tamamen değiştiriyoruz:
 
 const DJANGO_PORT = "8888";
 
 const isElectron = typeof window !== 'undefined' && typeof window.require === 'function';
 const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
 
-// ðŸ”¥ Production build kontrolÃ¼ - EXE daÄŸÄ±tÄ±mÄ± iÃ§in
+// 🔥 Production build kontrolü - EXE dağıtımı için
 const isProductionBuild = import.meta.env.PROD || process.env.NODE_ENV === 'production';
 
 const API_URL_BASE_STRING = (() => {
-    // 1. Mobil Uygulama ise gerÃ§ek siteye git
+    // 1. Mobil Uygulama ise gerçek siteye git
     if (isNative) return "https://api.pawscord.com";
 
-    // 2. Electron MasaÃ¼stÃ¼ ise
+    // 2. Electron Masaüstü ise
     if (isElectron) {
-        // Production build'de (EXE daÄŸÄ±tÄ±mÄ±) api.pawscord.com kullan
+        // Production build'de (EXE dağıtımı) api.pawscord.com kullan
         // Development'ta localhost kullan
         return isProductionBuild ? "https://api.pawscord.com" : `http://127.0.0.1:${DJANGO_PORT}`;
     }
 
-    // 3. Web TarayÄ±cÄ±sÄ± ise (Chrome/Edge) adres Ã§ubuÄŸundaki IP neyse onu kullan.
-    // BÃ¶ylece "localhost" veya "192.168.x.x" fark etmeksizin Ã§alÄ±ÅŸÄ±r.
+    // 3. Web Tarayıcısı ise (Chrome/Edge) adres çubuğundaki IP neyse onu kullan.
+    // Böylece "localhost" veya "192.168.x.x" fark etmeksizin çalışır.
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
 
@@ -251,19 +251,19 @@ const API_URL_BASE_STRING = (() => {
     return `${protocol}//${hostname}:${DJANGO_PORT}`;
 })();
 
-// ðŸ”¥ FIX: Media dosyalarÄ± iÃ§in ayrÄ± URL (EXE/APK'da production URL kullan)
+// 🔥 FIX: Media dosyaları için ayrı URL (EXE/APK'da production URL kullan)
 const MEDIA_BASE_URL = (() => {
-    // EXE veya APK ise MUTLAKA production URL kullan (media dosyalarÄ± localhost'ta yok)
+    // EXE veya APK ise MUTLAKA production URL kullan (media dosyaları localhost'ta yok)
     if (isElectron || isNative) return "https://www.pawscord.com";
 
-    // Web tarayÄ±cÄ±sÄ±nda ise normal API URL'i kullan
+    // Web tarayıcısında ise normal API URL'i kullan
     return API_URL_BASE_STRING;
 })();
 
 const API_BASE_URL = `${API_URL_BASE_STRING}/api`;
 const ABSOLUTE_HOST_URL = API_URL_BASE_STRING;
 const WS_PROTOCOL = API_URL_BASE_STRING.startsWith('https') ? 'wss' : 'ws';
-// API_HOST kÄ±smÄ±nÄ± da dinamik yapÄ±yoruz:
+// API_HOST kısmını da dinamik yapıyoruz:
 const API_HOST = API_URL_BASE_STRING.replace(/^https?:\/\//, '');
 // URL CONSTANTS
 const LOGIN_URL = `${API_BASE_URL}/auth/login/`;
@@ -307,7 +307,7 @@ const calculateFileHash = (file) => {
     });
 };
 
-// --- ANA Ä°Ã‡ERÄ°K BÄ°LEÅžENÄ° ---
+// --- ANA İÇERİK BİLEŞENİ ---
 const AppContent = () => {
     const { user, isAuthenticated, token, login, logout, isLoading: isAuthLoading } = useAuth();
     const {
@@ -315,11 +315,11 @@ const AppContent = () => {
         isMuted, isDeafened, toggleMute, toggleDeafened, toggleVideo, toggleScreenShare,
         remoteVolumes, setRemoteVolume, localCameraStream, remoteStreams, isTalking,
         sendSignal, isScreenSharing, isVideoEnabled, isPttActive, localScreenStream,
-        sendReaction, lastReaction, // ðŸ”¥ EKLENDÄ°
-        applyVoiceEffect, activeEffect, // ðŸ”¥ EKLENDÄ°
-        cinemaState, setCinemaState, // ðŸ”¥ EKLENDÄ°
-        gameState, sendGameSignal, // ðŸ”¥ EKLENDÄ°
-        mutedUsers // ðŸ”¥ EKLENDÄ°
+        sendReaction, lastReaction, // 🔥 EKLENDİ
+        applyVoiceEffect, activeEffect, // 🔥 EKLENDİ
+        cinemaState, setCinemaState, // 🔥 EKLENDİ
+        gameState, sendGameSignal, // 🔥 EKLENDİ
+        mutedUsers // 🔥 EKLENDİ
     } = useVoice();
 
     // Global WebSocket Data
@@ -330,13 +330,13 @@ const AppContent = () => {
     const activeChat = useChatStore(state => state.activeChat);
     const messages = useChatStore(state => state.messages);
     const encryptionKeys = useChatStore(state => state.encryptionKeys);
-    const voiceUsers = useChatStore(state => state.voiceUsers); // ðŸ”¥ FIX: Voice users state eklendi
-    const unreadCounts = useChatStore(state => state.unreadCounts); // ðŸ”¥ YENÄ°: OkunmamÄ±ÅŸ mesaj sayÄ±larÄ±
+    const voiceUsers = useChatStore(state => state.voiceUsers); // 🔥 FIX: Voice users state eklendi
+    const unreadCounts = useChatStore(state => state.unreadCounts); // 🔥 YENİ: Okunmamış mesaj sayıları
 
     // Store Actions
     const setActiveChat = useChatStore(state => state.setActiveChat);
     const addMessage = useChatStore(state => state.addMessage);
-    const updateMessage = useChatStore(state => state.updateMessage); // ðŸ”¥ NEW
+    const updateMessage = useChatStore(state => state.updateMessage); // 🔥 NEW
     const setMessages = useChatStore(state => state.setMessages);
     const setTypingUser = useChatStore(state => state.setTypingUser);
     const setOnlineUsers = useChatStore(state => state.setOnlineUsers);
@@ -349,30 +349,30 @@ const AppContent = () => {
     const [showSoundboard, setShowSoundboard] = useState(false);
     const [showWhiteboard, setShowWhiteboard] = useState(false);
     const [showEncModal, setShowEncModal] = useState(false);
-    const [showTemplateModal, setShowTemplateModal] = useState(false); // âœ¨ New State
+    const [showTemplateModal, setShowTemplateModal] = useState(false); // ✨ New State
     const [chartSymbol, setChartSymbol] = useState(null);
     const [isDownloading, setIsDownloading] = useState(false);
     const [downloadProgress, setDownloadProgress] = useState(0);
     const [updateStatusText, setUpdateStatusText] = useState('');
     const username = user?.username || '';
     const [showSnippetModal, setShowSnippetModal] = useState(false);
-    const [showPollModal, setShowPollModal] = useState(false); // ðŸ”¥ NEW STATE
+    const [showPollModal, setShowPollModal] = useState(false); // 🔥 NEW STATE
     const [focusedStream, setFocusedStream] = useState(null); // { id, user, track, streamType, avatarUrl, isLocal }
 
-    // ðŸ”¥ RESPONSIVE HOOK (replaces old isMobile state)
+    // 🔥 RESPONSIVE HOOK (replaces old isMobile state)
     const { isMobile, isTablet, isDesktop, width, height, orientation, isTouchDevice } = useResponsive();
 
     const [searchQuery, setSearchQuery] = useState('');
 
-    // âš¡ OPTIMIZATION: Debounce search query to reduce re-renders
+    // ⚡ OPTIMIZATION: Debounce search query to reduce re-renders
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
     const [safeAreaTop, setSafeAreaTop] = useState('0px');
     const safeAreaBottom = isNative ? 'max(20px, env(safe-area-inset-bottom))' : '0px';
     const [islandState, setIslandState] = useState({ width: 300, height: 225, x: 100, y: 100 });
-    const [showVoiceIsland, setShowVoiceIsland] = useState(true); // ðŸ”¥ Toggle visibility
-    const [useNewVoicePanel, setUseNewVoicePanel] = useState(true); // ðŸ†• Yeni panel kullan
-    const [isVoicePanelMinimized, setIsVoicePanelMinimized] = useState(false); // ðŸ†• Panel minimize durumu
+    const [showVoiceIsland, setShowVoiceIsland] = useState(true); // 🔥 Toggle visibility
+    const [useNewVoicePanel, setUseNewVoicePanel] = useState(true); // 🆕 Yeni panel kullan
+    const [isVoicePanelMinimized, setIsVoicePanelMinimized] = useState(false); // 🆕 Panel minimize durumu
 
     // Modals & UI States
     const [animationState, setAnimationState] = useState('start');
@@ -396,104 +396,104 @@ const AppContent = () => {
     const [dropTarget, setDropTarget] = useState(null);
     const [showStore, setShowStore] = useState(false);
     const [showThemeStore, setShowThemeStore] = useState(false);
-    const [showAnalytics, setShowAnalytics] = useState(false); // ðŸ”¥ YENÄ°: Admin Analytics
-    const [showAdminPanel, setShowAdminPanel] = useState(false); // ðŸ”¥ Admin Panel Modal
-    const [showWebhooks, setShowWebhooks] = useState(false); // ðŸ”¥ Webhooks Panel
-    const [showModTools, setShowModTools] = useState(false); // ðŸ”¥ Moderation Tools
-    const [showVanityURL, setShowVanityURL] = useState(false); // ðŸ”¥ Vanity URL Manager
+    const [showAnalytics, setShowAnalytics] = useState(false); // 🔥 YENİ: Admin Analytics
+    const [showAdminPanel, setShowAdminPanel] = useState(false); // 🔥 Admin Panel Modal
+    const [showWebhooks, setShowWebhooks] = useState(false); // 🔥 Webhooks Panel
+    const [showModTools, setShowModTools] = useState(false); // 🔥 Moderation Tools
+    const [showVanityURL, setShowVanityURL] = useState(false); // 🔥 Vanity URL Manager
 
-    // ðŸ›¡ï¸ MODERATION: Moderation Panels (2026-01-15)
+    // 🛡️ MODERATION: Moderation Panels (2026-01-15)
     const [showAutoModeration, setShowAutoModeration] = useState(false);
     const [showRaidProtection, setShowRaidProtection] = useState(false);
     const [showReportSystem, setShowReportSystem] = useState(false);
     const [showAuditLog, setShowAuditLog] = useState(false);
     const [showUserWarnings, setShowUserWarnings] = useState(false);
-    const [showAutoResponder, setShowAutoResponder] = useState(false); // ðŸ”¥ Auto Responder
+    const [showAutoResponder, setShowAutoResponder] = useState(false); // 🔥 Auto Responder
 
-    // ðŸ“š NEW FEATURES: Feature Panels (2026-01-19)
-    const [showBookmarks, setShowBookmarks] = useState(false); // ðŸ“š Bookmark Panel
-    const [showReadLater, setShowReadLater] = useState(false); // ðŸ“– Read Later
-    const [showChannelPermissions, setShowChannelPermissions] = useState(false); // ðŸ” Channel Permissions
-    const [showMessageThreads, setShowMessageThreads] = useState(false); // ðŸ’¬ Message Threads
-    const [showModeratorNotes, setShowModeratorNotes] = useState(false); // ðŸ“ Moderator Notes
-    const [showServerRoles, setShowServerRoles] = useState(false); // ðŸ‘¥ Server Roles
-    const [showNotificationPrefs, setShowNotificationPrefs] = useState(false); // ðŸ”” Notifications
-    const [showMessageOCR, setShowMessageOCR] = useState(false); // ðŸ” OCR
-    const [showMassActions, setShowMassActions] = useState(false); // âš¡ Mass Actions
+    // 📚 NEW FEATURES: Feature Panels (2026-01-19)
+    const [showBookmarks, setShowBookmarks] = useState(false); // 📚 Bookmark Panel
+    const [showReadLater, setShowReadLater] = useState(false); // 📖 Read Later
+    const [showChannelPermissions, setShowChannelPermissions] = useState(false); // 🔐 Channel Permissions
+    const [showMessageThreads, setShowMessageThreads] = useState(false); // 💬 Message Threads
+    const [showModeratorNotes, setShowModeratorNotes] = useState(false); // 📝 Moderator Notes
+    const [showServerRoles, setShowServerRoles] = useState(false); // 👥 Server Roles
+    const [showNotificationPrefs, setShowNotificationPrefs] = useState(false); // 🔔 Notifications
+    const [showMessageOCR, setShowMessageOCR] = useState(false); // 🔍 OCR
+    const [showMassActions, setShowMassActions] = useState(false); // ⚡ Mass Actions
 
-    // ðŸš€ BATCH 1: Analytics & Tracking (2026-01-19)
-    const [showReactionAnalytics, setShowReactionAnalytics] = useState(false); // ðŸ“Š Reaction Analytics
-    const [showLinkClickTracking, setShowLinkClickTracking] = useState(false); // ðŸ”— Link Click Tracking
-    const [showJoinLeaveLogs, setShowJoinLeaveLogs] = useState(false); // ðŸšª Join/Leave Logs
-    const [showUserActivity, setShowUserActivity] = useState(false); // ðŸ“ˆ User Activity
-    const [showNicknameHistory, setShowNicknameHistory] = useState(false); // ðŸ‘¤ Nickname History
-    const [showFieldChangeTracking, setShowFieldChangeTracking] = useState(false); // ðŸ“‹ Field Change Tracking
-    const [showInviteAnalytics, setShowInviteAnalytics] = useState(false); // ðŸ“§ Invite Analytics
+    // 🚀 BATCH 1: Analytics & Tracking (2026-01-19)
+    const [showReactionAnalytics, setShowReactionAnalytics] = useState(false); // 📊 Reaction Analytics
+    const [showLinkClickTracking, setShowLinkClickTracking] = useState(false); // 🔗 Link Click Tracking
+    const [showJoinLeaveLogs, setShowJoinLeaveLogs] = useState(false); // 🚪 Join/Leave Logs
+    const [showUserActivity, setShowUserActivity] = useState(false); // 📈 User Activity
+    const [showNicknameHistory, setShowNicknameHistory] = useState(false); // 👤 Nickname History
+    const [showFieldChangeTracking, setShowFieldChangeTracking] = useState(false); // 📋 Field Change Tracking
+    const [showInviteAnalytics, setShowInviteAnalytics] = useState(false); // 📧 Invite Analytics
 
-    // ðŸš€ BATCH 2: Content & Moderation (2026-01-19)
-    const [showContentScanner, setShowContentScanner] = useState(false); // ðŸ” Content Scanner
-    const [showEphemeralMessages, setShowEphemeralMessages] = useState(false); // â±ï¸ Ephemeral Messages
-    const [showTopicHistory, setShowTopicHistory] = useState(false); // ðŸ“œ Topic History
-    const [showDrafts, setShowDrafts] = useState(false); // ðŸ’¾ Drafts
-    const [showServerNicknames, setShowServerNicknames] = useState(false); // ðŸ·ï¸ Server Nicknames
+    // 🚀 BATCH 2: Content & Moderation (2026-01-19)
+    const [showContentScanner, setShowContentScanner] = useState(false); // 🔍 Content Scanner
+    const [showEphemeralMessages, setShowEphemeralMessages] = useState(false); // ⏱️ Ephemeral Messages
+    const [showTopicHistory, setShowTopicHistory] = useState(false); // 📜 Topic History
+    const [showDrafts, setShowDrafts] = useState(false); // 💾 Drafts
+    const [showServerNicknames, setShowServerNicknames] = useState(false); // 🏷️ Server Nicknames
 
-    // ðŸš€ BATCH 3: Server Features (2026-01-19)
-    const [showServerBoost, setShowServerBoost] = useState(false); // ðŸš€ Server Boost
-    const [showRoomWebhooks, setShowRoomWebhooks] = useState(false); // ðŸª Room Webhooks
-    const [showOAuthApps, setShowOAuthApps] = useState(false); // ðŸ” OAuth Apps
+    // 🚀 BATCH 3: Server Features (2026-01-19)
+    const [showServerBoost, setShowServerBoost] = useState(false); // 🚀 Server Boost
+    const [showRoomWebhooks, setShowRoomWebhooks] = useState(false); // 🪝 Room Webhooks
+    const [showOAuthApps, setShowOAuthApps] = useState(false); // 🔐 OAuth Apps
     // Note: showVanityURL already exists above
-    const [showAutoResponders, setShowAutoResponders] = useState(false); // ðŸ¤– Auto Responders
+    const [showAutoResponders, setShowAutoResponders] = useState(false); // 🤖 Auto Responders
 
-    // ðŸš€ BATCH 4: Security & Privacy (2026-01-19)
-    const [showSessionManagement, setShowSessionManagement] = useState(false); // ðŸ”’ Session Management
-    const [showGDPRExport, setShowGDPRExport] = useState(false); // ðŸ“¦ GDPR Export
-    const [showDataRetention, setShowDataRetention] = useState(false); // ðŸ—„ï¸ Data Retention
-    const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false); // ðŸ” Two-Factor Auth
+    // 🚀 BATCH 4: Security & Privacy (2026-01-19)
+    const [showSessionManagement, setShowSessionManagement] = useState(false); // 🔒 Session Management
+    const [showGDPRExport, setShowGDPRExport] = useState(false); // 📦 GDPR Export
+    const [showDataRetention, setShowDataRetention] = useState(false); // 🗄️ Data Retention
+    const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false); // 🔐 Two-Factor Auth
 
-    // ðŸš€ BATCH 5: Communication (2026-01-19)
-    const [showEnhancedPolls, setShowEnhancedPolls] = useState(false); // ðŸ“Š Enhanced Polls
-    const [showVoiceTranscripts, setShowVoiceTranscripts] = useState(false); // ðŸŽ¤ Voice Transcripts
-    const [showInviteExport, setShowInviteExport] = useState(false); // ðŸ“¤ Invite Export
+    // 🚀 BATCH 5: Communication (2026-01-19)
+    const [showEnhancedPolls, setShowEnhancedPolls] = useState(false); // 📊 Enhanced Polls
+    const [showVoiceTranscripts, setShowVoiceTranscripts] = useState(false); // 🎤 Voice Transcripts
+    const [showInviteExport, setShowInviteExport] = useState(false); // 📤 Invite Export
 
-    // ðŸš€ BATCH 6: Advanced Search & Analytics (2026-01-19)
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false); // ðŸ” Advanced Search
-    const [showGrowthMetrics, setShowGrowthMetrics] = useState(false); // ðŸ“ˆ Growth Metrics
-    const [showLinkPreview, setShowLinkPreview] = useState(false); // ðŸ”— Link Preview
+    // 🚀 BATCH 6: Advanced Search & Analytics (2026-01-19)
+    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false); // 🔍 Advanced Search
+    const [showGrowthMetrics, setShowGrowthMetrics] = useState(false); // 📈 Growth Metrics
+    const [showLinkPreview, setShowLinkPreview] = useState(false); // 🔗 Link Preview
 
-    // ðŸš€ BATCH 7: Store & Gamification (2026-01-19)
-    const [showInventory, setShowInventory] = useState(false); // ðŸŽ’ Inventory
-    const [showWaitlist, setShowWaitlist] = useState(false); // ðŸ“‹ Waitlist
-    const [showReferralRewards, setShowReferralRewards] = useState(false); // ðŸŽ Referral Rewards
+    // 🚀 BATCH 7: Store & Gamification (2026-01-19)
+    const [showInventory, setShowInventory] = useState(false); // 🎒 Inventory
+    const [showWaitlist, setShowWaitlist] = useState(false); // 📋 Waitlist
+    const [showReferralRewards, setShowReferralRewards] = useState(false); // 🎁 Referral Rewards
 
-    // ðŸŽ® BATCH 8: New Features (2026-01-28)
-    const [showMiniGames, setShowMiniGames] = useState(false); // ðŸŽ® Mini Games Hub
-    const [showProjectCollaboration, setShowProjectCollaboration] = useState(false); // ðŸ“‚ Project Collaboration
-    const [showAvatarStudio, setShowAvatarStudio] = useState(false); // ðŸŽ¨ Avatar Customization Studio
+    // 🎮 BATCH 8: New Features (2026-01-28)
+    const [showMiniGames, setShowMiniGames] = useState(false); // 🎮 Mini Games Hub
+    const [showProjectCollaboration, setShowProjectCollaboration] = useState(false); // 📂 Project Collaboration
+    const [showAvatarStudio, setShowAvatarStudio] = useState(false); // 🎨 Avatar Customization Studio
 
-    const [showTimeoutMute, setShowTimeoutMute] = useState(false); // â° Timeout/Mute
-    const [showServerThemes, setShowServerThemes] = useState(false); // ðŸŽ¨ Server Themes
-    const [showKeywordMutes, setShowKeywordMutes] = useState(false); // ðŸ”‡ Keyword Mutes
-    const [showWelcomeTemplates, setShowWelcomeTemplates] = useState(false); // ðŸ‘‹ Welcome Templates
-    const [showStickyMessages, setShowStickyMessages] = useState(false); // ðŸ“Œ Sticky Messages
-    const [showMessageTemplates, setShowMessageTemplates] = useState(false); // ðŸ“ Message Templates
-    const [showMessageExport, setShowMessageExport] = useState(false); // ðŸ“¦ Message Export
-    const [showArchivedRooms, setShowArchivedRooms] = useState(false); // ðŸ“¦ Archived Rooms
-    const [showSlowMode, setShowSlowMode] = useState(false); // â±ï¸ Slow Mode
-    const [showEmojiManagement, setShowEmojiManagement] = useState(false); // ðŸ˜€ Emoji Management
+    const [showTimeoutMute, setShowTimeoutMute] = useState(false); // ⏰ Timeout/Mute
+    const [showServerThemes, setShowServerThemes] = useState(false); // 🎨 Server Themes
+    const [showKeywordMutes, setShowKeywordMutes] = useState(false); // 🔇 Keyword Mutes
+    const [showWelcomeTemplates, setShowWelcomeTemplates] = useState(false); // 👋 Welcome Templates
+    const [showStickyMessages, setShowStickyMessages] = useState(false); // 📌 Sticky Messages
+    const [showMessageTemplates, setShowMessageTemplates] = useState(false); // 📝 Message Templates
+    const [showMessageExport, setShowMessageExport] = useState(false); // 📦 Message Export
+    const [showArchivedRooms, setShowArchivedRooms] = useState(false); // 📦 Archived Rooms
+    const [showSlowMode, setShowSlowMode] = useState(false); // ⏱️ Slow Mode
+    const [showEmojiManagement, setShowEmojiManagement] = useState(false); // 😀 Emoji Management
 
     const [currentTheme, setCurrentTheme] = useState('default');
     const [stickyMessage, setStickyMessage] = useState(null);
-    const [showAvatarCropper, setShowAvatarCropper] = useState(false); // ðŸ“¸ AVATAR CROPPER
+    const [showAvatarCropper, setShowAvatarCropper] = useState(false); // 📸 AVATAR CROPPER
     const [messageHistoryLoading, setMessageHistoryLoading] = useState(false);
     const [hasMoreMessages, setHasMoreMessages] = useState(true);
     const [messageHistoryOffset, setMessageHistoryOffset] = useState(0);
     const [isInitialDataLoaded, setIsInitialDataLoaded] = useState(false);
     const [friendsList, setFriendsList] = useState([]);
-    const [pendingFriendRequests, setPendingFriendRequests] = useState(0); // ðŸ”¥ YENÄ°: Bekleyen arkadaÅŸlÄ±k istekleri sayÄ±sÄ±
-    const [serverOrder, setServerOrder] = useState([]); // ðŸ”¥ YENÄ°: Sunucu sÄ±ralamasÄ±
+    const [pendingFriendRequests, setPendingFriendRequests] = useState(0); // 🔥 YENİ: Bekleyen arkadaşlık istekleri sayısı
+    const [serverOrder, setServerOrder] = useState([]); // 🔥 YENİ: Sunucu sıralaması
     const [serverMembers, setServerMembers] = useState([]);
-    const [selectedServer, setSelectedServer] = useState(null); // ðŸ”¥ YENÄ°: SeÃ§ili sunucu (Ã¼ye listesi iÃ§in)
-    const [currentUserProfile, setCurrentUserProfile] = useState(null); // ðŸ”¥ YENÄ°: KullanÄ±cÄ±nÄ±n profil verisi
+    const [selectedServer, setSelectedServer] = useState(null); // 🔥 YENİ: Seçili sunucu (üye listesi için)
+    const [currentUserProfile, setCurrentUserProfile] = useState(null); // 🔥 YENİ: Kullanıcının profil verisi
     const [updateAvailable, setUpdateAvailable] = useState(false);
     const [showDownloadModal, setShowDownloadModal] = useState(false);
     const [serverToEdit, setServerToEdit] = useState(null);
@@ -501,29 +501,29 @@ const AppContent = () => {
     const [isSummaryLoading, setIsSummaryLoading] = useState(false);
     const [summaryResult, setSummaryResult] = useState("");
     const [soundSettings, setSoundSettings] = useState(() => JSON.parse(localStorage.getItem('chat_sound_settings')) || { notifications: true, mentions: true, userJoinLeave: true });
-    const [maintenanceMode, setMaintenanceMode] = useState(null); // ðŸ†• Maintenance mode
+    const [maintenanceMode, setMaintenanceMode] = useState(null); // 🆕 Maintenance mode
     const [showDJ, setShowDJ] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0); // ðŸ“Š Upload progress %
+    const [uploadProgress, setUploadProgress] = useState(0); // 📊 Upload progress %
     const [isRecordingVoice, setIsRecordingVoice] = useState(false);
     const [hasDraftMessage, setHasDraftMessage] = useState(false);
     const [draftText, setDraftText] = useState('');
     const [showScrollToBottom, setShowScrollToBottom] = useState(false);
-    const [editingMessage, setEditingMessage] = useState(null); // ðŸ”¥ Mesaj dÃ¼zenleme
-    const [replyingTo, setReplyingTo] = useState(null); // ðŸ”¥ Mesaja cevap verme
-    const [forwardingMessage, setForwardingMessage] = useState(null); // ðŸ”¥ Mesaj iletme
-    const [isSelectionMode, setIsSelectionMode] = useState(false); // ðŸ”¥ EKLENDÄ°: Mesaj seÃ§me modu
+    const [editingMessage, setEditingMessage] = useState(null); // 🔥 Mesaj düzenleme
+    const [replyingTo, setReplyingTo] = useState(null); // 🔥 Mesaja cevap verme
+    const [forwardingMessage, setForwardingMessage] = useState(null); // 🔥 Mesaj iletme
+    const [isSelectionMode, setIsSelectionMode] = useState(false); // 🔥 EKLENDİ: Mesaj seçme modu
 
-    // ðŸ”” YENÄ°: Bildirim ve context menu state'leri
+    // 🔔 YENİ: Bildirim ve context menu state'leri
     const [showNotifications, setShowNotifications] = useState(false);
-    const [showToolbarMenu, setShowToolbarMenu] = useState(false); // ðŸ”¥ Toolbar aÃ§Ä±lÄ±r menÃ¼
+    const [showToolbarMenu, setShowToolbarMenu] = useState(false); // 🔥 Toolbar açılır menü
     const [userContextMenu, setUserContextMenu] = useState(null); // { x, y, user, permissions }
 
-    // ðŸŽ« YENÄ°: Sunucuya davet modal state
+    // 🎫 YENİ: Sunucuya davet modal state
     const [inviteToServerUser, setInviteToServerUser] = useState(null); // { username } or null
 
-    // ðŸ’° YENÄ°: Payment & Store state'leri (2026-01-19)
+    // 💰 YENİ: Payment & Store state'leri (2026-01-19)
     const [showPaymentPanel, setShowPaymentPanel] = useState(false);
     const [showStoreModal, setShowStoreModal] = useState(false);
     const [showDailyRewards, setShowDailyRewards] = useState(false);
@@ -531,18 +531,18 @@ const AppContent = () => {
     const [showExportJobsPanel, setShowExportJobsPanel] = useState(false);
     const [showScheduledAnnouncements, setShowScheduledAnnouncements] = useState(false);
 
-    // ðŸ”— YENÄ°: Vanity URL Invite Screen (2026-01-23)
+    // 🔗 YENİ: Vanity URL Invite Screen (2026-01-23)
     const [showVanityInvite, setShowVanityInvite] = useState(null); // vanity path veya null
 
-    // ðŸ”— YENÄ°: Platform Connections Panel
+    // 🔗 YENİ: Platform Connections Panel
     const [showConnectionsPanel, setShowConnectionsPanel] = useState(false);
 
-    // ðŸ”‘ YENÄ°: Google ile giriÅŸ yapanlar iÃ§in ÅŸifre belirleme modal
+    // 🔑 YENİ: Google ile giriş yapanlar için şifre belirleme modal
     const [showPasswordSetupModal, setShowPasswordSetupModal] = useState(false);
 
     const typingUsers = useChatStore(state => state.typingUsers);
 
-    // âš¡ OPTIMIZATION: Memoize filtered typing users
+    // ⚡ OPTIMIZATION: Memoize filtered typing users
     const activeTypingUsers = useMemo(() => {
         return typingUsers.filter(u => u !== username);
     }, [typingUsers, username]);
@@ -559,10 +559,10 @@ const AppContent = () => {
     const searchInputRef = useRef(null);
     const historyCacheRef = useRef({});
 
-    // ðŸ”¥ Admin kontrolÃ¼ - Eastkhan her zaman admin, diÄŸerleri iÃ§in role kontrolÃ¼
+    // 🔥 Admin kontrolü - Eastkhan her zaman admin, diğerleri için role kontrolü
     const isAdmin = username === 'Eastkhan' || username === 'PawPaw' || currentUserProfile?.role === 'admin';
 
-    // ðŸ”¥ YENÄ°: KullanÄ±cÄ± izinleri - context menu iÃ§in
+    // 🔥 YENİ: Kullanıcı izinleri - context menu için
     const currentUserPermissions = useMemo(() => {
         const currentServer = categories?.find(c => c.id === activeChat?.serverId);
         const isServerOwner = currentServer?.owner === username || currentServer?.created_by === username;
@@ -580,7 +580,7 @@ const AppContent = () => {
         };
     }, [isAdmin, categories, activeChat?.serverId, username, serverMembers]);
 
-    // ðŸ”¥ YENÄ°: SunucularÄ± sÄ±rala
+    // 🔥 YENİ: Sunucuları sırala
     const sortedServers = useMemo(() => {
         if (!categories || categories.length === 0) return [];
         if (!serverOrder || serverOrder.length === 0) return categories;
@@ -588,13 +588,13 @@ const AppContent = () => {
         const ordered = [];
         const unordered = [];
 
-        // SÄ±ralÄ± olanlarÄ± ekle
+        // Sıralı olanları ekle
         serverOrder.forEach(serverId => {
             const server = categories.find(c => c.id === serverId);
             if (server) ordered.push(server);
         });
 
-        // SÄ±ralamada olmayan yenileri ekle
+        // Sıralamada olmayan yenileri ekle
         categories.forEach(server => {
             if (!serverOrder.includes(server.id)) {
                 unordered.push(server);
@@ -605,7 +605,7 @@ const AppContent = () => {
     }, [categories, serverOrder]);
     const onlineUsers = useChatStore(state => state.onlineUsers);
 
-    // ðŸš€ PERFORMANS: Optimized messages ve online users
+    // 🚀 PERFORMANS: Optimized messages ve online users
     const rawMessages = useChatStore(state => state.messages);
     const optimizedMessages = useOptimizedMessages(rawMessages, debouncedSearchQuery, activeChat);
     const optimizedOnlineUsers = useOnlineUsers(allUsers);
@@ -615,9 +615,9 @@ const AppContent = () => {
     useEffect(() => {
         if (animationState === 'finished') return;
         setAnimationState('start');
-        // âš¡ Animasyonun tam gÃ¶rÃ¼nmesi iÃ§in yeterli sÃ¼re: 2-2.5s
-        const timer1 = setTimeout(() => setAnimationState('pre-transition'), 1500); // Logo animasyonu iÃ§in bekle
-        const timer2 = setTimeout(() => setAnimationState('finished'), 2200); // Normal bitiÅŸ - animasyon tamamlansÄ±n
+        // ⚡ Animasyonun tam görünmesi için yeterli süre: 2-2.5s
+        const timer1 = setTimeout(() => setAnimationState('pre-transition'), 1500); // Logo animasyonu için bekle
+        const timer2 = setTimeout(() => setAnimationState('finished'), 2200); // Normal bitiş - animasyon tamamlansın
         const forceFinishTimer = setTimeout(() => setAnimationState('finished'), 3000); // Max bekle
         return () => {
             clearTimeout(timer1);
@@ -626,10 +626,10 @@ const AppContent = () => {
         };
     }, []);
 
-    // ðŸ”¥ NOT: Veri yÃ¼klendiÄŸinde splash erken kapatmÄ±yoruz - animasyon tamamlansÄ±n
-    // Timer'lar splash'Ä± kontrol eder, veri hazÄ±r olsa bile animasyon biter
+    // 🔥 NOT: Veri yüklendiğinde splash erken kapatmıyoruz - animasyon tamamlansın
+    // Timer'lar splash'ı kontrol eder, veri hazır olsa bile animasyon biter
 
-    // ðŸ“§ EMAIL VERIFICATION: Check URL parameters for verification status
+    // 📧 EMAIL VERIFICATION: Check URL parameters for verification status
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const verification = params.get('verification');
@@ -638,28 +638,28 @@ const AppContent = () => {
         const needsPassword = params.get('needs_password');
 
         if (verification === 'success') {
-            toast.success(`âœ… Email doÄŸrulandÄ±! HoÅŸgeldin ${username || 'kullanÄ±cÄ±'}!`);
+            toast.success(`✅ Email doğrulandı! Hoşgeldin ${username || 'kullanıcı'}!`);
             // Clear URL parameters
             window.history.replaceState({}, document.title, window.location.pathname);
         } else if (verification === 'failed') {
             const errorMsg = reason === 'expired'
-                ? 'â° DoÄŸrulama linki sÃ¼resi dolmuÅŸ. Yeni bir link talep edin.'
-                : 'âŒ GeÃ§ersiz doÄŸrulama linki.';
+                ? '⏰ Doğrulama linki süresi dolmuş. Yeni bir link talep edin.'
+                : '❌ Geçersiz doğrulama linki.';
             toast.error(errorMsg);
             // Clear URL parameters
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        // ðŸ”‘ Google ile giriÅŸ yapan kullanÄ±cÄ±lar iÃ§in ÅŸifre belirleme kontrolÃ¼
+        // 🔑 Google ile giriş yapan kullanıcılar için şifre belirleme kontrolü
         if (needsPassword === 'true') {
-            console.log('ðŸ”‘ [Auth] Google user needs to set password');
+            console.log('🔑 [Auth] Google user needs to set password');
             setShowPasswordSetupModal(true);
             // Clear URL parameters
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }, []);
 
-    // 💰 PAYMENT SUCCESS: Stripe/Coinbase'den döndükten sonra coin ekleme
+    // ?? PAYMENT SUCCESS: Stripe/Coinbase'den d�nd�kten sonra coin ekleme
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const success = params.get('success');
@@ -690,19 +690,19 @@ const AppContent = () => {
                         
                         if (data.success) {
                             if (data.already_processed) {
-                                toast.info(`💰 Ödeme zaten işlendi! Bakiye: ${data.balance} coin`);
+                                toast.info(`?? �deme zaten islendi! Bakiye: ${data.balance} coin`);
                             } else {
-                                toast.success(`🎉 ${coins} coin hesabına eklendi! Yeni bakiye: ${data.balance} coin`);
+                                toast.success(`?? ${coins} coin hesabina eklendi! Yeni bakiye: ${data.balance} coin`);
                             }
                         } else {
-                            toast.error(data.error || 'Ödeme doğrulama hatası');
+                            toast.error(data.error || '�deme dogrulama hatasi');
                         }
                     } else {
-                        toast.success(`🎉 Ödeme başarılı! ${coins} coin hesabına eklendi.`);
+                        toast.success(`?? �deme basarili! ${coins} coin hesabina eklendi.`);
                     }
                 } catch (error) {
                     console.error('Payment verification error:', error);
-                    toast.success(`💰 ${coins} coin satın alma tamamlandı!`);
+                    toast.success(`?? ${coins} coin satin alma tamamlandi!`);
                 }
             };
             
@@ -711,25 +711,25 @@ const AppContent = () => {
         }
 
         if (canceled === 'true') {
-            toast.info('❌ Ödeme iptal edildi.');
+            toast.info('? �deme iptal edildi.');
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }, []);
 
 
-    // ðŸ”— VANITY URL CHECK: EÄŸer URL /#/join/path formatÄ±ndaysa invite ekranÄ±nÄ± aÃ§
+    // 🔗 VANITY URL CHECK: Eğer URL /#/join/path formatındaysa invite ekranını aç
     useEffect(() => {
         const hash = window.location.hash; // /#/join/pawpaw
         const vanityMatch = hash.match(/^#\/join\/([^/?]+)/);
 
         if (vanityMatch) {
             const vanityPath = vanityMatch[1];
-            console.log('ðŸ”— [Vanity] Detected vanity path:', vanityPath);
+            console.log('🔗 [Vanity] Detected vanity path:', vanityPath);
             setShowVanityInvite(vanityPath);
         }
     }, []);
 
-    // ï¿½ï¸ MODERATION: Global functions for ServerSettingsModal to trigger panels
+    // �️ MODERATION: Global functions for ServerSettingsModal to trigger panels
     useEffect(() => {
         window.showAutoModeration = () => setShowAutoModeration(true);
         window.showRaidProtection = () => setShowRaidProtection(true);
@@ -746,7 +746,7 @@ const AppContent = () => {
         };
     }, []);
 
-    // ï¿½ðŸ”¥ Close toolbar menu on click outside
+    // �🔥 Close toolbar menu on click outside
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (showToolbarMenu && !e.target.closest('.toolbar-menu-container')) {
@@ -757,7 +757,7 @@ const AppContent = () => {
         return () => document.removeEventListener('click', handleClickOutside);
     }, [showToolbarMenu]);
 
-    // ðŸ”— CONNECTIONS PANEL EVENT LISTENER
+    // 🔗 CONNECTIONS PANEL EVENT LISTENER
     useEffect(() => {
         const handleOpenConnectionsPanel = () => {
             setShowConnectionsPanel(true);
@@ -766,7 +766,7 @@ const AppContent = () => {
         return () => window.removeEventListener('openConnectionsPanel', handleOpenConnectionsPanel);
     }, []);
 
-    // âš¡ OPTIMIZATION: PWA & Critical CSS Initialization
+    // ⚡ OPTIMIZATION: PWA & Critical CSS Initialization
     useEffect(() => {
         // Register Service Worker for offline support
         registerServiceWorker();
@@ -780,34 +780,34 @@ const AppContent = () => {
         // Initialize critical CSS optimization
         initializeCSSOptimization();
 
-        // ðŸš€ CODE SPLITTING: Preload critical chunks after 3 seconds
+        // 🚀 CODE SPLITTING: Preload critical chunks after 3 seconds
         setTimeout(() => {
             preloadCriticalChunks();
         }, 3000);
 
-        // ðŸš€ CODE SPLITTING: Prefetch next chunks during idle time
+        // 🚀 CODE SPLITTING: Prefetch next chunks during idle time
         if ('requestIdleCallback' in window) {
             requestIdleCallback(() => {
                 prefetchNextChunks();
             });
         }
 
-        // ðŸ”” Initialize Push Notifications
+        // 🔔 Initialize Push Notifications
         if (isAuthenticated && user) {
             import('./utils/pushNotifications').then(({ pushNotificationManager }) => {
                 pushNotificationManager.init(API_BASE_URL, fetchWithAuth);
             });
         }
 
-        // ðŸ”— Initialize Deep Link Handler (APK)
+        // 🔗 Initialize Deep Link Handler (APK)
         if (isNative) {
             import('./utils/urlHandlers').then(({ initializeDeepLinkHandler }) => {
                 // Deep link handler needs navigate function - will be added when routing is available
-                console.log('âœ… Deep link handler ready');
+                console.log('✅ Deep link handler ready');
             });
         }
 
-        console.log('âœ… PWA ve optimizasyonlar aktif!');
+        console.log('✅ PWA ve optimizasyonlar aktif!');
     }, [isAuthenticated, user]);
 
 
@@ -845,7 +845,7 @@ const AppContent = () => {
             const parsed = JSON.parse(raw);
             return parsed && typeof parsed === 'object' ? parsed : {};
         } catch (e) {
-            console.warn('Taslak okunamadÄ±', e);
+            console.warn('Taslak okunamadı', e);
             return {};
         }
     }, []);
@@ -882,7 +882,7 @@ const AppContent = () => {
         return 'text';
     }, [activeChat, categories]);
 
-    // --- SCROLL LOGIC (DÃœZELTÄ°LDÄ°) ---
+    // --- SCROLL LOGIC (DÜZELTİLDİ) ---
     const scrollToBottom = useCallback((behavior = 'auto') => {
         if (messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior });
@@ -903,11 +903,11 @@ const AppContent = () => {
         setShowScrollToBottom(distance > 160);
     }, []);
 
-    // âš¡ OPTIMIZATION: Throttle scroll handler to reduce re-renders
+    // ⚡ OPTIMIZATION: Throttle scroll handler to reduce re-renders
     const throttledHandleMessageScroll = useThrottle(handleMessageScroll, 100);
 
     const getDeterministicAvatar = useCallback((uname) => {
-        if (uname === 'âš¡ Signal Bot') return `${MEDIA_BASE_URL}/static/bot/signal.png`;
+        if (uname === '⚡ Signal Bot') return `${MEDIA_BASE_URL}/static/bot/signal.png`;
         if (uname === 'PawPaw AI') return `${MEDIA_BASE_URL}/static/bot/ai.png`;
         if (!uname || !defaultAvatars || defaultAvatars.length === 0) return `${MEDIA_BASE_URL}/avatars/cat_1.png`;
         let hash = 0;
@@ -915,7 +915,7 @@ const AppContent = () => {
         const index = Math.abs(hash % defaultAvatars.length);
         const avatarItem = defaultAvatars[index];
 
-        // ðŸ”¥ FIX: API returns objects {name, original, thumbnail} or strings
+        // 🔥 FIX: API returns objects {name, original, thumbnail} or strings
         let path;
         if (typeof avatarItem === 'object' && avatarItem !== null) {
             path = avatarItem.original || avatarItem.thumbnail || avatarItem.url;
@@ -923,41 +923,41 @@ const AppContent = () => {
             path = avatarItem;
         }
 
-        // ðŸ”¥ FIX: path yoksa veya string deÄŸilse fallback
+        // 🔥 FIX: path yoksa veya string değilse fallback
         if (!path || typeof path !== 'string') {
             return `${MEDIA_BASE_URL}/avatars/cat_1.png`;
         }
 
-        // ðŸ”¥ FIX: Avatar URL'leri iÃ§in tam URL oluÅŸtur
+        // 🔥 FIX: Avatar URL'leri için tam URL oluştur
         if (path.startsWith('http')) return path;
         if (path.startsWith('blob:')) return path;
 
         // Path'i normalize et
         if (!path.startsWith('/')) path = '/' + path;
 
-        // ðŸ”¥ CRITICAL FIX: EXE/APK'da her zaman production URL kullan
+        // 🔥 CRITICAL FIX: EXE/APK'da her zaman production URL kullan
         return `${MEDIA_BASE_URL}${path}`;
     }, [defaultAvatars]);
 
     const getRealUserAvatar = useCallback((targetUsername) => {
         const userObj = allUsers.find(u => u.username === targetUsername);
-        // ðŸ”¥ FIX: avatar string olmalÄ±
+        // 🔥 FIX: avatar string olmalı
         if (userObj && userObj.avatar && typeof userObj.avatar === 'string') {
-            // ðŸ”¥ FIX 1: HTTP/HTTPS URL'leri direkt kullan
+            // 🔥 FIX 1: HTTP/HTTPS URL'leri direkt kullan
             if (userObj.avatar.startsWith('http://') || userObj.avatar.startsWith('https://')) {
                 return userObj.avatar;
             }
 
-            // ðŸ”¥ FIX 2: Blob URL'leri direkt kullan (local upload)
+            // 🔥 FIX 2: Blob URL'leri direkt kullan (local upload)
             if (userObj.avatar.startsWith('blob:')) {
                 return userObj.avatar;
             }
 
-            // ðŸ”¥ FIX 3: Relative path iÃ§in MEDIA_BASE_URL ekle
+            // 🔥 FIX 3: Relative path için MEDIA_BASE_URL ekle
             let avatarPath = userObj.avatar;
             if (!avatarPath.startsWith('/')) avatarPath = '/' + avatarPath;
 
-            // ðŸ”¥ CRITICAL: EXE/APK'da production URL zorunlu
+            // 🔥 CRITICAL: EXE/APK'da production URL zorunlu
             return `${MEDIA_BASE_URL}${avatarPath}`;
         }
         return getDeterministicAvatar(targetUsername);
@@ -968,7 +968,7 @@ const AppContent = () => {
         if (token) headers['Authorization'] = `Bearer ${token}`;
         if (!(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
         try {
-            // ðŸš€ Upload iÃ§in 5 dakika timeout, diÄŸerleri iÃ§in 30 saniye
+            // 🚀 Upload için 5 dakika timeout, diğerleri için 30 saniye
             const isUpload = url.includes('upload') || (options.body instanceof FormData);
             const timeout = isUpload ? 300000 : 30000; // 5 min : 30 sec
 
@@ -983,35 +983,35 @@ const AppContent = () => {
 
             clearTimeout(timeoutId);
 
-            // ðŸ”¥ 401'de hemen logout etme, sadece critical endpoint'lerde logout yap
+            // 🔥 401'de hemen logout etme, sadece critical endpoint'lerde logout yap
             if (response.status === 401) {
                 // Login/auth endpoint'lerinde logout yap
                 if (url.includes('/auth/') || url.includes('/login')) {
-                    console.warn('âš ï¸ [Auth] 401 on auth endpoint, logging out');
+                    console.warn('⚠️ [Auth] 401 on auth endpoint, logging out');
                     logout();
                 } else {
-                    // DiÄŸer endpoint'lerde sadece warning ver, logout yapma
-                    console.warn('âš ï¸ [Auth] 401 error on:', url, '- NOT logging out');
+                    // Diğer endpoint'lerde sadece warning ver, logout yapma
+                    console.warn('⚠️ [Auth] 401 error on:', url, '- NOT logging out');
                 }
                 throw new Error("Unauthorized");
             }
             return response;
         } catch (err) {
             if (err.name === 'AbortError') {
-                console.error('â±ï¸ [Fetch] Request timed out:', url);
-                throw new Error('Ä°stek zaman aÅŸÄ±mÄ±na uÄŸradÄ±');
+                console.error('⏱️ [Fetch] Request timed out:', url);
+                throw new Error('İstek zaman aşımına uğradı');
             }
             console.error("Fetch error:", err);
             throw err;
         }
     }, [token, logout]);
 
-    // ðŸ“Š ANALYTICS: Page view tracking (fetchWithAuth tanÄ±mÄ±ndan SONRA!)
+    // 📊 ANALYTICS: Page view tracking (fetchWithAuth tanımından SONRA!)
     usePageTracking();
 
-    // ðŸ”— VANITY URL JOIN HANDLER (fetchWithAuth tanÄ±mÄ±ndan SONRA!)
+    // 🔗 VANITY URL JOIN HANDLER (fetchWithAuth tanımından SONRA!)
     useEffect(() => {
-        // HashRouter kullanÄ±ldÄ±ÄŸÄ± iÃ§in hash'ten sonraki parametreleri oku
+        // HashRouter kullanıldığı için hash'ten sonraki parametreleri oku
         // URL format: /#/?join_server=123
         const hash = window.location.hash;
         const queryString = hash.includes('?') ? hash.split('?')[1] : '';
@@ -1019,15 +1019,15 @@ const AppContent = () => {
         const joinServerId = urlParams.get('join_server');
 
         if (joinServerId && isAuthenticated && categories && categories.length > 0) {
-            console.log('ðŸ”— [Vanity URL] Found join_server parameter:', joinServerId);
-            // Sunucuya katÄ±lma iÅŸlemi
+            console.log('🔗 [Vanity URL] Found join_server parameter:', joinServerId);
+            // Sunucuya katılma işlemi
             const targetServer = categories.find(s => s.id === parseInt(joinServerId));
 
             if (targetServer) {
-                // KullanÄ±cÄ± zaten bu sunucuda mÄ±?
-                console.log(`ðŸ”— Vanity URL: Redirecting to server ${targetServer.name}`);
+                // Kullanıcı zaten bu sunucuda mı?
+                console.log(`🔗 Vanity URL: Redirecting to server ${targetServer.name}`);
 
-                // Ä°lk kanalÄ± bul ve aÃ§
+                // İlk kanalı bul ve aç
                 if (targetServer.categories && targetServer.categories.length > 0) {
                     const firstCategory = targetServer.categories[0];
                     if (firstCategory.rooms && firstCategory.rooms.length > 0) {
@@ -1036,13 +1036,13 @@ const AppContent = () => {
                     }
                 }
 
-                // URL'i temizle (HashRouter iÃ§in)
+                // URL'i temizle (HashRouter için)
                 window.history.replaceState({}, document.title, '/#/');
             } else {
-                // Sunucu bulunamadÄ± - invite link olabilir
-                console.log(`ðŸ”— Vanity URL: Server ${joinServerId} not found, showing invite modal`);
+                // Sunucu bulunamadı - invite link olabilir
+                console.log(`🔗 Vanity URL: Server ${joinServerId} not found, showing invite modal`);
 
-                // Sunucu invite modal'Ä± aÃ§mak iÃ§in API Ã§aÄŸrÄ±sÄ± yap
+                // Sunucu invite modal'ı açmak için API çağrısı yap
                 const joinServer = async () => {
                     try {
                         const res = await fetchWithAuth(`${API_BASE_URL}/servers/${joinServerId}/join/`, {
@@ -1050,18 +1050,18 @@ const AppContent = () => {
                         });
 
                         if (res.ok) {
-                            toast.success('Sunucuya katÄ±ldÄ±nÄ±z!');
+                            toast.success('Sunucuya katıldınız!');
                             // Sunucu listesini yenile
                             window.location.reload();
                         } else {
                             const data = await res.json();
-                            toast.error(data.error || 'Sunucuya katÄ±lÄ±namadÄ±');
+                            toast.error(data.error || 'Sunucuya katılınamadı');
                         }
                     } catch (error) {
                         console.error('Join server error:', error);
-                        toast.error('Sunucuya katÄ±lÄ±rken hata oluÅŸtu');
+                        toast.error('Sunucuya katılırken hata oluştu');
                     } finally {
-                        // URL'i temizle (HashRouter iÃ§in)
+                        // URL'i temizle (HashRouter için)
                         window.history.replaceState({}, document.title, '/#/');
                     }
                 };
@@ -1071,7 +1071,7 @@ const AppContent = () => {
         }
     }, [isAuthenticated, categories, fetchWithAuth]);
 
-    // ðŸ”¥ YENÄ°: Sunucu SÄ±ralama Handler'larÄ±
+    // 🔥 YENİ: Sunucu Sıralama Handler'ları
     const saveServerOrder = useCallback(async (newOrder) => {
         try {
             await fetchWithAuth(`${API_BASE_URL}/user/server-order/update/`, {
@@ -1079,7 +1079,7 @@ const AppContent = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ server_order: newOrder })
             });
-            console.log('ðŸ’¾ Server order saved:', newOrder);
+            console.log('💾 Server order saved:', newOrder);
         } catch (error) {
             console.error('Server order save error:', error);
         }
@@ -1125,32 +1125,32 @@ const AppContent = () => {
         const serverId = parseInt(e.dataTransfer.getData('serverId'));
         const sourceIndex = parseInt(e.dataTransfer.getData('sourceIndex'));
 
-        console.log('ðŸ“ DROP: sourceIndex:', sourceIndex, 'â†’ targetIndex:', targetIndex);
+        console.log('📝 DROP: sourceIndex:', sourceIndex, '→ targetIndex:', targetIndex);
 
-        // AynÄ± yere veya hemen yanÄ±na bÄ±rakÄ±yorsa iÅŸlem yapma
-        // ANCAK sadece yukarÄ±dan aÅŸaÄŸÄ±ya deÄŸil, gerÃ§ek pozisyon kontrolÃ¼ yap
+        // Aynı yere veya hemen yanına bırakıyorsa işlem yapma
+        // ANCAK sadece yukarıdan aşağıya değil, gerçek pozisyon kontrolü yap
         if (sourceIndex === targetIndex) {
-            console.log('âŒ AynÄ± yere bÄ±rakÄ±lÄ±yor (sourceIndex === targetIndex), iÅŸlem iptal');
+            console.log('❌ Aynı yere bırakılıyor (sourceIndex === targetIndex), işlem iptal');
             return;
         }
 
         let currentOrder = serverOrder.length > 0 ? [...serverOrder] : categories.map(c => c.id);
 
-        console.log('ðŸ“ Mevcut sÄ±ralama:', currentOrder);
-        console.log('ðŸ”„ Kaynak index:', sourceIndex, 'â†’ Hedef index:', targetIndex);
+        console.log('📝 Mevcut sıralama:', currentOrder);
+        console.log('🔄 Kaynak index:', sourceIndex, '→ Hedef index:', targetIndex);
 
-        // Kaynak elementi Ã§Ä±kar
+        // Kaynak elementi çıkar
         const [draggedId] = currentOrder.splice(sourceIndex, 1);
 
-        // Hedef index'i ayarla (splice sonrasÄ± kayma iÃ§in)
+        // Hedef index'i ayarla (splice sonrası kayma için)
         const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
 
-        console.log('ðŸŽ¯ Adjusted target index:', adjustedTargetIndex);
+        console.log('🎯 Adjusted target index:', adjustedTargetIndex);
 
         // Hedef konuma ekle
         currentOrder.splice(adjustedTargetIndex, 0, draggedId);
 
-        console.log('âœ… Yeni sÄ±ralama:', currentOrder);
+        console.log('✅ Yeni sıralama:', currentOrder);
 
         setServerOrder(currentOrder);
         saveServerOrder(currentOrder);
@@ -1163,7 +1163,7 @@ const AppContent = () => {
     }
 
     const handleClearChat = async () => {
-        if (!window.confirm("Bu odadaki tÃ¼m mesajlarÄ± silmek istediÄŸine emin misin?")) return;
+        if (!window.confirm("Bu odadaki tüm mesajları silmek istediğine emin misin?")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/rooms/${activeChat.id}/clear/`, { method: 'POST' });
             if (res.ok) setMessages([]);
@@ -1183,23 +1183,23 @@ const AppContent = () => {
                 setSummaryResult("Hata: " + data.error);
             }
         } catch (e) {
-            setSummaryResult("BaÄŸlantÄ± hatasÄ±.");
+            setSummaryResult("Bağlantı hatası.");
         }
         setIsSummaryLoading(false);
     };
 
 
     const sendMessage = (content) => {
-        console.log('ðŸ“¤ [DEBUG] sendMessage called with:', content);
-        console.log('ðŸ“¤ [DEBUG] ws.current:', ws.current);
-        console.log('ðŸ“¤ [DEBUG] ws.current.readyState:', ws.current?.readyState);
-        console.log('ðŸ“¤ [DEBUG] activeChat:', activeChat);
+        console.log('📤 [DEBUG] sendMessage called with:', content);
+        console.log('📤 [DEBUG] ws.current:', ws.current);
+        console.log('📤 [DEBUG] ws.current.readyState:', ws.current?.readyState);
+        console.log('📤 [DEBUG] activeChat:', activeChat);
 
         if (!content) return;
         const trimmed = content.trim();
         if (!trimmed) return;
 
-        // âœ¨ Check for /tema command
+        // ✨ Check for /tema command
         if (trimmed === '/tema') {
             setShowThemeStore(true);
             setEditingMessage(null);
@@ -1209,7 +1209,7 @@ const AppContent = () => {
             return;
         }
 
-        // âœ¨ Check for /sablon command
+        // ✨ Check for /sablon command
         if (trimmed === '/sablon') {
             setShowTemplateModal(true);
             setEditingMessage(null);
@@ -1219,7 +1219,7 @@ const AppContent = () => {
             return;
         }
 
-        // âœ¨ Check for /duyuru command
+        // ✨ Check for /duyuru command
         if (trimmed.startsWith('/duyuru ')) {
             const announcement = trimmed.slice(8).trim();
             if (announcement) {
@@ -1266,7 +1266,7 @@ const AppContent = () => {
 
         const jsonPayload = JSON.stringify(payload);
 
-        // WebSocket gÃ¶nderme fonksiyonu (baÄŸlantÄ± bekleme ile)
+        // WebSocket gönderme fonksiyonu (bağlantı bekleme ile)
         const sendViaWebSocket = async () => {
             const maxWait = 3000;
             const checkInterval = 100;
@@ -1312,7 +1312,7 @@ const AppContent = () => {
             }
         };
 
-        // WebSocket dene, baÅŸarÄ±sÄ±z olursa HTTP fallback
+        // WebSocket dene, başarısız olursa HTTP fallback
         (async () => {
             const wsSent = await sendViaWebSocket();
             if (!wsSent) {
@@ -1320,8 +1320,8 @@ const AppContent = () => {
             }
         })();
 
-        // ðŸ”¥ FIX: addMessage yerine setMessages kullan (prev state ile)
-        // ðŸ”¥ AVATAR FIX: Kendi avatar'Ä±mÄ±zÄ± da ekle
+        // 🔥 FIX: addMessage yerine setMessages kullan (prev state ile)
+        // 🔥 AVATAR FIX: Kendi avatar'ımızı da ekle
         setMessages(prev => {
             const newMessage = {
                 ...payload,
@@ -1356,12 +1356,12 @@ const AppContent = () => {
         };
         ws.current?.send(JSON.stringify(payload));
 
-        // ðŸ”¥ FIX: addMessage yerine setMessages kullan + avatar ekle
+        // 🔥 FIX: addMessage yerine setMessages kullan + avatar ekle
         setMessages(prev => [...prev, {
             ...payload,
             timestamp: new Date().toISOString(),
             id: payload.temp_id,
-            avatar: currentUserProfile?.avatar || getDeterministicAvatar(username) // ðŸ”¥ Avatar eklendi
+            avatar: currentUserProfile?.avatar || getDeterministicAvatar(username) // 🔥 Avatar eklendi
         }]);
         setShowSnippetModal(false);
     };
@@ -1370,7 +1370,7 @@ const AppContent = () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-            // ðŸŽ¤ Sadece ses codec'i kullan (video metadata oluÅŸmasÄ±n)
+            // 🎤 Sadece ses codec'i kullan (video metadata oluşmasın)
             const options = { mimeType: 'audio/webm;codecs=opus' };
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                 options.mimeType = 'audio/webm';
@@ -1396,11 +1396,11 @@ const AppContent = () => {
         } catch (error) {
             console.error('Error starting voice recording:', error);
             if (error.name === 'NotAllowedError') {
-                toast.warning('Mikrofon eriÅŸimi reddedildi! LÃ¼tfen tarayÄ±cÄ± ayarlarÄ±ndan mikrofon izni verin.', 5000);
+                toast.warning('Mikrofon erişimi reddedildi! Lütfen tarayıcı ayarlarından mikrofon izni verin.', 5000);
             } else if (error.name === 'NotFoundError') {
-                toast.warning('Mikrofon bulunamadÄ±! LÃ¼tfen bir mikrofon baÄŸlayÄ±n.');
+                toast.warning('Mikrofon bulunamadı! Lütfen bir mikrofon bağlayın.');
             } else {
-                toast.error('Mikrofon hatasÄ±: ' + error.message);
+                toast.error('Mikrofon hatası: ' + error.message);
             }
         }
     };
@@ -1446,14 +1446,14 @@ const AppContent = () => {
             console.log('Voice message uploaded:', data);
         } catch (error) {
             console.error('Error uploading voice message:', error);
-            toast.error('Ses mesajÄ± gÃ¶nderilemedi');
+            toast.error('Ses mesajı gönderilemedi');
         }
     };
 
     const connectWebSocket = useCallback(() => {
         if (!activeChat.id || activeChat.type === 'welcome' || activeChat.type === 'friends' || !username) return;
 
-        // ðŸ”¥ FIX: Mevcut WebSocket aynÄ± chat iÃ§in zaten aÃ§Ä±ksa, tekrar baÄŸlanma
+        // 🔥 FIX: Mevcut WebSocket aynı chat için zaten açıksa, tekrar bağlanma
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             const currentWsUrl = ws.current.url;
             const expectedPath = activeChat.type === 'room'
@@ -1461,14 +1461,14 @@ const AppContent = () => {
                 : `/ws/dm/${activeChat.id}/`;
 
             if (currentWsUrl.includes(expectedPath)) {
-                console.log('â­ï¸ [WebSocket] Already connected to this chat, skipping reconnect');
+                console.log('⏭️ [WebSocket] Already connected to this chat, skipping reconnect');
                 return;
             }
         }
 
-        // ðŸ”¥ FIX: Mevcut baÄŸlantÄ±yÄ± kapat (eÄŸer varsa)
+        // 🔥 FIX: Mevcut bağlantıyı kapat (eğer varsa)
         if (ws.current) {
-            console.log('ðŸ”Œ [WebSocket] Closing existing connection before new one');
+            console.log('🔌 [WebSocket] Closing existing connection before new one');
             ws.current.close(1000, 'change_room');
         }
 
@@ -1477,21 +1477,27 @@ const AppContent = () => {
         if (activeChat.type === 'room') wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/chat/${activeChat.id}/${params}`;
         else if (activeChat.type === 'dm') wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/dm/${activeChat.id}/${params}`;
 
-        console.log('ðŸ”Œ [WebSocket] Connecting to:', wsUrl.split('?')[0]); // Token'sÄ±z URL'i logla
+
+        if (!wsUrl) {
+            console.log('⏭️ [WebSocket] Skipping - activeChat.type is not room/dm:', activeChat.type);
+            return;
+        }
+
+        console.log('🔌 [WebSocket] Connecting to:', wsUrl.split('?')[0]); // Token'sız URL'i logla
 
         const newWs = new WebSocket(wsUrl);
         ws.current = newWs;
 
         newWs.onopen = () => {
-            console.log('âœ… [WebSocket] Connected successfully');
+            console.log('✅ [WebSocket] Connected successfully');
             setIsConnected(true);
         };
 
         newWs.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'chat' || data.type === 'dm' || data.type === 'chat_message_handler') {
-                // ðŸ”¥ DEBUG: Gelen mesajÄ±n yapÄ±sÄ±nÄ± logla
-                console.log('ðŸ“¨ [WebSocket] Message data:', {
+                // 🔥 DEBUG: Gelen mesajın yapısını logla
+                console.log('📨 [WebSocket] Message data:', {
                     type: data.type,
                     id: data.id,
                     temp_id: data.temp_id,
@@ -1499,27 +1505,27 @@ const AppContent = () => {
                     conversation: data.conversation
                 });
 
-                // ðŸ”¥ FIX: Cache key'i gelen mesajdan hesapla (activeChat'e gÃ¼venme - stale closure olabilir!)
+                // 🔥 FIX: Cache key'i gelen mesajdan hesapla (activeChat'e güvenme - stale closure olabilir!)
                 // data.room = room slug (string), data.conversation = conversation ID (number)
                 const getCacheKeyFromMessage = (msgData) => {
                     if (msgData.room) return `room-${msgData.room}`;
                     if (msgData.conversation) return `dm-${msgData.conversation}`;
-                    // Fallback: activeChat kullan (eski davranÄ±ÅŸ)
-                    console.warn('âš ï¸ [WebSocket] No room/conversation in message, using activeChat fallback');
+                    // Fallback: activeChat kullan (eski davranış)
+                    console.warn('⚠️ [WebSocket] No room/conversation in message, using activeChat fallback');
                     return activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
                 };
 
-                // ðŸ”¥ FIX: Duplicate kontrolÃ¼ - temp mesajÄ± gerÃ§ek mesajla DEÄžIÅžTIR
+                // 🔥 FIX: Duplicate kontrolü - temp mesajı gerçek mesajla DEĞIŞTIR
                 setMessages(prev => {
-                    // Temp mesaj varsa, gerÃ§ek mesajla deÄŸiÅŸtir (server ID'si ile)
+                    // Temp mesaj varsa, gerçek mesajla değiştir (server ID'si ile)
                     if (data.temp_id) {
                         const tempIndex = prev.findIndex(msg => msg.temp_id === data.temp_id);
                         if (tempIndex !== -1) {
-                            console.log('ðŸ”„ [WebSocket] Replacing temp message with real message:', data.temp_id, 'â†’', data.id);
+                            console.log('🔄 [WebSocket] Replacing temp message with real message:', data.temp_id, '→', data.id);
                             const newMessages = [...prev];
-                            newMessages[tempIndex] = data; // Temp mesajÄ± gerÃ§ek mesajla deÄŸiÅŸtir
+                            newMessages[tempIndex] = data; // Temp mesajı gerçek mesajla değiştir
 
-                            // ðŸ”¥ FIX: Cache'i gelen mesajÄ±n room/conversation bilgisine gÃ¶re gÃ¼ncelle
+                            // 🔥 FIX: Cache'i gelen mesajın room/conversation bilgisine göre güncelle
                             const cacheKey = getCacheKeyFromMessage(data);
                             if (historyCacheRef.current[cacheKey]) {
                                 historyCacheRef.current[cacheKey].messages = newMessages;
@@ -1529,16 +1535,16 @@ const AppContent = () => {
                         }
                     }
 
-                    // ID ile duplicate kontrolÃ¼ (aynÄ± mesaj tekrar gelirse)
+                    // ID ile duplicate kontrolü (aynı mesaj tekrar gelirse)
                     if (data.id && prev.some(msg => msg.id === data.id)) {
-                        console.log('â­ï¸ [WebSocket] Duplicate message (by ID) skipped:', data.id);
+                        console.log('⏭️ [WebSocket] Duplicate message (by ID) skipped:', data.id);
                         return prev;
                     }
 
-                    console.log('ðŸ“¨ [WebSocket] New message received:', data);
+                    console.log('📨 [WebSocket] New message received:', data);
                     const updatedMessages = [...prev, data];
 
-                    // ðŸ”¥ FIX: Cache'i gelen mesajÄ±n room/conversation bilgisine gÃ¶re gÃ¼ncelle
+                    // 🔥 FIX: Cache'i gelen mesajın room/conversation bilgisine göre güncelle
                     const cacheKey = getCacheKeyFromMessage(data);
                     if (historyCacheRef.current[cacheKey]) {
                         historyCacheRef.current[cacheKey].messages = updatedMessages;
@@ -1560,7 +1566,7 @@ const AppContent = () => {
                 setMessages([]);
             }
 
-            // âœ¨ Check for sticky message in incoming data
+            // ✨ Check for sticky message in incoming data
             if (data.message && data.message.startsWith('[ANNOUNCE] ')) {
                 const announcement = data.message.replace('[ANNOUNCE] ', '');
                 setStickyMessage({ message: announcement, type: 'info', author: data.username });
@@ -1568,16 +1574,16 @@ const AppContent = () => {
         };
 
         newWs.onerror = (error) => {
-            console.error('âŒ [WebSocket] Connection error:', error);
+            console.error('❌ [WebSocket] Connection error:', error);
         };
 
         newWs.onclose = (event) => {
-            console.log('ðŸ”Œ [WebSocket] Connection closed:', event.code, event.reason);
+            console.log('🔌 [WebSocket] Connection closed:', event.code, event.reason);
             setIsConnected(false);
         };
     }, [activeChat.id, activeChat.type, username, token]);
-    // ðŸ”¥ FIX: activeChat yerine activeChat.id ve activeChat.type kullan
-    // Object referansÄ± her render'da deÄŸiÅŸebilir!
+    // 🔥 FIX: activeChat yerine activeChat.id ve activeChat.type kullan
+    // Object referansı her render'da değişebilir!
 
     useEffect(() => {
         if (Capacitor.isNativePlatform()) {
@@ -1586,9 +1592,9 @@ const AppContent = () => {
         }
     }, []);
 
-    // ðŸ”¥ OLD resize listener REMOVED - useResponsive hook handles it
+    // 🔥 OLD resize listener REMOVED - useResponsive hook handles it
 
-    // ðŸš€ PERFORM OPTIMIZASYONU: TÃ¼m kullanÄ±cÄ±larÄ± peÅŸin peÅŸin Ã§ekme iÅŸlemi KALDIRILDI.
+    // 🚀 PERFORM OPTIMIZASYONU: Tüm kullanıcıları peşin peşin çekme işlemi KALDIRILDI.
     useEffect(() => {
         const fetchInit = async () => {
             try {
@@ -1643,16 +1649,16 @@ const AppContent = () => {
                 setFriendsList(uniqueFriendProfiles);
                 setIsInitialDataLoaded(true);
 
-                // ðŸ”¥ DM Avatar Prefetch - ArkadaÅŸlarÄ±n avatarlarÄ±nÄ± arka planda yÃ¼kle
+                // 🔥 DM Avatar Prefetch - Arkadaşların avatarlarını arka planda yükle
                 import('./utils/imageCaching').then(({ prefetchUserAvatars }) => {
                     prefetchUserAvatars(uniqueFriendProfiles);
                 });
-            } catch (e) { console.error("Init Data Error", e); setAuthError("Veriler yÃ¼klenemedi."); }
+            } catch (e) { console.error("Init Data Error", e); setAuthError("Veriler yüklenemedi."); }
         };
         if (isAuthenticated && !isInitialDataLoaded) fetchInit();
     }, [isAuthenticated, isInitialDataLoaded, fetchWithAuth, username]);
 
-    // ðŸ”¥ YENÄ°: Sunucu sÄ±rasÄ±nÄ± yÃ¼kle
+    // 🔥 YENİ: Sunucu sırasını yükle
     useEffect(() => {
         const fetchServerOrder = async () => {
             try {
@@ -1660,7 +1666,13 @@ const AppContent = () => {
                 if (res.ok) {
                     const data = await res.json();
                     setServerOrder(data.server_order || []);
-                    console.log('ðŸŽ¯ Server order loaded:', data.server_order);
+
+        if (!wsUrl) {
+            console.log(' [WebSocket] Skipping - activeChat.type is not room/dm:', activeChat.type);
+            return;
+        }
+
+                    console.log('🎯 Server order loaded:', data.server_order);
                 }
             } catch (error) {
                 console.error('Server order fetch error:', error);
@@ -1672,7 +1684,7 @@ const AppContent = () => {
         }
     }, [username, fetchWithAuth]);
 
-    // ðŸ†• Sticky Messages - Current room iÃ§in sticky message Ã§ek
+    // 🆕 Sticky Messages - Current room için sticky message çek
     useEffect(() => {
         const fetchStickyMessages = async () => {
             if (!activeChat.id || activeChat.type !== 'room') {
@@ -1704,43 +1716,43 @@ const AppContent = () => {
         }
     }, [activeChat.id, activeChat.type, isAuthenticated, fetchWithAuth]);
 
-    // ðŸ”¥ YENÄ°: Server Members - Sunucuya girildiÄŸinde veya sunucu seÃ§ildiÄŸinde Ã¼yeleri fetch et
+    // 🔥 YENİ: Server Members - Sunucuya girildiğinde veya sunucu seçildiğinde üyeleri fetch et
     const fetchServerMembersById = useCallback(async (serverId) => {
         if (!serverId) {
             setServerMembers([]);
             return;
         }
         try {
-            console.log(`ðŸ” [Server Members] Fetching members for server ${serverId}...`);
+            console.log(`🔍 [Server Members] Fetching members for server ${serverId}...`);
             const res = await fetchWithAuth(`${API_BASE_URL}/servers/${serverId}/members/`);
             if (res.ok) {
                 const members = await res.json();
-                console.log(`ðŸ‘¥ [Server Members] Fetched ${members.length} members for server ${serverId}:`, members);
+                console.log(`👥 [Server Members] Fetched ${members.length} members for server ${serverId}:`, members);
                 setServerMembers(members);
             } else {
                 const errorText = await res.text();
-                console.error('âŒ Server members fetch failed:', res.status, errorText);
+                console.error('❌ Server members fetch failed:', res.status, errorText);
                 setServerMembers([]);
             }
         } catch (error) {
-            console.error('âŒ Server members fetch error:', error);
+            console.error('❌ Server members fetch error:', error);
             setServerMembers([]);
         }
     }, [fetchWithAuth]);
 
-    // ðŸ”¥ YENÄ°: Sunucu seÃ§ildiÄŸinde Ã¼yeleri yÃ¼kle (kanala basmadan)
+    // 🔥 YENİ: Sunucu seçildiğinde üyeleri yükle (kanala basmadan)
     const handleServerSelect = useCallback((server) => {
-        console.log('ðŸ–±ï¸ [Server Select] Server clicked:', server.name, server.id);
+        console.log('🖱️ [Server Select] Server clicked:', server.name, server.id);
         setSelectedServer(server);
         fetchServerMembersById(server.id);
-        // activeChat'i 'server' moduna al - saÄŸ panelde Ã¼yeleri gÃ¶ster
+        // activeChat'i 'server' moduna al - sağ panelde üyeleri göster
         setActiveChat('server', server.id, null);
     }, [fetchServerMembersById, setActiveChat]);
 
     useEffect(() => {
         const fetchServerMembers = async () => {
             if (!activeChat.id || activeChat.type !== 'room') {
-                // EÄŸer sunucu seÃ§iliyse, onu koru
+                // Eğer sunucu seçiliyse, onu koru
                 if (activeChat.type !== 'server') {
                     setServerMembers([]);
                 }
@@ -1748,28 +1760,28 @@ const AppContent = () => {
             }
 
             try {
-                // activeChat.id room slug'dÄ±r, server_id bulmalÄ±yÄ±z
-                // categories YENÄ° YAPIDIR: Her item aslÄ±nda bir server, ve iÃ§inde categories array var
+                // activeChat.id room slug'dır, server_id bulmalıyız
+                // categories YENİ YAPIDIR: Her item aslında bir server, ve içinde categories array var
                 let serverId = null;
 
-                // ðŸ”¥ FIX: categories array'i aslÄ±nda server array'i
+                // 🔥 FIX: categories array'i aslında server array'i
                 for (const server of categories) {
-                    // Her server'Ä±n iÃ§inde categories var
+                    // Her server'ın içinde categories var
                     if (!server.categories || !Array.isArray(server.categories)) {
-                        console.warn('âš ï¸ Server has no categories array:', server);
+                        console.warn('⚠️ Server has no categories array:', server);
                         continue;
                     }
 
-                    // Server'Ä±n iÃ§indeki her category'yi kontrol et
+                    // Server'ın içindeki her category'yi kontrol et
                     for (const category of server.categories) {
                         if (!category.rooms || !Array.isArray(category.rooms)) {
                             continue;
                         }
 
-                        // Category'nin iÃ§indeki her room'u kontrol et
+                        // Category'nin içindeki her room'u kontrol et
                         for (const room of category.rooms) {
                             if (room.slug === activeChat.id) {
-                                // ðŸ”¥ Server ID'yi parent server'dan al
+                                // 🔥 Server ID'yi parent server'dan al
                                 serverId = server.id;
                                 break;
                             }
@@ -1780,14 +1792,14 @@ const AppContent = () => {
                 }
 
                 if (!serverId) {
-                    console.warn('ðŸ”´ Server ID bulunamadÄ± for room:', activeChat.id);
+                    console.warn('🔴 Server ID bulunamadı for room:', activeChat.id);
                     setServerMembers([]);
                     return;
                 }
 
                 fetchServerMembersById(serverId);
             } catch (error) {
-                console.error('âŒ Server members fetch error:', error);
+                console.error('❌ Server members fetch error:', error);
                 setServerMembers([]);
             }
         };
@@ -1799,7 +1811,7 @@ const AppContent = () => {
         }
     }, [activeChat.id, activeChat.type, isAuthenticated, fetchServerMembersById, categories]);
 
-    // ðŸ†• Maintenance Mode Check
+    // 🆕 Maintenance Mode Check
     useEffect(() => {
         const checkMaintenanceMode = async () => {
             try {
@@ -1827,9 +1839,9 @@ const AppContent = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // ðŸ”¥ VERSION CHECK - GÃ¼ncelleme KontrolÃ¼ (EXE & APK)
+    // 🔥 VERSION CHECK - Güncelleme Kontrolü (EXE & APK)
     useEffect(() => {
-        // Semantic version karÅŸÄ±laÅŸtÄ±rma fonksiyonu
+        // Semantic version karşılaştırma fonksiyonu
         const compareVersions = (latest, current) => {
             try {
                 const latestParts = latest.split('.').map(Number);
@@ -1846,26 +1858,26 @@ const AppContent = () => {
                 // Patch version
                 if (latestParts[2] > currentParts[2]) return true;
 
-                return false; // AynÄ± veya eski
+                return false; // Aynı veya eski
             } catch (error) {
-                console.error('âŒ Version karÅŸÄ±laÅŸtÄ±rma hatasÄ±:', error);
+                console.error('❌ Version karşılaştırma hatası:', error);
                 return false;
             }
         };
 
         const checkForUpdates = async () => {
-            // ðŸ”¥ DEBUG MODE: localhost:3000'de test iÃ§in (geÃ§ici)
+            // 🔥 DEBUG MODE: localhost:3000'de test için (geçici)
             const isDebugMode = window.location.hostname === 'localhost' && window.location.port === '3000';
 
-            // Sadece Electron veya Native (Capacitor) platformlarda Ã§alÄ±ÅŸsÄ±n
-            // Debug modda da Ã§alÄ±ÅŸsÄ±n (test iÃ§in)
+            // Sadece Electron veya Native (Capacitor) platformlarda çalışsın
+            // Debug modda da çalışsın (test için)
             if (!isElectron && !isNative && !isDebugMode) {
-                console.log('â­ï¸ Version check atlandÄ± (web browser)');
+                console.log('⏭️ Version check atlandı (web browser)');
                 return;
             }
 
             try {
-                console.log('ðŸ” Version kontrolÃ¼ yapÄ±lÄ±yor...', {
+                console.log('🔍 Version kontrolü yapılıyor...', {
                     isElectron,
                     isNative,
                     isDebugMode,
@@ -1874,33 +1886,33 @@ const AppContent = () => {
 
                 // package.json'dan mevcut versiyonu al (Vite uyumlu)
                 const currentVersion = import.meta.env.VITE_APP_VERSION || '1.1.143';
-                console.log('ðŸ“¦ Mevcut versiyon:', currentVersion);
+                console.log('📦 Mevcut versiyon:', currentVersion);
 
-                // ðŸ”¥ R2 CDN'den son versiyonu kontrol et
+                // 🔥 R2 CDN'den son versiyonu kontrol et
                 const res = await fetch('https://media.pawscord.com/builds/version.json');
 
                 if (!res.ok) {
-                    console.warn('âš ï¸ version.json alÄ±namadÄ±:', res.status);
+                    console.warn('⚠️ version.json alınamadı:', res.status);
                     return;
                 }
 
                 const data = await res.json();
                 const latestVersion = data.latest_version;
-                console.log('ðŸŒ Son versiyon:', latestVersion);
-                console.log('ðŸ“Š KarÅŸÄ±laÅŸtÄ±rma:', { current: currentVersion, latest: latestVersion });
+                console.log('🌐 Son versiyon:', latestVersion);
+                console.log('📊 Karşılaştırma:', { current: currentVersion, latest: latestVersion });
 
-                // Versiyon karÅŸÄ±laÅŸtÄ±rmasÄ± - semantic versioning
+                // Versiyon karşılaştırması - semantic versioning
                 const isNewer = compareVersions(latestVersion, currentVersion);
-                console.log('ðŸ” Ä°s newer?', isNewer);
+                console.log('🔍 İs newer?', isNewer);
 
                 if (latestVersion && isNewer) {
-                    console.log('âœ… YENÄ° GÃœNCELLEME MEVCUT!', {
+                    console.log('✅ YENİ GÜNCELLEME MEVCUT!', {
                         current: currentVersion,
                         latest: latestVersion
                     });
                     setUpdateAvailable(true);
 
-                    // Optional: Electron'a bildirim gÃ¶nder
+                    // Optional: Electron'a bildirim gönder
                     if (window.require) {
                         const { ipcRenderer } = window.require('electron');
                         ipcRenderer.send('update-available', {
@@ -1910,15 +1922,15 @@ const AppContent = () => {
                         });
                     }
                 } else {
-                    console.log('â„¹ï¸ Versiyon gÃ¼ncel veya eski:', currentVersion, '>=', latestVersion);
+                    console.log('ℹ️ Versiyon güncel veya eski:', currentVersion, '>=', latestVersion);
                     setUpdateAvailable(false);
                 }
             } catch (error) {
-                console.error('âŒ Version check hatasÄ±:', error);
+                console.error('❌ Version check hatası:', error);
             }
         };
 
-        // Ä°lk kontrol
+        // İlk kontrol
         checkForUpdates();
 
         // Her 30 dakikada bir kontrol et
@@ -1927,22 +1939,22 @@ const AppContent = () => {
         return () => clearInterval(interval);
     }, []);
 
-    // ðŸ”¥ FIX: activeChat deÄŸiÅŸtiÄŸinde cache kontrol et, sonra mesaj yÃ¼kle ve WebSocket baÄŸla
-    // ðŸ”¥ TEK BÄ°R useEffect - Ã§akÄ±ÅŸma yok!
+    // 🔥 FIX: activeChat değiştiğinde cache kontrol et, sonra mesaj yükle ve WebSocket bağla
+    // 🔥 TEK BİR useEffect - çakışma yok!
     useEffect(() => {
         if (!isInitialDataLoaded || !activeChat.id || activeChat.type === 'friends' || activeChat.type === 'welcome') return;
 
-        console.log('ðŸ”„ [DEBUG activeChat] Chat deÄŸiÅŸti:', activeChat);
+        console.log('🔄 [DEBUG activeChat] Chat değişti:', activeChat);
 
-        // ðŸ”¥ CRITICAL: Ä°ÅŸlemi iptal etmek iÃ§in flag (cleanup iÃ§in)
+        // 🔥 CRITICAL: İşlemi iptal etmek için flag (cleanup için)
         let isCancelled = false;
 
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
         const cached = historyCacheRef.current[key];
 
         if (cached?.messages?.length > 0) {
-            // âœ… Cache varsa SADECE cache'i gÃ¶ster, API'ye GITME
-            console.log('ðŸ“¦ [Cache] Restoring cached messages:', cached.messages.length, '(skipping API call)');
+            // ✅ Cache varsa SADECE cache'i göster, API'ye GITME
+            console.log('📦 [Cache] Restoring cached messages:', cached.messages.length, '(skipping API call)');
             setMessages(cached.messages);
             setHasMoreMessages(!!cached.hasMore);
             setMessageHistoryOffset(cached.offset || 0);
@@ -1950,37 +1962,37 @@ const AppContent = () => {
                 if (!isCancelled) scrollToBottom('auto');
             }, 50);
 
-            // WebSocket'i baÄŸla (mesajlarÄ± yeniden yÃ¼klemeden)
-            // ðŸ”¥ FIX: setTimeout ile deÄŸil, direkt baÄŸla - race condition Ã¶nleme
+            // WebSocket'i bağla (mesajları yeniden yüklemeden)
+            // 🔥 FIX: setTimeout ile değil, direkt bağla - race condition önleme
             if (!isCancelled) connectWebSocket();
         } else {
-            // âŒ Cache yoksa server'dan Ã§ek
-            console.log('ðŸŒ [Fetch] No cache, fetching from server...');
+            // ❌ Cache yoksa server'dan çek
+            console.log('🌐 [Fetch] No cache, fetching from server...');
             setMessageHistoryOffset(0);
             setHasMoreMessages(true);
 
-            // ðŸ”¥ FIX: Ã–nce WebSocket baÄŸla, sonra mesajlarÄ± Ã§ek
+            // 🔥 FIX: Önce WebSocket bağla, sonra mesajları çek
             if (!isCancelled) connectWebSocket();
 
-            // Mesaj geÃ§miÅŸini yÃ¼kle
+            // Mesaj geçmişini yükle
             setTimeout(() => {
                 if (!isCancelled) fetchMessageHistory(true, 0);
             }, 50);
         }
 
-        // ðŸ”¥ CLEANUP: Component unmount veya activeChat deÄŸiÅŸince eski iÅŸlemleri iptal et
+        // 🔥 CLEANUP: Component unmount veya activeChat değişince eski işlemleri iptal et
         return () => {
             isCancelled = true;
-            console.log('ðŸ§¹ [Cleanup] activeChat useEffect cleanup triggered');
+            console.log('🧹 [Cleanup] activeChat useEffect cleanup triggered');
         };
     }, [activeChat.id, activeChat.type, isInitialDataLoaded, connectWebSocket]);
-    // âš ï¸ fetchMessageHistory dependency'den KALDIRILDI - useCallback deÄŸil, fonksiyon tanÄ±mÄ±
-    // connectWebSocket useCallback olduÄŸu iÃ§in gÃ¼venle eklenebilir
+    // ⚠️ fetchMessageHistory dependency'den KALDIRILDI - useCallback değil, fonksiyon tanımı
+    // connectWebSocket useCallback olduğu için güvenle eklenebilir
 
-    // ðŸ”¥ REAL-TIME SERVER STRUCTURE UPDATE
+    // 🔥 REAL-TIME SERVER STRUCTURE UPDATE
     useEffect(() => {
         if (globalData?.type === 'server_structure_update') {
-            console.log("ðŸ”„ Real-time Update: Refetching Server List...");
+            console.log("🔄 Real-time Update: Refetching Server List...");
             // Re-fetch only the server structure part of fetchInit
             const fetchCategories = async () => {
                 try {
@@ -1998,7 +2010,7 @@ const AppContent = () => {
     }, [globalData, fetchWithAuth]);
 
 
-    // ðŸ”¥ PERIODIC ACTIVITY POLLING (Spotify/Steam)
+    // 🔥 PERIODIC ACTIVITY POLLING (Spotify/Steam)
     useEffect(() => {
         if (!isAuthenticated || !username) return;
 
@@ -2019,7 +2031,7 @@ const AppContent = () => {
 
                     let newActivity = {}; // Changed to object to hold multiple
 
-                    // ðŸ”¥ Helper: Check if timestamp is fresh (within 2 minutes)
+                    // 🔥 Helper: Check if timestamp is fresh (within 2 minutes)
                     const isTimestampFresh = (timestamp) => {
                         if (!timestamp) return true; // No timestamp = trust it
                         const activityTime = new Date(timestamp);
@@ -2069,13 +2081,13 @@ const AppContent = () => {
             }
         };
 
-        const interval = setInterval(checkActivity, 30000); // 30s interval (daha az API isteÄŸi)
+        const interval = setInterval(checkActivity, 30000); // 30s interval (daha az API isteği)
         checkActivity(); // Initial check
 
         return () => clearInterval(interval);
     }, [isAuthenticated, username, fetchWithAuth]);
 
-    // ðŸš€ SCROLL DAVRANIÅžI
+    // 🚀 SCROLL DAVRANIŞI
     useEffect(() => {
         if (isNearBottom()) {
             scrollToBottom('smooth');
@@ -2102,7 +2114,7 @@ const AppContent = () => {
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
 
-        // âœ¨ Load Theme on Startup
+        // ✨ Load Theme on Startup
         const saved = loadSavedTheme();
         setCurrentTheme(saved);
 
@@ -2114,20 +2126,20 @@ const AppContent = () => {
         socket.onmessage = (e) => {
             const data = JSON.parse(e.data);
 
-            // ðŸ”§ FIX: Online users - sadece username array'i olarak set et
+            // 🔧 FIX: Online users - sadece username array'i olarak set et
             if (data.type === 'online_user_list_update') {
                 // Backend'den gelen data.users array'ini kontrol et
-                // EÄŸer object array'i ise username'leri Ã§Ä±kar, string array'i ise direkt kullan
+                // Eğer object array'i ise username'leri çıkar, string array'i ise direkt kullan
                 const onlineUsernames = Array.isArray(data.users)
                     ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
                     : [];
 
-                console.log('ðŸ‘¥ [Online Users] Updated:', onlineUsernames);
+                console.log('👥 [Online Users] Updated:', onlineUsernames);
                 setOnlineUsers(onlineUsernames);
             }
 
             if (data.type === 'voice_users_update') {
-                console.log('ðŸ”Š [GlobalWS] Received voice_users_update:', data.voice_users);
+                console.log('🔊 [GlobalWS] Received voice_users_update:', data.voice_users);
                 setVoiceUsersState(data.voice_users);
             }
 
@@ -2140,13 +2152,13 @@ const AppContent = () => {
                 }));
             }
 
-            // ðŸ”¥ Profil gÃ¼ncelleme (avatar, status_message vb.) - currentUserProfile'Ä± gÃ¼ncelle
+            // 🔥 Profil güncelleme (avatar, status_message vb.) - currentUserProfile'ı güncelle
             if (data.type === 'user_profile_update' && data.user_data) {
                 const updatedUser = data.user_data;
 
-                // Kendi profilimizi mi gÃ¼ncelledi?
+                // Kendi profilimizi mi güncelledi?
                 if (updatedUser.username === username) {
-                    console.log('ðŸ‘¤ [Profile Update] Updating currentUserProfile:', updatedUser);
+                    console.log('👤 [Profile Update] Updating currentUserProfile:', updatedUser);
                     setCurrentUserProfile(prevProfile => ({
                         ...prevProfile,
                         avatar: updatedUser.avatar,
@@ -2160,7 +2172,7 @@ const AppContent = () => {
                     }));
                 }
 
-                // AllUsers listesini de gÃ¼ncelle
+                // AllUsers listesini de güncelle
                 setAllUsers(prevUsers => prevUsers.map(u => {
                     if (u.username === updatedUser.username) {
                         return { ...u, ...updatedUser };
@@ -2175,7 +2187,7 @@ const AppContent = () => {
                 if (key !== currentKey) incrementUnread(key);
             }
 
-            // âœ¨ Handle Real-time Server/Channel Updates
+            // ✨ Handle Real-time Server/Channel Updates
             if (data.type === 'server_structure_update') {
                 console.log("Server structure update received, refreshing...");
                 fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
@@ -2184,10 +2196,10 @@ const AppContent = () => {
         return () => socket.close();
     }, [isAuthenticated, isInitialDataLoaded, username, token, activeChat]);
 
-    // ðŸŽ¤ SESLÄ° SOHBETE GÄ°RÄ°NCE CHAT ALANINI OTOMATÄ°K DEÄžÄ°ÅžTÄ°R
+    // 🎤 SESLİ SOHBETE GİRİNCE CHAT ALANINI OTOMATİK DEĞİŞTİR
     useEffect(() => {
         if (isInVoice && currentVoiceRoom) {
-            console.log(`ðŸ”Š [Voice] Switched to voice chat panel: ${currentVoiceRoom}`);
+            console.log(`🔊 [Voice] Switched to voice chat panel: ${currentVoiceRoom}`);
             setActiveChat('voice', currentVoiceRoom);
         }
     }, [isInVoice, currentVoiceRoom]);
@@ -2212,12 +2224,12 @@ const AppContent = () => {
         if (isMobile) setIsRightSidebarVisible(false);
     }, [isMobile]);
 
-    // ðŸ”¥ REMOVED: Bu useEffect satÄ±r 1787'deki useEffect ile Ã§akÄ±ÅŸÄ±yordu!
-    // activeChat deÄŸiÅŸtiÄŸinde mesaj geÃ§miÅŸini ve WebSocket'i YÃ–NETÄ°M artÄ±k
-    // TEK BÄ°R useEffect'te yapÄ±lÄ±yor (satÄ±r 1787-1819)
-    // Bu sayede WebSocket baÄŸlantÄ±sÄ± Ã§ift aÃ§Ä±lmÄ±yor ve mesajlar kaybolmuyor.
+    // 🔥 REMOVED: Bu useEffect satır 1787'deki useEffect ile çakışıyordu!
+    // activeChat değiştiğinde mesaj geçmişini ve WebSocket'i YÖNETİM artık
+    // TEK BİR useEffect'te yapılıyor (satır 1787-1819)
+    // Bu sayede WebSocket bağlantısı çift açılmıyor ve mesajlar kaybolmuyor.
 
-    // ðŸ”¥ REMOVED: Conflicting cache useEffect - cache logic now in main useEffect above
+    // 🔥 REMOVED: Conflicting cache useEffect - cache logic now in main useEffect above
 
     const toggleNotifications = useCallback(() => {
         setSoundSettings(prev => {
@@ -2232,18 +2244,18 @@ const AppContent = () => {
         const link = `${window.location.origin}/#/${activeChat.type === 'dm' ? `dm/${activeChat.id}` : `room/${activeChat.id}`}`;
         try {
             await navigator.clipboard.writeText(link);
-            setUpdateStatusText('Link kopyalandÄ±');
+            setUpdateStatusText('Link kopyalandı');
             setTimeout(() => setUpdateStatusText(''), 1500);
         } catch (e) {
-            console.error('Link kopyalanamadÄ±', e);
-            toast.error('Link kopyalanamadÄ±');
+            console.error('Link kopyalanamadı', e);
+            toast.error('Link kopyalanamadı');
         }
     }, [activeChat]);
 
     const fetchMessageHistory = async (isInitial = true, offset = 0) => {
         if (!activeChat.id) return;
 
-        // ðŸ”¥ FIX: Voice chat iÃ§in mesaj geÃ§miÅŸi yok
+        // 🔥 FIX: Voice chat için mesaj geçmişi yok
         if (activeChat.type === 'voice') {
             console.log('[Voice] Skipping message history for voice chat');
             setMessages([]);
@@ -2251,15 +2263,15 @@ const AppContent = () => {
             return;
         }
 
-        console.log('ðŸ”„ [fetchMessageHistory] Starting fetch:', { isInitial, offset, activeChat });
+        console.log('🔄 [fetchMessageHistory] Starting fetch:', { isInitial, offset, activeChat });
         setMessageHistoryLoading(true);
         const urlBase = activeChat.type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
 
-        // ðŸ”¥ FIX: Cache'i ARTIK TEMÄ°ZLEME - activeChat effect'inde cache varsa bu fonksiyon zaten Ã§aÄŸrÄ±lmÄ±yor
-        // Sadece ilk yÃ¼klemede (cache yoksa) buraya gelir, o yÃ¼zden cache temizlemeye gerek yok
+        // 🔥 FIX: Cache'i ARTIK TEMİZLEME - activeChat effect'inde cache varsa bu fonksiyon zaten çağrılmıyor
+        // Sadece ilk yüklemede (cache yoksa) buraya gelir, o yüzden cache temizlemeye gerek yok
         // if (isInitial) {
-        //     console.log('ðŸ—‘ï¸ [fetchMessageHistory] Clearing cache for:', key);
+        //     console.log('🗑️ [fetchMessageHistory] Clearing cache for:', key);
         //     delete historyCacheRef.current[key];
         // }
 
@@ -2268,37 +2280,37 @@ const AppContent = () => {
             if (res.ok) {
                 const data = await res.json();
 
-                // âœ… FIX: HatalÄ± mesajlarÄ± filtrele (eski/bozuk veriler iÃ§in)
+                // ✅ FIX: Hatalı mesajları filtrele (eski/bozuk veriler için)
                 const rawMessages = data.results || [];
                 const validMessages = rawMessages.filter(msg => {
-                    // Mesaj objesi geÃ§erli mi?
+                    // Mesaj objesi geçerli mi?
                     if (!msg || typeof msg !== 'object') {
-                        console.warn('âš ï¸ [fetchMessageHistory] Invalid message object:', msg);
+                        console.warn('⚠️ [fetchMessageHistory] Invalid message object:', msg);
                         return false;
                     }
-                    // En azÄ±ndan ID veya temp_id olmalÄ±
+                    // En azından ID veya temp_id olmalı
                     if (!msg.id && !msg.temp_id) {
-                        console.warn('âš ï¸ [fetchMessageHistory] Message without ID:', msg);
+                        console.warn('⚠️ [fetchMessageHistory] Message without ID:', msg);
                         return false;
                     }
                     return true;
                 });
 
                 if (validMessages.length < rawMessages.length) {
-                    console.warn(`âš ï¸ [fetchMessageHistory] Filtered out ${rawMessages.length - validMessages.length} invalid messages`);
+                    console.warn(`⚠️ [fetchMessageHistory] Filtered out ${rawMessages.length - validMessages.length} invalid messages`);
                 }
 
                 const newMsgs = validMessages.reverse();
-                console.log('âœ… [fetchMessageHistory] Fetched messages:', newMsgs.length);
+                console.log('✅ [fetchMessageHistory] Fetched messages:', newMsgs.length);
 
                 let combinedMessages = newMsgs;
                 if (isInitial) {
-                    console.log('ðŸ“ [fetchMessageHistory] Setting messages (INITIAL):', newMsgs.length);
+                    console.log('📝 [fetchMessageHistory] Setting messages (INITIAL):', newMsgs.length);
                     setMessages(newMsgs);
                     setTimeout(() => scrollToBottom('auto'), 100);
                 } else {
                     setMessages(prev => {
-                        console.log('ðŸ“ [fetchMessageHistory] Appending to existing:', prev.length, '+', newMsgs.length);
+                        console.log('📝 [fetchMessageHistory] Appending to existing:', prev.length, '+', newMsgs.length);
                         combinedMessages = [...newMsgs, ...prev];
                         return combinedMessages;
                     });
@@ -2316,67 +2328,67 @@ const AppContent = () => {
                     offset: nextOffset,
                     hasMore,
                 };
-                console.log('ðŸ’¾ [fetchMessageHistory] Cached:', key, 'with', (combinedMessages || cachedCombined).length, 'messages');
+                console.log('💾 [fetchMessageHistory] Cached:', key, 'with', (combinedMessages || cachedCombined).length, 'messages');
             }
         } catch (e) {
-            console.error('âŒ [fetchMessageHistory] Error:', e);
+            console.error('❌ [fetchMessageHistory] Error:', e);
         }
         setMessageHistoryLoading(false);
     };
 
     const handleLogin = async (u, p) => {
         try {
-            console.log('ðŸ”‘ [Auth] Login attempt:', { username: u, url: LOGIN_URL });
+            console.log('🔑 [Auth] Login attempt:', { username: u, url: LOGIN_URL });
             const res = await fetch(LOGIN_URL, {
                 method: 'POST',
                 body: JSON.stringify({ username: u, password: p }),
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            console.log('ðŸ”‘ [Auth] Response status:', res.status);
+            console.log('🔑 [Auth] Response status:', res.status);
             const data = await res.json();
 
             if (res.ok) {
-                console.log('âœ… [Auth] Login successful');
+                console.log('✅ [Auth] Login successful');
                 login(data.access, data.refresh);
             } else {
-                console.error('âŒ [Auth] Login failed:', data);
+                console.error('❌ [Auth] Login failed:', data);
                 if (res.status === 401) {
-                    setAuthError('KullanÄ±cÄ± adÄ± veya ÅŸifre hatalÄ±');
+                    setAuthError('Kullanıcı adı veya şifre hatalı');
                 } else if (res.status === 400) {
-                    setAuthError(data.detail || data.error || 'GeÃ§ersiz giriÅŸ bilgileri');
+                    setAuthError(data.detail || data.error || 'Geçersiz giriş bilgileri');
                 } else if (res.status >= 500) {
-                    setAuthError('Sunucu hatasÄ±. LÃ¼tfen daha sonra tekrar deneyin.');
+                    setAuthError('Sunucu hatası. Lütfen daha sonra tekrar deneyin.');
                 } else {
-                    setAuthError(data.detail || data.error || 'GiriÅŸ baÅŸarÄ±sÄ±z');
+                    setAuthError(data.detail || data.error || 'Giriş başarısız');
                 }
             }
         } catch (e) {
-            console.error('âŒ [Auth] Network error:', e);
-            setAuthError("Sunucuya baÄŸlanÄ±lamadÄ±. Ä°nternet baÄŸlantÄ±nÄ±zÄ± kontrol edin.");
+            console.error('❌ [Auth] Network error:', e);
+            setAuthError("Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.");
         }
     };
 
     const handleRegister = async (u, e, p) => {
         try {
-            console.log('ðŸ“ [Auth] Register attempt:', { username: u, email: e, url: REGISTER_URL });
+            console.log('📝 [Auth] Register attempt:', { username: u, email: e, url: REGISTER_URL });
             const res = await fetch(REGISTER_URL, {
                 method: 'POST',
                 body: JSON.stringify({ username: u, email: e, password: p }),
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            console.log('ðŸ“ [Auth] Response status:', res.status);
+            console.log('📝 [Auth] Response status:', res.status);
 
             if (res.status === 201) {
-                console.log('âœ… [Auth] Registration successful');
+                console.log('✅ [Auth] Registration successful');
                 return true;
             }
 
             const data = await res.json();
-            console.error('âŒ [Auth] Registration failed:', data);
+            console.error('❌ [Auth] Registration failed:', data);
 
-            // Hata mesajlarÄ±nÄ± kullanÄ±cÄ± dostu hale getir
+            // Hata mesajlarını kullanıcı dostu hale getir
             let errorMessage = '';
             if (data.username) {
                 errorMessage = data.username.join(' ');
@@ -2390,11 +2402,11 @@ const AppContent = () => {
                 errorMessage = Object.values(data).flat().join(' ');
             }
 
-            setAuthError(errorMessage || 'KayÄ±t iÅŸlemi baÅŸarÄ±sÄ±z');
+            setAuthError(errorMessage || 'Kayıt işlemi başarısız');
             return false;
         } catch (err) {
-            console.error('âŒ [Auth] Network error:', err);
-            setAuthError("Sunucuya baÄŸlanÄ±lamadÄ±. Ä°nternet baÄŸlantÄ±nÄ±zÄ± kontrol edin.");
+            console.error('❌ [Auth] Network error:', err);
+            setAuthError("Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.");
             return false;
         }
     };
@@ -2410,19 +2422,19 @@ const AppContent = () => {
             const hash = await calculateFileHash(file);
             const contentType = file.type || 'application/octet-stream';
 
-            // ðŸš€ R2 MULTIPART UPLOAD - Ã‡ok daha hÄ±zlÄ±!
+            // 🚀 R2 MULTIPART UPLOAD - Çok daha hızlı!
             const CHUNK_SIZE = 10 * 1024 * 1024; // 10 MB (R2 min: 5MB)
-            const PARALLEL_UPLOADS = 5; // 5 part aynÄ± anda
+            const PARALLEL_UPLOADS = 5; // 5 part aynı anda
             const totalParts = Math.ceil(file.size / CHUNK_SIZE);
 
-            console.log(`ðŸš€ [R2 Multipart] Starting upload:`, {
+            console.log(`🚀 [R2 Multipart] Starting upload:`, {
                 fileName: file.name,
                 fileSize: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
                 totalParts,
                 parallelUploads: PARALLEL_UPLOADS
             });
 
-            // 1ï¸âƒ£ Multipart upload baÅŸlat
+            // 1️⃣ Multipart upload başlat
             const initRes = await fetchWithAuth(`${API_BASE_URL}/upload/multipart/init/`, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -2437,17 +2449,17 @@ const AppContent = () => {
 
             // Dosya zaten varsa
             if (initData.file_exists) {
-                console.log('âœ… [R2] File already exists, skipping upload');
-                toast.success('Dosya zaten yÃ¼klÃ¼!');
+                console.log('✅ [R2] File already exists, skipping upload');
+                toast.success('Dosya zaten yüklü!');
                 setIsUploading(false);
                 setUploadProgress(100);
                 return;
             }
 
             const { upload_id, key } = initData;
-            console.log(`ðŸ“¦ [R2] Upload ID: ${upload_id.substring(0, 20)}..., Key: ${key}`);
+            console.log(`📦 [R2] Upload ID: ${upload_id.substring(0, 20)}..., Key: ${key}`);
 
-            // 2ï¸âƒ£ Her part iÃ§in backend Ã¼zerinden R2'ye yÃ¼kle (ETag almak iÃ§in)
+            // 2️⃣ Her part için backend üzerinden R2'ye yükle (ETag almak için)
             const parts = [];
             let completedParts = 0;
 
@@ -2456,9 +2468,9 @@ const AppContent = () => {
                 const end = Math.min(start + CHUNK_SIZE, file.size);
                 const chunk = file.slice(start, end);
 
-                console.log(`ðŸ“¤ [R2] Part ${partNumber}/${totalParts} uploading...`);
+                console.log(`📤 [R2] Part ${partNumber}/${totalParts} uploading...`);
 
-                // Backend Ã¼zerinden yÃ¼kle (ETag dÃ¶ner)
+                // Backend üzerinden yükle (ETag döner)
                 const formData = new FormData();
                 formData.append('upload_id', upload_id);
                 formData.append('key', key);
@@ -2468,8 +2480,8 @@ const AppContent = () => {
                 const uploadRes = await fetchWithAuth(`${API_BASE_URL}/upload/multipart/upload-part/`, {
                     method: 'POST',
                     body: formData,
-                    // Content-Type header'Ä± FormData iÃ§in otomatik ayarlanÄ±r
-                    headers: {} // fetchWithAuth'un Content-Type'Ä± override etmemesi iÃ§in
+                    // Content-Type header'ı FormData için otomatik ayarlanır
+                    headers: {} // fetchWithAuth'un Content-Type'ı override etmemesi için
                 });
 
                 if (!uploadRes.ok) {
@@ -2483,7 +2495,7 @@ const AppContent = () => {
                 const progress = Math.round((completedParts / totalParts) * 95); // %95'e kadar
                 setUploadProgress(progress);
 
-                console.log(`âœ… [R2] Part ${partNumber}/${totalParts} complete (${progress}%), ETag: ${etag}`);
+                console.log(`✅ [R2] Part ${partNumber}/${totalParts} complete (${progress}%), ETag: ${etag}`);
 
                 return {
                     ETag: etag,
@@ -2491,22 +2503,22 @@ const AppContent = () => {
                 };
             };
 
-            // Paralel upload - PARALLEL_UPLOADS adet aynÄ± anda
+            // Paralel upload - PARALLEL_UPLOADS adet aynı anda
             for (let i = 0; i < totalParts; i += PARALLEL_UPLOADS) {
                 const batch = [];
                 for (let j = 0; j < PARALLEL_UPLOADS && (i + j) < totalParts; j++) {
-                    batch.push(uploadPart(i + j + 1)); // PartNumber 1'den baÅŸlar
+                    batch.push(uploadPart(i + j + 1)); // PartNumber 1'den başlar
                 }
                 const batchResults = await Promise.all(batch);
                 parts.push(...batchResults);
             }
 
-            // Parts'Ä± PartNumber'a gÃ¶re sÄ±rala
+            // Parts'ı PartNumber'a göre sırala
             parts.sort((a, b) => a.PartNumber - b.PartNumber);
 
-            console.log(`ðŸ“‹ [R2] All parts uploaded, completing...`, parts);
+            console.log(`📋 [R2] All parts uploaded, completing...`, parts);
 
-            // 3ï¸âƒ£ Multipart upload'Ä± tamamla ve mesaj oluÅŸtur
+            // 3️⃣ Multipart upload'ı tamamla ve mesaj oluştur
             const completeRes = await fetchWithAuth(`${API_BASE_URL}/upload/multipart/complete/`, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -2531,9 +2543,9 @@ const AppContent = () => {
             const data = await completeRes.json();
             setUploadProgress(100);
 
-            console.log('âœ… [R2 Multipart] Upload complete!', data);
+            console.log('✅ [R2 Multipart] Upload complete!', data);
 
-            // MesajÄ± listeye ekle
+            // Mesajı listeye ekle
             if (target.id === activeChat.id) {
                 setMessages(prev => {
                     if (data.temp_id) {
@@ -2553,8 +2565,8 @@ const AppContent = () => {
             }
 
         } catch (e) {
-            console.error('âŒ [R2 Multipart] Error:', e);
-            toast.error(`YÃ¼kleme hatasÄ±: ${e.message}`);
+            console.error('❌ [R2 Multipart] Error:', e);
+            toast.error(`Yükleme hatası: ${e.message}`);
         }
 
         setIsUploading(false);
@@ -2573,25 +2585,25 @@ const AppContent = () => {
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             const file = e.dataTransfer.files[0];
 
-            // DM'e dosya atÄ±ldÄ±ysa
+            // DM'e dosya atıldıysa
             if (target.type === 'dm') {
-                // DM'i aÃ§ ve dosyayÄ± yÃ¼kle
+                // DM'i aç ve dosyayı yükle
                 const conversation = conversations.find(c => c.id === target.id);
                 if (conversation) {
                     const otherUser = conversation.participants.find(p => p.username !== username);
                     if (otherUser) {
                         // DM'i aktif et
                         handleDMClick(otherUser.username);
-                        // DosyayÄ± yÃ¼kle
+                        // Dosyayı yükle
                         setTimeout(() => {
                             uploadFile(file, false, 0, target);
                         }, 300);
                     }
                 }
             }
-            // Odaya dosya atÄ±ldÄ±ysa
+            // Odaya dosya atıldıysa
             else if (target.type === 'room') {
-                // OdayÄ± aÃ§ ve dosyayÄ± yÃ¼kle
+                // Odayı aç ve dosyayı yükle
                 const room = roomsWithCategories.find(r => r.room_slug === target.id);
                 if (room) {
                     handleRoomClick(target.id);
@@ -2625,7 +2637,7 @@ const AppContent = () => {
     };
 
     const handleDeleteMessage = async (messageId) => {
-        if (!window.confirm("Bu mesajÄ± silmek istediÄŸine emin misin?")) return;
+        if (!window.confirm("Bu mesajı silmek istediğine emin misin?")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/messages/${messageId}/delete/`, { method: 'DELETE' });
             if (res.ok) setMessages(prev => prev.filter(m => m.id !== messageId));
@@ -2645,25 +2657,25 @@ const AppContent = () => {
         } catch (e) { console.error(e); }
     };
 
-    // ðŸ”¥ ADMIN: Permanently delete entire conversation (from both sides)
+    // 🔥 ADMIN: Permanently delete entire conversation (from both sides)
     const handleAdminDeleteConversation = async (conversationId) => {
-        if (!window.confirm("âš ï¸ ADMÄ°N: Bu konuÅŸmayÄ± HER Ä°KÄ° TARAFTAN KALICI OLARAK silmek istediÄŸinize emin misiniz?\n\nBu iÅŸlem GERÄ° ALINAMAZ!")) return;
+        if (!window.confirm("⚠️ ADMİN: Bu konuşmayı HER İKİ TARAFTAN KALICI OLARAK silmek istediğinize emin misiniz?\n\nBu işlem GERİ ALINAMAZ!")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/conversations/${conversationId}/admin-delete/`, { method: 'DELETE' });
             if (res.ok) {
                 const data = await res.json();
-                toast.success(`âœ… ${data.deleted_messages} mesaj silindi. KatÄ±lÄ±mcÄ±lar: ${data.participants.join(', ')}`);
+                toast.success(`✅ ${data.deleted_messages} mesaj silindi. Katılımcılar: ${data.participants.join(', ')}`);
                 setConversations(prev => prev.filter(c => c.id !== conversationId));
                 if (activeChat.type === 'dm' && activeChat.id === conversationId) {
                     setActiveChat('welcome', 'welcome');
                 }
             } else {
                 const errorData = await res.json();
-                toast.error(`âŒ Hata: ${errorData.error || 'Silme iÅŸlemi baÅŸarÄ±sÄ±z'}`);
+                toast.error(`❌ Hata: ${errorData.error || 'Silme işlemi başarısız'}`);
             }
         } catch (e) {
             console.error(e);
-            toast.error('âŒ Sunucuyla baÄŸlantÄ± hatasÄ±');
+            toast.error('❌ Sunucuyla bağlantı hatası');
         }
     };
 
@@ -2672,17 +2684,17 @@ const AppContent = () => {
         if (isMobile) setIsLeftSidebarVisible(false);
     }, [isMobile]);
 
-    // ðŸ”¥ USER CONTEXT MENU HANDLER
+    // 🔥 USER CONTEXT MENU HANDLER
     const handleUserContextAction = useCallback(async (action, user, extraData) => {
         switch (action) {
             case 'profile':
-                // Profil gÃ¶rÃ¼ntÃ¼le
+                // Profil görüntüle
                 const userProfile = allUsers.find(u => u.username === user.username);
                 if (userProfile) setViewingProfile(userProfile);
                 break;
 
             case 'message':
-                // DM baÅŸlat
+                // DM başlat
                 handleDMClick(user.username);
                 break;
 
@@ -2691,7 +2703,7 @@ const AppContent = () => {
                 break;
 
             case 'move':
-                // KullanÄ±cÄ±yÄ± baÅŸka kanala taÅŸÄ± (admin/mod)
+                // Kullanıcıyı başka kanala taşı (admin/mod)
                 if (isAdmin && extraData && currentVoiceRoom) {
                     try {
                         const res = await fetchWithAuth(`${API_BASE_URL}/voice/move_user/`, {
@@ -2703,7 +2715,7 @@ const AppContent = () => {
                             })
                         });
                         if (res.ok) {
-                            console.log(`âœ… ${user.username} moved to ${extraData}`);
+                            console.log(`✅ ${user.username} moved to ${extraData}`);
                         }
                     } catch (e) {
                         console.error('Move user error:', e);
@@ -2713,7 +2725,7 @@ const AppContent = () => {
 
             case 'kick':
                 // Kanaldan at (admin/mod)
-                if (isAdmin && window.confirm(`${user.username} kullanÄ±cÄ±sÄ±nÄ± kanaldan atmak istediÄŸine emin misin?`)) {
+                if (isAdmin && window.confirm(`${user.username} kullanıcısını kanaldan atmak istediğine emin misin?`)) {
                     try {
                         const res = await fetchWithAuth(`${API_BASE_URL}/voice/kick_user/`, {
                             method: 'POST',
@@ -2723,7 +2735,7 @@ const AppContent = () => {
                             })
                         });
                         if (res.ok) {
-                            console.log(`âœ… ${user.username} kicked from voice`);
+                            console.log(`✅ ${user.username} kicked from voice`);
                         }
                     } catch (e) {
                         console.error('Kick user error:', e);
@@ -2743,7 +2755,7 @@ const AppContent = () => {
                             })
                         });
                         if (res.ok) {
-                            console.log(`âœ… ${user.username} server muted`);
+                            console.log(`✅ ${user.username} server muted`);
                         }
                     } catch (e) {
                         console.error('Server mute error:', e);
@@ -2752,30 +2764,30 @@ const AppContent = () => {
                 break;
 
             case 'add_friend':
-                // ArkadaÅŸ ekle
+                // Arkadaş ekle
                 try {
                     const res = await fetchWithAuth(`${API_BASE_URL}/friends/send/`, {
                         method: 'POST',
                         body: JSON.stringify({ username: user.username })
                     });
                     if (res.ok) {
-                        setUpdateStatusText(`âœ… ${user.username} kullanÄ±cÄ±sÄ±na arkadaÅŸlÄ±k isteÄŸi gÃ¶nderildi!`);
+                        setUpdateStatusText(`✅ ${user.username} kullanıcısına arkadaşlık isteği gönderildi!`);
                         setTimeout(() => setUpdateStatusText(''), 3000);
                     } else {
                         const data = await res.json();
-                        setUpdateStatusText(`âŒ ${data.error || 'Ä°stek gÃ¶nderilemedi'}`);
+                        setUpdateStatusText(`❌ ${data.error || 'İstek gönderilemedi'}`);
                         setTimeout(() => setUpdateStatusText(''), 3000);
                     }
                 } catch (e) {
                     console.error('Add friend error:', e);
-                    setUpdateStatusText('âŒ ArkadaÅŸ ekleme hatasÄ±');
+                    setUpdateStatusText('❌ Arkadaş ekleme hatası');
                     setTimeout(() => setUpdateStatusText(''), 3000);
                 }
                 break;
 
             case 'remove_friend':
-                // ArkadaÅŸtan Ã§Ä±kar
-                if (window.confirm(`${user.username} ile arkadaÅŸlÄ±ÄŸÄ± sonlandÄ±rmak istediÄŸinize emin misiniz?`)) {
+                // Arkadaştan çıkar
+                if (window.confirm(`${user.username} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) {
                     try {
                         // Friendship ID'sini bul
                         const friendship = friendsList.find(f =>
@@ -2786,7 +2798,7 @@ const AppContent = () => {
                                 method: 'DELETE'
                             });
                             if (res.ok) {
-                                setUpdateStatusText(`âœ… ${user.username} ile arkadaÅŸlÄ±k sonlandÄ±rÄ±ldÄ±`);
+                                setUpdateStatusText(`✅ ${user.username} ile arkadaşlık sonlandırıldı`);
                                 setTimeout(() => setUpdateStatusText(''), 3000);
                                 // Listeyi yenile
                                 const friendsRes = await fetchWithAuth(`${API_BASE_URL}/friends/list/`);
@@ -2798,45 +2810,45 @@ const AppContent = () => {
                         }
                     } catch (e) {
                         console.error('Remove friend error:', e);
-                        setUpdateStatusText('âŒ ArkadaÅŸlÄ±k sonlandÄ±rma hatasÄ±');
+                        setUpdateStatusText('❌ Arkadaşlık sonlandırma hatası');
                         setTimeout(() => setUpdateStatusText(''), 3000);
                     }
                 }
                 break;
 
             case 'invite_to_server':
-                // ðŸŽ« Sunucuya davet modal'Ä±nÄ± aÃ§
+                // 🎫 Sunucuya davet modal'ını aç
                 setInviteToServerUser({ username: user.username });
                 break;
 
             case 'mute_user':
-                // ðŸ”‡ KullanÄ±cÄ±yÄ± sessize al (DM bildirimleri)
+                // 🔇 Kullanıcıyı sessize al (DM bildirimleri)
                 try {
                     const res = await fetchWithAuth(`${API_BASE_URL}/users/${user.username}/mute/`, {
                         method: 'POST'
                     });
                     if (res.ok) {
-                        toast.success(`ðŸ”‡ ${user.username} sessize alÄ±ndÄ±`);
+                        toast.success(`🔇 ${user.username} sessize alındı`);
                     } else {
                         const data = await res.json();
-                        toast.error(`âŒ ${data.error || 'Sessize alma baÅŸarÄ±sÄ±z'}`);
+                        toast.error(`❌ ${data.error || 'Sessize alma başarısız'}`);
                     }
                 } catch (e) {
                     console.error('Mute user error:', e);
-                    toast.error('âŒ Sessize alma hatasÄ±');
+                    toast.error('❌ Sessize alma hatası');
                 }
                 break;
 
             case 'block_user':
-                // ðŸš« KullanÄ±cÄ±yÄ± engelle
-                if (window.confirm(`${user.username} kullanÄ±cÄ±sÄ±nÄ± engellemek istediÄŸinize emin misiniz?`)) {
+                // 🚫 Kullanıcıyı engelle
+                if (window.confirm(`${user.username} kullanıcısını engellemek istediğinize emin misiniz?`)) {
                     try {
                         const res = await fetchWithAuth(`${API_BASE_URL}/users/${user.username}/block/`, {
                             method: 'POST'
                         });
                         if (res.ok) {
-                            toast.success(`ðŸš« ${user.username} engellendi`);
-                            // ArkadaÅŸ listesini yenile
+                            toast.success(`🚫 ${user.username} engellendi`);
+                            // Arkadaş listesini yenile
                             const friendsRes = await fetchWithAuth(`${API_BASE_URL}/friends/list/`);
                             if (friendsRes.ok) {
                                 const data = await friendsRes.json();
@@ -2844,11 +2856,11 @@ const AppContent = () => {
                             }
                         } else {
                             const data = await res.json();
-                            toast.error(`âŒ ${data.error || 'Engelleme baÅŸarÄ±sÄ±z'}`);
+                            toast.error(`❌ ${data.error || 'Engelleme başarısız'}`);
                         }
                     } catch (e) {
                         console.error('Block user error:', e);
-                        toast.error('âŒ Engelleme hatasÄ±');
+                        toast.error('❌ Engelleme hatası');
                     }
                 }
                 break;
@@ -2861,13 +2873,13 @@ const AppContent = () => {
     const handleStartUpdate = () => {
         if (isElectron) {
             setIsDownloading(true);
-            setUpdateStatusText('Ä°ndiriliyor...');
+            setUpdateStatusText('İndiriliyor...');
             const { ipcRenderer } = window.require('electron');
             // Local path - media/build/Pawscord-Setup.exe
             const DOWNLOAD_URL = `${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`;
             ipcRenderer.send('start-download', DOWNLOAD_URL);
         } else {
-            // TarayÄ±cÄ±dan indirme - media/build klasÃ¶rÃ¼ne yÃ¶nlendir
+            // Tarayıcıdan indirme - media/build klasörüne yönlendir
             window.open(`${ABSOLUTE_HOST_URL}/media/build/Pawscord-Setup.exe`, '_blank');
         }
     };
@@ -2877,11 +2889,11 @@ const AppContent = () => {
             const { ipcRenderer } = window.require('electron');
             const handleProgress = (event, progress) => setDownloadProgress(Math.round(progress * 100));
             const handleComplete = () => {
-                setUpdateStatusText('BaÅŸlatÄ±lÄ±yor...');
+                setUpdateStatusText('Başlatılıyor...');
                 setDownloadProgress(100);
-                setTimeout(() => setUpdateStatusText('KapanÄ±yor...'), 1500);
+                setTimeout(() => setUpdateStatusText('Kapanıyor...'), 1500);
             };
-            const handleError = (event, error) => { setIsDownloading(false); toast.error(`Ä°ndirme hatasÄ±: ${error}`); };
+            const handleError = (event, error) => { setIsDownloading(false); toast.error(`İndirme hatası: ${error}`); };
 
             ipcRenderer.on('download-progress', handleProgress);
             ipcRenderer.on('download-complete', handleComplete);
@@ -2896,7 +2908,7 @@ const AppContent = () => {
     }, []);
 
     // --- RENDER ---
-    // ðŸ”¥ Splash screen overlay - arka planda veri yÃ¼klenmeye devam eder
+    // 🔥 Splash screen overlay - arka planda veri yüklenmeye devam eder
     const showSplash = animationState !== 'finished';
 
     if (!isAuthenticated) return (
@@ -2910,10 +2922,10 @@ const AppContent = () => {
     const currentKeyId = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
     const hasKey = !!encryptionKeys[currentKeyId];
 
-    // ðŸ”— EÄŸer vanity invite ekranÄ± aÃ§Ä±ksa, sadece onu gÃ¶ster (performans iÃ§in)
+    // 🔗 Eğer vanity invite ekranı açıksa, sadece onu göster (performans için)
     if (showVanityInvite) {
         return (
-            <Suspense fallback={<LoadingSpinner size="large" text="Davet yÃ¼kleniyor..." />}>
+            <Suspense fallback={<LoadingSpinner size="large" text="Davet yükleniyor..." />}>
                 <VanityInviteScreen
                     vanityPath={showVanityInvite}
                     fetchWithAuth={fetchWithAuth}
@@ -2929,10 +2941,10 @@ const AppContent = () => {
 
     return (
         <div style={{ ...styles.mainContainer }} className="dark-theme">
-            {/* ðŸ”¥ Splash overlay - veri yÃ¼klenirken gÃ¶ster */}
+            {/* 🔥 Splash overlay - veri yüklenirken göster */}
             {showSplash && <SplashScreen animationState={animationState} />}
 
-            {/* ðŸ†• Maintenance Mode Banner */}
+            {/* 🆕 Maintenance Mode Banner */}
             {maintenanceMode && (
                 <MaintenanceBanner
                     message={maintenanceMode.message}
@@ -2943,7 +2955,7 @@ const AppContent = () => {
             )}
 
             {/* --- LAZY MODALS --- */}
-            <Suspense fallback={<LoadingSpinner size="medium" text="Modal yÃ¼kleniyor..." />}>
+            <Suspense fallback={<LoadingSpinner size="medium" text="Modal yükleniyor..." />}>
                 {showProfilePanel && <UserProfilePanel user={currentUserProfile} onClose={() => setShowProfilePanel(false)} onProfileUpdate={(updatedUser) => setCurrentUserProfile(updatedUser)} onLogout={logout} fetchWithAuth={fetchWithAuth} getDeterministicAvatar={getDeterministicAvatar} updateProfileUrl={UPDATE_PROFILE_URL} changeUsernameUrl={CHANGE_USERNAME_URL} soundSettings={soundSettings} onUpdateSoundSettings={setSoundSettings} onImageClick={setZoomedImage} apiBaseUrl={ABSOLUTE_HOST_URL} />}
                 {showStore && <PremiumStoreModal onClose={() => setShowStore(false)} />}
                 {showAnalytics && <AdminAnalyticsPanel onClose={() => setShowAnalytics(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
@@ -2962,7 +2974,7 @@ const AppContent = () => {
                     />
                 )}
 
-                {/* ï¿½ CRITICAL & HIGH PRIORITY PANELS (2026-01-19) */}
+                {/* � CRITICAL & HIGH PRIORITY PANELS (2026-01-19) */}
                 {showPaymentPanel && (
                     <PaymentPanel
                         fetchWithAuth={fetchWithAuth}
@@ -3012,14 +3024,14 @@ const AppContent = () => {
                     />
                 )}
 
-                {/* ðŸ”— PLATFORM CONNECTIONS PANEL */}
+                {/* 🔗 PLATFORM CONNECTIONS PANEL */}
                 {showConnectionsPanel && (
                     <ConnectionsPanel
                         onClose={() => setShowConnectionsPanel(false)}
                     />
                 )}
 
-                {/* ðŸ”‘ PASSWORD SETUP MODAL (Google Users) */}
+                {/* 🔑 PASSWORD SETUP MODAL (Google Users) */}
                 {showPasswordSetupModal && (
                     <PasswordSetupModal
                         onClose={() => setShowPasswordSetupModal(false)}
@@ -3027,7 +3039,7 @@ const AppContent = () => {
                     />
                 )}
 
-                {/* ðŸ›¡ï¸ MODERATION PANELS */}
+                {/* 🛡️ MODERATION PANELS */}
                 {showAutoModeration && (
                     <AutoModerationDashboard
                         serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
@@ -3069,7 +3081,7 @@ const AppContent = () => {
                     />
                 )}
 
-                {/* ðŸ”¥ WEBHOOKS & VANITY URL */}
+                {/* 🔥 WEBHOOKS & VANITY URL */}
                 {showWebhooks && (
                     <WebhooksPanel
                         serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
@@ -3087,7 +3099,7 @@ const AppContent = () => {
                     />
                 )}
                 {showAutoResponder && activeChat?.type === 'room' && activeChat.server_id && (
-                    <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
                         <AutoRespondersPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3097,9 +3109,9 @@ const AppContent = () => {
                     </Suspense>
                 )}
 
-                {/* ðŸ“š NEW FEATURES: Feature Panels (2026-01-19) */}
+                {/* 📚 NEW FEATURES: Feature Panels (2026-01-19) */}
                 {showBookmarks && (
-                    <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
                         <BookmarkPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3118,7 +3130,7 @@ const AppContent = () => {
                 )}
 
                 {showReadLater && (
-                    <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
                         <ReadLaterPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3136,7 +3148,7 @@ const AppContent = () => {
                 )}
 
                 {showChannelPermissions && activeChat?.type === 'room' && (
-                    <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
                         <ChannelPermissionsPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3147,7 +3159,7 @@ const AppContent = () => {
                 )}
 
                 {showAutoModeration && (
-                    <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
                         <AutoModerationPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3175,9 +3187,9 @@ const AppContent = () => {
                 {showPollModal && <PollCreateModal onClose={() => setShowPollModal(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} activeRoomSlug={activeChat.id} />}
             </Suspense>
 
-            {/* ðŸš€ BATCH 1: Analytics & Tracking (2026-01-19) */}
+            {/* 🚀 BATCH 1: Analytics & Tracking (2026-01-19) */}
             {showReactionAnalytics && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <ReactionAnalyticsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3188,7 +3200,7 @@ const AppContent = () => {
             )}
 
             {showLinkClickTracking && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <LinkClickTrackingPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3199,7 +3211,7 @@ const AppContent = () => {
             )}
 
             {showJoinLeaveLogs && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <JoinLeaveLogsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3210,7 +3222,7 @@ const AppContent = () => {
             )}
 
             {showUserActivity && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <UserActivityPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3221,7 +3233,7 @@ const AppContent = () => {
             )}
 
             {showNicknameHistory && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <NicknameHistoryPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3232,7 +3244,7 @@ const AppContent = () => {
             )}
 
             {showFieldChangeTracking && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <FieldChangeTrackingPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3242,7 +3254,7 @@ const AppContent = () => {
             )}
 
             {showInviteAnalytics && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <InviteAnalyticsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3252,9 +3264,9 @@ const AppContent = () => {
                 </Suspense>
             )}
 
-            {/* ðŸš€ BATCH 2: Content & Moderation (2026-01-19) */}
+            {/* 🚀 BATCH 2: Content & Moderation (2026-01-19) */}
             {showContentScanner && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <ContentScannerPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3264,7 +3276,7 @@ const AppContent = () => {
             )}
 
             {showEphemeralMessages && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <EphemeralMessagesPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3275,7 +3287,7 @@ const AppContent = () => {
             )}
 
             {showTopicHistory && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <TopicHistoryPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3286,13 +3298,13 @@ const AppContent = () => {
             )}
 
             {showDrafts && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <DraftsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         onClose={() => setShowDrafts(false)}
                         onLoadDraft={(draft) => {
-                            // Draft'Ä± mesaj composer'a yÃ¼kle
+                            // Draft'ı mesaj composer'a yükle
                             if (draft.room) {
                                 setActiveChat({ type: 'room', slug: draft.room });
                             }
@@ -3303,7 +3315,7 @@ const AppContent = () => {
             )}
 
             {showServerNicknames && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <ServerNicknamesPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3313,9 +3325,9 @@ const AppContent = () => {
                 </Suspense>
             )}
 
-            {/* ðŸš€ BATCH 3: Server Features (2026-01-19) */}
+            {/* 🚀 BATCH 3: Server Features (2026-01-19) */}
             {showServerBoost && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <ServerBoostPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3327,7 +3339,7 @@ const AppContent = () => {
             )}
 
             {showRoomWebhooks && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <RoomWebhooksPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3338,7 +3350,7 @@ const AppContent = () => {
             )}
 
             {showOAuthApps && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <OAuthAppsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3348,7 +3360,7 @@ const AppContent = () => {
             )}
 
             {showAutoResponders && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <AutoRespondersPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3358,9 +3370,9 @@ const AppContent = () => {
                 </Suspense>
             )}
 
-            {/* ðŸš€ BATCH 4: Security & Privacy (2026-01-19) */}
+            {/* 🚀 BATCH 4: Security & Privacy (2026-01-19) */}
             {showSessionManagement && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <SessionManagementPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3370,7 +3382,7 @@ const AppContent = () => {
             )}
 
             {showGDPRExport && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <GDPRExportPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3380,7 +3392,7 @@ const AppContent = () => {
             )}
 
             {showDataRetention && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <DataRetentionPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3391,22 +3403,22 @@ const AppContent = () => {
             )}
 
             {showTwoFactorSetup && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <TwoFactorSetupWizard
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         onClose={() => setShowTwoFactorSetup(false)}
                         onSuccess={() => {
-                            toast.success('2FA baÅŸarÄ±yla etkinleÅŸtirildi!');
+                            toast.success('2FA başarıyla etkinleştirildi!');
                             setShowTwoFactorSetup(false);
                         }}
                     />
                 </Suspense>
             )}
 
-            {/* ðŸš€ BATCH 5: Communication (2026-01-19) */}
+            {/* 🚀 BATCH 5: Communication (2026-01-19) */}
             {showEnhancedPolls && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <EnhancedPollsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3417,7 +3429,7 @@ const AppContent = () => {
             )}
 
             {showVoiceTranscripts && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <VoiceTranscriptsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3427,7 +3439,7 @@ const AppContent = () => {
             )}
 
             {showInviteExport && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <InviteExportPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3437,9 +3449,9 @@ const AppContent = () => {
                 </Suspense>
             )}
 
-            {/* ðŸš€ BATCH 6: Advanced Search & Analytics (2026-01-19) */}
+            {/* 🚀 BATCH 6: Advanced Search & Analytics (2026-01-19) */}
             {showAdvancedSearch && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <AdvancedSearchPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3455,7 +3467,7 @@ const AppContent = () => {
             )}
 
             {showGrowthMetrics && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <GrowthMetricsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3466,7 +3478,7 @@ const AppContent = () => {
             )}
 
             {showLinkPreview && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <LinkPreviewRenderer
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3476,9 +3488,9 @@ const AppContent = () => {
                 </Suspense>
             )}
 
-            {/* ðŸš€ BATCH 7: Store & Gamification (2026-01-19) */}
+            {/* 🚀 BATCH 7: Store & Gamification (2026-01-19) */}
             {showInventory && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <InventoryPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3488,7 +3500,7 @@ const AppContent = () => {
             )}
 
             {showWaitlist && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <WaitlistPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3499,7 +3511,7 @@ const AppContent = () => {
             )}
 
             {showReferralRewards && (
-                <Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>Yükleniyor...</div>}>
                     <ReferralRewardsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3508,9 +3520,9 @@ const AppContent = () => {
                 </Suspense>
             )}
 
-            {/* ðŸŽ® BATCH 8: New Features (2026-01-28) */}
+            {/* 🎮 BATCH 8: New Features (2026-01-28) */}
             {showMiniGames && (
-                <Suspense fallback={<div>ðŸŽ® Oyunlar YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>🎮 Oyunlar Yükleniyor...</div>}>
                     <MiniGamesPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3522,7 +3534,7 @@ const AppContent = () => {
             )}
 
             {showProjectCollaboration && (
-                <Suspense fallback={<div>ðŸ“‚ Projeler YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>📂 Projeler Yükleniyor...</div>}>
                     <ProjectCollaborationPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3534,7 +3546,7 @@ const AppContent = () => {
             )}
 
             {showAvatarStudio && (
-                <Suspense fallback={<div>ðŸŽ¨ Avatar Studio YÃ¼kleniyor...</div>}>
+                <Suspense fallback={<div>🎨 Avatar Studio Yükleniyor...</div>}>
                     <AvatarStudioPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -3545,7 +3557,7 @@ const AppContent = () => {
                             if (currentUserProfile) {
                                 setCurrentUserProfile({ ...currentUserProfile, avatar_url: newAvatarUrl });
                             }
-                            toast.success('ðŸŽ¨ Avatar gÃ¼ncellendi!');
+                            toast.success('🎨 Avatar güncellendi!');
                         }}
                     />
                 </Suspense>
@@ -3553,7 +3565,7 @@ const AppContent = () => {
 
             {/* --- STANDART MODALLAR --- */}
             {zoomedImage && <ImageModal imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} />}
-            {showPinned && <Suspense fallback={<LoadingSpinner size="small" text="SabitlenmiÅŸ mesajlar yÃ¼kleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => setShowPinned(false)} /></Suspense>}
+            {showPinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => setShowPinned(false)} /></Suspense>}
             {viewingProfile && <UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} />}
 
             {/* Mobile overlay for left sidebar */}
@@ -3604,19 +3616,19 @@ const AppContent = () => {
                             serverMembers={serverMembers}
                             isAdmin={isAdmin}
                             friendsList={friendsList}
-                            pendingFriendRequests={pendingFriendRequests} // ðŸ”¥ YENÄ°: Bekleyen arkadaÅŸlÄ±k istekleri
+                            pendingFriendRequests={pendingFriendRequests} // 🔥 YENİ: Bekleyen arkadaşlık istekleri
                             currentUsername={username}
-                            currentUserProfile={currentUserProfile} // ðŸ”¥ DÃœZELTME: KullanÄ±cÄ±nÄ±n profil verisi
+                            currentUserProfile={currentUserProfile} // 🔥 DÜZELTME: Kullanıcının profil verisi
                             getRealUserAvatar={getRealUserAvatar}
                             getDeterministicAvatar={getDeterministicAvatar}
-                            unreadCounts={unreadCounts} // ðŸ”¥ YENÄ°: OkunmamÄ±ÅŸ mesaj sayÄ±larÄ±
+                            unreadCounts={unreadCounts} // 🔥 YENİ: Okunmamış mesaj sayıları
                             joinVoiceChat={joinChannel}
                             leaveVoiceChat={leaveChannel}
                             voiceUsers={voiceUsers}
                             isConnecting={isConnecting}
                             currentVoiceRoom={currentVoiceRoom}
-                            currentRoom={currentVoiceRoom} // ðŸ”¥ EKLENDI: ScheduledMessageModal iÃ§in
-                            currentConversationId={activeChat.type === 'dm' ? activeChat.id : null} // ðŸ”¥ EKLENDI
+                            currentRoom={currentVoiceRoom} // 🔥 EKLENDI: ScheduledMessageModal için
+                            currentConversationId={activeChat.type === 'dm' ? activeChat.id : null} // 🔥 EKLENDI
                             remoteVolumes={remoteVolumes}
                             setRemoteVolume={setRemoteVolume}
                             isPttActive={isPttActive}
@@ -3638,31 +3650,31 @@ const AppContent = () => {
                             toggleScreenShare={toggleScreenShare}
                             isVideoEnabled={isVideoEnabled}
                             isScreenSharing={isScreenSharing}
-                            // ðŸ”¥ Update System
+                            // 🔥 Update System
                             updateAvailable={updateAvailable}
                             onUpdateClick={() => setShowDownloadModal(true)}
-                            // ðŸ”¥ Analytics System
+                            // 🔥 Analytics System
                             onOpenAnalytics={() => setShowAnalytics(true)}
                             onOpenAdminPanel={() => setShowAdminPanel(true)}
-                            // ðŸ’° Payment & Engagement System (2026-01-19)
+                            // 💰 Payment & Engagement System (2026-01-19)
                             onOpenPaymentPanel={() => setShowPaymentPanel(true)}
                             onOpenStoreModal={() => setShowStoreModal(true)}
                             onOpenDailyRewards={() => setShowDailyRewards(true)}
                             onOpenAPIUsage={() => setShowAPIUsagePanel(true)}
                             onOpenExportJobs={() => setShowExportJobsPanel(true)}
                             onOpenScheduledAnnouncements={() => setShowScheduledAnnouncements(true)}
-                            // ðŸŽ® New Features (2026-01-28)
+                            // 🎮 New Features (2026-01-28)
                             onOpenMiniGames={() => setShowMiniGames(true)}
                             onOpenProjectCollaboration={() => setShowProjectCollaboration(true)}
                             onOpenAvatarStudio={() => setShowAvatarStudio(true)}
-                            // ðŸ”¥ YENÄ°: Sunucu seÃ§ildiÄŸinde saÄŸ panelde Ã¼yeleri gÃ¶ster
+                            // 🔥 YENİ: Sunucu seçildiğinde sağ panelde üyeleri göster
                             onServerSelect={handleServerSelect}
                         />
                     </div>
                 )}
 
                 <div style={styles.mainContent}>
-                    {/* âœ¨ STICKY BANNER */}
+                    {/* ✨ STICKY BANNER */}
                     <div style={{ position: 'absolute', top: 60, left: 0, right: 0, zIndex: 90 }}>
                         <StickyMessageBanner
                             message={stickyMessage?.message}
@@ -3679,7 +3691,7 @@ const AppContent = () => {
                                 getDeterministicAvatar={getDeterministicAvatar}
                                 onClose={() => setActiveChat('welcome', 'welcome')}
                                 onPendingCountChange={setPendingFriendRequests}
-                                onlineUsers={onlineUsers} // ðŸ”¥ DÃœZELTME: GerÃ§ek zamanlÄ± online durumu iÃ§in
+                                onlineUsers={onlineUsers} // 🔥 DÜZELTME: Gerçek zamanlı online durumu için
                             />
                         </div>
                     ) : activeChat.type === 'welcome' ? (
@@ -3709,12 +3721,12 @@ const AppContent = () => {
                     ) : activeRoomType === 'kanban' ? (
                         <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
                             <div style={styles.chatHeader}><h2># {chatTitle} (Pano)</h2></div>
-                            <Suspense fallback={<LoadingSpinner size="medium" text="Pano yÃ¼kleniyor..." />}>
+                            <Suspense fallback={<LoadingSpinner size="medium" text="Pano yükleniyor..." />}>
                                 <KanbanBoard roomSlug={activeChat.id} apiBaseUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />
                             </Suspense>
                         </div>
                     ) : activeChat.type === 'voice' && isInVoice ? (
-                        /* ðŸŽ¤ SESLÄ° SOHBET FULL-SCREEN PANEL */
+                        /* 🎤 SESLİ SOHBET FULL-SCREEN PANEL */
                         <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#2f3136' }}>
                             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -3723,11 +3735,11 @@ const AppContent = () => {
                                             onClick={() => setActiveChat('welcome', 'welcome')}
                                             style={{ ...styles.mobileMenuButton }}
                                         >
-                                            â†
+                                            ←
                                         </button>
                                     )}
                                     <h2 style={{ margin: 0, fontSize: '1.2em' }}>
-                                        ðŸ”Š {currentVoiceRoom}
+                                        🔊 {currentVoiceRoom}
                                     </h2>
                                 </div>
                                 <button
@@ -3745,7 +3757,7 @@ const AppContent = () => {
                                         fontWeight: 'bold'
                                     }}
                                 >
-                                    BaÄŸlantÄ±yÄ± Kes
+                                    Bağlantıyı Kes
                                 </button>
                             </div>
                             <VoiceChatPanel
@@ -3771,14 +3783,14 @@ const AppContent = () => {
                         >
                             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '8px' }}>
-                                    {/* ðŸ”¥ MOBÄ°L - Sol Panel AÃ§ma Butonu */}
+                                    {/* 🔥 MOBİL - Sol Panel Açma Butonu */}
                                     {isMobile && !isLeftSidebarVisible && (
-                                        <button onClick={() => setIsLeftSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }} aria-label="MenÃ¼yÃ¼ AÃ§">
-                                            â˜°
+                                        <button onClick={() => setIsLeftSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }} aria-label="Menüyü Aç">
+                                            ☰
                                         </button>
                                     )}
 
-                                    {/* ðŸ”¥ MOBÄ°L - Geri Butonu (DM/Kanal aÃ§Ä±kken Welcome'a dÃ¶n) */}
+                                    {/* 🔥 MOBİL - Geri Butonu (DM/Kanal açıkken Welcome'a dön) */}
                                     {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
                                         <button
                                             onClick={() => {
@@ -3789,7 +3801,7 @@ const AppContent = () => {
                                             style={{ ...styles.mobileMenuButton, fontSize: '1.2em' }}
                                             aria-label="Geri"
                                         >
-                                            â†
+                                            ←
                                         </button>
                                     )}
 
@@ -3797,24 +3809,24 @@ const AppContent = () => {
                                         {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `# ${String(chatTitle)}`}
                                     </h2>
                                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>
-                                        {isConnected ? 'Bağlı' : 'Kopuk'}
+                                        {isConnected ? 'Bagli' : 'Kopuk'}
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: isMobile ? '5px' : '10px', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', position: 'relative' }}>
-                                    {/* ðŸ” Arama */}
+                                    {/* 🔍 Arama */}
                                     <form onSubmit={handleSearchMessages} style={styles.searchForm}>
                                         <input type="text" placeholder="Ara..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={styles.searchInput} ref={searchInputRef} />
                                         <FaSearch style={styles.searchIcon} />
                                     </form>
 
-                                    {/* âŒ¨ï¸ YazÄ±yor gÃ¶stergesi */}
+                                    {/* ⌨️ Yazıyor göstergesi */}
                                     {!isMobile && activeTypingUsers.length > 0 && (
                                         <span style={styles.typingIndicator}>
-                                            {activeTypingUsers.join(', ')} yazÄ±yor...
+                                            {activeTypingUsers.join(', ')} yazıyor...
                                         </span>
                                     )}
 
-                                    {/* ðŸ”” Bildirimler (Her zaman gÃ¶rÃ¼nÃ¼r) */}
+                                    {/* 🔔 Bildirimler (Her zaman görünür) */}
                                     <button
                                         onClick={() => setShowNotifications(!showNotifications)}
                                         style={{
@@ -3844,7 +3856,7 @@ const AppContent = () => {
                                         </div>
                                     )}
 
-                                    {/* ðŸ”¥ AÃ‡ILIR MENÃœ BUTONU */}
+                                    {/* 🔥 AÇILIR MENÜ BUTONU */}
                                     <div className="toolbar-menu-container" style={{ position: 'relative' }}>
                                         <button
                                             onClick={() => setShowToolbarMenu(!showToolbarMenu)}
@@ -3856,10 +3868,10 @@ const AppContent = () => {
                                             }}
                                             title="Daha Fazla"
                                         >
-                                            â‹®
+                                            ⋮
                                         </button>
 
-                                        {/* ðŸ”¥ AÃ‡ILIR MENÃœ - TOOLBAR Ã–ZELLÄ°KLERÄ° */}
+                                        {/* 🔥 AÇILIR MENÜ - TOOLBAR ÖZELLİKLERİ */}
                                         {showToolbarMenu && (
                                             <div style={{
                                                 position: 'absolute',
@@ -3873,7 +3885,7 @@ const AppContent = () => {
                                                 overflow: 'hidden',
                                                 border: '1px solid #202225'
                                             }}>
-                                                {/* ðŸ” Åžifreleme (Sadece DM'de) */}
+                                                {/* 🔐 Şifreleme (Sadece DM'de) */}
                                                 {activeChat.type === 'dm' && (
                                                     <button
                                                         onClick={() => {
@@ -3894,11 +3906,11 @@ const AppContent = () => {
                                                         }}
                                                     >
                                                         {hasKey ? <FaLock /> : <FaLock style={{ opacity: 0.5 }} />}
-                                                        <span>{hasKey ? 'Åžifreli' : 'Åžifrele'}</span>
+                                                        <span>{hasKey ? 'Şifreli' : 'Şifrele'}</span>
                                                     </button>
                                                 )}
 
-                                                {/* ðŸ“Œ Sabitli Mesajlar */}
+                                                {/* 📌 Sabitli Mesajlar */}
                                                 <button
                                                     onClick={() => {
                                                         setShowPinned(!showPinned);
@@ -3921,7 +3933,7 @@ const AppContent = () => {
                                                     <span>Sabitli Mesajlar</span>
                                                 </button>
 
-                                                {/* ðŸ”— Link Kopyala */}
+                                                {/* 🔗 Link Kopyala */}
                                                 <button
                                                     onClick={() => {
                                                         handleCopyLink();
@@ -3938,10 +3950,10 @@ const AppContent = () => {
                                                     }}
                                                 >
                                                     <FaLink />
-                                                    <span>BaÄŸlantÄ±yÄ± Kopyala</span>
+                                                    <span>Bağlantıyı Kopyala</span>
                                                 </button>
 
-                                                {/* ðŸ”• Sessize Al */}
+                                                {/* 🔕 Sessize Al */}
                                                 <button
                                                     onClick={() => {
                                                         toggleNotifications();
@@ -3961,12 +3973,12 @@ const AppContent = () => {
                                                     }}
                                                 >
                                                     {soundSettings.notifications ? <FaBell /> : <FaBellSlash />}
-                                                    <span>{soundSettings.notifications ? 'Sessize Al' : 'Sesi AÃ§'}</span>
+                                                    <span>{soundSettings.notifications ? 'Sessize Al' : 'Sesi Aç'}</span>
                                                 </button>
 
                                                 <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
 
-                                                {/* ðŸŽ¬ Sinema */}
+                                                {/* 🎬 Sinema */}
                                                 <button
                                                     onClick={() => {
                                                         setShowCinema(true);
@@ -3986,7 +3998,7 @@ const AppContent = () => {
                                                     <span>Sinema Modu</span>
                                                 </button>
 
-                                                {/* ðŸŽµ DJ Modu */}
+                                                {/* 🎵 DJ Modu */}
                                                 <button
                                                     onClick={() => {
                                                         setShowDJ(true);
@@ -4006,7 +4018,7 @@ const AppContent = () => {
                                                     <span>DJ Modu</span>
                                                 </button>
 
-                                                {/* ðŸ–ï¸ Beyaz Tahta */}
+                                                {/* 🖍️ Beyaz Tahta */}
                                                 <button
                                                     onClick={() => {
                                                         setShowWhiteboard(true);
@@ -4026,7 +4038,7 @@ const AppContent = () => {
                                                     <span>Beyaz Tahta</span>
                                                 </button>
 
-                                                {/* ðŸŽ¤ Ses Efektleri */}
+                                                {/* 🎤 Ses Efektleri */}
                                                 {isInVoice && (
                                                     <button
                                                         onClick={() => {
@@ -4048,7 +4060,7 @@ const AppContent = () => {
                                                     </button>
                                                 )}
 
-                                                {/* ðŸ“Š Ã–zetle (Oda ise) */}
+                                                {/* 📊 Özetle (Oda ise) */}
                                                 {activeChat.type === 'room' && (
                                                     <>
                                                         <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
@@ -4068,10 +4080,10 @@ const AppContent = () => {
                                                             }}
                                                         >
                                                             <FaMagic />
-                                                            <span>Sohbeti Ã–zetle</span>
+                                                            <span>Sohbeti Özetle</span>
                                                         </button>
 
-                                                        {/* ðŸ§¹ Temizle */}
+                                                        {/* 🧹 Temizle */}
                                                         <button
                                                             onClick={() => {
                                                                 handleClearChat();
@@ -4094,7 +4106,7 @@ const AppContent = () => {
                                                             <span>Sohbeti Temizle</span>
                                                         </button>
 
-                                                        {/* ðŸ”¥ ADMIN: Permanently Delete Conversation (both sides) */}
+                                                        {/* 🔥 ADMIN: Permanently Delete Conversation (both sides) */}
                                                         {username === 'admin' && activeChat.type === 'dm' && (
                                                             <>
                                                                 <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
@@ -4116,10 +4128,10 @@ const AppContent = () => {
                                                                         e.currentTarget.style.backgroundColor = 'transparent';
                                                                         e.currentTarget.style.color = '#ed4245';
                                                                     }}
-                                                                    title="Admin: KonuÅŸmayÄ± kalÄ±cÄ± olarak sil (her iki taraftan)"
+                                                                    title="Admin: Konuşmayı kalıcı olarak sil (her iki taraftan)"
                                                                 >
                                                                     <FaTrash />
-                                                                    <span>âš ï¸ KALICI SÄ°L (ADMÄ°N)</span>
+                                                                    <span>⚠️ KALICI SİL (ADMİN)</span>
                                                                 </button>
                                                             </>
                                                         )}
@@ -4129,19 +4141,19 @@ const AppContent = () => {
                                         )}
                                     </div>
 
-                                    {/* ðŸ”¥ MOBÄ°L - SaÄŸ Panel AÃ§ma Butonu (KullanÄ±cÄ± Listesi) */}
+                                    {/* 🔥 MOBİL - Sağ Panel Açma Butonu (Kullanıcı Listesi) */}
                                     {isMobile && !isRightSidebarVisible && (
-                                        <button onClick={() => setIsRightSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }} aria-label="KullanÄ±cÄ±larÄ± GÃ¶ster">
+                                        <button onClick={() => setIsRightSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }} aria-label="Kullanıcıları Göster">
                                             <FaUsers />
                                         </button>
                                     )}
                                 </div>
                             </div>
 
-                            {/* âš¡ VIRTUAL MESSAGE LIST - 10x Performance Boost */}
+                            {/* ⚡ VIRTUAL MESSAGE LIST - 10x Performance Boost */}
                             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}>
                                 {messageHistoryLoading ? (
-                                    <p style={styles.systemMessage}>YÃ¼kleniyor...</p>
+                                    <p style={styles.systemMessage}>Yükleniyor...</p>
                                 ) : optimizedMessages.length > 50 ? (
                                     // Virtual scrolling for 50+ messages
                                     <VirtualMessageList
@@ -4245,11 +4257,11 @@ const AppContent = () => {
                                         zIndex: 1000
                                     }}>
                                         <div style={{ color: '#5865f2', fontSize: '1.2em', fontWeight: 'bold' }}>
-                                            ðŸ“ DosyayÄ± buraya bÄ±rakÄ±n
+                                            📁 Dosyayı buraya bırakın
                                         </div>
                                     </div>
                                 )}
-                                {/* ðŸ“Š Upload Progress Bar */}
+                                {/* 📊 Upload Progress Bar */}
                                 {isUploading && uploadProgress > 0 && (
                                     <div style={{
                                         position: 'absolute',
@@ -4264,7 +4276,7 @@ const AppContent = () => {
                                     }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <span style={{ color: '#b9bbbe', fontSize: '12px', whiteSpace: 'nowrap' }}>
-                                                ðŸ“¤ YÃ¼kleniyor: {uploadProgress}%
+                                                📤 Yükleniyor: {uploadProgress}%
                                             </span>
                                             <div style={{ flex: 1, height: '6px', backgroundColor: '#40444b', borderRadius: '3px', overflow: 'hidden' }}>
                                                 <div style={{
@@ -4278,13 +4290,13 @@ const AppContent = () => {
                                         </div>
                                     </div>
                                 )}
-                                {/* âœ¨ Modern MessageInput Component */}
+                                {/* ✨ Modern MessageInput Component */}
                                 <MessageInput
                                     onSendMessage={sendMessage}
                                     onFileUpload={uploadFile}
                                     onShowCodeSnippet={() => setShowSnippetModal(true)}
                                     placeholder={chatTitle
-                                        ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalÄ±na mesaj gÃ¶nder`
+                                        ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalına mesaj gönder`
                                         : 'Mesaj yaz...'}
                                     disabled={isUploading}
                                     fetchWithAuth={fetchWithAuth}
@@ -4295,7 +4307,7 @@ const AppContent = () => {
 
                         </div>
                     )}
-                    {/* ðŸ”¥ SAÄž PANEL - HER ZAMAN AÃ‡IK (ArkadaÅŸlar tab'Ä± hariÃ§, Ã§Ã¼nkÃ¼ orada FriendsTab kendi iÃ§eriÄŸini gÃ¶steriyor) */}
+                    {/* 🔥 SAĞ PANEL - HER ZAMAN AÇIK (Arkadaşlar tab'ı hariç, çünkü orada FriendsTab kendi içeriğini gösteriyor) */}
                     {(!isMobile || isRightSidebarVisible) && (
                         <div style={{ ...styles.chatUserListPanel, ...(isMobile ? styles.mobileRightSidebar : {}), paddingTop: mobileWebPadding }}>
                             {isMobile && (
@@ -4303,7 +4315,7 @@ const AppContent = () => {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <FaUsers size={18} color="#b9bbbe" />
                                         <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'white' }}>
-                                            {activeChat.type === 'room' ? 'Sunucu Ãœyeleri' : activeChat.type === 'friends' ? 'Ã‡evrimiÃ§i' : 'ArkadaÅŸlar'}
+                                            {activeChat.type === 'room' ? 'Sunucu Üyeleri' : activeChat.type === 'friends' ? 'Çevrimiçi' : 'Arkadaşlar'}
                                         </span>
                                     </div>
                                     <button onClick={() => setIsRightSidebarVisible(false)} style={styles.closeSidebarButton}>
@@ -4311,7 +4323,7 @@ const AppContent = () => {
                                     </button>
                                 </div>
                             )}
-                            <Suspense fallback={<LoadingSpinner size="small" text="KullanÄ±cÄ±lar yÃ¼kleniyor..." />}>
+                            <Suspense fallback={<LoadingSpinner size="small" text="Kullanıcılar yükleniyor..." />}>
                                 <ChatUserList
                                     chatUsers={[]}
                                     allUsers={allUsers}
@@ -4319,7 +4331,7 @@ const AppContent = () => {
                                     currentUser={username}
                                     getDeterministicAvatar={getDeterministicAvatar}
                                     onUserClick={(u) => {
-                                        // Ã–nce allUsers'da ara, yoksa serverMembers'dan al
+                                        // Önce allUsers'da ara, yoksa serverMembers'dan al
                                         let user = allUsers.find(usr => usr.username === u);
                                         if (!user && serverMembers.length > 0) {
                                             const member = serverMembers.find(m => m.username === u);
@@ -4335,7 +4347,7 @@ const AppContent = () => {
                                         if (user) setViewingProfile(user);
                                     }}
                                     onUserContextMenu={(e, targetUsername) => {
-                                        if (targetUsername === username) return; // Kendine saÄŸ tÄ±klama yok
+                                        if (targetUsername === username) return; // Kendine sağ tıklama yok
                                         const targetUser = allUsers.find(u => u.username === targetUsername);
                                         if (!targetUser) return;
                                         setUserContextMenu({
@@ -4354,7 +4366,7 @@ const AppContent = () => {
                         </div>
                     )}
                 </div>
-                {/* ðŸ”Š SES KONTROLCÃœSÃœ - ALWAYS ACTIVE when in voice (UNMOUNT EDILMEMELI) */}
+                {/* 🔊 SES KONTROLCÜSÜ - ALWAYS ACTIVE when in voice (UNMOUNT EDILMEMELI) */}
                 {isInVoice && (
                     <VoiceAudioController
                         remoteStreams={remoteStreams}
@@ -4363,7 +4375,7 @@ const AppContent = () => {
                     />
                 )}
 
-                {/* ðŸ”¥ RESTORE PANEL BUTTON (when hidden) - SADECE VOICE FULL-SCREEN DEÄžÄ°LKEN */}
+                {/* 🔥 RESTORE PANEL BUTTON (when hidden) - SADECE VOICE FULL-SCREEN DEĞİLKEN */}
                 {isInVoice && !showVoiceIsland && activeChat.type !== 'voice' && (
                     <button
                         onClick={() => setShowVoiceIsland(true)}
@@ -4386,20 +4398,20 @@ const AppContent = () => {
                             boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                             transition: 'all 0.2s'
                         }}
-                        title="Ses Panelini AÃ§"
+                        title="Ses Panelini Aç"
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
                         onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                     >
-                        ðŸŽ¤
+                        🎤
                     </button>
                 )}
 
-                {/* ðŸŽ¤ FLOATING VOICE ISLAND - SADECE VOICE FULL-SCREEN MODDA DEÄžÄ°LKEN */}
+                {/* 🎤 FLOATING VOICE ISLAND - SADECE VOICE FULL-SCREEN MODDA DEĞİLKEN */}
                 {
                     isInVoice && showVoiceIsland && activeChat.type !== 'voice' && (
                         <>
                             {useNewVoicePanel ? (
-                                /* ðŸ†• YENÄ° PROFESYONEL PANEL */
+                                /* 🆕 YENİ PROFESYONEL PANEL */
                                 <VoiceChatPanel
                                     roomName={currentVoiceRoom}
                                     onClose={() => {
@@ -4412,8 +4424,8 @@ const AppContent = () => {
                                     currentUserProfile={currentUserProfile}
                                 />
                             ) : (
-                                /* âš™ï¸ ESKÄ° FLOATING ISLAND */
-                                <Suspense fallback={<LoadingSpinner size="small" text="Sesli sohbet yÃ¼kleniyor..." />}>
+                                /* ⚙️ ESKİ FLOATING ISLAND */
+                                <Suspense fallback={<LoadingSpinner size="small" text="Sesli sohbet yükleniyor..." />}>
                                     <FloatingVoiceIsland
                                         islandState={islandState}
                                         onDrag={(d) => setIslandState(p => ({ ...p, x: d.x, y: d.y }))}
@@ -4421,12 +4433,12 @@ const AppContent = () => {
                                         isMobile={isMobile}
                                         headerActions={
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                                                {/* ðŸ”¥ MINIMIZE BUTTON (Hide Island) */}
+                                                {/* 🔥 MINIMIZE BUTTON (Hide Island) */}
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('ðŸŽ›ï¸ [VoiceIsland] Hiding panel');
+                                                        console.log('🎛️ [VoiceIsland] Hiding panel');
                                                         setShowVoiceIsland(false);
                                                     }}
                                                     style={{
@@ -4449,12 +4461,12 @@ const AppContent = () => {
 
                                                 <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.1)' }} />
 
-                                                {/* ðŸŽ¤ MÄ°KROFON BUTONU */}
+                                                {/* 🎤 MİKROFON BUTONU */}
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('ðŸŽ¤ [VoiceIsland] Mute toggle clicked');
+                                                        console.log('🎤 [VoiceIsland] Mute toggle clicked');
                                                         toggleMute();
                                                     }}
                                                     style={{
@@ -4470,17 +4482,17 @@ const AppContent = () => {
                                                         fontSize: '16px',
                                                         transition: 'all 0.2s'
                                                     }}
-                                                    title={isMuted ? "Mikrofonu AÃ§" : "Mikrofonu Kapat"}
+                                                    title={isMuted ? "Mikrofonu Aç" : "Mikrofonu Kapat"}
                                                 >
                                                     <FaMicrophone style={{ opacity: isMuted ? 0.5 : 1 }} />
                                                 </button>
 
-                                                {/* ðŸŽ§ KULAKLIK BUTONU */}
+                                                {/* 🎧 KULAKLIK BUTONU */}
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('ðŸŽ§ [VoiceIsland] Deafen toggle clicked');
+                                                        console.log('🎧 [VoiceIsland] Deafen toggle clicked');
                                                         toggleDeafened();
                                                     }}
                                                     style={{
@@ -4496,17 +4508,17 @@ const AppContent = () => {
                                                         fontSize: '16px',
                                                         transition: 'all 0.2s'
                                                     }}
-                                                    title={isDeafened ? "Sesi AÃ§" : "Sesi Kapat"}
+                                                    title={isDeafened ? "Sesi Aç" : "Sesi Kapat"}
                                                 >
                                                     <FaHeadphones style={{ opacity: isDeafened ? 0.5 : 1 }} />
                                                 </button>
 
-                                                {/* ðŸ“¹ VÄ°DEO BUTONU */}
+                                                {/* 📹 VİDEO BUTONU */}
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('ðŸ“¹ [VoiceIsland] Video toggle clicked');
+                                                        console.log('📹 [VoiceIsland] Video toggle clicked');
                                                         toggleVideo();
                                                     }}
                                                     style={{
@@ -4522,17 +4534,17 @@ const AppContent = () => {
                                                         fontSize: '16px',
                                                         transition: 'all 0.2s'
                                                     }}
-                                                    title={isVideoEnabled ? "KamerayÄ± Kapat" : "KamerayÄ± AÃ§"}
+                                                    title={isVideoEnabled ? "Kamerayı Kapat" : "Kamerayı Aç"}
                                                 >
                                                     <FaVideo style={{ opacity: isVideoEnabled ? 1 : 0.5 }} />
                                                 </button>
 
-                                                {/* ðŸ–¥ï¸ EKRAN PAYLAÅžIMI BUTONU */}
+                                                {/* 🖥️ EKRAN PAYLAŞIMI BUTONU */}
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('ðŸ–¥ï¸ [VoiceIsland] Screen share toggle clicked');
+                                                        console.log('🖥️ [VoiceIsland] Screen share toggle clicked');
                                                         toggleScreenShare();
                                                     }}
                                                     style={{
@@ -4548,7 +4560,7 @@ const AppContent = () => {
                                                         fontSize: '16px',
                                                         transition: 'all 0.2s'
                                                     }}
-                                                    title={isScreenSharing ? "Ekran PaylaÅŸÄ±mÄ±nÄ± Durdur" : "EkranÄ± PaylaÅŸ"}
+                                                    title={isScreenSharing ? "Ekran Paylaşımını Durdur" : "Ekranı Paylaş"}
                                                 >
                                                     <FaDesktop style={{ opacity: isScreenSharing ? 1 : 0.5 }} />
                                                 </button>
@@ -4570,7 +4582,7 @@ const AppContent = () => {
                                                         justifyContent: 'center',
                                                         fontSize: '16px'
                                                     }}
-                                                    title="Odadan AyrÄ±l"
+                                                    title="Odadan Ayrıl"
                                                 >
                                                     <FaPhoneSlash />
                                                 </button>
@@ -4585,7 +4597,7 @@ const AppContent = () => {
                                                         padding: '4px 8px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold'
                                                     }}
                                                 >
-                                                    {cinemaState.isActive ? 'ðŸŽ¬ Kapat' : 'ðŸ¿ Sinema'}
+                                                    {cinemaState.isActive ? '🎬 Kapat' : '🍿 Sinema'}
                                                 </button>
 
                                                 <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.1)' }} />
@@ -4606,23 +4618,23 @@ const AppContent = () => {
                                                     }}
                                                 >
                                                     <option value="none">Normal</option>
-                                                    <option value="robot">ðŸ¤– Robot</option>
-                                                    <option value="child">ðŸ‘¶ Bebek</option>
-                                                    <option value="monster">ðŸ‘¹ Canavar</option>
+                                                    <option value="robot">🤖 Robot</option>
+                                                    <option value="child">👶 Bebek</option>
+                                                    <option value="monster">👹 Canavar</option>
                                                 </select>
 
                                                 <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.1)' }} />
 
-                                                {/* ðŸ”¥ GAME BUTTONS */}
+                                                {/* 🔥 GAME BUTTONS */}
                                                 <div style={{ display: 'flex', gap: '5px' }}>
                                                     <button
                                                         onClick={() => sendGameSignal('reset')}
                                                         title="Reset Game"
                                                         style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '16px' }}
                                                     >
-                                                        ðŸ”„
+                                                        🔄
                                                     </button>
-                                                    {['ðŸª¨', 'ðŸ“„', 'âœ‚ï¸'].map((move, i) => {
+                                                    {['🪨', '📄', '✂️'].map((move, i) => {
                                                         const moveKey = i === 0 ? 'rock' : i === 1 ? 'paper' : 'scissors';
                                                         return (
                                                             <button
@@ -4649,7 +4661,7 @@ const AppContent = () => {
                                                 <div style={{ width: '1px', height: '20px', background: 'rgba(255,255,255,0.1)' }} />
 
                                                 <div style={{ display: 'flex', gap: '5px' }}>
-                                                    {['â¤ï¸', 'ðŸ˜‚', 'ðŸ˜®', 'ðŸ‘', 'ðŸŽ‰'].map(emoji => (
+                                                    {['❤️', '😂', '😮', '👍', '🎉'].map(emoji => (
                                                         <button
                                                             key={emoji}
                                                             onClick={() => sendReaction(emoji)}
@@ -4672,12 +4684,12 @@ const AppContent = () => {
                                             </div>
                                         }
                                     >
-                                        {/* ðŸ”¥ CINEMA MODE vs GRID MODE */}
+                                        {/* 🔥 CINEMA MODE vs GRID MODE */}
                                         {cinemaState.isActive ? (
                                             <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                                                 {/* TOP: CINEMA PLAYER */}
                                                 <div style={{ flex: 1, minHeight: 0, position: 'relative' }}>
-                                                    <Suspense fallback={<LoadingSpinner size="large" text="Cinema Player yÃ¼kleniyor..." fullscreen />}>
+                                                    <Suspense fallback={<LoadingSpinner size="large" text="Cinema Player yükleniyor..." fullscreen />}>
                                                         <CinemaPlayer />
                                                     </Suspense>
                                                 </div>
@@ -4713,17 +4725,17 @@ const AppContent = () => {
                                                                 {...stream}
                                                                 style={{ height: '100%', aspectRatio: '16/9', minWidth: '160px' }}
                                                                 lastReaction={lastReaction}
-                                                                gameMove={gameState?.moves?.[stream.user.username]} // ðŸ”¥ Game Move
+                                                                gameMove={gameState?.moves?.[stream.user.username]} // 🔥 Game Move
                                                             />
                                                         ));
                                                     })()}
                                                 </div>
                                             </div>
                                         ) : (
-                                            /* ðŸ”¥ NORMAL GRID / FOCUS MODE */
+                                            /* 🔥 NORMAL GRID / FOCUS MODE */
                                             <div style={{ ...styles.videoGrid, flexDirection: focusedStream ? 'column' : 'row', flexWrap: focusedStream ? 'nowrap' : 'wrap', overflowY: 'auto', height: '100%' }}>
                                                 {(() => {
-                                                    // 1. TÃ¼m streamleri topla
+                                                    // 1. Tüm streamleri topla
                                                     const allStreams = [];
 
                                                     // Local Camera (or Avatar)
@@ -4785,7 +4797,7 @@ const AppContent = () => {
                                                         const activeFocused = allStreams.find(s => s.id === focusedStream);
 
                                                         if (!activeFocused) {
-                                                            setFocusedStream(null); // AkÄ±ÅŸ gittiyse focus'tan Ã§Ä±k
+                                                            setFocusedStream(null); // Akış gittiyse focus'tan çık
                                                             return renderGrid(allStreams); // Fallback to grid
                                                         }
 
@@ -4804,11 +4816,11 @@ const AppContent = () => {
                                                                             borderRadius: '0',
                                                                             maxHeight: '100%',
                                                                             margin: '0 auto',
-                                                                            aspectRatio: 'unset' // ðŸ”¥ Explicitly override default
+                                                                            aspectRatio: 'unset' // 🔥 Explicitly override default
                                                                         }}
                                                                         onClick={() => setFocusedStream(null)} // Click to Unfocus
-                                                                        lastReaction={lastReaction} // ðŸ”¥ Pass logic
-                                                                        gameMove={gameState?.moves?.[activeFocused.user?.username]} // ðŸ”¥ Game Move
+                                                                        lastReaction={lastReaction} // 🔥 Pass logic
+                                                                        gameMove={gameState?.moves?.[activeFocused.user?.username]} // 🔥 Game Move
                                                                     />
                                                                 </div>
 
@@ -4820,8 +4832,8 @@ const AppContent = () => {
                                                                             {...stream}
                                                                             style={{ width: '180px', height: '100%', flexShrink: 0, aspectRatio: '16/9' }}
                                                                             onClick={() => setFocusedStream(stream.id)} // Switch focus
-                                                                            lastReaction={lastReaction} // ðŸ”¥ Pass logic
-                                                                            gameMove={gameState?.moves?.[stream.user.username]} // ðŸ”¥ Game Move
+                                                                            lastReaction={lastReaction} // 🔥 Pass logic
+                                                                            gameMove={gameState?.moves?.[stream.user.username]} // 🔥 Game Move
                                                                         />
                                                                     ))}
                                                                 </div>
@@ -4838,10 +4850,10 @@ const AppContent = () => {
                                                             <UserVideoContainer
                                                                 key={stream.id}
                                                                 {...stream}
-                                                                style={{ width: '240px', maxWidth: '100%', flexGrow: 1, height: 'auto' }} // BÃ¼yÃ¼tÃ¼lmÃ¼ÅŸ varsayÄ±lan boyut
+                                                                style={{ width: '240px', maxWidth: '100%', flexGrow: 1, height: 'auto' }} // Büyütülmüş varsayılan boyut
                                                                 onClick={() => setFocusedStream(stream.id)} // Click to Focus
-                                                                lastReaction={lastReaction} // ðŸ”¥ Pass logic
-                                                                gameMove={gameState?.moves?.[stream.user.username]} // ðŸ”¥ Game Move
+                                                                lastReaction={lastReaction} // 🔥 Pass logic
+                                                                gameMove={gameState?.moves?.[stream.user.username]} // 🔥 Game Move
                                                             />
                                                         ));
                                                     }
@@ -4854,9 +4866,9 @@ const AppContent = () => {
                             )}
                         </>
                     )}
-                {/* âœ¨ THEME STORE MODAL */}
+                {/* ✨ THEME STORE MODAL */}
                 {showThemeStore && (
-                    <Suspense fallback={<LoadingSpinner size="medium" text="Temalar yÃ¼kleniyor..." />}>
+                    <Suspense fallback={<LoadingSpinner size="medium" text="Temalar yükleniyor..." />}>
                         <ThemeStoreModal
                             onClose={() => setShowThemeStore(false)}
                             currentTheme={currentTheme}
@@ -4866,7 +4878,7 @@ const AppContent = () => {
                 )}
 
                 {showSummary && (
-                    <Suspense fallback={<LoadingSpinner size="medium" text="Ã–zet hazÄ±rlanÄ±yor..." />}>
+                    <Suspense fallback={<LoadingSpinner size="medium" text="Özet hazırlanıyor..." />}>
                         <SummaryModal
                             roomSlug={activeChat.id}
                             onClose={() => setShowSummary(false)}
@@ -4877,7 +4889,7 @@ const AppContent = () => {
                 )}
 
                 {showTemplateModal && (
-                    <Suspense fallback={<LoadingSpinner size="small" text="Åžablonlar yÃ¼kleniyor..." />}>
+                    <Suspense fallback={<LoadingSpinner size="small" text="Şablonlar yükleniyor..." />}>
                         <MessageTemplateModal
                             onClose={() => setShowTemplateModal(false)}
                             onSelect={(content) => {
@@ -4892,7 +4904,7 @@ const AppContent = () => {
                 )}
             </div >
 
-            {/* ðŸ”¥ USER CONTEXT MENU */}
+            {/* 🔥 USER CONTEXT MENU */}
             {
                 userContextMenu && (
                     <UserContextMenu
@@ -4914,7 +4926,7 @@ const AppContent = () => {
                 )
             }
 
-            {/* ðŸŽ« SUNUCUYA DAVET MODAL - SaÄŸ Panel iÃ§in */}
+            {/* 🎫 SUNUCUYA DAVET MODAL - Sağ Panel için */}
             {inviteToServerUser && ReactDOM.createPortal(
                 <div
                     style={{
@@ -4949,10 +4961,10 @@ const AppContent = () => {
                             textAlign: 'center'
                         }}>
                             <h2 style={{ color: '#f2f3f5', margin: 0, fontSize: '18px' }}>
-                                ðŸŽ« Sunucuya Davet Et
+                                🎫 Sunucuya Davet Et
                             </h2>
                             <p style={{ color: '#b9bbbe', margin: '8px 0 0', fontSize: '14px' }}>
-                                <strong>{inviteToServerUser.username}</strong> kullanÄ±cÄ±sÄ±nÄ± hangi sunucuya davet etmek istiyorsunuz?
+                                <strong>{inviteToServerUser.username}</strong> kullanıcısını hangi sunucuya davet etmek istiyorsunuz?
                             </p>
                         </div>
 
@@ -4972,19 +4984,19 @@ const AppContent = () => {
                                                 body: JSON.stringify({ target_username: inviteToServerUser.username })
                                             });
                                             if (res.ok) {
-                                                toast.success(`ðŸŽ« ${inviteToServerUser.username} kullanÄ±cÄ±sÄ±na davetiye gÃ¶nderildi!`);
+                                                toast.success(`🎫 ${inviteToServerUser.username} kullanıcısına davetiye gönderildi!`);
                                             } else {
                                                 const data = await res.json();
-                                                // Zaten Ã¼ye ise Ã¶zel mesaj
+                                                // Zaten üye ise özel mesaj
                                                 if (data.error && data.error.includes('zaten')) {
-                                                    toast.info(`â„¹ï¸ ${inviteToServerUser.username} zaten bu sunucunun Ã¼yesi!`);
+                                                    toast.info(`ℹ️ ${inviteToServerUser.username} zaten bu sunucunun üyesi!`);
                                                 } else {
-                                                    toast.error(`âŒ ${data.error || 'Davet gÃ¶nderilemedi'}`);
+                                                    toast.error(`❌ ${data.error || 'Davet gönderilemedi'}`);
                                                 }
                                             }
                                         } catch (error) {
-                                            console.error('âŒ Invite error:', error);
-                                            toast.error('âŒ BaÄŸlantÄ± hatasÄ±');
+                                            console.error('❌ Invite error:', error);
+                                            toast.error('❌ Bağlantı hatası');
                                         }
                                         setInviteToServerUser(null);
                                     }}
@@ -5038,10 +5050,10 @@ const AppContent = () => {
                                             {server.name}
                                         </div>
                                         <div style={{ color: '#b9bbbe', fontSize: '12px' }}>
-                                            {server.member_count || server.categories?.length || 0} Ã¼ye
+                                            {server.member_count || server.categories?.length || 0} üye
                                         </div>
                                     </div>
-                                    <div style={{ color: '#5865f2', fontSize: '20px' }}>â†’</div>
+                                    <div style={{ color: '#5865f2', fontSize: '20px' }}>→</div>
                                 </div>
                             ))}
                         </div>
@@ -5064,7 +5076,7 @@ const AppContent = () => {
                                     fontWeight: '600'
                                 }}
                             >
-                                Ä°ptal
+                                İptal
                             </button>
                         </div>
                     </div>
@@ -5083,9 +5095,9 @@ const AppContent = () => {
 
 
 
-// --- STÄ°LLER ---
+// --- STİLLER ---
 const styles = {
-    // âœ¨ GLASSMORPHISM - ANA PENCERE
+    // ✨ GLASSMORPHISM - ANA PENCERE
     mainContainer: {
         display: 'flex',
         width: '100%',
@@ -5097,7 +5109,7 @@ const styles = {
         fontFamily: "'Inter', sans-serif"
     },
 
-    // 2. YERLEÅžÄ°M DÃœZENÄ°
+    // 2. YERLEŞİM DÜZENİ
     chatLayout: {
         display: 'flex',
         width: '100%',
@@ -5105,7 +5117,7 @@ const styles = {
         overflow: 'hidden'
     },
 
-    // 3. SOL MENÃœ (Sidebar)
+    // 3. SOL MENÜ (Sidebar)
     sidebarWrapper: {
         width: '312px',
         backgroundColor: 'rgba(30, 31, 34, 0.6)',
@@ -5117,7 +5129,7 @@ const styles = {
         borderRight: '1px solid rgba(255,255,255,0.05)'
     },
 
-    // 4. SAÄž TARAFTAKÄ° ANA Ä°Ã‡ERÄ°K
+    // 4. SAĞ TARAFTAKİ ANA İÇERİK
     mainContent: {
         flex: 1,
         display: 'flex',
@@ -5127,7 +5139,7 @@ const styles = {
         overflow: 'hidden'
     },
 
-    // 5. CHAT ALANI (BaÅŸlÄ±k + Mesajlar + Input)
+    // 5. CHAT ALANI (Başlık + Mesajlar + Input)
     chatArea: {
         flex: 1,
         display: 'flex',
@@ -5153,7 +5165,7 @@ const styles = {
         zIndex: 10
     },
 
-    // ðŸ”¥ DÃœZELTÄ°LEN MESAJ KUTUSU
+    // 🔥 DÜZELTİLEN MESAJ KUTUSU
     messageBox: {
         flex: 1,
         overflowY: 'auto',
@@ -5178,7 +5190,7 @@ const styles = {
     inputForm: {
         display: 'flex',
         backgroundColor: 'rgba(56, 58, 64, 0.5)',
-        borderRadius: '12px', // YuvarlatÄ±lmÄ±ÅŸ kÃ¶ÅŸeler
+        borderRadius: '12px', // Yuvarlatılmış köşeler
         padding: '12px',
         alignItems: 'flex-end',
         gap: '12px',
@@ -5189,7 +5201,7 @@ const styles = {
         boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
     },
 
-    // ... DiÄŸer stiller (Modernize)
+    // ... Diğer stiller (Modernize)
     chatUserListPanel: {
         width: '240px',
         backgroundColor: 'rgba(30, 31, 34, 0.6)',
@@ -5201,7 +5213,7 @@ const styles = {
     mobileSidebar: { position: 'fixed', zIndex: 100, top: 0, bottom: 0, left: 0, width: '85vw', maxWidth: '350px', boxShadow: '5px 0 15px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column' },
     mobileRightSidebar: { position: 'fixed', zIndex: 100, top: 0, bottom: 0, right: 0, width: '85vw', maxWidth: '300px', boxShadow: '-5px 0 15px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column' },
 
-    // ðŸ”¥ MOBÄ°L OVERLAY - Sidebar aÃ§Ä±ldÄ±ÄŸÄ±nda arka planÄ± karartÄ±r ve tÄ±klanabilir yapar
+    // 🔥 MOBİL OVERLAY - Sidebar açıldığında arka planı karartır ve tıklanabilir yapar
     mobileOverlay: {
         position: 'fixed',
         top: 0,
@@ -5209,7 +5221,7 @@ const styles = {
         right: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        zIndex: 99, // Sidebar'Ä±n altÄ±nda
+        zIndex: 99, // Sidebar'ın altında
         backdropFilter: 'blur(3px)'
     },
 
@@ -5268,7 +5280,7 @@ const styles = {
     quickEmojiRow: { display: 'flex', gap: '6px', marginTop: '8px', paddingLeft: '4px' },
     quickEmojiButton: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', padding: '4px 8px', cursor: 'pointer', color: '#fff', fontSize: '14px', transition: 'background 0.2s' },
 
-    // ðŸ”¥ MOBÄ°L KENAR Ã‡UBUÄžU HEADER STÄ°LÄ°
+    // 🔥 MOBİL KENAR ÇUBUĞU HEADER STİLİ
     mobileSidebarHeader: {
         display: 'flex',
         alignItems: 'center',
@@ -5293,7 +5305,7 @@ const styles = {
         transition: 'background 0.2s, color 0.2s'
     },
 
-    // ðŸ”¥ AÃ‡ILIR MENÃœ ITEM STÄ°LÄ°
+    // 🔥 AÇILIR MENÜ ITEM STİLİ
     menuItem: {
         width: '100%',
         padding: '10px 16px',
