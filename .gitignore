@@ -9,7 +9,7 @@
 /coverage
 
 # production
-/build
+# /build  (Cloudflare Pages için gerekli, kaldırıldı)
 
 # Electron build output (not needed for Cloudflare Pages)
 /dist
