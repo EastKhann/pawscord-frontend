@@ -3,6 +3,7 @@ import axios from 'axios';
 import toast from './utils/toast';
 import { QRCodeSVG } from 'qrcode.react';
 import AvatarCropper from './components/AvatarCropper';
+import LogoutModal from './components/LogoutModal';
 import { getApiBase } from './utils/apiEndpoints';
 import './UserProfilePanel.css';
 
@@ -46,6 +47,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
 
   const [activeTab, setActiveTab] = useState('profile');
   const [activeCategory, setActiveCategory] = useState('account'); // 🆕 Kategori state'i
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // 🚪 Logout Modal State
   const [loading, setLoading] = useState({});
   const [formData, setFormData] = useState({
     username: user?.username || '',
@@ -3599,12 +3601,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
                       cursor: 'pointer',
                       transition: 'background 0.2s'
                     }}
-                    onClick={() => {
-                      if (window.confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-                        onLogout();
-                        onClose();
-                      }
-                    }}
+                    onClick={() => setShowLogoutModal(true)}
                     onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(240, 71, 71, 0.1)'}
                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                   >
@@ -3632,6 +3629,17 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
             }}
           />
         )}
+
+        {/* 🚪 Logout Modal */}
+        <LogoutModal
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={() => {
+            onLogout();
+            onClose();
+          }}
+          username={user?.username || currentUsername}
+        />
       </div>
     );
   } catch (error) {

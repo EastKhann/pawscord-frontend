@@ -846,7 +846,7 @@ const AppContent = () => {
     const getDeterministicAvatar = useCallback((uname) => {
         if (uname === 'âš¡ Signal Bot') return `${MEDIA_BASE_URL}/static/bot/signal.png`;
         if (uname === 'PawPaw AI') return `${MEDIA_BASE_URL}/static/bot/ai.png`;
-        if (!uname || !defaultAvatars || defaultAvatars.length === 0) return `${MEDIA_BASE_URL}/media/avatars/default.png`;
+        if (!uname || !defaultAvatars || defaultAvatars.length === 0) return `${MEDIA_BASE_URL}/avatars/cat_1.png`;
         let hash = 0;
         for (let i = 0; i < uname.length; i++) hash = uname.charCodeAt(i) + ((hash << 5) - hash);
         const index = Math.abs(hash % defaultAvatars.length);
@@ -862,7 +862,7 @@ const AppContent = () => {
 
         // ðŸ”¥ FIX: path yoksa veya string deÄŸilse fallback
         if (!path || typeof path !== 'string') {
-            return `${MEDIA_BASE_URL}/media/avatars/default.png`;
+            return `${MEDIA_BASE_URL}/avatars/cat_1.png`;
         }
 
         // ðŸ”¥ FIX: Avatar URL'leri iÃ§in tam URL oluÅŸtur

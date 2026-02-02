@@ -305,7 +305,7 @@ export const useCachedImage = (url) => {
 export const prefetchRouteImages = async (route) => {
   const routeImages = {
     profile: [
-      '/media/avatars/default.png',
+      '/avatars/cat_1.png',
       // Add common profile images
     ],
     home: [
