@@ -36,7 +36,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const loadBalance = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/users/balance/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/users/balance/`);
             const data = await response.json();
             setBalance(data.balance || 0);
         } catch (error) {
@@ -49,7 +49,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const loadTransactions = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/payments/history/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/payments/history/`);
             const data = await response.json();
             setTransactions(data.transactions || []);
         } catch (error) {
@@ -69,7 +69,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/payments/coins/purchase/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/payments/coins/purchase/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

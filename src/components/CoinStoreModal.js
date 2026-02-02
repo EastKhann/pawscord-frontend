@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaTimes, FaCoins, FaStar, FaCrown, FaCheck } from 'react-icons/fa';
 import { GiSparkles } from 'react-icons/gi';
 import toast from '../utils/toast';
+import { getApiBase } from '../utils/apiEndpoints';
 
 const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
   const [packages, setPackages] = useState([]);
@@ -87,7 +88,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
   };
 
   return (
-    <div 
+    <div
       style={{
         position: 'fixed',
         inset: 0,
@@ -102,7 +103,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
       }}
       onClick={onClose}
     >
-      <div 
+      <div
         style={{
           background: 'linear-gradient(135deg, #2a2d35 0%, #1e2024 100%)',
           borderRadius: '24px',
@@ -116,7 +117,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        
+
         {/* Header */}
         <div style={{
           position: 'sticky',
@@ -205,7 +206,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                   key={pkg.id}
                   style={{
                     position: 'relative',
-                    background: isPopular 
+                    background: isPopular
                       ? 'linear-gradient(135deg, rgba(88, 101, 242, 0.15) 0%, rgba(88, 101, 242, 0.05) 100%)'
                       : 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
                     borderRadius: '20px',
@@ -213,7 +214,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                     border: isPopular ? '2px solid rgba(88, 101, 242, 0.5)' : '2px solid rgba(255, 255, 255, 0.1)',
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     cursor: 'pointer',
-                    boxShadow: isPopular 
+                    boxShadow: isPopular
                       ? '0 8px 32px rgba(88, 101, 242, 0.3), inset 0 0 60px rgba(88, 101, 242, 0.1)'
                       : '0 4px 20px rgba(0, 0, 0, 0.3)',
                     transform: 'translateY(0)',
@@ -221,19 +222,19 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-8px)';
-                    e.currentTarget.style.boxShadow = isPopular 
+                    e.currentTarget.style.boxShadow = isPopular
                       ? '0 12px 48px rgba(88, 101, 242, 0.4), inset 0 0 80px rgba(88, 101, 242, 0.15)'
                       : '0 8px 32px rgba(255, 215, 0, 0.2)';
-                    e.currentTarget.style.border = isPopular 
+                    e.currentTarget.style.border = isPopular
                       ? '2px solid rgba(88, 101, 242, 0.8)'
                       : '2px solid rgba(255, 215, 0, 0.3)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = isPopular 
+                    e.currentTarget.style.boxShadow = isPopular
                       ? '0 8px 32px rgba(88, 101, 242, 0.3), inset 0 0 60px rgba(88, 101, 242, 0.1)'
                       : '0 4px 20px rgba(0, 0, 0, 0.3)';
-                    e.currentTarget.style.border = isPopular 
+                    e.currentTarget.style.border = isPopular
                       ? '2px solid rgba(88, 101, 242, 0.5)'
                       : '2px solid rgba(255, 255, 255, 0.1)';
                   }}
@@ -293,10 +294,10 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      background: isPopular 
+                      background: isPopular
                         ? 'linear-gradient(135deg, rgba(88, 101, 242, 0.3) 0%, rgba(88, 101, 242, 0.1) 100%)'
                         : 'linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%)',
-                      boxShadow: isPopular 
+                      boxShadow: isPopular
                         ? '0 0 40px rgba(88, 101, 242, 0.3), inset 0 0 20px rgba(88, 101, 242, 0.2)'
                         : '0 0 30px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.1)',
                       border: `2px solid ${isPopular ? 'rgba(88, 101, 242, 0.3)' : 'rgba(255, 215, 0, 0.2)'}`
@@ -386,7 +387,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                       fontWeight: 'bold',
                       fontSize: '16px',
                       color: 'white',
-                      background: isPopular 
+                      background: isPopular
                         ? 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)'
                         : 'linear-gradient(135deg, #57f287 0%, #3ba55d 100%)',
                       border: 'none',
@@ -396,7 +397,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '10px',
-                      boxShadow: isPopular 
+                      boxShadow: isPopular
                         ? '0 6px 20px rgba(88, 101, 242, 0.4)'
                         : '0 6px 20px rgba(87, 242, 135, 0.3)',
                       opacity: loading ? 0.6 : 1,
@@ -407,14 +408,14 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
                     onMouseEnter={(e) => {
                       if (!loading) {
                         e.target.style.transform = 'translateY(-2px)';
-                        e.target.style.boxShadow = isPopular 
+                        e.target.style.boxShadow = isPopular
                           ? '0 8px 28px rgba(88, 101, 242, 0.6)'
                           : '0 8px 28px rgba(87, 242, 135, 0.5)';
                       }
                     }}
                     onMouseLeave={(e) => {
                       e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = isPopular 
+                      e.target.style.boxShadow = isPopular
                         ? '0 6px 20px rgba(88, 101, 242, 0.4)'
                         : '0 6px 20px rgba(87, 242, 135, 0.3)';
                     }}
@@ -487,7 +488,6 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
           }
           @keyframes slideUp {
             from { 
-import { getApiBase } from '../utils/apiEndpoints';
               opacity: 0;
               transform: translateY(20px);
             }

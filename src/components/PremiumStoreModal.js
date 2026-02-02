@@ -911,7 +911,7 @@ const styles = {
     featureIcon: {
         fontSize: '14px',
     },
-    popularBadge: {
+    popularBadgeAlt: {
         position: 'absolute',
         top: '-12px',
         left: '50%',
