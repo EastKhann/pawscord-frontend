@@ -212,6 +212,11 @@ const UserPresenceInsightsPanel = React.lazy(() => import(/* webpackChunkName: "
 const UserFooter = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserFooter')); // ðŸ‘¤ KullanÄ±cÄ± footer
 const UserContextMenu = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserContextMenu')); // ðŸ–±ï¸ KullanÄ±cÄ± saÄŸ tÄ±k menÃ¼sÃ¼
 
+//  BATCH 8: New Features (2026-01-28) - Missing Imports Fixed
+const MiniGamesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MiniGamesPanel')); //  Mini Games
+const ProjectCollaborationPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ProjectCollaborationPanel')); //  Project Collaboration
+const AvatarStudioPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AvatarStudioPanel')); //  Avatar Studio
+
 // --- AYARLAR ---
 // Bu kÄ±smÄ± tamamen deÄŸiÅŸtiriyoruz:
 
@@ -3451,7 +3456,7 @@ const AppContent = () => {
                     <MiniGamesPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.id}
+                        serverId={activeChat?.server_id}
                         currentUser={username}
                         onClose={() => setShowMiniGames(false)}
                     />
@@ -3734,7 +3739,7 @@ const AppContent = () => {
                                         {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `# ${String(chatTitle)}`}
                                     </h2>
                                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>
-                                        {isConnected ? 'BaÄŸlÄ±' : 'Kopuk'}
+                                        {isConnected ? 'Bağlı' : 'Kopuk'}
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: isMobile ? '5px' : '10px', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', position: 'relative' }}>
@@ -5264,5 +5269,6 @@ function App() {
 }
 
 export default App;
+
 
 

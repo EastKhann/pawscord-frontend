@@ -36,7 +36,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const loadExportJobs = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/exports/jobs/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/exports/jobs/`);
             const data = await response.json();
             setJobs(data.jobs || []);
         } catch (error) {
@@ -49,7 +49,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const createExport = async () => {
         setCreating(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/exports/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/exports/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

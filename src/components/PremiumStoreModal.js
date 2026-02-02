@@ -59,7 +59,7 @@ const PremiumStoreModal = ({ onClose }) => {
                 }
             });
             const data = await response.json();
-            
+
             // ✅ Array kontrolü ekle
             const inventoryArray = Array.isArray(data) ? data : [];
             setUserInventory(inventoryArray);
@@ -248,17 +248,17 @@ const PremiumStoreModal = ({ onClose }) => {
     return (
         <div style={styles.overlay}>
             {showCoinStore && (
-                <CoinStoreModal 
+                <CoinStoreModal
                     onClose={() => setShowCoinStore(false)}
                     currentCoins={premiumStatus?.coins || 0}
                     onPurchaseComplete={(newBalance) => {
                         // Bakiyeyi güncelle
-                        setPremiumStatus(prev => prev ? {...prev, coins: newBalance} : null);
+                        setPremiumStatus(prev => prev ? { ...prev, coins: newBalance } : null);
                         fetchPremiumStatus();
                     }}
                 />
             )}
-            
+
             <div style={styles.modal}>
                 {/* Header */}
                 <div style={styles.header}>
@@ -278,14 +278,14 @@ const PremiumStoreModal = ({ onClose }) => {
                             cursor: 'pointer',
                             transition: 'transform 0.2s',
                         }}
-                        onClick={() => setShowCoinStore(true)}
-                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                        title="Coin satın al"
+                            onClick={() => setShowCoinStore(true)}
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            title="Coin satın al"
                         >
                             <span style={{ fontSize: '18px' }}>💰</span>
-                            <span style={{ 
-                                fontWeight: 'bold', 
+                            <span style={{
+                                fontWeight: 'bold',
                                 color: '#000',
                                 fontSize: '14px'
                             }}>
@@ -442,10 +442,10 @@ const PremiumStoreModal = ({ onClose }) => {
                                 {displayItems.map(item => {
                                     // 🔥 Ownership kontrolü: Envanterde var mı?
                                     // Backend'den gelen inventory item'larda item_details var
-                                    const isOwned = userInventory.some(inv => 
+                                    const isOwned = userInventory.some(inv =>
                                         inv.item_details?.id === item.id || inv.item === item.id
                                     );
-                                    
+
                                     return (
                                         <div key={item.id} style={{
                                             ...styles.storeItem,
@@ -455,7 +455,7 @@ const PremiumStoreModal = ({ onClose }) => {
                                             <h4 style={styles.itemName}>{item.name}</h4>
                                             <p style={styles.itemDescription}>{item.description}</p>
                                             <div style={styles.itemPrice}>{item.price} TL</div>
-                                            
+
                                             {isOwned ? (
                                                 <button
                                                     disabled
@@ -486,52 +486,72 @@ const PremiumStoreModal = ({ onClose }) => {
 
                     {activeTab === 'boost' && (
                         <div style={styles.boostTab}>
-                            <h3 style={styles.sectionTitle}>Server Boosting</h3>
-                            <p style={styles.boostDescription}>
-                                Sevdiğin sunucuları güçlendir ve özel özellikler kazan!
-                            </p>
+                            <div style={styles.boostHeader}>
+                                <h3 style={styles.boostTitle}>
+                                    <span style={styles.boostIcon}>🚀</span>
+                                    Server Boosting
+                                </h3>
+                                <p style={styles.boostSubtitle}>
+                                    Sevdiğin sunucuları güçlendir ve özel özellikler kazan!
+                                </p>
+                            </div>
 
-                            <div style={styles.boostTiers}>
-                                <div style={styles.boostTier}>
-                                    <h4>🥉 Seviye 1</h4>
-                                    <p>2 Boost gerekli</p>
-                                    <ul>
-                                        <li>100 emoji slot</li>
-                                        <li>256 kbps ses kalitesi</li>
-                                        <li>50 MB dosya yükleme</li>
-                                        <li>Animated sunucu ikonu</li>
+                            <div style={styles.boostTiersContainer}>
+                                {/* Seviye 1 */}
+                                <div style={{ ...styles.boostTierCard, borderColor: '#cd7f32' }}>
+                                    <div style={{ ...styles.tierBadge, background: 'linear-gradient(135deg, #cd7f32, #a0522d)' }}>
+                                        <span style={styles.tierNumber}>1</span>
+                                    </div>
+                                    <h4 style={styles.tierTitle}>Seviye 1</h4>
+                                    <p style={styles.tierRequirement}>2 Boost gerekli</p>
+                                    <ul style={styles.tierFeatureList}>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎨</span> 100 emoji slot</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎵</span> 256 kbps ses kalitesi</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📁</span> 50 MB dosya yükleme</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>✨</span> Animated sunucu ikonu</li>
                                     </ul>
                                 </div>
 
-                                <div style={styles.boostTier}>
-                                    <h4>🥈 Seviye 2</h4>
-                                    <p>7 Boost gerekli</p>
-                                    <ul>
-                                        <li>150 emoji slot</li>
-                                        <li>384 kbps ses kalitesi</li>
-                                        <li>100 MB dosya yükleme</li>
-                                        <li>1080p Go Live stream</li>
-                                        <li>Özel davet linki</li>
+                                {/* Seviye 2 */}
+                                <div style={{ ...styles.boostTierCard, borderColor: '#c0c0c0', transform: 'scale(1.02)' }}>
+                                    <div style={{ ...styles.tierBadge, background: 'linear-gradient(135deg, #c0c0c0, #808080)' }}>
+                                        <span style={styles.tierNumber}>2</span>
+                                    </div>
+                                    <div style={styles.popularBadge}>⭐ Popüler</div>
+                                    <h4 style={styles.tierTitle}>Seviye 2</h4>
+                                    <p style={styles.tierRequirement}>7 Boost gerekli</p>
+                                    <ul style={styles.tierFeatureList}>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎨</span> 150 emoji slot</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎵</span> 384 kbps ses kalitesi</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📁</span> 100 MB dosya yükleme</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📺</span> 1080p Go Live stream</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🔗</span> Özel davet linki</li>
                                     </ul>
                                 </div>
 
-                                <div style={styles.boostTier}>
-                                    <h4>🥇 Seviye 3</h4>
-                                    <p>14 Boost gerekli</p>
-                                    <ul>
-                                        <li>250 emoji slot</li>
-                                        <li>384 kbps ses kalitesi</li>
-                                        <li>500 MB dosya yükleme</li>
-                                        <li>4K Go Live 60FPS</li>
-                                        <li>Özel ses efektleri</li>
+                                {/* Seviye 3 */}
+                                <div style={{ ...styles.boostTierCard, borderColor: '#ffd700', boxShadow: '0 0 20px rgba(255, 215, 0, 0.3)' }}>
+                                    <div style={{ ...styles.tierBadge, background: 'linear-gradient(135deg, #ffd700, #ff8c00)' }}>
+                                        <span style={styles.tierNumber}>3</span>
+                                    </div>
+                                    <div style={{ ...styles.premiumBadge }}>👑 Premium</div>
+                                    <h4 style={styles.tierTitle}>Seviye 3</h4>
+                                    <p style={styles.tierRequirement}>14 Boost gerekli</p>
+                                    <ul style={styles.tierFeatureList}>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎨</span> 250 emoji slot</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎵</span> 384 kbps ses kalitesi</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📁</span> 500 MB dosya yükleme</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📺</span> 4K Go Live 60FPS</li>
+                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🔊</span> Özel ses efektleri</li>
                                     </ul>
                                 </div>
                             </div>
 
                             <button
                                 onClick={() => alert('Server boost özelliği yakında!')}
-                                style={styles.boostButton}
+                                style={styles.boostPurchaseButton}
                             >
+                                <span style={styles.boostButtonIcon}>🚀</span>
                                 Boost Satın Al (19.99 TL/ay)
                             </button>
                         </div>
@@ -804,6 +824,140 @@ const styles = {
         cursor: 'pointer',
         display: 'block',
         margin: '0 auto',
+    },
+    // Server Boost Tab - Yeni Stiller
+    boostTab: {
+        padding: '10px 0',
+    },
+    boostHeader: {
+        textAlign: 'center',
+        marginBottom: '30px',
+    },
+    boostTitle: {
+        color: '#fff',
+        fontSize: '28px',
+        fontWeight: '700',
+        margin: '0 0 10px 0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px',
+    },
+    boostIcon: {
+        fontSize: '32px',
+    },
+    boostSubtitle: {
+        color: '#b9bbbe',
+        fontSize: '15px',
+        margin: 0,
+    },
+    boostTiersContainer: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+        gap: '20px',
+        marginBottom: '30px',
+    },
+    boostTierCard: {
+        background: 'linear-gradient(145deg, #2b2d31, #1e1f22)',
+        borderRadius: '16px',
+        padding: '25px 20px',
+        border: '2px solid',
+        position: 'relative',
+        transition: 'all 0.3s ease',
+        textAlign: 'center',
+    },
+    tierBadge: {
+        width: '60px',
+        height: '60px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: '0 auto 15px auto',
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
+    },
+    tierNumber: {
+        color: '#fff',
+        fontSize: '28px',
+        fontWeight: 'bold',
+        textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+    },
+    tierTitle: {
+        color: '#fff',
+        fontSize: '20px',
+        fontWeight: '700',
+        margin: '0 0 5px 0',
+    },
+    tierRequirement: {
+        color: '#72767d',
+        fontSize: '13px',
+        margin: '0 0 15px 0',
+    },
+    tierFeatureList: {
+        listStyle: 'none',
+        padding: 0,
+        margin: 0,
+        textAlign: 'left',
+    },
+    tierFeature: {
+        color: '#dcddde',
+        fontSize: '13px',
+        padding: '6px 0',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+    },
+    featureIcon: {
+        fontSize: '14px',
+    },
+    popularBadge: {
+        position: 'absolute',
+        top: '-12px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: 'linear-gradient(135deg, #5865f2, #7c8af2)',
+        color: '#fff',
+        fontSize: '11px',
+        fontWeight: 'bold',
+        padding: '4px 14px',
+        borderRadius: '12px',
+        boxShadow: '0 2px 10px rgba(88, 101, 242, 0.4)',
+    },
+    premiumBadge: {
+        position: 'absolute',
+        top: '-12px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
+        color: '#000',
+        fontSize: '11px',
+        fontWeight: 'bold',
+        padding: '4px 14px',
+        borderRadius: '12px',
+        boxShadow: '0 2px 10px rgba(255, 215, 0, 0.4)',
+    },
+    boostPurchaseButton: {
+        width: '100%',
+        maxWidth: '350px',
+        padding: '16px 24px',
+        borderRadius: '12px',
+        border: 'none',
+        background: 'linear-gradient(135deg, #ff6b9d, #f0b232, #ffd700)',
+        color: '#000',
+        fontWeight: 'bold',
+        fontSize: '16px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px',
+        margin: '0 auto',
+        boxShadow: '0 4px 20px rgba(240, 178, 50, 0.4)',
+        transition: 'all 0.3s ease',
+    },
+    boostButtonIcon: {
+        fontSize: '20px',
     },
 };
 

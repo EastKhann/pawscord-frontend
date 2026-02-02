@@ -29,7 +29,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const loadAPIUsage = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/analytics/usage/?range=${timeRange}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/analytics/usage/?range=${timeRange}`);
             const data = await response.json();
 
             setStats(data.stats || {});
@@ -46,13 +46,16 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const getRateLimitStatus = () => {
         if (!stats || !stats.rate_limit) return { color: '#43b581', text: 'Normal' };
 
-        const usage = (stats.requests_made / stats.rate_limit) * 100;
+        const requestsMade = stats.requests_made || 0;
+        const usage = (requestsMade / stats.rate_limit) * 100;
 
         if (usage >= 90) return { color: '#f04747', text: 'Critical' };
         if (usage >= 70) return { color: '#faa61a', text: 'Warning' };
         return { color: '#43b581', text: 'Normal' };
     };
 
+    // Guard against null stats - initialize with defaults if null
+    const safeStats = stats || { requests_made: 0, rate_limit: 10000, success_rate: 0, avg_response_time: 0, errors: 0 };
     const rateLimitStatus = getRateLimitStatus();
 
     return (
@@ -94,7 +97,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>
-                                            {stats.requests_made?.toLocaleString() || 0}
+                                            {(safeStats.requests_made || 0).toLocaleString()}
                                         </div>
                                         <div style={styles.statLabel}>Total Requests</div>
                                     </div>
@@ -106,7 +109,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>
-                                            {stats.success_rate ? `${stats.success_rate.toFixed(1)}%` : '0%'}
+                                            {safeStats.success_rate ? `${safeStats.success_rate.toFixed(1)}%` : '0%'}
                                         </div>
                                         <div style={styles.statLabel}>Success Rate</div>
                                     </div>
@@ -118,7 +121,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>
-                                            {stats.avg_response_time ? `${stats.avg_response_time}ms` : '0ms'}
+                                            {safeStats.avg_response_time ? `${safeStats.avg_response_time}ms` : '0ms'}
                                         </div>
                                         <div style={styles.statLabel}>Avg Response Time</div>
                                     </div>
@@ -130,7 +133,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>
-                                            {stats.errors || 0}
+                                            {safeStats.errors || 0}
                                         </div>
                                         <div style={styles.statLabel}>Errors</div>
                                     </div>
@@ -146,7 +149,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                 }}>
                                     <div style={styles.rateLimitInfo}>
                                         <div style={styles.rateLimitText}>
-                                            {stats.requests_made || 0} / {stats.rate_limit || 1000} requests used
+                                            {safeStats.requests_made || 0} / {safeStats.rate_limit || 10000} requests used
                                         </div>
                                         <div style={{
                                             ...styles.rateLimitStatus,
@@ -158,13 +161,13 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     <div style={styles.rateLimitBar}>
                                         <div style={{
                                             ...styles.rateLimitProgress,
-                                            width: `${Math.min((stats.requests_made / stats.rate_limit) * 100, 100)}%`,
+                                            width: `${Math.min(((safeStats.requests_made || 0) / (safeStats.rate_limit || 10000)) * 100, 100)}%`,
                                             backgroundColor: rateLimitStatus.color
                                         }} />
                                     </div>
-                                    {stats.reset_at && (
+                                    {safeStats.reset_at && (
                                         <div style={styles.rateLimitReset}>
-                                            Resets in: {calculateTimeUntilReset(stats.reset_at)}
+                                            Resets in: {calculateTimeUntilReset(safeStats.reset_at)}
                                         </div>
                                     )}
                                 </div>

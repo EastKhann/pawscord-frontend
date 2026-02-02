@@ -27,7 +27,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
 
     const loadDailyRewards = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/rewards/daily/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/api/rewards/daily/`);
             const data = await response.json();
 
             setRewards(data.rewards || []);
