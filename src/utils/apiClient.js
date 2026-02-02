@@ -325,6 +325,10 @@ class APIClient {
 // Dynamic API URL detection
 const getApiBaseUrl = () => {
     if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+    // Use environment variable if available, fallback to auto-detection
+    const envApiUrl = import.meta.env.VITE_API_BASE_URL;
+    if (envApiUrl) return envApiUrl;
+
     const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
     if (isElectron || isPawscordDomain) return 'https://api.pawscord.com';

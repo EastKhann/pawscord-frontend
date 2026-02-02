@@ -327,6 +327,10 @@ class OfflineModeManager {
         const isPawscordDomain = window.location.hostname.includes('pawscord.com');
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
+        // Use environment variable if available, fallback to auto-detection
+        const envApiUrl = import.meta.env.VITE_API_BASE_URL;
+        if (envApiUrl) return envApiUrl;
+
         if (isElectron || isPawscordDomain) {
             return 'https://api.pawscord.com';
         }

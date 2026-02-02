@@ -21,12 +21,16 @@ const getApiBaseUrl = () => {
         return 'https://pawscord.com/api';
     }
 
-    // 3. Development fallback
+    // 3. Environment variable override
+    const envApiUrl = import.meta.env.VITE_API_BASE_URL;
+    if (envApiUrl) return envApiUrl;
+
+    // 4. Development fallback
     if (isLocalhost) {
         return 'http://localhost:8888/api';
     }
 
-    // 4. Default to production
+    // 5. Default to production
     return 'https://api.pawscord.com';
 };
 
