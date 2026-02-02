@@ -42,7 +42,7 @@ const usePageTracking = () => {
         };
 
         trackPageView();
-    }, [location.pathname, apiBaseUrl]);
+    }, [location.pathname]);
 };
 
 export default usePageTracking;

@@ -118,6 +118,8 @@ export const API_CONFIG = {
 // Named exports for convenience
 export const API_HOST = API_CONFIG.API_HOST;
 export const API_BASE_URL = API_CONFIG.API_BASE_URL;
+// For components that add /api/ themselves (legacy support)
+export const API_ROOT = API_CONFIG.API_HOST;
 export const MEDIA_URL = API_CONFIG.MEDIA_URL;
 export const FRONTEND_URL = API_CONFIG.FRONTEND_URL;
 export const WS_PROTOCOL = API_CONFIG.WS_PROTOCOL;

@@ -1,4 +1,4 @@
-// frontend/src/index.js
+﻿// frontend/src/index.js
 
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
@@ -9,7 +9,7 @@ import VerifyEmailPage from './VerifyEmailPage';
 import InvitePage from './InvitePage';
 import EnglishHub from './EnglishHub';
 
-// ⚡ OPTIMIZATION: Lazy load English learning pages
+// âš¡ OPTIMIZATION: Lazy load English learning pages
 const GrammarQuizPage = React.lazy(() => import('./GrammarQuizPage'));
 const EnglishLearningPage = React.lazy(() => import('./EnglishLearningPage'));
 import EnglishVoicePractice from './EnglishVoicePractice';
@@ -26,18 +26,18 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config';
 
-// 🔐 Auth & Security Pages (Lazy Load)
+// ðŸ” Auth & Security Pages (Lazy Load)
 const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
 const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage'));
 
-// 📈 GROWTH: Landing Page & Growth Components (Lazy Load)
+// ðŸ“ˆ GROWTH: Landing Page & Growth Components (Lazy Load)
 const LandingPage = React.lazy(() => import('./components/LandingPage'));
 const ReferralProgram = React.lazy(() => import('./components/ReferralProgram'));
 const GrowthDashboard = React.lazy(() => import('./components/GrowthDashboard'));
 
-// 🎨 DEMO: Toast Notification Demo (Lazy Load)
+// ðŸŽ¨ DEMO: Toast Notification Demo (Lazy Load)
 const ToastDemo = React.lazy(() => import('./components/ToastDemo'));
 
 // --- URL AYARLARI (Centralized from constants.js) ---
@@ -90,69 +90,69 @@ const RootApp = () => {
                                     <PageWrapper><VerifyEmailPage /></PageWrapper>
                                 } />
 
-                                {/* 🔐 Auth & Security Routes */}
+                                {/* ðŸ” Auth & Security Routes */}
                                 <Route path="/verify-email/:token" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <VerifyEmailPageNew apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <VerifyEmailPageNew apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/forgot-password" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ForgotPasswordPage apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <ForgotPasswordPage apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/reset-password/:token" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ResetPasswordPage apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <ResetPasswordPage apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/2fa-login" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <TwoFactorLoginPage apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <TwoFactorLoginPage apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
 
-                                {/* 📈 GROWTH: Landing Page & Growth System */}
+                                {/* ðŸ“ˆ GROWTH: Landing Page & Growth System */}
                                 <Route path="/launch" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <LandingPage apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <LandingPage apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/referral" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ReferralProgram apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <ReferralProgram apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/growth-dashboard" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <GrowthDashboard apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
+                                            <GrowthDashboard apiBaseUrl={API_URL_BASE_STRING} />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
 
-                                {/* 🎨 DEMO: Toast Notification Demo */}
+                                {/* ðŸŽ¨ DEMO: Toast Notification Demo */}
                                 <Route path="/toast-demo" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
                                             <ToastDemo />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
 
-                                {/* 🔗 Server Invite */}
+                                {/* ðŸ”— Server Invite */}
                                 <Route path="/invite/:code" element={
                                     <PageWrapper><InvitePage /></PageWrapper>
                                 } />
@@ -160,36 +160,36 @@ const RootApp = () => {
                                 {/* Spotify Callback */}
                                 <Route path="/spotify-callback" element={
                                     <PageWrapper>
-                                        <SpotifyCallback apiBaseUrl={API_BASE_URL} />
+                                        <SpotifyCallback apiBaseUrl={API_URL_BASE_STRING} />
                                     </PageWrapper>
                                 } />
 
-                                {/* İngilizce Modülleri */}
+                                {/* Ä°ngilizce ModÃ¼lleri */}
                                 <Route path="/eng-learn" element={
                                     <PageWrapper><EnglishHub /></PageWrapper>
                                 } />
                                 <Route path="/eng-learn/vocab" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
                                             <EnglishLearningPage />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/eng-learn/grammar" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                        <React.Suspense fallback={<div>YÃ¼kleniyor...</div>}>
                                             <GrammarQuizPage />
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/eng-learn/voice" element={
                                     <PageWrapper>
-                                        <EnglishVoicePractice apiBaseUrl={API_BASE_URL} />
+                                        <EnglishVoicePractice apiBaseUrl={API_URL_BASE_STRING} />
                                     </PageWrapper>
                                 } />
                                 <Route path="/eng-learn/pronunciation" element={
                                     <PageWrapper>
-                                        <PronunciationPage apiBaseUrl={API_BASE_URL} />
+                                        <PronunciationPage apiBaseUrl={API_URL_BASE_STRING} />
                                     </PageWrapper>
                                 } />
 
@@ -213,5 +213,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<RootApp />);
 
 reportWebVitals();
+
 
 
