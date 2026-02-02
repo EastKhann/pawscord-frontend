@@ -138,7 +138,7 @@ export const getAppUrl = (path = '') => {
 
     let baseUrl;
     if (isElectron || isPawscordDomain) {
-        baseUrl = 'https://pawscord.com';
+        baseUrl = 'https://www.pawscord.com';
     } else if (isLocalhost) {
         baseUrl = `${window.location.protocol}//${window.location.host}`;
     } else {
