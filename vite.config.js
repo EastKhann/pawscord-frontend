@@ -14,8 +14,12 @@ const APP_VERSION = packageJson.version
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // 🔥 Production'da static dosyaları R2 CDN'den sun
-  base: process.env.VITE_CDN_URL || '/',
+  // 🔥 FIX: Electron için relative path, web için CDN/absolute path
+  // VITE_ELECTRON=true ise './' kullan (file:// protokolü için)
+  // Değilse CDN URL veya '/' kullan (web deployment için)
+  base: process.env.VITE_ELECTRON === 'true'
+    ? './'
+    : (process.env.VITE_CDN_URL || '/'),
 
   plugins: [
     // ⚡ React with automatic JSX runtime
