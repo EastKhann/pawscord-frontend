@@ -34,8 +34,8 @@ export default defineConfig({
       template: 'treemap', // treemap, sunburst, network
     }),
 
-    // ⚡ PWA Support - AKTIF (optimized)
-    VitePWA({
+    // ⚡ PWA Support - SADECE web build için (Electron'da devre dışı)
+    ...(process.env.VITE_ELECTRON !== 'true' ? [VitePWA({
       // 🔥 FIX: autoUpdate yerine prompt kullan - otomatik sayfa yenilemesi mesaj kaybına sebep oluyor!
       registerType: 'prompt',
       workbox: {
@@ -126,8 +126,8 @@ export default defineConfig({
           }
         ]
       }
-    }),
-  ].filter(Boolean),
+    })] : []),
+  ],
 
   // 🔥 base artık en üstte tanımlı (CDN için)
 
