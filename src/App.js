@@ -672,7 +672,7 @@ const AppContent = () => {
                 try {
                     const token = localStorage.getItem('access_token');
                     const apiBase = 'https://api.pawscord.com/api';
-                    
+
                     if (sessionId) {
                         const response = await fetch(`${apiBase}/payments/verify/`, {
                             method: 'POST',
@@ -685,9 +685,9 @@ const AppContent = () => {
                                 coin_amount: parseInt(coins)
                             })
                         });
-                        
+
                         const data = await response.json();
-                        
+
                         if (data.success) {
                             if (data.already_processed) {
                                 toast.info(`?? �deme zaten islendi! Bakiye: ${data.balance} coin`);
@@ -705,7 +705,7 @@ const AppContent = () => {
                     toast.success(`?? ${coins} coin satin alma tamamlandi!`);
                 }
             };
-            
+
             verifyPayment();
             window.history.replaceState({}, document.title, window.location.pathname);
         }
@@ -1667,10 +1667,10 @@ const AppContent = () => {
                     const data = await res.json();
                     setServerOrder(data.server_order || []);
 
-        if (!wsUrl) {
-            console.log(' [WebSocket] Skipping - activeChat.type is not room/dm:', activeChat.type);
-            return;
-        }
+                    if (!wsUrl) {
+                        console.log(' [WebSocket] Skipping - activeChat.type is not room/dm:', activeChat.type);
+                        return;
+                    }
 
                     console.log('🎯 Server order loaded:', data.server_order);
                 }

@@ -15,6 +15,7 @@ const EnglishLearningPage = React.lazy(() => import('./EnglishLearningPage'));
 import EnglishVoicePractice from './EnglishVoicePractice';
 import PronunciationPage from './PronunciationPage';
 const CryptoDashboard = React.lazy(() => import('./CryptoDashboard'));
+const CryptoSignals = React.lazy(() => import('./CryptoSignals'));
 import SpotifyCallback from './SpotifyCallback';
 import reportWebVitals from './reportWebVitals';
 import { GlobalWebSocketProvider } from './GlobalWebSocketContext';
@@ -204,8 +205,17 @@ const RootApp = () => {
                                     </PageWrapper>
                                 } />
 
-                                {/* Kripto Analiz */}
+                                {/* Kripto Sinyaller (Yeni) */}
                                 <Route path="/crypto-analysis" element={
+                                    <PageWrapper>
+                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                            <CryptoSignals />
+                                        </React.Suspense>
+                                    </PageWrapper>
+                                } />
+
+                                {/* Eski Crypto Dashboard (yedek) */}
+                                <Route path="/crypto-dashboard-old" element={
                                     <PageWrapper>
                                         <React.Suspense fallback={<div>Yükleniyor...</div>}>
                                             <CryptoDashboard />
