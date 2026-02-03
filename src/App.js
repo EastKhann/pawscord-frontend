@@ -4329,6 +4329,7 @@ const AppContent = () => {
                                     allUsers={allUsers}
                                     onlineUsers={onlineUsers}
                                     currentUser={username}
+                                    currentUserProfile={currentUserProfile}
                                     getDeterministicAvatar={getDeterministicAvatar}
                                     onUserClick={(u) => {
                                         // Önce allUsers'da ara, yoksa serverMembers'dan al

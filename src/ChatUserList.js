@@ -40,6 +40,7 @@ const ChatUserList = ({
     allUsers = [],
     onlineUsers = [],
     currentUser,
+    currentUserProfile,
     getDeterministicAvatar,
     onUserClick,
     onUserContextMenu,
@@ -216,7 +217,7 @@ const ChatUserList = ({
             </div>
 
             {/* HIZLI ERİŞİM BUTONLARI - Sadece whitelist kullanıcılar görebilir */}
-            {currentUser?.is_whitelisted && (
+            {currentUserProfile?.is_whitelisted && (
                 <div style={styles.quickAccessSection}>
                     <div style={styles.quickAccessHeader}>
                         HIZLI ERİŞİM
