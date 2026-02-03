@@ -99,7 +99,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
     };
 
     const copyUrl = () => {
-        const fullUrl = `https://pawscord.com/join/${existingVanity.path}`;
+        const fullUrl = `https://www.pawscord.com/join/${existingVanity.path}`;
         navigator.clipboard.writeText(fullUrl);
         toast.success('URL kopyalandı!');
     };

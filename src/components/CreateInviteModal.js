@@ -37,7 +37,7 @@ const CreateInviteModal = ({ server, room, onClose, apiBaseUrl, fetchWithAuth })
 
                 // Vanity URL kontrolü
                 if (server.vanity_url) {
-                    setVanityUrl(`https://pawscord.com/invite/${server.vanity_url}`);
+                    setVanityUrl(`https://www.pawscord.com/invite/${server.vanity_url}`);
                 }
             } catch (err) {
                 console.error("Mevcut davetler alınamadı:", err);
@@ -101,7 +101,7 @@ const CreateInviteModal = ({ server, room, onClose, apiBaseUrl, fetchWithAuth })
 
             if (response.ok) {
                 // Backend'den gelen tam URL'i al
-                const link = data.url || data.invite_link || `https://pawscord.com/#/invite/${data.code}`;
+                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
 
                 console.log('✅ [CreateInvite] Invite created:', {
                     code: data.code,
@@ -227,7 +227,7 @@ const CreateInviteModal = ({ server, room, onClose, apiBaseUrl, fetchWithAuth })
                         <div style={{ ...styles.section, marginBottom: '15px' }}>
                             <div style={{ color: '#b5bac1', fontSize: '0.85em', marginBottom: '8px', fontWeight: '500' }}>⏰ Mevcut Süresiz Davetler</div>
                             {existingInvites.map(inv => {
-                                const url = inv.url || `https://pawscord.com/invite/${inv.code}`;
+                                const url = inv.url || `https://www.pawscord.com/invite/${inv.code}`;
                                 return (
                                     <div key={inv.code} style={{ ...styles.linkContainer, marginBottom: '5px', backgroundColor: '#1e1f22' }}>
                                         <input

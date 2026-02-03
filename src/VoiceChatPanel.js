@@ -144,7 +144,7 @@ const VoiceChatPanel = ({
                     avatarUrl = currentUserProfile.avatar;
                 } else {
                     // Relative path ise tam URL yap
-                    avatarUrl = `https://pawscord.com${currentUserProfile.avatar.startsWith('/') ? '' : '/'}${currentUserProfile.avatar}`;
+                    avatarUrl = `https://www.pawscord.com${currentUserProfile.avatar.startsWith('/') ? '' : '/'}${currentUserProfile.avatar}`;
                 }
             }
         }
@@ -162,7 +162,7 @@ const VoiceChatPanel = ({
                 if (userFromList.avatar.startsWith('http') || userFromList.avatar.startsWith('blob:')) {
                     avatarUrl = userFromList.avatar;
                 } else {
-                    avatarUrl = `https://pawscord.com${userFromList.avatar.startsWith('/') ? '' : '/'}${userFromList.avatar}`;
+                    avatarUrl = `https://www.pawscord.com${userFromList.avatar.startsWith('/') ? '' : '/'}${userFromList.avatar}`;
                 }
             }
         }

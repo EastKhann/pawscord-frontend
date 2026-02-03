@@ -31,7 +31,7 @@ export default function ReferralProgram({ user }) {
     };
 
     const copyReferralLink = () => {
-        const link = `https://pawscord.com/join/${referralCode}`;
+        const link = `https://www.pawscord.com/join/${referralCode}`;
         navigator.clipboard.writeText(link);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -39,7 +39,7 @@ export default function ReferralProgram({ user }) {
 
     const shareOnTwitter = () => {
         const text = `Join me on Pawscord - a privacy-first Discord alternative! 🐾\n\nNo tracking. No ads. 100% open source.\n\nSign up with my link for 3 months free premium:`;
-        const url = `https://pawscord.com/join/${referralCode}`;
+        const url = `https://www.pawscord.com/join/${referralCode}`;
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
     };
 
@@ -75,7 +75,7 @@ export default function ReferralProgram({ user }) {
                 <div className="link-container">
                     <input
                         type="text"
-                        value={`https://pawscord.com/join/${referralCode}`}
+                        value={`https://www.pawscord.com/join/${referralCode}`}
                         readOnly
                         className="referral-input"
                     />
@@ -182,25 +182,25 @@ export default function ReferralProgram({ user }) {
                 <h3>Share on:</h3>
                 <div className="share-buttons">
                     <button
-                        onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=https://pawscord.com/join/${referralCode}`, '_blank')}
+                        onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=https://www.pawscord.com/join/${referralCode}`, '_blank')}
                         className="share-btn facebook"
                     >
                         📘 Facebook
                     </button>
                     <button
-                        onClick={() => window.open(`https://www.reddit.com/submit?url=https://pawscord.com/join/${referralCode}&title=Check out Pawscord!`, '_blank')}
+                        onClick={() => window.open(`https://www.reddit.com/submit?url=https://www.pawscord.com/join/${referralCode}&title=Check out Pawscord!`, '_blank')}
                         className="share-btn reddit"
                     >
                         🤖 Reddit
                     </button>
                     <button
-                        onClick={() => window.open(`https://wa.me/?text=Join me on Pawscord! https://pawscord.com/join/${referralCode}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/?text=Join me on Pawscord! https://www.pawscord.com/join/${referralCode}`, '_blank')}
                         className="share-btn whatsapp"
                     >
                         💬 WhatsApp
                     </button>
                     <button
-                        onClick={() => window.open(`https://t.me/share/url?url=https://pawscord.com/join/${referralCode}&text=Check out Pawscord!`, '_blank')}
+                        onClick={() => window.open(`https://t.me/share/url?url=https://www.pawscord.com/join/${referralCode}&text=Check out Pawscord!`, '_blank')}
                         className="share-btn telegram"
                     >
                         ✈️ Telegram

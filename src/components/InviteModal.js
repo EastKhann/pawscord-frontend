@@ -194,7 +194,7 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
 
             if (response.ok) {
                 // Backend'den gelen tam URL'i al
-                const link = data.url || data.invite_link || `https://pawscord.com/#/invite/${data.code}`;
+                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
 
                 console.log('✅ [InviteModal] Invite created:', {
                     code: data.code,

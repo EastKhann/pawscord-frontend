@@ -47,7 +47,7 @@ const MY_LOCAL_IP = "192.168.68.53";
 const DJANGO_PORT = "8888";
 
 const API_URL_BASE_STRING = (IS_PRODUCTION)
-    ? "https://pawscord.com"
+    ? "https://www.pawscord.com"
     : `http://${MY_LOCAL_IP}:${DJANGO_PORT}`;
 
 const API_BASE_URL = `${API_URL_BASE_STRING}/api`;

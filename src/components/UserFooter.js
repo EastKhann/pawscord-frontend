@@ -17,7 +17,7 @@ const UserFooter = ({
     if (avatarUrl && typeof avatarUrl === 'string' && !avatarUrl.startsWith('http') && !avatarUrl.startsWith('blob') && !avatarUrl.includes('ui-avatars.com')) {
         // Başında slash yoksa ekle
         const path = avatarUrl.startsWith('/') ? avatarUrl : `/${avatarUrl}`;
-        avatarUrl = `https://pawscord.com${path}`;
+        avatarUrl = `https://www.pawscord.com${path}`;
     } else if (!avatarUrl || typeof avatarUrl !== 'string') {
         avatarUrl = getDeterministicAvatar(currentUsername);
     }

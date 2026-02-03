@@ -23,14 +23,14 @@ const InvitePage = () => {
     const isElectron = typeof window !== 'undefined' && typeof window.require === 'function';
 
     const API_URL_BASE_STRING = (() => {
-        if (isNative) return "https://pawscord.com";
+        if (isNative) return "https://www.pawscord.com";
         if (isElectron) return `http://127.0.0.1:${DJANGO_PORT}`;
 
         const protocol = window.location.protocol;
         const hostname = window.location.hostname;
 
         if (hostname.includes('pawscord.com')) {
-            return "https://pawscord.com";
+            return "https://www.pawscord.com";
         }
 
         return `${protocol}//${hostname}:${DJANGO_PORT}`;
@@ -238,8 +238,8 @@ const InvitePage = () => {
                     }}
                 >
                     {joining ? 'Katılınıyor...' :
-                     !isAuthenticated ? 'Giriş Yap ve Katıl' :
-                     'Sunucuya Katıl'}
+                        !isAuthenticated ? 'Giriş Yap ve Katıl' :
+                            'Sunucuya Katıl'}
                 </button>
 
                 {!isAuthenticated && (

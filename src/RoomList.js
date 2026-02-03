@@ -584,7 +584,7 @@ const RoomList = ({
                 // 2. Hostname kontrolü (pawscord.com)
                 // 3. Fallback olarak window.location.origin
 
-                const productionUrl = import.meta.env.VITE_PRODUCTION_URL || 'https://pawscord.com';
+                const productionUrl = import.meta.env.VITE_PRODUCTION_URL || 'https://www.pawscord.com';
                 const isProduction = import.meta.env.MODE === 'production' ||
                     window.location.hostname === 'pawscord.com' ||
                     window.location.hostname === 'www.pawscord.com';
@@ -2080,7 +2080,7 @@ const RoomList = ({
                             <div style={{ backgroundColor: '#202225', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
                                 <p style={{ color: '#b9bbbe', fontSize: '0.9em', marginTop: 0 }}>Elinizde bir davet kodu veya linki varsa aşağıya yapıştırın.</p>
                                 <form onSubmit={handleJoinViaCode} style={{ display: 'flex', gap: '10px' }}>
-                                    <input value={inviteCodeInput} onChange={(e) => setInviteCodeInput(e.target.value)} placeholder="https://pawscord.com/invite/..." style={{ flex: 1, padding: '10px', borderRadius: '4px', border: '1px solid #1e1f22', backgroundColor: '#313338', color: 'white', outline: 'none' }} />
+                                    <input value={inviteCodeInput} onChange={(e) => setInviteCodeInput(e.target.value)} placeholder="https://www.pawscord.com/invite/..." style={{ flex: 1, padding: '10px', borderRadius: '4px', border: '1px solid #1e1f22', backgroundColor: '#313338', color: 'white', outline: 'none' }} />
                                     <button type="submit" style={{ backgroundColor: '#5865f2', color: 'white', border: 'none', borderRadius: '4px', padding: '0 20px', fontWeight: 'bold', cursor: 'pointer' }}>Katıl</button>
                                 </form>
                             </div>
@@ -2096,7 +2096,7 @@ const RoomList = ({
                                     {publicServers.map(srv => (
                                         <div key={srv.id} style={{ backgroundColor: '#2b2d31', padding: '10px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #1f2023' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                {srv.icon ? (<img src={`https://pawscord.com${srv.icon}`} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />) : (<div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: '#5865f2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'white' }}>{srv.name.substring(0, 2).toUpperCase()}</div>)}
+                                                {srv.icon ? (<img src={`https://www.pawscord.com${srv.icon}`} alt="" style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }} />) : (<div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: '#5865f2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'white' }}>{srv.name.substring(0, 2).toUpperCase()}</div>)}
                                                 <div style={{ textAlign: 'left' }}>
                                                     <div style={{ color: 'white', fontWeight: 'bold' }}>{srv.name}</div>
                                                     <div style={{ color: '#b9bbbe', fontSize: '0.8em' }}>{srv.member_count} Üye • Kurucu: {srv.owner}</div>
