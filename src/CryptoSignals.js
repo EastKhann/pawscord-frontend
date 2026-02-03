@@ -128,13 +128,15 @@ const CryptoSignals = () => {
 
         // Coin ismi (Binance Futures linki ile)
         if (key === 'coin') {
+            // Eğer coin zaten USDT ile bitiyorsa, tekrar ekleme
+            const symbol = value.endsWith('USDT') ? value : `${value}USDT`;
             return (
-                <a 
-                    href={`https://www.binance.com/en/futures/${value}USDT`}
+                <a
+                    href={`https://www.binance.com/en/futures/${symbol}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ 
-                        fontWeight: 'bold', 
+                    style={{
+                        fontWeight: 'bold',
                         color: '#f0b232',
                         textDecoration: 'none',
                         cursor: 'pointer'
