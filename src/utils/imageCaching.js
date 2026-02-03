@@ -370,8 +370,13 @@ export const prefetchUserAvatars = async (users) => {
           return;
         }
 
-        // Fetch
-        const response = await fetch(url);
+        // Fetch with cache-busting to avoid stale CORS errors
+        const cacheBuster = `?_=${Date.now()}`;
+        const fetchUrl = url.includes('?') ? `${url}&_=${Date.now()}` : `${url}${cacheBuster}`;
+        const response = await fetch(fetchUrl, {
+          mode: 'cors',
+          cache: 'no-cache'
+        });
         if (!response.ok) return;
 
         const blob = await response.blob();
