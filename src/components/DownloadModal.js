@@ -15,16 +15,16 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
 
     const handleDownload = (platform) => {
         if (platform === 'windows') {
-            // Windows EXE İndirme Linki
-            window.location.href = `${apiBaseUrl}/download/latest/`;
+            // Windows EXE - Direkt R2 CDN'den indir
+            window.location.href = 'https://media.pawscord.com/builds/Pawscord-Setup.exe';
         } else if (platform === 'android') {
-            // 🔥 NATIVE APK: Tarayıcıda aç (indirme otomatik başlar)
+            // Android APK - Direkt R2 CDN'den indir
             if (isNativeApp) {
                 // Capacitor Browser plugin ile harici tarayıcıda aç
-                window.open(`${apiBaseUrl}/download/android/`, '_system');
+                window.open('https://media.pawscord.com/builds/Pawscord-signed.apk', '_system');
             } else {
                 // Web'de normal indirme
-                window.location.href = `${apiBaseUrl}/download/android/`;
+                window.location.href = 'https://media.pawscord.com/builds/Pawscord-signed.apk';
             }
         }
     };
