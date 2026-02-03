@@ -216,7 +216,7 @@ const ChatUserList = ({
             </div>
 
             {/* HIZLI ERİŞİM BUTONLARI - Sadece whitelist kullanıcılar görebilir */}
-            {currentUser?.is_premium_whitelisted && (
+            {currentUser?.is_whitelisted && (
                 <div style={styles.quickAccessSection}>
                     <div style={styles.quickAccessHeader}>
                         HIZLI ERİŞİM
