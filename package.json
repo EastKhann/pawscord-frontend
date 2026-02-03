@@ -82,6 +82,7 @@
         "start": "vite",
         "dev": "vite",
         "build": "vite build",
+        "build:android": "vite build --config vite.config.android.js",
         "build:prod": "cross-env VITE_ENV=production vite build \u0026\u0026 node scripts/verify-build.js",
         "verify": "node scripts/verify-build.js",
         "preview": "vite preview",

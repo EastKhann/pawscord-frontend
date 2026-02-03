@@ -14,6 +14,12 @@ const config: CapacitorConfig = {
       'googleusercontent.com'
     ]
   },
+  // 🔥 Service Worker'ı devre dışı bırak - LazyLoad sorunu için
+  android: {
+    allowMixedContent: true,
+    captureInput: true,
+    webContentsDebuggingEnabled: true
+  },
   plugins: {
     GoogleAuth: {
       scopes: ['profile', 'email'],
