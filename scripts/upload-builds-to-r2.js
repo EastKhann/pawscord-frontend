@@ -76,8 +76,8 @@ async function main() {
             name: 'Windows Installer'
         },
         {
-            local: path.join(mediaBuildPath, 'Pawscord-signed.apk'),
-            r2Key: 'builds/Pawscord-signed.apk',
+            local: path.join(mediaBuildPath, 'Pawscord.apk'),
+            r2Key: 'builds/Pawscord.apk',
             name: 'Android APK'
         },
         {

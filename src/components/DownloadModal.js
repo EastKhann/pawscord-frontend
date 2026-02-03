@@ -21,10 +21,10 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
             // Android APK - Direkt R2 CDN'den indir
             if (isNativeApp) {
                 // Capacitor Browser plugin ile harici tarayıcıda aç
-                window.open('https://media.pawscord.com/builds/Pawscord-signed.apk', '_system');
+                window.open('https://media.pawscord.com/builds/Pawscord.apk', '_system');
             } else {
                 // Web'de normal indirme
-                window.location.href = 'https://media.pawscord.com/builds/Pawscord-signed.apk';
+                window.location.href = 'https://media.pawscord.com/builds/Pawscord.apk';
             }
         }
     };
