@@ -215,12 +215,15 @@ export default defineConfig({
               return 'ui-vendor';
             }
 
-            // Chart libraries - NO REACT imports allowed, must import from react-vendor
+            // Chart libraries - Recharts MUST go to react-core (SES/lockdown fix)
+            if (id.includes('recharts')) {
+              return 'react-core'; // 🔥 FIX: Recharts needs React globals from react-core
+            }
             if (id.includes('chart.js') && !id.includes('react-chartjs')) {
               return 'chart-vendor'; // Pure chart.js
             }
-            if (id.includes('react-chartjs-2') || id.includes('recharts')) {
-              return 'chart-vendor'; // React wrappers go to chart-vendor
+            if (id.includes('react-chartjs-2')) {
+              return 'chart-vendor'; // Chart.js React wrapper
             }
 
             // Media libraries

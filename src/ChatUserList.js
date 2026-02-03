@@ -1,5 +1,6 @@
 // frontend/src/ChatUserList.js
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaCircle, FaMoon, FaCrown } from 'react-icons/fa';
 
 // 🚫 Oyun olarak gösterilmeyecek uygulamalar (tools, utilities)
@@ -49,6 +50,7 @@ const ChatUserList = ({
     friendsList = [],
     onNavigate
 }) => {
+    const navigate = useNavigate();
     // 🔥 ROOM/SERVER modunda: serverMembers göster
     // 🔥 DM modunda: friendsList göster
 
@@ -229,7 +231,7 @@ const ChatUserList = ({
 
                         {/* English Learn Butonu */}
                         <button
-                            onClick={() => window.location.hash = '#/eng-learn'}
+                            onClick={() => navigate('/eng-learn')}
                             style={styles.quickAccessButton}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-2px)';
@@ -246,7 +248,7 @@ const ChatUserList = ({
 
                         {/* Crypto Analysis Butonu */}
                         <button
-                            onClick={() => window.location.hash = '#/crypto-analysis'}
+                            onClick={() => navigate('/crypto-analysis')}
                             style={{
                                 ...styles.quickAccessButton,
                                 background: 'linear-gradient(135deg, #F39C12 0%, #E67E22 100%)',
