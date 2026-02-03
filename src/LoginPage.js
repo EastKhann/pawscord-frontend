@@ -274,8 +274,8 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 // WEB & ELECTRON: Redirect to Google
                 console.log('🌐 [Google] Web/Electron redirect flow');
                 const source = isElectron ? 'electron' : 'web';
-                // 🔥 FIX: Electron için HER ZAMAN pawscord.com kullan (localhost'ta backend yok)
-                const oauthBaseUrl = isElectron ? 'https://pawscord.com/api' : API_BASE_URL;
+                // 🔥 FIX: Electron için HER ZAMAN www.pawscord.com kullan (localhost'ta backend yok)
+                const oauthBaseUrl = isElectron ? 'https://www.pawscord.com/api' : API_BASE_URL;
                 const redirectUrl = `${oauthBaseUrl}/auth/google/start/?source=${source}`;
                 console.log('🔀 [Google] Redirecting to:', redirectUrl);
 
