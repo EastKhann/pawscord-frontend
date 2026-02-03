@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaSync, FaBitcoin, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const SIGNAL_JSON_URL = 'https://media.pawscord.com/crypto/signal_export.json';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8888'
+    : 'https://api.pawscord.com';
+
+const SIGNAL_JSON_URL = `${API_URL}/api/crypto/signals/`;
 
 const CryptoSignals = () => {
     const [signalData, setSignalData] = useState(null);
