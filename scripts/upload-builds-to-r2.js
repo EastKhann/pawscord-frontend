@@ -108,7 +108,7 @@ async function main() {
     console.log('');
     console.log('  📥 Download URLs:');
     console.log('     Windows: https://media.pawscord.com/builds/Pawscord-Setup.exe');
-    console.log('     Android: https://media.pawscord.com/builds/pawscord-signed.apk');
+    console.log('     Android: https://media.pawscord.com/builds/Pawscord.apk');
     console.log('     Version: https://media.pawscord.com/builds/version.json');
     console.log('═══════════════════════════════════════════════════════════');
     console.log('');
