@@ -227,7 +227,7 @@ const CryptoSignals = () => {
                         Otomatik Yenile
                     </label>
                     <button onClick={loadSignals} style={styles.refreshButton}>
-                        <FaSync className={loading ? 'spin' : ''} /> Yenile
+                        <FaSync /> Yenile
                     </button>
                 </div>
             </div>
