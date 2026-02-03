@@ -44,10 +44,10 @@ const CryptoSignals = () => {
     // Hücre içeriğini formatla
     const formatCell = (key, value) => {
         if (value === null || value === undefined) return '-';
-        
+
         // Ters sinyal sütununu gizle (zaten yon_uyumu'nda gösteriliyor)
         if (key === 'ters_sinyal') return null;
-        
+
         // Pozisyon yönü (LONG/SHORT)
         if (key === 'pozisyon_yonu') {
             return (
@@ -126,9 +126,25 @@ const CryptoSignals = () => {
             );
         }
 
-        // Coin ismi
+        // Coin ismi (Binance Futures linki ile)
         if (key === 'coin') {
-            return <span style={{ fontWeight: 'bold', color: '#f0b232' }}>{value}</span>;
+            return (
+                <a 
+                    href={`https://www.binance.com/en/futures/${value}USDT`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ 
+                        fontWeight: 'bold', 
+                        color: '#f0b232',
+                        textDecoration: 'none',
+                        cursor: 'pointer'
+                    }}
+                    onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                    onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+                >
+                    {value}
+                </a>
+            );
         }
 
         return String(value);
@@ -141,7 +157,7 @@ const CryptoSignals = () => {
             if (!signalData) {
                 setLoading(true);
             }
-            
+
             const response = await fetch(`${SIGNAL_JSON_URL}?t=${Date.now()}`);
             const data = await response.json();
             setSignalData(data);
