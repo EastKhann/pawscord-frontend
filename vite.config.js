@@ -22,8 +22,10 @@ export default defineConfig({
     : (process.env.VITE_CDN_URL || '/'),
 
   plugins: [
-    // ⚡ React with automatic JSX runtime
-    react(),
+    // ⚡ React with classic JSX runtime - SES/lockdown uyumluluğu için
+    react({
+      jsxRuntime: 'classic',
+    }),
 
     // 📊 Bundle analyzer - generate stats.html after build
     visualizer({
@@ -181,16 +183,21 @@ export default defineConfig({
 
           // Existing manual chunks - fixed circular dependencies
           if (id.includes('node_modules')) {
-            // React core - MUST be first and isolated - FIX: Match exact paths only
-            if (id.includes('/react/') || id.includes('\\react\\')) {
-              if (!id.includes('react-') && !id.includes('@') &&
-                (id.includes('/react/index') || id.includes('\\react\\index') ||
-                  id.includes('/react/jsx-') || id.includes('\\react\\jsx-'))) {
-                return 'react-vendor';
+            // 🔥 CRITICAL FIX: React core - React, ReactDOM, Scheduler AYNI CHUNK'TA OLMALI
+            // SES/lockdown (MetaMask vb.) ile uyumluluk için
+            if (
+              id.includes('/react/') || id.includes('\\react\\') ||
+              id.includes('/react-dom/') || id.includes('\\react-dom\\') ||
+              id.includes('/scheduler/') || id.includes('\\scheduler\\')
+            ) {
+              // react-router, react-icons gibi paketleri hariç tut
+              if (!id.includes('react-router') && !id.includes('react-icons') &&
+                !id.includes('react-toastify') && !id.includes('react-color') &&
+                !id.includes('react-chartjs') && !id.includes('react-player') &&
+                !id.includes('react-window') && !id.includes('react-virtualized') &&
+                !id.includes('react-syntax') && !id.includes('react-dnd')) {
+                return 'react-core'; // React + ReactDOM + Scheduler tek chunk'ta
               }
-            }
-            if (id.includes('/react-dom/') || id.includes('\\react-dom\\')) {
-              return 'react-vendor';
             }
 
             // React Router - separate to avoid circular deps with chart-vendor

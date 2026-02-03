@@ -1,23 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { visualizer } from 'rollup-plugin-visualizer'
 import path from 'path'
 
-// �🔥 ELECTRON CONFIG - PWA DISABLED
+// 🔥 ELECTRON CONFIG - PWA DISABLED - REACT IN SINGLE CHUNK
 export default defineConfig({
     base: './',
 
     plugins: [
-        // ⚡ React with automatic JSX runtime
-        react(),
-
-        // 📊 Bundle analyzer
-        visualizer({
-            filename: 'stats.html',
-            open: false,
-            gzipSize: true,
-            brotliSize: true,
-            template: 'treemap',
+        // ⚡ React with automatic JSX runtime - classic mode to avoid Fragment issues
+        react({
+            jsxRuntime: 'classic',
         }),
         // ⚠️ PWA DISABLED FOR ELECTRON
     ],
@@ -25,10 +17,6 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
-            'react': path.resolve(__dirname, './node_modules/react'),
-            'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
-            'react/jsx-runtime': path.resolve(__dirname, './node_modules/react/jsx-runtime'),
-            'react/jsx-dev-runtime': path.resolve(__dirname, './node_modules/react/jsx-dev-runtime'),
         },
     },
 
@@ -39,7 +27,7 @@ export default defineConfig({
     },
 
     optimizeDeps: {
-        include: ['react', 'react-dom'],
+        include: ['react', 'react-dom', 'react/jsx-runtime'],
         esbuildOptions: {
             loader: {
                 '.js': 'jsx',
@@ -50,67 +38,25 @@ export default defineConfig({
     build: {
         outDir: 'build',
         sourcemap: false,
-        chunkSizeWarningLimit: 1500,
+        chunkSizeWarningLimit: 10000,
 
         rollupOptions: {
             output: {
+                // 🚨 REACT TEK CHUNK'TA - Fragment hatası için
                 manualChunks: (id) => {
-                    if (id.includes('react-syntax-highlighter')) {
-                        return 'syntax-core';
+                    // React ve react-dom MUTLAKA aynı chunk'ta olmalı
+                    if (id.includes('node_modules/react') ||
+                        id.includes('node_modules/react-dom') ||
+                        id.includes('node_modules/scheduler')) {
+                        return 'react-core';
                     }
-
-                    if (id.includes('node_modules')) {
-                        if (id.includes('/react/') || id.includes('\\react\\')) {
-                            if (!id.includes('react-') && !id.includes('@') &&
-                                (id.includes('/react/index') || id.includes('\\react\\index') ||
-                                    id.includes('/react/jsx-') || id.includes('\\react\\jsx-'))) {
-                                return 'react-vendor';
-                            }
-                        }
-                        if (id.includes('/react-dom/') || id.includes('\\react-dom\\')) {
-                            return 'react-vendor';
-                        }
-
-                        if (id.includes('react-router')) {
-                            return 'router-vendor';
-                        }
-
-                        if (id.includes('react-icons') || id.includes('lucide-react')) {
-                            return 'icons-vendor';
-                        }
-
-                        if (id.includes('chart.js') || id.includes('recharts')) {
-                            return 'chart-vendor';
-                        }
-
-                        if (id.includes('@tiptap') || id.includes('prosemirror') || id.includes('y-prosemirror') || id.includes('y-protocols')) {
-                            return 'editor-vendor';
-                        }
-
-                        if (id.includes('simple-peer') || id.includes('socket.io-client') || id.includes('mediasoup-client')) {
-                            return 'media-vendor';
-                        }
-
-                        if (id.includes('crypto-js') || id.includes('ethereum') || id.includes('ethers')) {
-                            return 'crypto-vendor';
-                        }
-
-                        if (id.includes('@radix-ui') || id.includes('framer-motion') || id.includes('react-spring')) {
-                            return 'ui-vendor';
-                        }
-
-                        if (id.includes('zustand') || id.includes('immer') || id.includes('react-query')) {
-                            return 'state-vendor';
-                        }
-
-                        if (id.includes('performance-now') || id.includes('raf')) {
-                            return 'perf-vendor';
-                        }
-
-                        return 'vendor';
-                    }
+                    // Büyük kütüphaneler ayrı
+                    if (id.includes('node_modules/recharts')) return 'recharts';
+                    if (id.includes('node_modules/hls.js')) return 'hls';
+                    if (id.includes('node_modules/dashjs')) return 'dashjs';
+                    if (id.includes('node_modules/@tiptap')) return 'tiptap';
+                    // Geri kalanlar vendor - circular dependency önlemek için tek chunk
                 },
-
                 assetFileNames: (assetInfo) => {
                     const info = assetInfo.name.split('.');
                     let extType = info[info.length - 1];
