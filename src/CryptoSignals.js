@@ -12,7 +12,6 @@ const SIGNAL_JSON_URL = `${API_URL}/api/crypto/signals/`;
 const CryptoSignals = () => {
     const [signalData, setSignalData] = useState(null);
     const [activeTab, setActiveTab] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [lastUpdate, setLastUpdate] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(true);
 
@@ -155,11 +154,6 @@ const CryptoSignals = () => {
     // JSON'u yükle
     const loadSignals = async () => {
         try {
-            // İlk yüklemede loading göster, sonrakilerde gösterme
-            if (!signalData) {
-                setLoading(true);
-            }
-
             const response = await fetch(`${SIGNAL_JSON_URL}?t=${Date.now()}`);
             const data = await response.json();
             setSignalData(data);
@@ -172,8 +166,6 @@ const CryptoSignals = () => {
             }
         } catch (error) {
             console.error('Signal yükleme hatası:', error);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -193,7 +185,7 @@ const CryptoSignals = () => {
         return () => clearInterval(interval);
     }, [autoRefresh]);
 
-    if (loading && !signalData) {
+    if (!signalData) {
         return (
             <div style={styles.container}>
                 <div style={styles.loadingContainer}>
