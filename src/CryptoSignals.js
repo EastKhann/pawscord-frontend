@@ -1,5 +1,5 @@
 // frontend/src/CryptoSignals.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FaArrowLeft, FaSync, FaBitcoin, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +14,8 @@ const CryptoSignals = () => {
     const [activeTab, setActiveTab] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(true);
+    const tableContainerRef = useRef(null);
+    const scrollPositionRef = useRef(0);
 
     // Sütun başlıklarını Türkçeleştir
     const translateColumn = (col) => {
@@ -78,36 +80,63 @@ const CryptoSignals = () => {
         }
 
         // Yön uyumu (AÇIK POZİSYONLAR sekmesinde önemli!)
+        // YÖN UYUYOR = Yeşil ✅, TERS SİNYAL = Kırmızı 🔴
         if (key === 'yon_uyumu') {
-            const isSame = value.includes('AYNI');
+            const isMatching = value.includes('UYUYOR') || value.includes('AYNI');
             return (
                 <span style={{
                     padding: '6px 12px',
                     borderRadius: '6px',
                     fontWeight: 'bold',
                     fontSize: '0.95em',
-                    backgroundColor: isSame ? '#23a55933' : '#ed424233',
-                    color: isSame ? '#23a559' : '#ed4245',
-                    border: `2px solid ${isSame ? '#23a559' : '#ed4245'}`
+                    backgroundColor: isMatching ? '#23a55944' : '#ed424544',
+                    color: isMatching ? '#57F287' : '#ED4245',
+                    border: `2px solid ${isMatching ? '#57F287' : '#ED4245'}`,
+                    textShadow: isMatching ? '0 0 8px #57F287' : '0 0 8px #ED4245'
                 }}>
-                    {value}
+                    {isMatching ? '✅ YÖN UYUYOR' : '⚠️ TERS SİNYAL'}
                 </span>
             );
         }
 
         // Durum (KAR/ZARAR)
+        // YÖN UYUYOR = Yeşil, TERS SİNYAL = Kırmızı
         if (key === 'status') {
+            const isMatching = value.includes('UYUYOR') || value.includes('AYNI');
             const isProfit = value.includes('KAR');
-            const isWarning = value.includes('TERS');
+            const isTersSignal = value.includes('TERS');
+
+            let bgColor, textColor, displayText;
+
+            if (isMatching) {
+                bgColor = '#23a55944';
+                textColor = '#57F287';
+                displayText = '✅ YÖN UYUYOR';
+            } else if (isTersSignal) {
+                bgColor = '#ed424544';
+                textColor = '#ED4245';
+                displayText = '⚠️ TERS SİNYAL';
+            } else if (isProfit) {
+                bgColor = '#23a55933';
+                textColor = '#57F287';
+                displayText = value;
+            } else {
+                bgColor = '#ed424533';
+                textColor = '#ED4245';
+                displayText = value;
+            }
+
             return (
                 <span style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px',
+                    padding: '6px 12px',
+                    borderRadius: '6px',
                     fontWeight: 'bold',
-                    backgroundColor: isWarning ? '#faa61a22' : isProfit ? '#23a55922' : '#ed424222',
-                    color: isWarning ? '#faa61a' : isProfit ? '#23a559' : '#ed4245'
+                    backgroundColor: bgColor,
+                    color: textColor,
+                    border: `2px solid ${textColor}`,
+                    textShadow: `0 0 8px ${textColor}`
                 }}>
-                    {value}
+                    {displayText}
                 </span>
             );
         }
@@ -151,9 +180,14 @@ const CryptoSignals = () => {
         return String(value);
     };
 
-    // JSON'u yükle
-    const loadSignals = async () => {
+    // JSON'u yükle - scroll pozisyonunu koru
+    const loadSignals = useCallback(async () => {
         try {
+            // Mevcut scroll pozisyonunu kaydet
+            if (tableContainerRef.current) {
+                scrollPositionRef.current = tableContainerRef.current.scrollTop;
+            }
+
             const response = await fetch(`${SIGNAL_JSON_URL}?t=${Date.now()}`);
             const data = await response.json();
             setSignalData(data);
@@ -164,10 +198,17 @@ const CryptoSignals = () => {
                 const firstTab = Object.keys(data.tabs)[0];
                 setActiveTab(firstTab);
             }
+
+            // Scroll pozisyonunu geri yükle (kısa gecikme ile DOM güncellensin)
+            setTimeout(() => {
+                if (tableContainerRef.current && scrollPositionRef.current > 0) {
+                    tableContainerRef.current.scrollTop = scrollPositionRef.current;
+                }
+            }, 50);
         } catch (error) {
             console.error('Signal yükleme hatası:', error);
         }
-    };
+    }, [activeTab]);
 
     // İlk yükleme
     useEffect(() => {
@@ -280,7 +321,7 @@ const CryptoSignals = () => {
 
                     {/* Tablo */}
                     {currentTabData.data?.length > 0 && (
-                        <div style={styles.tableContainer}>
+                        <div ref={tableContainerRef} style={styles.tableContainer}>
                             <table style={styles.table}>
                                 <thead>
                                     <tr>

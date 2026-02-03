@@ -23,7 +23,7 @@ class CSRFTokenManager {
         // localStorage'a kaydet
         localStorage.setItem(this.tokenKey, this.token);
 
-        console.log('🔒 [CSRF] Token oluşturuldu');
+        if (import.meta.env.DEV) console.log('🔒 [CSRF] Token oluşturuldu');
         return this.token;
     }
 
@@ -67,7 +67,7 @@ class CSRFTokenManager {
         this.token = null;
         localStorage.removeItem(this.tokenKey);
         this.generateToken();
-        console.log('🔄 [CSRF] Token yenilendi');
+        if (import.meta.env.DEV) console.log('🔄 [CSRF] Token yenilendi');
     }
 
     /**
@@ -93,7 +93,7 @@ class CSRFTokenManager {
     clearToken() {
         this.token = null;
         localStorage.removeItem(this.tokenKey);
-        console.log('🗑️ [CSRF] Token temizlendi');
+        if (import.meta.env.DEV) console.log('🗑️ [CSRF] Token temizlendi');
     }
 }
 

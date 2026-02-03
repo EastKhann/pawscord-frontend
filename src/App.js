@@ -1670,12 +1670,6 @@ const AppContent = () => {
                 if (res.ok) {
                     const data = await res.json();
                     setServerOrder(data.server_order || []);
-
-                    if (!wsUrl) {
-                        console.log(' [WebSocket] Skipping - activeChat.type is not room/dm:', activeChat.type);
-                        return;
-                    }
-
                     console.log('🎯 Server order loaded:', data.server_order);
                 }
             } catch (error) {

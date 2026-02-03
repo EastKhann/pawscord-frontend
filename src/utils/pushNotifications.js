@@ -48,7 +48,7 @@ class PushNotificationManager {
 
                 // Listen for registration
                 await PushNotifications.addListener('registration', async (token) => {
-                    console.log('🔔 [Push] Token:', token.value);
+                    if (import.meta.env.DEV) console.log('🔔 [Push] Token obtained (hidden for security)');
                     this.deviceToken = token.value;
                     await this.registerDevice(token.value);
                 });
