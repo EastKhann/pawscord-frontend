@@ -854,10 +854,13 @@ const AdminPanelModal = ({
                     <thead>
                         <tr>
                             <th style={styles.th}>Kullanıcı</th>
-                            <th style={styles.th}>Durum</th>
-                            <th style={styles.th}>Kayıt</th>
+                            <th style={styles.th}>Arkadaşlık Kodu</th>
+                            <th style={styles.th}>Seviye / XP</th>
+                            <th style={styles.th}>Coin</th>
                             <th style={styles.th}>Mesaj</th>
-                            <th style={styles.th}>Ses (dk)</th>
+                            <th style={styles.th}>Sunucu</th>
+                            <th style={styles.th}>Arkadaş</th>
+                            <th style={styles.th}>Durum</th>
                             <th style={styles.th}>Tip</th>
                             <th style={styles.th}>İşlemler</th>
                         </tr>
@@ -881,22 +884,44 @@ const AdminPanelModal = ({
                                         </div>
                                     </div>
                                 </td>
+                                <td style={{ ...styles.td, fontFamily: 'monospace', fontWeight: '600', color: '#5865f2' }}>
+                                    #{user.friend_code || 'N/A'}
+                                </td>
+                                <td style={styles.td}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span style={{ ...styles.badge('#23a559'), minWidth: '45px' }}>Lv.{user.level || 1}</span>
+                                        <span style={{ fontSize: '11px', color: '#a3a3a3' }}>{(user.xp || 0).toLocaleString()} XP</span>
+                                    </div>
+                                </td>
+                                <td style={{ ...styles.td, color: '#ffd700', fontWeight: '600' }}>
+                                    🪙 {(user.coins || 0).toLocaleString()}
+                                </td>
+                                <td style={styles.td}>
+                                    💬 {(user.total_messages || 0).toLocaleString()}
+                                </td>
+                                <td style={styles.td}>
+                                    🏠 {user.servers_joined || 0}
+                                </td>
+                                <td style={styles.td}>
+                                    👥 {user.friends_count || 0}
+                                </td>
                                 <td style={styles.td}>
                                     <span style={styles.badge(
                                         user.status === 'online' ? '#23a559' :
                                             user.status === 'idle' ? '#f0b132' :
                                                 user.status === 'dnd' ? '#e74c3c' : '#6b7280'
                                     )}>
-                                        {user.status === 'online' ? '🟢' : user.status === 'idle' ? '🌙' : user.status === 'dnd' ? '⛔' : '⚫'} {user.status}
+                                        {user.status === 'online' ? '🟢' : user.status === 'idle' ? '🌙' : user.status === 'dnd' ? '⛔' : '⚫'}
                                     </span>
                                 </td>
-                                <td style={styles.td}>{user.created}</td>
-                                <td style={styles.td}>{user.message_count?.toLocaleString()}</td>
-                                <td style={styles.td}>{user.voice_minutes?.toLocaleString()}</td>
                                 <td style={styles.td}>
-                                    {user.is_admin && <span style={styles.badge('#e74c3c')}>👑 Admin</span>}
-                                    {user.is_premium && <span style={styles.badge('#ffd700')}>⭐ Premium</span>}
-                                    {!user.is_admin && !user.is_premium && <span style={styles.badge('#6b7280')}>Free</span>}
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                        {user.is_staff && <span style={styles.badge('#e74c3c')}>👑</span>}
+                                        {user.is_premium && <span style={styles.badge('#ffd700')}>⭐</span>}
+                                        {user.is_whitelisted && <span style={styles.badge('#9b59b6')}>💎</span>}
+                                        {user.has_spotify && <span style={styles.badge('#1db954')}>🎵</span>}
+                                        {!user.is_staff && !user.is_premium && !user.is_whitelisted && <span style={styles.badge('#6b7280')}>Free</span>}
+                                    </div>
                                 </td>
                                 <td style={styles.td}>
                                     <button style={styles.actionBtn('#5865f2')} onClick={() => setSelectedUser(user)} title="Görüntüle">
@@ -1414,29 +1439,112 @@ const AdminPanelModal = ({
                     }} onClick={() => setSelectedUser(null)}>
                         <div style={{
                             backgroundColor: '#1a1a1e', borderRadius: '12px',
-                            padding: '24px', width: '450px', border: '1px solid #2a2a2e'
+                            padding: '24px', width: '550px', maxHeight: '80vh', overflowY: 'auto',
+                            border: '1px solid #2a2a2e'
                         }} onClick={e => e.stopPropagation()}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+                            {/* Header */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
                                 <div style={{
-                                    width: '56px', height: '56px', borderRadius: '50%',
+                                    width: '64px', height: '64px', borderRadius: '50%',
                                     background: 'linear-gradient(135deg, #5865f2, #7c3aed)',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    color: '#fff', fontWeight: '700', fontSize: '20px'
+                                    color: '#fff', fontWeight: '700', fontSize: '24px'
                                 }}>
                                     {selectedUser.username?.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
-                                    <h3 style={{ color: '#fff', margin: 0 }}>{selectedUser.username}</h3>
-                                    <div style={{ color: '#6b7280', fontSize: '12px' }}>{selectedUser.email}</div>
+                                    <h3 style={{ color: '#fff', margin: 0, fontSize: '20px' }}>{selectedUser.username}</h3>
+                                    <div style={{ color: '#6b7280', fontSize: '13px' }}>{selectedUser.email}</div>
+                                    <div style={{ color: '#5865f2', fontSize: '14px', fontFamily: 'monospace', marginTop: '4px' }}>
+                                        🎫 #{selectedUser.friend_code || 'N/A'}
+                                    </div>
+                                </div>
+                                <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                    {selectedUser.is_staff && <span style={styles.badge('#e74c3c')}>👑 Admin</span>}
+                                    {selectedUser.is_premium && <span style={styles.badge('#ffd700')}>⭐ Premium</span>}
+                                    {selectedUser.is_whitelisted && <span style={styles.badge('#9b59b6')}>💎 Whitelist</span>}
+                                    {selectedUser.has_spotify && <span style={styles.badge('#1db954')}>🎵 Spotify</span>}
                                 </div>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
-                                <div><span style={{ color: '#6b7280' }}>ID:</span> <span style={{ color: '#fff' }}>{selectedUser.id}</span></div>
-                                <div><span style={{ color: '#6b7280' }}>Kayıt:</span> <span style={{ color: '#fff' }}>{selectedUser.created}</span></div>
-                                <div><span style={{ color: '#6b7280' }}>Mesaj:</span> <span style={{ color: '#fff' }}>{selectedUser.message_count}</span></div>
-                                <div><span style={{ color: '#6b7280' }}>Ses:</span> <span style={{ color: '#fff' }}>{selectedUser.voice_minutes} dk</span></div>
+
+                            {/* Stats Grid */}
+                            <div style={{
+                                display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '20px',
+                                padding: '16px', backgroundColor: '#2a2a2e', borderRadius: '10px'
+                            }}>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '24px', fontWeight: '700', color: '#23a559' }}>{selectedUser.level || 1}</div>
+                                    <div style={{ fontSize: '11px', color: '#6b7280' }}>Seviye</div>
+                                </div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '24px', fontWeight: '700', color: '#5865f2' }}>{(selectedUser.xp || 0).toLocaleString()}</div>
+                                    <div style={{ fontSize: '11px', color: '#6b7280' }}>XP</div>
+                                </div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '24px', fontWeight: '700', color: '#ffd700' }}>{(selectedUser.coins || 0).toLocaleString()}</div>
+                                    <div style={{ fontSize: '11px', color: '#6b7280' }}>Coin</div>
+                                </div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '24px', fontWeight: '700', color: '#f0b132' }}>{(selectedUser.total_messages || 0).toLocaleString()}</div>
+                                    <div style={{ fontSize: '11px', color: '#6b7280' }}>Mesaj</div>
+                                </div>
                             </div>
-                            <div style={{ display: 'flex', gap: '8px' }}>
+
+                            {/* Detail Grid */}
+                            <div style={{
+                                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px',
+                                fontSize: '13px'
+                            }}>
+                                <div style={{ padding: '10px', backgroundColor: '#2a2a2e', borderRadius: '8px' }}>
+                                    <span style={{ color: '#6b7280' }}>🆔 ID:</span>
+                                    <span style={{ color: '#fff', marginLeft: '8px' }}>{selectedUser.id}</span>
+                                </div>
+                                <div style={{ padding: '10px', backgroundColor: '#2a2a2e', borderRadius: '8px' }}>
+                                    <span style={{ color: '#6b7280' }}>📅 Kayıt:</span>
+                                    <span style={{ color: '#fff', marginLeft: '8px' }}>{selectedUser.created?.split('T')[0]}</span>
+                                </div>
+                                <div style={{ padding: '10px', backgroundColor: '#2a2a2e', borderRadius: '8px' }}>
+                                    <span style={{ color: '#6b7280' }}>🏠 Sunucu:</span>
+                                    <span style={{ color: '#fff', marginLeft: '8px' }}>{selectedUser.servers_joined || 0}</span>
+                                </div>
+                                <div style={{ padding: '10px', backgroundColor: '#2a2a2e', borderRadius: '8px' }}>
+                                    <span style={{ color: '#6b7280' }}>👥 Arkadaş:</span>
+                                    <span style={{ color: '#fff', marginLeft: '8px' }}>{selectedUser.friends_count || 0}</span>
+                                </div>
+                                <div style={{ padding: '10px', backgroundColor: '#2a2a2e', borderRadius: '8px' }}>
+                                    <span style={{ color: '#6b7280' }}>🕐 Son Giriş:</span>
+                                    <span style={{ color: '#fff', marginLeft: '8px' }}>{selectedUser.last_login?.split('T')[0] || 'N/A'}</span>
+                                </div>
+                                <div style={{ padding: '10px', backgroundColor: '#2a2a2e', borderRadius: '8px' }}>
+                                    <span style={{ color: '#6b7280' }}>👁️ Son Görülme:</span>
+                                    <span style={{ color: '#fff', marginLeft: '8px' }}>{selectedUser.last_seen?.split('T')[0] || 'N/A'}</span>
+                                </div>
+                            </div>
+
+                            {/* Status Message */}
+                            {selectedUser.status_message && (
+                                <div style={{ padding: '12px', backgroundColor: '#2a2a2e', borderRadius: '8px', marginBottom: '20px' }}>
+                                    <div style={{ color: '#6b7280', fontSize: '11px', marginBottom: '4px' }}>📝 Durum Mesajı</div>
+                                    <div style={{ color: '#fff', fontSize: '14px' }}>"{selectedUser.status_message}"</div>
+                                </div>
+                            )}
+
+                            {/* Social Links */}
+                            {selectedUser.social_links && Object.keys(selectedUser.social_links).length > 0 && (
+                                <div style={{ padding: '12px', backgroundColor: '#2a2a2e', borderRadius: '8px', marginBottom: '20px' }}>
+                                    <div style={{ color: '#6b7280', fontSize: '11px', marginBottom: '8px' }}>🔗 Sosyal Bağlantılar</div>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        {Object.entries(selectedUser.social_links).map(([key, value]) => (
+                                            value && <span key={key} style={{ ...styles.badge('#5865f2'), fontSize: '12px' }}>
+                                                {key}: {value}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Actions */}
+                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                 <button style={styles.actionBtn('#5865f2')} onClick={() => { setEditUserModal(selectedUser); setSelectedUser(null); }}>
                                     <FaEdit /> Düzenle
                                 </button>
@@ -1446,7 +1554,7 @@ const AdminPanelModal = ({
                                 <button style={styles.actionBtn('#e74c3c')} onClick={() => handleUserAction('ban', selectedUser.id)}>
                                     <FaBan /> Yasakla
                                 </button>
-                                <button style={styles.actionBtn('#6b7280')} onClick={() => setSelectedUser(null)}>
+                                <button style={{ ...styles.actionBtn('#6b7280'), marginLeft: 'auto' }} onClick={() => setSelectedUser(null)}>
                                     Kapat
                                 </button>
                             </div>

@@ -1615,10 +1615,14 @@ const AppContent = () => {
                     friend_code: currentUserData?.friend_code || '0000',
                     social_links: currentUserData?.social_links || {},
                     coins: currentUserData?.coins || 0,
+                    xp: currentUserData?.xp || 0,
+                    level: currentUserData?.level || 1,
                     status: 'online',
-                    role: currentUserData?.role || 'member'
+                    role: currentUserData?.role || 'member',
+                    is_whitelisted: currentUserData?.is_whitelisted || false  // 🔥 Premium whitelist
                 };
                 setCurrentUserProfile(currentUser);
+                console.log('🔥 [DEBUG] currentUserProfile with is_whitelisted:', currentUser);
 
                 const friendProfiles = (friendsData.friends || []).map(f => {
                     const isSender = f.sender_username === username;
