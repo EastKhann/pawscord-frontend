@@ -16,16 +16,138 @@ const CryptoSignals = () => {
     const [lastUpdate, setLastUpdate] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(true);
 
+    // Sütun başlıklarını Türkçeleştir
+    const translateColumn = (col) => {
+        const translations = {
+            'rank': 'Sıra',
+            'coin': 'Coin',
+            'timeframe': 'Zaman',
+            'signal': 'Sinyal',
+            'pozisyon_yonu': 'Pozisyon',
+            'sinyal_yonu': 'Yeni Sinyal',
+            'yon_uyumu': 'Durum',
+            'ters_sinyal': 'Ters?',
+            'entry_price': 'Giriş',
+            'current_price': 'Şu An',
+            'pnl_percent': 'Kar/Zarar %',
+            'bars_ago': 'Bar',
+            'days_ago': 'Gün',
+            'trades': 'İşlem',
+            'win_rate': 'Başarı %',
+            'x_kat': 'X Kat',
+            'hedef_roe': 'Hedef ROE',
+            'status': 'Durum'
+        };
+        return translations[col] || col;
+    };
+
+    // Hücre içeriğini formatla
+    const formatCell = (key, value) => {
+        if (value === null || value === undefined) return '-';
+        
+        // Ters sinyal sütununu gizle (zaten yon_uyumu'nda gösteriliyor)
+        if (key === 'ters_sinyal') return null;
+        
+        // Pozisyon yönü (LONG/SHORT)
+        if (key === 'pozisyon_yonu') {
+            return (
+                <span style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    backgroundColor: value === 'LONG' ? '#23a55922' : '#ed424222',
+                    color: value === 'LONG' ? '#23a559' : '#ed4245'
+                }}>
+                    {value === 'LONG' ? '📈 LONG' : '📉 SHORT'}
+                </span>
+            );
+        }
+
+        // Yeni sinyal yönü
+        if (key === 'sinyal_yonu' || key === 'signal') {
+            return (
+                <span style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    backgroundColor: value === 'LONG' ? '#5865f222' : '#faa61a22',
+                    color: value === 'LONG' ? '#5865f2' : '#faa61a'
+                }}>
+                    {value === 'LONG' ? '⬆️ LONG' : '⬇️ SHORT'}
+                </span>
+            );
+        }
+
+        // Yön uyumu (AÇIK POZİSYONLAR sekmesinde önemli!)
+        if (key === 'yon_uyumu') {
+            const isSame = value.includes('AYNI');
+            return (
+                <span style={{
+                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    fontWeight: 'bold',
+                    fontSize: '0.95em',
+                    backgroundColor: isSame ? '#23a55933' : '#ed424233',
+                    color: isSame ? '#23a559' : '#ed4245',
+                    border: `2px solid ${isSame ? '#23a559' : '#ed4245'}`
+                }}>
+                    {value}
+                </span>
+            );
+        }
+
+        // Durum (KAR/ZARAR)
+        if (key === 'status') {
+            const isProfit = value.includes('KAR');
+            const isWarning = value.includes('TERS');
+            return (
+                <span style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontWeight: 'bold',
+                    backgroundColor: isWarning ? '#faa61a22' : isProfit ? '#23a55922' : '#ed424222',
+                    color: isWarning ? '#faa61a' : isProfit ? '#23a559' : '#ed4245'
+                }}>
+                    {value}
+                </span>
+            );
+        }
+
+        // Kar/Zarar yüzdesi
+        if (key === 'pnl_percent') {
+            const isPositive = String(value).includes('+');
+            return (
+                <span style={{
+                    fontWeight: 'bold',
+                    color: isPositive ? '#23a559' : '#ed4245'
+                }}>
+                    {value}
+                </span>
+            );
+        }
+
+        // Coin ismi
+        if (key === 'coin') {
+            return <span style={{ fontWeight: 'bold', color: '#f0b232' }}>{value}</span>;
+        }
+
+        return String(value);
+    };
+
     // JSON'u yükle
     const loadSignals = async () => {
         try {
-            setLoading(true);
+            // İlk yüklemede loading göster, sonrakilerde gösterme
+            if (!signalData) {
+                setLoading(true);
+            }
+            
             const response = await fetch(`${SIGNAL_JSON_URL}?t=${Date.now()}`);
             const data = await response.json();
             setSignalData(data);
             setLastUpdate(new Date(data.meta.export_time));
 
-            // İlk sekmeyiaktif yap
+            // İlk sekmeyi aktif yap
             if (!activeTab && data.tabs) {
                 const firstTab = Object.keys(data.tabs)[0];
                 setActiveTab(firstTab);
@@ -152,19 +274,25 @@ const CryptoSignals = () => {
                             <table style={styles.table}>
                                 <thead>
                                     <tr>
-                                        {Object.keys(currentTabData.data[0]).map((col) => (
-                                            <th key={col} style={styles.th}>{col}</th>
-                                        ))}
+                                        {Object.keys(currentTabData.data[0])
+                                            .filter(col => col !== 'ters_sinyal') // Ters sinyal sütununu gizle
+                                            .map((col) => (
+                                                <th key={col} style={styles.th}>
+                                                    {translateColumn(col)}
+                                                </th>
+                                            ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {currentTabData.data.map((row, idx) => (
                                         <tr key={idx} style={styles.tr}>
-                                            {Object.values(row).map((val, colIdx) => (
-                                                <td key={colIdx} style={styles.td}>
-                                                    {val !== null && val !== undefined ? String(val) : '-'}
-                                                </td>
-                                            ))}
+                                            {Object.entries(row)
+                                                .filter(([key]) => key !== 'ters_sinyal')
+                                                .map(([key, val], colIdx) => (
+                                                    <td key={colIdx} style={styles.td}>
+                                                        {formatCell(key, val)}
+                                                    </td>
+                                                ))}
                                         </tr>
                                     ))}
                                 </tbody>
