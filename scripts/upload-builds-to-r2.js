@@ -66,21 +66,22 @@ async function main() {
 
     const projectRoot = path.resolve(__dirname, '..', '..');
     const frontendRoot = path.resolve(__dirname, '..');
+    const mediaBuildPath = path.join(projectRoot, 'media', 'build');
 
-    // Dosya yolları
+    // Dosya yolları (hepsi media\build klasöründe)
     const files = [
         {
-            local: path.join(frontendRoot, 'dist', 'Pawscord-Setup.exe'),
+            local: path.join(mediaBuildPath, 'Pawscord-Setup.exe'),
             r2Key: 'builds/Pawscord-Setup.exe',
             name: 'Windows Installer'
         },
         {
-            local: path.join(projectRoot, 'media', 'build', 'pawscord-signed.apk'),
-            r2Key: 'builds/pawscord-signed.apk',
+            local: path.join(mediaBuildPath, 'Pawscord-signed.apk'),
+            r2Key: 'builds/Pawscord-signed.apk',
             name: 'Android APK'
         },
         {
-            local: path.join(frontendRoot, 'public', 'version.json'),
+            local: path.join(mediaBuildPath, 'version.json'),
             r2Key: 'builds/version.json',
             name: 'Version Info'
         }
