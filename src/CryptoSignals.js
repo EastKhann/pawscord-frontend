@@ -3,9 +3,16 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { FaArrowLeft, FaSync, FaBitcoin, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://127.0.0.1:8888'
-    : 'https://api.pawscord.com';
+// Capacitor (mobil) kontrolü
+const isCapacitor = window.Capacitor?.isNativePlatform?.() ||
+    window.location.protocol === 'capacitor:' ||
+    window.location.protocol === 'ionic:';
+
+const API_URL = isCapacitor
+    ? 'https://api.pawscord.com'  // Mobilde her zaman production API
+    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://127.0.0.1:8888'
+        : 'https://api.pawscord.com';
 
 const SIGNAL_JSON_URL = `${API_URL}/api/crypto/signals/`;
 

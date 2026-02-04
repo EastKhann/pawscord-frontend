@@ -12,7 +12,17 @@ const getApiBaseUrl = () => {
         return import.meta.env.VITE_API_URL;
     }
 
-    // 2. Production detection (Electron or pawscord.com)
+    // 2. Capacitor (mobil) detection
+    const isCapacitor = window.Capacitor?.isNativePlatform?.() ||
+        window.location.protocol === 'capacitor:' ||
+        window.location.protocol === 'ionic:';
+
+    if (isCapacitor) {
+        console.log('📱 Capacitor detected - using production API');
+        return 'https://api.pawscord.com';
+    }
+
+    // 3. Production detection (Electron or pawscord.com)
     const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -21,16 +31,16 @@ const getApiBaseUrl = () => {
         return 'https://api.pawscord.com';
     }
 
-    // 3. Environment variable override
+    // 4. Environment variable override
     const envApiUrl = import.meta.env.VITE_API_BASE_URL;
     if (envApiUrl) return envApiUrl.replace(/\/api\/?$/, '');
 
-    // 4. Development fallback
+    // 5. Development fallback
     if (isLocalhost) {
         return 'http://localhost:8888';
     }
 
-    // 5. Default to production
+    // 6. Default to production
     return 'https://api.pawscord.com';
 };
 
