@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import api from './api';
@@ -15,9 +15,17 @@ const AuthCallback = ({ apiBaseUrl }) => {
     const { login } = useAuth();
     const [status, setStatus] = useState('processing');
     const [error, setError] = useState(null);
+    const exchangeAttempted = useRef(false);  // Prevent double exchange
 
     useEffect(() => {
         const handleCallback = async () => {
+            // Prevent double execution (React StrictMode / re-renders)
+            if (exchangeAttempted.current) {
+                console.log('🔐 [AuthCallback] Exchange already attempted, skipping...');
+                return;
+            }
+            exchangeAttempted.current = true;
+
             const code = searchParams.get('code');
             const errorParam = searchParams.get('error');
             const needsPassword = searchParams.get('needs_password') === 'true';

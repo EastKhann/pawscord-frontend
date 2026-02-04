@@ -14,6 +14,7 @@ const CryptoSignals = () => {
     const [activeTab, setActiveTab] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(true);
+    const [compactMode, setCompactMode] = useState(false);  // 🔥 Özet mod
     const tableContainerRef = useRef(null);
     const scrollPositionRef = useRef(0);
 
@@ -267,6 +268,15 @@ const CryptoSignals = () => {
                         />
                         Otomatik Yenile
                     </label>
+                    <button
+                        onClick={() => setCompactMode(!compactMode)}
+                        style={{
+                            ...styles.refreshButton,
+                            backgroundColor: compactMode ? '#23a559' : '#5865f2'
+                        }}
+                    >
+                        {compactMode ? '📊 Detay' : '⚡ Özet'}
+                    </button>
                     <button onClick={loadSignals} style={styles.refreshButton}>
                         <FaSync /> Yenile
                     </button>
@@ -319,8 +329,66 @@ const CryptoSignals = () => {
                     <h2 style={styles.contentTitle}>{currentTabData.title}</h2>
                     <p style={styles.contentDesc}>{currentTabData.description}</p>
 
-                    {/* Tablo */}
-                    {currentTabData.data?.length > 0 && (
+                    {/* 🔥 ÖZET MOD - Coin bazında kartlar */}
+                    {compactMode && currentTabData.data?.length > 0 && (
+                        <div style={styles.compactGrid}>
+                            {(() => {
+                                // Coin bazında grupla
+                                const coinGroups = {};
+                                currentTabData.data.forEach(row => {
+                                    const coin = row.coin || 'UNKNOWN';
+                                    if (!coinGroups[coin]) coinGroups[coin] = [];
+                                    coinGroups[coin].push(row);
+                                });
+
+                                return Object.entries(coinGroups).map(([coin, rows]) => {
+                                    // Her coin için 10 nokta hesapla
+                                    const maxDots = 10;
+                                    const dotsData = rows.slice(0, maxDots).map(r => {
+                                        // YÖN UYUYOR = yeşil, TERS SİNYAL = kırmızı
+                                        const uyum = r.yon_uyumu || r.status || '';
+                                        return uyum.includes('UYUYOR') || uyum.includes('AYNI');
+                                    });
+                                    while (dotsData.length < maxDots) dotsData.push(null);
+
+                                    const greenCount = dotsData.filter(d => d === true).length;
+                                    const redCount = dotsData.filter(d => d === false).length;
+                                    const firstRow = rows[0] || {};
+
+                                    return (
+                                        <div key={coin} style={styles.compactCard}>
+                                            <div style={styles.compactHeader}>
+                                                <span style={styles.compactCoinName}>{coin}</span>
+                                                <span style={{ color: '#949ba4', fontSize: '0.8em' }}>{rows.length} pozisyon</span>
+                                            </div>
+                                            <div style={styles.dotsContainer}>
+                                                {dotsData.map((isGreen, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        style={{
+                                                            width: '14px',
+                                                            height: '14px',
+                                                            borderRadius: '50%',
+                                                            backgroundColor: isGreen === null ? '#40444b' : (isGreen ? '#23a559' : '#da373c'),
+                                                            boxShadow: isGreen === null ? 'none' : (isGreen ? '0 0 6px #23a559' : '0 0 6px #da373c')
+                                                        }}
+                                                        title={isGreen === null ? 'Veri yok' : (isGreen ? 'Yön Uyuyor' : 'Ters Sinyal')}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <div style={styles.compactStats}>
+                                                <span style={{ color: '#23a559', fontWeight: 'bold' }}>✓ {greenCount}</span>
+                                                <span style={{ color: '#da373c', fontWeight: 'bold' }}>✗ {redCount}</span>
+                                            </div>
+                                        </div>
+                                    );
+                                });
+                            })()}
+                        </div>
+                    )}
+
+                    {/* Normal Tablo Modu */}
+                    {!compactMode && currentTabData.data?.length > 0 && (
                         <div ref={tableContainerRef} style={styles.tableContainer}>
                             <table style={styles.table}>
                                 <thead>
@@ -494,6 +562,45 @@ const styles = {
     contentDesc: {
         margin: '0 0 20px 0',
         color: '#b9bbbe',
+    },
+    // 🔥 Özet mod stilleri
+    compactGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        gap: '12px',
+        marginBottom: '20px',
+    },
+    compactCard: {
+        backgroundColor: '#202225',
+        borderRadius: '10px',
+        padding: '12px',
+        border: '1px solid #1f2023',
+        transition: 'transform 0.2s, box-shadow 0.2s',
+    },
+    compactHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '10px',
+    },
+    compactCoinName: {
+        color: '#f0b232',
+        fontWeight: 'bold',
+        fontSize: '1.1em',
+    },
+    dotsContainer: {
+        display: 'flex',
+        gap: '5px',
+        justifyContent: 'center',
+        marginBottom: '10px',
+        flexWrap: 'wrap',
+    },
+    compactStats: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        borderTop: '1px solid #40444b',
+        paddingTop: '8px',
+        fontSize: '0.9em',
     },
     tableContainer: {
         overflowX: 'auto',

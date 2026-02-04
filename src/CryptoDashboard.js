@@ -231,6 +231,7 @@ const CryptoDashboard = () => {
     const [activeTimeframe, setActiveTimeframe] = useState('');
     const [sortBy, setSortBy] = useState('balance');
     const [expandedCoins, setExpandedCoins] = useState({});
+    const [compactMode, setCompactMode] = useState(false);  // 🔥 Özet mod
     const [showPortfolio, setShowPortfolio] = useState(false);
     const [tradeData, setTradeData] = useState(null);
     const [portfolio, setPortfolio] = useState(null);
@@ -241,7 +242,15 @@ const CryptoDashboard = () => {
     const { token } = useAuth();
     const isMobile = useWindowWidth();
 
-    // 1. Verileri Çek
+    // 🔥 FIX: Ref'leri state değiştiğinde güncelle
+    useEffect(() => {
+        activeTimeframeRef.current = activeTimeframe;
+    }, [activeTimeframe]);
+
+    useEffect(() => {
+        dataRef.current = data;
+    }, [data]);
+
     // 1. Verileri Çek
     const fetchData = async () => {
         // 🔥 DÜZELTME: Doğrudan state yerine Ref kontrol ediyoruz
@@ -432,18 +441,61 @@ const CryptoDashboard = () => {
                             ))}
                         </div>
                         <div style={styles.sortContainer}>
+                            <button onClick={() => setCompactMode(!compactMode)} style={{ ...styles.sortButton, ...(compactMode ? styles.activeSort : {}), marginRight: 10 }}>
+                                {compactMode ? '📊 Detay' : '⚡ Özet'}
+                            </button>
                             <button onClick={() => setSortBy('balance')} style={{ ...styles.sortButton, ...(sortBy === 'balance' ? styles.activeSort : {}) }}>PNL</button>
                             <button onClick={() => setSortBy('win_rate')} style={{ ...styles.sortButton, ...(sortBy === 'win_rate' ? styles.activeSort : {}) }}>WR</button>
                         </div>
                     </div>
 
-                    <div style={styles.grid}>
+                    <div style={compactMode ? styles.compactGrid : styles.grid}>
                         {sortedCoins.map(([rawCoinName, trades]) => {
                             const isExpanded = !!expandedCoins[rawCoinName];
                             const visibleTrades = isExpanded ? trades : trades.slice(0, 5);
                             const bestTrade = trades[0] || {};
                             const livePrice = getLivePrice(rawCoinName);
                             const coinSymbol = extractCoinSymbol(rawCoinName)?.replace('USDT', '') || "UNK";
+
+                            // 🔥 Özet mod için 10 nokta hesapla
+                            const maxDots = 10;
+                            const dotsData = trades.slice(0, maxDots).map(t => {
+                                // Win rate %50+ = aynı yön (yeşil), %50- = ters yön (kırmızı)
+                                return parseFloat(t.win_rate || 0) >= 50;
+                            });
+                            // Eksik noktaları gri yap
+                            while (dotsData.length < maxDots) dotsData.push(null);
+
+                            // Özet mod kartı
+                            if (compactMode) {
+                                const greenCount = dotsData.filter(d => d === true).length;
+                                const redCount = dotsData.filter(d => d === false).length;
+                                return (
+                                    <div key={rawCoinName} style={styles.compactCard} onClick={() => setCompactMode(false)}>
+                                        <div style={styles.compactHeader}>
+                                            <span style={styles.compactCoinName}>{coinSymbol}</span>
+                                            <LivePrice price={livePrice || "..."} />
+                                        </div>
+                                        <div style={styles.dotsContainer}>
+                                            {dotsData.map((isGreen, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    style={{
+                                                        ...styles.dot,
+                                                        backgroundColor: isGreen === null ? '#40444b' : (isGreen ? '#23a559' : '#da373c')
+                                                    }}
+                                                    title={isGreen === null ? 'Veri yok' : (isGreen ? 'Aynı yön' : 'Ters yön')}
+                                                />
+                                            ))}
+                                        </div>
+                                        <div style={styles.compactStats}>
+                                            <span style={{ color: '#23a559', fontSize: '0.8em' }}>✓{greenCount}</span>
+                                            <span style={{ color: '#da373c', fontSize: '0.8em' }}>✗{redCount}</span>
+                                            <span style={{ color: '#f0b232', fontSize: '0.8em' }}>{safeRender(bestTrade.balance)}</span>
+                                        </div>
+                                    </div>
+                                );
+                            }
 
                             return (
                                 <div key={rawCoinName} style={styles.coinCard}>
@@ -531,6 +583,16 @@ const styles = {
     sortButton: { backgroundColor: 'transparent', border: '1px solid #40444b', color: '#dcddde', padding: '4px 10px', borderRadius: '15px', cursor: 'pointer', fontSize: '0.8em' },
     activeSort: { backgroundColor: '#5865f2', borderColor: '#5865f2', color: 'white' },
     grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '15px', paddingBottom: '50px' },
+
+    // 🔥 Özet mod stilleri
+    compactGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px', paddingBottom: '50px' },
+    compactCard: { backgroundColor: '#2b2d31', borderRadius: '8px', padding: '10px', border: '1px solid #1f2023', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' },
+    compactHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' },
+    compactCoinName: { color: '#fff', fontWeight: '700', fontSize: '0.95em' },
+    dotsContainer: { display: 'flex', gap: '4px', justifyContent: 'center', marginBottom: '8px', flexWrap: 'wrap' },
+    dot: { width: '12px', height: '12px', borderRadius: '50%', transition: 'transform 0.2s' },
+    compactStats: { display: 'flex', justifyContent: 'space-around', gap: '5px', borderTop: '1px solid #40444b', paddingTop: '6px' },
+
     coinCard: { backgroundColor: '#2b2d31', borderRadius: '10px', overflow: 'hidden', border: '1px solid #1f2023', boxShadow: '0 4px 6px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column' },
     cardHeader: { backgroundColor: '#202225', padding: '12px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #2f3136' },
     coinTitle: { margin: 0, color: '#fff', fontSize: '1em', fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' },
