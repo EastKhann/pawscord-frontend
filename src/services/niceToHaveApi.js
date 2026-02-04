@@ -1703,5 +1703,148 @@ export default {
     aiImage: aiImageApi,
     recommendation: recommendationApi,
     languageLearning: languageLearningApi,
-    miniGames: miniGamesApi
+    miniGames: miniGamesApi,
+    // 🛡️ Advanced Admin APIs
+    adminPanel: adminPanelApi
+};
+
+// ==========================================
+// 🛡️ ADVANCED ADMIN PANEL API
+// ==========================================
+
+const adminPanelApi = {
+    // System Logs - Tüm log tiplerini birleştirir
+    getSystemLogs: async (params = {}) => {
+        const queryParams = new URLSearchParams();
+        if (params.type) queryParams.append('type', params.type);
+        if (params.limit) queryParams.append('limit', params.limit);
+        if (params.offset) queryParams.append('offset', params.offset);
+        if (params.search) queryParams.append('search', params.search);
+        if (params.severity) queryParams.append('severity', params.severity);
+        if (params.date_from) queryParams.append('date_from', params.date_from);
+        if (params.date_to) queryParams.append('date_to', params.date_to);
+
+        const res = await fetch(`${BASE}/admin/system-logs/?${queryParams}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    // Realtime Metrics
+    getRealtimeMetrics: async () => {
+        const res = await fetch(`${BASE}/admin/realtime-metrics/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    // User Activity Timeline
+    getUserActivity: async (userId, limit = 50) => {
+        const res = await fetch(`${BASE}/admin/users/${userId}/activity/?limit=${limit}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    // Batch User Actions
+    batchUserAction: async (action, userIds, reason = '') => {
+        const res = await fetch(`${BASE}/admin/batch-action/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ action, user_ids: userIds, reason })
+        });
+        return res.json();
+    },
+
+    // IP Blacklist
+    getIPBlacklist: async (search = '', limit = 50) => {
+        const res = await fetch(`${BASE}/admin/ip-blacklist/?search=${search}&limit=${limit}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    addIPToBlacklist: async (ipAddress, reason = '', durationHours = null) => {
+        const res = await fetch(`${BASE}/admin/ip-blacklist/add/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ ip_address: ipAddress, reason, duration_hours: durationHours })
+        });
+        return res.json();
+    },
+
+    removeIPFromBlacklist: async (blacklistId) => {
+        const res = await fetch(`${BASE}/admin/ip-blacklist/${blacklistId}/remove/`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    // Appeals
+    getAppeals: async (status = 'pending', limit = 50) => {
+        const res = await fetch(`${BASE}/admin/appeals/?status=${status}&limit=${limit}`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    reviewAppeal: async (appealId, decision, response = '') => {
+        const res = await fetch(`${BASE}/admin/appeals/${appealId}/review/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ decision, response })
+        });
+        return res.json();
+    },
+
+    // Feature Flags
+    getFeatureFlags: async () => {
+        const res = await fetch(`${BASE}/admin/feature-flags/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    // Log Export
+    exportLogs: async (type = 'audit', format = 'json', dateFrom = null, dateTo = null, limit = 1000) => {
+        const res = await fetch(`${BASE}/admin/logs/export/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ type, format, date_from: dateFrom, date_to: dateTo, limit })
+        });
+
+        if (format === 'csv') {
+            return res.blob();
+        }
+        return res.json();
+    },
+
+    // Rate Limits
+    getRateLimitDashboard: async () => {
+        const res = await fetch(`${BASE}/admin/rate-limits/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    },
+
+    // Scheduled Tasks
+    getScheduledTasks: async () => {
+        const res = await fetch(`${BASE}/admin/scheduled-tasks/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        return res.json();
+    }
 };

@@ -30,8 +30,7 @@ import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting
 const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
-const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage'));
-
+const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage')); const AuthCallback = React.lazy(() => import('./AuthCallback'));  // 🔐 Secure OAuth callback
 // ðŸ“ˆ GROWTH: Landing Page & Growth Components (Lazy Load)
 const LandingPage = React.lazy(() => import('./components/LandingPage'));
 const ReferralProgram = React.lazy(() => import('./components/ReferralProgram'));
@@ -119,7 +118,14 @@ const RootApp = () => {
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
-
+                                {/* 🔐 OAuth Secure Callback */}
+                                <Route path="/auth/callback" element={
+                                    <PageWrapper>
+                                        <React.Suspense fallback={<div>Giriş yapılıyor...</div>}>
+                                            <AuthCallback apiBaseUrl={API_URL_BASE_STRING} />
+                                        </React.Suspense>
+                                    </PageWrapper>
+                                } />
                                 {/* ðŸ“ˆ GROWTH: Landing Page & Growth System */}
                                 <Route path="/launch" element={
                                     <PageWrapper>
