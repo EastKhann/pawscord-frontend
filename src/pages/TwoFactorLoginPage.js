@@ -1,23 +1,29 @@
 // frontend/src/pages/TwoFactorLoginPage.js
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FaShieldAlt, FaArrowLeft, FaKey } from 'react-icons/fa';
 
 const TwoFactorLoginPage = ({ apiBaseUrl, onLogin }) => {
     const navigate = useNavigate();
-    const location = useLocation();
+    const [searchParams] = useSearchParams();
     const [code, setCode] = useState('');
     const [useBackupCode, setUseBackupCode] = useState(false);
     const [backupCode, setBackupCode] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Get username/password from navigation state
-    const { username, password, tempToken } = location.state || {};
+    // Get temp_token from URL query params
+    const tempToken = searchParams.get('temp_token');
 
-    if (!username || !password) {
-        // Redirect to login if no credentials
-        navigate('/login');
+    useEffect(() => {
+        if (!tempToken) {
+            // Redirect to login if no temp_token
+            console.warn('🔐 [2FA] No temp_token found, redirecting to login');
+            navigate('/login');
+        }
+    }, [tempToken, navigate]);
+
+    if (!tempToken) {
         return null;
     }
 
@@ -35,29 +41,33 @@ const TwoFactorLoginPage = ({ apiBaseUrl, onLogin }) => {
         }
 
         try {
-            const response = await fetch(`${apiBaseUrl}/auth/2fa/login/`, {
+            console.log('🔐 [2FA] Verifying code with temp_token...');
+            const response = await fetch(`${apiBaseUrl}/api/security/2fa/verify-login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username,
-                    password,
-                    code: codeToSend,
-                    is_backup_code: useBackupCode
+                    temp_token: tempToken,
+                    code: codeToSend
                 })
             });
 
-            if (response.ok) {
-                const data = await response.json();
+            const data = await response.json();
+
+            if (response.ok && data.verified) {
+                console.log('✅ [2FA] Verification successful, logging in...');
                 // Call parent onLogin with tokens
-                onLogin(data.access, data.refresh, username);
+                localStorage.setItem('access_token', data.access);
+                localStorage.setItem('refresh_token', data.refresh);
+                onLogin(data.access, data.refresh, data.username);
                 navigate('/');
             } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Geçersiz kod');
+                console.error('❌ [2FA] Verification failed:', data);
+                setError(data.error || 'Geçersiz kod');
             }
         } catch (error) {
+            console.error('❌ [2FA] Network error:', error);
             setError('Bağlantı hatası oluştu');
         } finally {
             setLoading(false);

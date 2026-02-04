@@ -2351,6 +2351,15 @@ const AppContent = () => {
                 login(data.access, data.refresh);
             } else {
                 console.error('❌ [Auth] Login failed:', data);
+
+                // 🔐 2FA KONTROLÜ - Backend 2FA gerektiriyorsa
+                if (res.status === 401 && data.requires_2fa && data.temp_token) {
+                    console.log('🔐 [Auth] 2FA required, redirecting...');
+                    // 2FA sayfasına yönlendir - temp_token'ı URL'de taşı
+                    window.location.href = `/#/2fa-login?temp_token=${encodeURIComponent(data.temp_token)}`;
+                    return;
+                }
+
                 if (res.status === 401) {
                     setAuthError('Kullanıcı adı veya şifre hatalı');
                 } else if (res.status === 400) {
