@@ -8,8 +8,9 @@ import App from './App';
 import VerifyEmailPage from './VerifyEmailPage';
 import InvitePage from './InvitePage';
 import EnglishHub from './EnglishHub';
+import AuthCallback from './AuthCallback';  // 🔐 Direct import for OAuth callback
 
-// âš¡ OPTIMIZATION: Lazy load English learning pages
+// ⚡ OPTIMIZATION: Lazy load English learning pages
 const GrammarQuizPage = React.lazy(() => import('./GrammarQuizPage'));
 const EnglishLearningPage = React.lazy(() => import('./EnglishLearningPage'));
 import EnglishVoicePractice from './EnglishVoicePractice';
@@ -26,12 +27,14 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config';
 
-// ðŸ” Auth & Security Pages (Lazy Load)
+// 🔐 Auth & Security Pages (Lazy Load)
 const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
-const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage')); const AuthCallback = React.lazy(() => import('./AuthCallback'));  // 🔐 Secure OAuth callback
-// ðŸ“ˆ GROWTH: Landing Page & Growth Components (Lazy Load)
+const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage'));
+// AuthCallback is directly imported above for OAuth reliability
+
+// 📈 GROWTH: Landing Page & Growth Components (Lazy Load)
 const LandingPage = React.lazy(() => import('./components/LandingPage'));
 const ReferralProgram = React.lazy(() => import('./components/ReferralProgram'));
 const GrowthDashboard = React.lazy(() => import('./components/GrowthDashboard'));
@@ -118,12 +121,10 @@ const RootApp = () => {
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />
-                                {/* 🔐 OAuth Secure Callback */}
+                                {/* 🔐 OAuth Secure Callback - Direct import for reliability */}
                                 <Route path="/auth/callback" element={
                                     <PageWrapper>
-                                        <React.Suspense fallback={<div>Giriş yapılıyor...</div>}>
-                                            <AuthCallback apiBaseUrl={API_URL_BASE_STRING} />
-                                        </React.Suspense>
+                                        <AuthCallback apiBaseUrl={API_URL_BASE_STRING} />
                                     </PageWrapper>
                                 } />
                                 {/* ðŸ“ˆ GROWTH: Landing Page & Growth System */}

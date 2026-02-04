@@ -27,7 +27,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config';
 
-// 🔐 Auth & Security Pages (Lazy Load)
+// 🔐 Auth & Security Pages
+import AuthCallback from './AuthCallback';  // 🔐 Direct import for OAuth callback reliability
 const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
 const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
@@ -125,6 +126,13 @@ const RootApp = () => {
                                         <React.Suspense fallback={<div>Yükleniyor...</div>}>
                                             <TwoFactorLoginPage apiBaseUrl={API_BASE_URL} />
                                         </React.Suspense>
+                                    </PageWrapper>
+                                } />
+
+                                {/* 🔐 OAuth Secure Callback - Direct import for reliability */}
+                                <Route path="/auth/callback" element={
+                                    <PageWrapper>
+                                        <AuthCallback apiBaseUrl={API_URL_BASE_STRING} />
                                     </PageWrapper>
                                 } />
 
