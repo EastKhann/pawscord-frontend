@@ -1,0 +1,247 @@
+/* 🔮 Time Capsule Panel CSS */
+
+.time-capsule-panel {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.time-capsule-panel h2 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.capsule-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.capsule-tab {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.capsule-tab:hover {
+    background: var(--bg-tertiary);
+}
+
+.capsule-tab.active {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+}
+
+.create-capsule-form {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.create-capsule-form .form-group {
+    margin-bottom: 15px;
+}
+
+.create-capsule-form label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.create-capsule-form textarea,
+.create-capsule-form input,
+.create-capsule-form select {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.create-capsule-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.date-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.date-preset {
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-preset:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-row input {
+    width: auto;
+}
+
+.create-capsule-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.create-capsule-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(155, 89, 182, 0.4);
+}
+
+.capsules-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.capsule-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.capsule-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+.capsule-card.pending::before {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.capsule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.capsule-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--bg-tertiary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.capsule-date {
+    text-align: right;
+}
+
+.capsule-date .label {
+    color: var(--text-secondary);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.capsule-date .value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.capsule-content {
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.capsule-content.hidden {
+    color: var(--text-secondary);
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.capsule-countdown {
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.capsule-countdown .time-left {
+    font-size: 24px;
+    font-weight: 700;
+    color: #f39c12;
+    margin-bottom: 5px;
+}
+
+.capsule-countdown .label {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.capsule-meta {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+.empty-state .emoji {
+    font-size: 48px;
+    margin-bottom: 15px;
+}

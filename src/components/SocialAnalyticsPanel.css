@@ -1,0 +1,148 @@
+/* 📊 Social Analytics Panel CSS */
+
+.social-analytics-panel {
+    padding: 20px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.social-analytics-panel h2 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.social-analytics-panel h3 {
+    color: var(--text-primary);
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.time-range-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.time-range-selector button {
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.time-range-selector button:hover {
+    background: var(--bg-tertiary);
+}
+
+.time-range-selector button.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat-card .stat-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.stat-card .stat-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.activity-chart {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 150px;
+    gap: 5px;
+}
+
+.chart-bar-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.chart-bar {
+    width: 100%;
+    background: linear-gradient(to top, var(--accent-color), #7289DA);
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    transition: height 0.3s ease;
+}
+
+.chart-label {
+    color: var(--text-secondary);
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.stats-insights {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.insight-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.insight-item:last-child {
+    border-bottom: none;
+}
+
+.insight-label {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.insight-value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}

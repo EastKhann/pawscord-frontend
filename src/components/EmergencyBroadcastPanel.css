@@ -1,0 +1,242 @@
+/* 🚨 Emergency Broadcast Panel CSS */
+
+.emergency-broadcast-panel {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.panel-header h2 {
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.create-btn {
+    padding: 10px 20px;
+    background: #e74c3c;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.create-btn:hover {
+    background: #c0392b;
+}
+
+.create-form {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #e74c3c;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.severity-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.severity-option {
+    padding: 15px 10px;
+    background: var(--bg-tertiary);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.severity-option:hover {
+    background: var(--bg-primary);
+}
+
+.severity-option.selected {
+    border-color: var(--severity-color);
+    background: var(--bg-primary);
+}
+
+.severity-option .icon {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.severity-option .label {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.severity-option.selected .label {
+    color: var(--severity-color);
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.checkbox-row input {
+    width: auto;
+}
+
+.checkbox-row label {
+    margin: 0;
+    text-transform: none;
+    font-weight: normal;
+    color: var(--text-primary);
+}
+
+.send-broadcast-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.send-broadcast-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.send-broadcast-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.broadcasts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.broadcast-item {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    border-left: 4px solid var(--broadcast-color);
+}
+
+.broadcast-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.severity-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.timestamp {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.broadcast-item h3 {
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.broadcast-item p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.broadcast-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.sender {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.ack-btn {
+    padding: 8px 16px;
+    background: #43b581;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ack-btn:hover {
+    background: #3ca374;
+}
+
+.acked {
+    color: #43b581;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+.empty-state .emoji {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+}
