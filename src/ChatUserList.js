@@ -218,63 +218,66 @@ const ChatUserList = ({
                 )}
             </div>
 
-            {/* HIZLI ERİŞİM BUTONLARI - Sadece whitelist kullanıcılar görebilir */}
-            {(() => {
-                console.log('🔍 [ChatUserList] currentUserProfile:', currentUserProfile);
-                console.log('🔍 [ChatUserList] is_whitelisted:', currentUserProfile?.is_whitelisted);
-                return currentUserProfile?.is_whitelisted;
-            })() && (
-                    <div style={styles.quickAccessSection}>
-                        <div style={styles.quickAccessHeader}>
-                            HIZLI ERİŞİM
-                        </div>
+            {/* HIZLI ERİŞİM BUTONLARI VE LOGO */}
+            <div style={styles.quickAccessSection}>
+                {/* Whitelist kullanıcılar için butonlar */}
+                {(() => {
+                    console.log('🔍 [ChatUserList] currentUserProfile:', currentUserProfile);
+                    console.log('🔍 [ChatUserList] is_whitelisted:', currentUserProfile?.is_whitelisted);
+                    return currentUserProfile?.is_whitelisted;
+                })() && (
+                        <>
+                            <div style={styles.quickAccessHeader}>
+                                HIZLI ERİŞİM
+                            </div>
 
-                        {/* English Learn Butonu */}
-                        <button
-                            onClick={() => navigate('/eng-learn')}
-                            style={styles.quickAccessButton}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(88, 101, 242, 0.4)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 2px 8px rgba(88, 101, 242, 0.3)';
-                            }}
-                        >
-                            <span style={{ fontSize: '18px' }}>📚</span>
-                            <span>English Learn</span>
-                        </button>
+                            {/* English Learn Butonu */}
+                            <button
+                                onClick={() => navigate('/eng-learn')}
+                                style={styles.quickAccessButton}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(88, 101, 242, 0.4)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(88, 101, 242, 0.3)';
+                                }}
+                            >
+                                <span style={{ fontSize: '18px' }}>📚</span>
+                                <span>English Learn</span>
+                            </button>
 
-                        {/* Crypto Analysis Butonu */}
-                        <button
-                            onClick={() => navigate('/crypto-analysis')}
-                            style={{
-                                ...styles.quickAccessButton,
-                                background: 'linear-gradient(135deg, #F39C12 0%, #E67E22 100%)',
-                                boxShadow: '0 2px 8px rgba(243, 156, 18, 0.3)'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(243, 156, 18, 0.4)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 2px 8px rgba(243, 156, 18, 0.3)';
-                            }}
-                        >
-                            <span style={{ fontSize: '18px' }}>📊</span>
-                            <span>Crypto Signals</span>
-                        </button>
+                            {/* Crypto Analysis Butonu */}
+                            <button
+                                onClick={() => navigate('/crypto-analysis')}
+                                style={{
+                                    ...styles.quickAccessButton,
+                                    background: 'linear-gradient(135deg, #F39C12 0%, #E67E22 100%)',
+                                    boxShadow: '0 2px 8px rgba(243, 156, 18, 0.3)'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(243, 156, 18, 0.4)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(243, 156, 18, 0.3)';
+                                }}
+                            >
+                                <span style={{ fontSize: '18px' }}>📊</span>
+                                <span>Crypto Signals</span>
+                            </button>
+                        </>
+                    )}
 
-                        {/* PAWSCORD Logo */}
-                        <div style={styles.pawscordLogo}>
-                            <div style={{ fontSize: '24px', marginBottom: '4px' }}>🐾</div>
-                            <div style={{ fontWeight: 'bold', color: '#5865f2', fontSize: '14px' }}>PAWSCORD</div>
-                            <div style={{ fontSize: '11px', color: '#b9bbbe', opacity: 0.7, marginTop: '2px' }}>v1.1.133</div>
-                        </div>
-                    </div>
-                )}
+                {/* PAWSCORD Logo - Herkes için görünür */}
+                <div style={styles.pawscordLogo}>
+                    <div style={{ fontSize: '24px', marginBottom: '4px' }}>🐾</div>
+                    <div style={{ fontWeight: 'bold', color: '#5865f2', fontSize: '14px' }}>PAWSCORD</div>
+                    <div style={{ fontSize: '11px', color: '#b9bbbe', opacity: 0.7, marginTop: '2px' }}>v1.1.133</div>
+                </div>
+            </div>
         </div>
     );
 };
