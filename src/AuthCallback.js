@@ -6,8 +6,7 @@ import './AuthCallback.css';
 
 /**
  * 🔐 Auth Callback Page
- * Handles OAuth callback with secure auth code exchange
- * Tokens are NOT passed in URL - instead a short-lived code is exchanged
+ * Handles OAuth callback - supports both direct token and code exchange
  */
 const AuthCallback = ({ apiBaseUrl }) => {
     const [searchParams] = useSearchParams();
@@ -27,10 +26,16 @@ const AuthCallback = ({ apiBaseUrl }) => {
             exchangeAttempted.current = true;
 
             const code = searchParams.get('code');
+            const accessToken = searchParams.get('access_token');
+            const refreshToken = searchParams.get('refresh_token');
             const errorParam = searchParams.get('error');
             const needsPassword = searchParams.get('needs_password') === 'true';
 
-            console.log('🔐 [AuthCallback] Starting...', { code: code?.substring(0, 10) + '...', apiBaseUrl });
+            console.log('🔐 [AuthCallback] Starting...', {
+                hasCode: !!code,
+                hasAccessToken: !!accessToken,
+                apiBaseUrl
+            });
 
             // Check for error
             if (errorParam) {
@@ -41,11 +46,39 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 return;
             }
 
-            // Check for auth code
+            // 🔐 DIRECT TOKEN MODE: Tokens passed directly in URL
+            if (accessToken && refreshToken) {
+                console.log('🔐 [AuthCallback] Direct token mode');
+                try {
+                    // Store tokens securely
+                    localStorage.setItem('accessToken', accessToken);
+                    localStorage.setItem('refreshToken', refreshToken);
+
+                    // Update auth context
+                    if (login) {
+                        await login(accessToken, refreshToken);
+                    }
+
+                    setStatus('success');
+
+                    // Redirect based on password status
+                    setTimeout(() => {
+                        navigate(needsPassword ? '/settings?section=security&action=set-password' : '/');
+                    }, 1500);
+                } catch (err) {
+                    console.error('🔐 [AuthCallback] Direct token error:', err);
+                    setStatus('error');
+                    setError('Token işleme hatası.');
+                    setTimeout(() => navigate('/'), 3000);
+                }
+                return;
+            }
+
+            // 🔐 CODE EXCHANGE MODE: Exchange code for tokens
             if (!code) {
-                console.error('🔐 [AuthCallback] No code found');
+                console.error('🔐 [AuthCallback] No code or tokens found');
                 setStatus('error');
-                setError('Yetkilendirme kodu bulunamadı.');
+                setError('Yetkilendirme bilgisi bulunamadı.');
                 setTimeout(() => navigate('/'), 3000);
                 return;
             }
