@@ -22,8 +22,11 @@ const AuthCallback = ({ apiBaseUrl }) => {
             const errorParam = searchParams.get('error');
             const needsPassword = searchParams.get('needs_password') === 'true';
 
+            console.log('🔐 [AuthCallback] Starting...', { code: code?.substring(0, 10) + '...', apiBaseUrl });
+
             // Check for error
             if (errorParam) {
+                console.error('🔐 [AuthCallback] Error param:', errorParam);
                 setStatus('error');
                 setError('Google giriş başarısız oldu. Lütfen tekrar deneyin.');
                 setTimeout(() => navigate('/'), 3000);
@@ -32,6 +35,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
 
             // Check for auth code
             if (!code) {
+                console.error('🔐 [AuthCallback] No code found');
                 setStatus('error');
                 setError('Yetkilendirme kodu bulunamadı.');
                 setTimeout(() => navigate('/'), 3000);
@@ -40,11 +44,16 @@ const AuthCallback = ({ apiBaseUrl }) => {
 
             try {
                 setStatus('exchanging');
+                
+                const exchangeUrl = `${apiBaseUrl}/api/auth/exchange-code/`;
+                console.log('🔐 [AuthCallback] Exchanging code at:', exchangeUrl);
 
                 // Exchange auth code for tokens (secure exchange)
-                const response = await api.post(`${apiBaseUrl}/auth/exchange-code/`, {
+                const response = await api.post(exchangeUrl, {
                     code: code
                 });
+                
+                console.log('🔐 [AuthCallback] Response:', response.data);
 
                 if (response.data.success) {
                     const { access_token, refresh_token, user_id, needs_password } = response.data;
