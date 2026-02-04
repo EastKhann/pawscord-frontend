@@ -44,7 +44,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
 
             try {
                 setStatus('exchanging');
-                
+
                 const exchangeUrl = `${apiBaseUrl}/api/auth/exchange-code/`;
                 console.log('🔐 [AuthCallback] Exchanging code at:', exchangeUrl);
 
@@ -52,7 +52,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 const response = await api.post(exchangeUrl, {
                     code: code
                 });
-                
+
                 console.log('🔐 [AuthCallback] Response:', response.data);
 
                 if (response.data.success) {
