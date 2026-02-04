@@ -1882,8 +1882,18 @@ const AppContent = () => {
                     hostname: window.location.hostname
                 });
 
-                // package.json'dan mevcut versiyonu al (Vite uyumlu)
-                const currentVersion = import.meta.env.VITE_APP_VERSION || '1.1.143';
+                // 🔥 FIX: Electron'da app.getVersion() kullan, fallback olarak VITE_APP_VERSION
+                let currentVersion = import.meta.env.VITE_APP_VERSION || '1.1.203';
+
+                // Electron'da doğru versiyonu al
+                if (window.electron?.getAppVersion) {
+                    try {
+                        currentVersion = await window.electron.getAppVersion();
+                        console.log('🖥️ Electron version:', currentVersion);
+                    } catch (e) {
+                        console.warn('⚠️ Electron version alınamadı:', e);
+                    }
+                }
                 console.log('📦 Mevcut versiyon:', currentVersion);
 
                 // 🔥 R2 CDN'den son versiyonu kontrol et
