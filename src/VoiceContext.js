@@ -4,6 +4,7 @@ import logger from './utils/logger';
 import toast from './utils/toast';
 import { spatialAudio } from './SpatialAudioEngine'; // 🔥 YENİ: Spatial Audio import
 import { API_URL_BASE_STRING, WS_PROTOCOL, API_HOST, isElectron } from './utils/constants';
+import { authFetch } from './utils/authFetch'; // 🔥 Token auto-refresh
 
 const VoiceContext = createContext(null);
 
@@ -244,9 +245,10 @@ export const VoiceProvider = ({ children }) => {
         // Fallback olarak STUN-only kullanılır
 
         try {
-            const res = await fetch(`${API_URL_BASE_STRING}/api/voice/turn-credentials/`, {
+            // 🔥 authFetch kullanarak otomatik token refresh
+            const res = await authFetch(`${API_URL_BASE_STRING}/api/voice/turn-credentials/`, {
+                method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });

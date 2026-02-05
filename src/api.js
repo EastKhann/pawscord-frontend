@@ -2,6 +2,8 @@
 // 🔐 Simple API wrapper for AuthCallback
 // Uses axios-like interface for compatibility
 
+import { authFetch } from './utils/authFetch';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.pawscord.com';
 
 const api = {
@@ -11,30 +13,45 @@ const api = {
             ...config.headers
         };
 
-        // Add auth token if exists
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
         console.log('📡 [API] POST request:', url);
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(data),
-            credentials: 'include'
-        });
+        try {
+            // 🔥 authFetch ile otomatik token refresh
+            const response = await authFetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(data),
+                credentials: 'include'
+            });
 
-        const responseData = await response.json();
+            const responseData = await response.json();
 
-        if (!response.ok) {
-            const error = new Error(responseData.error || 'Request failed');
-            error.response = { data: responseData, status: response.status };
+            if (!response.ok) {
+                const error = new Error(responseData.error || 'Request failed');
+                error.response = { data: responseData, status: response.status };
+                throw error;
+            }
+
+            return { data: responseData, status: response.status };
+        } catch (error) {
+            // Fallback for non-auth requests
+            if (error.message === 'No refresh token available') {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(data),
+                    credentials: 'include'
+                });
+                const responseData = await response.json();
+                if (!response.ok) {
+                    const err = new Error(responseData.error || 'Request failed');
+                    err.response = { data: responseData, status: response.status };
+                    throw err;
+                }
+                return { data: responseData, status: response.status };
+            }
             throw error;
         }
-
-        return { data: responseData, status: response.status };
     },
 
     async get(url, config = {}) {
@@ -43,28 +60,43 @@ const api = {
             ...config.headers
         };
 
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-
         console.log('📡 [API] GET request:', url);
 
-        const response = await fetch(url, {
-            method: 'GET',
-            headers,
-            credentials: 'include'
-        });
+        try {
+            // 🔥 authFetch ile otomatik token refresh
+            const response = await authFetch(url, {
+                method: 'GET',
+                headers,
+                credentials: 'include'
+            });
 
-        const responseData = await response.json();
+            const responseData = await response.json();
 
-        if (!response.ok) {
-            const error = new Error(responseData.error || 'Request failed');
-            error.response = { data: responseData, status: response.status };
+            if (!response.ok) {
+                const error = new Error(responseData.error || 'Request failed');
+                error.response = { data: responseData, status: response.status };
+                throw error;
+            }
+
+            return { data: responseData, status: response.status };
+        } catch (error) {
+            // Fallback for non-auth requests
+            if (error.message === 'No refresh token available') {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers,
+                    credentials: 'include'
+                });
+                const responseData = await response.json();
+                if (!response.ok) {
+                    const err = new Error(responseData.error || 'Request failed');
+                    err.response = { data: responseData, status: response.status };
+                    throw err;
+                }
+                return { data: responseData, status: response.status };
+            }
             throw error;
         }
-
-        return { data: responseData, status: response.status };
     }
 };
 
