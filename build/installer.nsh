@@ -3,15 +3,18 @@
   ; PAWSCORD INSTALLER - ROBUST CLEANUP
   ; ========================================
   
-  ; 1. Tüm Pawscord process'lerini kapat
-  nsExec::ExecToLog 'taskkill /F /IM "Pawscord.exe" /T'
-  nsExec::ExecToLog 'taskkill /F /IM "pawscord.exe" /T'
+  ; 1. Tüm Pawscord process'lerini zorla kapat (sessiz mod)
+  nsExec::ExecToStack 'taskkill /F /IM "Pawscord.exe" /T'
+  Pop $0  ; Çıkış kodunu al ve görmezden gel
+  nsExec::ExecToStack 'taskkill /F /IM "pawscord.exe" /T'
+  Pop $0
   
   ; 2. Electron alt process'lerini de kapat
-  nsExec::ExecToLog 'taskkill /F /IM "electron.exe" /T'
+  nsExec::ExecToStack 'taskkill /F /IM "electron.exe" /T'
+  Pop $0
   
   ; 3. Dosya kilitlerinin açılması için bekle
-  Sleep 3000
+  Sleep 2000
   
   ; 4. Eski kurulum dizinlerini kontrol et ve temizle
   ; LocalAppData yolu
