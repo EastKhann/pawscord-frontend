@@ -2126,82 +2126,123 @@ const AppContent = () => {
         const saved = loadSavedTheme();
         setCurrentTheme(saved);
 
-
+        // 📱 APK CRASH FIX: Token yoksa WebSocket açma
+        if (!token) {
+            console.warn('⚠️ [StatusWS] No token available, skipping WebSocket connection');
+            return;
+        }
 
         const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(username)}&token=${token}`;
-        const socket = new WebSocket(url);
+        console.log('🌐 [StatusWS] Connecting to:', url.replace(token, 'TOKEN_HIDDEN'));
+
+        let socket;
+        try {
+            socket = new WebSocket(url);
+        } catch (err) {
+            console.error('❌ [StatusWS] WebSocket creation failed:', err);
+            return;
+        }
+
         statusWsRef.current = socket;
+
+        socket.onopen = () => {
+            console.log('✅ [StatusWS] Connected successfully');
+        };
+
+        socket.onerror = (error) => {
+            console.error('❌ [StatusWS] WebSocket error:', error);
+            // Don't crash - just log
+        };
+
+        socket.onclose = (event) => {
+            console.log(`🔌 [StatusWS] Connection closed: code=${event.code}, reason=${event.reason || 'none'}`);
+            // Auto-reconnect after 5 seconds if not intentional close
+            if (event.code !== 1000 && event.code !== 1001) {
+                console.log('🔄 [StatusWS] Will attempt reconnect in 5s...');
+            }
+        };
+
         socket.onmessage = (e) => {
-            const data = JSON.parse(e.data);
+            try {
+                const data = JSON.parse(e.data);
 
-            // 🔧 FIX: Online users - sadece username array'i olarak set et
-            if (data.type === 'online_user_list_update') {
-                // Backend'den gelen data.users array'ini kontrol et
-                // Eğer object array'i ise username'leri çıkar, string array'i ise direkt kullan
-                const onlineUsernames = Array.isArray(data.users)
-                    ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
-                    : [];
+                // 🔧 FIX: Online users - sadece username array'i olarak set et
+                if (data.type === 'online_user_list_update') {
+                    // Backend'den gelen data.users array'ini kontrol et
+                    // Eğer object array'i ise username'leri çıkar, string array'i ise direkt kullan
+                    const onlineUsernames = Array.isArray(data.users)
+                        ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
+                        : [];
 
-                console.log('👥 [Online Users] Updated:', onlineUsernames);
-                setOnlineUsers(onlineUsernames);
-            }
+                    console.log('👥 [Online Users] Updated:', onlineUsernames);
+                    setOnlineUsers(onlineUsernames);
+                }
 
-            if (data.type === 'voice_users_update') {
-                console.log('🔊 [GlobalWS] Received voice_users_update:', data.voice_users);
-                setVoiceUsersState(data.voice_users);
-            }
+                if (data.type === 'voice_users_update') {
+                    console.log('🔊 [GlobalWS] Received voice_users_update:', data.voice_users);
+                    setVoiceUsersState(data.voice_users);
+                }
 
-            if (data.type === 'user_activity_update') {
-                setAllUsers(prevUsers => prevUsers.map(u => {
-                    if (u.username === data.username) {
-                        return { ...u, current_activity: data.activity };
-                    }
-                    return u;
-                }));
-            }
-
-            // 🔥 Profil güncelleme (avatar, status_message vb.) - currentUserProfile'ı güncelle
-            if (data.type === 'user_profile_update' && data.user_data) {
-                const updatedUser = data.user_data;
-
-                // Kendi profilimizi mi güncelledi?
-                if (updatedUser.username === username) {
-                    console.log('👤 [Profile Update] Updating currentUserProfile:', updatedUser);
-                    setCurrentUserProfile(prevProfile => ({
-                        ...prevProfile,
-                        avatar: updatedUser.avatar,
-                        status_message: updatedUser.status_message,
-                        social_links: updatedUser.social_links,
-                        coins: updatedUser.coins,
-                        xp: updatedUser.xp,
-                        level: updatedUser.level,
-                        status: updatedUser.status,
-                        role: updatedUser.role
+                if (data.type === 'user_activity_update') {
+                    setAllUsers(prevUsers => prevUsers.map(u => {
+                        if (u.username === data.username) {
+                            return { ...u, current_activity: data.activity };
+                        }
+                        return u;
                     }));
                 }
 
-                // AllUsers listesini de güncelle
-                setAllUsers(prevUsers => prevUsers.map(u => {
-                    if (u.username === updatedUser.username) {
-                        return { ...u, ...updatedUser };
+                // 🔥 Profil güncelleme (avatar, status_message vb.) - currentUserProfile'ı güncelle
+                if (data.type === 'user_profile_update' && data.user_data) {
+                    const updatedUser = data.user_data;
+
+                    // Kendi profilimizi mi güncelledi?
+                    if (updatedUser.username === username) {
+                        console.log('👤 [Profile Update] Updating currentUserProfile:', updatedUser);
+                        setCurrentUserProfile(prevProfile => ({
+                            ...prevProfile,
+                            avatar: updatedUser.avatar,
+                            status_message: updatedUser.status_message,
+                            social_links: updatedUser.social_links,
+                            coins: updatedUser.coins,
+                            xp: updatedUser.xp,
+                            level: updatedUser.level,
+                            status: updatedUser.status,
+                            role: updatedUser.role
+                        }));
                     }
-                    return u;
-                }));
-            }
 
-            if (data.type === 'global_message_notification' && data.username !== username) {
-                const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
-                const currentKey = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
-                if (key !== currentKey) incrementUnread(key);
-            }
+                    // AllUsers listesini de güncelle
+                    setAllUsers(prevUsers => prevUsers.map(u => {
+                        if (u.username === updatedUser.username) {
+                            return { ...u, ...updatedUser };
+                        }
+                        return u;
+                    }));
+                }
 
-            // ✨ Handle Real-time Server/Channel Updates
-            if (data.type === 'server_structure_update') {
-                console.log("Server structure update received, refreshing...");
-                fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                if (data.type === 'global_message_notification' && data.username !== username) {
+                    const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
+                    const currentKey = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
+                    if (key !== currentKey) incrementUnread(key);
+                }
+
+                // ✨ Handle Real-time Server/Channel Updates
+                if (data.type === 'server_structure_update') {
+                    console.log("Server structure update received, refreshing...");
+                    fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                }
+            } catch (parseError) {
+                console.error('❌ [StatusWS] Failed to parse message:', parseError);
             }
         };
-        return () => socket.close();
+        return () => {
+            try {
+                socket.close(1000, 'Component unmount');
+            } catch (e) {
+                // Ignore close errors
+            }
+        };
     }, [isAuthenticated, isInitialDataLoaded, username, token, activeChat]);
 
     // 🎤 SESLİ SOHBETE GİRİNCE CHAT ALANINI OTOMATİK DEĞİŞTİR
