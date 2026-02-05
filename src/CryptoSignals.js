@@ -22,8 +22,25 @@ const CryptoSignals = () => {
     const [lastUpdate, setLastUpdate] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(true);
     const [compactMode, setCompactMode] = useState(false);  // 🔥 Özet mod
+    const [selectedCoin, setSelectedCoin] = useState(null); // 🎯 Seçili coin detayı
+    const [modalAnimation, setModalAnimation] = useState(''); // Modal animasyon durumu
     const tableContainerRef = useRef(null);
     const scrollPositionRef = useRef(0);
+
+    // Modal açma fonksiyonu
+    const openCoinModal = (coinName, coinData) => {
+        setSelectedCoin({ name: coinName, data: coinData });
+        setTimeout(() => setModalAnimation('open'), 10);
+    };
+
+    // Modal kapatma fonksiyonu
+    const closeCoinModal = () => {
+        setModalAnimation('closing');
+        setTimeout(() => {
+            setSelectedCoin(null);
+            setModalAnimation('');
+        }, 300);
+    };
 
     // Sütun başlıklarını Türkçeleştir
     const translateColumn = (col) => {
@@ -363,7 +380,21 @@ const CryptoSignals = () => {
                                     const firstRow = rows[0] || {};
 
                                     return (
-                                        <div key={coin} style={styles.compactCard}>
+                                        <div
+                                            key={coin}
+                                            style={styles.compactCard}
+                                            onClick={() => openCoinModal(coin, rows)}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
+                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(240,178,50,0.3)';
+                                                e.currentTarget.style.borderColor = '#f0b232';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                                e.currentTarget.style.borderColor = '#1f2023';
+                                            }}
+                                        >
                                             <div style={styles.compactHeader}>
                                                 <span style={styles.compactCoinName}>{coin}</span>
                                                 <span style={{ color: '#949ba4', fontSize: '0.8em' }}>{rows.length} pozisyon</span>
@@ -431,6 +462,150 @@ const CryptoSignals = () => {
                             <p>Bu sekmede henüz veri yok</p>
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* 🎯 COİN DETAY MODAL */}
+            {selectedCoin && (
+                <div
+                    style={{
+                        ...styles.modalOverlay,
+                        opacity: modalAnimation === 'open' ? 1 : 0,
+                    }}
+                    onClick={closeCoinModal}
+                >
+                    <div
+                        style={{
+                            ...styles.modalContent,
+                            transform: modalAnimation === 'open'
+                                ? 'translateY(0) scale(1)'
+                                : 'translateY(50px) scale(0.9)',
+                            opacity: modalAnimation === 'open' ? 1 : 0,
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Modal Header */}
+                        <div style={styles.modalHeader}>
+                            <div style={styles.modalCoinInfo}>
+                                <FaBitcoin style={{ fontSize: '28px', color: '#f0b232' }} />
+                                <h2 style={styles.modalTitle}>{selectedCoin.name}</h2>
+                                <span style={styles.modalBadge}>{selectedCoin.data?.length || 0} Strateji</span>
+                            </div>
+                            <button onClick={closeCoinModal} style={styles.modalCloseBtn}>✕</button>
+                        </div>
+
+                        {/* Özet İstatistikler */}
+                        <div style={styles.modalStats}>
+                            {(() => {
+                                const data = selectedCoin.data || [];
+                                const greenCount = data.filter(r => {
+                                    const uyum = r.yon_uyumu || r.status || '';
+                                    return uyum.includes('UYUYOR') || uyum.includes('AYNI');
+                                }).length;
+                                const redCount = data.filter(r => {
+                                    const uyum = r.yon_uyumu || r.status || '';
+                                    return uyum.includes('TERS');
+                                }).length;
+                                const avgPnl = data.reduce((acc, r) => {
+                                    const pnl = parseFloat(r.pnl_percent) || 0;
+                                    return acc + pnl;
+                                }, 0) / (data.length || 1);
+                                const firstRow = data[0] || {};
+
+                                return (
+                                    <>
+                                        <div style={styles.statBox}>
+                                            <span style={styles.statValue}>{greenCount}</span>
+                                            <span style={{ ...styles.statLabel, color: '#23a559' }}>✓ Yön Uyuyor</span>
+                                        </div>
+                                        <div style={styles.statBox}>
+                                            <span style={styles.statValue}>{redCount}</span>
+                                            <span style={{ ...styles.statLabel, color: '#da373c' }}>✗ Ters Sinyal</span>
+                                        </div>
+                                        <div style={styles.statBox}>
+                                            <span style={{ ...styles.statValue, color: avgPnl >= 0 ? '#23a559' : '#da373c' }}>
+                                                {avgPnl >= 0 ? '+' : ''}{avgPnl.toFixed(2)}%
+                                            </span>
+                                            <span style={styles.statLabel}>Ort. PNL</span>
+                                        </div>
+                                        <div style={styles.statBox}>
+                                            <span style={styles.statValue}>{firstRow.current_price || '-'}</span>
+                                            <span style={styles.statLabel}>Şu Anki Fiyat</span>
+                                        </div>
+                                    </>
+                                );
+                            })()}
+                        </div>
+
+                        {/* Detaylı Pozisyon Listesi */}
+                        <div style={styles.modalPositions}>
+                            <h3 style={styles.modalSubtitle}>📊 Pozisyon Detayları</h3>
+                            <div style={styles.positionsList}>
+                                {selectedCoin.data?.map((row, idx) => {
+                                    const uyum = row.yon_uyumu || row.status || '';
+                                    const isGreen = uyum.includes('UYUYOR') || uyum.includes('AYNI');
+                                    const pnl = parseFloat(row.pnl_percent) || 0;
+
+                                    return (
+                                        <div
+                                            key={idx}
+                                            style={{
+                                                ...styles.positionCard,
+                                                borderLeft: `4px solid ${isGreen ? '#23a559' : '#da373c'}`,
+                                                animationDelay: `${idx * 0.05}s`
+                                            }}
+                                        >
+                                            <div style={styles.positionHeader}>
+                                                <span style={styles.positionTimeframe}>{row.timeframe || 'N/A'}</span>
+                                                <span style={{
+                                                    padding: '4px 10px',
+                                                    borderRadius: '4px',
+                                                    fontSize: '0.75em',
+                                                    fontWeight: 'bold',
+                                                    backgroundColor: row.pozisyon_yonu === 'LONG' ? '#23a55922' : '#ed424222',
+                                                    color: row.pozisyon_yonu === 'LONG' ? '#23a559' : '#ed4245'
+                                                }}>
+                                                    {row.pozisyon_yonu === 'LONG' ? '📈 LONG' : '📉 SHORT'}
+                                                </span>
+                                            </div>
+                                            <div style={styles.positionBody}>
+                                                <div style={styles.positionRow}>
+                                                    <span>Giriş:</span>
+                                                    <strong>{row.entry_price || '-'}</strong>
+                                                </div>
+                                                <div style={styles.positionRow}>
+                                                    <span>Şu An:</span>
+                                                    <strong>{row.current_price || '-'}</strong>
+                                                </div>
+                                                <div style={styles.positionRow}>
+                                                    <span>PNL:</span>
+                                                    <strong style={{ color: pnl >= 0 ? '#23a559' : '#da373c' }}>
+                                                        {pnl >= 0 ? '+' : ''}{pnl.toFixed(2)}%
+                                                    </strong>
+                                                </div>
+                                                <div style={styles.positionRow}>
+                                                    <span>Hedef:</span>
+                                                    <strong style={{ color: '#f0b232' }}>{row.hedef_roe || row.x_kat || '-'}</strong>
+                                                </div>
+                                            </div>
+                                            <div style={styles.positionFooter}>
+                                                <span style={{
+                                                    padding: '4px 8px',
+                                                    borderRadius: '4px',
+                                                    fontSize: '0.75em',
+                                                    backgroundColor: isGreen ? '#23a55933' : '#da373c33',
+                                                    color: isGreen ? '#57F287' : '#ED4245',
+                                                }}>
+                                                    {isGreen ? '✅ Yön Uyuyor' : '⚠️ Ters Sinyal'}
+                                                </span>
+                                                {row.bars_ago && <span style={{ color: '#949ba4', fontSize: '0.75em' }}>{row.bars_ago} bar önce</span>}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
@@ -643,6 +818,185 @@ const styles = {
         color: '#949ba4',
         fontSize: '1.1em',
     },
+    // 🎯 Modal Stilleri
+    modalOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px',
+        transition: 'opacity 0.3s ease',
+        backdropFilter: 'blur(8px)',
+    },
+    modalContent: {
+        backgroundColor: '#1e1f22',
+        borderRadius: '16px',
+        width: '100%',
+        maxWidth: '700px',
+        maxHeight: '85vh',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        border: '1px solid #f0b232',
+        boxShadow: '0 20px 60px rgba(240, 178, 50, 0.3), 0 0 40px rgba(240, 178, 50, 0.1)',
+        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+    },
+    modalHeader: {
+        padding: '20px 24px',
+        borderBottom: '1px solid #2f3136',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        background: 'linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%)',
+    },
+    modalCoinInfo: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+    },
+    modalTitle: {
+        margin: 0,
+        fontSize: '1.5em',
+        color: '#f0b232',
+        fontWeight: '700',
+    },
+    modalBadge: {
+        padding: '6px 12px',
+        backgroundColor: '#5865f2',
+        borderRadius: '20px',
+        fontSize: '0.75em',
+        fontWeight: '600',
+        color: '#fff',
+    },
+    modalCloseBtn: {
+        background: 'none',
+        border: 'none',
+        color: '#b9bbbe',
+        fontSize: '24px',
+        cursor: 'pointer',
+        padding: '8px',
+        borderRadius: '8px',
+        transition: 'all 0.2s',
+        lineHeight: 1,
+    },
+    modalStats: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '12px',
+        padding: '20px 24px',
+        borderBottom: '1px solid #2f3136',
+        background: 'linear-gradient(180deg, rgba(240, 178, 50, 0.05) 0%, transparent 100%)',
+    },
+    statBox: {
+        textAlign: 'center',
+        padding: '12px',
+        backgroundColor: '#2b2d31',
+        borderRadius: '10px',
+        border: '1px solid #40444b',
+    },
+    statValue: {
+        fontSize: '1.5em',
+        fontWeight: '700',
+        color: '#fff',
+        display: 'block',
+        marginBottom: '4px',
+    },
+    statLabel: {
+        fontSize: '0.75em',
+        color: '#949ba4',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+    },
+    modalPositions: {
+        flex: 1,
+        overflow: 'auto',
+        padding: '20px 24px',
+    },
+    modalSubtitle: {
+        margin: '0 0 16px 0',
+        fontSize: '1.1em',
+        color: '#fff',
+        fontWeight: '600',
+    },
+    positionsList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+    },
+    positionCard: {
+        backgroundColor: '#2b2d31',
+        borderRadius: '10px',
+        padding: '16px',
+        border: '1px solid #40444b',
+        animation: 'slideInFromRight 0.4s ease forwards',
+        opacity: 0,
+        transform: 'translateX(20px)',
+    },
+    positionHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '12px',
+        paddingBottom: '10px',
+        borderBottom: '1px solid #40444b',
+    },
+    positionTimeframe: {
+        fontSize: '1.1em',
+        fontWeight: '700',
+        color: '#5865f2',
+    },
+    positionBody: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '10px',
+        marginBottom: '12px',
+    },
+    positionRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '8px 12px',
+        backgroundColor: '#202225',
+        borderRadius: '6px',
+        fontSize: '0.9em',
+    },
+    positionFooter: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: '10px',
+        borderTop: '1px solid #40444b',
+    },
 };
+
+// CSS Animasyon keyframes (global style olarak eklenmeli)
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.crypto-card-hover:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(240,178,50,0.3);
+    border-color: #f0b232 !important;
+}
+`;
+if (!document.getElementById('crypto-signals-animations')) {
+    styleSheet.id = 'crypto-signals-animations';
+    document.head.appendChild(styleSheet);
+}
 
 export default CryptoSignals;
