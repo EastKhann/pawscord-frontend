@@ -19,6 +19,7 @@ import { MessageReactions } from './MessageReactions';
 import { MessageContextMenu } from './MessageContextMenu';
 import { MessageMedia, LazyMount } from './MessageMedia';
 import { MessagePoll } from './MessagePoll';
+import ReadReceipt from '../ReadReceipt';
 
 // Lazy load heavy components
 const LinkPreview = lazy(() => import(/* webpackChunkName: "message-ui" */ '../../LinkPreview'));
@@ -359,7 +360,16 @@ const Message = ({
                         messageId={msg.id}
                     />
                     {isMyMessage && !msg.temp_id && (
-                        <span style={styles.readReceipt} title="İletildi">✓</span>
+                        <ReadReceipt
+                            status={
+                                msg.read_by && msg.read_by.length > 0
+                                    ? 'read'
+                                    : msg.id
+                                        ? 'delivered'
+                                        : 'sent'
+                            }
+                            readBy={msg.read_by || []}
+                        />
                     )}
                 </div>
             </div>

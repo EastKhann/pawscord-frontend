@@ -20,7 +20,7 @@ import {
     FaGift, FaMicrophone, FaCode,
     FaSearch, FaBroom, FaLock, FaCoffee, FaMagic, FaPaperPlane,
     FaLink, FaThumbtack, FaBellSlash, FaBell, FaTimes, FaPoll, FaPhoneSlash,
-    FaHeadphones, FaVideo, FaDesktop, FaTrash // 🔥 Ses kontrol ikonları eklendi
+    FaHeadphones, FaVideo, FaDesktop, FaTrash, FaInbox, FaSmile // 🔥 Ses kontrol ikonları + yeni özellik ikonları
 } from './utils/iconOptimization'; // ⚡ OPTIMIZATION: -130KB bundle size
 import { loadSavedTheme } from './utils/ThemeManager';
 
@@ -116,6 +116,8 @@ const MessageExportPanel = React.lazy(() => import(/* webpackChunkName: "feature
 const ArchivedRoomsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ArchivedRoomsPanel')); // 📦 Archived Channels
 const SlowModePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/SlowModePanel')); // 🐢 Slow Mode
 const EmojiManagementPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EmojiManagementPanel')); // 😀 Emoji Management
+const MentionsInboxPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MentionsInboxPanel')); // 📬 Mentions Inbox
+const CustomStatusModal = React.lazy(() => import(/* webpackChunkName: "features" */ './components/CustomStatusModal')); // 🎭 Custom Status
 
 // 🚀 BATCH 1: Analytics & Tracking (2026-01-19)
 const ReactionAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReactionAnalyticsPanel'));
@@ -414,6 +416,8 @@ const AppContent = () => {
     // 📚 NEW FEATURES: Feature Panels (2026-01-19)
     const [showBookmarks, setShowBookmarks] = useState(false); // 📚 Bookmark Panel
     const [showReadLater, setShowReadLater] = useState(false); // 📖 Read Later
+    const [showMentionsInbox, setShowMentionsInbox] = useState(false); // 📬 Mentions Inbox
+    const [showCustomStatus, setShowCustomStatus] = useState(false); // 🎭 Custom Status
     const [showChannelPermissions, setShowChannelPermissions] = useState(false); // 🔐 Channel Permissions
     const [showMessageThreads, setShowMessageThreads] = useState(false); // 💬 Message Threads
     const [showModeratorNotes, setShowModeratorNotes] = useState(false); // 📝 Moderator Notes
@@ -2695,12 +2699,66 @@ const AppContent = () => {
         setMessageHistoryLoading(false);
     };
 
+    // ✅ Read Receipt: batch mark messages as read when they become visible
+    const readReceiptBufferRef = useRef([]);
+    const readReceiptTimerRef = useRef(null);
+    const handleMessageVisible = useCallback((messageId) => {
+        readReceiptBufferRef.current.push(messageId);
+        if (readReceiptTimerRef.current) return; // already scheduled
+        readReceiptTimerRef.current = setTimeout(async () => {
+            const ids = [...new Set(readReceiptBufferRef.current)];
+            readReceiptBufferRef.current = [];
+            readReceiptTimerRef.current = null;
+            if (ids.length === 0) return;
+            try {
+                const res = await fetchWithAuth(`${API_BASE_URL}/messages/mark_read/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message_ids: ids })
+                });
+                if (res.ok) {
+                    setMessages(prev => prev.map(m =>
+                        ids.includes(m.id) ? { ...m, read_by: [...(m.read_by || []), username] } : m
+                    ));
+                }
+            } catch (e) { /* silent */ }
+        }, 1500); // batch every 1.5s
+    }, [fetchWithAuth, username]);
+
     const handleDeleteMessage = async (messageId) => {
         if (!window.confirm("Bu mesajı silmek istediğine emin misin?")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/messages/${messageId}/delete/`, { method: 'DELETE' });
             if (res.ok) setMessages(prev => prev.filter(m => m.id !== messageId));
         } catch (e) { console.error(e); }
+    };
+
+    // 📌 Pin/Unpin message handler
+    const handleTogglePin = async (messageId) => {
+        try {
+            const res = await fetchWithAuth(`${API_BASE_URL}/messages/${messageId}/pin/`, { method: 'POST' });
+            if (res.ok) {
+                const data = await res.json();
+                const isPinned = data.is_pinned ?? data.pinned ?? !messages.find(m => m.id === messageId)?.is_pinned;
+                setMessages(prev => prev.map(m =>
+                    m.id === messageId ? { ...m, is_pinned: isPinned } : m
+                ));
+                if (isPinned) {
+                    setPinnedMessages(prev => {
+                        const msg = messages.find(m => m.id === messageId);
+                        if (msg && !prev.some(p => p.id === messageId)) return [...prev, { ...msg, is_pinned: true }];
+                        return prev;
+                    });
+                    toast.success('📌 Mesaj sabitlendi');
+                } else {
+                    setPinnedMessages(prev => prev.filter(p => p.id !== messageId));
+                    toast.success('📌 Sabitleme kaldırıldı');
+                }
+            }
+        } catch (e) {
+            console.error('Pin toggle error:', e);
+            toast.error('❌ Sabitleme hatası');
+        }
     };
 
     const handleHideConversation = async (conversationId) => {
@@ -3201,6 +3259,40 @@ const AppContent = () => {
                                     setActiveChat({ type: 'dm', slug: msg.conversation });
                                 }
                                 setShowReadLater(false);
+                            }}
+                        />
+                    </Suspense>
+                )}
+
+                {/* 📬 Mentions Inbox Panel */}
+                {showMentionsInbox && (
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
+                        <MentionsInboxPanel
+                            isOpen={showMentionsInbox}
+                            onClose={() => setShowMentionsInbox(false)}
+                            currentUsername={currentUser?.username}
+                            onNavigateToMessage={(msg) => {
+                                if (msg.room_id) {
+                                    // Navigate to the room where the mention happened
+                                    setActiveChat({ type: 'room', id: msg.room_id });
+                                }
+                                setShowMentionsInbox(false);
+                            }}
+                        />
+                    </Suspense>
+                )}
+
+                {/* 🎭 Custom Status Modal */}
+                {showCustomStatus && (
+                    <Suspense fallback={<div>Yükleniyor...</div>}>
+                        <CustomStatusModal
+                            isOpen={showCustomStatus}
+                            onClose={() => setShowCustomStatus(false)}
+                            onStatusChange={(status) => {
+                                // Update local user status display
+                                if (currentUser) {
+                                    setCurrentUser(prev => ({ ...prev, customStatus: status }));
+                                }
                             }}
                         />
                     </Suspense>
@@ -4037,6 +4129,48 @@ const AppContent = () => {
 
                                                 <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
 
+                                                {/* 📬 Bahsedilmeler (Mentions Inbox) */}
+                                                <button
+                                                    onClick={() => {
+                                                        setShowMentionsInbox(true);
+                                                        setShowToolbarMenu(false);
+                                                    }}
+                                                    style={styles.menuItem}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#5865f2';
+                                                        e.currentTarget.style.color = '#ffffff';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                                        e.currentTarget.style.color = '#dcddde';
+                                                    }}
+                                                >
+                                                    <FaInbox />
+                                                    <span>Bahsedilmeler</span>
+                                                </button>
+
+                                                {/* 🎭 Durumunu Ayarla */}
+                                                <button
+                                                    onClick={() => {
+                                                        setShowCustomStatus(true);
+                                                        setShowToolbarMenu(false);
+                                                    }}
+                                                    style={styles.menuItem}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#5865f2';
+                                                        e.currentTarget.style.color = '#ffffff';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                                        e.currentTarget.style.color = '#dcddde';
+                                                    }}
+                                                >
+                                                    <FaSmile />
+                                                    <span>Durumunu Ayarla</span>
+                                                </button>
+
+                                                <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
+
                                                 {/* 🎬 Sinema */}
                                                 <button
                                                     onClick={() => {
@@ -4244,7 +4378,8 @@ const AppContent = () => {
                                                 }}
                                                 onScrollToMessage={scrollToMessage}
                                                 onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                onTogglePin={(id) => { /* pin fonksiyonun */ }}
+                                                onTogglePin={handleTogglePin}
+                                                onVisible={handleMessageVisible}
                                             />
                                         )}
                                     />
@@ -4279,7 +4414,8 @@ const AppContent = () => {
                                                     }}
                                                     onScrollToMessage={scrollToMessage}
                                                     onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                    onTogglePin={(id) => { /* pin fonksiyonun */ }}
+                                                    onTogglePin={handleTogglePin}
+                                                    onVisible={handleMessageVisible}
                                                 />
                                             );
                                         })}

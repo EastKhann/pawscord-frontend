@@ -122,8 +122,38 @@ export const ENDPOINTS = {
         DELETE: (messageId) => `${API_BASE}/messages/${messageId}/delete/`,
         REACT: (messageId) => `${API_BASE}/messages/${messageId}/react/`,
         PIN: (messageId) => `${API_BASE}/messages/${messageId}/pin/`,
+        UNPIN: (messageId) => `${API_BASE}/messages/${messageId}/unpin/`,
+        MARK_READ: (messageId) => `${API_BASE}/messages/${messageId}/mark_read/`,
+        READ_RECEIPTS: (messageId) => `${API_BASE}/messages/${messageId}/read_receipts/`,
         TRANSLATE: `${API_BASE}/translate/message/`,
         TRANSCRIBE: (messageId) => `${API_BASE}/messages/${messageId}/transcribe/`,
+    },
+
+    // ==========================================
+    // 📌 PINNED MESSAGES
+    // ==========================================
+    PINNED: {
+        LIST: (roomId) => `${API_BASE}/rooms/${roomId}/pinned/`,
+        CATEGORIES: (roomId) => `${API_BASE}/rooms/${roomId}/pin-categories/`,
+    },
+
+    // ==========================================
+    // 🗳️ POLLS
+    // ==========================================
+    POLLS: {
+        CREATE: `${API_BASE}/polls/create/`,
+        VOTE: (pollId) => `${API_BASE}/polls/${pollId}/vote/`,
+        RESULTS: (pollId) => `${API_BASE}/polls/${pollId}/results/`,
+        LIST: `${API_BASE}/polls/`,
+        DELETE: (pollId) => `${API_BASE}/polls/${pollId}/delete/`,
+    },
+
+    // ==========================================
+    // 📝 USER NOTES
+    // ==========================================
+    USER_NOTES: {
+        GET: (username) => `${API_BASE}/user-notes/${username}/`,
+        SAVE: (username) => `${API_BASE}/user-notes/${username}/`,
     },
 
     // ==========================================
@@ -372,6 +402,30 @@ export const ENDPOINTS = {
         CANCEL: `${API_BASE}/premium/cancel/`,
         FEATURES: `${API_BASE}/premium/features/`,
         BOOSTS: `${API_BASE}/premium/boosts/`,
+    },
+
+    // ==========================================
+    // 📬 MENTIONS INBOX
+    // ==========================================
+    MENTIONS: {
+        INBOX: `${API_BASE}/mentions/inbox/`,
+        GROUP_SETTING: `${API_BASE}/mentions/group/setting/`,
+        GROUP_SETTING_SET: `${API_BASE}/mentions/group/setting/set/`,
+    },
+
+    // ==========================================
+    // 🎭 CUSTOM STATUS
+    // ==========================================
+    STATUS: {
+        CUSTOM: `${API_BASE}/status/custom/`,
+    },
+
+    // ==========================================
+    // 🤖 AUTO-ROLE ASSIGNMENT
+    // ==========================================
+    AUTO_ROLES: {
+        GET: (serverId) => `${API_BASE}/servers/${serverId}/auto-roles/`,
+        SET: (serverId) => `${API_BASE}/servers/${serverId}/auto-roles/`,
     },
 };
 

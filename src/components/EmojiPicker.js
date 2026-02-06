@@ -1,5 +1,31 @@
 // frontend/src/components/EmojiPicker.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
+// ─── localStorage helpers for Recents & Favorites ───
+const RECENTS_KEY = 'pawscord_recent_emojis';
+const FAVS_KEY = 'pawscord_favorite_emojis';
+const MAX_RECENTS = 24;
+
+const getRecents = () => {
+    try { return JSON.parse(localStorage.getItem(RECENTS_KEY)) || []; }
+    catch { return []; }
+};
+const addRecent = (emoji) => {
+    const arr = getRecents().filter(e => e !== emoji);
+    arr.unshift(emoji);
+    localStorage.setItem(RECENTS_KEY, JSON.stringify(arr.slice(0, MAX_RECENTS)));
+};
+const getFavorites = () => {
+    try { return JSON.parse(localStorage.getItem(FAVS_KEY)) || []; }
+    catch { return []; }
+};
+const toggleFavorite = (emoji) => {
+    const arr = getFavorites();
+    const idx = arr.indexOf(emoji);
+    if (idx >= 0) arr.splice(idx, 1); else arr.push(emoji);
+    localStorage.setItem(FAVS_KEY, JSON.stringify(arr));
+    return [...arr];
+};
 
 const EMOJI_CATEGORIES = {
     'Trending 🔥': [], // 🆕 Will be populated from API
@@ -16,9 +42,12 @@ const EMOJI_CATEGORIES = {
 };
 
 const EmojiPicker = ({ onSelect }) => {
-    const [activeCategory, setActiveCategory] = useState('Trending 🔥'); // 🆕 Default to Trending
+    const [activeCategory, setActiveCategory] = useState('Son Kullanılan ⏱️');
     const [searchTerm, setSearchTerm] = useState('');
-    const [trendingEmojis, setTrendingEmojis] = useState([]); // 🆕 Trending emojis state
+    const [trendingEmojis, setTrendingEmojis] = useState([]);
+    const [recentEmojis, setRecentEmojis] = useState(getRecents());
+    const [favoriteEmojis, setFavoriteEmojis] = useState(getFavorites());
+    const [contextMenu, setContextMenu] = useState(null); // {emoji, x, y}
 
     // 🆕 Fetch trending emojis from API
     useEffect(() => {
@@ -27,27 +56,56 @@ const EmojiPicker = ({ onSelect }) => {
                 const response = await fetch('/api/emoji/trending/');
                 if (response.ok) {
                     const data = await response.json();
-                    // API returns [{emoji: '😀', count: 42}, ...]
                     const emojis = data.map(item => item.emoji);
                     setTrendingEmojis(emojis);
-                    // Update EMOJI_CATEGORIES with trending
                     EMOJI_CATEGORIES['Trending 🔥'] = emojis;
                 }
             } catch (error) {
-                console.error('Failed to fetch trending emojis:', error);
-                // Fallback to default trending
                 const fallbackTrending = ['🔥', '❤️', '😂', '👍', '🎉', '💯', '✨', '😍', '🚀', '💪'];
                 setTrendingEmojis(fallbackTrending);
                 EMOJI_CATEGORIES['Trending 🔥'] = fallbackTrending;
             }
         };
-
         fetchTrendingEmojis();
     }, []);
 
+    // Close context menu on outside click
+    useEffect(() => {
+        const close = () => setContextMenu(null);
+        if (contextMenu) window.addEventListener('click', close);
+        return () => window.removeEventListener('click', close);
+    }, [contextMenu]);
+
+    const handleSelect = useCallback((emoji) => {
+        addRecent(emoji);
+        setRecentEmojis(getRecents());
+        onSelect(emoji);
+    }, [onSelect]);
+
+    const handleContextMenu = useCallback((e, emoji) => {
+        e.preventDefault();
+        setContextMenu({ emoji, x: e.clientX, y: e.clientY });
+    }, []);
+
+    const handleToggleFav = useCallback((emoji) => {
+        const newFavs = toggleFavorite(emoji);
+        setFavoriteEmojis(newFavs);
+        setContextMenu(null);
+    }, []);
+
+    // Build dynamic categories with Recents & Favorites at top
+    const allCategories = {
+        ...(recentEmojis.length > 0 ? { 'Son Kullanılan ⏱️': recentEmojis } : {}),
+        ...(favoriteEmojis.length > 0 ? { 'Favoriler ⭐': favoriteEmojis } : {}),
+        ...EMOJI_CATEGORIES,
+    };
+
+    // Auto-select first available category if current is empty
+    const effectiveCategory = allCategories[activeCategory] ? activeCategory : Object.keys(allCategories)[0];
+
     const filteredEmojis = searchTerm
         ? Object.values(EMOJI_CATEGORIES).flat().filter(emoji => emoji.includes(searchTerm))
-        : EMOJI_CATEGORIES[activeCategory] || [];
+        : allCategories[effectiveCategory] || [];
 
     return (
         <div style={styles.container}>
@@ -65,13 +123,13 @@ const EmojiPicker = ({ onSelect }) => {
             {/* Category Tabs */}
             {!searchTerm && (
                 <div style={styles.categories}>
-                    {Object.keys(EMOJI_CATEGORIES).map(category => (
+                    {Object.keys(allCategories).map(category => (
                         <button
                             key={category}
                             onClick={() => setActiveCategory(category)}
                             style={{
                                 ...styles.categoryButton,
-                                ...(activeCategory === category && styles.activeCategoryButton)
+                                ...(effectiveCategory === category && styles.activeCategoryButton)
                             }}
                         >
                             {category}
@@ -84,15 +142,33 @@ const EmojiPicker = ({ onSelect }) => {
             <div style={styles.emojiGrid}>
                 {filteredEmojis.map((emoji, index) => (
                     <button
-                        key={index}
-                        onClick={() => onSelect(emoji)}
-                        style={styles.emojiButton}
-                        title={emoji}
+                        key={`${emoji}-${index}`}
+                        onClick={() => handleSelect(emoji)}
+                        onContextMenu={(e) => handleContextMenu(e, emoji)}
+                        style={{
+                            ...styles.emojiButton,
+                            ...(favoriteEmojis.includes(emoji) && effectiveCategory !== 'Favoriler ⭐' ? styles.favHighlight : {})
+                        }}
+                        title={favoriteEmojis.includes(emoji) ? `${emoji} ⭐` : emoji}
                     >
                         {emoji}
                     </button>
                 ))}
+                {filteredEmojis.length === 0 && (
+                    <div style={styles.emptyState}>
+                        {searchTerm ? '🔍 Sonuç bulunamadı' : activeCategory === 'Son Kullanılan ⏱️' ? '⏱️ Henüz emoji kullanılmadı' : '⭐ Sağ tıklayarak favori ekle'}
+                    </div>
+                )}
             </div>
+
+            {/* Context Menu (Right-click) */}
+            {contextMenu && (
+                <div style={{ ...styles.contextMenu, top: contextMenu.y - 50, left: contextMenu.x - 100 }}>
+                    <button style={styles.contextMenuItem} onClick={() => handleToggleFav(contextMenu.emoji)}>
+                        {favoriteEmojis.includes(contextMenu.emoji) ? '💔 Favorilerden Çıkar' : '⭐ Favorilere Ekle'}
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
@@ -160,11 +236,44 @@ const styles = {
         cursor: 'pointer',
         padding: '8px',
         borderRadius: '4px',
-        transition: 'background 0.2s',
+        transition: 'background 0.2s, transform 0.1s',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         aspectRatio: '1',
+    },
+    favHighlight: {
+        background: 'rgba(250, 176, 5, 0.08)',
+        boxShadow: 'inset 0 0 0 1px rgba(250, 176, 5, 0.25)',
+    },
+    emptyState: {
+        gridColumn: '1 / -1',
+        textAlign: 'center',
+        color: '#72767d',
+        fontSize: '14px',
+        padding: '24px 0',
+    },
+    contextMenu: {
+        position: 'fixed',
+        zIndex: 9999,
+        backgroundColor: '#18191c',
+        border: '1px solid #2f3136',
+        borderRadius: '6px',
+        padding: '4px',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+    },
+    contextMenuItem: {
+        display: 'block',
+        width: '100%',
+        padding: '8px 16px',
+        background: 'none',
+        border: 'none',
+        color: '#dcddde',
+        fontSize: '13px',
+        cursor: 'pointer',
+        borderRadius: '4px',
+        whiteSpace: 'nowrap',
+        textAlign: 'left',
     },
 };
 

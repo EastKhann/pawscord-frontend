@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import toast from './utils/toast';
-import { FaUserPlus, FaCheck, FaCoins, FaDesktop, FaClock } from 'react-icons/fa';
+import { FaUserPlus, FaCheck, FaCoins, FaDesktop, FaClock, FaStickyNote } from 'react-icons/fa';
 import { AchievementsPanel } from './components/AchievementBadge';
 import SessionManagerModal from './components/SessionManagerModal';
+import UserNotesModal from './components/UserNotesModal';
 
 const getIconForLink = (key) => {
     if (key.includes('steam')) return 'fab fa-steam';
@@ -26,6 +27,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
 
     const [requestStatus, setRequestStatus] = useState('idle');
     const [showSessionManager, setShowSessionManager] = useState(false);
+    const [showNotes, setShowNotes] = useState(false);
     const [activeTab, setActiveTab] = useState('profile'); // 🆕 Tab management
     const [presenceHistory, setPresenceHistory] = useState([]); // 🆕 Presence history
 
@@ -309,6 +311,16 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                                 💬 Mesaj Gönder
                             </button>
                         )}
+
+                        {!isSelf && (
+                            <button
+                                onClick={() => setShowNotes(true)}
+                                style={{ ...styles.actionButton, backgroundColor: '#faa61a', flex: 0, minWidth: '44px' }}
+                                title="Kullanıcı Notu"
+                            >
+                                <FaStickyNote />
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -362,6 +374,14 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         >
                             <FaClock /> Activity
                         </button>
+                        {!isSelf && (
+                            <button
+                                onClick={() => setActiveTab('notes')}
+                                style={{ ...styles.tabButton, ...(activeTab === 'notes' && styles.activeTab) }}
+                            >
+                                <FaStickyNote /> Notes
+                            </button>
+                        )}
                     </div>
 
                     {/* Profile Tab */}
@@ -455,6 +475,29 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                     )}
                 </div>
             </div>
+
+            {/* 📝 Notes Tab - Inline */}
+            {activeTab === 'notes' && !isSelf && (
+                <div style={{ padding: '0 32px 24px' }}>
+                    <UserNotesModal
+                        targetUser={user.username}
+                        apiBaseUrl={apiBaseUrl ? apiBaseUrl.replace(/\/api\/?$/, '') + '/api' : ''}
+                        fetchWithAuth={fetchWithAuth}
+                        onClose={() => setActiveTab('profile')}
+                        inline={true}
+                    />
+                </div>
+            )}
+
+            {/* 📝 Notes Modal (from button) */}
+            {showNotes && (
+                <UserNotesModal
+                    targetUser={user.username}
+                    apiBaseUrl={apiBaseUrl ? apiBaseUrl.replace(/\/api\/?$/, '') + '/api' : ''}
+                    fetchWithAuth={fetchWithAuth}
+                    onClose={() => setShowNotes(false)}
+                />
+            )}
 
             {showSessionManager && (
                 <SessionManagerModal

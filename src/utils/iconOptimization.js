@@ -49,6 +49,10 @@ export {
     FaCircle,
     FaMoon,
     FaCrown,
+    FaInbox,
+    FaSmile,
+    FaStickyNote,
+    FaGamepad,
 } from 'react-icons/fa';
 
 // TbIcons

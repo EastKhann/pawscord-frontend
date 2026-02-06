@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaStickyNote, FaSave, FaTimes } from 'react-icons/fa';
 
-const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose }) => {
+const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline = false }) => {
     const [note, setNote] = useState('');
     const [color, setColor] = useState('yellow');
     const [saving, setSaving] = useState(false);
@@ -41,7 +41,8 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose }) => {
                 body: JSON.stringify({ note, color })
             });
             if (response.ok) {
-                onClose();
+                if (!inline) onClose();
+                else setSaving(false);
             }
         } catch (error) {
             console.error('Failed to save note:', error);
@@ -49,6 +50,54 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose }) => {
             setSaving(false);
         }
     };
+
+    // Inline mode: render without overlay/modal wrapper
+    if (inline) {
+        return (
+            <div style={{ marginTop: '8px' }}>
+                <p style={styles.info}>Bu not sadece sen görebilirsin</p>
+
+                <div style={styles.colorPicker}>
+                    <label style={styles.label}>Renk:</label>
+                    <div style={styles.colors}>
+                        {colors.map(c => (
+                            <button
+                                key={c.name}
+                                onClick={() => setColor(c.name)}
+                                style={{
+                                    ...styles.colorButton,
+                                    backgroundColor: c.value,
+                                    ...(color === c.name ? styles.colorButtonActive : {})
+                                }}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                <textarea
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    placeholder="Notunu buraya yaz..."
+                    style={{
+                        ...styles.textarea,
+                        backgroundColor: colors.find(c => c.name === color)?.value
+                    }}
+                    maxLength={500}
+                />
+
+                <div style={styles.footer}>
+                    <span style={styles.charCount}>{note.length}/500</span>
+                    <button
+                        onClick={saveNote}
+                        disabled={saving}
+                        style={styles.saveButton}
+                    >
+                        {saving ? 'Kaydediliyor...' : '💾 Kaydet'}
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div style={styles.overlay} onClick={onClose}>
