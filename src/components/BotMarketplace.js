@@ -2,7 +2,7 @@
 // Discord App Directory benzeri
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { API_BASE_URL } from '../config/api.config';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 import './BotMarketplace.css';
 
 // Bot Card Component

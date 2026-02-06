@@ -8,8 +8,9 @@ import fs from 'fs'
 // � PurgeCSS for unused CSS removal in production
 import purgecss from '@fullhuman/postcss-purgecss'
 
-// �🔥 package.json'dan versiyonu dinamik oku
-const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
+// 🔥 package.json'dan versiyonu dinamik oku (BOM-safe)
+const rawPkg = fs.readFileSync('./package.json', 'utf-8')
+const packageJson = JSON.parse(rawPkg.charCodeAt(0) === 0xFEFF ? rawPkg.slice(1) : rawPkg)
 const APP_VERSION = packageJson.version
 
 // https://vitejs.dev/config/

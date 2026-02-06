@@ -2,7 +2,7 @@
 // Discord Events benzeri
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { API_BASE_URL } from '../config/api.config';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 import './EventPlanner.css';
 
 // Event Types

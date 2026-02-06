@@ -58,6 +58,10 @@ export const getApiBase = getApiBaseUrl;
 export const getMediaBase = getMediaBaseUrl;
 export { API_BASE };
 
+// API_BASE_URL includes /api suffix (for components that need it)
+// e.g., https://api.pawscord.com/api
+export const API_BASE_URL = `${API_BASE}/api`;
+
 export const ENDPOINTS = {
     // ==========================================
     // 🔐 AUTH

@@ -1,7 +1,7 @@
 // frontend/src/hooks/usePageTracking.js
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { API_BASE_URL } from '../config/api.config';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 
 // Session ID oluştur (ilk ziyarette)
 const getOrCreateSessionId = () => {

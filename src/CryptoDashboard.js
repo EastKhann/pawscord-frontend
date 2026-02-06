@@ -1,21 +1,22 @@
 // frontend/src/CryptoDashboard.js
+// 🔥 v3.0 — Balance/Winrate Mode + 5 Sekme Desteği
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { FaArrowLeft, FaBitcoin, FaSync, FaSortAmountDown, FaWallet, FaExchangeAlt, FaTimes, FaBug } from 'react-icons/fa';
+import { FaArrowLeft, FaBitcoin, FaSync, FaWallet, FaExchangeAlt, FaTimes, FaBug, FaChartLine, FaTrophy, FaFilter } from 'react-icons/fa';
 import { useAuth } from './AuthContext';
 import toast from './utils/toast';
 import { getApiBase, getMediaBase } from './utils/apiEndpoints';
 
 // --- EKRAN GENİŞLİĞİ KONTROLÜ ---
 const useWindowWidth = () => {
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        const handleResize = () => setWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-    return isMobile;
+    return { isMobile: width <= 768, width };
 };
 
 // Güvenli veri yazdırma
@@ -34,21 +35,15 @@ const formatPrice = (price) => {
 // --- AYARLAR ---
 const API_BASE = getApiBase();
 const MEDIA_BASE = getMediaBase();
-const DATA_URL = `${API_BASE}/trading/dashboard/`;
+const SIGNALS_URL = `${API_BASE}/crypto/signals/`;
 
-// PYTHON VERİSİNİ TEMİZLEME
-const cleanPythonData = (text) => {
-    if (!text) return "{}";
-    let cleaned = text;
-    cleaned = cleaned.replace(/:\s*None/g, ': null');
-    cleaned = cleaned.replace(/:\s*True/g, ': true');
-    cleaned = cleaned.replace(/:\s*False/g, ': false');
-    cleaned = cleaned.replace(/:\s*Infinity/g, ': 0');
-    cleaned = cleaned.replace(/:\s*NaN/g, ': 0');
-    if (cleaned.includes("'")) {
-        try { cleaned = cleaned.replace(/'/g, '"'); } catch (e) { }
-    }
-    return cleaned;
+// TAB BİLGİLERİ
+const TAB_CONFIG = {
+    TUM_STRATEJILER: { icon: '📊', shortLabel: 'Tümü', color: '#5865f2' },
+    ACIK_POZISYONLAR: { icon: '💼', shortLabel: 'Açık Poz.', color: '#f0b232' },
+    POZISYON_OLMAYAN: { icon: '🔍', shortLabel: 'Poz. Yok', color: '#949ba4' },
+    ZARARDA_OLANLAR: { icon: '🔴', shortLabel: 'Zararda', color: '#da373c' },
+    ALIM_FIRSATI: { icon: '💰', shortLabel: 'Alım Fır.', color: '#23a559' }
 };
 
 // 🔥 CANLI FİYAT BİLEŞENİ
@@ -57,49 +52,37 @@ const LivePrice = ({ price }) => {
     const [colorClass, setColorClass] = useState('');
 
     useEffect(() => {
-        if (!price || price === "Yükleniyor..." || price === "Fiyat Bekleniyor...") return;
-
+        if (!price || price === "Yükleniyor..." || price === "Fiyat Bekleniyor..." || price === "...") return;
         const current = parseFloat(price);
         const previous = parseFloat(prevPrice);
-
-        if (current > previous) {
-            setColorClass('flash-green');
-        } else if (current < previous) {
-            setColorClass('flash-red');
-        }
-
+        if (current > previous) setColorClass('flash-green');
+        else if (current < previous) setColorClass('flash-red');
         setPrevPrice(price);
         const timer = setTimeout(() => setColorClass(''), 1000);
         return () => clearTimeout(timer);
     }, [price]);
 
     const displayPrice = formatPrice(price);
-
     return (
         <span className={colorClass} style={{
-            fontSize: '1em',
-            fontWeight: 'bold',
-            color: (price === "Yükleniyor..." || price === "Fiyat Bekleniyor...") ? '#999' : (colorClass === 'flash-green' ? '#23a559' : (colorClass === 'flash-red' ? '#da373c' : '#23a559')),
-            transition: 'color 0.5s ease',
-            display: 'block',
-            marginTop: 2
+            fontSize: '0.95em', fontWeight: 'bold',
+            color: (price === "Yükleniyor..." || price === "Fiyat Bekleniyor..." || price === "...") ? '#999'
+                : (colorClass === 'flash-green' ? '#23a559' : (colorClass === 'flash-red' ? '#da373c' : '#23a559')),
+            transition: 'color 0.5s ease'
         }}>
-            {(price !== "Yükleniyor..." && price !== "Fiyat Bekleniyor...") ? `$${displayPrice}` : price}
+            {(price !== "Yükleniyor..." && price !== "Fiyat Bekleniyor..." && price !== "...") ? `$${displayPrice}` : price}
         </span>
     );
 };
 
-// --- GÜNCELLENMİŞ TİCARET MODALI (CANLI FİYAT DESTEKLİ) ---
+// --- TİCARET MODALI ---
 const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrade }) => {
     const [amount, setAmount] = useState('');
     const [usdtTotal, setUsdtTotal] = useState('');
     const [mode, setMode] = useState('BUY');
 
-    // 🔥 DÜZELTME 1: Fiyatı canlı veriden al, yoksa initial kullan
-    // Coin sembolünü USDT ile eşleştir (Örn: BTC -> BTCUSDT)
     const symbolKey = Object.keys(livePrices).find(k => k === coin || k === `${coin}USDT`) || coin;
     const currentLivePrice = livePrices[symbolKey] || initialPrice;
-
     const numericPrice = parseFloat(String(currentLivePrice).replace(/,/g, '').replace('$', ''));
     const userBalance = parseFloat(portfolio?.balance || 0);
 
@@ -111,26 +94,22 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
     };
     const userCoinHolding = findHolding();
 
-    // Fiyat değiştikçe toplam tutarı güncelle (Eğer miktar girilmişse)
     useEffect(() => {
         if (amount && !isNaN(parseFloat(amount))) {
-            const total = (parseFloat(amount) * numericPrice).toFixed(2);
-            setUsdtTotal(total);
+            setUsdtTotal((parseFloat(amount) * numericPrice).toFixed(2));
         }
     }, [numericPrice]);
 
     const handleAmountChange = (val) => {
         setAmount(val);
         if (!val || isNaN(parseFloat(val))) { setUsdtTotal(''); return; }
-        const total = (parseFloat(val) * numericPrice).toFixed(2);
-        setUsdtTotal(total);
+        setUsdtTotal((parseFloat(val) * numericPrice).toFixed(2));
     };
 
     const handleUsdtChange = (val) => {
         setUsdtTotal(val);
         if (!val || isNaN(parseFloat(val))) { setAmount(''); return; }
-        const count = (parseFloat(val) / numericPrice).toFixed(6);
-        setAmount(parseFloat(count).toString());
+        setAmount(parseFloat((parseFloat(val) / numericPrice).toFixed(6)).toString());
     };
 
     const handleMax = () => {
@@ -145,25 +124,20 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                     <h3>{mode === 'BUY' ? '🟢 Alış' : '🔴 Satış'}: {coin}</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>
                 </div>
-
                 <div style={{ backgroundColor: '#2b2d31', padding: 10, borderRadius: 8, marginBottom: 15, textAlign: 'center' }}>
                     <span style={{ color: '#999', fontSize: '0.9em' }}>Canlı Piyasa Fiyatı</span>
-                    {/* 🔥 CANLI FİYAT BİLEŞENİ BURADA */}
                     <div style={{ fontSize: '1.4em', fontWeight: 'bold' }}>
                         <LivePrice price={currentLivePrice} />
                     </div>
                 </div>
-
                 <div style={{ display: 'flex', gap: 10, marginBottom: 15 }}>
                     <button onClick={() => { setMode('BUY'); setAmount(''); setUsdtTotal(''); }} style={{ ...styles.modeBtn, backgroundColor: mode === 'BUY' ? '#23a559' : '#2b2d31', opacity: mode === 'BUY' ? 1 : 0.5 }}>AL (Buy)</button>
                     <button onClick={() => { setMode('SELL'); setAmount(''); setUsdtTotal(''); }} style={{ ...styles.modeBtn, backgroundColor: mode === 'SELL' ? '#da373c' : '#2b2d31', opacity: mode === 'SELL' ? 1 : 0.5 }}>SAT (Sell)</button>
                 </div>
-
                 <div style={{ marginBottom: 10, fontSize: '0.85em', color: '#dbdee1', display: 'flex', justifyContent: 'space-between', padding: '0 5px' }}>
                     <span>💰 Bakiye: <span style={{ color: '#23a559' }}>${userBalance.toFixed(2)}</span></span>
                     <span>🪙 Varlık: <span style={{ color: '#f0b232' }}>{formatPrice(userCoinHolding)} {coin}</span></span>
                 </div>
-
                 <div style={styles.inputWrapper}>
                     <label>Miktar ({coin})</label>
                     <div style={{ display: 'flex' }}>
@@ -171,7 +145,6 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                         {mode === 'SELL' && <button onClick={handleMax} style={styles.maxBtn}>MAX</button>}
                     </div>
                 </div>
-
                 <div style={styles.inputWrapper}>
                     <label>Toplam (USDT)</label>
                     <div style={{ display: 'flex' }}>
@@ -179,12 +152,9 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                         {mode === 'BUY' && <button onClick={handleMax} style={styles.maxBtn}>MAX</button>}
                     </div>
                 </div>
-
-                <button
-                    onClick={() => onTrade(mode, coin, amount, numericPrice)}
+                <button onClick={() => onTrade(mode, coin, amount, numericPrice)}
                     style={{ ...styles.confirmBtn, backgroundColor: mode === 'BUY' ? '#23a559' : '#da373c' }}
-                    disabled={!amount || parseFloat(amount) <= 0}
-                >
+                    disabled={!amount || parseFloat(amount) <= 0}>
                     {mode === 'BUY' ? 'SATIN AL' : 'SATIŞ YAP'}
                 </button>
             </div>
@@ -192,6 +162,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
     );
 };
 
+// --- PORTFÖY MODALI ---
 const PortfolioModal = ({ portfolio, onClose }) => {
     if (!portfolio) return null;
     return (
@@ -223,86 +194,99 @@ const PortfolioModal = ({ portfolio, onClose }) => {
     );
 };
 
+// --- PNL RENK YARDIMCISI ---
+const pnlColor = (pnl) => {
+    if (!pnl) return '#949ba4';
+    const str = String(pnl);
+    if (str.startsWith('+')) return '#23a559';
+    if (str.startsWith('-')) return '#da373c';
+    return '#f0b232';
+};
+
+// --- SİNYAL BADGE ---
+const SignalBadge = ({ signal }) => {
+    if (!signal || signal === '-') return <span style={{ color: '#949ba4' }}>-</span>;
+    const isLong = signal === 'LONG';
+    return (
+        <span style={{
+            backgroundColor: isLong ? 'rgba(35,165,89,0.15)' : 'rgba(218,55,60,0.15)',
+            color: isLong ? '#23a559' : '#da373c',
+            padding: '2px 8px', borderRadius: 4, fontWeight: 700, fontSize: '0.8em',
+            border: `1px solid ${isLong ? 'rgba(35,165,89,0.3)' : 'rgba(218,55,60,0.3)'}`
+        }}>
+            {isLong ? '▲' : '▼'} {signal}
+        </span>
+    );
+};
+
+// --- STATUS BADGE ---
+const StatusBadge = ({ status }) => {
+    if (!status) return <span style={{ color: '#949ba4' }}>-</span>;
+    const str = String(status);
+    const isProfit = str.includes('KAR') || str.includes('UYUYOR');
+    const isLoss = str.includes('ZARAR') || str.includes('TERS');
+    return (
+        <span style={{
+            fontSize: '0.8em', fontWeight: 600,
+            color: isProfit ? '#23a559' : isLoss ? '#da373c' : '#f0b232'
+        }}>
+            {str}
+        </span>
+    );
+};
+
+// =====================================================
+// 🔥 ANA BİLEŞEN
+// =====================================================
 const CryptoDashboard = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState(null);
     const [debugInfo, setDebugInfo] = useState("");
-    const [activeTimeframe, setActiveTimeframe] = useState('');
-    const [sortBy, setSortBy] = useState('balance');
-    const [expandedCoins, setExpandedCoins] = useState({});
-    const [compactMode, setCompactMode] = useState(false);  // 🔥 Özet mod
+
+    // v3.0: Mode & Tab
+    const [activeMode, setActiveMode] = useState('balance_mode');
+    const [activeTab, setActiveTab] = useState('TUM_STRATEJILER');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('rank');
+    const [sortDir, setSortDir] = useState('asc');
+    const [page, setPage] = useState(1);
+    const ITEMS_PER_PAGE = 50;
+
+    // Portfolio & Trading
     const [showPortfolio, setShowPortfolio] = useState(false);
     const [tradeData, setTradeData] = useState(null);
     const [portfolio, setPortfolio] = useState(null);
     const [prices, setPrices] = useState({});
-    const activeTimeframeRef = useRef(activeTimeframe);
+
     const dataRef = useRef(data);
-
     const { token } = useAuth();
-    const isMobile = useWindowWidth();
+    const { isMobile } = useWindowWidth();
 
-    // 🔥 FIX: Ref'leri state değiştiğinde güncelle
-    useEffect(() => {
-        activeTimeframeRef.current = activeTimeframe;
-    }, [activeTimeframe]);
+    useEffect(() => { dataRef.current = data; }, [data]);
 
-    useEffect(() => {
-        dataRef.current = data;
-    }, [data]);
+    // Tab değişince sayfayı sıfırla
+    useEffect(() => { setPage(1); }, [activeTab, activeMode, searchQuery]);
 
-    // 1. Verileri Çek
-    const fetchData = async () => {
-        // 🔥 DÜZELTME: Doğrudan state yerine Ref kontrol ediyoruz
-        // Böylece interval içindeki fonksiyon güncel veriyi görebiliyor.
+    // 1. Verileri Çek (v3.0 endpoint)
+    const fetchData = useCallback(async () => {
         if (!dataRef.current) setLoading(true);
-
         setErrorMsg(null);
         try {
-            const response = await fetch(DATA_URL);
-            const text = await response.text();
-
-            if (!text || text.length < 50) {
-                if (!dataRef.current) setErrorMsg("Veri dosyası boş. Bot çalışıyor mu?");
-                setLoading(false);
-                return;
-            }
-
-            const cleanText = cleanPythonData(text);
-
-            try {
-                // Hatalı JSON karakterlerini temizle
-                let validJson = cleanText
-                    .replace(/:\s*NaN/g, ': null')
-                    .replace(/:\s*Infinity/g, ': null')
-                    .replace(/:\s*-Infinity/g, ': null');
-
-                const result = JSON.parse(validJson);
-                setData(result);
-                const keys = Object.keys(result);
-
-                // 🔥 DÜZELTME: Burada da Ref kullanıyoruz.
-                // Eğer kullanıcı bir timeframe seçmişse (activeTimeframeRef.current doluysa),
-                // onu EZMİYORUZ. Sadece boşsa ilkini seçiyoruz.
-                if (keys.length > 0 && !activeTimeframeRef.current) {
-                    setActiveTimeframe(keys[0]);
-                }
-            } catch (jsonError) {
-                console.error("JSON Hatası:", jsonError, cleanText); // Konsola detaylı hata bas
-                if (!dataRef.current) {
-                    setDebugInfo("JSON Parse Hatası: " + jsonError.message + "\n\nVeri Özeti: " + cleanText.substring(0, 100));
-                    setErrorMsg("Veri formatı bozuk.");
-                }
-            }
+            const response = await fetch(SIGNALS_URL);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const result = await response.json();
+            if (result.error) { setErrorMsg(result.error); setLoading(false); return; }
+            setData(result);
         } catch (error) {
             console.error("Fetch Hatası:", error);
-            if (!dataRef.current) setErrorMsg("Sunucuya bağlanılamadı.");
+            if (!dataRef.current) setErrorMsg("Sunucuya bağlanılamadı: " + error.message);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const fetchPortfolio = async () => {
+    const fetchPortfolio = useCallback(async () => {
         if (!token) return;
         try {
             const res = await fetch(`${API_BASE}/portfolio/my/`, {
@@ -310,104 +294,166 @@ const CryptoDashboard = () => {
             });
             if (res.ok) setPortfolio(await res.json());
         } catch (e) { console.debug('[CryptoDashboard] Portfolio fetch skipped:', e.message); }
-    };
+    }, [token]);
 
-    const fetchPricesFromLocal = async () => {
-        if (!token) return;
+    const fetchPricesFromLocal = useCallback(async () => {
         try {
             const url = `${MEDIA_BASE}/crypto_prices.json?t=${Date.now()}`;
-            const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
-
-            if (res.ok) {
-                const newPrices = await res.json();
-                setPrices(newPrices);
-            }
-        } catch (e) {
-            console.error("Fiyat Okuma Hatası:", e);
-        }
-    };
+            const res = await fetch(url);
+            if (res.ok) setPrices(await res.json());
+        } catch (e) { console.error("Fiyat Okuma Hatası:", e); }
+    }, []);
 
     useEffect(() => {
         fetchData();
         fetchPortfolio();
         fetchPricesFromLocal();
-
         const priceInterval = setInterval(fetchPricesFromLocal, 1500);
         const dataInterval = setInterval(fetchData, 10000);
+        return () => { clearInterval(priceInterval); clearInterval(dataInterval); };
+    }, [token, fetchData, fetchPortfolio, fetchPricesFromLocal]);
 
-        return () => {
-            clearInterval(priceInterval);
-            clearInterval(dataInterval);
-        };
-    }, [token]);
-
-    // KESİN EŞLEŞTİRME (Regex)
+    // Coin sembolü çıkar
     const extractCoinSymbol = (rawName) => {
         if (!rawName) return null;
-        const upperName = rawName.toUpperCase();
-        const match = upperName.match(/([A-Z0-9]+USDT)/);
-        if (match && match[0]) return match[0];
-        return upperName.split(' ')[0].replace(/[^A-Z0-9]/g, '');
+        const upper = rawName.toUpperCase();
+        const match = upper.match(/([A-Z0-9]+USDT)/);
+        return match ? match[0] : upper.replace(/[^A-Z0-9]/g, '');
     };
 
-    const getLivePrice = (rawName) => {
-        const exactSymbol = extractCoinSymbol(rawName);
-        if (exactSymbol && prices[exactSymbol]) return prices[exactSymbol];
-        const shortSymbol = exactSymbol?.replace('USDT', '');
-        if (shortSymbol && prices[shortSymbol]) return prices[shortSymbol];
+    const getLivePrice = (coin) => {
+        const symbol = extractCoinSymbol(coin);
+        if (symbol && prices[symbol]) return prices[symbol];
+        const short = symbol?.replace('USDT', '');
+        if (short && prices[short]) return prices[short];
         return null;
     };
 
     const handleTrade = async (action, symbol, amount, price) => {
         if (!token) return toast.error("❌ Giriş yapmalısınız!");
-
         let finalSymbol = symbol.toUpperCase();
         if (!finalSymbol.endsWith('USDT')) finalSymbol += 'USDT';
-
         try {
             const res = await fetch(`${API_BASE}/portfolio/trade/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ symbol: finalSymbol, action, amount, price })
             });
-            const data = await res.json();
+            const resData = await res.json();
             if (res.ok) {
-                toast.success(`✅ İşlem Başarılı!`);
-                setPortfolio(data);
+                toast.success('✅ İşlem Başarılı!');
+                setPortfolio(resData);
                 setTradeData(null);
-            } else { toast.error(`❌ Hata: ${data.error}`); }
+            } else { toast.error(`❌ Hata: ${resData.error}`); }
         } catch (e) { toast.error("❌ Sunucu hatası."); }
     };
 
-    const sortedCoins = useMemo(() => {
-        if (!data || !activeTimeframe || !data[activeTimeframe]) return [];
-        const coinsArray = Object.entries(data[activeTimeframe]);
-        return coinsArray.sort((a, b) => {
-            const tA = a[1][0] || {};
-            const tB = b[1][0] || {};
-            if (sortBy === 'balance') return parseFloat(tB.balance || 0) - parseFloat(tA.balance || 0);
-            if (sortBy === 'win_rate') return parseFloat(tB.win_rate || 0) - parseFloat(tA.win_rate || 0);
-            return parseInt(tB.trade_count || 0) - parseInt(tA.trade_count || 0);
+    // =========================================
+    // v3.0: Aktif mod ve sekme verisi
+    // =========================================
+    const modeData = useMemo(() => {
+        if (!data || !data[activeMode]) return null;
+        return data[activeMode];
+    }, [data, activeMode]);
+
+    const tabData = useMemo(() => {
+        if (!modeData || !modeData.tabs || !modeData.tabs[activeTab]) return [];
+        return modeData.tabs[activeTab].data || [];
+    }, [modeData, activeTab]);
+
+    const tabInfo = useMemo(() => {
+        if (!modeData || !modeData.tabs || !modeData.tabs[activeTab]) return null;
+        return modeData.tabs[activeTab];
+    }, [modeData, activeTab]);
+
+    // Filtrelenmiş & sıralanmış veri
+    const processedData = useMemo(() => {
+        let items = [...tabData];
+
+        // Arama filtresi
+        if (searchQuery.trim()) {
+            const q = searchQuery.trim().toUpperCase();
+            items = items.filter(item =>
+                (item.coin && item.coin.toUpperCase().includes(q)) ||
+                (item.timeframe && item.timeframe.toUpperCase().includes(q)) ||
+                (item.signal && item.signal.toUpperCase().includes(q))
+            );
+        }
+
+        // Sıralama
+        items.sort((a, b) => {
+            let valA, valB;
+            switch (sortBy) {
+                case 'rank':
+                    valA = a.rank || 9999; valB = b.rank || 9999; break;
+                case 'coin':
+                    valA = a.coin || ''; valB = b.coin || '';
+                    return sortDir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                case 'pnl':
+                    valA = parseFloat(String(a.pnl_percent || '0').replace('%', '').replace('+', ''));
+                    valB = parseFloat(String(b.pnl_percent || '0').replace('%', '').replace('+', ''));
+                    break;
+                case 'win_rate':
+                    valA = parseFloat(String(a.win_rate || '0').replace('%', ''));
+                    valB = parseFloat(String(b.win_rate || '0').replace('%', ''));
+                    break;
+                case 'x_kat':
+                    valA = parseFloat(String(a.x_kat || '0').replace('x', ''));
+                    valB = parseFloat(String(b.x_kat || '0').replace('x', ''));
+                    break;
+                case 'trades':
+                    valA = parseInt(a.trades || 0); valB = parseInt(b.trades || 0); break;
+                default:
+                    valA = a.rank || 9999; valB = b.rank || 9999;
+            }
+            return sortDir === 'asc' ? valA - valB : valB - valA;
         });
-    }, [data, activeTimeframe, sortBy]);
-    useEffect(() => {
-        activeTimeframeRef.current = activeTimeframe;
-    }, [activeTimeframe]);
 
-    useEffect(() => {
-        dataRef.current = data;
-    }, [data]);
+        return items;
+    }, [tabData, searchQuery, sortBy, sortDir]);
 
-    const toggleExpand = (coin) => setExpandedCoins(p => ({ ...p, [coin]: !p[coin] }));
+    // Pagination
+    const totalPages = Math.max(1, Math.ceil(processedData.length / ITEMS_PER_PAGE));
+    const pagedData = processedData.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
 
+    const isPositionsTab = activeTab === 'ACIK_POZISYONLAR';
+
+    // Meta info
+    const meta = data?.meta || {};
+    const positionCoins = meta.position_coins || [];
+
+    const handleSort = (field) => {
+        if (sortBy === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+        else { setSortBy(field); setSortDir(field === 'rank' ? 'asc' : 'desc'); }
+    };
+
+    const SortHeader = ({ field, children, style: extraStyle }) => (
+        <th onClick={() => handleSort(field)} style={{
+            cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap',
+            color: sortBy === field ? '#f0b232' : '#949ba4',
+            ...extraStyle
+        }}>
+            {children} {sortBy === field ? (sortDir === 'asc' ? '▲' : '▼') : ''}
+        </th>
+    );
+
+    // =========================================
+    // RENDER
+    // =========================================
     return (
         <div style={{ ...styles.pageContainer, paddingTop: isMobile ? 'max(10px, env(safe-area-inset-top))' : '20px' }}>
+
+            {/* ===== HEADER ===== */}
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
                     <Link to="/" style={styles.backButton}><FaArrowLeft /> Ana Menü</Link>
-                    <h1 style={styles.title}><FaBitcoin style={{ color: '#f0b232', marginRight: '10px' }} /> Crypto AI Dashboard</h1>
+                    <h1 style={styles.title}>
+                        <FaBitcoin style={{ color: '#f0b232', marginRight: '10px' }} />
+                        Crypto AI Dashboard
+                        {meta.version && <span style={{ fontSize: '0.5em', color: '#949ba4', marginLeft: 10 }}>v{meta.version}</span>}
+                    </h1>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <button onClick={() => setShowPortfolio(true)} style={styles.portfolioBtn}>
                         <FaWallet /> Cüzdan (${formatPrice(portfolio?.balance || '0')})
                     </button>
@@ -417,8 +463,22 @@ const CryptoDashboard = () => {
                 </div>
             </div>
 
+            {/* ===== META BAR ===== */}
+            {meta.export_date && (
+                <div style={styles.metaBar}>
+                    <span>📅 Son Güncelleme: <strong>{meta.export_date}</strong></span>
+                    <span>📊 Strateji: <strong>{activeMode === 'balance_mode' ? meta.balance_strategies : meta.winrate_strategies}</strong></span>
+                    {positionCoins.length > 0 && (
+                        <span>💼 Açık Poz: <strong style={{ color: '#f0b232' }}>{positionCoins.length} Coin</strong></span>
+                    )}
+                </div>
+            )}
+
             {loading && !data ? (
-                <div style={styles.loader}>Veriler Yükleniyor...</div>
+                <div style={styles.loader}>
+                    <div className="spin" style={{ fontSize: 40, display: 'inline-block' }}>⏳</div>
+                    <p>Kripto Verileri Yükleniyor...</p>
+                </div>
             ) : errorMsg ? (
                 <div style={{ textAlign: 'center', marginTop: 50 }}>
                     <h3 style={{ color: '#da373c' }}>⚠️ {errorMsg}</h3>
@@ -428,136 +488,252 @@ const CryptoDashboard = () => {
                             <pre style={{ color: '#dbdee1', fontSize: '0.8em', whiteSpace: 'pre-wrap' }}>{debugInfo}</pre>
                         </div>
                     )}
-                    <button onClick={fetchData} style={styles.confirmBtn}>Tekrar Dene</button>
+                    <button onClick={fetchData} style={{ ...styles.confirmBtn, maxWidth: 200, margin: '20px auto' }}>Tekrar Dene</button>
                 </div>
             ) : (
                 <div style={styles.content}>
-                    <div style={styles.controlsContainer}>
+
+                    {/* ===== MODE TOGGLE (Balance / Winrate) ===== */}
+                    <div style={styles.modeToggleContainer}>
+                        <button
+                            onClick={() => setActiveMode('balance_mode')}
+                            style={{
+                                ...styles.modeToggleBtn,
+                                ...(activeMode === 'balance_mode' ? styles.modeToggleActive : {}),
+                                borderColor: activeMode === 'balance_mode' ? '#f0b232' : '#40444b'
+                            }}
+                        >
+                            <FaChartLine style={{ marginRight: 6 }} />
+                            {isMobile ? 'Balance' : '💰 Balance Sıralama'}
+                        </button>
+                        <button
+                            onClick={() => setActiveMode('winrate_mode')}
+                            style={{
+                                ...styles.modeToggleBtn,
+                                ...(activeMode === 'winrate_mode' ? styles.modeToggleActive : {}),
+                                borderColor: activeMode === 'winrate_mode' ? '#23a559' : '#40444b'
+                            }}
+                        >
+                            <FaTrophy style={{ marginRight: 6 }} />
+                            {isMobile ? 'Winrate' : '🏆 Winrate Sıralama'}
+                        </button>
+                    </div>
+
+                    {/* ===== TAB BAR ===== */}
+                    <div style={styles.tabBar}>
                         <div style={styles.tabs}>
-                            {data && Object.keys(data).map(tf => (
-                                <button key={tf} onClick={() => setActiveTimeframe(tf)} style={{ ...styles.tabButton, ...(activeTimeframe === tf ? styles.activeTab : {}) }}>
-                                    {String(tf).trim() || tf}
-                                </button>
+                            {modeData && modeData.tabs && Object.keys(modeData.tabs).map(tabKey => {
+                                const config = TAB_CONFIG[tabKey] || { icon: '📋', shortLabel: tabKey, color: '#949ba4' };
+                                const tab = modeData.tabs[tabKey];
+                                const isActive = activeTab === tabKey;
+                                return (
+                                    <button
+                                        key={tabKey}
+                                        onClick={() => setActiveTab(tabKey)}
+                                        style={{
+                                            ...styles.tabButton,
+                                            ...(isActive ? { ...styles.activeTab, backgroundColor: config.color, borderColor: config.color } : {})
+                                        }}
+                                    >
+                                        <span>{config.icon}</span>
+                                        <span>{isMobile ? config.shortLabel : (tab.title || tabKey)}</span>
+                                        <span style={{
+                                            backgroundColor: isActive ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.1)',
+                                            padding: '1px 6px', borderRadius: 10, fontSize: '0.75em', marginLeft: 4
+                                        }}>
+                                            {tab.count || 0}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* ===== ARAMA & FİLTRE ===== */}
+                    <div style={styles.filterBar}>
+                        <div style={styles.searchBox}>
+                            <FaFilter style={{ color: '#949ba4', marginRight: 8 }} />
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={e => setSearchQuery(e.target.value)}
+                                placeholder="Coin ara... (BTC, ETH, SOL)"
+                                style={styles.searchInput}
+                            />
+                            {searchQuery && (
+                                <button onClick={() => setSearchQuery('')} style={styles.clearSearchBtn}><FaTimes /></button>
+                            )}
+                        </div>
+                        <div style={styles.resultInfo}>
+                            <span style={{ color: '#949ba4', fontSize: '0.85em' }}>
+                                {processedData.length} sonuç {searchQuery && `"${searchQuery}" için`}
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* ===== POZİSYON COİNLERİ BANNER ===== */}
+                    {isPositionsTab && positionCoins.length > 0 && (
+                        <div style={styles.positionBanner}>
+                            <strong>💼 Açık Pozisyon Coinleri:</strong>{' '}
+                            {positionCoins.map((c) => (
+                                <span key={c} style={styles.positionCoinTag}>
+                                    {c.replace('USDT', '')}
+                                </span>
                             ))}
                         </div>
-                        <div style={styles.sortContainer}>
-                            <button onClick={() => setCompactMode(!compactMode)} style={{ ...styles.sortButton, ...(compactMode ? styles.activeSort : {}), marginRight: 10 }}>
-                                {compactMode ? '📊 Detay' : '⚡ Özet'}
-                            </button>
-                            <button onClick={() => setSortBy('balance')} style={{ ...styles.sortButton, ...(sortBy === 'balance' ? styles.activeSort : {}) }}>PNL</button>
-                            <button onClick={() => setSortBy('win_rate')} style={{ ...styles.sortButton, ...(sortBy === 'win_rate' ? styles.activeSort : {}) }}>WR</button>
-                        </div>
-                    </div>
+                    )}
 
-                    <div style={compactMode ? styles.compactGrid : styles.grid}>
-                        {sortedCoins.map(([rawCoinName, trades]) => {
-                            const isExpanded = !!expandedCoins[rawCoinName];
-                            const visibleTrades = isExpanded ? trades : trades.slice(0, 5);
-                            const bestTrade = trades[0] || {};
-                            const livePrice = getLivePrice(rawCoinName);
-                            const coinSymbol = extractCoinSymbol(rawCoinName)?.replace('USDT', '') || "UNK";
-
-                            // 🔥 Özet mod için 10 nokta hesapla
-                            const maxDots = 10;
-                            const dotsData = trades.slice(0, maxDots).map(t => {
-                                // Win rate %50+ = aynı yön (yeşil), %50- = ters yön (kırmızı)
-                                return parseFloat(t.win_rate || 0) >= 50;
-                            });
-                            // Eksik noktaları gri yap
-                            while (dotsData.length < maxDots) dotsData.push(null);
-
-                            // Özet mod kartı
-                            if (compactMode) {
-                                const greenCount = dotsData.filter(d => d === true).length;
-                                const redCount = dotsData.filter(d => d === false).length;
-                                return (
-                                    <div key={rawCoinName} style={styles.compactCard} onClick={() => setCompactMode(false)}>
-                                        <div style={styles.compactHeader}>
-                                            <span style={styles.compactCoinName}>{coinSymbol}</span>
-                                            <LivePrice price={livePrice || "..."} />
-                                        </div>
-                                        <div style={styles.dotsContainer}>
-                                            {dotsData.map((isGreen, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    style={{
-                                                        ...styles.dot,
-                                                        backgroundColor: isGreen === null ? '#40444b' : (isGreen ? '#23a559' : '#da373c')
-                                                    }}
-                                                    title={isGreen === null ? 'Veri yok' : (isGreen ? 'Aynı yön' : 'Ters yön')}
-                                                />
-                                            ))}
-                                        </div>
-                                        <div style={styles.compactStats}>
-                                            <span style={{ color: '#23a559', fontSize: '0.8em' }}>✓{greenCount}</span>
-                                            <span style={{ color: '#da373c', fontSize: '0.8em' }}>✗{redCount}</span>
-                                            <span style={{ color: '#f0b232', fontSize: '0.8em' }}>{safeRender(bestTrade.balance)}</span>
-                                        </div>
-                                    </div>
-                                );
-                            }
-
-                            return (
-                                <div key={rawCoinName} style={styles.coinCard}>
-                                    <div style={styles.cardHeader}>
-                                        <div style={{ flex: 1, overflow: 'hidden' }}>
-                                            <h3 style={styles.coinTitle} title={rawCoinName}>{rawCoinName}</h3>
-                                            <LivePrice price={livePrice || "Fiyat Bekleniyor..."} />
-                                        </div>
-                                        <button
-                                            onClick={() => setTradeData({ coin: coinSymbol, price: livePrice })}
-                                            style={{ ...styles.tradeBtn, opacity: livePrice ? 1 : 0.5, cursor: livePrice ? 'pointer' : 'not-allowed' }}
-                                            disabled={!livePrice}
+                    {/* ===== VERİ TABLOSU ===== */}
+                    <div style={styles.tableContainer}>
+                        <table style={styles.table}>
+                            <thead>
+                                <tr style={styles.tableHeaderRow}>
+                                    <SortHeader field="rank">#</SortHeader>
+                                    <SortHeader field="coin">Coin</SortHeader>
+                                    <th style={{ color: '#949ba4' }}>TF</th>
+                                    <th style={{ color: '#949ba4' }}>Sinyal</th>
+                                    {isPositionsTab && <>
+                                        <th style={{ color: '#949ba4' }}>Poz.Yönü</th>
+                                        <th style={{ color: '#949ba4' }}>Uyum</th>
+                                    </>}
+                                    <th style={{ color: '#949ba4' }}>Giriş</th>
+                                    <th style={{ color: '#949ba4' }}>Güncel</th>
+                                    <SortHeader field="pnl">PNL%</SortHeader>
+                                    <SortHeader field="win_rate">WR%</SortHeader>
+                                    <SortHeader field="trades">İşlem</SortHeader>
+                                    <SortHeader field="x_kat">X Kat</SortHeader>
+                                    <th style={{ color: '#949ba4' }}>Hedef</th>
+                                    <th style={{ color: '#949ba4' }}>Durum</th>
+                                    <th style={{ color: '#949ba4' }}>Al/Sat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {pagedData.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={isPositionsTab ? 15 : 13} style={{ textAlign: 'center', padding: 40, color: '#949ba4' }}>
+                                            {searchQuery ? 'Arama sonucu bulunamadı.' : 'Bu sekmede veri yok.'}
+                                        </td>
+                                    </tr>
+                                ) : pagedData.map((item, idx) => {
+                                    const livePrice = getLivePrice(item.coin);
+                                    const coinSymbol = extractCoinSymbol(item.coin)?.replace('USDT', '') || item.coin;
+                                    const rowBg = idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)';
+                                    return (
+                                        <tr key={`${item.rank}-${item.coin}-${item.timeframe}-${idx}`} style={{
+                                            backgroundColor: rowBg,
+                                            transition: 'background-color 0.2s'
+                                        }}
+                                            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(88,101,242,0.08)'}
+                                            onMouseLeave={e => e.currentTarget.style.backgroundColor = rowBg}
                                         >
-                                            <FaExchangeAlt /> İşlem
-                                        </button>
-                                    </div>
+                                            <td style={{ color: '#949ba4', fontWeight: 600 }}>{item.rank}</td>
+                                            <td>
+                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+                                                    <strong style={{ color: '#fff', fontSize: '0.9em' }}>{coinSymbol}</strong>
+                                                    {livePrice && <LivePrice price={livePrice} />}
+                                                </div>
+                                            </td>
+                                            <td><span style={styles.tfBadge}>{item.timeframe}</span></td>
+                                            <td><SignalBadge signal={item.signal || item.sinyal_yonu || '-'} /></td>
 
-                                    <div style={styles.statsSummary}>
-                                        <div style={styles.statItem}>
-                                            <span style={styles.statLabel}>PNL</span>
-                                            <span style={{ color: '#f0b232' }}>{safeRender(bestTrade.balance)}</span>
-                                        </div>
-                                        <div style={styles.statItem}>
-                                            <span style={styles.statLabel}>WR</span>
-                                            <span style={{ color: bestTrade.win_rate > 50 ? '#23a559' : '#da373c' }}>%{safeRender(bestTrade.win_rate)}</span>
-                                        </div>
-                                    </div>
+                                            {isPositionsTab && <>
+                                                <td><SignalBadge signal={item.pozisyon_yonu || '-'} /></td>
+                                                <td>
+                                                    <span style={{
+                                                        fontSize: '0.8em',
+                                                        color: item.ters_sinyal ? '#da373c' : '#23a559',
+                                                        fontWeight: 600
+                                                    }}>
+                                                        {item.yon_uyumu || '-'}
+                                                    </span>
+                                                </td>
+                                            </>}
 
-                                    <div style={styles.tableWrapper}>
-                                        <table style={styles.table}>
-                                            <thead><tr><th>PNL</th><th>WR%</th><th>İşlem</th><th>TP/SL</th></tr></thead>
-                                            <tbody>
-                                                {visibleTrades.map((trade, idx) => (
-                                                    <tr key={idx} style={{ backgroundColor: idx === 0 ? 'rgba(240,178,50,0.08)' : 'transparent' }}>
-                                                        <td style={{ color: '#f0b232' }}>{safeRender(trade.balance)}</td>
-                                                        <td style={{ color: trade.win_rate > 50 ? '#23a559' : '#da373c' }}>%{safeRender(trade.win_rate)}</td>
-                                                        <td>{safeRender(trade.trade_count)}</td>
-                                                        <td>{safeRender(trade.tp)}/{safeRender(trade.sl)}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    {trades.length > 5 && (
-                                        <button onClick={() => setExpandedCoins(p => ({ ...p, [rawCoinName]: !p[rawCoinName] }))} style={styles.expandButton}>
-                                            {isExpanded ? 'Kapat' : `+${trades.length - 5} Daha`}
-                                        </button>
-                                    )}
-                                </div>
-                            );
-                        })}
+                                            <td style={{ color: '#dbdee1', fontSize: '0.85em' }}>${formatPrice(item.entry_price)}</td>
+                                            <td style={{ color: '#dbdee1', fontSize: '0.85em' }}>${formatPrice(item.current_price)}</td>
+                                            <td style={{ color: pnlColor(item.pnl_percent), fontWeight: 700 }}>{safeRender(item.pnl_percent)}</td>
+                                            <td style={{
+                                                color: parseFloat(String(item.win_rate || '0').replace('%', '')) >= 50 ? '#23a559' : '#da373c',
+                                                fontWeight: 600
+                                            }}>
+                                                {safeRender(item.win_rate)}
+                                            </td>
+                                            <td style={{ color: '#dbdee1' }}>{safeRender(item.trades)}</td>
+                                            <td style={{ color: '#f0b232', fontWeight: 700 }}>{safeRender(item.x_kat)}</td>
+                                            <td style={{ color: '#5865f2', fontWeight: 600 }}>{safeRender(item.hedef_roe)}</td>
+                                            <td><StatusBadge status={item.status} /></td>
+                                            <td>
+                                                <button
+                                                    onClick={() => setTradeData({ coin: coinSymbol, price: livePrice })}
+                                                    style={{
+                                                        ...styles.miniTradeBtn,
+                                                        opacity: livePrice ? 1 : 0.4,
+                                                        cursor: livePrice ? 'pointer' : 'not-allowed'
+                                                    }}
+                                                    disabled={!livePrice}
+                                                    title={livePrice ? `${coinSymbol} Al/Sat` : 'Canlı fiyat bekleniyor'}
+                                                >
+                                                    <FaExchangeAlt />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     </div>
+
+                    {/* ===== PAGINATION ===== */}
+                    {totalPages > 1 && (
+                        <div style={styles.pagination}>
+                            <button
+                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                                disabled={page === 1}
+                                style={{ ...styles.pageBtn, opacity: page === 1 ? 0.4 : 1 }}
+                            >
+                                ◄ Önceki
+                            </button>
+                            <div style={styles.pageNumbers}>
+                                {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+                                    let pageNum;
+                                    if (totalPages <= 7) pageNum = i + 1;
+                                    else if (page <= 4) pageNum = i + 1;
+                                    else if (page >= totalPages - 3) pageNum = totalPages - 6 + i;
+                                    else pageNum = page - 3 + i;
+                                    return (
+                                        <button
+                                            key={pageNum}
+                                            onClick={() => setPage(pageNum)}
+                                            style={{
+                                                ...styles.pageNumBtn,
+                                                ...(page === pageNum ? styles.pageNumActive : {})
+                                            }}
+                                        >
+                                            {pageNum}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <button
+                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                disabled={page === totalPages}
+                                style={{ ...styles.pageBtn, opacity: page === totalPages ? 0.4 : 1 }}
+                            >
+                                Sonraki ►
+                            </button>
+                        </div>
+                    )}
+
                 </div>
             )}
 
+            {/* MODALS */}
             {showPortfolio && <PortfolioModal portfolio={portfolio} onClose={() => setShowPortfolio(false)} />}
-
             {tradeData && (
                 <TradeModal
                     coin={tradeData.coin}
                     initialPrice={tradeData.price}
-                    livePrices={prices} // 🔥 CANLI FİYATLAR MODALA GÖNDERİLİYOR
+                    livePrices={prices}
                     portfolio={portfolio}
                     onClose={() => setTradeData(null)}
                     onTrade={handleTrade}
@@ -567,67 +743,208 @@ const CryptoDashboard = () => {
     );
 };
 
+
+// =====================================================
+// 🎨 STİLLER
+// =====================================================
 const styles = {
-    pageContainer: { minHeight: '100%', backgroundColor: '#1e1f22', color: '#dbdee1', padding: '20px', boxSizing: 'border-box' },
-    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '15px', borderBottom: '1px solid #2b2d31' },
+    pageContainer: {
+        minHeight: '100%', backgroundColor: '#1e1f22', color: '#dbdee1',
+        padding: '20px', boxSizing: 'border-box'
+    },
+    header: {
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px solid #2b2d31',
+        flexWrap: 'wrap', gap: 10
+    },
     headerLeft: { display: 'flex', flexDirection: 'column', gap: '5px' },
-    title: { margin: 0, fontSize: '1.4em', display: 'flex', alignItems: 'center', fontWeight: '700', color: '#fff' },
-    backButton: { textDecoration: 'none', color: '#949ba4', fontSize: '0.9em', display: 'flex', alignItems: 'center', gap: '5px' },
-    refreshButton: { backgroundColor: '#5865f2', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' },
-    portfolioBtn: { backgroundColor: '#2b2d31', border: '1px solid #f0b232', color: '#f0b232', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' },
-    controlsContainer: { display: 'flex', flexWrap: 'wrap', gap: '15px', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
-    tabs: { display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '5px' },
-    tabButton: { backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#949ba4', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontWeight: '500', fontSize: '0.9em' },
-    activeTab: { backgroundColor: '#f0b232', color: '#000', borderColor: '#f0b232', fontWeight: '700' },
-    sortContainer: { display: 'flex', alignItems: 'center', gap: '8px' },
-    sortButton: { backgroundColor: 'transparent', border: '1px solid #40444b', color: '#dcddde', padding: '4px 10px', borderRadius: '15px', cursor: 'pointer', fontSize: '0.8em' },
-    activeSort: { backgroundColor: '#5865f2', borderColor: '#5865f2', color: 'white' },
-    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '15px', paddingBottom: '50px' },
+    title: {
+        margin: 0, fontSize: '1.4em', display: 'flex', alignItems: 'center',
+        fontWeight: '700', color: '#fff'
+    },
+    backButton: {
+        textDecoration: 'none', color: '#949ba4', fontSize: '0.9em',
+        display: 'flex', alignItems: 'center', gap: '5px'
+    },
+    refreshButton: {
+        backgroundColor: '#5865f2', color: 'white', border: 'none',
+        padding: '8px 16px', borderRadius: '6px', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600'
+    },
+    portfolioBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #f0b232', color: '#f0b232',
+        padding: '8px 16px', borderRadius: '6px', cursor: 'pointer',
+        fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px'
+    },
 
-    // 🔥 Özet mod stilleri
-    compactGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px', paddingBottom: '50px' },
-    compactCard: { backgroundColor: '#2b2d31', borderRadius: '8px', padding: '10px', border: '1px solid #1f2023', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' },
-    compactHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' },
-    compactCoinName: { color: '#fff', fontWeight: '700', fontSize: '0.95em' },
-    dotsContainer: { display: 'flex', gap: '4px', justifyContent: 'center', marginBottom: '8px', flexWrap: 'wrap' },
-    dot: { width: '12px', height: '12px', borderRadius: '50%', transition: 'transform 0.2s' },
-    compactStats: { display: 'flex', justifyContent: 'space-around', gap: '5px', borderTop: '1px solid #40444b', paddingTop: '6px' },
+    // META BAR
+    metaBar: {
+        display: 'flex', gap: 20, flexWrap: 'wrap', padding: '8px 12px',
+        backgroundColor: '#2b2d31', borderRadius: 8, marginBottom: 15,
+        fontSize: '0.85em', color: '#dbdee1', alignItems: 'center'
+    },
 
-    coinCard: { backgroundColor: '#2b2d31', borderRadius: '10px', overflow: 'hidden', border: '1px solid #1f2023', boxShadow: '0 4px 6px rgba(0,0,0,0.2)', display: 'flex', flexDirection: 'column' },
-    cardHeader: { backgroundColor: '#202225', padding: '12px 15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #2f3136' },
-    coinTitle: { margin: 0, color: '#fff', fontSize: '1em', fontWeight: '700', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' },
-    tradeBtn: { backgroundColor: '#23a559', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85em', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px', flexShrink: 0 },
-    statsSummary: { display: 'flex', gap: '15px', padding: '10px 15px' },
-    statItem: { display: 'flex', flexDirection: 'column' },
-    statLabel: { fontSize: '0.7em', color: '#949ba4' },
-    tableWrapper: { overflowX: 'auto' },
+    // MODE TOGGLE
+    modeToggleContainer: { display: 'flex', gap: 10, marginBottom: 15 },
+    modeToggleBtn: {
+        flex: 1, padding: '12px 20px', borderRadius: 8,
+        border: '2px solid #40444b', backgroundColor: '#2b2d31',
+        color: '#949ba4', cursor: 'pointer', fontWeight: 700,
+        fontSize: '0.95em', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', transition: 'all 0.2s'
+    },
+    modeToggleActive: {
+        backgroundColor: '#313338', color: '#fff',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+    },
+
+    // TABS
+    tabBar: { marginBottom: 15, overflowX: 'auto' },
+    tabs: {
+        display: 'flex', gap: '6px', paddingBottom: '5px',
+        minWidth: 'max-content'
+    },
+    tabButton: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b',
+        color: '#949ba4', padding: '8px 14px', borderRadius: '8px',
+        cursor: 'pointer', fontWeight: '500', fontSize: '0.85em',
+        display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap',
+        transition: 'all 0.2s'
+    },
+    activeTab: {
+        color: '#fff', fontWeight: '700',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.3)'
+    },
+
+    // FILTER BAR
+    filterBar: {
+        display: 'flex', gap: 15, marginBottom: 15, alignItems: 'center',
+        flexWrap: 'wrap'
+    },
+    searchBox: {
+        display: 'flex', alignItems: 'center', backgroundColor: '#2b2d31',
+        borderRadius: 8, padding: '6px 12px', border: '1px solid #40444b',
+        flex: 1, maxWidth: 400
+    },
+    searchInput: {
+        backgroundColor: 'transparent', border: 'none', outline: 'none',
+        color: '#dbdee1', fontSize: '0.9em', flex: 1
+    },
+    clearSearchBtn: {
+        background: 'none', border: 'none', color: '#949ba4', cursor: 'pointer',
+        padding: '2px 5px'
+    },
+    resultInfo: { display: 'flex', alignItems: 'center', gap: 10 },
+
+    // POSITION BANNER
+    positionBanner: {
+        padding: '10px 15px', backgroundColor: 'rgba(240,178,50,0.08)',
+        border: '1px solid rgba(240,178,50,0.2)', borderRadius: 8,
+        marginBottom: 15, fontSize: '0.85em', color: '#dbdee1',
+        display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap'
+    },
+    positionCoinTag: {
+        backgroundColor: '#f0b232', color: '#000', padding: '2px 8px',
+        borderRadius: 4, fontWeight: 700, fontSize: '0.8em'
+    },
+
+    // TABLE
+    content: {},
+    tableContainer: {
+        overflowX: 'auto', borderRadius: 10, border: '1px solid #2f3136',
+        backgroundColor: '#2b2d31'
+    },
     table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.85em' },
-    expandButton: { width: '100%', padding: '8px', backgroundColor: '#232428', border: 'none', borderTop: '1px solid #2f3136', color: '#949ba4', cursor: 'pointer' },
+    tableHeaderRow: { backgroundColor: '#202225', borderBottom: '2px solid #40444b' },
+    tfBadge: {
+        backgroundColor: '#40444b', color: '#dbdee1', padding: '2px 6px',
+        borderRadius: 4, fontSize: '0.8em', fontWeight: 600
+    },
+    miniTradeBtn: {
+        backgroundColor: '#23a559', color: 'white', border: 'none',
+        padding: '5px 8px', borderRadius: 4, cursor: 'pointer',
+        fontSize: '0.8em', display: 'flex', alignItems: 'center'
+    },
 
-    modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000 },
-    modalContent: { backgroundColor: '#313338', padding: '25px', borderRadius: '12px', width: '90%', maxWidth: '400px', border: '1px solid #40444b', boxShadow: '0 10px 40px rgba(0,0,0,0.5)' },
-    modalHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, color: 'white', borderBottom: '1px solid #444', paddingBottom: 10 },
+    // PAGINATION
+    pagination: {
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        gap: 10, marginTop: 20, paddingBottom: 30
+    },
+    pageBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#dbdee1',
+        padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
+        fontSize: '0.85em'
+    },
+    pageNumbers: { display: 'flex', gap: 4 },
+    pageNumBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#949ba4',
+        padding: '6px 10px', borderRadius: 4, cursor: 'pointer', fontSize: '0.85em',
+        minWidth: 32, textAlign: 'center'
+    },
+    pageNumActive: {
+        backgroundColor: '#5865f2', borderColor: '#5865f2', color: '#fff', fontWeight: 700
+    },
+
+    // LOADER
+    loader: { textAlign: 'center', marginTop: 80, color: '#949ba4', fontSize: '1.1em' },
+
+    // MODALS (shared)
+    modalOverlay: {
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex',
+        alignItems: 'center', justifyContent: 'center', zIndex: 2000
+    },
+    modalContent: {
+        backgroundColor: '#313338', padding: '25px', borderRadius: '12px',
+        width: '90%', maxWidth: '400px', border: '1px solid #40444b',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
+    },
+    modalHeader: {
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        marginBottom: 20, color: 'white', borderBottom: '1px solid #444', paddingBottom: 10
+    },
     closeBtn: { background: 'none', border: 'none', color: '#bbb', fontSize: '1.2em', cursor: 'pointer' },
-    modeBtn: { flex: 1, padding: '12px', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1em' },
+    modeBtn: {
+        flex: 1, padding: '12px', color: 'white', border: 'none',
+        borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1em'
+    },
     inputWrapper: { marginBottom: 15 },
-    input: { flex: 1, padding: '12px', borderRadius: '6px 0 0 6px', border: '1px solid #40444b', backgroundColor: '#202225', color: 'white', fontSize: '1.1em', outline: 'none', width: '100%' },
-    maxBtn: { padding: '0 15px', backgroundColor: '#40444b', border: '1px solid #40444b', borderRadius: '0 6px 6px 0', color: '#f0b232', fontWeight: 'bold', cursor: 'pointer' },
-    confirmBtn: { width: '100%', padding: '15px', border: 'none', borderRadius: '6px', color: 'white', fontWeight: 'bold', fontSize: '1.1em', cursor: 'pointer', marginTop: 10 },
-    balanceCard: { backgroundColor: '#202225', padding: '15px', borderRadius: '8px', textAlign: 'center', marginBottom: '20px', border: '1px solid #f0b232' },
+    input: {
+        flex: 1, padding: '12px', borderRadius: '6px 0 0 6px',
+        border: '1px solid #40444b', backgroundColor: '#202225', color: 'white',
+        fontSize: '1.1em', outline: 'none', width: '100%'
+    },
+    maxBtn: {
+        padding: '0 15px', backgroundColor: '#40444b', border: '1px solid #40444b',
+        borderRadius: '0 6px 6px 0', color: '#f0b232', fontWeight: 'bold', cursor: 'pointer'
+    },
+    confirmBtn: {
+        width: '100%', padding: '15px', border: 'none', borderRadius: '6px',
+        color: 'white', fontWeight: 'bold', fontSize: '1.1em', cursor: 'pointer', marginTop: 10
+    },
+    balanceCard: {
+        backgroundColor: '#202225', padding: '15px', borderRadius: '8px',
+        textAlign: 'center', marginBottom: '20px', border: '1px solid #f0b232'
+    },
     holdingsList: { maxHeight: '250px', overflowY: 'auto', margin: '10px 0' },
-    holdingItem: { display: 'flex', justifyContent: 'space-between', padding: '10px', borderBottom: '1px solid #40444b', alignItems: 'center' }
+    holdingItem: {
+        display: 'flex', justifyContent: 'space-between', padding: '10px',
+        borderBottom: '1px solid #40444b', alignItems: 'center'
+    }
 };
 
+// Global CSS
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   @keyframes flashGreen { 0% { color: #fff; background: rgba(35, 165, 89, 0.5); } 100% { color: #23a559; background: transparent; } }
   @keyframes flashRed { 0% { color: #fff; background: rgba(218, 55, 60, 0.5); } 100% { color: #da373c; background: transparent; } }
   .flash-green { animation: flashGreen 1s ease-out; }
   .flash-red { animation: flashRed 1s ease-out; }
-  .spin { animation: spin 1s linear infinite; } 
-  @keyframes spin { 100% { transform: rotate(360deg); } } 
-  td, th { padding: 8px 10px; text-align: center; border-bottom: 1px solid #2f3136; } 
-  th { color: '#949ba4'; font-weight: 600; font-size: 0.8em; } 
+  .spin { animation: spin 1s linear infinite; }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  td, th { padding: 8px 10px; text-align: center; border-bottom: 1px solid #2f3136; }
+  th { color: #949ba4; font-weight: 600; font-size: 0.8em; }
   input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 `;
 document.head.appendChild(styleSheet);

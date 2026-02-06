@@ -2,7 +2,7 @@
 // Grafik, kelime bulutu, aktif saatler, üye sıralaması
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { API_BASE_URL } from '../config/api.config';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 import './ServerStats.css';
 
 const ServerStats = ({ serverId, serverName, onClose }) => {

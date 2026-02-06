@@ -1,5 +1,5 @@
 // frontend/src/utils/apiClient.js
-import { API_BASE_URL } from '../config/api.config';
+import { API_BASE_URL } from './apiEndpoints';
 
 /**
  * 🌐 API Client Manager
