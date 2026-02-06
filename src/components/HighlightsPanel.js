@@ -72,7 +72,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/highlights/server/${serverId}/clear/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Geçmiş temizlendi');

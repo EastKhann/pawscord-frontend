@@ -48,7 +48,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchAlerts = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/security/alerts/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -65,7 +65,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchStats = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/security/alerts/stats/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -80,7 +80,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const resolveAlert = async (alertId, resolution) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/security/alerts/${alertId}/resolve/`, {
                 method: 'POST',
                 headers: {
@@ -105,7 +105,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const dismissAlert = async (alertId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/security/alerts/${alertId}/dismiss/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

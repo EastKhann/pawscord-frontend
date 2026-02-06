@@ -116,7 +116,7 @@ const revalidateInBackground = async (cacheKey, endpoint, params, headers) => {
 // Fetch with retry and timeout
 const fetchWithRetry = async (endpoint, options = {}, retries = 3) => {
     const { method = 'GET', body, headers = {}, params = {} } = options;
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     let url = endpoint;
     if (Object.keys(params).length > 0) {
@@ -128,7 +128,7 @@ const fetchWithRetry = async (endpoint, options = {}, retries = 3) => {
         method,
         headers: {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Token ${token}` }),
+            ...(token && { 'Authorization': `Bearer ${token}` }),
             ...headers
         },
         ...(body && { body: JSON.stringify(body) })

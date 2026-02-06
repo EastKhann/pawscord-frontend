@@ -22,7 +22,7 @@ const TwoFactorPanel = ({ onClose }) => {
         try {
             const response = await fetch('/api/auth/2fa/status/', {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             const data = await response.json();
@@ -39,7 +39,7 @@ const TwoFactorPanel = ({ onClose }) => {
             const response = await fetch('/api/auth/2fa/enable/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 }
             });
@@ -71,7 +71,7 @@ const TwoFactorPanel = ({ onClose }) => {
             const response = await fetch('/api/auth/2fa/verify/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ code: verifyCode })
@@ -102,7 +102,7 @@ const TwoFactorPanel = ({ onClose }) => {
             const response = await fetch('/api/auth/2fa/disable/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 

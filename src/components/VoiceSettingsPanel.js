@@ -77,7 +77,7 @@ const VoiceSettingsPanel = ({ onClose, channelId }) => {
     const animationRef = useRef(null);
 
     const apiBaseUrl = getApiBase();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const tabs = [
         { id: 'input', icon: <FaMicrophone />, label: 'Giriş' },

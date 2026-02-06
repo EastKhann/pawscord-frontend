@@ -60,7 +60,7 @@ const RateLimitConfigPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchConfig = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/rate-limits/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -81,7 +81,7 @@ const RateLimitConfigPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/rate-limits/`, {
                 method: 'PUT',
                 headers: {

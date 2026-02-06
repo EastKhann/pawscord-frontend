@@ -34,7 +34,7 @@ const PresenceHistoryPanel = ({ apiBaseUrl, userId, serverId, onClose }) => {
 
     const fetchServerMembers = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/members/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -49,7 +49,7 @@ const PresenceHistoryPanel = ({ apiBaseUrl, userId, serverId, onClose }) => {
 
     const fetchPresenceHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = selectedUser
                 ? `${apiBaseUrl}/users/${selectedUser}/presence/history/?range=${dateRange}`
                 : `${apiBaseUrl}/presence/history/?range=${dateRange}`;
@@ -70,7 +70,7 @@ const PresenceHistoryPanel = ({ apiBaseUrl, userId, serverId, onClose }) => {
 
     const fetchStats = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = selectedUser
                 ? `${apiBaseUrl}/users/${selectedUser}/presence/stats/?range=${dateRange}`
                 : `${apiBaseUrl}/presence/stats/?range=${dateRange}`;
@@ -89,7 +89,7 @@ const PresenceHistoryPanel = ({ apiBaseUrl, userId, serverId, onClose }) => {
 
     const exportHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/presence/export/?user=${selectedUser || ''}&range=${dateRange}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });

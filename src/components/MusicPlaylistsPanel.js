@@ -40,7 +40,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const fetchPlaylists = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/playlists/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -57,7 +57,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const fetchPublicPlaylists = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/playlists/public/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -72,7 +72,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const fetchDJStatus = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/music/${roomId}/dj-status/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -94,7 +94,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/playlists/create/`, {
                 method: 'POST',
                 headers: {
@@ -127,7 +127,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/playlists/${playlistId}/add-song/`, {
                 method: 'POST',
                 headers: {
@@ -166,7 +166,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleRemoveSong = async (playlistId, songId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/playlists/${playlistId}/remove-song/${songId}/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -195,7 +195,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         if (!window.confirm('Bu playlist\'i silmek istediğinizden emin misiniz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/playlists/${playlistId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -220,7 +220,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/music/${roomId}/load-playlist/${playlistId}/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -245,7 +245,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/music/${roomId}/dj-mode/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -263,7 +263,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleJoinDJQueue = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/music/${roomId}/dj-queue/join/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -280,7 +280,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleLeaveDJQueue = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/music/${roomId}/dj-queue/leave/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

@@ -31,7 +31,7 @@ const ChannelClonePanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -70,7 +70,7 @@ const ChannelClonePanel = ({ apiBaseUrl, serverId, onClose }) => {
 
         setCloning(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/channels/${selectedChannel.id}/clone/`, {
                 method: 'POST',
                 headers: {

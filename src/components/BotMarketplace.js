@@ -52,7 +52,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
 
     const loadServers = useCallback(async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/bots/my-servers/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -70,7 +70,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
         setInstalling(true);
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/bots/${bot.id}/install/`, {
                 method: 'POST',
                 headers: {

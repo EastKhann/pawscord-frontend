@@ -38,7 +38,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
   const fetchConfig = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/stream-alerts/server/${serverId}/config/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -54,7 +54,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
   const fetchStreamers = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/stream-alerts/server/${serverId}/streamers/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -68,7 +68,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -82,7 +82,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
   const fetchRoles = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -98,7 +98,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/stream-alerts/server/${serverId}/config/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -124,7 +124,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/stream-alerts/add-streamer/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId, ...newStreamer })
@@ -148,7 +148,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/stream-alerts/streamer/${streamerId}/remove/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Yayıncı kaldırıldı');

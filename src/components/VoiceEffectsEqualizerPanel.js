@@ -55,7 +55,7 @@ const VoiceEffectsEqualizerPanel = ({ roomId, apiBaseUrl, onClose }) => {
 
     const fetchCurrentSettings = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/voice/${roomId}/effects/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -75,7 +75,7 @@ const VoiceEffectsEqualizerPanel = ({ roomId, apiBaseUrl, onClose }) => {
     const handleApplyEffect = async (effectId) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/voice/${roomId}/effect/apply/`, {
                 method: 'POST',
                 headers: {
@@ -107,7 +107,7 @@ const VoiceEffectsEqualizerPanel = ({ roomId, apiBaseUrl, onClose }) => {
     const handleRemoveEffect = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/voice/${roomId}/effect/remove/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -135,7 +135,7 @@ const VoiceEffectsEqualizerPanel = ({ roomId, apiBaseUrl, onClose }) => {
     const handleApplyEqualizer = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/voice/${roomId}/equalizer/apply/`, {
                 method: 'POST',
                 headers: {
@@ -165,7 +165,7 @@ const VoiceEffectsEqualizerPanel = ({ roomId, apiBaseUrl, onClose }) => {
 
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/voice/${roomId}/equalizer/preset/`, {
                 method: 'POST',
                 headers: {

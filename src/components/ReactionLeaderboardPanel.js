@@ -16,7 +16,7 @@ const ReactionLeaderboardPanel = ({ serverId, onClose }) => {
     const [channelStats, setChannelStats] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchLeaderboard();
@@ -26,7 +26,7 @@ const ReactionLeaderboardPanel = ({ serverId, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/servers/${serverId}/reactions/leaderboard/?type=${activeTab}&range=${timeRange}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -55,7 +55,7 @@ const ReactionLeaderboardPanel = ({ serverId, onClose }) => {
     const handleExport = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/reactions/export/?range=${timeRange}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

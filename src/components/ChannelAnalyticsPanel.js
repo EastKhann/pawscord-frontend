@@ -12,7 +12,7 @@ const ChannelAnalyticsPanel = ({ channelId, channelName, onClose, fetchWithAuth,
     const [loading, setLoading] = useState(true);
     const [timeRange, setTimeRange] = useState('week');
     const [activeTab, setActiveTab] = useState('overview');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const emptyAnalytics = {
         channel: { id: channelId, name: channelName || 'general', type: 'text' },
@@ -35,7 +35,7 @@ const ChannelAnalyticsPanel = ({ channelId, channelName, onClose, fetchWithAuth,
             const response = fetchWithAuth
                 ? await fetchWithAuth(`${baseUrl}/api/channels/${channelId}/analytics/?range=${timeRange}`)
                 : await fetch(`${baseUrl}/api/channels/${channelId}/analytics/?range=${timeRange}`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
             if (response.ok) {

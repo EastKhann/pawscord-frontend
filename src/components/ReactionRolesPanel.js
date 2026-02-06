@@ -29,7 +29,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
 
   const fetchReactionRoles = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/reaction-roles/server/${serverId}/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -47,7 +47,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
 
   const fetchRoles = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/roles/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -63,7 +63,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
 
   const fetchChannels = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -84,7 +84,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/reaction-roles/create/`, {
         method: 'POST',
         headers: {
@@ -124,7 +124,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/reaction-roles/${id}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -142,7 +142,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
 
   const syncReactionRoles = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/reaction-roles/server/${serverId}/sync/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }

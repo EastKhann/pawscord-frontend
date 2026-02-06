@@ -29,7 +29,7 @@ const PinSummaryPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -51,7 +51,7 @@ const PinSummaryPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const fetchPins = async (channelId) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/channels/${channelId}/pins/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -70,7 +70,7 @@ const PinSummaryPanel = ({ apiBaseUrl, serverId, onClose }) => {
         if (!window.confirm('Bu mesajı sabitlenmişlerden kaldırmak istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/channels/${selectedChannel}/pins/${messageId}/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

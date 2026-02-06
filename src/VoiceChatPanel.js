@@ -87,15 +87,6 @@ const VoiceChatPanel = ({
         isTalking = false
     } = useVoice();
 
-    console.log('[VoicePanel] Render:', {
-        isInVoice,
-        roomName,
-        connectedUsers,
-        remoteStreams,
-        localCameraStream,
-        localScreenStream
-    });
-
     // 🔥 ALIAS: isCameraOn = isVideoEnabled
     const isCameraOn = isVideoEnabled;
 
@@ -676,7 +667,7 @@ const VoiceChatPanel = ({
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 },
                 body: JSON.stringify({ username: targetUser.username })
             });
@@ -697,7 +688,7 @@ const VoiceChatPanel = ({
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 },
                 body: JSON.stringify({ username: targetUser.username })
             });
@@ -1252,16 +1243,6 @@ const VoiceChatPanel = ({
                     const screenShares = combinedUsers.filter(u => u.isScreenSharing && allStreams[`${u.username}_screen`]);
                     const hasScreenShares = screenShares.length > 0;
 
-                    // 🔥 DEBUG: Stream durumlarını logla
-                    console.log('[VoicePanel] Stream Status:', {
-                        combinedUsersCount: combinedUsers.length,
-                        combinedUsers: combinedUsers.map(u => u.username),
-                        screenSharesCount: screenShares.length,
-                        screenShares: screenShares.map(u => u.username),
-                        allStreamKeys: Object.keys(allStreams),
-                        hasScreenShares
-                    });
-
                     if (hasScreenShares) {
                         // 🔥 FIX: Tüm kullanıcıları tek grid'de göster (ekran + kamera karışık)
                         const allItems = [];
@@ -1347,8 +1328,6 @@ const VoiceChatPanel = ({
                             cols = 3;
                             rows = Math.ceil(totalItems / 3);
                         }
-
-                        console.log(`[VoicePanel] Grid: ${totalItems} items, ${cols}x${rows}`, allItems.map(i => `${i.username}:${i.type}`));
 
                         return (
                             <div style={{

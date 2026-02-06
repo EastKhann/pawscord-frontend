@@ -20,7 +20,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
     const fetchScheduledMessages = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/scheduled/list/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -56,7 +56,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/scheduled/create/`, {
                 method: 'POST',
                 headers: {
@@ -88,7 +88,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/scheduled/cancel/${schedId}/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

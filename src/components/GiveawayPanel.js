@@ -35,7 +35,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/giveaways/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -54,7 +54,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -71,7 +71,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -94,7 +94,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/giveaways/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -135,7 +135,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/giveaways/${giveawayId}/end/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -157,7 +157,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/giveaways/${giveawayId}/reroll/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -181,7 +181,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/giveaways/${giveawayId}/delete/`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 

@@ -30,7 +30,7 @@ const GeoLocationLogsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchLogs = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(
                 `${apiBaseUrl}/moderation/${serverId}/geo-logs/?range=${filters.dateRange}`,
                 { headers: { 'Authorization': `Bearer ${token}` } }
@@ -52,7 +52,7 @@ const GeoLocationLogsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchStats = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(
                 `${apiBaseUrl}/moderation/${serverId}/geo-stats/`,
                 { headers: { 'Authorization': `Bearer ${token}` } }
@@ -68,7 +68,7 @@ const GeoLocationLogsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchAlerts = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(
                 `${apiBaseUrl}/moderation/${serverId}/geo-alerts/`,
                 { headers: { 'Authorization': `Bearer ${token}` } }
@@ -86,7 +86,7 @@ const GeoLocationLogsPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm(`${countryCode} ülkesini engellemek istiyor musunuz?`)) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/${serverId}/block-country/`, {
                 method: 'POST',
                 headers: {

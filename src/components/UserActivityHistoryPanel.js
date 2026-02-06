@@ -17,7 +17,7 @@ const UserActivityHistoryPanel = ({ userId, username, onClose }) => {
     const [filter, setFilter] = useState('all');
     const [dateRange, setDateRange] = useState({ from: '', to: '' });
     const [page, setPage] = useState(1);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchData();
@@ -35,10 +35,10 @@ const UserActivityHistoryPanel = ({ userId, username, onClose }) => {
 
             const [activitiesRes, statsRes] = await Promise.all([
                 fetch(`/api/users/${userId}/activity/?${params}`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`/api/users/${userId}/activity/stats/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
 
@@ -143,7 +143,7 @@ const UserActivityHistoryPanel = ({ userId, username, onClose }) => {
     const handleExport = async () => {
         try {
             const response = await fetch(`/api/users/${userId}/activity/export/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

@@ -50,7 +50,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
     try {
       const response = await fetch(`/api/economy/balance/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -70,7 +70,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
     try {
       const response = await fetch(`/api/economy/history/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -90,7 +90,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
     try {
       const response = await fetch(`/api/economy/leaderboard/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -130,7 +130,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
       const response = await fetch('/api/economy/transfer/', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

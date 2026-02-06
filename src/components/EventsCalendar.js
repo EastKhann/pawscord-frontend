@@ -33,7 +33,7 @@ const EventsCalendar = ({ serverId, onClose }) => {
             
             const response = await fetch(`/api/events/${serverId}/?start=${startDate}&end=${endDate}`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -58,7 +58,7 @@ const EventsCalendar = ({ serverId, onClose }) => {
             const response = await fetch(`/api/events/${serverId}/create/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newEvent)
@@ -83,7 +83,7 @@ const EventsCalendar = ({ serverId, onClose }) => {
             const response = await fetch(`/api/events/${eventId}/rsvp/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ status })
@@ -108,7 +108,7 @@ const EventsCalendar = ({ serverId, onClose }) => {
             const response = await fetch(`/api/events/${eventId}/delete/`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 

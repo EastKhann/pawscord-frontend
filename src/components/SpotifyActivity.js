@@ -16,7 +16,7 @@ const SpotifyActivity = ({ username, showAlbumArt = true, compact = false }) => 
 
     const fetchSpotifyActivity = useCallback(async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = username
                 ? `${getApiBase()}/presence/${username}/`
                 : `${getApiBase()}/spotify/playing/`;

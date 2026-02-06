@@ -15,7 +15,7 @@ const VerificationRequestsPanel = ({ serverId, onClose }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [stats, setStats] = useState({ pending: 0, approved: 0, rejected: 0 });
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchRequests();
@@ -25,7 +25,7 @@ const VerificationRequestsPanel = ({ serverId, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/verification/requests/?status=${activeTab}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -48,7 +48,7 @@ const VerificationRequestsPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/verification/requests/${requestId}/review/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ decision, notes })

@@ -139,7 +139,7 @@ const CachedMediaPanel = ({ serverId, serverName, onClose, fetchWithAuth, apiBas
             await fetch(`/api/servers/${serverId}/media/cached/bulk-delete/`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ ids: selectedItems })
@@ -169,7 +169,7 @@ const CachedMediaPanel = ({ serverId, serverName, onClose, fetchWithAuth, apiBas
         try {
             await fetch(`/api/servers/${serverId}/media/cached/clear/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) {
             console.error('Clear all cache error:', error);

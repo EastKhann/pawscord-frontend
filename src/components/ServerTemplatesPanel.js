@@ -17,7 +17,7 @@ const ServerTemplatesPanel = ({ onClose, onServerCreated, apiBaseUrl }) => {
 
     const fetchTemplates = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/templates/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -56,7 +56,7 @@ const ServerTemplatesPanel = ({ onClose, onServerCreated, apiBaseUrl }) => {
 
         setCreating(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/templates/${selectedTemplate.id}/create/`, {
                 method: 'POST',
                 headers: {

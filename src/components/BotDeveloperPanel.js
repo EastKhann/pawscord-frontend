@@ -30,7 +30,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchMyBots = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/my/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -48,7 +48,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchBotAnalytics = async (botId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/analytics/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -64,7 +64,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchBotWebhooks = async (botId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/webhooks/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -85,7 +85,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/create/`, {
                 method: 'POST',
                 headers: {
@@ -118,7 +118,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
         if (!url) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/webhook/`, {
                 method: 'POST',
                 headers: {
@@ -144,7 +144,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
         if (!confirm('Bu botu silmek istediğinize emin misiniz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

@@ -47,7 +47,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
     const [editData, setEditData] = useState({});
     const [activeTab, setActiveTab] = useState('about');
 
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('access_token');
 
     // ════════════════════════════════════════════════════════════════════════════
     // 📡 DATA FETCHING

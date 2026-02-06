@@ -17,7 +17,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
     const [sortBy, setSortBy] = useState('newest');
     const [expandedBan, setExpandedBan] = useState(null);
     const [stats, setStats] = useState({ total: 0, active: 0, expired: 0, appealed: 0 });
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchBanHistory();
@@ -31,7 +31,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/servers/${serverId}/bans/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -91,7 +91,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/bans/${ban.id}/revoke/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             toast.success(`${ban.user.username} yasaklaması kaldırıldı`);

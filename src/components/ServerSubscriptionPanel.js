@@ -22,7 +22,7 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
         payout_method: 'stripe',
         payout_threshold: 50
     });
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchData();
@@ -33,13 +33,13 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
         try {
             const [tiersRes, subscribersRes, statsRes] = await Promise.all([
                 fetch(`/api/servers/${serverId}/subscriptions/tiers/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`/api/servers/${serverId}/subscriptions/subscribers/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`/api/servers/${serverId}/subscriptions/stats/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
 
@@ -77,7 +77,7 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/servers/${serverId}/subscriptions/tiers/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(tierData)
@@ -100,7 +100,7 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
             await fetch(`/api/servers/${serverId}/subscriptions/tiers/${editingTier.id}/`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(tierData)
@@ -119,7 +119,7 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
         try {
             await fetch(`/api/servers/${serverId}/subscriptions/tiers/${tierId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) {
             console.error('Error deleting tier:', error);
@@ -132,7 +132,7 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
         try {
             await fetch(`/api/servers/${serverId}/subscriptions/tiers/${tierId}/toggle/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) {
             console.error('Error toggling tier:', error);

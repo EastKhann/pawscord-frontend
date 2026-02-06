@@ -40,7 +40,7 @@ const ScreenShare = ({ serverId, onClose }) => {
 
   const checkShareStatus = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/screen-share/${serverId}/status/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -61,7 +61,7 @@ const ScreenShare = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/screen-share/${serverId}/start/`, {
         method: 'POST',
         headers: {
@@ -91,7 +91,7 @@ const ScreenShare = ({ serverId, onClose }) => {
 
   const stopShare = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/screen-share/${serverId}/stop/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }

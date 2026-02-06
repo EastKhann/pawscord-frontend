@@ -42,9 +42,6 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
   const isOwnProfile = viewingUsername === currentUsername ||
     user?.id?.toString() === currentUserId;
 
-  // 🐛 Debug log
-  console.log('🔍 [UserProfilePanel] Is own profile:', isOwnProfile);
-
   const [activeTab, setActiveTab] = useState('profile');
   const [activeCategory, setActiveCategory] = useState('account'); // 🆕 Kategori state'i
   const [showLogoutModal, setShowLogoutModal] = useState(false); // 🚪 Logout Modal State
@@ -188,7 +185,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
     }
 
     lastFetchedUserRef.current = userId;
-    console.log('🔄 [UserProfilePanel] Fetching data for user:', userId);
+
 
     // Update formData when user prop changes
     setFormData({
@@ -268,7 +265,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
       const response = await axios.get(`${API_URL}/api/2fa/methods/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      console.log('🔐 [2FA Status] Response:', response.data);
+
       // 🔧 FIX: Backend returns {available: [], enabled: []} format
       // Check if 'totp' is in the enabled array
       const enabledMethods = response.data?.enabled || [];
@@ -276,8 +273,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
         response.data?.totp_enabled ||
         response.data?.is_enabled ||
         false;
-      console.log('🔐 [2FA Status] Enabled methods:', enabledMethods);
-      console.log('🔐 [2FA Status] Setting twoFactorEnabled to:', isEnabled);
+
       setTwoFactorEnabled(isEnabled);
     } catch (err) {
       console.error('2FA status check failed:', err);
@@ -352,7 +348,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHasPassword(response.data?.has_password ?? true);
-      console.log('🔑 [Password Status]', response.data);
+
     } catch (err) {
       console.error('Password status check failed:', err);
       setHasPassword(true); // Varsayılan olarak şifresi var kabul et
@@ -539,7 +535,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
     try {
       // 🚀 OPTIMIZATION: Use cached data if available
       if (avatarCache.isValid()) {
-        console.log('🎯 [Avatars] Using cached data');
+
         setDefaultAvatars(avatarCache.data);
         return;
       }
@@ -589,7 +585,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
       avatarCache.timestamp = Date.now();
 
       setDefaultAvatars(avatars);
-      console.log(`✅ [Avatars] Loaded ${avatars.length} avatars (thumbnail for display, original for saving)`);
+
     } catch (err) {
       console.error('Default avatars fetch failed:', err);
       setDefaultAvatars([]);

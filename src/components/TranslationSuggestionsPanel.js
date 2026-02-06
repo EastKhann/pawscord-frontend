@@ -43,7 +43,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchSuggestions = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/translations/suggestions/?status=${activeFilter}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -65,7 +65,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/translations/suggest/`, {
                 method: 'POST',
                 headers: {
@@ -94,7 +94,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
 
     const approveSuggestion = async (suggestionId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/translations/${suggestionId}/approve/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -113,7 +113,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
 
     const rejectSuggestion = async (suggestionId, reason) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/translations/${suggestionId}/reject/`, {
                 method: 'POST',
                 headers: {
@@ -136,7 +136,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
 
     const voteSuggestion = async (suggestionId, vote) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/translations/${suggestionId}/vote/`, {
                 method: 'POST',
                 headers: {
@@ -158,7 +158,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu öneriyi silmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/translations/${suggestionId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

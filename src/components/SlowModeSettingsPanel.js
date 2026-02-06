@@ -13,7 +13,7 @@ const SlowModeSettingsPanel = ({ channelId, channelName, currentSlowMode, onClos
     const [customTime, setCustomTime] = useState('');
     const [recentChanges, setRecentChanges] = useState([]);
     const [loading, setLoading] = useState(false);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const presetOptions = [
         { value: 0, label: 'Kapalı', description: 'Slow mode devre dışı' },
@@ -36,7 +36,7 @@ const SlowModeSettingsPanel = ({ channelId, channelName, currentSlowMode, onClos
     const fetchRecentChanges = async () => {
         try {
             const response = await fetch(`/api/channels/${channelId}/slowmode/history/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -57,7 +57,7 @@ const SlowModeSettingsPanel = ({ channelId, channelName, currentSlowMode, onClos
             const response = await fetch(`/api/channels/${channelId}/slowmode/`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ slowmode_delay: finalSlowMode })

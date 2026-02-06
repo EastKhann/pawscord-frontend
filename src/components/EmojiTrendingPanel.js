@@ -31,7 +31,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const fetchTrending = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/emojis/trending/?range=${timeRange}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -49,7 +49,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const fetchSuggestions = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/emojis/suggestions/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -67,7 +67,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const fetchMyEmojis = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/emojis/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -84,7 +84,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const voteSuggestion = async (suggestionId, vote) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             await fetch(`${apiBaseUrl}/emojis/suggestions/${suggestionId}/vote/`, {
                 method: 'POST',
                 headers: {
@@ -101,7 +101,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const approveSuggestion = async (suggestionId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/emojis/suggestions/${suggestionId}/approve/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -120,7 +120,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
         if (!window.confirm('Bu emojiyi silmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/emojis/${emojiId}/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -407,7 +407,7 @@ const UploadEmojiModal = ({ apiBaseUrl, serverId, onClose, onSuccess }) => {
 
         setUploading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const formData = new FormData();
             formData.append('name', name);
             formData.append('image', file);

@@ -29,7 +29,7 @@ const PollsPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/polls/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -48,7 +48,7 @@ const PollsPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -78,7 +78,7 @@ const PollsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/polls/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -118,7 +118,7 @@ const PollsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/polls/${pollId}/vote/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ option_id: optionId })
@@ -144,7 +144,7 @@ const PollsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/polls/${pollId}/end/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -167,7 +167,7 @@ const PollsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/polls/${pollId}/delete/`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 

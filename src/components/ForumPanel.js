@@ -26,7 +26,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchForums = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/forums/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -44,7 +44,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchPosts = async (forumId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/forums/${forumId}/posts/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -63,7 +63,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!name) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/forums/create/`, {
                 method: 'POST',
                 headers: {
@@ -94,7 +94,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
         setCreating(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/forums/${selectedForum.id}/posts/create/`, {
                 method: 'POST',
                 headers: {
@@ -128,7 +128,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/forums/posts/${postId}/reply/`, {
                 method: 'POST',
                 headers: {
@@ -155,7 +155,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleVote = async (postId, voteType) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/forums/posts/${postId}/vote/`, {
                 method: 'POST',
                 headers: {
@@ -178,7 +178,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleMarkSolution = async (postId, replyId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/forums/posts/${postId}/solve/${replyId}/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

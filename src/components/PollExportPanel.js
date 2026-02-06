@@ -23,7 +23,7 @@ const PollExportPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchPolls = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/polls/?status=${filterStatus}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -61,7 +61,7 @@ const PollExportPanel = ({ apiBaseUrl, serverId, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/polls/export/`, {
                 method: 'POST',
                 headers: {

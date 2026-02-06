@@ -72,7 +72,7 @@ const NicknameHistory = ({ serverId, apiBaseUrl }) => {
 
     const fetchNicknameHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/history/nicknames/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -91,7 +91,7 @@ const NicknameHistory = ({ serverId, apiBaseUrl }) => {
         if (!window.confirm(`${nickname} takma adına geri dönmek istiyor musunuz?`)) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/history/nicknames/revert/`, {
                 method: 'POST',
                 headers: {
@@ -229,7 +229,7 @@ const TopicHistory = ({ serverId, apiBaseUrl }) => {
 
     const fetchTopicHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/history/topics/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -246,7 +246,7 @@ const TopicHistory = ({ serverId, apiBaseUrl }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -263,7 +263,7 @@ const TopicHistory = ({ serverId, apiBaseUrl }) => {
         if (!window.confirm('Bu konuya geri dönmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/history/topics/revert/`, {
                 method: 'POST',
                 headers: {
@@ -374,7 +374,7 @@ const FieldChangeHistory = ({ serverId, apiBaseUrl }) => {
 
     const fetchFieldHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/history/fields/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });

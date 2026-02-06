@@ -22,7 +22,7 @@ const ServerClonePanel = ({ serverId, serverName, onClose, onClone }) => {
     });
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState('');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         loadServerData();
@@ -32,7 +32,7 @@ const ServerClonePanel = ({ serverId, serverName, onClose, onClone }) => {
         setLoading(true);
         try {
             const response = await fetch(`${getApiBase()}/api/servers/${serverId}/clone-data/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -68,7 +68,7 @@ const ServerClonePanel = ({ serverId, serverName, onClose, onClone }) => {
             const response = await fetch(`${getApiBase()}/api/servers/${serverId}/clone/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

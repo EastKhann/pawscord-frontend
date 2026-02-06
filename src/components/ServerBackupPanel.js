@@ -24,7 +24,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
   const fetchBackups = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/backups/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -43,7 +43,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/backups/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId, ...backupOptions })
@@ -68,7 +68,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/backups/${backupId}/restore/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Sunucu geri yükleniyor...');
@@ -83,7 +83,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
   const downloadBackup = async (backupId) => {
     try {
       const response = await fetch(`${apiBaseUrl}/backups/${backupId}/download/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const blob = await response.blob();
@@ -104,7 +104,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/backups/${backupId}/delete/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Yedek silindi');

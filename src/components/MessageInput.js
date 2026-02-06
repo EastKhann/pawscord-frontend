@@ -46,6 +46,7 @@ const MessageInput = ({
     const [draftSaved, setDraftSaved] = useState(false); // 🆕 Draft kaydedildi mi?
     const [touchStartY, setTouchStartY] = useState(0); // 🎤 Touch başlangıç pozisyonu
     const [currentTouchY, setCurrentTouchY] = useState(0); // 🎤 Mevcut touch pozisyonu
+    const [slideProgress, setSlideProgress] = useState(0); // 🎤 0-1 arası kaydırma ilerlemesi
     const [isDragging, setIsDragging] = useState(false); // 🆕 Drag & Drop state
     const [pendingFiles, setPendingFiles] = useState([]); // 🆕 Dosya önizleme için bekleyen dosyalar
 
@@ -464,9 +465,13 @@ const MessageInput = ({
     };
 
     // 🎤 Mikrofon butonu gesture handlers
+    const LOCK_THRESHOLD = 80; // px yukarı kaydırma eşiği
+
     const handleMicMouseDown = (e) => {
         e.preventDefault();
         setTouchStartY(e.clientY);
+        setCurrentTouchY(e.clientY);
+        setSlideProgress(0);
         startRecording();
     };
 
@@ -475,6 +480,7 @@ const MessageInput = ({
         const startY = e.touches[0].clientY;
         setTouchStartY(startY);
         setCurrentTouchY(startY);
+        setSlideProgress(0);
         startRecording();
     };
 
@@ -482,9 +488,11 @@ const MessageInput = ({
         if (!isRecording || isRecordingLocked) return;
         setCurrentTouchY(e.clientY);
         const deltaY = touchStartY - e.clientY;
-        if (deltaY > 80) {
+        const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
+        setSlideProgress(progress);
+        if (deltaY > LOCK_THRESHOLD) {
             setIsRecordingLocked(true);
-            toast.success('🔒 Kayıt kilitlendi');
+            setSlideProgress(1);
         }
     };
 
@@ -493,9 +501,11 @@ const MessageInput = ({
         const currentY = e.touches[0].clientY;
         setCurrentTouchY(currentY);
         const deltaY = touchStartY - currentY;
-        if (deltaY > 80) {
+        const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
+        setSlideProgress(progress);
+        if (deltaY > LOCK_THRESHOLD) {
             setIsRecordingLocked(true);
-            toast.success('🔒 Kayıt kilitlendi');
+            setSlideProgress(1);
         }
     };
 
@@ -565,15 +575,6 @@ const MessageInput = ({
             {draftSaved && !editingMessage && (
                 <div style={styles.draftSaved}>
                     ✅ Taslak kaydedildi
-                </div>
-            )}
-
-            {/* Recording Indicator */}
-            {isRecording && (
-                <div style={styles.recordingIndicator}>
-                    <div style={styles.recordingPulse} />
-                    <span>🎤 Kayıt ediliyor... {formatTime(recordingTime)}</span>
-                    <button onClick={stopRecording} style={styles.stopButton}>Durdur</button>
                 </div>
             )}
 
@@ -784,41 +785,73 @@ const MessageInput = ({
                             onTouchMove={handleMicTouchMove}
                             onTouchEnd={handleMicTouchEnd}
                             style={styles.micButton}
-                            className="action-button"
-                            title="Basılı tut"
+                            className="mic-button action-button"
+                            title="Basılı tut — yukarı kaydır kilitle"
                             disabled={disabled}
                         >
                             <FaMicrophone />
                         </button>
                     ) : isRecording ? (
                         <div style={styles.recordingContainer}>
-                            <div style={styles.recordingIndicator}>
-                                <div style={styles.recordingPulse} />
+                            {/* Pulsing red dot + timer */}
+                            <div style={styles.recLeft}>
+                                <div style={styles.recordingDot} className="rec-pulse" />
                                 <span style={styles.recordingTime}>{formatTime(recordingTime)}</span>
                             </div>
 
                             {!isRecordingLocked ? (
-                                <div style={styles.slideIndicator}>
-                                    <span style={styles.slideArrow}>↑</span>
-                                    <span style={styles.slideText}>Kilitle</span>
+                                /* Slide-to-lock indicator with animated mic icon */
+                                <div
+                                    style={{
+                                        ...styles.slideToLock,
+                                        transform: `translateY(${-slideProgress * 40}px)`,
+                                        opacity: 1 - slideProgress * 0.3,
+                                    }}
+                                    className="slide-to-lock"
+                                >
+                                    <div
+                                        style={{
+                                            ...styles.slideMicCircle,
+                                            backgroundColor: slideProgress > 0.7
+                                                ? '#43b581'
+                                                : `rgba(237, 66, 69, ${0.6 + slideProgress * 0.4})`,
+                                            transform: `scale(${1 + slideProgress * 0.3})`,
+                                        }}
+                                    >
+                                        {slideProgress > 0.7 ? '🔒' : <FaMicrophone style={{ color: 'white', fontSize: '14px' }} />}
+                                    </div>
+                                    <div style={styles.slideTrack}>
+                                        <div style={{
+                                            ...styles.slideTrackFill,
+                                            height: `${slideProgress * 100}%`,
+                                        }} />
+                                    </div>
+                                    <span style={{
+                                        ...styles.slideLabel,
+                                        color: slideProgress > 0.7 ? '#43b581' : '#72767d',
+                                    }}>
+                                        {slideProgress > 0.7 ? 'Bırak → Kilitle' : '↑ Kilitle'}
+                                    </span>
                                 </div>
                             ) : (
-                                <>
+                                /* Locked state — cancel & send buttons */
+                                <div style={styles.lockedActions}>
+                                    <span style={styles.lockedBadge}>🔒 Kilitlendi</span>
                                     <button
                                         onClick={cancelRecording}
-                                        style={styles.cancelButton}
+                                        style={styles.cancelRecButton}
                                         title="İptal"
                                     >
-                                        <FaTimes />
+                                        <FaTimes /> İptal
                                     </button>
                                     <button
                                         onClick={stopRecording}
                                         style={styles.sendVoiceButton}
                                         title="Gönder"
                                     >
-                                        <FaPaperPlane />
+                                        <FaPaperPlane /> Gönder
                                     </button>
-                                </>
+                                </div>
                             )}
                         </div>
                     ) : (
@@ -912,7 +945,6 @@ const styles = {
         height: '12px',
         borderRadius: '50%',
         backgroundColor: '#ed4245',
-        animation: 'pulse 1.5s infinite',
     },
     stopButton: {
         padding: '6px 12px',
@@ -1054,40 +1086,130 @@ const styles = {
         cursor: 'pointer',
         fontSize: window.innerWidth <= 768 ? '18px' : '20px',
         padding: window.innerWidth <= 768 ? '6px' : '8px',
-        borderRadius: '4px',
+        borderRadius: '50%',
         transition: 'all 0.2s',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         userSelect: 'none',
-        minWidth: window.innerWidth <= 768 ? '32px' : '36px',
-        minHeight: window.innerWidth <= 768 ? '32px' : '36px',
+        minWidth: window.innerWidth <= 768 ? '36px' : '40px',
+        minHeight: window.innerWidth <= 768 ? '36px' : '40px',
     },
     recordingContainer: {
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: '10px',
         position: 'relative',
         flex: 1,
-        backgroundColor: '#40444b',
+        backgroundColor: 'rgba(237, 66, 69, 0.08)',
         borderRadius: '8px',
         padding: '8px 12px',
+        border: '1px solid rgba(237, 66, 69, 0.2)',
+        transition: 'all 0.2s ease',
     },
-    slideIndicator: {
+    recLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '6px',
-        animation: 'slideUp 1s infinite',
-        fontSize: '12px',
-        color: '#72767d',
+        gap: '8px',
     },
-    slideArrow: {
-        fontSize: '16px',
-        color: '#72767d',
+    recordingDot: {
+        width: '10px',
+        height: '10px',
+        borderRadius: '50%',
+        backgroundColor: '#ed4245',
     },
-    slideText: {
+    recordingTime: {
+        fontSize: '14px',
+        color: '#ed4245',
+        fontWeight: '600',
+        fontVariantNumeric: 'tabular-nums',
+        minWidth: '40px',
+    },
+    slideToLock: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '4px',
+        marginLeft: 'auto',
+        transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+        cursor: 'default',
+    },
+    slideMicCircle: {
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'background-color 0.15s ease, transform 0.15s ease',
+        fontSize: '14px',
+    },
+    slideTrack: {
+        width: '4px',
+        height: '20px',
+        borderRadius: '2px',
+        backgroundColor: 'rgba(114, 118, 125, 0.3)',
+        overflow: 'hidden',
+        position: 'relative',
+    },
+    slideTrackFill: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        backgroundColor: '#ed4245',
+        borderRadius: '2px',
+        transition: 'height 0.05s linear',
+    },
+    slideLabel: {
+        fontSize: '10px',
+        fontWeight: '600',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        transition: 'color 0.15s ease',
+        whiteSpace: 'nowrap',
+    },
+    lockedActions: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        marginLeft: 'auto',
+    },
+    lockedBadge: {
         fontSize: '11px',
-        color: '#72767d',
+        color: '#43b581',
+        backgroundColor: 'rgba(67, 181, 129, 0.15)',
+        padding: '3px 8px',
+        borderRadius: '10px',
+        fontWeight: '600',
+    },
+    cancelRecButton: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        padding: '6px 12px',
+        backgroundColor: 'rgba(237, 66, 69, 0.15)',
+        color: '#ed4245',
+        border: '1px solid rgba(237, 66, 69, 0.3)',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '12px',
+        fontWeight: '600',
+        transition: 'all 0.15s',
+    },
+    sendVoiceButton: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        padding: '6px 12px',
+        backgroundColor: '#5865f2',
+        color: 'white',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '12px',
+        fontWeight: '600',
+        transition: 'all 0.15s',
     },
     // 🆕 Pending Files Styles
     pendingFilesContainer: {
@@ -1226,6 +1348,36 @@ styleSheet.textContent = `
     @keyframes slideUp {
         0%, 100% { opacity: 0.5; }
         50% { opacity: 1; }
+    }
+    
+    /* 🎤 Recording pulse animation */
+    .rec-pulse {
+        animation: recPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes recPulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(237, 66, 69, 0.5); }
+        50% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(237, 66, 69, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(237, 66, 69, 0); }
+    }
+    
+    /* 🎤 Mic button hover/active states */
+    .mic-button:hover {
+        color: #ed4245 !important;
+        background: rgba(237, 66, 69, 0.1) !important;
+    }
+    .mic-button:active {
+        transform: scale(1.2);
+        color: #ed4245 !important;
+        background: rgba(237, 66, 69, 0.2) !important;
+    }
+    
+    /* 🎤 Slide-to-lock bounce hint */
+    .slide-to-lock {
+        animation: lockHint 2s ease-in-out infinite;
+    }
+    @keyframes lockHint {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
     }
     
     textarea::-webkit-scrollbar {

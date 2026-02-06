@@ -279,7 +279,8 @@ const UPDATE_PROFILE_URL = `${API_BASE_URL}/users/update_profile/`;
 const DEFAULT_AVATARS_URL = `${API_BASE_URL}/users/default_avatars/`;
 const CHANGE_USERNAME_URL = `${API_BASE_URL}/users/change_username/`;
 const LOCAL_GIF_LIST_URL = `${API_BASE_URL}/gifs/list_local/`;
-const GOOGLE_WEB_CLIENT_ID = "774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com";
+// Google Client ID imported from constants.js
+import { GOOGLE_WEB_CLIENT_ID } from './utils/constants';
 const DRAFT_STORAGE_KEY = 'chat_drafts_v1';
 
 const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();

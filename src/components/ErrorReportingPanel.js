@@ -40,7 +40,7 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
 
         try {
             setSubmitting(true);
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/errors/report/`, {
                 method: 'POST',
                 headers: {

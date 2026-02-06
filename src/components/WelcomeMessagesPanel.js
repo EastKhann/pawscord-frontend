@@ -41,7 +41,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
   const fetchConfig = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/welcome-messages/server/${serverId}/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -61,7 +61,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
   const fetchChannels = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -77,7 +77,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
   const fetchRoles = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/roles/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -93,7 +93,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/welcome-messages/server/${serverId}/stats/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -109,7 +109,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
   const saveConfig = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/welcome-messages/server/${serverId}/update/`, {
         method: 'POST',
         headers: {
@@ -133,7 +133,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
   const testWelcomeMessage = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/welcome-messages/server/${serverId}/test/`, {
         method: 'POST',
         headers: {

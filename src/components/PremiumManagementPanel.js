@@ -10,7 +10,7 @@ const PremiumManagementPanel = ({ onClose }) => {
     const [selectedTier, setSelectedTier] = useState('classic');
     const [billingCycle, setBillingCycle] = useState('monthly'); // monthly or yearly
     const apiBaseUrl = getApiBase();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchPricingTiers();

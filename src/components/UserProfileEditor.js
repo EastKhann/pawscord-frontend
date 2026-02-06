@@ -31,7 +31,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/profile/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -51,7 +51,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const fetchBadges = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/badges/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -67,7 +67,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const fetchConnections = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/connections/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -83,7 +83,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const updateProfile = async (updates) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/update/`, {
         method: 'PUT',
         headers: {
@@ -113,7 +113,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
     try {
       setUploading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/avatar/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -142,7 +142,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
     try {
       setUploading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/banner/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -165,7 +165,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const removeAvatar = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/avatar/remove/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -184,7 +184,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const removeBanner = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/banner/remove/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -203,7 +203,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const addConnection = async (platform, username) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/connections/add/`, {
         method: 'POST',
         headers: {
@@ -226,7 +226,7 @@ const UserProfileEditor = ({ userId, onClose }) => {
 
   const removeConnection = async (connectionId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/user/${userId}/connections/${connectionId}/remove/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }

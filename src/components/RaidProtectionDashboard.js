@@ -52,7 +52,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchProtectionStatus = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/status/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -71,7 +71,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchRecentActivity = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/activity/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -86,7 +86,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchPendingVerifications = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/pending/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -101,7 +101,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchRaidLogs = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/logs/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -116,7 +116,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleToggleProtection = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = protectionStatus.enabled ? 'disable' : 'enable';
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/${endpoint}/`, {
                 method: 'POST',
@@ -145,7 +145,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
         if (!confirmed) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = protectionStatus.lockdown_active ? 'unlock' : 'lockdown';
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/${endpoint}/`, {
                 method: 'POST',
@@ -167,7 +167,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleVerifyUser = async (userId, action) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/verify/`, {
                 method: 'POST',
                 headers: {
@@ -192,7 +192,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleSaveSettings = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/settings/`, {
                 method: 'PUT',
                 headers: {

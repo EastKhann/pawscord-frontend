@@ -51,7 +51,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 console.log('🔐 [AuthCallback] Direct token mode');
                 try {
                     // Store tokens securely
-                    localStorage.setItem('accessToken', accessToken);
+                    localStorage.setItem('access_token', accessToken);
                     localStorage.setItem('refreshToken', refreshToken);
 
                     // Update auth context
@@ -100,7 +100,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                     const { access_token, refresh_token, user_id, needs_password } = response.data;
 
                     // Store tokens securely
-                    localStorage.setItem('accessToken', access_token);
+                    localStorage.setItem('access_token', access_token);
                     localStorage.setItem('refreshToken', refresh_token);
 
                     // Update auth context

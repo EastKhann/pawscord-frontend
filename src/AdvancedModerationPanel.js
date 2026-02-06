@@ -53,7 +53,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`/api/moderation/warnings/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -73,7 +73,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`/api/moderation/raid-protection/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -96,7 +96,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`/api/moderation/logs/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -116,7 +116,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`/api/moderation/automod/${serverId}/`, {
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -142,7 +142,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       const response = await fetch('/api/moderation/timeout/', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -185,7 +185,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       const response = await fetch('/api/moderation/mass-action/', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -218,7 +218,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       const response = await fetch('/api/moderation/raid-protection/', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -248,7 +248,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       const response = await fetch('/api/moderation/raid-protection/', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -275,7 +275,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       const response = await fetch('/api/moderation/warning/', {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -306,7 +306,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       const response = await fetch(`/api/moderation/warning/${userId}/clear/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Token ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId })

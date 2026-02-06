@@ -35,7 +35,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchSchedules = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/roles/${serverId}/scheduled/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -52,7 +52,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchRoles = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/roles/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -67,7 +67,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchMembers = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/members/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -89,7 +89,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/roles/${serverId}/schedule/`, {
                 method: 'POST',
                 headers: {
@@ -126,7 +126,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu zamanlamayı silmek istediğinize emin misiniz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/roles/scheduled/${scheduleId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -145,7 +145,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu zamanlamayı şimdi çalıştırmak istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/roles/scheduled/${scheduleId}/execute/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

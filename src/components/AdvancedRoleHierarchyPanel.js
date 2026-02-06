@@ -18,7 +18,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showPermissionModal, setShowPermissionModal] = useState(false);
     const [bulkAssignModal, setBulkAssignModal] = useState(false);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const permissionCategories = {
         general: {
@@ -86,7 +86,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/servers/${serverId}/roles/hierarchy/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -104,7 +104,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
     const fetchMembers = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/members/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -136,7 +136,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
             await fetch(`/api/servers/${serverId}/roles/reorder/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -161,7 +161,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/roles/${roleId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -178,7 +178,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/servers/${serverId}/roles/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -412,7 +412,7 @@ const PermissionMatrixView = ({ roles, permissionCategories, serverId, token, on
             const response = await fetch(`/api/servers/${serverId}/roles/${roleId}/permissions/toggle/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ permission })
@@ -498,7 +498,7 @@ const MemberRolesView = ({ members, roles, serverId, token, onUpdate }) => {
             const response = await fetch(`/api/servers/${serverId}/members/${memberId}/roles/`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ role_ids: roleIds })
@@ -640,7 +640,7 @@ const CreateRoleModal = ({ serverId, token, onClose, onCreated }) => {
             const response = await fetch(`/api/servers/${serverId}/roles/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name, color })
@@ -723,7 +723,7 @@ const RolePermissionModal = ({ role, permissionCategories, serverId, token, onCl
             const response = await fetch(`/api/servers/${serverId}/roles/${role.id}/`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name, color, permissions })
@@ -816,7 +816,7 @@ const BulkAssignModal = ({ roles, members, serverId, token, onClose, onAssigned 
             const response = await fetch(`/api/servers/${serverId}/roles/bulk-assign/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

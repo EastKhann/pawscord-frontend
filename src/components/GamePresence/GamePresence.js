@@ -258,7 +258,7 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
 
         setIsSaving(true);
         try {
-            const token = localStorage.getItem('accessToken');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_BASE_URL}/presence/custom-status/`, {
                 method: 'POST',
                 headers: {
@@ -349,7 +349,7 @@ export const PlaytimeStats = ({ username }) => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const token = localStorage.getItem('accessToken');
+                const token = localStorage.getItem('access_token');
                 const url = username
                     ? `${API_BASE_URL}/presence/playtime/${username}/`
                     : `${API_BASE_URL}/presence/playtime/`;
@@ -428,7 +428,7 @@ const GamePresence = ({ userId, username, showStats = false }) => {
     useEffect(() => {
         const fetchActivity = async () => {
             try {
-                const token = localStorage.getItem('accessToken');
+                const token = localStorage.getItem('access_token');
                 const url = username
                     ? `${API_BASE_URL}/presence/activity/${username}/`
                     : `${API_BASE_URL}/presence/activity/`;

@@ -24,7 +24,7 @@ export async function fetchWithAuth(url, options = {}) {
     };
 
     // Authorization token varsa ekle
-    const authToken = localStorage.getItem('token');
+    const authToken = localStorage.getItem('access_token');
     if (authToken) {
         headers['Authorization'] = `Bearer ${authToken}`;
     }

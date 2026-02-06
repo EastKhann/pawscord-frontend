@@ -30,7 +30,7 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     const timerRef = useRef(null);
     const audioContextRef = useRef(null);
     const analyserRef = useRef(null);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchRecordings();
@@ -43,7 +43,7 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     const fetchRecordings = async () => {
         try {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -161,7 +161,7 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
         try {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` },
+                headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
             });
 
@@ -184,7 +184,7 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
         try {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/${recordingId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 setRecordings(recordings.filter(r => r.id !== recordingId));
@@ -201,7 +201,7 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     const downloadRecording = async (recording) => {
         try {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/${recording.id}/download/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

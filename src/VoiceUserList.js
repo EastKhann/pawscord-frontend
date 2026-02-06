@@ -146,11 +146,8 @@ const VoiceUserList = ({
 
     // 🔥 KULLANICILAR YOKSA NULL DÖN (Arka plan gösterme!)
     if (!Array.isArray(usersInRoom) || usersInRoom.length === 0) {
-        console.log(`📭 [VoiceUserList] ${roomName}: No users in room`);
         return null; // 🔥 Boş kanal arka planı yok
     }
-
-    console.log(`✅ [VoiceUserList] ${roomName}: Rendering ${usersInRoom.length} user(s)`);
 
     return (
         <div style={styles.container}>

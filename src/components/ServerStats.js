@@ -21,7 +21,7 @@ const ServerStats = ({ serverId, serverName, onClose }) => {
     const API_URL = API_BASE_URL;
 
     const fetchData = useCallback(async (endpoint) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
         const response = await fetch(`${API_URL}/${endpoint}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });

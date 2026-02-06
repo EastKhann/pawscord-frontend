@@ -31,7 +31,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/moderation/auto-mod/rules/${serverId}/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -56,7 +56,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/moderation/auto-mod/rules/${serverId}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newRule)
@@ -81,7 +81,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/moderation/auto-mod/rules/${serverId}/${ruleId}/`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updates)
@@ -105,7 +105,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/moderation/auto-mod/rules/${serverId}/${ruleId}/`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 

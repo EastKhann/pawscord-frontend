@@ -32,7 +32,7 @@ const ForumThreadList = ({ serverId, channelId, onThreadSelect }) => {
 
             const response = await fetch(`/api/forum/threads/${channelId}/?${params}`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -51,7 +51,7 @@ const ForumThreadList = ({ serverId, channelId, onThreadSelect }) => {
         try {
             const response = await fetch(`/api/forum/tags/${channelId}/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -74,7 +74,7 @@ const ForumThreadList = ({ serverId, channelId, onThreadSelect }) => {
             const response = await fetch(`/api/forum/threads/${channelId}/create/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newThread)
@@ -99,7 +99,7 @@ const ForumThreadList = ({ serverId, channelId, onThreadSelect }) => {
             const response = await fetch(`/api/forum/threads/${threadId}/pin/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ pinned: !isPinned })
@@ -121,7 +121,7 @@ const ForumThreadList = ({ serverId, channelId, onThreadSelect }) => {
             const response = await fetch(`/api/forum/threads/${threadId}/lock/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ locked: !isLocked })

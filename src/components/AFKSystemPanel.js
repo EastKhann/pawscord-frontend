@@ -35,7 +35,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/afk/server/${serverId}/config/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -52,7 +52,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -69,7 +69,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -86,7 +86,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/afk/server/${serverId}/users/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -103,7 +103,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/afk/server/${serverId}/stats/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -121,7 +121,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/afk/server/${serverId}/config/update/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -143,7 +143,7 @@ const AFKSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/afk/user/${userId}/return/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 

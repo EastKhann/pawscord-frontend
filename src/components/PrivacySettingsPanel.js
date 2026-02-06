@@ -44,7 +44,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
   // Fetch privacy settings
   const fetchPrivacySettings = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/privacy/settings/`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -65,7 +65,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
   // Fetch blocked words
   const fetchBlockedWords = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/privacy/blocked-words/`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -84,7 +84,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
   // Update privacy settings
   const updateSettings = async (newSettings) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/privacy/settings/update/`, {
         method: 'POST',
         headers: {
@@ -123,7 +123,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
     if (!newWord.trim()) return;
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/privacy/blocked-words/add/`, {
         method: 'POST',
         headers: {
@@ -149,7 +149,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
   // Remove blocked word
   const removeBlockedWord = async (word) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/privacy/blocked-words/remove/`, {
         method: 'POST',
         headers: {
@@ -178,7 +178,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/privacy/data-export/request/`, {
         method: 'POST',
         headers: {

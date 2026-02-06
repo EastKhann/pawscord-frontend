@@ -20,7 +20,7 @@ const EmojiManager = ({ serverId, onClose }) => {
   const fetchEmojis = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/emoji/${serverId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -40,7 +40,7 @@ const EmojiManager = ({ serverId, onClose }) => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/emoji/${serverId}/stats/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -86,7 +86,7 @@ const EmojiManager = ({ serverId, onClose }) => {
 
     try {
       setUploading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/emoji/${serverId}/upload/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -116,7 +116,7 @@ const EmojiManager = ({ serverId, onClose }) => {
     if (!window.confirm('Delete this emoji?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/emoji/${serverId}/${emojiId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }

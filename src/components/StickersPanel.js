@@ -23,7 +23,7 @@ const StickersPanel = ({ serverId, onClose }) => {
   const fetchStickers = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stickers/${serverId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -42,7 +42,7 @@ const StickersPanel = ({ serverId, onClose }) => {
   const fetchStickerPacks = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stickers/packs/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -70,7 +70,7 @@ const StickersPanel = ({ serverId, onClose }) => {
 
     try {
       setUploading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stickers/${serverId}/upload/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -99,7 +99,7 @@ const StickersPanel = ({ serverId, onClose }) => {
     if (!window.confirm('Delete this sticker?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stickers/${serverId}/${stickerId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -118,7 +118,7 @@ const StickersPanel = ({ serverId, onClose }) => {
 
   const installPack = async (packId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stickers/${serverId}/install-pack/`, {
         method: 'POST',
         headers: {

@@ -46,7 +46,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
   // Fetch appearance settings
   const fetchAppearanceSettings = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/appearance/settings/`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -68,7 +68,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
   // Update appearance settings
   const updateSettings = async (newSettings) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/appearance/settings/update/`, {
         method: 'POST',
         headers: {
@@ -130,7 +130,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/appearance/settings/reset/`, {
         method: 'POST',
         headers: {

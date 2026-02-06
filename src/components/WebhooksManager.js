@@ -37,7 +37,7 @@ const WebhooksManager = ({ serverId, onClose }) => {
     }, [serverId]);
 
     const fetchWithAuth = async (url, options = {}) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
         const response = await fetch(url, {
             ...options,
             headers: {

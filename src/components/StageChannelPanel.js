@@ -24,7 +24,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const fetchActiveStages = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const url = roomId 
                 ? `${apiBaseUrl}/stages/active/` 
                 : `${apiBaseUrl}/stages/active/`;
@@ -56,7 +56,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/create/${roomId}/`, {
                 method: 'POST',
                 headers: {
@@ -84,7 +84,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleJoinStage = async (stageId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/join/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -105,7 +105,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleLeaveStage = async (stageId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/leave/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -122,7 +122,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleRequestToSpeak = async (stageId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/request-speak/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -138,7 +138,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const handleInviteSpeaker = async (stageId, username) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/invite-speaker/`, {
                 method: 'POST',
                 headers: {

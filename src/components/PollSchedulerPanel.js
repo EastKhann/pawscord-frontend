@@ -36,7 +36,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchScheduledPolls = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/polls/${serverId}/scheduled/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -53,7 +53,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -81,7 +81,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/polls/${serverId}/schedule/`, {
                 method: 'POST',
                 headers: {
@@ -113,7 +113,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu zamanlanmış anketi silmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/polls/scheduled/${pollId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -132,7 +132,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu anketi şimdi başlatmak istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/polls/scheduled/${pollId}/start-now/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

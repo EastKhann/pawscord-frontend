@@ -1181,7 +1181,6 @@ const RoomList = ({
                                     )}
                                 </button>
                             </div>
-                            {console.log('📋 [RoomList] Conversations:', conversations?.length || 0, 'items')}
                             {!conversations || conversations.length === 0 ? (
                                 <div style={{
                                     padding: '20px',

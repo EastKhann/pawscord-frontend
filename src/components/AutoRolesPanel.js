@@ -39,7 +39,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/auto-roles/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -58,7 +58,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -81,7 +81,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/auto-roles/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -117,7 +117,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/auto-roles/${autoRoleId}/toggle/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -140,7 +140,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/auto-roles/${autoRoleId}/delete/`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 

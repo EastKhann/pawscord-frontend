@@ -15,7 +15,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
     useEffect(() => {
         const loadProfile = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem('access_token');
                 const url = username
                     ? `${API_URL}/profile/card/${username}/`
                     : `${API_URL}/profile/card/`;
@@ -203,7 +203,7 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
 
     const loadData = useCallback(async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
 
             const [profileRes, themesRes, badgesRes] = await Promise.all([
                 fetch(`${API_URL}/profile/card/`, { headers: { 'Authorization': `Bearer ${token}` } }),
@@ -242,7 +242,7 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
 
             // Save profile card
             const profileRes = await fetch(`${API_URL}/profile/card/update/`, {
@@ -278,7 +278,7 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
         if (!newLink.url) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/profile/links/add/`, {
                 method: 'POST',
                 headers: {
@@ -300,7 +300,7 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
 
     const handleRemoveLink = async (index) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/profile/links/${index}/remove/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

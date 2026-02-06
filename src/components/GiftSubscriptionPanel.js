@@ -52,7 +52,7 @@ const GiftSubscriptionPanel = ({ userId, onClose }) => {
         { value: '12', label: '1 Year' }
     ];
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         if (activeTab === 'history') {
@@ -72,7 +72,7 @@ const GiftSubscriptionPanel = ({ userId, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`${getApiBase()}/api/nitro/gift-history/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -91,7 +91,7 @@ const GiftSubscriptionPanel = ({ userId, onClose }) => {
         setSearching(true);
         try {
             const response = await fetch(`${getApiBase()}/api/users/search/?q=${encodeURIComponent(recipient)}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -120,7 +120,7 @@ const GiftSubscriptionPanel = ({ userId, onClose }) => {
             const response = await fetch(`${getApiBase()}/api/nitro/send-gift/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

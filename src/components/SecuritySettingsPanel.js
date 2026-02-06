@@ -15,7 +15,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
     const [securityStatus, setSecurityStatus] = useState(null);
     const [activeTab, setActiveTab] = useState('2fa'); // 2fa, sessions, ip, alerts
     const apiBaseUrl = getApiBase();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchSecurityStatus();

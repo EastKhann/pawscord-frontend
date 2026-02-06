@@ -306,10 +306,24 @@ class StatePersistenceManager {
     }
 
     /**
-     * Simple encryption (XOR - not secure, just obfuscation)
+     * Get obfuscation secret (device-unique, not hardcoded)
+     */
+    _getSecret() {
+        // Use a combination of origin + user agent hash for device-unique key
+        const raw = (window.location.origin || 'pawscord') + navigator.userAgent.slice(0, 32);
+        let hash = 0;
+        for (let i = 0; i < raw.length; i++) {
+            hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+            hash |= 0;
+        }
+        return 'pws_' + Math.abs(hash).toString(36) + '_state';
+    }
+
+    /**
+     * Simple encryption (XOR - obfuscation, not cryptographic security)
      */
     encryptData(data) {
-        const secret = 'MySecretKey123';
+        const secret = this._getSecret();
         const str = JSON.stringify(data);
         let encrypted = '';
 
@@ -326,7 +340,7 @@ class StatePersistenceManager {
      * Simple decryption
      */
     decryptData(encrypted) {
-        const secret = 'MySecretKey123';
+        const secret = this._getSecret();
         const decoded = atob(encrypted);
         let decrypted = '';
 

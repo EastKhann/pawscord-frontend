@@ -39,7 +39,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchCommunitySettings = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/community/settings/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -58,7 +58,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -74,7 +74,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const saveSettings = async () => {
         setSaving(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/community/settings/`, {
                 method: 'PUT',
                 headers: {

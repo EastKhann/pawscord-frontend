@@ -19,7 +19,7 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
     const [newCategoryName, setNewCategoryName] = useState('');
     const [newCategoryColor, setNewCategoryColor] = useState('#9c27b0');
     const [draggedPin, setDraggedPin] = useState(null);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const colorOptions = [
         '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5',
@@ -36,10 +36,10 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
         try {
             const [catsRes, pinsRes] = await Promise.all([
                 fetch(`/api/channels/${channelId}/pins/categories/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`/api/channels/${channelId}/pins/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
 
@@ -72,7 +72,7 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
             await fetch(`/api/channels/${channelId}/pins/categories/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newCategory)
@@ -93,7 +93,7 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
             await fetch(`/api/channels/${channelId}/pins/categories/${editingCategory.id}/`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name: newCategoryName, color: newCategoryColor })
@@ -117,7 +117,7 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
         try {
             await fetch(`/api/channels/${channelId}/pins/categories/${categoryId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) { console.error('Delete category error:', error); }
 
@@ -131,7 +131,7 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
             await fetch(`/api/channels/${channelId}/pins/${pinId}/`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ category_id: newCategoryId })

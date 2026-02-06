@@ -9,7 +9,7 @@ const CDNManager = ({ serverId, onClose }) => {
     const [uploadProgress, setUploadProgress] = useState(0);
 
     const fetchWithAuth = async (url, options = {}) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
         const response = await fetch(url, {
             ...options,
             headers: {
@@ -30,7 +30,7 @@ const CDNManager = ({ serverId, onClose }) => {
             formData.append('file', file);
             formData.append('server_id', serverId);
 
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const xhr = new XMLHttpRequest();
 
             xhr.upload.addEventListener('progress', (e) => {

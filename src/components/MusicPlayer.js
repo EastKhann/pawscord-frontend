@@ -42,7 +42,7 @@ const MusicPlayer = ({ channelId }) => {
         try {
             const response = await fetch(`/api/music/status/${channelId}/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -64,7 +64,7 @@ const MusicPlayer = ({ channelId }) => {
             const response = await fetch(`/api/music/${endpoint}/${channelId}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -82,7 +82,7 @@ const MusicPlayer = ({ channelId }) => {
             const response = await fetch(`/api/music/skip/${channelId}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -101,7 +101,7 @@ const MusicPlayer = ({ channelId }) => {
             const response = await fetch(`/api/music/previous/${channelId}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -121,7 +121,7 @@ const MusicPlayer = ({ channelId }) => {
             await fetch(`/api/music/volume/${channelId}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ volume: newVolume })
@@ -141,7 +141,7 @@ const MusicPlayer = ({ channelId }) => {
             const response = await fetch(`/api/music/add/${channelId}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ url: trackUrl })
@@ -166,7 +166,7 @@ const MusicPlayer = ({ channelId }) => {
             const response = await fetch(`/api/music/remove/${channelId}/${trackId}/`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 

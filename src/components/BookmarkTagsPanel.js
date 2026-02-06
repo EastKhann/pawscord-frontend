@@ -37,7 +37,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchBookmarks = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -54,7 +54,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchTags = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/tags/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -74,7 +74,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/tags/create/`, {
                 method: 'POST',
                 headers: {
@@ -99,7 +99,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
         if (!editingTag) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/tags/${editingTag.id}/update/`, {
                 method: 'PUT',
                 headers: {
@@ -125,7 +125,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu etiketi silmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/tags/${tagId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -142,7 +142,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
 
     const deleteBookmark = async (bookmarkId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/${bookmarkId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -159,7 +159,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
 
     const addTagToBookmark = async (bookmarkId, tagId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/${bookmarkId}/tags/add/`, {
                 method: 'POST',
                 headers: {
@@ -179,7 +179,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
 
     const removeTagFromBookmark = async (bookmarkId, tagId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bookmarks/${bookmarkId}/tags/${tagId}/remove/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

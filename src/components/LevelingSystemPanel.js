@@ -37,7 +37,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const fetchConfig = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/config/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -55,7 +55,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const fetchLevelRoles = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -71,7 +71,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const fetchRoles = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/roles/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -87,7 +87,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const fetchChannels = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -103,7 +103,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const fetchLeaderboard = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/leaderboard/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -119,7 +119,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const saveConfig = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/config/update/`, {
         method: 'POST',
         headers: {
@@ -147,7 +147,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/add/`, {
         method: 'POST',
         headers: {
@@ -171,7 +171,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
   const removeLevelRole = async (id) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/${id}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -193,7 +193,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/user/${userId}/reset/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }

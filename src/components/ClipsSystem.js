@@ -21,7 +21,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
   const fetchMyClips = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/clips/my-clips/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -40,7 +40,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
   const fetchServerClips = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/clips/${serverId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -64,7 +64,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
     try {
       setRecording(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/clips/${serverId}/start/`, {
         method: 'POST',
         headers: {
@@ -92,7 +92,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
   const stopClip = async (clipId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/clips/${clipId}/stop/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -114,7 +114,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
     if (!window.confirm('Delete this clip?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/clips/${clipId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -131,7 +131,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
   const shareClip = async (clipId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/clips/${clipId}/share/`, {
         method: 'POST',
         headers: {

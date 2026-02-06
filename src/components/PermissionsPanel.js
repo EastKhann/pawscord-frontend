@@ -81,7 +81,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
     }, [selectedRole]);
 
     const fetchWithAuth = async (url, options = {}) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
         const response = await fetch(url, {
             ...options,
             headers: {

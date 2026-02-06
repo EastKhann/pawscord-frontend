@@ -26,7 +26,7 @@ const BatchOperationsPanel = ({ apiBaseUrl, onClose }) => {
             setLoading(true);
             setResult(null);
 
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             let endpoint = '';
             let method = 'POST';
             let body = {};

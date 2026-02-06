@@ -28,7 +28,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
   const fetchLogs = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const params = new URLSearchParams({
         page,
         ...Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== ''))
@@ -74,7 +74,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
 
   const exportLogs = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const params = new URLSearchParams({
         ...Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== ''))
       });

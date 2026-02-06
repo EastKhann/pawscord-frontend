@@ -21,7 +21,7 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
         try {
             const response = await fetch('/api/templates/list/', {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -40,7 +40,7 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
         try {
             const response = await fetch('/api/templates/categories/', {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -57,7 +57,7 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
         try {
             const response = await fetch(`/api/templates/${templateId}/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -75,7 +75,7 @@ const ServerTemplates = ({ onSelectTemplate, onClose }) => {
             const response = await fetch(`/api/templates/${templateId}/use/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             

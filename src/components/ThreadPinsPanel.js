@@ -30,7 +30,7 @@ const ThreadPinsPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -52,7 +52,7 @@ const ThreadPinsPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const fetchThreads = async (channelId) => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const [threadsRes, pinnedRes] = await Promise.all([
                 fetch(`${apiBaseUrl}/channels/${channelId}/threads/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -79,7 +79,7 @@ const ThreadPinsPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const pinThread = async (threadId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/threads/${threadId}/pin/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -102,7 +102,7 @@ const ThreadPinsPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const unpinThread = async (threadId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/threads/${threadId}/unpin/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

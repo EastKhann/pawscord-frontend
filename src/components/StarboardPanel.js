@@ -27,7 +27,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
   const fetchConfig = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/starboard/server/${serverId}/config/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -43,7 +43,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
   const fetchStars = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/starboard/server/${serverId}/messages/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -57,7 +57,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -73,7 +73,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/starboard/server/${serverId}/config/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -93,7 +93,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/starboard/message/${messageId}/remove/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Mesaj kaldırıldı');

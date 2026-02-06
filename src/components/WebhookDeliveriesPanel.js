@@ -30,7 +30,7 @@ const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchDeliveries = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(
                 `${apiBaseUrl}/webhooks/${serverId}/deliveries/?range=${filters.dateRange}`,
                 { headers: { 'Authorization': `Bearer ${token}` } }
@@ -48,7 +48,7 @@ const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchWebhooks = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/webhooks/${serverId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -63,7 +63,7 @@ const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchStats = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/webhooks/${serverId}/stats/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -78,7 +78,7 @@ const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleRetry = async (deliveryId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/webhooks/deliveries/${deliveryId}/retry/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -102,7 +102,7 @@ const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm(`${failedCount} başarısız webhook'u yeniden göndermek istiyor musunuz?`)) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/webhooks/${serverId}/retry-all/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

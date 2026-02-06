@@ -27,7 +27,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
   const fetchReminders = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/reminders/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -43,7 +43,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -64,7 +64,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/reminders/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId, ...newReminder })
@@ -88,7 +88,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/reminders/${id}/delete/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Hatırlatıcı silindi');
@@ -103,7 +103,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/reminders/${id}/trigger/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Hatırlatıcı tetiklendi');

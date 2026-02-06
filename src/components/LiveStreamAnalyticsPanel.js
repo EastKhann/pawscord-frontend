@@ -13,7 +13,7 @@ const LiveStreamAnalyticsPanel = ({ streamId, streamTitle, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [timeRange, setTimeRange] = useState('live'); // live, today, week, month
     const [activeTab, setActiveTab] = useState('overview');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchAnalytics();
@@ -23,7 +23,7 @@ const LiveStreamAnalyticsPanel = ({ streamId, streamTitle, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/streams/${streamId}/analytics/?range=${timeRange}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

@@ -27,7 +27,7 @@ const GoLiveSettings = ({ serverId, onClose }) => {
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stream/${serverId}/settings/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -63,7 +63,7 @@ const GoLiveSettings = ({ serverId, onClose }) => {
   const saveSettings = async () => {
     try {
       setSaving(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stream/${serverId}/settings/update/`, {
         method: 'POST',
         headers: {
@@ -99,7 +99,7 @@ const GoLiveSettings = ({ serverId, onClose }) => {
 
   const startStream = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stream/${serverId}/start/`, {
         method: 'POST',
         headers: {
@@ -126,7 +126,7 @@ const GoLiveSettings = ({ serverId, onClose }) => {
 
   const stopStream = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/stream/${serverId}/stop/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }

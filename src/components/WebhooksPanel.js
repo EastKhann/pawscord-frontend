@@ -29,7 +29,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
   // Fetch webhooks for server
   const fetchWebhooks = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/server/${serverId}/`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -50,7 +50,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
   // Fetch channels for server
   const fetchChannels = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -74,7 +74,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/create/`, {
         method: 'POST',
         headers: {
@@ -105,7 +105,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
   // Update webhook
   const updateWebhook = async (webhookId, updates) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/update/`, {
         method: 'POST',
         headers: {
@@ -136,7 +136,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/delete/`, {
         method: 'DELETE',
         headers: {
@@ -159,7 +159,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
   // Test webhook
   const testWebhook = async (webhookId) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/test/`, {
         method: 'POST',
         headers: {
@@ -185,7 +185,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/regenerate-token/`, {
         method: 'POST',
         headers: {
@@ -209,7 +209,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
   // Fetch webhook logs
   const fetchWebhookLogs = async (webhookId) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/logs/`, {
         headers: {
           'Authorization': `Bearer ${token}`

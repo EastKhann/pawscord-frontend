@@ -40,7 +40,7 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
     const fetchAllAnalytics = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const headers = { 'Authorization': `Bearer ${token}` };
 
             // Fetch all data in parallel

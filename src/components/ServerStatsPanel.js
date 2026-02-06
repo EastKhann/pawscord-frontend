@@ -19,7 +19,7 @@ const ServerStatsPanel = ({ serverId, onClose }) => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/server-stats/${serverId}/?range=${timeRange}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -38,7 +38,7 @@ const ServerStatsPanel = ({ serverId, onClose }) => {
 
   const exportStats = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/server-stats/${serverId}/export/?range=${timeRange}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });

@@ -38,7 +38,7 @@ const RolesManager = ({ serverId, onClose }) => {
   const fetchRoles = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -63,7 +63,7 @@ const RolesManager = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/create/`, {
         method: 'POST',
         headers: {
@@ -89,7 +89,7 @@ const RolesManager = ({ serverId, onClose }) => {
 
   const updateRole = async (roleId, updates) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/${roleId}/update/`, {
         method: 'PUT',
         headers: {
@@ -116,7 +116,7 @@ const RolesManager = ({ serverId, onClose }) => {
     if (!window.confirm('Are you sure you want to delete this role?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/${roleId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -135,7 +135,7 @@ const RolesManager = ({ serverId, onClose }) => {
 
   const reorderRoles = async (newOrder) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/reorder/`, {
         method: 'POST',
         headers: {
@@ -158,7 +158,7 @@ const RolesManager = ({ serverId, onClose }) => {
 
   const assignRole = async (roleId, userId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/${roleId}/assign/`, {
         method: 'POST',
         headers: {
@@ -180,7 +180,7 @@ const RolesManager = ({ serverId, onClose }) => {
 
   const removeRole = async (roleId, userId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/${roleId}/remove/`, {
         method: 'POST',
         headers: {
@@ -228,7 +228,7 @@ const RolesManager = ({ serverId, onClose }) => {
 
   const copyRole = async (roleId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/roles/${serverId}/${roleId}/copy/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }

@@ -100,7 +100,7 @@ const CreateEventModal = ({ serverId, voiceChannels, onClose, onCreate }) => {
 
         setCreating(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/events/servers/${serverId}/events/create/`, {
                 method: 'POST',
                 headers: {
@@ -375,7 +375,7 @@ const EventPlanner = ({ serverId, serverName, voiceChannels, onClose }) => {
 
     const loadEvents = useCallback(async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/events/servers/${serverId}/events/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -392,7 +392,7 @@ const EventPlanner = ({ serverId, serverName, voiceChannels, onClose }) => {
 
     const handleRSVP = async (event) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/events/${event.id}/rsvp/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }

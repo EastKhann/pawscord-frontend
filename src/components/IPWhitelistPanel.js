@@ -32,7 +32,7 @@ const IPWhitelistPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchIPLists = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
 
             // Fetch whitelist
             const whitelistRes = await fetch(`${apiBaseUrl}/security/ip-whitelist/`, {
@@ -60,7 +60,7 @@ const IPWhitelistPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchLogs = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/security/access-logs/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -87,7 +87,7 @@ const IPWhitelistPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = newEntry.type === 'whitelist'
                 ? `${apiBaseUrl}/security/ip-whitelist/add/`
                 : `${apiBaseUrl}/security/ip-blacklist/add/`;
@@ -120,7 +120,7 @@ const IPWhitelistPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu IP adresini listeden kaldırmak istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = type === 'whitelist'
                 ? `${apiBaseUrl}/security/ip-whitelist/${ipId}/remove/`
                 : `${apiBaseUrl}/security/ip-blacklist/${ipId}/remove/`;

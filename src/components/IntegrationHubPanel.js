@@ -15,7 +15,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [configModal, setConfigModal] = useState({ show: false, integration: null });
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const integrationIcons = {
         github: FaGithub,
@@ -48,10 +48,10 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
         try {
             const [connectedRes, availableRes] = await Promise.all([
                 fetch(`/api/servers/${serverId}/integrations/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`/api/integrations/available/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
 
@@ -78,7 +78,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/servers/${serverId}/integrations/connect/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ integration_type: integrationId })
@@ -105,7 +105,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/integrations/${integrationId}/disconnect/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -121,7 +121,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/integrations/${integrationId}/sync/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -365,7 +365,7 @@ const WebhooksView = ({ serverId, token }) => {
     const fetchWebhooks = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/webhooks/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -382,7 +382,7 @@ const WebhooksView = ({ serverId, token }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/webhooks/${webhookId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 toast.success('Webhook silindi');
@@ -461,7 +461,7 @@ const CreateWebhookModal = ({ serverId, token, onClose, onCreated }) => {
 
     useEffect(() => {
         fetch(`/api/servers/${serverId}/channels/`, {
-            headers: { 'Authorization': `Token ${token}` }
+            headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => res.json())
             .then(data => setChannels(data.channels || []))
@@ -478,7 +478,7 @@ const CreateWebhookModal = ({ serverId, token, onClose, onCreated }) => {
             const response = await fetch(`/api/servers/${serverId}/webhooks/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name, channel_id: channelId })
@@ -540,7 +540,7 @@ const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) =
             const response = await fetch(`/api/servers/${serverId}/integrations/${integration.id}/configure/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(config)

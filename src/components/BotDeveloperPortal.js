@@ -43,7 +43,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
 
     const fetchBots = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/my/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -65,7 +65,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/create/`, {
                 method: 'POST',
                 headers: {
@@ -99,7 +99,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
         if (!selectedBot) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${selectedBot.id}/update/`, {
                 method: 'PUT',
                 headers: {
@@ -124,7 +124,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
         if (!window.confirm('Bu botu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -146,7 +146,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
         if (!window.confirm('Token yenilenecek. Eski token geçersiz olacak. Devam?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/regenerate-token/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -170,7 +170,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/webhook/`, {
                 method: 'POST',
                 headers: {
@@ -196,7 +196,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
 
     const handleToggleBotStatus = async (botId, currentStatus) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = currentStatus === 'online' ? 'pause' : 'start';
             const response = await fetch(`${apiBaseUrl}/bots/${botId}/${endpoint}/`, {
                 method: 'POST',

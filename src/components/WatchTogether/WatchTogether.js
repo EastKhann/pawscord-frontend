@@ -38,7 +38,7 @@ const WatchTogether = ({ roomId, onClose }) => {
     const chatEndRef = useRef(null);
     const heartbeatRef = useRef(null);
 
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('access_token');
 
     // ════════════════════════════════════════════════════════════════════════════
     // 🔌 WEBSOCKET CONNECTION

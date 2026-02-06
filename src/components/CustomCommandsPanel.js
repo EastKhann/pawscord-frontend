@@ -33,7 +33,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
 
   const fetchCommands = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/server/${serverId}/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -51,7 +51,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/server/${serverId}/stats/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -72,7 +72,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/create/`, {
         method: 'POST',
         headers: {
@@ -107,7 +107,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
 
   const updateCommand = async (commandId, updates) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/${commandId}/update/`, {
         method: 'POST',
         headers: {
@@ -135,7 +135,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
     if (!window.confirm('Bu komutu silmek istediğinizden emin misiniz?')) return;
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/${commandId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -156,7 +156,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
 
   const toggleCommand = async (commandId, enabled) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/${commandId}/toggle/`, {
         method: 'POST',
         headers: {
@@ -178,7 +178,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
 
   const exportCommands = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/server/${serverId}/export/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -204,7 +204,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
     formData.append('server_id', serverId);
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`${apiBaseUrl}/commands/import/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },

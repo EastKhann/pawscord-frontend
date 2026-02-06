@@ -44,7 +44,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
   const fetchConfig = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/translation/server/${serverId}/config/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -60,7 +60,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
   const fetchStats = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/translation/server/${serverId}/stats/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -76,7 +76,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/translation/server/${serverId}/config/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)

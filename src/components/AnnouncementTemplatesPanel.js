@@ -48,7 +48,7 @@ const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchTemplates = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/announcements/${serverId}/templates/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -65,7 +65,7 @@ const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -85,7 +85,7 @@ const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const endpoint = editingTemplate
                 ? `${apiBaseUrl}/announcements/${serverId}/templates/${editingTemplate.id}/update/`
                 : `${apiBaseUrl}/announcements/${serverId}/templates/create/`;
@@ -113,7 +113,7 @@ const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm('Bu şablonu silmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/announcements/${serverId}/templates/${templateId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -130,7 +130,7 @@ const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const useTemplate = async (template, channelId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/announcements/${serverId}/send/`, {
                 method: 'POST',
                 headers: {

@@ -48,18 +48,9 @@ const GrowthDashboard = React.lazy(() => import('./components/GrowthDashboard'))
 // 🎨 DEMO: Toast Notification Demo (Lazy Load)
 const ToastDemo = React.lazy(() => import('./components/ToastDemo'));
 
-// --- URL AYARLARI ---
-const IS_PRODUCTION = window.location.hostname === 'pawscord.com' || window.location.hostname === 'www.pawscord.com';
-const MY_LOCAL_IP = "192.168.68.53";
-const DJANGO_PORT = "8888";
-
-// 🔥 FIX: Production'da API api.pawscord.com'da, www.pawscord.com değil!
-const API_URL_BASE_STRING = (IS_PRODUCTION)
-    ? "https://api.pawscord.com"
-    : `http://${MY_LOCAL_IP}:${DJANGO_PORT}`;
-
-const API_BASE_URL = `${API_URL_BASE_STRING}/api`;
-const GOOGLE_CLIENT_ID = "774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com";
+// --- URL AYARLARI (constants.js'den import) ---
+import { API_URL_BASE_STRING, API_BASE_URL, GOOGLE_WEB_CLIENT_ID } from './utils/constants';
+const GOOGLE_CLIENT_ID = GOOGLE_WEB_CLIENT_ID;
 
 const RootApp = () => {
     useEffect(() => {

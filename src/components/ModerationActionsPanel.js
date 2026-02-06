@@ -19,7 +19,7 @@ const ModerationActionsPanel = ({ serverId, serverName, onClose }) => {
     const [expandedAction, setExpandedAction] = useState(null);
     const [moderators, setModerators] = useState([]);
     const [stats, setStats] = useState({});
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const actionTypes = [
         { key: 'all', label: 'Tümü', icon: <FaShieldAlt /> },
@@ -45,7 +45,7 @@ const ModerationActionsPanel = ({ serverId, serverName, onClose }) => {
             if (dateRange !== 'all') params.append('range', dateRange);
 
             const response = await fetch(`/api/servers/${serverId}/moderation/actions/?${params}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -102,7 +102,7 @@ const ModerationActionsPanel = ({ serverId, serverName, onClose }) => {
         try {
             await fetch(`/api/servers/${serverId}/moderation/actions/${action.id}/revert/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) { console.error('Revert action error:', error); }
 

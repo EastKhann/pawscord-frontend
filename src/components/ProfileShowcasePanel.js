@@ -71,7 +71,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
             await fetchWithAuth(`${apiBaseUrl}/users/${userId}/showcase/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newItem)
@@ -90,7 +90,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
             await fetch(`/api/users/${userId}/showcase/${editingItem.id}/`, {
                 method: 'PATCH',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
@@ -110,7 +110,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
         try {
             await fetch(`/api/users/${userId}/showcase/${id}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
         } catch (error) { console.error('Delete showcase error:', error); }
 
@@ -133,7 +133,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
             await fetch(`/api/users/${userId}/showcase/reorder/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ order: newShowcases.map(s => s.id) })

@@ -32,7 +32,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
   const fetchEmbeds = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/custom-embeds/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -48,7 +48,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -69,7 +69,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/custom-embeds/save/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId, ...currentEmbed })
@@ -98,7 +98,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/custom-embeds/${embedId}/send/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ channel_id: selectedChannel })
@@ -119,7 +119,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/custom-embeds/${id}/delete/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Embed silindi');

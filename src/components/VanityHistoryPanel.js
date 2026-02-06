@@ -23,7 +23,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchVanityHistory = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/vanity-history/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -40,7 +40,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchCurrentVanity = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/vanity/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -57,7 +57,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
         if (!window.confirm(`"${vanityUrl}" vanity URL'sine geri dönmek istiyor musunuz?`)) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/vanity/`, {
                 method: 'PUT',
                 headers: {

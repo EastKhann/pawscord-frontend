@@ -22,7 +22,7 @@ const InviteTrackerPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const fetchInvites = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/invites/debug/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -43,7 +43,7 @@ const InviteTrackerPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const fetchInviteStats = async (inviteCode) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/invites/stats/${inviteCode}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -62,7 +62,7 @@ const InviteTrackerPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const createInvite = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/invites/create/`, {
                 method: 'POST',
                 headers: {
@@ -97,7 +97,7 @@ const InviteTrackerPanel = ({ apiBaseUrl, serverId, onClose }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/invites/${inviteCode}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -121,7 +121,7 @@ const InviteTrackerPanel = ({ apiBaseUrl, serverId, onClose }) => {
 
     const exportCSV = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/invites/export_csv/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });

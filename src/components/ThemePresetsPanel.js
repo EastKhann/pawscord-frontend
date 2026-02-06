@@ -187,7 +187,7 @@ const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
 
     const fetchPresets = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/themes/presets/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -207,7 +207,7 @@ const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
 
     const fetchCustomThemes = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/themes/custom/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -222,7 +222,7 @@ const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
 
     const applyTheme = async (theme) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/themes/${serverId}/apply/`, {
                 method: 'POST',
                 headers: {
@@ -250,7 +250,7 @@ const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/themes/custom/create/`, {
                 method: 'POST',
                 headers: {
@@ -274,7 +274,7 @@ const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
         if (!window.confirm('Bu temayı silmek istiyor musunuz?')) return;
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/themes/custom/${themeId}/delete/`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }

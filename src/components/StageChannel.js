@@ -23,7 +23,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
         try {
             const response = await fetch(`/api/stage/${channelId}/info/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -45,7 +45,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             const response = await fetch(`/api/stage/${channelId}/request/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -63,7 +63,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             const response = await fetch(`/api/stage/${channelId}/cancel-request/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -81,7 +81,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             const response = await fetch(`/api/stage/${channelId}/approve/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user_id: requestUserId })
@@ -101,7 +101,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             const response = await fetch(`/api/stage/${channelId}/remove-speaker/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user_id: speakerId })
@@ -121,7 +121,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             const response = await fetch(`/api/stage/${channelId}/mute/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ muted: !isMuted })
@@ -141,7 +141,7 @@ const StageChannel = ({ channelId, userId, onClose }) => {
             const response = await fetch(`/api/stage/${channelId}/invite/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user_id: listenerId })

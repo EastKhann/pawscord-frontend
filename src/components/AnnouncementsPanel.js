@@ -31,7 +31,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
   const fetchAnnouncements = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/announcements/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -47,7 +47,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -61,7 +61,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
   const fetchRoles = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -82,7 +82,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/announcements/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId, ...newAnnouncement })
@@ -108,7 +108,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/announcements/${id}/send/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Duyuru gönderildi');
@@ -124,7 +124,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/announcements/${id}/delete/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Duyuru silindi');

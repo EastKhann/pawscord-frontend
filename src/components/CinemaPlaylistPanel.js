@@ -28,7 +28,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [repeatMode, setRepeatMode] = useState('off'); // off, one, all
     const [shuffle, setShuffle] = useState(false);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchData();
@@ -39,13 +39,13 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
         try {
             const [playlistsRes, queueRes, viewersRes] = await Promise.all([
                 fetch(`${getApiBase()}/api/servers/${serverId}/cinema/playlists/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`${getApiBase()}/api/channels/${channelId}/cinema/queue/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 }),
                 fetch(`${getApiBase()}/api/channels/${channelId}/cinema/viewers/`, {
-                    headers: { 'Authorization': `Token ${token}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
             ]);
 
@@ -109,7 +109,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/cinema/queue/add/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ url: video.url, title: video.title })
@@ -131,7 +131,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
         try {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/cinema/queue/${videoId}/remove/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 setCurrentQueue(currentQueue.filter(v => v.id !== videoId));
@@ -160,7 +160,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
 
         try {
             const response = await fetch(`${getApiBase()}/api/cinema/search/?q=${encodeURIComponent(searchQuery)}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -180,7 +180,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
             const response = await fetch(`${getApiBase()}/api/servers/${serverId}/cinema/playlists/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(playlistData)
@@ -205,7 +205,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
         try {
             const response = await fetch(`${getApiBase()}/api/servers/${serverId}/cinema/playlists/${playlistId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 setPlaylists(playlists.filter(p => p.id !== playlistId));
@@ -222,7 +222,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
     const handleLoadPlaylist = async (playlist) => {
         try {
             const response = await fetch(`${getApiBase()}/api/servers/${serverId}/cinema/playlists/${playlist.id}/videos/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

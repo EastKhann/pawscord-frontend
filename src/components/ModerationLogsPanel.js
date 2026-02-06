@@ -25,7 +25,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
     const [stats, setStats] = useState(null);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchLogs();
@@ -41,7 +41,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
             });
 
             const response = await fetch(`/api/servers/${serverId}/moderation/logs/?${params}`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -65,7 +65,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
     const fetchStats = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/moderation/stats/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -124,7 +124,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/moderation/logs/${logId}/revert/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -140,7 +140,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
     const handleExport = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/moderation/logs/export/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

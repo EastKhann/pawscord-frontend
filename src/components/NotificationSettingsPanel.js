@@ -30,7 +30,7 @@ const NotificationSettingsPanel = ({ onClose }) => {
     const [mutedServers, setMutedServers] = useState([]);
     const [loading, setLoading] = useState(true);
     const apiBaseUrl = getApiBase();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchNotificationSettings();

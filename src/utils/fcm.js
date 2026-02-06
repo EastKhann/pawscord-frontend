@@ -4,18 +4,18 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
-// Firebase configuration
+// Firebase configuration - env variables REQUIRED, no unsafe fallbacks
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "YOUR_API_KEY",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "pawscord.firebaseapp.com",
     projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "pawscord",
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "pawscord.appspot.com",
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-    appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abcdef",
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // VAPID key for web push
-const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY || "YOUR_VAPID_KEY";
+const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 
 let firebaseApp;
 let messaging;

@@ -15,7 +15,7 @@ const MessageReceiptsPanel = ({ messageId, messageContent, channelName, onClose 
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState('time');
     const [stats, setStats] = useState({ total: 0, delivered: 0, read: 0 });
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchReceipts();
@@ -25,7 +25,7 @@ const MessageReceiptsPanel = ({ messageId, messageContent, channelName, onClose 
         setLoading(true);
         try {
             const response = await fetch(`/api/messages/${messageId}/receipts/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

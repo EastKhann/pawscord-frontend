@@ -16,7 +16,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
     const fetchReports = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/reports/list/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -37,7 +37,7 @@ const ReportsPanel = ({ apiBaseUrl, onClose }) => {
 
     const handleReport = async (reportId, action, reason = '') => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/reports/handle/${reportId}/`, {
                 method: 'POST',
                 headers: {

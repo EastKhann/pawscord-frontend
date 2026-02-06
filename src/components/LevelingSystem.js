@@ -105,7 +105,7 @@ export const Leaderboard = ({ serverId, serverName, onClose }) => {
     const loadLeaderboard = useCallback(async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const url = scope === 'server' && serverId
                 ? `${API_URL}/leveling/leaderboard/?server_id=${serverId}&limit=20`
                 : `${API_URL}/leveling/leaderboard/?limit=20`;
@@ -250,7 +250,7 @@ export const UserLevelCard = ({ username }) => {
     useEffect(() => {
         const loadStats = async () => {
             try {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem('access_token');
                 const response = await fetch(
                     `${API_URL}/leveling/stats/${username}/`,
                     { headers: { 'Authorization': `Bearer ${token}` } }
@@ -318,7 +318,7 @@ export const useLeveling = () => {
 
     const loadStats = useCallback(async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/leveling/stats/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -332,7 +332,7 @@ export const useLeveling = () => {
 
     const awardXP = useCallback(async (type = 'message', amount = null, reason = '') => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${API_URL}/leveling/award/`, {
                 method: 'POST',
                 headers: {

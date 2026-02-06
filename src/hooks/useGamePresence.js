@@ -19,7 +19,7 @@ const useGamePresence = () => {
             // Game closed - clear activity
             if (lastReportedGame.current) {
                 try {
-                    const token = localStorage.getItem('token');
+                    const token = localStorage.getItem('access_token');
                     await fetch(`${getApiBase()}/activity/game/clear/`, {
                         method: 'POST',
                         headers: {
@@ -41,7 +41,7 @@ const useGamePresence = () => {
         }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             await fetch(`${getApiBase()}/activity/game/`, {
                 method: 'POST',
                 headers: {

@@ -51,7 +51,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const fetchConversations = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/dm/${currentUserId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -67,7 +67,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const fetchFriends = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/friends/${currentUserId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -83,7 +83,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const fetchPendingRequests = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/friends/${currentUserId}/requests/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -99,7 +99,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const fetchMessages = async (conversationId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/dm/${conversationId}/messages/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -117,7 +117,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
     if ((!messageInput.trim() && !selectedFile) || !selectedConversation) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
 
       // 🔥 Dosya varsa FormData kullan
       if (selectedFile) {
@@ -169,7 +169,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const createConversation = async (userId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/dm/create/`, {
         method: 'POST',
         headers: {
@@ -196,7 +196,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
     if (!friendUsername.trim()) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/friends/send-request/`, {
         method: 'POST',
         headers: {
@@ -221,7 +221,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const acceptFriendRequest = async (requestId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/friends/accept/${requestId}/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -241,7 +241,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
 
   const rejectFriendRequest = async (requestId) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/friends/reject/${requestId}/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -262,7 +262,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
     if (!window.confirm('Remove this friend?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/friends/remove/${friendId}/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -283,7 +283,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
     if (!window.confirm('Delete this message?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/dm/messages/${messageId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }

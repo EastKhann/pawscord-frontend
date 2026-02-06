@@ -19,7 +19,7 @@ const Soundboard = ({ serverId, onClose }) => {
   const fetchSounds = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/soundboard/${serverId}/list/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -46,7 +46,7 @@ const Soundboard = ({ serverId, onClose }) => {
       }
 
       // Send to server to broadcast
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       await fetch(`/api/soundboard/${serverId}/${soundId}/play/`, {
         method: 'POST',
         headers: {
@@ -72,7 +72,7 @@ const Soundboard = ({ serverId, onClose }) => {
 
     try {
       setUploading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/soundboard/${serverId}/upload/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -100,7 +100,7 @@ const Soundboard = ({ serverId, onClose }) => {
     if (!window.confirm('Delete this sound?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/soundboard/${serverId}/${soundId}/delete/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }

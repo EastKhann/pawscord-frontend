@@ -36,7 +36,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
   const fetchConfig = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/verification/server/${serverId}/config/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -52,7 +52,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
   const fetchStats = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/verification/server/${serverId}/stats/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -66,7 +66,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -80,7 +80,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
   const fetchRoles = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -96,7 +96,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/verification/server/${serverId}/config/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -116,7 +116,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/verification/server/${serverId}/send-message/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Doğrulama mesajı gönderildi');
@@ -131,7 +131,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/verification/server/${serverId}/reset-stats/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ İstatistikler sıfırlandı');

@@ -32,7 +32,7 @@ const ServerInsightsPanel = ({ serverId, onClose }) => {
   const fetchInsights = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/insights/server/${serverId}/?range=${timeRange}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -48,7 +48,7 @@ const ServerInsightsPanel = ({ serverId, onClose }) => {
   const fetchStats = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/insights/server/${serverId}/stats/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -62,7 +62,7 @@ const ServerInsightsPanel = ({ serverId, onClose }) => {
   const exportReport = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/insights/server/${serverId}/export/?range=${timeRange}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const blob = await response.blob();

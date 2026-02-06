@@ -25,8 +25,6 @@ const UserFooter = ({
     // 🔥 DÜZELTME 2: Friend Code
     const friendCode = currentUserProfile?.friend_code || '0000';
 
-    console.log('👤 [UserFooter] Profile:', { currentUserProfile, avatarUrl, friendCode }); // Debug
-
     return (
         <div style={styles.bottomSection}>
 

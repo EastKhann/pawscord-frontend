@@ -42,7 +42,7 @@ const GroupMentionSettingsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchSettings = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/mention-settings/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -62,7 +62,7 @@ const GroupMentionSettingsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchRoles = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/roles/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -77,7 +77,7 @@ const GroupMentionSettingsPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const fetchChannels = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/channels/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -93,7 +93,7 @@ const GroupMentionSettingsPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/servers/${serverId}/mention-settings/`, {
                 method: 'PUT',
                 headers: {

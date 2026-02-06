@@ -71,7 +71,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/payments/cards/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -100,7 +100,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
       const response = await fetch(`${apiBaseUrl}/payments/cards/add/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(newCard)
@@ -134,7 +134,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
       const response = await fetch(`${apiBaseUrl}/payments/cards/${cardId}/delete/`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -156,7 +156,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/payments/crypto/wallets/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -185,7 +185,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
       const response = await fetch(`${apiBaseUrl}/payments/crypto/wallets/add/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -214,7 +214,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/payments/history/?filter=${historyFilter}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -238,7 +238,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/payments/settings/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -261,7 +261,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
       const response = await fetch(`${apiBaseUrl}/payments/settings/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(newSettings)

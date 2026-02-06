@@ -29,7 +29,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
   const fetchConfig = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/suggestions/server/${serverId}/config/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -45,7 +45,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
   const fetchSuggestions = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/suggestions/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -59,7 +59,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -75,7 +75,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/suggestions/server/${serverId}/config/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -96,7 +96,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/suggestions/${id}/status/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status })

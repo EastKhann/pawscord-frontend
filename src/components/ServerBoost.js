@@ -54,7 +54,7 @@ const ServerBoost = ({ serverId, onClose }) => {
   const fetchBoostData = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/boost/${serverId}/status/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -74,7 +74,7 @@ const ServerBoost = ({ serverId, onClose }) => {
 
   const fetchBoostHistory = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/boost/${serverId}/history/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -90,7 +90,7 @@ const ServerBoost = ({ serverId, onClose }) => {
 
   const boostServer = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/boost/${serverId}/boost/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -114,7 +114,7 @@ const ServerBoost = ({ serverId, onClose }) => {
     if (!window.confirm('Remove your boost from this server?')) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/boost/${serverId}/${boostId}/remove/`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -134,7 +134,7 @@ const ServerBoost = ({ serverId, onClose }) => {
 
   const getPerks = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const response = await fetch(`/api/boost/${serverId}/perks/`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });

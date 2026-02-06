@@ -19,7 +19,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
     const [savedSnippets, setSavedSnippets] = useState([]);
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     const languages = [
         { id: 'python', name: 'Python', icon: <FaPython />, template: '# Python Code\nprint("Hello, World!")' },
@@ -47,7 +47,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
     const fetchHistory = async () => {
         try {
             const response = await fetch('/api/code-runner/history/', {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -61,7 +61,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
     const fetchSavedSnippets = async () => {
         try {
             const response = await fetch('/api/code-runner/snippets/', {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -86,7 +86,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
             const response = await fetch('/api/code-runner/execute/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -121,7 +121,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
         try {
             await fetch('/api/code-runner/stop/', {
                 method: 'POST',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             setIsRunning(false);
             setOutput('Çalıştırma durduruldu');
@@ -135,7 +135,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
             const response = await fetch('/api/code-runner/snippets/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ name, code, language })
@@ -161,7 +161,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
         try {
             await fetch(`/api/code-runner/snippets/${snippetId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             toast.success('Snippet silindi');
             fetchSavedSnippets();
@@ -191,7 +191,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
             const response = await fetch(`/api/channels/${channelId}/messages/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

@@ -30,7 +30,7 @@ const BotAPIPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/bots/${serverId}/list/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -49,7 +49,7 @@ const BotAPIPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/bots/${serverId}/tokens/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -66,7 +66,7 @@ const BotAPIPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/bots/${serverId}/stats/`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
             
@@ -89,7 +89,7 @@ const BotAPIPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/bots/${serverId}/create/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newBot)
@@ -121,7 +121,7 @@ const BotAPIPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/bots/${serverId}/${botId}/delete/`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 
@@ -141,7 +141,7 @@ const BotAPIPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/bots/${serverId}/${botId}/regenerate-token/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 

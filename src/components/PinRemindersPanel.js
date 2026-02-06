@@ -14,7 +14,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchReminders();
@@ -25,7 +25,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
         setLoading(true);
         try {
             const response = await fetch(`/api/servers/${serverId}/pin-reminders/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -44,7 +44,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
     const fetchPinnedMessages = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/pinned-messages/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -61,7 +61,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/servers/${serverId}/pin-reminders/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(reminderData)
@@ -83,7 +83,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
         try {
             const response = await fetch(`/api/servers/${serverId}/pin-reminders/${reminderId}/`, {
                 method: 'DELETE',
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {
@@ -100,7 +100,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
             const response = await fetch(`/api/servers/${serverId}/pin-reminders/${reminderId}/toggle/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ is_active: !isActive })
@@ -269,7 +269,7 @@ const CreateReminderModal = ({ pinnedMessages, serverId, token, onClose, onCreat
     const fetchChannels = async () => {
         try {
             const response = await fetch(`/api/servers/${serverId}/channels/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
                 const data = await response.json();

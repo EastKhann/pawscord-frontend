@@ -35,7 +35,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/tickets/server/${serverId}/config/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -52,7 +52,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/tickets/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -71,7 +71,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/categories/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -88,7 +88,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -105,7 +105,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -123,7 +123,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/tickets/server/${serverId}/config/update/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -147,7 +147,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/close/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 
@@ -171,7 +171,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/assign/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ user_id: userId })
@@ -194,7 +194,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/priority/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ priority })
@@ -219,7 +219,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/tickets/${selectedTicket.id}/reply/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ message: newMessage })
@@ -246,7 +246,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/transcript/`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       });
 

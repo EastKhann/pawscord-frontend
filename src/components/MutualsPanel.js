@@ -13,7 +13,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
     const [mutualServers, setMutualServers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
         fetchMutuals();
@@ -24,7 +24,7 @@ const MutualsPanel = ({ userId, username, onClose, onNavigateToUser, onNavigateT
         try {
             // Backend expects username, not userId
             const response = await fetch(`/api/users/${username}/mutuals/`, {
-                headers: { 'Authorization': `Token ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (response.ok) {

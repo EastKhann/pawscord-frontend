@@ -325,7 +325,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
 
         setIsLoading(true);
         try {
-            const token = localStorage.getItem('accessToken');
+            const token = localStorage.getItem('access_token');
 
             const startTime = new Date(`${formData.start_date}T${formData.start_time}`).toISOString();
             const endTime = formData.end_time
@@ -508,7 +508,7 @@ const ServerEvents = ({ serverId }) => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
 
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('access_token');
 
     // Fetch events
     useEffect(() => {

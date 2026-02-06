@@ -53,7 +53,7 @@ const MessageSearchPanel = ({ serverId, channelId, onClose, onSelectMessage }) =
 
             const response = await fetch(`/api/messages/search/?${params}`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
 

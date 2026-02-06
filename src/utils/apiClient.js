@@ -335,7 +335,7 @@ export const apiClient = new APIClient({
 
 // Add auth interceptor
 apiClient.addRequestInterceptor(async (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -346,7 +346,7 @@ apiClient.addRequestInterceptor(async (config) => {
 apiClient.addErrorInterceptor(async (error) => {
     if (error.message.includes('401')) {
         // Handle unauthorized
-        localStorage.removeItem('token');
+        localStorage.removeItem('access_token');
         window.location.href = '/login';
     }
     return error;

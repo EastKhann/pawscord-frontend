@@ -30,7 +30,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
   const fetchConfig = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/birthday-system/server/${serverId}/config/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -46,7 +46,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
   const fetchBirthdays = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/birthday-system/server/${serverId}/birthdays/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -61,7 +61,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
   const fetchChannels = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/channels/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -75,7 +75,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
   const fetchRoles = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/roles/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -91,7 +91,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/birthday-system/server/${serverId}/config/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(config)
@@ -111,7 +111,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/birthday-system/server/${serverId}/test/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Test mesajı gönderildi');

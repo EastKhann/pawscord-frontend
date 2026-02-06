@@ -32,7 +32,7 @@ const QuotesPanel = ({ serverId, onClose }) => {
   const fetchQuotes = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/quotes/server/${serverId}/`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         const data = await response.json();
@@ -55,7 +55,7 @@ const QuotesPanel = ({ serverId, onClose }) => {
       const response = await fetch(`${apiBaseUrl}/quotes/create/`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ server_id: serverId, ...newQuote })
@@ -79,7 +79,7 @@ const QuotesPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/quotes/${id}/delete/`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Alıntı silindi');
@@ -94,7 +94,7 @@ const QuotesPanel = ({ serverId, onClose }) => {
     try {
       const response = await fetch(`${apiBaseUrl}/quotes/server/${serverId}/random/`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` }
       });
       if (response.ok) {
         toast.success('✅ Rastgele alıntı gönderildi');

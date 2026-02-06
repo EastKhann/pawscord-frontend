@@ -27,7 +27,7 @@ const EnglishLearningPanel = ({ apiBaseUrl, onClose }) => {
     const fetchWords = async () => {
         try {
             setLoading(true);
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/eng-learn/words/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -48,7 +48,7 @@ const EnglishLearningPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchKnownWords = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/eng-learn/known-words/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -83,7 +83,7 @@ const EnglishLearningPanel = ({ apiBaseUrl, onClose }) => {
 
     const fetchKnownGrammar = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/eng-learn/grammar/known/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -99,7 +99,7 @@ const EnglishLearningPanel = ({ apiBaseUrl, onClose }) => {
 
     const markWordAsKnown = async (wordId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/eng-learn/mark-known/`, {
                 method: 'POST',
                 headers: {
@@ -123,7 +123,7 @@ const EnglishLearningPanel = ({ apiBaseUrl, onClose }) => {
 
     const markGrammarKnown = async (grammarId) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/eng-learn/grammar/mark-known/`, {
                 method: 'POST',
                 headers: {
