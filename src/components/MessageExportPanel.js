@@ -29,7 +29,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
     const startExport = async () => {
         try {
             setProcessing(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/exports/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/exports/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -60,7 +60,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
     const checkExportStatus = async (jId) => {
         const interval = setInterval(async () => {
             try {
-                const response = await fetchWithAuth(`${apiBaseUrl}/api/exports/${jId}/status/`);
+                const response = await fetchWithAuth(`${apiBaseUrl}/exports/${jId}/status/`);
                 if (response.ok) {
                     const data = await response.json();
 

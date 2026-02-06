@@ -37,7 +37,7 @@ const AdvancedSearchPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId, roo
                 has_embed: filters.hasEmbed || '',
             });
 
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/search/advanced/?${params}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/search/advanced/?${params}`);
             const data = await response.json();
             setResults(data.results || []);
             toast.success(`Found ${data.results?.length || 0} results`);

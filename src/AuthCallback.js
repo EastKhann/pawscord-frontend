@@ -86,7 +86,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
             try {
                 setStatus('exchanging');
 
-                const exchangeUrl = `${apiBaseUrl}/api/auth/exchange-code/`;
+                const exchangeUrl = `${apiBaseUrl}/auth/exchange-code/`;
                 console.log('🔐 [AuthCallback] Exchanging code at:', exchangeUrl);
 
                 // Exchange auth code for tokens (secure exchange)

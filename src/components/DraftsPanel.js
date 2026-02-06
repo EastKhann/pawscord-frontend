@@ -13,7 +13,7 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
     const fetchDrafts = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/drafts/?room_slug=${roomSlug}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/drafts/?room_slug=${roomSlug}`);
             const data = await response.json();
             setDrafts(data.drafts || []);
         } catch (error) {
@@ -34,7 +34,7 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
         if (!confirm('Delete this draft?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/drafts/${draftId}/delete/`, {
+            await fetchWithAuth(`${apiBaseUrl}/drafts/${draftId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -49,7 +49,7 @@ const DraftsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => {
         if (!confirm(`Delete all ${drafts.length} drafts?`)) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/drafts/delete-all/`, {
+            await fetchWithAuth(`${apiBaseUrl}/drafts/delete-all/`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ room_slug: roomSlug })

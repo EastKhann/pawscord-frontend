@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FaShieldAlt, FaArrowLeft, FaKey } from 'react-icons/fa';
+import { API_BASE_URL } from '../utils/constants';
 
 const TwoFactorLoginPage = ({ apiBaseUrl, onLogin }) => {
     const navigate = useNavigate();
@@ -42,7 +43,7 @@ const TwoFactorLoginPage = ({ apiBaseUrl, onLogin }) => {
 
         try {
             console.log('🔐 [2FA] Verifying code with temp_token...');
-            const response = await fetch(`${apiBaseUrl}/api/security/2fa/verify-login/`, {
+            const response = await fetch(`${API_BASE_URL}/security/2fa/verify-login/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

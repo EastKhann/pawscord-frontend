@@ -47,7 +47,7 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
         setError('');
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/user/delete-account/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/user/delete-account/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password, confirm_text: confirmText })

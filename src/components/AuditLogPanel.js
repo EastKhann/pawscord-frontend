@@ -20,7 +20,7 @@ const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                 filter: filterType,
                 range: dateRange
             });
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/audit-logs/?${params}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/audit-logs/?${params}`);
             if (res.ok) {
                 const data = await res.json();
                 setLogs(data.logs || []);
@@ -34,7 +34,7 @@ const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
 
     const exportLogs = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/audit-logs/export/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/audit-logs/export/`);
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

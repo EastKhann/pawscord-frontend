@@ -14,7 +14,7 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const fetchExports = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/gdpr/exports/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/gdpr/exports/`);
             const data = await response.json();
             setExports(data.exports || []);
         } catch (error) {
@@ -27,7 +27,7 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const requestExport = async () => {
         setRequesting(true);
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/gdpr/request-export/`, {
+            await fetchWithAuth(`${apiBaseUrl}/gdpr/request-export/`, {
                 method: 'POST'
             });
 
@@ -42,7 +42,7 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const downloadExport = async (exportId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/gdpr/exports/${exportId}/download/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/gdpr/exports/${exportId}/download/`);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

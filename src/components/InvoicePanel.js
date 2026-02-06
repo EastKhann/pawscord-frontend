@@ -14,7 +14,7 @@ const InvoicePanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     const loadInvoices = async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/invoices/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/invoices/`);
             if (res.ok) {
                 const data = await res.json();
                 setInvoices(data.invoices || []);
@@ -27,7 +27,7 @@ const InvoicePanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
 
     const downloadInvoice = async (invoiceId) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/invoices/${invoiceId}/download/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/invoices/${invoiceId}/download/`);
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

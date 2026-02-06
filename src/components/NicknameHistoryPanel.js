@@ -13,7 +13,7 @@ const NicknameHistoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
     const fetchHistory = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/users/${username}/nicknames/history/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/users/${username}/nicknames/history/`);
             const data = await response.json();
             setHistory(data.history || []);
         } catch (error) {

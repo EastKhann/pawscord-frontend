@@ -18,7 +18,7 @@ function GrowthWaitlistPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadStats = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/waitlist/stats/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/waitlist/stats/`);
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -30,7 +30,7 @@ function GrowthWaitlistPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadDashboard = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/growth/dashboard/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/growth/dashboard/`);
       if (response.ok) {
         const data = await response.json();
         setDashboard(data);
@@ -48,7 +48,7 @@ function GrowthWaitlistPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/waitlist/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/waitlist/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name, referral_code: referralCode || null })
@@ -74,7 +74,7 @@ function GrowthWaitlistPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const claimReferral = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/referral/claim/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/referral/claim/`, {
         method: 'POST'
       });
 

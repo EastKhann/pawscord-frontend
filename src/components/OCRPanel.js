@@ -33,7 +33,7 @@ function OCRPanel({ apiBaseUrl, fetchWithAuth }) {
     formData.append('image', selectedFile);
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/ocr/extract/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/ocr/extract/`, {
         method: 'POST',
         body: formData
       });

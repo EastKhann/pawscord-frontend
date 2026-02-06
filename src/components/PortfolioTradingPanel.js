@@ -23,7 +23,7 @@ function PortfolioTradingPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadPortfolio = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/portfolio/my/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/portfolio/my/`);
       if (response.ok) {
         const data = await response.json();
         setPortfolio(data);
@@ -35,7 +35,7 @@ function PortfolioTradingPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadLeaderboard = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/portfolio/leaderboard/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/portfolio/leaderboard/`);
       if (response.ok) {
         const data = await response.json();
         setLeaderboard(data.leaderboard || []);
@@ -53,7 +53,7 @@ function PortfolioTradingPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/portfolio/trade/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/portfolio/trade/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

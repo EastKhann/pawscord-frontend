@@ -14,7 +14,7 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
     const fetchLogs = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/logs/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/logs/`);
             const data = await response.json();
             setLogs(data.logs || []);
         } catch (error) {
@@ -26,7 +26,7 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
     const exportLogs = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/logs/export/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/logs/export/`);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

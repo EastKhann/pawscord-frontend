@@ -37,8 +37,6 @@
         "react": "^19.2.0",
         "react-chartjs-2": "^5.3.1",
         "react-color": "^2.19.3",
-        "react-dnd": "^16.0.1",
-        "react-dnd-html5-backend": "^16.0.1",
         "react-dom": "^19.2.0",
         "react-draggable": "^4.5.0",
         "react-icons": "^5.5.0",
@@ -47,7 +45,6 @@
         "react-player": "^3.4.0",
         "react-resizable": "^3.0.5",
         "react-router-dom": "^6.22.0",
-        "react-scripts": "5.0.1",
         "react-syntax-highlighter": "^16.1.0",
         "react-toastify": "^11.0.5",
         "react-virtualized-auto-sizer": "^2.0.2",
@@ -61,10 +58,8 @@
         "zustand": "^5.0.9"
     },
     "devDependencies": {
-        "@craco/craco": "^7.1.0",
         "@fullhuman/postcss-purgecss": "^7.0.2",
         "@vitejs/plugin-react": "^5.1.2",
-        "compression-webpack-plugin": "^11.1.0",
         "concurrently": "^8.2.2",
         "cross-env": "^7.0.3",
         "electron": "^35.7.5",
@@ -72,12 +67,10 @@
         "rollup-plugin-visualizer": "^6.0.5",
         "sharp": "^0.34.5",
         "source-map-explorer": "^2.5.3",
-        "terser-webpack-plugin": "^5.3.16",
         "typescript": "^5.9.3",
         "vite": "^7.3.1",
         "vite-plugin-pwa": "^1.2.0",
-        "wait-on": "^7.2.0",
-        "webpack-bundle-analyzer": "^5.1.1"
+        "wait-on": "^7.2.0"
     },
     "scripts": {
         "start": "vite",
@@ -87,8 +80,6 @@
         "build:prod": "cross-env VITE_ENV=production vite build && node scripts/verify-build.js",
         "verify": "node scripts/verify-build.js",
         "preview": "vite preview",
-        "test": "craco test",
-        "eject": "react-scripts eject",
         "analyze": "source-map-explorer 'build/static/js/*.js'",
         "build:analyze": "npm run build && npm run analyze",
         "electron:dev": "concurrently \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && electron .\"",

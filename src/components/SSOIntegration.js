@@ -329,7 +329,7 @@ const SSOConfigModal = ({ provider, onClose, onSave }) => {
                 setSsoProviders(data.providers || []);
                 const data = await res.json();
             if (res.ok) {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/enterprise/sso/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/enterprise/sso/`);
         try {
     const loadSSOProviders = async () => {
 
@@ -346,7 +346,7 @@ const SSOConfigModal = ({ provider, onClose, onSave }) => {
                 body: JSON.stringify({ provider, config })
                 headers: { 'Content-Type': 'application/json' },
                 method: 'POST',
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/enterprise/sso/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/enterprise/sso/`, {
         try {
     const configureSSOProvider = async (provider, config) => {
 

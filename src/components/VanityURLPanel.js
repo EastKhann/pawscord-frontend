@@ -15,7 +15,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const fetchVanity = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/vanity/get/${serverId}/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/vanity/get/${serverId}/`);
             const data = await response.json();
             setCurrentVanity(data.vanity_url);
             setHistory(data.history || []);
@@ -32,7 +32,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
         setChecking(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/vanity/check/?url=${url}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/vanity/check/?url=${url}`);
             const data = await response.json();
             setAvailable(data.available);
         } catch (error) {
@@ -54,7 +54,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
         }
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/vanity/create/`, {
+            await fetchWithAuth(`${apiBaseUrl}/vanity/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

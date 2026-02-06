@@ -356,7 +356,7 @@ const styles = {
 
             });
                 method: 'POST'
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/subscription/cancel/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/subscription/cancel/`, {
         try {
 
         if (!confirm('Aboneliğinizi iptal etmek istediğinize emin misiniz?')) return;
@@ -387,7 +387,7 @@ const styles = {
                 body: JSON.stringify({
                 headers: { 'Content-Type': 'application/json' },
                 method: 'POST',
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/subscription/subscribe/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/subscription/subscribe/`, {
         try {
     const subscribe = async (planId) => {
 
@@ -407,8 +407,8 @@ const styles = {
             if (subRes.ok) {
 
             ]);
-                fetchWithAuth(`${apiBaseUrl}/api/subscription/plans/`)
-                fetchWithAuth(`${apiBaseUrl}/api/subscription/current/`),
+                fetchWithAuth(`${apiBaseUrl}/subscription/plans/`)
+                fetchWithAuth(`${apiBaseUrl}/subscription/current/`),
             const [subRes, plansRes] = await Promise.all([
         try {
         setLoading(true);

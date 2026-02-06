@@ -20,7 +20,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const loadKeywords = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/mutekeyword/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/mutekeyword/list/`);
             if (response.ok) {
                 const data = await response.json();
                 setKeywords(data);
@@ -39,7 +39,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/mutekeyword/add/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/mutekeyword/add/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ keyword: newKeyword.trim() })
@@ -60,7 +60,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const removeKeyword = async (keywordId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/mutekeyword/remove/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/mutekeyword/remove/`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ keyword_id: keywordId })

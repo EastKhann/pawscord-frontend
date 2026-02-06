@@ -14,7 +14,7 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
     const fetchNicknames = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/nicknames/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/nicknames/`);
             const data = await response.json();
             setNicknames(data.nicknames || []);
         } catch (error) {
@@ -26,7 +26,7 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
     const updateNickname = async (userId, newNickname) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/nicknames/set/`, {
+            await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/nicknames/set/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -44,7 +44,7 @@ const ServerNicknamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
     const clearNickname = async (userId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/nicknames/clear/`, {
+            await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/nicknames/clear/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: userId })

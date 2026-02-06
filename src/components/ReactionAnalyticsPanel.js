@@ -18,7 +18,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
     const fetchHeatmap = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/reaction_heatmap/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/reaction_heatmap/`);
             const data = await response.json();
             setHeatmap(data);
         } catch (error) {
@@ -30,7 +30,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
     const fetchDailyStats = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/reactions/daily/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/reactions/daily/`);
             const data = await response.json();
             setDailyStats(data.stats || []);
         } catch (error) {
@@ -40,7 +40,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
     const fetchLeaderboard = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/leaderboards/reactions/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/leaderboards/reactions/`);
             const data = await response.json();
             setLeaderboard(data.leaderboard || []);
         } catch (error) {

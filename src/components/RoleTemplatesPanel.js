@@ -57,7 +57,7 @@ function RoleTemplatesPanel({ apiBaseUrl, fetchWithAuth }) {
     setLoading(true);
     setMessage('');
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/roles/template/create/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/roles/template/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ template: template.name, roles: template.roles })
@@ -84,7 +84,7 @@ function RoleTemplatesPanel({ apiBaseUrl, fetchWithAuth }) {
     setLoading(true);
     setMessage('');
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/roles/template/save/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/roles/template/save/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

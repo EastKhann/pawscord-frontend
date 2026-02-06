@@ -11,7 +11,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadKeys = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/keys/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/webauthn/keys/list/`);
       if (response.ok) {
         const data = await response.json();
         setKeys(data.keys || []);
@@ -35,7 +35,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
     setError('');
     try {
       // Begin registration
-      const beginResponse = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/register/begin/`, {
+      const beginResponse = await fetchWithAuth(`${apiBaseUrl}/webauthn/register/begin/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ key_name: keyName })
@@ -60,7 +60,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
       });
 
       // Complete registration
-      const completeResponse = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/register/complete/`, {
+      const completeResponse = await fetchWithAuth(`${apiBaseUrl}/webauthn/register/complete/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,7 +91,7 @@ function WebAuthnPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const removeKey = async (keyId) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/keys/${keyId}/remove/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/webauthn/keys/${keyId}/remove/`, {
         method: 'DELETE'
       });
 

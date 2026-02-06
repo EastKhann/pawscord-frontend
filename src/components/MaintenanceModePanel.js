@@ -17,7 +17,7 @@ function MaintenanceModePanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadStatus = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/maintenance/status/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/maintenance/status/`);
       if (response.ok) {
         const data = await response.json();
         setStatus(data);
@@ -42,7 +42,7 @@ function MaintenanceModePanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/maintenance/set/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/maintenance/set/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

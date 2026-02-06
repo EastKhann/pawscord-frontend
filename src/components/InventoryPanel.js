@@ -25,7 +25,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 username: username || '',
                 type: filter !== 'all' ? filter : ''
             });
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/inventory/?${params}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/inventory/?${params}`);
             const data = await response.json();
             setInventory(data.items || []);
         } catch (error) {
@@ -37,7 +37,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const equipItem = async (itemId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/inventory/${itemId}/equip/`, {
+            await fetchWithAuth(`${apiBaseUrl}/inventory/${itemId}/equip/`, {
                 method: 'POST'
             });
             toast.success('Item equipped');
@@ -49,7 +49,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const unequipItem = async (itemId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/inventory/${itemId}/unequip/`, {
+            await fetchWithAuth(`${apiBaseUrl}/inventory/${itemId}/unequip/`, {
                 method: 'POST'
             });
             toast.success('Item unequipped');
@@ -61,7 +61,7 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
     const useItem = async (itemId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/inventory/${itemId}/use/`, {
+            await fetchWithAuth(`${apiBaseUrl}/inventory/${itemId}/use/`, {
                 method: 'POST'
             });
             toast.success('Item used');

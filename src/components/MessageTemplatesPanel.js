@@ -20,7 +20,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
     const loadTemplates = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/templates/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/templates/`);
             if (response.ok) {
                 const data = await response.json();
                 setTemplates(data);
@@ -39,7 +39,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/templates/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/templates/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newTemplate)
@@ -60,7 +60,7 @@ const MessageTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, onSelectTemplate, on
 
     const deleteTemplate = async (templateId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/templates/${templateId}/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/templates/${templateId}/`, {
                 method: 'DELETE'
             });
 

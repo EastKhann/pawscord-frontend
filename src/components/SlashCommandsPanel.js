@@ -19,7 +19,7 @@ function SlashCommandsPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadCommands = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/commands/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/commands/list/`);
       if (response.ok) {
         const data = await response.json();
         setCommands(data.commands || []);
@@ -33,7 +33,7 @@ function SlashCommandsPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadHistory = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/commands/history/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/commands/history/`);
       if (response.ok) {
         const data = await response.json();
         setHistory(data.history || []);
@@ -47,7 +47,7 @@ function SlashCommandsPanel({ apiBaseUrl, fetchWithAuth }) {
     setLoading(true);
     setResult(null);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/commands/${command.name}/execute/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/commands/${command.name}/execute/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ args: commandArgs })

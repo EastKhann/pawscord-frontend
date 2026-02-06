@@ -20,7 +20,7 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                 include_revoked: includeRevoked
             });
             const response = await fetchWithAuth(
-                `${apiBaseUrl}/api/servers/${serverId}/invites/?${params}`
+                `${apiBaseUrl}/servers/${serverId}/invites/?${params}`
             );
             const data = await response.json();
             setInvites(data.invites || []);

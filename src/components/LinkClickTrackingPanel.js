@@ -13,7 +13,7 @@ const LinkClickTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
     const fetchLinkStats = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/links/stats/?room=${roomSlug}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/links/stats/?room=${roomSlug}`);
             const data = await response.json();
             setLinkStats(data.stats || []);
         } catch (error) {
@@ -25,7 +25,7 @@ const LinkClickTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
     const exportStats = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/links/export/?room=${roomSlug}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/links/export/?room=${roomSlug}`);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

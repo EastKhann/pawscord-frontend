@@ -26,7 +26,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadBookmarks = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/readlater/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/readlater/list/`);
       if (response.ok) {
         const data = await response.json();
         setBookmarks(data.bookmarks || []);
@@ -40,7 +40,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadTags = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/list/`);
       if (response.ok) {
         const data = await response.json();
         setTags(data.tags || []);
@@ -57,7 +57,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
     }
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/create/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -84,7 +84,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const removeBookmark = async (messageId) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/readlater/toggle/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/readlater/toggle/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message_id: messageId })
@@ -101,7 +101,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const addTagToBookmark = async (messageId, tagId) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/${tagId}/add/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/${tagId}/add/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message_id: messageId })
@@ -118,7 +118,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const removeTagFromBookmark = async (messageId, tagId) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/${tagId}/remove/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/${tagId}/remove/`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message_id: messageId })

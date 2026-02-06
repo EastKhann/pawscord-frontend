@@ -13,7 +13,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const fetchSessions = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/sessions/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/sessions/list/`);
             const data = await response.json();
             setSessions(data.sessions || []);
         } catch (error) {
@@ -27,7 +27,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         if (!confirm('Are you sure you want to sign out this device?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/sessions/revoke/`, {
+            await fetchWithAuth(`${apiBaseUrl}/sessions/revoke/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ session_id: sessionId })
@@ -44,7 +44,7 @@ const SessionManagementPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         if (!confirm('This will sign you out from ALL devices except this one. Continue?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/security/sessions/revoke-all/`, {
+            await fetchWithAuth(`${apiBaseUrl}/security/sessions/revoke-all/`, {
                 method: 'POST'
             });
 

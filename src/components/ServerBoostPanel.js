@@ -15,7 +15,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const fetchBoosts = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/boosts/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/boosts/`);
             const data = await response.json();
             setBoosts(data.boosts || []);
         } catch (error) {
@@ -26,7 +26,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const fetchServerStats = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/boost_stats/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/boost_stats/`);
             const data = await response.json();
             setServerStats(data);
         } catch (error) {
@@ -38,7 +38,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const boostServer = async () => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/servers/boost/`, {
+            await fetchWithAuth(`${apiBaseUrl}/servers/boost/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ server_id: serverId })

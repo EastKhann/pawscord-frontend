@@ -18,7 +18,7 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadAppeals = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/ban-appeals/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/ban-appeals/list/`);
       if (response.ok) {
         const data = await response.json();
         setAppeals(data.appeals || []);
@@ -32,7 +32,7 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadBanInfo = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/ban-appeals/status/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/ban-appeals/status/`);
       if (response.ok) {
         const data = await response.json();
         setBanInfo(data);
@@ -50,7 +50,7 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/adv/ban-appeal/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/adv/ban-appeal/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

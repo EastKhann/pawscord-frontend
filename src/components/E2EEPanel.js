@@ -17,7 +17,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
 
   const checkKeysStatus = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/status/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/status/`);
       if (response.ok) {
         const data = await response.json();
         setKeysUploaded(data.keys_uploaded || false);
@@ -39,7 +39,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
         publicKey: btoa(Math.random().toString(36).substring(2, 15))
       }));
 
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/upload-keys/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/upload-keys/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -69,7 +69,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
 
   const fetchPreKeyBundle = async (username) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/pre-key-bundle/${username}/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/pre-key-bundle/${username}/`);
       if (response.ok) {
         const data = await response.json();
         setMessage(`✅ Fetched ${username}'s encryption keys`);
@@ -95,7 +95,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
       // Simulate encryption (in production, use Signal Protocol)
       const encrypted = btoa(encryptedMessage);
 
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/send-encrypted-message/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/send-encrypted-message/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -127,7 +127,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/encrypted-messages/${recipientUsername}/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/encrypted-messages/${recipientUsername}/`);
       if (response.ok) {
         const data = await response.json();
         setDecryptedMessages(data.messages || []);
@@ -143,7 +143,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
   const rotateKeys = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/rotate-keys/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/rotate-keys/`, {
         method: 'POST'
       });
 
@@ -167,7 +167,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
     }
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/safety-number/${recipientUsername}/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/safety-number/${recipientUsername}/`);
       if (response.ok) {
         const data = await response.json();
         setSafetyNumber(data.safety_number);
@@ -180,7 +180,7 @@ function E2EEPanel({ apiBaseUrl, fetchWithAuth, currentUser }) {
 
   const verifySafetyNumber = async (number) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/e2ee/verify-safety-number/${recipientUsername}/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/verify-safety-number/${recipientUsername}/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ safety_number: number })

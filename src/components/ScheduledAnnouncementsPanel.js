@@ -34,7 +34,7 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
     const loadScheduledAnnouncements = async () => {
         try {
             const response = await fetchWithAuth(
-                `${apiBaseUrl}/api/announcements/scheduled/`
+                `${apiBaseUrl}/announcements/scheduled/`
             );
             const data = await response.json();
             setAnnouncements(data.announcements || []);
@@ -58,7 +58,7 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
 
         try {
             const response = await fetchWithAuth(
-                `${apiBaseUrl}/api/announcements/schedule/`,
+                `${apiBaseUrl}/announcements/schedule/`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -94,7 +94,7 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
 
         try {
             await fetchWithAuth(
-                `${apiBaseUrl}/api/announcements/${announcementId}/delete/`,
+                `${apiBaseUrl}/announcements/${announcementId}/delete/`,
                 { method: 'DELETE' }
             );
             toast.success('Announcement deleted');

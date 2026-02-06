@@ -27,7 +27,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
 
     const loadDailyRewards = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rewards/daily/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rewards/daily/`);
             const data = await response.json();
 
             setRewards(data.rewards || []);
@@ -50,7 +50,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
 
         setClaiming(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rewards/claim/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/rewards/claim/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });

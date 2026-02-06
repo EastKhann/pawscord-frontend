@@ -29,7 +29,7 @@ const WebAuthnSetup = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
 
     const loadCredentials = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/credentials/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/webauthn/credentials/`);
             if (response.ok) {
                 const data = await response.json();
                 setCredentials(data);
@@ -46,7 +46,7 @@ const WebAuthnSetup = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
 
         try {
             // Step 1: Get challenge from server
-            const beginResponse = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/register/begin/`, {
+            const beginResponse = await fetchWithAuth(`${apiBaseUrl}/webauthn/register/begin/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({})
@@ -93,7 +93,7 @@ const WebAuthnSetup = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
                 device_name: `Security Key ${credentials.length + 1}`
             };
 
-            const completeResponse = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/register/complete/`, {
+            const completeResponse = await fetchWithAuth(`${apiBaseUrl}/webauthn/register/complete/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentialData)
@@ -128,7 +128,7 @@ const WebAuthnSetup = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/credentials/${credentialId}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/webauthn/credentials/${credentialId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -150,7 +150,7 @@ const WebAuthnSetup = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/webauthn/credentials/${credentialId}/rename/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/webauthn/credentials/${credentialId}/rename/`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ device_name: newDeviceName })

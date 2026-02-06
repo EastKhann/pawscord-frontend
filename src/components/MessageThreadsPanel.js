@@ -30,7 +30,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
     const loadThreads = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/threads/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/threads/list/`);
             if (response.ok) {
                 const data = await response.json();
                 setThreads(data);
@@ -50,7 +50,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/threads/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/threads/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -75,7 +75,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
 
     const subscribeToThread = async (threadId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/threads/subscribe/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/threads/subscribe/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ thread_id: threadId })
@@ -93,7 +93,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
 
     const pinThread = async (threadId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/threads/${threadId}/pin/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/threads/${threadId}/pin/`, {
                 method: 'POST'
             });
 

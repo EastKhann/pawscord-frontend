@@ -18,7 +18,7 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
     const fetchResults = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${messageId}/scan_results/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/messages/${messageId}/scan_results/`);
             const data = await response.json();
             setScanResults(data.results || []);
         } catch (error) {
@@ -31,7 +31,7 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
     const fetchAllResults = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/content_scanner/results/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/content_scanner/results/`);
             const data = await response.json();
             setScanResults(data.results || []);
         } catch (error) {
@@ -43,7 +43,7 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
 
     const exportResults = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/content_scanner/export/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/content_scanner/export/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ filter })
@@ -66,7 +66,7 @@ const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) 
 
     const reviewResult = async (resultId, action) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/content_scanner/results/${resultId}/review/`, {
+            await fetchWithAuth(`${apiBaseUrl}/content_scanner/results/${resultId}/review/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action }) // approve, block, ignore

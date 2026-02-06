@@ -20,7 +20,7 @@ function RecaptchaPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/recaptcha/verify/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/auth/recaptcha/verify/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, action })
@@ -46,7 +46,7 @@ function RecaptchaPanel({ apiBaseUrl, fetchWithAuth }) {
   const updateSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/recaptcha/settings/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/auth/recaptcha/settings/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

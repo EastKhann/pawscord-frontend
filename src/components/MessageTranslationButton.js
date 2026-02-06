@@ -26,7 +26,7 @@ const MessageTranslationButton = ({ message, fetchWithAuth, apiBaseUrl }) => {
 
         try {
             setIsTranslating(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${message.id}/translations/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/messages/${message.id}/translations/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ target_language: targetLang })

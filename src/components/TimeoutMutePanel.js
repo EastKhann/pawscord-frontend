@@ -33,7 +33,7 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
 
         try {
             setProcessing(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/mute/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/mute/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -61,7 +61,7 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
     const removeMute = async () => {
         try {
             setProcessing(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/unmute/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/unmute/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

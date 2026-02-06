@@ -34,7 +34,7 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
     const loadSlowMode = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/slowmode/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/slowmode/`);
             if (response.ok) {
                 const data = await response.json();
                 if (data) setSlowMode(data);
@@ -48,7 +48,7 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
 
     const saveSlowMode = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/slowmode/set/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/slowmode/set/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

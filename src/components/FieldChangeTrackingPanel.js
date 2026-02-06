@@ -15,7 +15,7 @@ const FieldChangeTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, entityTy
         setLoading(true);
         try {
             const response = await fetchWithAuth(
-                `${apiBaseUrl}/api/audit/field-changes/?entity_type=${entityType}&entity_id=${entityId}`
+                `${apiBaseUrl}/audit/field-changes/?entity_type=${entityType}&entity_id=${entityId}`
             );
             const data = await response.json();
             setChanges(data.changes || []);

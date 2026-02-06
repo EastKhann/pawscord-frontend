@@ -24,8 +24,8 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
     setLoading(true);
     try {
       const url = selectedModel === 'all' 
-        ? `${apiBaseUrl}/api/changelog/`
-        : `${apiBaseUrl}/api/changelog/${selectedModel}/`;
+        ? `${apiBaseUrl}/changelog/`
+        : `${apiBaseUrl}/changelog/${selectedModel}/`;
       
       const response = await fetchWithAuth(url);
       if (response.ok) {
@@ -41,7 +41,7 @@ function ChangelogPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadModels = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/changelog/models/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/changelog/models/`);
       if (response.ok) {
         const data = await response.json();
         setModels(data.models || []);

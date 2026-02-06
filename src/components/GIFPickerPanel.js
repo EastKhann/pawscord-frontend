@@ -24,7 +24,7 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
       if (selectedCategory !== 'all') params.append('category', selectedCategory);
       if (searchQuery) params.append('search', searchQuery);
 
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/gifs/list_local/?${params}`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/gifs/list_local/?${params}`);
       if (response.ok) {
         const data = await response.json();
         setGifs(data.gifs || []);
@@ -38,7 +38,7 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
 
   const loadCategories = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/gifs/categories/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/gifs/categories/`);
       if (response.ok) {
         const data = await response.json();
         setCategories(data.categories || []);
@@ -50,7 +50,7 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
 
   const loadFavorites = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/gifs/favorites/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/gifs/favorites/`);
       if (response.ok) {
         const data = await response.json();
         setFavorites(new Set(data.gif_ids || []));
@@ -64,8 +64,8 @@ function GIFPickerPanel({ apiBaseUrl, fetchWithAuth, onSelectGIF }) {
     try {
       const isFav = favorites.has(gifId);
       const url = isFav 
-        ? `${apiBaseUrl}/api/gifs/favorites/remove/`
-        : `${apiBaseUrl}/api/gifs/favorites/add/`;
+        ? `${apiBaseUrl}/gifs/favorites/remove/`
+        : `${apiBaseUrl}/gifs/favorites/add/`;
 
       const response = await fetchWithAuth(url, {
         method: 'POST',

@@ -20,7 +20,7 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
     const loadNotes = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/moderation/notes/list/?username=${username}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/moderation/notes/list/?username=${username}`);
             if (response.ok) {
                 const data = await response.json();
                 setNotes(data);
@@ -40,7 +40,7 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/moderation/notes/add/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/moderation/notes/add/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -64,7 +64,7 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
 
     const deleteNote = async (noteId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/moderation/notes/${noteId}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/moderation/notes/${noteId}/delete/`, {
                 method: 'DELETE'
             });
 

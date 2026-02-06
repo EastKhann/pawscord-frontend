@@ -23,7 +23,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
         setLoading(true);
         try {
             const response = await fetchWithAuth(
-                `${apiBaseUrl}/api/servers/${serverId}/growth-metrics/?range=${timeRange}`
+                `${apiBaseUrl}/servers/${serverId}/growth-metrics/?range=${timeRange}`
             );
             const data = await response.json();
             setMetrics(data);

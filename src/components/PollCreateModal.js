@@ -47,7 +47,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
         setIsLoading(true);
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/polls/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/polls/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

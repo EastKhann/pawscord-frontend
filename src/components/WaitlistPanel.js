@@ -14,7 +14,7 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const fetchWaitlist = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/waitlist/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/waitlist/`);
             const data = await response.json();
             setWaitlist(data.entries || []);
             setReferralCode(data.referral_code || '');
@@ -27,7 +27,7 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const approveEntry = async (entryId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/waitlist/${entryId}/approve/`, {
+            await fetchWithAuth(`${apiBaseUrl}/waitlist/${entryId}/approve/`, {
                 method: 'POST'
             });
             toast.success('Waitlist entry approved');
@@ -39,7 +39,7 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const rejectEntry = async (entryId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/waitlist/${entryId}/reject/`, {
+            await fetchWithAuth(`${apiBaseUrl}/waitlist/${entryId}/reject/`, {
                 method: 'POST'
             });
             toast.success('Waitlist entry rejected');

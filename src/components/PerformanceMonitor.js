@@ -25,8 +25,8 @@ const PerformanceMonitor = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
         setLoading(true);
         try {
             const [statsRes, healthRes] = await Promise.all([
-                fetchWithAuth(`${apiBaseUrl}/api/cache/stats/`),
-                fetchWithAuth(`${apiBaseUrl}/api/cache/health/`)
+                fetchWithAuth(`${apiBaseUrl}/cache/stats/`),
+                fetchWithAuth(`${apiBaseUrl}/cache/health/`)
             ]);
 
             if (statsRes.ok) {

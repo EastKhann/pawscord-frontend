@@ -18,7 +18,7 @@ function ThreadSystemPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
 
   const loadThreads = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/threads/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/threads/list/`);
       if (response.ok) {
         const data = await response.json();
         setThreads(data.threads || []);
@@ -30,7 +30,7 @@ function ThreadSystemPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
 
   const loadSubscriptions = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/threads/subscriptions/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/threads/subscriptions/`);
       if (response.ok) {
         const data = await response.json();
         setSubscriptions(new Set(data.thread_ids || []));
@@ -48,7 +48,7 @@ function ThreadSystemPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/adv/create-thread/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/adv/create-thread/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message_id: currentMessageId })
@@ -69,7 +69,7 @@ function ThreadSystemPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
 
   const loadThreadMessages = async (threadId) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${threadId}/thread/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/${threadId}/thread/`);
       if (response.ok) {
         const data = await response.json();
         setThreadMessages(data.messages || []);
@@ -83,8 +83,8 @@ function ThreadSystemPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
     try {
       const isSubscribed = subscriptions.has(threadId);
       const url = isSubscribed 
-        ? `${apiBaseUrl}/api/threads/unsubscribe/`
-        : `${apiBaseUrl}/api/threads/subscribe/`;
+        ? `${apiBaseUrl}/threads/unsubscribe/`
+        : `${apiBaseUrl}/threads/subscribe/`;
 
       const response = await fetchWithAuth(url, {
         method: isSubscribed ? 'DELETE' : 'POST',

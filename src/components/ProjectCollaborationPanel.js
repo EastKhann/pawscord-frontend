@@ -24,7 +24,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
     const fetchProjects = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/projects/?server_id=${serverId}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/projects/?server_id=${serverId}`);
             const data = await res.json();
             setProjects(data.projects || []);
         } catch (error) {
@@ -34,7 +34,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
     const fetchProject = async (projectId) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/projects/${projectId}/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/projects/${projectId}/`);
             const data = await res.json();
             setSelectedProject(data.project);
             setDocuments(data.documents || []);
@@ -52,7 +52,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/projects/create/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/projects/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -84,7 +84,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/documents/create/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/documents/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -109,7 +109,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
     const fetchDocument = async (docId) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/documents/${docId}/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/documents/${docId}/`);
             const data = await res.json();
             setSelectedDoc(data.document);
             setView('document');
@@ -122,7 +122,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
         if (!selectedDoc) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/documents/${selectedDoc.id}/`, {
+            await fetchWithAuth(`${apiBaseUrl}/documents/${selectedDoc.id}/`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content: selectedDoc.content })

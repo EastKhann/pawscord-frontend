@@ -19,7 +19,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiBaseUrl}/api/user/achievements/`, {
+            const response = await fetch(`${apiBaseUrl}/user/achievements/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -40,7 +40,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
     const fetchBadges = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${apiBaseUrl}/api/user/badges/`, {
+            const response = await fetch(`${apiBaseUrl}/user/badges/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

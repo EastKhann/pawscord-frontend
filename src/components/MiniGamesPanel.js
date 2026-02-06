@@ -16,7 +16,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const fetchGames = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/games/?server_id=${serverId}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/games/?server_id=${serverId}`);
             const data = await res.json();
             setGames(data.games || []);
         } catch (error) {
@@ -26,7 +26,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/games/leaderboard/?server_id=${serverId}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/games/leaderboard/?server_id=${serverId}`);
             const data = await res.json();
             setLeaderboard(data.leaderboard || []);
         } catch (error) {
@@ -37,7 +37,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const createGame = async (gameType) => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/games/create/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/games/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ game_type: gameType, server_id: serverId })
@@ -58,7 +58,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const performAction = async (action, actionData = {}) => {
         if (!activeGame) return;
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/games/${activeGame.id}/action/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/games/${activeGame.id}/action/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action, data: actionData })

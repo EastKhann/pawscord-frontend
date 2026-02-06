@@ -34,7 +34,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
     const fetchChallenges = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/challenges/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/challenges/`);
             if (response.ok) {
                 const data = await response.json();
                 setChallenges(data.challenges);

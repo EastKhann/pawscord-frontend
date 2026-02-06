@@ -14,8 +14,8 @@ function DownloadPagesPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadDownloads = async () => {
     setLoading(true);
     try {
-      const latestResponse = await fetchWithAuth(`${apiBaseUrl}/api/download/latest/`);
-      const androidResponse = await fetchWithAuth(`${apiBaseUrl}/api/download/android/`);
+      const latestResponse = await fetchWithAuth(`${apiBaseUrl}/download/latest/`);
+      const androidResponse = await fetchWithAuth(`${apiBaseUrl}/download/android/`);
       
       if (latestResponse.ok && androidResponse.ok) {
         const latest = await latestResponse.json();

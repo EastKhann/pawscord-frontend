@@ -15,7 +15,7 @@ const EnterpriseAnalytics = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     const loadAnalytics = async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/enterprise/analytics/?range=${timeRange}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/enterprise/analytics/?range=${timeRange}`);
             if (res.ok) {
                 const data = await res.json();
                 setAnalytics(data);
@@ -28,7 +28,7 @@ const EnterpriseAnalytics = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
 
     const exportReport = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/enterprise/analytics/export/?range=${timeRange}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/enterprise/analytics/export/?range=${timeRange}`);
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

@@ -16,7 +16,7 @@ const LeaderboardPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
         setLoading(true);
         try {
             const res = await fetchWithAuth(
-                `${apiBaseUrl}/api/leaderboard/${selectedBoard}/?range=${timeRange}`
+                `${apiBaseUrl}/leaderboard/${selectedBoard}/?range=${timeRange}`
             );
             if (res.ok) {
                 const data = await res.json();

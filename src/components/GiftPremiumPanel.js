@@ -17,7 +17,7 @@ function GiftPremiumPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/adv/gift-premium/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/adv/gift-premium/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

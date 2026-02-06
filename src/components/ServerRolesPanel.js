@@ -22,7 +22,7 @@ const ServerRolesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
     const loadRoles = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/roles/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/roles/list/`);
             if (response.ok) {
                 const data = await response.json();
                 setRoles(data.sort((a, b) => (b.position || 0) - (a.position || 0)));
@@ -42,7 +42,7 @@ const ServerRolesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/roles/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/roles/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newRole)
@@ -66,7 +66,7 @@ const ServerRolesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
         if (!confirm('Bu rolü silmek istediğinize emin misiniz?')) return;
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/roles/${roleId}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/roles/${roleId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -104,7 +104,7 @@ const ServerRolesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
         if (!draggedRole) return;
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/roles/reorder/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/roles/reorder/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

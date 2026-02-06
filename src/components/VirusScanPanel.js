@@ -25,7 +25,7 @@ const VirusScanPanel = ({ serverId, apiBaseUrl, fetchWithAuth, onClose }) => {
     const loadScans = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/virus-scans/${serverId}/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/virus-scans/${serverId}/`);
             if (response.ok) {
                 const data = await response.json();
                 setScans(data.scans || []);
@@ -40,7 +40,7 @@ const VirusScanPanel = ({ serverId, apiBaseUrl, fetchWithAuth, onClose }) => {
 
     const handleRescan = async (messageId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/virus-scans/${messageId}/rescan/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/virus-scans/${messageId}/rescan/`, {
                 method: 'POST'
             });
             if (response.ok) {
@@ -57,7 +57,7 @@ const VirusScanPanel = ({ serverId, apiBaseUrl, fetchWithAuth, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${messageId}/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/messages/${messageId}/`, {
                 method: 'DELETE'
             });
             if (response.ok) {

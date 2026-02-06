@@ -53,7 +53,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
     const loadChallenges = async () => {
         try {
             setLoading(true);
-            const data = await fetchWithAuth(`${apiBaseUrl}/api/quickwins/${serverId}/challenges/?status=${activeTab}`);
+            const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/${serverId}/challenges/?status=${activeTab}`);
             setChallenges(data.challenges || []);
         } catch (error) {
             console.error('Challenge yükleme hatası:', error);
@@ -64,7 +64,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
 
     const loadProgress = async () => {
         try {
-            const data = await fetchWithAuth(`${apiBaseUrl}/api/quickwins/${serverId}/my-progress/`);
+            const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/${serverId}/my-progress/`);
             setUserProgress(data.progress || {});
         } catch (error) {
             console.error('İlerleme yükleme hatası:', error);
@@ -73,7 +73,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
 
     const loadRewards = async () => {
         try {
-            const data = await fetchWithAuth(`${apiBaseUrl}/api/quickwins/${serverId}/rewards/`);
+            const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/${serverId}/rewards/`);
             setRewards(data.rewards || []);
         } catch (error) {
             console.error('Ödül yükleme hatası:', error);
@@ -82,7 +82,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
 
     const loadLeaderboard = async () => {
         try {
-            const data = await fetchWithAuth(`${apiBaseUrl}/api/quickwins/${serverId}/leaderboard/`);
+            const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/${serverId}/leaderboard/`);
             setLeaderboard(data.leaderboard || []);
         } catch (error) {
             console.error('Lider tablosu yükleme hatası:', error);
@@ -91,7 +91,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
 
     const createChallenge = async () => {
         try {
-            const data = await fetchWithAuth(`${apiBaseUrl}/api/quickwins/${serverId}/challenges/`, {
+            const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/${serverId}/challenges/`, {
                 method: 'POST',
                 body: JSON.stringify(newChallenge)
             });
@@ -114,7 +114,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
 
     const claimReward = async (challengeId) => {
         try {
-            const data = await fetchWithAuth(`${apiBaseUrl}/api/quickwins/challenge/${challengeId}/claim/`, {
+            const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/challenge/${challengeId}/claim/`, {
                 method: 'POST'
             });
             alert(`Tebrikler! ${data.points} puan kazandınız!`);
@@ -130,7 +130,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
     const deleteChallenge = async (challengeId) => {
         if (!confirm('Bu challenge\'ı silmek istediğinize emin misiniz?')) return;
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/quickwins/challenge/${challengeId}/`, {
+            await fetchWithAuth(`${apiBaseUrl}/quickwins/challenge/${challengeId}/`, {
                 method: 'DELETE'
             });
             setChallenges(challenges.filter(c => c.id !== challengeId));

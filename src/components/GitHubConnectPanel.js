@@ -16,7 +16,7 @@ function GitHubConnectPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/adv/connect-github/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/adv/connect-github/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ github_username: githubUsername })

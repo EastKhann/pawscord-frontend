@@ -20,7 +20,7 @@ const MessageOCRPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
     const loadOCRText = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${messageId}/ocr/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/messages/${messageId}/ocr/`);
             if (response.ok) {
                 const data = await response.json();
                 setOcrText(data.text || '');
@@ -35,7 +35,7 @@ const MessageOCRPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) => {
     const requestOCR = async () => {
         try {
             setProcessing(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${messageId}/ocr/request/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/messages/${messageId}/ocr/request/`, {
                 method: 'POST'
             });
 

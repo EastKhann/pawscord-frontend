@@ -33,7 +33,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const fetchParts = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/parts/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/parts/`);
             const data = await res.json();
             setParts(data.parts || {});
             setUserCoins(data.user_coins || 0);
@@ -44,7 +44,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const fetchMyAvatar = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/my-avatar/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/my-avatar/`);
             const data = await res.json();
             setAvatar(data.avatar || getDefaultAvatar());
             setOwnedItems(data.owned_items || []);
@@ -55,7 +55,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const fetchPresets = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/presets/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/presets/`);
             const data = await res.json();
             setPresets(data.presets || []);
         } catch (error) {
@@ -97,7 +97,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const purchaseItem = async (category, itemId) => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/purchase/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/purchase/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category, item_id: itemId })
@@ -120,7 +120,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const saveAvatar = async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/save/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/save/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ config: avatar })
@@ -140,7 +140,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const randomizeAvatar = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/randomize/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/randomize/`, {
                 method: 'POST'
             });
             const data = await res.json();
@@ -158,7 +158,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         if (!name) return;
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/avatar-studio/presets/save/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/presets/save/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, config: avatar })

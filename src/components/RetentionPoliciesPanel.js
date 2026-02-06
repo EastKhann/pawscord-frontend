@@ -24,7 +24,7 @@ function RetentionPoliciesPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadPolicies = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/retention/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/retention/list/`);
       if (response.ok) {
         const data = await response.json();
         setPolicies(data.policies || []);
@@ -44,7 +44,7 @@ function RetentionPoliciesPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/retention/create/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/retention/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -73,7 +73,7 @@ function RetentionPoliciesPanel({ apiBaseUrl, fetchWithAuth }) {
     if (!window.confirm('Delete this retention policy?')) return;
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/retention/${policyId}/delete/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/retention/${policyId}/delete/`, {
         method: 'DELETE'
       });
 

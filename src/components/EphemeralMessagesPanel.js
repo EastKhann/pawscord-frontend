@@ -26,7 +26,7 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
     const fetchSettings = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/ephemeral/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/ephemeral/`);
             const data = await response.json();
             setSettings(data);
             if (data.ttl) setTtl(data.ttl);
@@ -39,7 +39,7 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
     const toggleEphemeral = async () => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/ephemeral/set/`, {
+            await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/ephemeral/set/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -59,7 +59,7 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
         setTtl(newTTL);
         if (settings?.enabled) {
             try {
-                await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/ephemeral/set/`, {
+                await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/ephemeral/set/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

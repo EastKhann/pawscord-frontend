@@ -26,7 +26,7 @@ function EndorsementsPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadEndorsements = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/endorsements/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/endorsements/list/`);
       if (response.ok) {
         const data = await response.json();
         setReceivedEndorsements(data.received || []);
@@ -46,7 +46,7 @@ function EndorsementsPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/adv/endorsement/create/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/adv/endorsement/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

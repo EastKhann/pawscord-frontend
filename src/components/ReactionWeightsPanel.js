@@ -15,7 +15,7 @@ function ReactionWeightsPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadWeights = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/reactions/weights/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/reactions/weights/list/`);
       if (response.ok) {
         const data = await response.json();
         setWeights(data.weights || []);
@@ -29,7 +29,7 @@ function ReactionWeightsPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const updateWeight = async (emoji, xp, points) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/reactions/weights/set/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/reactions/weights/set/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ emoji, xp, points })

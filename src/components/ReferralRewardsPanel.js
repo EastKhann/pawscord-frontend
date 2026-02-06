@@ -16,7 +16,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
     const fetchRewards = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/referrals/rewards/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/referrals/rewards/`);
             const data = await response.json();
             setRewards(data.rewards || []);
             setReferralLink(data.referral_link || '');
@@ -29,7 +29,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
 
     const fetchStats = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/referrals/stats/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/referrals/stats/`);
             const data = await response.json();
             setStats(data);
         } catch (error) {
@@ -39,7 +39,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
 
     const claimReward = async (rewardId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/referrals/rewards/${rewardId}/claim/`, {
+            await fetchWithAuth(`${apiBaseUrl}/referrals/rewards/${rewardId}/claim/`, {
                 method: 'POST'
             });
             toast.success('Reward claimed!');

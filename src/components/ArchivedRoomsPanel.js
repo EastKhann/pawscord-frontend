@@ -19,7 +19,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
     const loadArchivedRooms = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/archived/list/?server_id=${serverId}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/archived/list/?server_id=${serverId}`);
             if (response.ok) {
                 const data = await response.json();
                 setArchivedRooms(data);
@@ -33,7 +33,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
 
     const unarchiveRoom = async (roomSlug) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/unarchive/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/unarchive/`, {
                 method: 'POST'
             });
 
@@ -55,7 +55,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/delete/`, {
                 method: 'DELETE'
             });
 

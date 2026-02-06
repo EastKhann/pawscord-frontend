@@ -25,7 +25,7 @@ function MessageTagsPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
 
   const loadAllTags = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/tags/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/tags/list/`);
       if (response.ok) {
         const data = await response.json();
         setTags(data.tags || []);
@@ -40,7 +40,7 @@ function MessageTagsPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
     
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${currentMessageId}/tags/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/${currentMessageId}/tags/`);
       if (response.ok) {
         const data = await response.json();
         setMessageTags(data.tags || []);
@@ -59,7 +59,7 @@ function MessageTagsPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
     }
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/tags/create/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/tags/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -84,7 +84,7 @@ function MessageTagsPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
     if (!currentMessageId) return;
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${currentMessageId}/tags/add/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/${currentMessageId}/tags/add/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tag_id: tagId })
@@ -103,7 +103,7 @@ function MessageTagsPanel({ apiBaseUrl, fetchWithAuth, currentMessageId }) {
     if (!currentMessageId) return;
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${currentMessageId}/tags/remove/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/${currentMessageId}/tags/remove/`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tag_id: tagId })

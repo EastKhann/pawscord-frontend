@@ -36,7 +36,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
     const fetchPolicies = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/retention/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/retention/`);
             const data = await response.json();
             setPolicies(data.policies || []);
         } catch (error) {
@@ -48,7 +48,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
     const savePolicy = async () => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/retention/policies/create/`, {
+            await fetchWithAuth(`${apiBaseUrl}/retention/policies/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newPolicy, server_id: serverId })
@@ -64,7 +64,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
     const togglePolicy = async (policyId, enabled) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/retention/policies/${policyId}/toggle/`, {
+            await fetchWithAuth(`${apiBaseUrl}/retention/policies/${policyId}/toggle/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ enabled })
@@ -81,7 +81,7 @@ const DataRetentionPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
         if (!confirm('Delete this retention policy?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/retention/policies/${policyId}/delete/`, {
+            await fetchWithAuth(`${apiBaseUrl}/retention/policies/${policyId}/delete/`, {
                 method: 'DELETE'
             });
 

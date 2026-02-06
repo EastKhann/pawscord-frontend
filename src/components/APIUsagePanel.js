@@ -29,7 +29,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     const loadAPIUsage = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/analytics/usage/?range=${timeRange}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/analytics/usage/?range=${timeRange}`);
             const data = await response.json();
 
             setStats(data.stats || {});

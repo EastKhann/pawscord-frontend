@@ -14,7 +14,7 @@ function CatAvatarsSyncPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadSyncStatus = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/admin/cat-avatars/status/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/admin/cat-avatars/status/`);
       if (response.ok) {
         const data = await response.json();
         setSyncStatus(data);
@@ -28,7 +28,7 @@ function CatAvatarsSyncPanel({ apiBaseUrl, fetchWithAuth }) {
     setLoading(true);
     setMessage('');
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/admin/sync-cat-avatars/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/admin/sync-cat-avatars/`, {
         method: 'POST'
       });
 

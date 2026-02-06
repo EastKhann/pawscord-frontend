@@ -14,7 +14,7 @@ const TopicHistoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
     const fetchTopicHistory = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/topics/${roomSlug}/history/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/topics/${roomSlug}/history/`);
             const data = await response.json();
             setHistory(data.history || []);
             setCurrentTopic(data.current_topic || '');

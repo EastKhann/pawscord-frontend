@@ -32,7 +32,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
     const loadBookmarks = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/list/`);
             if (response.ok) {
                 const data = await response.json();
                 setBookmarks(data);
@@ -47,7 +47,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
 
     const loadTags = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/list/`);
             if (response.ok) {
                 const data = await response.json();
                 setTags(data);
@@ -64,7 +64,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -90,7 +90,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
 
     const deleteBookmark = async (bookmarkId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/${bookmarkId}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/${bookmarkId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -108,7 +108,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
 
     const addTagToBookmark = async (bookmarkId, tagId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bookmarks/tags/${tagId}/add/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/bookmarks/tags/${tagId}/add/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ bookmark_id: bookmarkId })

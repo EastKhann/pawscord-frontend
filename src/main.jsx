@@ -37,7 +37,10 @@ const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage'));
 // 📄 Legal Pages
 const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage'));
 
-// 📈 GROWTH: Landing Page & Growth Components (Lazy Load)
+// � Store Page
+const StorePage = React.lazy(() => import('./pages/StorePage'));
+
+// �📈 GROWTH: Landing Page & Growth Components (Lazy Load)
 const LandingPage = React.lazy(() => import('./components/LandingPage'));
 const ReferralProgram = React.lazy(() => import('./components/ReferralProgram'));
 const GrowthDashboard = React.lazy(() => import('./components/GrowthDashboard'));
@@ -152,7 +155,14 @@ const RootApp = () => {
                                     </React.Suspense>
                                 } />
 
-                                {/* �📈 GROWTH: Landing Page & Growth System */}
+                                {/* 🛒 Store */}
+                                <Route path="/store" element={
+                                    <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
+                                        <StorePage />
+                                    </React.Suspense>
+                                } />
+
+                                {/* 📈 GROWTH: Landing Page & Growth System */}
                                 <Route path="/launch" element={
                                     <PageWrapper>
                                         <React.Suspense fallback={<div>Yükleniyor...</div>}>

@@ -18,7 +18,7 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadBalance = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/economy/balance/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/economy/balance/`);
       if (response.ok) {
         const data = await response.json();
         setBalance(data.balance || 0);
@@ -31,7 +31,7 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
   const loadHistory = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/economy/history/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/economy/history/`);
       if (response.ok) {
         const data = await response.json();
         setHistory(data.transactions || []);
@@ -61,7 +61,7 @@ function EconomySystemPanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/economy/transfer/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/economy/transfer/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

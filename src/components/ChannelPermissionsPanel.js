@@ -41,7 +41,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
     const loadPermissions = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/channels/${channelSlug}/permissions/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/channels/${channelSlug}/permissions/`);
             if (response.ok) {
                 const data = await response.json();
                 setPermissions(data);
@@ -66,7 +66,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
 
     const loadRoles = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/roles/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/roles/list/`);
             if (response.ok) {
                 const data = await response.json();
                 setRoles(data);
@@ -78,7 +78,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
 
     const updatePermission = async (roleId, permission, value) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/channels/permissions/add/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/channels/permissions/add/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

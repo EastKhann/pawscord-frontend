@@ -15,7 +15,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadStats = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/cache/stats/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/cache/stats/`);
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -27,7 +27,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadHealth = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/cache/health/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/cache/health/`);
       if (response.ok) {
         const data = await response.json();
         setHealth(data);
@@ -42,7 +42,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
     
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/cache/clear-all/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/cache/clear-all/`, {
         method: 'POST'
       });
       if (response.ok) {
@@ -60,7 +60,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
   const clearUserCache = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/cache/user/clear/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/cache/user/clear/`, {
         method: 'POST'
       });
       if (response.ok) {
@@ -79,7 +79,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
     
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/cache/database/optimize/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/cache/database/optimize/`, {
         method: 'POST'
       });
       if (response.ok) {

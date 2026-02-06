@@ -20,7 +20,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
     const loadStickies = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/stickies/list/?room_slug=${roomSlug}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/stickies/list/?room_slug=${roomSlug}`);
             if (response.ok) {
                 const data = await response.json();
                 setStickies(data);
@@ -39,7 +39,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/stickies/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/stickies/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -63,7 +63,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
 
     const deleteSticky = async (stickyId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/stickies/${stickyId}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/stickies/${stickyId}/delete/`, {
                 method: 'DELETE'
             });
 

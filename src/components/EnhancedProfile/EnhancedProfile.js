@@ -61,7 +61,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
         setIsLoading(true);
         try {
             // Temel profil
-            const profileRes = await fetch(`${API_BASE_URL}/api/profile/${userId}/`, {
+            const profileRes = await fetch(`${API_BASE_URL}/profile/${userId}/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (profileRes.ok) {
@@ -70,7 +70,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
             }
 
             // Genişletilmiş profil
-            const extendedRes = await fetch(`${API_BASE_URL}/api/profile/extended/?user_id=${userId}`, {
+            const extendedRes = await fetch(`${API_BASE_URL}/profile/extended/?user_id=${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (extendedRes.ok) {
@@ -79,7 +79,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
             }
 
             // Vitrin öğeleri
-            const showcaseRes = await fetch(`${API_BASE_URL}/api/profile/showcases/?user_id=${userId}`, {
+            const showcaseRes = await fetch(`${API_BASE_URL}/profile/showcases/?user_id=${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (showcaseRes.ok) {
@@ -89,7 +89,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
 
             // Ortak bağlantılar (kendi profilimiz değilse)
             if (!isOwn) {
-                const mutualRes = await fetch(`${API_BASE_URL}/api/profile/mutual-connections/?target_user_id=${userId}`, {
+                const mutualRes = await fetch(`${API_BASE_URL}/profile/mutual-connections/?target_user_id=${userId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (mutualRes.ok) {
@@ -98,7 +98,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                 }
 
                 // Profil notu
-                const noteRes = await fetch(`${API_BASE_URL}/api/profile/note/?target_user_id=${userId}`, {
+                const noteRes = await fetch(`${API_BASE_URL}/profile/note/?target_user_id=${userId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (noteRes.ok) {
@@ -107,7 +107,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                 }
 
                 // Ziyaret kaydet
-                fetch(`${API_BASE_URL}/api/profile/visit/`, {
+                fetch(`${API_BASE_URL}/profile/visit/`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -131,7 +131,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
 
     const saveExtendedProfile = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/profile/extended/`, {
+            const res = await fetch(`${API_BASE_URL}/profile/extended/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -156,7 +156,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
 
     const saveProfileNote = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/api/profile/note/`, {
+            const res = await fetch(`${API_BASE_URL}/profile/note/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

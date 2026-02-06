@@ -63,8 +63,8 @@ export const AchievementsPanel = ({ username, fetchWithAuth, apiBaseUrl }) => {
     const loadAchievements = async () => {
         try {
             const [achievRes, badgeRes] = await Promise.all([
-                fetchWithAuth(`${apiBaseUrl}/api/user/achievements/`),
-                fetchWithAuth(`${apiBaseUrl}/api/user/badges/`)
+                fetchWithAuth(`${apiBaseUrl}/user/achievements/`),
+                fetchWithAuth(`${apiBaseUrl}/user/badges/`)
             ]);
 
             if (achievRes.ok) {

@@ -35,7 +35,7 @@ const NotificationScheduler = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
     const fetchScheduledNotifications = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/notifications/scheduled/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/notifications/scheduled/`);
             if (response.ok) {
                 const data = await response.json();
                 setScheduledNotifications(data);
@@ -134,7 +134,7 @@ const NotificationScheduler = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
         };
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/notifications/scheduled/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/notifications/scheduled/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(notification)
@@ -162,7 +162,7 @@ const NotificationScheduler = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
         ));
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/notifications/scheduled/${notificationId}/`, {
+            await fetchWithAuth(`${apiBaseUrl}/notifications/scheduled/${notificationId}/`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus })
@@ -176,7 +176,7 @@ const NotificationScheduler = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
         setScheduledNotifications(prev => prev.filter(n => n.id !== notificationId));
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/notifications/scheduled/${notificationId}/`, {
+            await fetchWithAuth(`${apiBaseUrl}/notifications/scheduled/${notificationId}/`, {
                 method: 'DELETE'
             });
         } catch (err) {

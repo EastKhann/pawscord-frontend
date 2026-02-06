@@ -17,7 +17,7 @@ function ReactionHeatmapPanel({ apiBaseUrl, fetchWithAuth, currentRoomId }) {
   const loadHeatmap = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${currentRoomId}/reaction_heatmap/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${currentRoomId}/reaction_heatmap/`);
       if (response.ok) {
         const data = await response.json();
         setHeatmapData(data);
@@ -31,7 +31,7 @@ function ReactionHeatmapPanel({ apiBaseUrl, fetchWithAuth, currentRoomId }) {
 
   const loadDayData = async (day) => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${currentRoomId}/reaction_heatmap/${day}/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${currentRoomId}/reaction_heatmap/${day}/`);
       if (response.ok) {
         const data = await response.json();
         setDayData(data);

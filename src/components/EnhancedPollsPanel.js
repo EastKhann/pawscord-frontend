@@ -54,7 +54,7 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
                 payload.scheduled_for = new Date(scheduledFor).toISOString();
             }
 
-            await fetchWithAuth(`${apiBaseUrl}/api/polls/create/`, {
+            await fetchWithAuth(`${apiBaseUrl}/polls/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -69,7 +69,7 @@ const EnhancedPollsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) =>
 
     const exportResults = async (pollId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/polls/${pollId}/export/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/polls/${pollId}/export/`);
             const data = await response.json();
 
             const csv = [

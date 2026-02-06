@@ -17,8 +17,8 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
         setLoading(true);
         try {
             const endpoint = channelId
-                ? `${apiBaseUrl}/api/channels/${channelId}/webhooks/`
-                : `${apiBaseUrl}/api/servers/${serverId}/webhooks/`;
+                ? `${apiBaseUrl}/channels/${channelId}/webhooks/`
+                : `${apiBaseUrl}/servers/${serverId}/webhooks/`;
             const res = await fetchWithAuth(endpoint);
             if (res.ok) {
                 const data = await res.json();
@@ -32,7 +32,7 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
 
     const createWebhook = async (name, avatar) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/channels/${channelId}/webhooks/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/channels/${channelId}/webhooks/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, avatar })
@@ -51,7 +51,7 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
         if (!confirm('Bu webhook\'u silmek istediğinize emin misiniz?')) return;
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/webhooks/${webhookId}/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/webhooks/${webhookId}/`, {
                 method: 'DELETE'
             });
             if (res.ok) {
@@ -66,7 +66,7 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
         if (!confirm('Token\'ı yenilemek istediğinize emin misiniz? Eski token geçersiz olacak.')) return;
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/webhooks/${webhookId}/regenerate/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/webhooks/${webhookId}/regenerate/`, {
                 method: 'POST'
             });
             if (res.ok) {
@@ -80,7 +80,7 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
     };
 
     const copyWebhookUrl = (webhook) => {
-        const url = `${apiBaseUrl}/api/webhooks/${webhook.id}/${webhook.token}`;
+        const url = `${apiBaseUrl}/webhooks/${webhook.id}/${webhook.token}`;
         navigator.clipboard.writeText(url);
         toast.success('✅ Webhook URL kopyalandı!');
     };
@@ -127,7 +127,7 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
                                     <div style={styles.webhookInfo}>
                                         <div style={styles.webhookName}>{webhook.name}</div>
                                         <div style={styles.webhookUrl}>
-                                            {apiBaseUrl}/api/webhooks/{webhook.id}/...
+                                            {apiBaseUrl}/webhooks/{webhook.id}/...
                                         </div>
                                         <div style={styles.webhookMeta}>
                                             Oluşturuldu: {new Date(webhook.created_at).toLocaleDateString('tr-TR')}
@@ -182,7 +182,7 @@ const WebhookPanel = ({ serverId, channelId, onClose, fetchWithAuth, apiBaseUrl 
                         onClose={() => setEditingWebhook(null)}
                         onSave={(name, avatar) => {
                             // Update webhook
-                            fetchWithAuth(`${apiBaseUrl}/api/webhooks/${editingWebhook.id}/`, {
+                            fetchWithAuth(`${apiBaseUrl}/webhooks/${editingWebhook.id}/`, {
                                 method: 'PATCH',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ name, avatar })

@@ -24,7 +24,7 @@ function MessageRedactionPanel({ apiBaseUrl, fetchWithAuth, messageId, onRedact 
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/redact/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/redact/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

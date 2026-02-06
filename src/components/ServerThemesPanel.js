@@ -79,7 +79,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
     const loadThemes = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/themes/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/themes/`);
             if (response.ok) {
                 const data = await response.json();
                 setThemes(data.themes || []);
@@ -94,7 +94,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
 
     const applyTheme = async (theme) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/theme/apply/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/theme/apply/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(theme)
@@ -119,7 +119,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/theme/save/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/theme/save/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(customTheme)

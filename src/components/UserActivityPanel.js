@@ -16,7 +16,7 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
     const fetchActivityLog = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/activity/${username}/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/activity/${username}/`);
             const data = await response.json();
             setActivityLog(data.activity || []);
         } catch (error) {
@@ -28,7 +28,7 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
 
     const fetchPresenceHistory = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/presence/${username}/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/presence/${username}/`);
             const data = await response.json();
             setPresenceHistory(data.history || []);
         } catch (error) {

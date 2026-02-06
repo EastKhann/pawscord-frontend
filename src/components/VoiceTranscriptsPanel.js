@@ -27,7 +27,7 @@ const VoiceTranscriptsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug })
     const fetchTranscripts = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/voice/transcripts/?room_slug=${roomSlug}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/voice/transcripts/?room_slug=${roomSlug}`);
             const data = await response.json();
             setTranscripts(data.transcripts || []);
             setFilteredTranscripts(data.transcripts || []);

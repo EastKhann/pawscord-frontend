@@ -22,7 +22,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const fetchApps = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/oauth/apps/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/oauth/apps/list/`);
             const data = await response.json();
             setApps(data.apps || []);
         } catch (error) {
@@ -34,7 +34,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const fetchBots = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bots/list/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/bots/list/`);
             const data = await response.json();
             setBots(data.bots || []);
         } catch (error) {
@@ -49,7 +49,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/oauth/apps/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/oauth/apps/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -80,7 +80,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         }
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/bots/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/bots/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newBot)
@@ -105,7 +105,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         if (!confirm('Are you sure you want to delete this app? This cannot be undone.')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/oauth/apps/${appId}/delete/`, {
+            await fetchWithAuth(`${apiBaseUrl}/oauth/apps/${appId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -120,7 +120,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         if (!confirm('Are you sure you want to delete this bot? This cannot be undone.')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/bots/${botId}/delete/`, {
+            await fetchWithAuth(`${apiBaseUrl}/bots/${botId}/delete/`, {
                 method: 'DELETE'
             });
 

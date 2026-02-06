@@ -17,7 +17,7 @@ function TopicManagementPanel({ apiBaseUrl, fetchWithAuth, roomSlug }) {
 
   const loadTopic = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/topics/${roomSlug}/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/topics/${roomSlug}/`);
       if (response.ok) {
         const data = await response.json();
         setCurrentTopic(data.topic || '');
@@ -37,7 +37,7 @@ function TopicManagementPanel({ apiBaseUrl, fetchWithAuth, roomSlug }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/topics/set/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/topics/set/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

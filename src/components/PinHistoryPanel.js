@@ -19,7 +19,7 @@ function PinHistoryPanel({ apiBaseUrl, fetchWithAuth, messageId }) {
 
   const loadPinHistory = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${messageId}/pin_history/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/${messageId}/pin_history/`);
       if (response.ok) {
         const data = await response.json();
         setPinHistory(data.history || []);
@@ -31,7 +31,7 @@ function PinHistoryPanel({ apiBaseUrl, fetchWithAuth, messageId }) {
 
   const loadReminders = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/pins/reminder/list/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/pins/reminder/list/`);
       if (response.ok) {
         const data = await response.json();
         setReminders(data.reminders || []);
@@ -54,7 +54,7 @@ function PinHistoryPanel({ apiBaseUrl, fetchWithAuth, messageId }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/pins/reminder/create/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/pins/reminder/create/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

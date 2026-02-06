@@ -20,7 +20,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const checkSpotifyConnection = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/spotify/status/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/auth/spotify/status/`);
       if (response.ok) {
         const data = await response.json();
         setConnected(data.connected);
@@ -34,7 +34,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
   const connectSpotify = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/spotify/start/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/auth/spotify/start/`);
       if (response.ok) {
         const data = await response.json();
         // Backend returns 'url', not 'auth_url'
@@ -50,7 +50,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
   const disconnectSpotify = async () => {
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/spotify/disconnect/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/auth/spotify/disconnect/`, {
         method: 'POST'
       });
       if (response.ok) {
@@ -67,7 +67,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const fetchCurrentTrack = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/spotify/current-track/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/spotify/current-track/`);
       if (response.ok) {
         const data = await response.json();
         setCurrentTrack(data.track);
@@ -79,7 +79,7 @@ function SpotifyIntegrationPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const toggleActivityStatus = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/spotify/toggle-activity/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/spotify/toggle-activity/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ show_activity: !showActivity })

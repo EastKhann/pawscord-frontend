@@ -26,7 +26,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
     const loadEmojis = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/emoji/list/?server_id=${serverId}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/emoji/list/?server_id=${serverId}`);
             if (response.ok) {
                 const data = await response.json();
                 setEmojis(data);
@@ -40,7 +40,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
 
     const loadTrending = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/emoji/trending/?server_id=${serverId}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/emoji/trending/?server_id=${serverId}`);
             if (response.ok) {
                 const data = await response.json();
                 setTrendingEmojis(data);
@@ -52,7 +52,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
 
     const loadSuggestions = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/emoji/suggestions/?server_id=${serverId}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/emoji/suggestions/?server_id=${serverId}`);
             if (response.ok) {
                 const data = await response.json();
                 setSuggestions(data);
@@ -74,7 +74,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
         formData.append('server_id', serverId);
 
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/emoji/upload/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/emoji/upload/`, {
                 method: 'POST',
                 body: formData
             });
@@ -95,7 +95,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
 
     const deleteEmoji = async (emojiId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/emoji/${emojiId}/delete/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/emoji/${emojiId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -113,7 +113,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
 
     const suggestEmoji = async (name, url) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/emoji/suggest/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/emoji/suggest/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

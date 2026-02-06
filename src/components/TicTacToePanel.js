@@ -43,7 +43,7 @@ function TicTacToePanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadGameHistory = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/games/xox/history/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/games/xox/history/`);
       if (response.ok) {
         const data = await response.json();
         setGameHistory(data.games || []);
@@ -55,7 +55,7 @@ function TicTacToePanel({ apiBaseUrl, fetchWithAuth }) {
 
   const loadStats = async () => {
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/games/xox/stats/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/games/xox/stats/`);
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -69,7 +69,7 @@ function TicTacToePanel({ apiBaseUrl, fetchWithAuth }) {
     setLoading(true);
     setError('');
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/games/xox/start/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/games/xox/start/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,7 +102,7 @@ function TicTacToePanel({ apiBaseUrl, fetchWithAuth }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/games/xox/move/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/games/xox/move/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

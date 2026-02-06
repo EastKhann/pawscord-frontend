@@ -14,7 +14,7 @@ const SteamRichPresence = ({ apiBaseUrl, fetchWithAuth }) => {
     const checkSteamConnection = async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/status/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/integrations/steam/status/`);
             if (res.ok) {
                 const data = await res.json();
                 setConnected(data.connected);
@@ -31,7 +31,7 @@ const SteamRichPresence = ({ apiBaseUrl, fetchWithAuth }) => {
     const loadSteamData = async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/presence/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/integrations/steam/presence/`);
             if (res.ok) {
                 const data = await res.json();
                 setSteamData(data);
@@ -44,7 +44,7 @@ const SteamRichPresence = ({ apiBaseUrl, fetchWithAuth }) => {
 
     const connectSteam = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/auth/steam/start/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/auth/steam/start/`, {
                 method: 'GET'
             });
             if (res.ok) {
@@ -60,7 +60,7 @@ const SteamRichPresence = ({ apiBaseUrl, fetchWithAuth }) => {
         if (!confirm('Steam bağlantısını kesmek istediğinize emin misiniz?')) return;
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/integrations/steam/disconnect/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/integrations/steam/disconnect/`, {
                 method: 'POST'
             });
             if (res.ok) {

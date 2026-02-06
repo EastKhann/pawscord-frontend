@@ -29,7 +29,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
     const fetchResponders = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/autoresponders/list/?server_id=${serverId}`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/autoresponders/list/?server_id=${serverId}`);
             const data = await response.json();
             setResponders(data.responders || []);
         } catch (error) {
@@ -46,7 +46,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
         }
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/autoresponders/create/`, {
+            await fetchWithAuth(`${apiBaseUrl}/autoresponders/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...newResponder, server_id: serverId })
@@ -69,7 +69,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
 
     const toggleResponder = async (id, enabled) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/autoresponders/${id}/toggle/`, {
+            await fetchWithAuth(`${apiBaseUrl}/autoresponders/${id}/toggle/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ enabled })
@@ -86,7 +86,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
         if (!confirm('Delete this auto-responder?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/autoresponders/${id}/delete/`, {
+            await fetchWithAuth(`${apiBaseUrl}/autoresponders/${id}/delete/`, {
                 method: 'DELETE'
             });
 

@@ -34,7 +34,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
 
     const loadTemplate = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/welcome/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/welcome/`);
             if (response.ok) {
                 const data = await response.json();
                 if (data) setTemplate(data);
@@ -48,7 +48,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
 
     const loadChannels = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/${serverId}/channels/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/channels/`);
             if (response.ok) {
                 const data = await response.json();
                 setChannels(data);
@@ -60,7 +60,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
 
     const saveTemplate = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/servers/welcome/set/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/servers/welcome/set/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

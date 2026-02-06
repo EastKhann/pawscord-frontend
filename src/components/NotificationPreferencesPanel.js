@@ -33,7 +33,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
     const loadPreferences = async () => {
         try {
             setLoading(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/notifications/preferences/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/notifications/preferences/`);
             if (response.ok) {
                 const data = await response.json();
                 setPreferences({ ...preferences, ...data });
@@ -47,7 +47,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
 
     const savePreferences = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/notifications/preferences/update/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/notifications/preferences/update/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(preferences)

@@ -15,7 +15,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
         setLoading(true);
         try {
             const response = await fetchWithAuth(
-                `${apiBaseUrl}/api/servers/${serverId}/invite-analytics/?range=${timeRange}`
+                `${apiBaseUrl}/servers/${serverId}/invite-analytics/?range=${timeRange}`
             );
             const data = await response.json();
             setAnalytics(data);

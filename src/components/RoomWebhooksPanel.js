@@ -24,7 +24,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
     const fetchWebhooks = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/rooms/${roomSlug}/webhooks/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/rooms/${roomSlug}/webhooks/`);
             const data = await response.json();
             setWebhooks(data.webhooks || []);
         } catch (error) {
@@ -36,7 +36,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
 
     const fetchDeliveries = async (webhookId) => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/webhooks/${webhookId}/deliveries/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/webhooks/${webhookId}/deliveries/`);
             const data = await response.json();
             setDeliveries(data.deliveries || []);
             setSelectedWebhook(webhookId);
@@ -52,7 +52,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
         }
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/webhooks/create/`, {
+            await fetchWithAuth(`${apiBaseUrl}/webhooks/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -74,7 +74,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
         if (!confirm('Are you sure you want to delete this webhook?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/webhooks/${webhookId}/delete/`, {
+            await fetchWithAuth(`${apiBaseUrl}/webhooks/${webhookId}/delete/`, {
                 method: 'DELETE'
             });
 
@@ -87,7 +87,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
 
     const retryDelivery = async (deliveryId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/webhook/deliveries/retry/`, {
+            await fetchWithAuth(`${apiBaseUrl}/webhook/deliveries/retry/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ delivery_id: deliveryId })

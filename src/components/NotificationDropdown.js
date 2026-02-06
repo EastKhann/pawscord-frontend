@@ -30,7 +30,7 @@ const NotificationDropdown = ({
 
     const loadNotifications = async () => {
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/notifications/`);
+            const response = await fetchWithAuth(`${apiBaseUrl}/notifications/`);
             if (response.ok) {
                 const data = await response.json();
                 setNotifications(data.results || data);
@@ -44,7 +44,7 @@ const NotificationDropdown = ({
 
     const markAsRead = async (notificationId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/notifications/${notificationId}/read/`, {
+            await fetchWithAuth(`${apiBaseUrl}/notifications/${notificationId}/read/`, {
                 method: 'POST'
             });
 
@@ -58,7 +58,7 @@ const NotificationDropdown = ({
 
     const markAllAsRead = async () => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/notifications/mark_all_read/`, {
+            await fetchWithAuth(`${apiBaseUrl}/notifications/mark_all_read/`, {
                 method: 'POST'
             });
 
@@ -70,7 +70,7 @@ const NotificationDropdown = ({
 
     const deleteNotification = async (notificationId) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/notifications/${notificationId}/`, {
+            await fetchWithAuth(`${apiBaseUrl}/notifications/${notificationId}/`, {
                 method: 'DELETE'
             });
 
@@ -84,7 +84,7 @@ const NotificationDropdown = ({
         if (!window.confirm('Tüm bildirimleri silmek istediğinize emin misiniz?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/notifications/clear_all/`, {
+            await fetchWithAuth(`${apiBaseUrl}/notifications/clear_all/`, {
                 method: 'POST'
             });
 

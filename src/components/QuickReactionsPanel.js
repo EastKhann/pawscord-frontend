@@ -22,7 +22,7 @@ function QuickReactionsPanel({ apiBaseUrl, fetchWithAuth, messageId }) {
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/quick_reaction/add/`, {
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/quick_reaction/add/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -49,7 +49,7 @@ function QuickReactionsPanel({ apiBaseUrl, fetchWithAuth, messageId }) {
     if (!messageId) return;
 
     try {
-      const response = await fetchWithAuth(`${apiBaseUrl}/api/messages/${messageId}/quick_reactions/`);
+      const response = await fetchWithAuth(`${apiBaseUrl}/messages/${messageId}/quick_reactions/`);
       if (response.ok) {
         const data = await response.json();
         // Update counts based on response

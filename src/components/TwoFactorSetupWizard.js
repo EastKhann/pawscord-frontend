@@ -13,7 +13,7 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const startSetup = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/2fa/enable/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/auth/2fa/enable/`, {
                 method: 'POST'
             });
             const data = await response.json();
@@ -36,7 +36,7 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/auth/2fa/verify-setup/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/auth/2fa/verify-setup/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code: verificationCode })

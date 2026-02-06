@@ -15,7 +15,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
 
     const loadTournaments = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/tournaments/?filter=${filter}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/?filter=${filter}`);
             if (res.ok) {
                 const data = await res.json();
                 setTournaments(data.tournaments || []);
@@ -27,7 +27,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
 
     const createTournament = async (tournamentData) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/tournaments/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(tournamentData)
@@ -45,7 +45,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
 
     const joinTournament = async (tournamentId) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/tournaments/${tournamentId}/join/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournamentId}/join/`, {
                 method: 'POST'
             });
 
@@ -62,7 +62,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
         if (!confirm('Turnuvadan ayrılmak istediğinize emin misiniz?')) return;
 
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/tournaments/${tournamentId}/leave/`, {
+            await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournamentId}/leave/`, {
                 method: 'POST'
             });
             loadTournaments();
@@ -295,7 +295,7 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
 
     const loadBracket = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/tournaments/${tournament.id}/bracket/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournament.id}/bracket/`);
             if (res.ok) {
                 const data = await res.json();
                 setBracket(data.bracket);

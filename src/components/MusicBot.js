@@ -58,7 +58,7 @@ const MusicBot = ({ onClose, ws, channelId, fetchWithAuth, apiBaseUrl }) => {
 
     const loadQueue = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/music/queue/${channelId}/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/music/queue/${channelId}/`);
             if (res.ok) {
                 const data = await res.json();
                 setQueue(data.queue || []);
@@ -76,7 +76,7 @@ const MusicBot = ({ onClose, ws, channelId, fetchWithAuth, apiBaseUrl }) => {
 
         setSearching(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/music/search/?q=${encodeURIComponent(searchQuery)}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/music/search/?q=${encodeURIComponent(searchQuery)}`);
             if (res.ok) {
                 const data = await res.json();
                 setSearchResults(data.results || []);
@@ -89,7 +89,7 @@ const MusicBot = ({ onClose, ws, channelId, fetchWithAuth, apiBaseUrl }) => {
 
     const addToQueue = async (track) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/music/queue/${channelId}/add/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/music/queue/${channelId}/add/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ track })
@@ -147,7 +147,7 @@ const MusicBot = ({ onClose, ws, channelId, fetchWithAuth, apiBaseUrl }) => {
 
     const removeFromQueue = async (index) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/api/music/queue/${channelId}/remove/${index}/`, {
+            await fetchWithAuth(`${apiBaseUrl}/music/queue/${channelId}/remove/${index}/`, {
                 method: 'DELETE'
             });
 

@@ -30,7 +30,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
 
         try {
             setProcessing(true);
-            const response = await fetchWithAuth(`${apiBaseUrl}/api/moderation/mass_action/create/`, {
+            const response = await fetchWithAuth(`${apiBaseUrl}/moderation/mass_action/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
