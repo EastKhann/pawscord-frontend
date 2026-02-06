@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FaShieldAlt, FaArrowLeft, FaKey } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';
+import { useAuth } from '../AuthContext';
 
-const TwoFactorLoginPage = ({ apiBaseUrl, onLogin }) => {
+const TwoFactorLoginPage = () => {
+    const { login } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [code, setCode] = useState('');
@@ -58,10 +60,8 @@ const TwoFactorLoginPage = ({ apiBaseUrl, onLogin }) => {
 
             if (response.ok && data.verified) {
                 console.log('✅ [2FA] Verification successful, logging in...');
-                // Call parent onLogin with tokens
-                localStorage.setItem('access_token', data.access);
-                localStorage.setItem('refresh_token', data.refresh);
-                onLogin(data.access, data.refresh, data.username);
+                // Use AuthContext login — sets tokens, user state, schedules refresh
+                login(data.access, data.refresh);
                 navigate('/');
             } else {
                 console.error('❌ [2FA] Verification failed:', data);
