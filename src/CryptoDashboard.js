@@ -422,6 +422,19 @@ const CryptoDashboard = () => {
     const meta = data?.meta || {};
     const positionCoins = meta.position_coins || [];
 
+    // Pozisyon coinleri için ters sinyal durumu
+    const positionCoinStatus = useMemo(() => {
+        const statusMap = {};
+        if (positionCoins.length > 0 && processedData.length > 0) {
+            positionCoins.forEach(coin => {
+                const rows = processedData.filter(r => r.coin === coin);
+                const hasTersSinyal = rows.some(r => r.ters_sinyal === true);
+                statusMap[coin] = { hasTersSinyal, rows };
+            });
+        }
+        return statusMap;
+    }, [positionCoins, processedData]);
+
     const handleSort = (field) => {
         if (sortBy === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
         else { setSortBy(field); setSortDir(field === 'rank' ? 'asc' : 'desc'); }
@@ -574,12 +587,21 @@ const CryptoDashboard = () => {
                     {/* ===== POZİSYON COİNLERİ BANNER ===== */}
                     {isPositionsTab && positionCoins.length > 0 && (
                         <div style={styles.positionBanner}>
-                            <strong>💼 Açık Pozisyon Coinleri:</strong>{' '}
-                            {positionCoins.map((c) => (
-                                <span key={c} style={styles.positionCoinTag}>
-                                    {c.replace('USDT', '')}
-                                </span>
-                            ))}
+                            <strong>💼 Açık Pozisyon ({positionCoins.length}):</strong>{' '}
+                            {positionCoins.map((c, i) => {
+                                const status = positionCoinStatus[c];
+                                const isTers = status?.hasTersSinyal;
+                                return (
+                                    <span key={c} style={{
+                                        ...styles.positionCoinTag,
+                                        backgroundColor: isTers ? 'rgba(218,55,60,0.15)' : 'rgba(35,165,89,0.15)',
+                                        color: isTers ? '#da373c' : '#23a559',
+                                        border: `1px solid ${isTers ? 'rgba(218,55,60,0.4)' : 'rgba(35,165,89,0.4)'}`,
+                                    }}>
+                                        {i + 1}. {isTers ? '⚠️' : '✅'} {c.replace('USDT', '')}
+                                    </span>
+                                );
+                            })}
                         </div>
                     )}
 
@@ -844,8 +866,8 @@ const styles = {
         display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap'
     },
     positionCoinTag: {
-        backgroundColor: '#f0b232', color: '#000', padding: '2px 8px',
-        borderRadius: 4, fontWeight: 700, fontSize: '0.8em'
+        padding: '3px 10px', borderRadius: 6, fontWeight: 700, fontSize: '0.8em',
+        display: 'inline-flex', alignItems: 'center', gap: 3, transition: 'all 0.2s'
     },
 
     // TABLE

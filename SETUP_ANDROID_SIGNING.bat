@@ -29,6 +29,16 @@ if exist "%LOCALAPPDATA%\Android\Sdk\jdk\17\bin\keytool.exe" (
     set KEYTOOL=%LOCALAPPDATA%\Android\Sdk\jdk\17\bin\keytool.exe
 )
 
+@REM Read keystore password from env (set KEYSTORE_PASSWORD and KEY_PASSWORD in .env)
+if not defined KEYSTORE_PASSWORD (
+    echo ⚠️  KEYSTORE_PASSWORD ortam değişkeni tanımlı değil!
+    echo    Önce: set KEYSTORE_PASSWORD=your_password
+    echo    Ve:   set KEY_PASSWORD=your_password
+    pause
+    exit /b 1
+)
+if not defined KEY_PASSWORD set KEY_PASSWORD=%KEYSTORE_PASSWORD%
+
 "%KEYTOOL%" -genkeypair ^
     -v ^
     -keystore pawscord-release.keystore ^
@@ -36,8 +46,8 @@ if exist "%LOCALAPPDATA%\Android\Sdk\jdk\17\bin\keytool.exe" (
     -keyalg RSA ^
     -keysize 2048 ^
     -validity 10000 ^
-    -storepass pawscord123 ^
-    -keypass pawscord123 ^
+    -storepass %KEYSTORE_PASSWORD% ^
+    -keypass %KEY_PASSWORD% ^
     -dname "CN=Pawscord, OU=Dev, O=Pawscord, L=Istanbul, ST=Istanbul, C=TR"
 
 if errorlevel 1 (
@@ -55,7 +65,7 @@ echo.
 echo 📋 SHA-1 Fingerprint alınıyor...
 echo.
 
-"%KEYTOOL%" -list -v -keystore pawscord-release.keystore -alias pawscord -storepass pawscord123 | findstr "SHA1"
+"%KEYTOOL%" -list -v -keystore pawscord-release.keystore -alias pawscord -storepass %KEYSTORE_PASSWORD% | findstr "SHA1"
 
 echo.
 echo ════════════════════════════════════════════════════════════════
@@ -85,8 +95,8 @@ echo.
 echo 💾 Keystore Bilgileri:
 echo    Dosya: frontend\android\app\pawscord-release.keystore
 echo    Alias: pawscord
-echo    Store Password: pawscord123
-echo    Key Password: pawscord123
+echo    Store Password: %%KEYSTORE_PASSWORD%%
+echo    Key Password: %%KEY_PASSWORD%%
 echo.
 echo ⚠️  BU BİLGİLERİ GÜVENLİ BİR YERDE SAKLAYIN!
 echo    Kaybederseniz uygulama güncellemesi yapamazsınız!
