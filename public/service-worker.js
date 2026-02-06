@@ -4,7 +4,7 @@
  * Aggressive caching for performance
  */
 
-const CACHE_NAME = 'pawscord-v1.1.133-perf-webp';
+const CACHE_NAME = 'pawscord-v1.1.134-perf-webp';
 const CRITICAL_CACHE = [
     '/',
     '/index.html',
@@ -16,7 +16,7 @@ const CRITICAL_CACHE = [
 
 // Install event - cache critical files ONLY
 self.addEventListener('install', event => {
-    console.log('🔧 SW installing (v1.1.133)');
+    console.log('🔧 SW installing (v1.1.134)');
 
     event.waitUntil(
         caches.open(CACHE_NAME)
