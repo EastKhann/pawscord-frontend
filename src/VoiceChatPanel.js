@@ -849,13 +849,15 @@ const VoiceChatPanel = ({
                     style={{
                         position: 'fixed',
                         zIndex: 9999,
-                        background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
+                        background: 'linear-gradient(135deg, #1e2124 0%, #2c2f33 50%, #23272a 100%)',
                         borderRadius: '16px',
                         padding: '16px',
-                        boxShadow: '0 12px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 12px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(88, 101, 242, 0.15)',
+                        border: '1px solid rgba(88, 101, 242, 0.1)',
                         minWidth: '320px',
                         maxWidth: '400px',
+                        backdropFilter: 'blur(12px)',
+                        animation: 'slideIn 0.3s ease',
                     }}
                 >
                     {/* MINI HEADER */}
@@ -971,18 +973,27 @@ const VoiceChatPanel = ({
                                         : 'rgba(255, 255, 255, 0.05)';
                                 }}
                             >
-                                <div style={{
-                                    width: '32px',
-                                    height: '32px',
-                                    borderRadius: '50%',
-                                    background: 'linear-gradient(135deg, #5865f2, #7289da)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '14px',
-                                }}>
-                                    👤
-                                </div>
+                                <img
+                                    src={getUserAvatar(user.username)}
+                                    alt={user.username}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = getDeterministicAvatarFallback(user.username, 64);
+                                    }}
+                                    style={{
+                                        width: '32px',
+                                        height: '32px',
+                                        borderRadius: '50%',
+                                        objectFit: 'cover',
+                                        border: user.isTalking
+                                            ? '2px solid #43b581'
+                                            : '2px solid rgba(255, 255, 255, 0.15)',
+                                        boxShadow: user.isTalking
+                                            ? '0 0 10px rgba(67, 181, 129, 0.5)'
+                                            : 'none',
+                                        transition: 'all 0.3s ease',
+                                    }}
+                                />
                                 <div style={{ flex: 1 }}>
                                     <div style={{
                                         color: '#fff',
@@ -1160,14 +1171,15 @@ const VoiceChatPanel = ({
                 <h2 style={{
                     color: '#fff',
                     margin: 0,
-                    fontSize: '18px',
-                    fontWeight: 600,
+                    fontSize: '17px',
+                    fontWeight: 700,
                     flex: 1,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px'
+                    gap: '12px',
+                    letterSpacing: '0.3px',
                 }}>
-                    📹 Sesli Sohbet: {roomName}
+                    🎙️ {roomName}
                     {renderStatusBadges()}
                     {/* 🔥 YENİ: Network Quality Badge */}
                     {networkQuality === 'poor' && (
@@ -1410,6 +1422,7 @@ const VoiceChatPanel = ({
                                                 cursor: 'pointer',
                                                 position: 'relative',
                                                 transform: activeSpeaker === user.username ? 'scale(1.05)' : 'scale(1)',
+                                                animation: 'slideIn 0.4s ease forwards',
                                             }}
                                             onClick={() => setContextMenu({
                                                 user,
@@ -1553,10 +1566,10 @@ const VoiceChatPanel = ({
                     animation: 'pulse 2s infinite',
                     maxWidth: '90%',
                 }}>
-                    <div style={{ fontSize: '24px' }}>⚠️</div>
+                    <div style={{ fontSize: '24px', animation: 'pulse 1.5s infinite' }}>⚠️</div>
                     <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Echo Tespit Edildi!</div>
-                        <div style={{ fontSize: '13px', opacity: 0.9 }}>Kulaklık kullanmanız önerilir.</div>
+                        <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '15px' }}>Echo Tespit Edildi!</div>
+                        <div style={{ fontSize: '13px', opacity: 0.9 }}>Kulaklık kullanmanız önerilir. Hoparlör kullanımı echo'ya neden olur.</div>
                     </div>
                     <button
                         onClick={() => setShowEchoWarning(false)}
@@ -1601,11 +1614,78 @@ const VoiceChatPanel = ({
                 />
             )}
 
-            {/* PULSE ANIMATION */}
+            {/* 🎨 COMPREHENSIVE ANIMATIONS */}
             <style>{`
                 @keyframes pulse {
                     0%, 100% { opacity: 1; }
                     50% { opacity: 0.5; }
+                }
+                @keyframes talkingPulse {
+                    0%, 100% { 
+                        box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.4);
+                        transform: scale(1);
+                    }
+                    50% { 
+                        box-shadow: 0 0 0 8px rgba(67, 181, 129, 0);
+                        transform: scale(1.03);
+                    }
+                }
+                @keyframes wave1 {
+                    0%, 100% { height: 8px; }
+                    50% { height: 16px; }
+                }
+                @keyframes wave2 {
+                    0%, 100% { height: 12px; }
+                    50% { height: 20px; }
+                }
+                @keyframes wave3 {
+                    0%, 100% { height: 8px; }
+                    50% { height: 14px; }
+                }
+                @keyframes badgePulse {
+                    0%, 100% { 
+                        box-shadow: 0 4px 16px rgba(88, 101, 242, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.2);
+                    }
+                    50% { 
+                        box-shadow: 0 4px 24px rgba(88, 101, 242, 0.8), 0 0 0 3px rgba(255, 255, 255, 0.3);
+                    }
+                }
+                @keyframes slideIn {
+                    from { opacity: 0; transform: translateY(10px) scale(0.95); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes connectionGlow {
+                    0%, 100% { box-shadow: 0 0 12px rgba(67, 181, 129, 0.3); }
+                    50% { box-shadow: 0 0 20px rgba(67, 181, 129, 0.6); }
+                }
+                @keyframes screenShareGlow {
+                    0%, 100% { border-color: rgba(88, 101, 242, 0.5); }
+                    50% { border-color: rgba(88, 101, 242, 0.9); }
+                }
+                
+                /* Smooth grid transitions */
+                .voice-grid-item {
+                    animation: slideIn 0.3s ease forwards;
+                }
+                
+                /* Video card hover effects */
+                .voice-video-card:hover {
+                    transform: scale(1.01);
+                    z-index: 10;
+                }
+                
+                /* Active speaker highlight */
+                .voice-active-speaker {
+                    animation: connectionGlow 2s ease-in-out infinite;
+                }
+                
+                /* Screen share border animation */
+                .voice-screen-share {
+                    animation: screenShareGlow 2s ease-in-out infinite;
                 }
             `}</style>
         </div>
@@ -1898,16 +1978,18 @@ const UserVideoCard = React.memo(({
                 </div>
             </div>
 
-            {/* HOVER ACTIONS - Her zaman görünsün */}
+            {/* HOVER ACTIONS - Hover'da görünsün, temiz görünüm */}
             <div style={{
                 position: 'absolute',
                 top: '12px',
                 right: '12px',
                 display: 'flex',
                 gap: '6px',
-                opacity: 1, // 🔥 FIX: Her zaman görünür
-                transition: 'opacity 0.2s',
-                zIndex: 20, // 🔥 FIX: Butonlar en üstte
+                opacity: showFullControls ? 1 : 0,
+                transition: 'opacity 0.25s ease, transform 0.25s ease',
+                transform: showFullControls ? 'translateY(0)' : 'translateY(-6px)',
+                zIndex: 20,
+                pointerEvents: showFullControls ? 'auto' : 'none',
             }}>
                 <ActionButton
                     icon={isPinned ? '📌' : '📍'}
@@ -1951,18 +2033,23 @@ const UserVideoCard = React.memo(({
                     bgColor="rgba(250, 166, 26, 0.9)"
                 />
 
-                {/* 🔥 YENİ: Volume Slider (sadece remote user için) */}
-                {!user.isLocal && (
+                {/* 🔥 Volume Slider (hover'da görünür, sadece remote user) */}
+                {!user.isLocal && showFullControls && (
                     <div style={{
-                        background: 'rgba(0, 0, 0, 0.85)',
-                        borderRadius: '8px',
-                        padding: '8px 12px',
+                        background: 'rgba(0, 0, 0, 0.9)',
+                        borderRadius: '10px',
+                        padding: '6px 10px',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
-                        minWidth: '120px',
+                        gap: '6px',
+                        minWidth: '100px',
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        animation: 'fadeIn 0.2s ease',
                     }}>
-                        <span style={{ fontSize: '14px' }}>🔊</span>
+                        <span style={{ fontSize: '12px' }}>
+                            {(user.volume || 100) === 0 ? '🔇' : (user.volume || 100) > 100 ? '🔊' : '🔉'}
+                        </span>
                         <input
                             type="range"
                             min="0"
@@ -1977,10 +2064,11 @@ const UserVideoCard = React.memo(({
                             style={{
                                 flex: 1,
                                 cursor: 'pointer',
+                                height: '4px',
                             }}
                             onClick={(e) => e.stopPropagation()}
                         />
-                        <span style={{ fontSize: '11px', color: '#fff', minWidth: '35px' }}>
+                        <span style={{ fontSize: '10px', color: '#fff', minWidth: '30px', fontWeight: 600 }}>
                             {user.volume || 100}%
                         </span>
                     </div>

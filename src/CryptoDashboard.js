@@ -35,7 +35,7 @@ const formatPrice = (price) => {
 // --- AYARLAR ---
 const API_BASE = getApiBase();
 const MEDIA_BASE = getMediaBase();
-const SIGNALS_URL = `${API_BASE}/crypto/signals/`;
+const SIGNALS_URL = `${API_BASE}/api/crypto/signals/`;
 
 // TAB BİLGİLERİ
 const TAB_CONFIG = {

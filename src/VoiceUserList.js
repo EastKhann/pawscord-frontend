@@ -35,6 +35,8 @@ const VoiceUserList = ({
     // ✅ HOOK #1: State (her zaman çalışmalı)
     const [contextMenu, setContextMenu] = useState(null);
     const [showMoveMenu, setShowMoveMenu] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const [draggedUser, setDraggedUser] = useState(null);
 
     // 🔥 Global WebSocket'ten voice users çek
     const { globalData } = useGlobalWebSocket();
@@ -110,6 +112,30 @@ const VoiceUserList = ({
             onUserAction('profile', userObj.username);
         }
     }, [currentUsername, onUserAction]);
+
+    // 🔥 DRAG & DROP - Admin kullanıcı taşıma
+    const handleDragStart = useCallback((e, userObj) => {
+        if (!isAdmin) return;
+        setIsDragging(true);
+        setDraggedUser(userObj.username);
+        e.dataTransfer.setData('application/json', JSON.stringify({
+            username: userObj.username,
+            fromChannel: roomName
+        }));
+        e.dataTransfer.effectAllowed = 'move';
+        // Drag görselini ayarla
+        const dragGhost = document.createElement('div');
+        dragGhost.style.cssText = 'position:fixed;top:-1000px;background:linear-gradient(135deg,#5865f2,#7289da);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(88,101,242,0.6);display:flex;align-items:center;gap:8px;z-index:99999;';
+        dragGhost.innerHTML = '🔀 ' + userObj.username;
+        document.body.appendChild(dragGhost);
+        e.dataTransfer.setDragImage(dragGhost, 60, 20);
+        setTimeout(() => document.body.removeChild(dragGhost), 0);
+    }, [isAdmin, roomName]);
+
+    const handleDragEnd = useCallback(() => {
+        setIsDragging(false);
+        setDraggedUser(null);
+    }, []);
 
     // ✅ KOŞULLU RENDER - EN SONDA (tüm hook'lardan sonra)
     // 🔥 SADECE GEÇERSIZ VERI VARSA NULL DÖN
@@ -206,7 +232,18 @@ const VoiceUserList = ({
                     return (
                         <div
                             key={user}
-                            style={styles.userItemNew}
+                            style={{
+                                ...styles.userItemNew,
+                                ...(isAdmin ? { cursor: 'grab' } : {}),
+                                ...(isDragging && draggedUser === user ? {
+                                    opacity: 0.4,
+                                    border: '1px dashed rgba(88, 101, 242, 0.5)',
+                                    background: 'rgba(88, 101, 242, 0.05)'
+                                } : {})
+                            }}
+                            draggable={isAdmin}
+                            onDragStart={(e) => handleDragStart(e, userObj)}
+                            onDragEnd={handleDragEnd}
                             onContextMenu={(e) => handleContextMenu(e, userObj)}
                         >
                             <div
@@ -344,44 +381,52 @@ const VoiceUserList = ({
                                     ⚡ MOD ARAÇLARI
                                 </div>
 
-                                {/* Başka Kanala Taşı */}
+                                {/* Başka Kanala Taşı - Click-based */}
                                 <div
                                     style={styles.menuItem}
-                                    onMouseEnter={() => setShowMoveMenu(true)}
-                                    onMouseLeave={() => setShowMoveMenu(false)}
+                                    onClick={() => setShowMoveMenu(!showMoveMenu)}
                                 >
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                                         <span>🔀 Başka Kanala Taşı</span>
-                                        <span style={{ fontSize: '10px' }}>›</span>
+                                        <span style={{ fontSize: '10px', transform: showMoveMenu ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>›</span>
                                     </div>
-
-                                    {/* Alt Menü - Ses Kanalları Listesi */}
-                                    {showMoveMenu && voiceChannels && voiceChannels.length > 0 && (
-                                        <div style={{
-                                            ...styles.subMenu,
-                                            left: '100%',
-                                            top: '0'
-                                        }}>
-                                            {voiceChannels
-                                                .filter(channel => channel.slug !== roomName)
-                                                .map(channel => (
-                                                    <div
-                                                        key={channel.slug}
-                                                        style={styles.menuItem}
-                                                        onClick={() => handleMenuAction('move', channel.slug)}
-                                                    >
-                                                        🔊 {channel.name}
-                                                    </div>
-                                                ))
-                                            }
-                                            {voiceChannels.filter(c => c.slug !== roomName).length === 0 && (
-                                                <div style={{ ...styles.menuItem, color: '#72767d', cursor: 'default' }}>
-                                                    Başka kanal yok
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
                                 </div>
+
+                                {/* Kanal Listesi - Click ile açılır */}
+                                {showMoveMenu && voiceChannels && voiceChannels.length > 0 && (
+                                    <div style={{
+                                        padding: '4px 0',
+                                        background: 'rgba(88, 101, 242, 0.05)',
+                                        borderTop: '1px solid rgba(88, 101, 242, 0.15)',
+                                        borderBottom: '1px solid rgba(88, 101, 242, 0.15)',
+                                        margin: '2px 0'
+                                    }}>
+                                        {voiceChannels
+                                            .filter(channel => channel.slug !== roomName)
+                                            .map(channel => (
+                                                <div
+                                                    key={channel.slug}
+                                                    style={{
+                                                        ...styles.menuItem,
+                                                        paddingLeft: '24px',
+                                                        fontSize: '0.82em',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '8px'
+                                                    }}
+                                                    onClick={() => handleMenuAction('move', channel.slug)}
+                                                >
+                                                    <span style={{ color: '#5865f2' }}>🔊</span> {channel.name}
+                                                </div>
+                                            ))
+                                        }
+                                        {voiceChannels.filter(c => c.slug !== roomName).length === 0 && (
+                                            <div style={{ ...styles.menuItem, color: '#72767d', cursor: 'default', paddingLeft: '24px', fontSize: '0.82em' }}>
+                                                Başka kanal yok
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 <div style={styles.menuItem} onClick={() => handleMenuAction('kick')}>
                                     ❌ Kanaldan At
@@ -630,6 +675,32 @@ styleSheet.textContent = `
         color: #fff !important;
     }
     
+    /* Drag & Drop styling */
+    .voice-user-dragging {
+        opacity: 0.4 !important;
+        border: 1px dashed rgba(88, 101, 242, 0.5) !important;
+    }
+    
+    .voice-channel-drop-target {
+        background: rgba(88, 101, 242, 0.15) !important;
+        border-color: rgba(88, 101, 242, 0.6) !important;
+        box-shadow: inset 0 0 12px rgba(88, 101, 242, 0.2) !important;
+    }
+    
+    .voice-channel-drop-target::after {
+        content: '🔀 Buraya bırak';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 10px;
+        color: #5865f2;
+        font-weight: 600;
+        background: rgba(88, 101, 242, 0.15);
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
+
     /* Volume slider styling */
     input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;

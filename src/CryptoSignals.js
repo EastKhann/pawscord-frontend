@@ -1,611 +1,771 @@
 // frontend/src/CryptoSignals.js
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { FaArrowLeft, FaSync, FaBitcoin, FaClock } from 'react-icons/fa';
+// 🔥 v4.0 — Tamamen yeniden tasarlandı — JSON v3.0 yapısına uyumlu
+// ÖNCEKİ SORUN: data.tabs arıyordu, ama JSON: data.balance_mode.tabs / data.winrate_mode.tabs
+
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { FaArrowLeft, FaSync, FaBitcoin, FaClock, FaChartLine, FaTrophy, FaFilter, FaTimes, FaExternalLinkAlt, FaSortAmountDown, FaSortAmountUp, FaWallet } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { getApiBase } from './utils/apiEndpoints';
 
-// Capacitor (mobil) kontrolü
-const isCapacitor = window.Capacitor?.isNativePlatform?.() ||
-    window.location.protocol === 'capacitor:' ||
-    window.location.protocol === 'ionic:';
+// === EKRAN GENİŞLİĞİ HOOK ===
+const useWindowWidth = () => {
+    const [width, setWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        const h = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', h);
+        return () => window.removeEventListener('resize', h);
+    }, []);
+    return { isMobile: width <= 768, isTablet: width <= 1024, width };
+};
 
-const API_URL = isCapacitor
-    ? 'https://api.pawscord.com'  // Mobilde her zaman production API
-    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? 'http://127.0.0.1:8888'
-        : 'https://api.pawscord.com';
+// === YARDIMCI FONKSİYONLAR ===
+const API_BASE = getApiBase();
+const SIGNALS_URL = `${API_BASE}/api/crypto/signals/`;
 
-const SIGNAL_JSON_URL = `${API_URL}/api/crypto/signals/`;
+const formatPrice = (price) => {
+    if (!price || price === '-') return '-';
+    const num = parseFloat(String(price).replace(/,/g, ''));
+    if (isNaN(num)) return String(price);
+    if (num >= 1000) return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (num >= 1) return num.toFixed(4);
+    return num.toPrecision(4);
+};
 
+const parsePnl = (pnl) => {
+    if (!pnl) return 0;
+    return parseFloat(String(pnl).replace('%', '').replace('+', '')) || 0;
+};
+
+// === TAB CONFIG ===
+const TAB_CONFIG = {
+    TUM_STRATEJILER: { icon: '📊', label: 'Tüm Stratejiler', shortLabel: 'Tümü', color: '#5865f2' },
+    ACIK_POZISYONLAR: { icon: '💼', label: 'Açık Pozisyonlar', shortLabel: 'Açık Poz.', color: '#f0b232' },
+    POZISYON_OLMAYAN: { icon: '🔍', label: 'Pozisyon Olmayan', shortLabel: 'Poz. Yok', color: '#949ba4' },
+    ZARARDA_OLANLAR: { icon: '🔴', label: 'Zararda Olanlar', shortLabel: 'Zararda', color: '#da373c' },
+    ALIM_FIRSATI: { icon: '💰', label: 'Alım Fırsatı', shortLabel: 'Alım Fır.', color: '#23a559' }
+};
+
+// === PNL RENK ===
+const pnlColor = (val) => {
+    const n = parsePnl(val);
+    if (n > 0) return '#23a559';
+    if (n < 0) return '#da373c';
+    return '#949ba4';
+};
+
+// === SİNYAL BADGE ===
+const SignalBadge = ({ value }) => {
+    if (!value || value === '-') return <span style={{ color: '#949ba4' }}>-</span>;
+    const isLong = String(value).toUpperCase() === 'LONG';
+    return (
+        <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '3px 10px', borderRadius: 6, fontWeight: 700, fontSize: '0.82em',
+            backgroundColor: isLong ? 'rgba(35,165,89,0.12)' : 'rgba(218,55,60,0.12)',
+            color: isLong ? '#23a559' : '#da373c',
+            border: `1px solid ${isLong ? 'rgba(35,165,89,0.25)' : 'rgba(218,55,60,0.25)'}`
+        }}>
+            {isLong ? '▲' : '▼'} {value}
+        </span>
+    );
+};
+
+// === DURUM BADGE ===
+const StatusBadge = ({ status }) => {
+    if (!status) return <span style={{ color: '#949ba4' }}>-</span>;
+    const s = String(status);
+    const isProfit = s.includes('KAR') || s.includes('UYUYOR');
+    const isLoss = s.includes('ZARAR') || s.includes('TERS');
+    const clean = s.replace(/[\u{1F7E2}\u{1F534}\u{2705}\u{26A0}\u{FE0F}]/gu, '').trim();
+    return (
+        <span style={{
+            padding: '3px 10px', borderRadius: 6, fontWeight: 700, fontSize: '0.82em',
+            backgroundColor: isProfit ? 'rgba(35,165,89,0.12)' : isLoss ? 'rgba(218,55,60,0.12)' : 'rgba(240,178,50,0.12)',
+            color: isProfit ? '#57F287' : isLoss ? '#ED4245' : '#f0b232',
+        }}>
+            {isProfit ? '✅' : isLoss ? '🔴' : '⚪'} {clean}
+        </span>
+    );
+};
+
+// ================================================================
+// 🔥 ANA BİLEŞEN
+// ================================================================
 const CryptoSignals = () => {
-    const [signalData, setSignalData] = useState(null);
-    const [activeTab, setActiveTab] = useState(null);
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
+
+    // Mode & Tab
+    const [activeMode, setActiveMode] = useState('balance_mode');
+    const [activeTab, setActiveTab] = useState('TUM_STRATEJILER');
+
+    // Filters
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('rank');
+    const [sortDir, setSortDir] = useState('asc');
+
+    // View & Pagination
+    const [viewMode, setViewMode] = useState('table');
+    const [page, setPage] = useState(1);
+    const ITEMS_PER_PAGE = 50;
+
+    // Coin Detail Modal
+    const [selectedCoin, setSelectedCoin] = useState(null);
+
+    // Auto refresh
     const [autoRefresh, setAutoRefresh] = useState(true);
-    const [compactMode, setCompactMode] = useState(false);  // 🔥 Özet mod
-    const [selectedCoin, setSelectedCoin] = useState(null); // 🎯 Seçili coin detayı
-    const [modalAnimation, setModalAnimation] = useState(''); // Modal animasyon durumu
-    const tableContainerRef = useRef(null);
-    const scrollPositionRef = useRef(0);
+    const tableRef = useRef(null);
+    const scrollRef = useRef(0);
+    const { isMobile } = useWindowWidth();
 
-    // Modal açma fonksiyonu
-    const openCoinModal = (coinName, coinData) => {
-        setSelectedCoin({ name: coinName, data: coinData });
-        setTimeout(() => setModalAnimation('open'), 10);
-    };
+    // Tab/mode değişince sayfa sıfırla
+    useEffect(() => { setPage(1); }, [activeTab, activeMode, searchQuery]);
 
-    // Modal kapatma fonksiyonu
-    const closeCoinModal = () => {
-        setModalAnimation('closing');
-        setTimeout(() => {
-            setSelectedCoin(null);
-            setModalAnimation('');
-        }, 300);
-    };
-
-    // Sütun başlıklarını Türkçeleştir
-    const translateColumn = (col) => {
-        const translations = {
-            'rank': 'Sıra',
-            'coin': 'Coin',
-            'timeframe': 'Zaman',
-            'signal': 'Sinyal',
-            'pozisyon_yonu': 'Pozisyon',
-            'sinyal_yonu': 'Yeni Sinyal',
-            'yon_uyumu': 'Durum',
-            'ters_sinyal': 'Ters?',
-            'entry_price': 'Giriş',
-            'current_price': 'Şu An',
-            'pnl_percent': 'Kar/Zarar %',
-            'bars_ago': 'Bar',
-            'days_ago': 'Gün',
-            'trades': 'İşlem',
-            'win_rate': 'Başarı %',
-            'x_kat': 'X Kat',
-            'hedef_roe': 'Hedef ROE',
-            'status': 'Durum'
-        };
-        return translations[col] || col;
-    };
-
-    // Hücre içeriğini formatla
-    const formatCell = (key, value) => {
-        if (value === null || value === undefined) return '-';
-
-        // Ters sinyal sütununu gizle (zaten yon_uyumu'nda gösteriliyor)
-        if (key === 'ters_sinyal') return null;
-
-        // Pozisyon yönü (LONG/SHORT)
-        // ⚠️ ÖZEL MANTIK: PNL'e bakarak karda mı zararda mı anlarız
-        // KARDA = Yeşil, ZARARDA = Kırmızı (pozisyon yönü fark etmez)
-        if (key === 'pozisyon_yonu') {
-            return (
-                <span style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontWeight: 'bold',
-                    backgroundColor: value === 'LONG' ? '#23a55922' : '#ed424222',
-                    color: value === 'LONG' ? '#23a559' : '#ed4245'
-                }}>
-                    {value === 'LONG' ? '📈 LONG' : '📉 SHORT'}
-                </span>
-            );
-        }
-
-        // Yeni sinyal yönü
-        if (key === 'sinyal_yonu' || key === 'signal') {
-            return (
-                <span style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px',
-                    fontWeight: 'bold',
-                    backgroundColor: value === 'LONG' ? '#5865f222' : '#faa61a22',
-                    color: value === 'LONG' ? '#5865f2' : '#faa61a'
-                }}>
-                    {value === 'LONG' ? '⬆️ LONG' : '⬇️ SHORT'}
-                </span>
-            );
-        }
-
-        // Yön uyumu (AÇIK POZİSYONLAR sekmesinde önemli!)
-        // YÖN UYUYOR = Yeşil ✅, TERS SİNYAL = Kırmızı 🔴
-        if (key === 'yon_uyumu') {
-            const isMatching = value.includes('UYUYOR') || value.includes('AYNI');
-            return (
-                <span style={{
-                    padding: '6px 12px',
-                    borderRadius: '6px',
-                    fontWeight: 'bold',
-                    fontSize: '0.95em',
-                    backgroundColor: isMatching ? '#23a55944' : '#ed424544',
-                    color: isMatching ? '#57F287' : '#ED4245',
-                    border: `2px solid ${isMatching ? '#57F287' : '#ED4245'}`,
-                    textShadow: isMatching ? '0 0 8px #57F287' : '0 0 8px #ED4245'
-                }}>
-                    {isMatching ? '✅ YÖN UYUYOR' : '⚠️ TERS SİNYAL'}
-                </span>
-            );
-        }
-
-        // Durum (KAR/ZARAR)
-        // YÖN UYUYOR = Yeşil, TERS SİNYAL = Kırmızı
-        if (key === 'status') {
-            const isMatching = value.includes('UYUYOR') || value.includes('AYNI');
-            const isProfit = value.includes('KAR');
-            const isTersSignal = value.includes('TERS');
-
-            let bgColor, textColor, displayText;
-
-            if (isMatching) {
-                bgColor = '#23a55944';
-                textColor = '#57F287';
-                displayText = '✅ YÖN UYUYOR';
-            } else if (isTersSignal) {
-                bgColor = '#ed424544';
-                textColor = '#ED4245';
-                displayText = '⚠️ TERS SİNYAL';
-            } else if (isProfit) {
-                bgColor = '#23a55933';
-                textColor = '#57F287';
-                displayText = value;
-            } else {
-                bgColor = '#ed424533';
-                textColor = '#ED4245';
-                displayText = value;
-            }
-
-            return (
-                <span style={{
-                    padding: '6px 12px',
-                    borderRadius: '6px',
-                    fontWeight: 'bold',
-                    backgroundColor: bgColor,
-                    color: textColor,
-                    border: `2px solid ${textColor}`,
-                    textShadow: `0 0 8px ${textColor}`
-                }}>
-                    {displayText}
-                </span>
-            );
-        }
-
-        // Kar/Zarar yüzdesi
-        if (key === 'pnl_percent') {
-            const isPositive = String(value).includes('+');
-            return (
-                <span style={{
-                    fontWeight: 'bold',
-                    color: isPositive ? '#23a559' : '#ed4245'
-                }}>
-                    {value}
-                </span>
-            );
-        }
-
-        // Coin ismi (Binance Futures linki ile)
-        if (key === 'coin') {
-            // Eğer coin zaten USDT ile bitiyorsa, tekrar ekleme
-            const symbol = value.endsWith('USDT') ? value : `${value}USDT`;
-            return (
-                <a
-                    href={`https://www.binance.com/en/futures/${symbol}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                        fontWeight: 'bold',
-                        color: '#f0b232',
-                        textDecoration: 'none',
-                        cursor: 'pointer'
-                    }}
-                    onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
-                    onMouseOut={(e) => e.target.style.textDecoration = 'none'}
-                >
-                    {value}
-                </a>
-            );
-        }
-
-        return String(value);
-    };
-
-    // JSON'u yükle - scroll pozisyonunu koru
-    const loadSignals = useCallback(async () => {
+    // ===== VERİ ÇEKME =====
+    const fetchData = useCallback(async () => {
         try {
-            // Mevcut scroll pozisyonunu kaydet
-            if (tableContainerRef.current) {
-                scrollPositionRef.current = tableContainerRef.current.scrollTop;
+            if (tableRef.current) scrollRef.current = tableRef.current.scrollTop;
+
+            const res = await fetch(`${SIGNALS_URL}?t=${Date.now()}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const json = await res.json();
+
+            if (json.error) {
+                setError(json.error);
+                setLoading(false);
+                return;
             }
 
-            const response = await fetch(`${SIGNAL_JSON_URL}?t=${Date.now()}`);
-            const data = await response.json();
-            setSignalData(data);
-            setLastUpdate(new Date(data.meta.export_time));
+            setData(json);
+            setLastUpdate(new Date(json.meta?.export_time || Date.now()));
+            setError(null);
 
-            // İlk sekmeyi aktif yap
-            if (!activeTab && data.tabs) {
-                const firstTab = Object.keys(data.tabs)[0];
-                setActiveTab(firstTab);
-            }
-
-            // Scroll pozisyonunu geri yükle (kısa gecikme ile DOM güncellensin)
             setTimeout(() => {
-                if (tableContainerRef.current && scrollPositionRef.current > 0) {
-                    tableContainerRef.current.scrollTop = scrollPositionRef.current;
+                if (tableRef.current && scrollRef.current > 0) {
+                    tableRef.current.scrollTop = scrollRef.current;
                 }
             }, 50);
-        } catch (error) {
-            console.error('Signal yükleme hatası:', error);
+        } catch (err) {
+            console.error('Signal fetch error:', err);
+            if (!data) setError('Sunucuya bağlanılamadı: ' + err.message);
+        } finally {
+            setLoading(false);
         }
-    }, [activeTab]);
-
-    // İlk yükleme
-    useEffect(() => {
-        loadSignals();
     }, []);
 
-    // Otomatik yenileme (30 saniyede bir)
+    useEffect(() => { fetchData(); }, []);
+
     useEffect(() => {
         if (!autoRefresh) return;
+        const iv = setInterval(fetchData, 30000);
+        return () => clearInterval(iv);
+    }, [autoRefresh, fetchData]);
 
-        const interval = setInterval(() => {
-            loadSignals();
-        }, 30000);
+    // ===== VERİ ERİŞİMİ (v3.0 JSON YAPISI) =====
+    // ✅ KRİTİK FİX: data.balance_mode.tabs / data.winrate_mode.tabs
+    const meta = data?.meta || {};
+    const positionCoins = meta.position_coins || [];
 
-        return () => clearInterval(interval);
-    }, [autoRefresh]);
+    const modeData = useMemo(() => {
+        if (!data || !data[activeMode]) return null;
+        return data[activeMode];
+    }, [data, activeMode]);
 
-    if (!signalData) {
+    const allTabs = useMemo(() => {
+        if (!modeData || !modeData.tabs) return {};
+        return modeData.tabs;
+    }, [modeData]);
+
+    const currentTab = useMemo(() => {
+        if (!allTabs[activeTab]) return null;
+        return allTabs[activeTab];
+    }, [allTabs, activeTab]);
+
+    const tabData = useMemo(() => {
+        return currentTab?.data || [];
+    }, [currentTab]);
+
+    // ===== FİLTRE & SIRALAMA =====
+    const processedData = useMemo(() => {
+        let items = [...tabData];
+
+        if (searchQuery.trim()) {
+            const q = searchQuery.trim().toUpperCase();
+            items = items.filter(item =>
+                (item.coin && item.coin.toUpperCase().includes(q)) ||
+                (item.timeframe && item.timeframe.toUpperCase().includes(q)) ||
+                (item.signal && item.signal.toUpperCase().includes(q))
+            );
+        }
+
+        items.sort((a, b) => {
+            let valA, valB;
+            switch (sortBy) {
+                case 'coin':
+                    valA = a.coin || ''; valB = b.coin || '';
+                    return sortDir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                case 'pnl':
+                    valA = parsePnl(a.pnl_percent); valB = parsePnl(b.pnl_percent); break;
+                case 'win_rate':
+                    valA = parseFloat(String(a.win_rate || '0').replace('%', ''));
+                    valB = parseFloat(String(b.win_rate || '0').replace('%', '')); break;
+                case 'x_kat':
+                    valA = parseFloat(String(a.x_kat || '0').replace('x', ''));
+                    valB = parseFloat(String(b.x_kat || '0').replace('x', '')); break;
+                case 'trades':
+                    valA = parseInt(a.trades || 0); valB = parseInt(b.trades || 0); break;
+                default:
+                    valA = a.rank || 9999; valB = b.rank || 9999; break;
+            }
+            if (typeof valA === 'string') return 0;
+            return sortDir === 'asc' ? valA - valB : valB - valA;
+        });
+
+        return items;
+    }, [tabData, searchQuery, sortBy, sortDir]);
+
+    // Pagination
+    const totalPages = Math.max(1, Math.ceil(processedData.length / ITEMS_PER_PAGE));
+    const pagedData = processedData.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+    const isPositionsTab = activeTab === 'ACIK_POZISYONLAR';
+
+    const handleSort = (field) => {
+        if (sortBy === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+        else { setSortBy(field); setSortDir(field === 'rank' ? 'asc' : 'desc'); }
+    };
+
+    // Özet istatistikler
+    const stats = useMemo(() => {
+        if (!tabData.length) return null;
+        const profits = tabData.filter(i => parsePnl(i.pnl_percent) > 0);
+        const losses = tabData.filter(i => parsePnl(i.pnl_percent) < 0);
+        const avgPnl = tabData.reduce((s, i) => s + parsePnl(i.pnl_percent), 0) / tabData.length;
+        const avgWr = tabData.reduce((s, i) => s + parseFloat(String(i.win_rate || '0').replace('%', '')), 0) / tabData.length;
+        const uniqueCoins = [...new Set(tabData.map(i => i.coin))];
+        return { profits: profits.length, losses: losses.length, avgPnl, avgWr, uniqueCoins: uniqueCoins.length, total: tabData.length };
+    }, [tabData]);
+
+    // Coin grupları (card view)
+    const coinGroups = useMemo(() => {
+        const groups = {};
+        processedData.forEach(row => {
+            const coin = row.coin || 'UNKNOWN';
+            if (!groups[coin]) groups[coin] = [];
+            groups[coin].push(row);
+        });
+        return groups;
+    }, [processedData]);
+
+    // SortHeader bileşeni
+    const SortHeader = ({ field, children, style: extra }) => (
+        <th onClick={() => handleSort(field)} style={{
+            ...S.th, cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap',
+            color: sortBy === field ? '#f0b232' : '#b9bbbe', ...extra
+        }}>
+            {children} {sortBy === field && (sortDir === 'asc' ? <FaSortAmountUp style={{ fontSize: '0.7em' }} /> : <FaSortAmountDown style={{ fontSize: '0.7em' }} />)}
+        </th>
+    );
+
+    // ================================================================
+    // RENDER
+    // ================================================================
+
+    if (loading && !data) {
         return (
-            <div style={styles.container}>
-                <div style={styles.loadingContainer}>
-                    <FaSync className="spin" size={40} color="#f0b232" />
-                    <p>Sinyaller yükleniyor...</p>
+            <div style={S.page}>
+                <div style={S.loadingBox}>
+                    <div className="crypto-spin" style={{ fontSize: 48 }}>₿</div>
+                    <p style={{ color: '#f0b232', fontSize: '1.1em', marginTop: 16 }}>Kripto Verileri Yükleniyor...</p>
                 </div>
             </div>
         );
     }
 
-    const currentTabData = signalData?.tabs?.[activeTab];
+    if (error && !data) {
+        return (
+            <div style={S.page}>
+                <div style={{ textAlign: 'center', marginTop: 80 }}>
+                    <div style={{ fontSize: 60, marginBottom: 16 }}>⚠️</div>
+                    <h3 style={{ color: '#da373c', marginBottom: 8 }}>{error}</h3>
+                    <button onClick={fetchData} style={S.primaryBtn}>Tekrar Dene</button>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div style={styles.container}>
-            {/* Header */}
-            <div style={styles.header}>
-                <div style={styles.headerLeft}>
-                    <Link to="/" style={styles.backButton}>
-                        <FaArrowLeft /> Ana Menü
-                    </Link>
-                    <h1 style={styles.title}>
-                        <FaBitcoin style={{ color: '#f0b232', marginRight: '10px' }} />
-                        Kripto Sinyaller
+        <div style={S.page}>
+
+            {/* ====== HEADER ====== */}
+            <header style={S.header}>
+                <div style={S.headerLeft}>
+                    <Link to="/" style={S.backBtn}><FaArrowLeft /> Geri</Link>
+                    <h1 style={S.title}>
+                        <FaBitcoin style={{ color: '#f0b232' }} />
+                        <span>Kripto Sinyaller</span>
+                        {meta.version && <span style={S.versionBadge}>v{meta.version}</span>}
                     </h1>
                 </div>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={S.headerRight}>
                     {lastUpdate && (
-                        <div style={styles.updateTime}>
+                        <span style={S.updateTime}>
                             <FaClock /> {lastUpdate.toLocaleTimeString('tr-TR')}
-                        </div>
+                        </span>
                     )}
-                    <label style={styles.autoRefreshLabel}>
-                        <input
-                            type="checkbox"
-                            checked={autoRefresh}
-                            onChange={(e) => setAutoRefresh(e.target.checked)}
-                            style={{ marginRight: '5px' }}
-                        />
-                        Otomatik Yenile
+                    <label style={S.checkboxLabel}>
+                        <input type="checkbox" checked={autoRefresh} onChange={e => setAutoRefresh(e.target.checked)} />
+                        Oto
                     </label>
-                    <button
-                        onClick={() => setCompactMode(!compactMode)}
-                        style={{
-                            ...styles.refreshButton,
-                            backgroundColor: compactMode ? '#23a559' : '#5865f2'
-                        }}
-                    >
-                        {compactMode ? '📊 Detay' : '⚡ Özet'}
+                    <button onClick={fetchData} style={S.primaryBtn}>
+                        <FaSync className={loading ? 'crypto-spin' : ''} /> Yenile
                     </button>
-                    <button onClick={loadSignals} style={styles.refreshButton}>
-                        <FaSync /> Yenile
+                </div>
+            </header>
+
+            {/* ====== MODE TOGGLE (Balance / Winrate) ====== */}
+            <div style={S.modeToggle}>
+                <button
+                    onClick={() => setActiveMode('balance_mode')}
+                    style={{
+                        ...S.modeBtn,
+                        ...(activeMode === 'balance_mode' ? S.modeBtnActive : {}),
+                        borderColor: activeMode === 'balance_mode' ? '#f0b232' : '#40444b'
+                    }}
+                >
+                    <FaChartLine /> {isMobile ? 'Balance' : '💰 Balance Sıralama'}
+                </button>
+                <button
+                    onClick={() => setActiveMode('winrate_mode')}
+                    style={{
+                        ...S.modeBtn,
+                        ...(activeMode === 'winrate_mode' ? S.modeBtnActive : {}),
+                        borderColor: activeMode === 'winrate_mode' ? '#23a559' : '#40444b'
+                    }}
+                >
+                    <FaTrophy /> {isMobile ? 'Winrate' : '🏆 Winrate Sıralama'}
+                </button>
+            </div>
+
+            {/* ====== ÖZET İSTATİSTİK BAR ====== */}
+            {stats && (
+                <div style={S.statsBar}>
+                    <div style={S.statCard}>
+                        <span style={S.statNum}>{stats.total}</span>
+                        <span style={S.statLabel}>Strateji</span>
+                    </div>
+                    <div style={S.statCard}>
+                        <span style={S.statNum}>{stats.uniqueCoins}</span>
+                        <span style={S.statLabel}>Coin</span>
+                    </div>
+                    <div style={S.statCard}>
+                        <span style={{ ...S.statNum, color: '#23a559' }}>{stats.profits}</span>
+                        <span style={S.statLabel}>Kârda</span>
+                    </div>
+                    <div style={S.statCard}>
+                        <span style={{ ...S.statNum, color: '#da373c' }}>{stats.losses}</span>
+                        <span style={S.statLabel}>Zararda</span>
+                    </div>
+                    <div style={S.statCard}>
+                        <span style={{ ...S.statNum, color: stats.avgPnl >= 0 ? '#23a559' : '#da373c' }}>
+                            {stats.avgPnl >= 0 ? '+' : ''}{stats.avgPnl.toFixed(2)}%
+                        </span>
+                        <span style={S.statLabel}>Ort. PNL</span>
+                    </div>
+                    <div style={S.statCard}>
+                        <span style={{ ...S.statNum, color: stats.avgWr >= 50 ? '#23a559' : '#f0b232' }}>
+                            {stats.avgWr.toFixed(1)}%
+                        </span>
+                        <span style={S.statLabel}>Ort. WR</span>
+                    </div>
+                </div>
+            )}
+
+            {/* ====== TAB BAR ====== */}
+            <div style={S.tabBar}>
+                {Object.keys(allTabs).map(tabKey => {
+                    const cfg = TAB_CONFIG[tabKey] || { icon: '📋', label: tabKey, shortLabel: tabKey, color: '#949ba4' };
+                    const tab = allTabs[tabKey];
+                    const isActive = activeTab === tabKey;
+                    return (
+                        <button
+                            key={tabKey}
+                            onClick={() => setActiveTab(tabKey)}
+                            style={{
+                                ...S.tabBtn,
+                                ...(isActive ? { backgroundColor: cfg.color, borderColor: cfg.color, color: '#fff', boxShadow: `0 4px 14px ${cfg.color}44` } : {})
+                            }}
+                        >
+                            <span>{cfg.icon}</span>
+                            <span>{isMobile ? cfg.shortLabel : cfg.label}</span>
+                            <span style={{
+                                backgroundColor: isActive ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.08)',
+                                padding: '2px 8px', borderRadius: 12, fontSize: '0.75em', fontWeight: 700
+                            }}>
+                                {tab?.count || 0}
+                            </span>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* ====== FİLTRE BAR ====== */}
+            <div style={S.filterBar}>
+                <div style={S.searchBox}>
+                    <FaFilter style={{ color: '#949ba4', flexShrink: 0 }} />
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        placeholder="Coin ara... (BTC, ETH, SOL)"
+                        style={S.searchInput}
+                    />
+                    {searchQuery && <button onClick={() => setSearchQuery('')} style={S.clearBtn}><FaTimes /></button>}
+                </div>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <span style={{ color: '#949ba4', fontSize: '0.85em' }}>
+                        {processedData.length} sonuç
+                    </span>
+                    <button
+                        onClick={() => setViewMode(v => v === 'table' ? 'cards' : 'table')}
+                        style={S.viewToggle}
+                        title={viewMode === 'table' ? 'Kart görünümü' : 'Tablo görünümü'}
+                    >
+                        {viewMode === 'table' ? '🃏' : '📋'}
                     </button>
                 </div>
             </div>
 
-            {/* Meta Bilgisi */}
-            {signalData?.meta && (
-                <div style={styles.metaBar}>
-                    <div style={styles.metaItem}>
-                        <strong>Toplam Strateji:</strong> {signalData.meta.total_strategies}
-                    </div>
-                    {signalData.meta.position_coins?.length > 0 && (
-                        <div style={styles.metaItem}>
-                            <strong>Pozisyondaki Coinler:</strong>{' '}
-                            <span style={{ color: '#23a559' }}>
-                                {signalData.meta.position_coins.join(', ')}
-                            </span>
-                        </div>
-                    )}
-                    <div style={styles.metaItem}>
-                        <strong>Versiyon:</strong> {signalData.meta.version}
-                    </div>
-                </div>
-            )}
-
-            {/* Sekmeler */}
-            {signalData?.tabs && (
-                <div style={styles.tabsContainer}>
-                    {Object.entries(signalData.tabs).map(([key, tab]) => (
-                        <button
-                            key={key}
-                            onClick={() => setActiveTab(key)}
-                            style={{
-                                ...styles.tab,
-                                ...(activeTab === key ? styles.activeTab : {})
-                            }}
-                        >
-                            <div style={styles.tabTitle}>{tab.title}</div>
-                            <div style={styles.tabDesc}>{tab.description}</div>
-                            <div style={styles.tabCount}>{tab.count} kayıt</div>
-                        </button>
+            {/* ====== POZİSYON COİNLERİ BANNER ====== */}
+            {isPositionsTab && positionCoins.length > 0 && (
+                <div style={S.posBanner}>
+                    <strong><FaWallet style={{ marginRight: 6 }} />Açık Pozisyon:</strong>
+                    {positionCoins.map(c => (
+                        <span key={c} style={S.posTag}>{c.replace('USDT', '')}</span>
                     ))}
                 </div>
             )}
 
-            {/* İçerik */}
-            {currentTabData && (
-                <div style={styles.content}>
-                    <h2 style={styles.contentTitle}>{currentTabData.title}</h2>
-                    <p style={styles.contentDesc}>{currentTabData.description}</p>
+            {/* ====== İÇERİK ====== */}
+            {!currentTab ? (
+                <div style={S.emptyState}>
+                    <div style={{ fontSize: 48, marginBottom: 12 }}>📭</div>
+                    <p>Bu modda veri bulunamadı</p>
+                </div>
+            ) : viewMode === 'cards' ? (
+                /* ====== KART GÖRÜNÜMÜ ====== */
+                <div style={S.cardGrid}>
+                    {Object.entries(coinGroups).map(([coin, rows]) => {
+                        const profitRows = rows.filter(r => parsePnl(r.pnl_percent) > 0);
+                        const lossRows = rows.filter(r => parsePnl(r.pnl_percent) < 0);
+                        const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
+                        const bestWr = Math.max(...rows.map(r => parseFloat(String(r.win_rate || '0').replace('%', ''))));
+                        const firstRow = rows[0] || {};
+                        const mainSignal = firstRow.signal || firstRow.sinyal_yonu || '-';
 
-                    {/* 🔥 ÖZET MOD - Coin bazında kartlar */}
-                    {compactMode && currentTabData.data?.length > 0 && (
-                        <div style={styles.compactGrid}>
-                            {(() => {
-                                // Coin bazında grupla
-                                const coinGroups = {};
-                                currentTabData.data.forEach(row => {
-                                    const coin = row.coin || 'UNKNOWN';
-                                    if (!coinGroups[coin]) coinGroups[coin] = [];
-                                    coinGroups[coin].push(row);
-                                });
-
-                                return Object.entries(coinGroups).map(([coin, rows]) => {
-                                    // Her coin için 10 nokta hesapla
-                                    const maxDots = 10;
-                                    const dotsData = rows.slice(0, maxDots).map(r => {
-                                        // YÖN UYUYOR = yeşil, TERS SİNYAL = kırmızı
-                                        const uyum = r.yon_uyumu || r.status || '';
-                                        return uyum.includes('UYUYOR') || uyum.includes('AYNI');
-                                    });
-                                    while (dotsData.length < maxDots) dotsData.push(null);
-
-                                    const greenCount = dotsData.filter(d => d === true).length;
-                                    const redCount = dotsData.filter(d => d === false).length;
-                                    const firstRow = rows[0] || {};
+                        return (
+                            <div
+                                key={coin}
+                                style={S.coinCard}
+                                onClick={() => setSelectedCoin({ name: coin, data: rows })}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = '#f0b232'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#2f3136'; }}
+                            >
+                                <div style={S.cardHeader}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                        <span style={S.cardCoinName}>{coin.replace('USDT', '')}</span>
+                                        <SignalBadge value={mainSignal} />
+                                    </div>
+                                    <span style={{ color: '#949ba4', fontSize: '0.78em' }}>{rows.length} str.</span>
+                                </div>
+                                <div style={S.cardBody}>
+                                    <div style={S.cardRow}>
+                                        <span style={S.cardRowLabel}>Fiyat</span>
+                                        <span style={S.cardRowValue}>${formatPrice(firstRow.current_price)}</span>
+                                    </div>
+                                    <div style={S.cardRow}>
+                                        <span style={S.cardRowLabel}>Ort. PNL</span>
+                                        <span style={{ ...S.cardRowValue, color: pnlColor(avgPnl.toString()), fontWeight: 700 }}>
+                                            {avgPnl >= 0 ? '+' : ''}{avgPnl.toFixed(2)}%
+                                        </span>
+                                    </div>
+                                    <div style={S.cardRow}>
+                                        <span style={S.cardRowLabel}>En İyi WR</span>
+                                        <span style={{ ...S.cardRowValue, color: bestWr >= 50 ? '#23a559' : '#da373c' }}>
+                                            {bestWr.toFixed(1)}%
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style={S.cardFooter}>
+                                    <div style={S.miniBarBg}>
+                                        <div style={{ ...S.miniBar, width: `${(profitRows.length / Math.max(rows.length, 1)) * 100}%` }} />
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75em', marginTop: 4 }}>
+                                        <span style={{ color: '#23a559' }}>✓ {profitRows.length}</span>
+                                        <span style={{ color: '#da373c' }}>✗ {lossRows.length}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                /* ====== TABLO GÖRÜNÜMÜ ====== */
+                <>
+                    <div ref={tableRef} style={S.tableWrap}>
+                        <table style={S.table}>
+                            <thead>
+                                <tr>
+                                    <SortHeader field="rank">#</SortHeader>
+                                    <SortHeader field="coin">Coin</SortHeader>
+                                    <th style={S.th}>TF</th>
+                                    <th style={S.th}>Sinyal</th>
+                                    {isPositionsTab && <th style={S.th}>Poz.Yönü</th>}
+                                    {isPositionsTab && <th style={S.th}>Uyum</th>}
+                                    <th style={S.th}>Giriş</th>
+                                    <th style={S.th}>Güncel</th>
+                                    <SortHeader field="pnl">PNL%</SortHeader>
+                                    <SortHeader field="win_rate">WR%</SortHeader>
+                                    <SortHeader field="trades">İşlem</SortHeader>
+                                    <SortHeader field="x_kat">X Kat</SortHeader>
+                                    <th style={S.th}>Hedef ROE</th>
+                                    <th style={S.th}>Durum</th>
+                                    <th style={S.th}>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {pagedData.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={isPositionsTab ? 15 : 13} style={{ textAlign: 'center', padding: 40, color: '#949ba4' }}>
+                                            {searchQuery ? `"${searchQuery}" için sonuç bulunamadı` : 'Bu sekmede veri yok'}
+                                        </td>
+                                    </tr>
+                                ) : pagedData.map((item, idx) => {
+                                    const coinShort = (item.coin || '').replace('USDT', '');
+                                    const binanceSymbol = item.coin?.endsWith('USDT') ? item.coin : `${item.coin}USDT`;
+                                    const rowBg = idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)';
 
                                     return (
-                                        <div
-                                            key={coin}
-                                            style={styles.compactCard}
-                                            onClick={() => openCoinModal(coin, rows)}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
-                                                e.currentTarget.style.boxShadow = '0 8px 25px rgba(240,178,50,0.3)';
-                                                e.currentTarget.style.borderColor = '#f0b232';
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                                                e.currentTarget.style.boxShadow = 'none';
-                                                e.currentTarget.style.borderColor = '#1f2023';
-                                            }}
+                                        <tr
+                                            key={`${item.rank}-${item.coin}-${item.timeframe}-${idx}`}
+                                            style={{ backgroundColor: rowBg, transition: 'background-color 0.15s' }}
+                                            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(88,101,242,0.06)'}
+                                            onMouseLeave={e => e.currentTarget.style.backgroundColor = rowBg}
                                         >
-                                            <div style={styles.compactHeader}>
-                                                <span style={styles.compactCoinName}>{coin}</span>
-                                                <span style={{ color: '#949ba4', fontSize: '0.8em' }}>{rows.length} pozisyon</span>
-                                            </div>
-                                            <div style={styles.dotsContainer}>
-                                                {dotsData.map((isGreen, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        style={{
-                                                            width: '14px',
-                                                            height: '14px',
-                                                            borderRadius: '50%',
-                                                            backgroundColor: isGreen === null ? '#40444b' : (isGreen ? '#23a559' : '#da373c'),
-                                                            boxShadow: isGreen === null ? 'none' : (isGreen ? '0 0 6px #23a559' : '0 0 6px #da373c')
-                                                        }}
-                                                        title={isGreen === null ? 'Veri yok' : (isGreen ? 'Yön Uyuyor' : 'Ters Sinyal')}
-                                                    />
-                                                ))}
-                                            </div>
-                                            <div style={styles.compactStats}>
-                                                <span style={{ color: '#23a559', fontWeight: 'bold' }}>✓ {greenCount}</span>
-                                                <span style={{ color: '#da373c', fontWeight: 'bold' }}>✗ {redCount}</span>
-                                            </div>
-                                        </div>
-                                    );
-                                });
-                            })()}
-                        </div>
-                    )}
+                                            <td style={S.td}><span style={{ color: '#949ba4', fontWeight: 600 }}>{item.rank}</span></td>
+                                            <td style={S.td}>
+                                                <span
+                                                    style={{ color: '#f0b232', fontWeight: 700, cursor: 'pointer' }}
+                                                    onClick={() => {
+                                                        const allRows = tabData.filter(r => r.coin === item.coin);
+                                                        setSelectedCoin({ name: item.coin, data: allRows });
+                                                    }}
+                                                >
+                                                    {coinShort}
+                                                </span>
+                                            </td>
+                                            <td style={S.td}><span style={S.tfBadge}>{item.timeframe}</span></td>
+                                            <td style={S.td}><SignalBadge value={item.signal || item.sinyal_yonu || '-'} /></td>
 
-                    {/* Normal Tablo Modu */}
-                    {!compactMode && currentTabData.data?.length > 0 && (
-                        <div ref={tableContainerRef} style={styles.tableContainer}>
-                            <table style={styles.table}>
-                                <thead>
-                                    <tr>
-                                        {Object.keys(currentTabData.data[0])
-                                            .filter(col => col !== 'ters_sinyal') // Ters sinyal sütununu gizle
-                                            .map((col) => (
-                                                <th key={col} style={styles.th}>
-                                                    {translateColumn(col)}
-                                                </th>
-                                            ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {currentTabData.data.map((row, idx) => (
-                                        <tr key={idx} style={styles.tr}>
-                                            {Object.entries(row)
-                                                .filter(([key]) => key !== 'ters_sinyal')
-                                                .map(([key, val], colIdx) => (
-                                                    <td key={colIdx} style={styles.td}>
-                                                        {formatCell(key, val)}
-                                                    </td>
-                                                ))}
+                                            {isPositionsTab && (
+                                                <td style={S.td}><SignalBadge value={item.pozisyon_yonu || '-'} /></td>
+                                            )}
+                                            {isPositionsTab && (
+                                                <td style={S.td}>
+                                                    <span style={{
+                                                        fontSize: '0.8em', fontWeight: 600,
+                                                        color: item.ters_sinyal ? '#da373c' : '#23a559'
+                                                    }}>
+                                                        {item.ters_sinyal ? '⚠️ Ters' : '✅ Uyumlu'}
+                                                    </span>
+                                                </td>
+                                            )}
+
+                                            <td style={{ ...S.td, color: '#b9bbbe', fontSize: '0.85em' }}>${formatPrice(item.entry_price)}</td>
+                                            <td style={{ ...S.td, color: '#dbdee1', fontSize: '0.85em' }}>${formatPrice(item.current_price)}</td>
+                                            <td style={{ ...S.td, color: pnlColor(item.pnl_percent), fontWeight: 700 }}>{item.pnl_percent || '-'}</td>
+                                            <td style={{
+                                                ...S.td, fontWeight: 600,
+                                                color: parseFloat(String(item.win_rate || '0').replace('%', '')) >= 50 ? '#23a559' : '#da373c'
+                                            }}>
+                                                {item.win_rate || '-'}
+                                            </td>
+                                            <td style={S.td}>{item.trades || '-'}</td>
+                                            <td style={{ ...S.td, color: '#f0b232', fontWeight: 700 }}>{item.x_kat || '-'}</td>
+                                            <td style={{ ...S.td, color: '#5865f2', fontWeight: 600 }}>{item.hedef_roe || '-'}</td>
+                                            <td style={S.td}><StatusBadge status={item.status} /></td>
+                                            <td style={S.td}>
+                                                <a
+                                                    href={`https://www.binance.com/en/futures/${binanceSymbol}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    style={S.linkBtn}
+                                                    title={`${coinShort} Binance Futures`}
+                                                >
+                                                    <FaExternalLinkAlt />
+                                                </a>
+                                            </td>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
 
-                    {(!currentTabData.data || currentTabData.data.length === 0) && (
-                        <div style={styles.emptyState}>
-                            <p>Bu sekmede henüz veri yok</p>
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                        <div style={S.pagination}>
+                            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+                                style={{ ...S.pageBtn, opacity: page === 1 ? 0.4 : 1 }}>◄</button>
+                            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+                                let num;
+                                if (totalPages <= 7) num = i + 1;
+                                else if (page <= 4) num = i + 1;
+                                else if (page >= totalPages - 3) num = totalPages - 6 + i;
+                                else num = page - 3 + i;
+                                return (
+                                    <button key={num} onClick={() => setPage(num)}
+                                        style={{ ...S.pageNumBtn, ...(page === num ? S.pageNumActive : {}) }}>
+                                        {num}
+                                    </button>
+                                );
+                            })}
+                            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+                                style={{ ...S.pageBtn, opacity: page === totalPages ? 0.4 : 1 }}>►</button>
                         </div>
                     )}
-                </div>
+                </>
             )}
 
-            {/* 🎯 COİN DETAY MODAL */}
+            {/* ====== COİN DETAY MODAL ====== */}
             {selectedCoin && (
-                <div
-                    style={{
-                        ...styles.modalOverlay,
-                        opacity: modalAnimation === 'open' ? 1 : 0,
-                    }}
-                    onClick={closeCoinModal}
-                >
-                    <div
-                        style={{
-                            ...styles.modalContent,
-                            transform: modalAnimation === 'open'
-                                ? 'translateY(0) scale(1)'
-                                : 'translateY(50px) scale(0.9)',
-                            opacity: modalAnimation === 'open' ? 1 : 0,
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                <div style={S.modalOverlay} onClick={() => setSelectedCoin(null)}>
+                    <div style={S.modal} onClick={e => e.stopPropagation()}>
                         {/* Modal Header */}
-                        <div style={styles.modalHeader}>
-                            <div style={styles.modalCoinInfo}>
-                                <FaBitcoin style={{ fontSize: '28px', color: '#f0b232' }} />
-                                <h2 style={styles.modalTitle}>{selectedCoin.name}</h2>
-                                <span style={styles.modalBadge}>{selectedCoin.data?.length || 0} Strateji</span>
+                        <div style={S.modalHeader}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <FaBitcoin style={{ fontSize: 28, color: '#f0b232' }} />
+                                <h2 style={{ margin: 0, color: '#f0b232', fontWeight: 700 }}>
+                                    {selectedCoin.name.replace('USDT', '')}
+                                </h2>
+                                <span style={S.modalBadge}>{selectedCoin.data.length} Strateji</span>
                             </div>
-                            <button onClick={closeCoinModal} style={styles.modalCloseBtn}>✕</button>
+                            <button onClick={() => setSelectedCoin(null)} style={S.modalCloseBtn}>✕</button>
                         </div>
 
-                        {/* Özet İstatistikler */}
-                        <div style={styles.modalStats}>
+                        {/* Modal Stats */}
+                        <div style={S.modalStats}>
                             {(() => {
-                                const data = selectedCoin.data || [];
-                                const greenCount = data.filter(r => {
-                                    const uyum = r.yon_uyumu || r.status || '';
-                                    return uyum.includes('UYUYOR') || uyum.includes('AYNI');
-                                }).length;
-                                const redCount = data.filter(r => {
-                                    const uyum = r.yon_uyumu || r.status || '';
-                                    return uyum.includes('TERS');
-                                }).length;
-                                const avgPnl = data.reduce((acc, r) => {
-                                    const pnl = parseFloat(r.pnl_percent) || 0;
-                                    return acc + pnl;
-                                }, 0) / (data.length || 1);
-                                const firstRow = data[0] || {};
+                                const rows = selectedCoin.data;
+                                const profits = rows.filter(r => parsePnl(r.pnl_percent) > 0).length;
+                                const losses = rows.filter(r => parsePnl(r.pnl_percent) < 0).length;
+                                const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
+                                const avgWr = rows.reduce((s, r) => s + parseFloat(String(r.win_rate || '0').replace('%', '')), 0) / rows.length;
+                                const price = rows[0]?.current_price;
 
                                 return (
                                     <>
-                                        <div style={styles.statBox}>
-                                            <span style={styles.statValue}>{greenCount}</span>
-                                            <span style={{ ...styles.statLabel, color: '#23a559' }}>✓ Yön Uyuyor</span>
+                                        <div style={S.mStatCard}>
+                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#23a559' }}>{profits}</span>
+                                            <span style={S.mStatLabel}>Kârda</span>
                                         </div>
-                                        <div style={styles.statBox}>
-                                            <span style={styles.statValue}>{redCount}</span>
-                                            <span style={{ ...styles.statLabel, color: '#da373c' }}>✗ Ters Sinyal</span>
+                                        <div style={S.mStatCard}>
+                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#da373c' }}>{losses}</span>
+                                            <span style={S.mStatLabel}>Zararda</span>
                                         </div>
-                                        <div style={styles.statBox}>
-                                            <span style={{ ...styles.statValue, color: avgPnl >= 0 ? '#23a559' : '#da373c' }}>
+                                        <div style={S.mStatCard}>
+                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: avgPnl >= 0 ? '#23a559' : '#da373c' }}>
                                                 {avgPnl >= 0 ? '+' : ''}{avgPnl.toFixed(2)}%
                                             </span>
-                                            <span style={styles.statLabel}>Ort. PNL</span>
+                                            <span style={S.mStatLabel}>Ort. PNL</span>
                                         </div>
-                                        <div style={styles.statBox}>
-                                            <span style={styles.statValue}>{firstRow.current_price || '-'}</span>
-                                            <span style={styles.statLabel}>Şu Anki Fiyat</span>
+                                        <div style={S.mStatCard}>
+                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#f0b232' }}>
+                                                {avgWr.toFixed(1)}%
+                                            </span>
+                                            <span style={S.mStatLabel}>Ort. WR</span>
                                         </div>
+                                        {price && (
+                                            <div style={S.mStatCard}>
+                                                <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#fff' }}>
+                                                    ${formatPrice(price)}
+                                                </span>
+                                                <span style={S.mStatLabel}>Fiyat</span>
+                                            </div>
+                                        )}
                                     </>
                                 );
                             })()}
                         </div>
 
-                        {/* Detaylı Pozisyon Listesi */}
-                        <div style={styles.modalPositions}>
-                            <h3 style={styles.modalSubtitle}>📊 Pozisyon Detayları</h3>
-                            <div style={styles.positionsList}>
-                                {selectedCoin.data?.map((row, idx) => {
-                                    const uyum = row.yon_uyumu || row.status || '';
-                                    const isGreen = uyum.includes('UYUYOR') || uyum.includes('AYNI');
-                                    const pnl = parseFloat(row.pnl_percent) || 0;
-
+                        {/* Modal Strateji Listesi */}
+                        <div style={S.modalBody}>
+                            <h3 style={{ margin: '0 0 12px', color: '#fff', fontSize: '1em' }}>📊 Strateji Detayları</h3>
+                            <div style={S.strategyList}>
+                                {selectedCoin.data.map((row, idx) => {
+                                    const pnl = parsePnl(row.pnl_percent);
+                                    const isProfit = pnl > 0;
                                     return (
-                                        <div
-                                            key={idx}
-                                            style={{
-                                                ...styles.positionCard,
-                                                borderLeft: `4px solid ${isGreen ? '#23a559' : '#da373c'}`,
-                                                animationDelay: `${idx * 0.05}s`
-                                            }}
-                                        >
-                                            <div style={styles.positionHeader}>
-                                                <span style={styles.positionTimeframe}>{row.timeframe || 'N/A'}</span>
-                                                <span style={{
-                                                    padding: '4px 10px',
-                                                    borderRadius: '4px',
-                                                    fontSize: '0.75em',
-                                                    fontWeight: 'bold',
-                                                    backgroundColor: pnl >= 0 ? '#23a55922' : '#ed424222',
-                                                    color: pnl >= 0 ? '#23a559' : '#ed4245'
-                                                }}>
-                                                    {row.pozisyon_yonu === 'LONG' ? '📈 LONG' : '📉 SHORT'}
-                                                </span>
+                                        <div key={idx} style={{
+                                            ...S.strategyCard,
+                                            borderLeft: `4px solid ${isProfit ? '#23a559' : '#da373c'}`,
+                                            animationDelay: `${idx * 0.04}s`
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                                                <span style={{ color: '#5865f2', fontWeight: 700, fontSize: '1.05em' }}>{row.timeframe}</span>
+                                                <SignalBadge value={row.signal || row.sinyal_yonu || row.pozisyon_yonu || '-'} />
                                             </div>
-                                            <div style={styles.positionBody}>
-                                                <div style={styles.positionRow}>
-                                                    <span>Giriş:</span>
-                                                    <strong>{row.entry_price || '-'}</strong>
+                                            <div style={S.strategyGrid}>
+                                                <div style={S.stratItem}>
+                                                    <span style={S.stratItemLabel}>Giriş</span>
+                                                    <span style={S.stratItemVal}>${formatPrice(row.entry_price)}</span>
                                                 </div>
-                                                <div style={styles.positionRow}>
-                                                    <span>Şu An:</span>
-                                                    <strong>{row.current_price || '-'}</strong>
+                                                <div style={S.stratItem}>
+                                                    <span style={S.stratItemLabel}>Güncel</span>
+                                                    <span style={S.stratItemVal}>${formatPrice(row.current_price)}</span>
                                                 </div>
-                                                <div style={styles.positionRow}>
-                                                    <span>PNL:</span>
-                                                    <strong style={{ color: pnl >= 0 ? '#23a559' : '#da373c' }}>
-                                                        {pnl >= 0 ? '+' : ''}{pnl.toFixed(2)}%
-                                                    </strong>
+                                                <div style={S.stratItem}>
+                                                    <span style={S.stratItemLabel}>PNL</span>
+                                                    <span style={{ ...S.stratItemVal, color: isProfit ? '#23a559' : '#da373c', fontWeight: 700 }}>
+                                                        {row.pnl_percent || '-'}
+                                                    </span>
                                                 </div>
-                                                <div style={styles.positionRow}>
-                                                    <span>Hedef:</span>
-                                                    <strong style={{ color: '#f0b232' }}>{row.hedef_roe || row.x_kat || '-'}</strong>
+                                                <div style={S.stratItem}>
+                                                    <span style={S.stratItemLabel}>WR</span>
+                                                    <span style={S.stratItemVal}>{row.win_rate || '-'}</span>
+                                                </div>
+                                                <div style={S.stratItem}>
+                                                    <span style={S.stratItemLabel}>X Kat</span>
+                                                    <span style={{ ...S.stratItemVal, color: '#f0b232' }}>{row.x_kat || '-'}</span>
+                                                </div>
+                                                <div style={S.stratItem}>
+                                                    <span style={S.stratItemLabel}>Hedef</span>
+                                                    <span style={{ ...S.stratItemVal, color: '#5865f2' }}>{row.hedef_roe || '-'}</span>
                                                 </div>
                                             </div>
-                                            <div style={styles.positionFooter}>
-                                                <span style={{
-                                                    padding: '4px 8px',
-                                                    borderRadius: '4px',
-                                                    fontSize: '0.75em',
-                                                    backgroundColor: isGreen ? '#23a55933' : '#da373c33',
-                                                    color: isGreen ? '#57F287' : '#ED4245',
-                                                }}>
-                                                    {isGreen ? '✅ Yön Uyuyor' : '⚠️ Ters Sinyal'}
-                                                </span>
-                                                {row.bars_ago && <span style={{ color: '#949ba4', fontSize: '0.75em' }}>{row.bars_ago} bar önce</span>}
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 8, borderTop: '1px solid #40444b' }}>
+                                                <StatusBadge status={row.status} />
+                                                {row.days_ago !== undefined && (
+                                                    <span style={{ color: '#949ba4', fontSize: '0.78em' }}>{row.days_ago} gün · {row.bars_ago} bar</span>
+                                                )}
                                             </div>
                                         </div>
                                     );
                                 })}
                             </div>
+                        </div>
+
+                        {/* Binance Link */}
+                        <div style={{ padding: '12px 20px', borderTop: '1px solid #2f3136', textAlign: 'center' }}>
+                            <a
+                                href={`https://www.binance.com/en/futures/${selectedCoin.name.endsWith('USDT') ? selectedCoin.name : selectedCoin.name + 'USDT'}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: '#f0b232', textDecoration: 'none', fontWeight: 600, fontSize: '0.9em' }}
+                            >
+                                <FaExternalLinkAlt /> Binance Futures'da Aç
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -614,391 +774,265 @@ const CryptoSignals = () => {
     );
 };
 
-const styles = {
-    container: {
-        backgroundColor: '#1e1f22',
-        minHeight: '100vh',
-        color: '#dcddde',
-        padding: '20px',
+
+// ================================================================
+// 🎨 STİLLER
+// ================================================================
+const S = {
+    page: {
+        minHeight: '100vh', backgroundColor: '#1e1f22', color: '#dbdee1',
+        padding: '16px', boxSizing: 'border-box',
+        paddingTop: 'max(16px, env(safe-area-inset-top))',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     },
-    loadingContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '80vh',
-        gap: '20px',
+    loadingBox: {
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        justifyContent: 'center', height: '70vh'
     },
     header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '20px',
-        flexWrap: 'wrap',
-        gap: '15px',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid #2b2d31',
+        flexWrap: 'wrap', gap: 10
     },
-    headerLeft: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-    },
-    backButton: {
-        textDecoration: 'none',
-        color: '#949ba4',
-        fontSize: '0.9em',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
+    headerLeft: { display: 'flex', flexDirection: 'column', gap: 4 },
+    headerRight: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' },
+    backBtn: {
+        textDecoration: 'none', color: '#949ba4', fontSize: '0.85em',
+        display: 'flex', alignItems: 'center', gap: 5
     },
     title: {
-        margin: 0,
-        fontSize: '1.8em',
-        display: 'flex',
-        alignItems: 'center',
+        margin: 0, fontSize: '1.4em', display: 'flex', alignItems: 'center',
+        gap: 10, fontWeight: 700, color: '#fff'
+    },
+    versionBadge: {
+        fontSize: '0.4em', color: '#949ba4', backgroundColor: '#2b2d31',
+        padding: '2px 8px', borderRadius: 8
     },
     updateTime: {
-        fontSize: '0.85em',
-        color: '#949ba4',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
+        fontSize: '0.8em', color: '#949ba4', display: 'flex',
+        alignItems: 'center', gap: 4
     },
-    autoRefreshLabel: {
-        fontSize: '0.85em',
-        color: '#dcddde',
-        display: 'flex',
-        alignItems: 'center',
-        cursor: 'pointer',
+    checkboxLabel: {
+        fontSize: '0.8em', color: '#b9bbbe', display: 'flex',
+        alignItems: 'center', gap: 4, cursor: 'pointer'
     },
-    refreshButton: {
-        backgroundColor: '#5865f2',
-        color: 'white',
-        border: 'none',
-        padding: '8px 16px',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        fontWeight: '600',
+    primaryBtn: {
+        backgroundColor: '#5865f2', color: '#fff', border: 'none',
+        padding: '8px 16px', borderRadius: 8, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600,
+        fontSize: '0.85em', transition: 'background-color 0.2s'
     },
-    metaBar: {
-        backgroundColor: '#2b2d31',
-        borderRadius: '8px',
-        padding: '15px',
-        marginBottom: '20px',
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '20px',
-        border: '1px solid #1f2023',
+    modeToggle: { display: 'flex', gap: 8, marginBottom: 12 },
+    modeBtn: {
+        flex: 1, padding: '10px 16px', borderRadius: 10,
+        border: '2px solid #40444b', backgroundColor: '#2b2d31',
+        color: '#949ba4', cursor: 'pointer', fontWeight: 700,
+        fontSize: '0.9em', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', gap: 8, transition: 'all 0.2s'
     },
-    metaItem: {
-        fontSize: '0.9em',
-        color: '#b9bbbe',
+    modeBtnActive: {
+        backgroundColor: '#313338', color: '#fff',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
     },
-    tabsContainer: {
+    statsBar: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '15px',
-        marginBottom: '20px',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
+        gap: 8, marginBottom: 12
     },
-    tab: {
-        backgroundColor: '#2b2d31',
-        border: '1px solid #1f2023',
-        borderRadius: '8px',
-        padding: '15px',
-        cursor: 'pointer',
-        textAlign: 'left',
-        transition: 'all 0.2s',
+    statCard: {
+        backgroundColor: '#2b2d31', borderRadius: 10, padding: '10px 8px',
+        textAlign: 'center', border: '1px solid #2f3136'
     },
-    activeTab: {
-        backgroundColor: '#5865f2',
-        borderColor: '#5865f2',
-        boxShadow: '0 4px 12px rgba(88, 101, 242, 0.4)',
+    statNum: { display: 'block', fontSize: '1.2em', fontWeight: 700, color: '#fff' },
+    statLabel: { display: 'block', fontSize: '0.72em', color: '#949ba4', marginTop: 2 },
+    tabBar: {
+        display: 'flex', gap: 6, marginBottom: 12, overflowX: 'auto',
+        paddingBottom: 4
     },
-    tabTitle: {
-        fontSize: '1em',
-        fontWeight: 'bold',
-        marginBottom: '5px',
-        color: '#fff',
+    tabBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b',
+        color: '#949ba4', padding: '8px 14px', borderRadius: 10,
+        cursor: 'pointer', fontWeight: 500, fontSize: '0.85em',
+        display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
+        transition: 'all 0.2s', flexShrink: 0
     },
-    tabDesc: {
-        fontSize: '0.8em',
-        color: '#b9bbbe',
-        marginBottom: '8px',
+    filterBar: {
+        display: 'flex', gap: 10, marginBottom: 12, alignItems: 'center',
+        flexWrap: 'wrap', justifyContent: 'space-between'
     },
-    tabCount: {
-        fontSize: '0.75em',
-        color: '#f0b232',
-        fontWeight: 'bold',
+    searchBox: {
+        display: 'flex', alignItems: 'center', backgroundColor: '#2b2d31',
+        borderRadius: 8, padding: '7px 12px', border: '1px solid #40444b',
+        flex: 1, maxWidth: 360, gap: 8
     },
-    content: {
-        backgroundColor: '#2b2d31',
-        borderRadius: '8px',
-        padding: '20px',
-        border: '1px solid #1f2023',
+    searchInput: {
+        backgroundColor: 'transparent', border: 'none', outline: 'none',
+        color: '#dbdee1', fontSize: '0.88em', flex: 1
     },
-    contentTitle: {
-        margin: '0 0 10px 0',
-        color: '#fff',
-        fontSize: '1.5em',
+    clearBtn: {
+        background: 'none', border: 'none', color: '#949ba4',
+        cursor: 'pointer', padding: '2px 4px', fontSize: '0.9em'
     },
-    contentDesc: {
-        margin: '0 0 20px 0',
-        color: '#b9bbbe',
+    viewToggle: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b',
+        color: '#dbdee1', padding: '6px 10px', borderRadius: 6,
+        cursor: 'pointer', fontSize: '1em'
     },
-    // 🔥 Özet mod stilleri
-    compactGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-        gap: '12px',
-        marginBottom: '20px',
+    posBanner: {
+        padding: '10px 14px', backgroundColor: 'rgba(240,178,50,0.06)',
+        border: '1px solid rgba(240,178,50,0.15)', borderRadius: 10,
+        marginBottom: 12, fontSize: '0.85em', color: '#dbdee1',
+        display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap'
     },
-    compactCard: {
-        backgroundColor: '#202225',
-        borderRadius: '10px',
-        padding: '12px',
-        border: '1px solid #1f2023',
-        transition: 'transform 0.2s, box-shadow 0.2s',
+    posTag: {
+        backgroundColor: '#f0b232', color: '#000', padding: '2px 10px',
+        borderRadius: 6, fontWeight: 700, fontSize: '0.82em'
     },
-    compactHeader: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '10px',
+    tableWrap: {
+        overflowX: 'auto', borderRadius: 12, border: '1px solid #2f3136',
+        backgroundColor: '#2b2d31'
     },
-    compactCoinName: {
-        color: '#f0b232',
-        fontWeight: 'bold',
-        fontSize: '1.1em',
-    },
-    dotsContainer: {
-        display: 'flex',
-        gap: '5px',
-        justifyContent: 'center',
-        marginBottom: '10px',
-        flexWrap: 'wrap',
-    },
-    compactStats: {
-        display: 'flex',
-        justifyContent: 'space-around',
-        borderTop: '1px solid #40444b',
-        paddingTop: '8px',
-        fontSize: '0.9em',
-    },
-    tableContainer: {
-        overflowX: 'auto',
-        borderRadius: '6px',
-        border: '1px solid #1f2023',
-    },
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-        fontSize: '0.85em',
-    },
+    table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.85em' },
     th: {
-        backgroundColor: '#202225',
-        color: '#fff',
-        padding: '12px',
-        textAlign: 'left',
-        borderBottom: '2px solid #f0b232',
-        fontWeight: 'bold',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1,
-    },
-    tr: {
-        borderBottom: '1px solid #1f2023',
+        padding: '10px 10px', textAlign: 'center', backgroundColor: '#202225',
+        color: '#b9bbbe', fontWeight: 600, fontSize: '0.82em',
+        borderBottom: '2px solid #40444b', position: 'sticky', top: 0, zIndex: 1
     },
     td: {
-        padding: '10px 12px',
-        color: '#dcddde',
+        padding: '8px 8px', textAlign: 'center',
+        borderBottom: '1px solid rgba(47,49,54,0.6)'
     },
+    tfBadge: {
+        backgroundColor: '#40444b', color: '#dbdee1', padding: '2px 8px',
+        borderRadius: 4, fontSize: '0.82em', fontWeight: 600
+    },
+    linkBtn: {
+        color: '#5865f2', fontSize: '0.85em', padding: '4px 8px',
+        borderRadius: 4, display: 'inline-flex'
+    },
+    pagination: {
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        gap: 6, marginTop: 16, paddingBottom: 24
+    },
+    pageBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#dbdee1',
+        padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600
+    },
+    pageNumBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#949ba4',
+        padding: '6px 10px', borderRadius: 4, cursor: 'pointer', fontSize: '0.85em',
+        minWidth: 32, textAlign: 'center'
+    },
+    pageNumActive: {
+        backgroundColor: '#5865f2', borderColor: '#5865f2', color: '#fff', fontWeight: 700
+    },
+    cardGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+        gap: 12
+    },
+    coinCard: {
+        backgroundColor: '#2b2d31', borderRadius: 12, padding: 14,
+        border: '1px solid #2f3136', cursor: 'pointer',
+        transition: 'all 0.2s ease'
+    },
+    cardHeader: {
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid #40444b'
+    },
+    cardCoinName: { color: '#f0b232', fontWeight: 700, fontSize: '1.1em' },
+    cardBody: { display: 'flex', flexDirection: 'column', gap: 6 },
+    cardRow: {
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '4px 0'
+    },
+    cardRowLabel: { color: '#949ba4', fontSize: '0.82em' },
+    cardRowValue: { color: '#dbdee1', fontSize: '0.9em', fontWeight: 600 },
+    cardFooter: { marginTop: 10, paddingTop: 8, borderTop: '1px solid #40444b' },
+    miniBarBg: {
+        width: '100%', height: 4, backgroundColor: '#da373c',
+        borderRadius: 4, overflow: 'hidden'
+    },
+    miniBar: { height: '100%', borderRadius: 4, backgroundColor: '#23a559', transition: 'width 0.3s ease' },
     emptyState: {
-        textAlign: 'center',
-        padding: '60px 20px',
-        color: '#949ba4',
-        fontSize: '1.1em',
+        textAlign: 'center', padding: '60px 20px', color: '#949ba4'
     },
-    // 🎯 Modal Stilleri
     modalOverlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: '20px',
-        transition: 'opacity 0.3s ease',
-        backdropFilter: 'blur(8px)',
+        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex',
+        alignItems: 'center', justifyContent: 'center', zIndex: 2000,
+        padding: 16, backdropFilter: 'blur(6px)'
     },
-    modalContent: {
-        backgroundColor: '#1e1f22',
-        borderRadius: '16px',
-        width: '100%',
-        maxWidth: '700px',
-        maxHeight: '85vh',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
+    modal: {
+        backgroundColor: '#1e1f22', borderRadius: 16, width: '100%',
+        maxWidth: 700, maxHeight: '88vh', overflow: 'hidden',
+        display: 'flex', flexDirection: 'column',
         border: '1px solid #f0b232',
-        boxShadow: '0 20px 60px rgba(240, 178, 50, 0.3), 0 0 40px rgba(240, 178, 50, 0.1)',
-        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease',
+        boxShadow: '0 20px 60px rgba(240,178,50,0.2)'
     },
     modalHeader: {
-        padding: '20px 24px',
-        borderBottom: '1px solid #2f3136',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        background: 'linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%)',
-    },
-    modalCoinInfo: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-    },
-    modalTitle: {
-        margin: 0,
-        fontSize: '1.5em',
-        color: '#f0b232',
-        fontWeight: '700',
+        padding: '16px 20px', borderBottom: '1px solid #2f3136',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: 'linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%)'
     },
     modalBadge: {
-        padding: '6px 12px',
-        backgroundColor: '#5865f2',
-        borderRadius: '20px',
-        fontSize: '0.75em',
-        fontWeight: '600',
-        color: '#fff',
+        padding: '4px 10px', backgroundColor: '#5865f2', borderRadius: 16,
+        fontSize: '0.72em', fontWeight: 600, color: '#fff'
     },
     modalCloseBtn: {
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
-        fontSize: '24px',
-        cursor: 'pointer',
-        padding: '8px',
-        borderRadius: '8px',
-        transition: 'all 0.2s',
-        lineHeight: 1,
+        background: 'none', border: 'none', color: '#b9bbbe',
+        fontSize: 22, cursor: 'pointer', padding: 8, borderRadius: 8,
+        lineHeight: 1, transition: 'color 0.2s'
     },
     modalStats: {
         display: 'grid',
-        gridTemplateColumns: window.innerWidth < 640 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
-        gap: '12px',
-        padding: '20px 24px',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+        gap: 10, padding: '16px 20px',
         borderBottom: '1px solid #2f3136',
-        background: 'linear-gradient(180deg, rgba(240, 178, 50, 0.05) 0%, transparent 100%)',
+        background: 'linear-gradient(180deg, rgba(240,178,50,0.04) 0%, transparent 100%)'
     },
-    statBox: {
-        textAlign: 'center',
-        padding: '12px',
-        backgroundColor: '#2b2d31',
-        borderRadius: '10px',
+    mStatCard: {
+        textAlign: 'center', padding: '10px 6px', backgroundColor: '#2b2d31',
+        borderRadius: 10, border: '1px solid #40444b'
+    },
+    mStatLabel: { display: 'block', fontSize: '0.7em', color: '#949ba4', marginTop: 2, textTransform: 'uppercase' },
+    modalBody: { flex: 1, overflow: 'auto', padding: '16px 20px' },
+    strategyList: { display: 'flex', flexDirection: 'column', gap: 10 },
+    strategyCard: {
+        backgroundColor: '#2b2d31', borderRadius: 10, padding: 14,
         border: '1px solid #40444b',
+        animation: 'cryptoSlideIn 0.35s ease forwards',
+        opacity: 0, transform: 'translateX(15px)'
     },
-    statValue: {
-        fontSize: '1.5em',
-        fontWeight: '700',
-        color: '#fff',
-        display: 'block',
-        marginBottom: '4px',
-    },
-    statLabel: {
-        fontSize: '0.75em',
-        color: '#949ba4',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-    },
-    modalPositions: {
-        flex: 1,
-        overflow: 'auto',
-        padding: '20px 24px',
-    },
-    modalSubtitle: {
-        margin: '0 0 16px 0',
-        fontSize: '1.1em',
-        color: '#fff',
-        fontWeight: '600',
-    },
-    positionsList: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-    },
-    positionCard: {
-        backgroundColor: '#2b2d31',
-        borderRadius: '10px',
-        padding: '16px',
-        border: '1px solid #40444b',
-        animation: 'slideInFromRight 0.4s ease forwards',
-        opacity: 0,
-        transform: 'translateX(20px)',
-    },
-    positionHeader: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '12px',
-        paddingBottom: '10px',
-        borderBottom: '1px solid #40444b',
-    },
-    positionTimeframe: {
-        fontSize: '1.1em',
-        fontWeight: '700',
-        color: '#5865f2',
-    },
-    positionBody: {
+    strategyGrid: {
         display: 'grid',
-        gridTemplateColumns: window.innerWidth < 640 ? '1fr' : 'repeat(2, 1fr)',
-        gap: '10px',
-        marginBottom: '12px',
+        gridTemplateColumns: window.innerWidth < 640 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+        gap: 8
     },
-    positionRow: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '8px 12px',
-        backgroundColor: '#202225',
-        borderRadius: '6px',
-        fontSize: '0.9em',
+    stratItem: {
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '5px 10px', backgroundColor: '#202225', borderRadius: 6,
+        fontSize: '0.85em'
     },
-    positionFooter: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: '10px',
-        borderTop: '1px solid #40444b',
-    },
+    stratItemLabel: { color: '#949ba4', fontSize: '0.85em' },
+    stratItemVal: { color: '#dbdee1', fontWeight: 600 }
 };
 
-// CSS Animasyon keyframes (global style olarak eklenmeli)
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
-@keyframes slideInFromRight {
-    from {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-.crypto-card-hover:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(240,178,50,0.3);
-    border-color: #f0b232 !important;
-}
-`;
-if (!document.getElementById('crypto-signals-animations')) {
-    styleSheet.id = 'crypto-signals-animations';
-    document.head.appendChild(styleSheet);
+// === GLOBAL CSS ===
+if (!document.getElementById('crypto-signals-v4-styles')) {
+    const sheet = document.createElement('style');
+    sheet.id = 'crypto-signals-v4-styles';
+    sheet.textContent = `
+        @keyframes cryptoSlideIn {
+            from { opacity: 0; transform: translateX(15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes cryptoSpin {
+            100% { transform: rotate(360deg); }
+        }
+        .crypto-spin { animation: cryptoSpin 1s linear infinite; display: inline-block; }
+    `;
+    document.head.appendChild(sheet);
 }
 
 export default CryptoSignals;

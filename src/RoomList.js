@@ -144,6 +144,7 @@ const RoomList = ({
     const [isNewServerPublic, setIsNewServerPublic] = useState(false);
 
     const activeVoiceUsers = voiceUsers || {};
+    const [dropTargetChannel, setDropTargetChannel] = useState(null);
 
     // ✅ TÜM HOOKS TANIMLANDI - ŞİMDİ FONKSİYONLAR
 
@@ -1391,19 +1392,52 @@ const RoomList = ({
                                                     return (
                                                         <div key={room.id} className="channel-wrapper">
                                                             <div
-                                                                className={`channel-item ${isVoice ? 'voice-channel' : 'text-channel'} ${isActive ? 'active' : ''}`}
+                                                                className={`channel-item ${isVoice ? 'voice-channel' : 'text-channel'} ${isActive ? 'active' : ''} ${dropTargetChannel === room.slug ? 'voice-channel-drop-target' : ''}`}
                                                                 style={{
                                                                     ...styles.roomItem,
                                                                     marginLeft: 8,
-                                                                    backgroundColor: isActive ? 'rgba(88, 101, 242, 0.15)' : 'transparent',
+                                                                    backgroundColor: dropTargetChannel === room.slug
+                                                                        ? 'rgba(88, 101, 242, 0.2)'
+                                                                        : isActive ? 'rgba(88, 101, 242, 0.15)' : 'transparent',
                                                                     color: isActive ? '#fff' : '#949ba4',
-                                                                    borderLeft: isActive ? '3px solid #5865f2' : '3px solid transparent',
+                                                                    borderLeft: dropTargetChannel === room.slug
+                                                                        ? '3px solid #5865f2'
+                                                                        : isActive ? '3px solid #5865f2' : '3px solid transparent',
                                                                     paddingLeft: isActive ? '5px' : '8px',
                                                                     transition: 'all 0.2s ease',
                                                                     borderRadius: '6px',
                                                                     margin: '2px 8px',
+                                                                    position: 'relative',
+                                                                    ...(dropTargetChannel === room.slug ? {
+                                                                        boxShadow: 'inset 0 0 12px rgba(88, 101, 242, 0.15), 0 0 8px rgba(88, 101, 242, 0.2)',
+                                                                        border: '1px dashed rgba(88, 101, 242, 0.5)',
+                                                                    } : {})
                                                                 }}
                                                                 onClick={() => { if (isVoice) joinVoiceChat(room.slug); else onRoomSelect(room.slug); }}
+                                                                onDragOver={(e) => {
+                                                                    if (!isVoice) return;
+                                                                    e.preventDefault();
+                                                                    e.dataTransfer.dropEffect = 'move';
+                                                                    setDropTargetChannel(room.slug);
+                                                                }}
+                                                                onDragLeave={(e) => {
+                                                                    if (dropTargetChannel === room.slug) {
+                                                                        setDropTargetChannel(null);
+                                                                    }
+                                                                }}
+                                                                onDrop={(e) => {
+                                                                    e.preventDefault();
+                                                                    setDropTargetChannel(null);
+                                                                    if (!isVoice || !isAdmin) return;
+                                                                    try {
+                                                                        const data = JSON.parse(e.dataTransfer.getData('application/json'));
+                                                                        if (data.username && data.fromChannel && data.fromChannel !== room.slug) {
+                                                                            handleMoveUserToChannel(data.username, data.fromChannel, room.slug);
+                                                                        }
+                                                                    } catch (err) {
+                                                                        console.error('Drop error:', err);
+                                                                    }
+                                                                }}
                                                             >
                                                                 <div style={styles.channelContent}>
                                                                     {isVoice && (
@@ -2011,44 +2045,63 @@ const RoomList = ({
                         </div>
                     )}
 
-                    {/* 💝 DEVELOPER SUPPORT BUTTON - UserFooter üstünde */}
+                    {/* 💝 DEVELOPER SUPPORT BUTTON - Sesli sohbet moduna uyumlu */}
                     <div
                         onClick={() => setShowSupportModal(true)}
                         style={{
                             backgroundColor: '#1e1f22',
-                            padding: '10px 14px',
+                            padding: (isInVoice || isConnecting) ? '6px 10px' : '10px 14px',
                             margin: '0 8px 8px 8px',
                             borderRadius: '6px',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '12px',
-                            transition: 'all 0.2s',
-                            border: '1px solid transparent'
+                            gap: (isInVoice || isConnecting) ? '8px' : '12px',
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            border: '1px solid transparent',
+                            background: 'linear-gradient(135deg, rgba(235, 69, 158, 0.06) 0%, rgba(88, 101, 242, 0.06) 100%)',
+                            overflow: 'hidden',
+                            flexShrink: 0,
+                            minHeight: (isInVoice || isConnecting) ? '36px' : '44px',
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#2b2d31';
-                            e.currentTarget.style.borderColor = '#5865f2';
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(235, 69, 158, 0.12) 0%, rgba(88, 101, 242, 0.12) 100%)';
+                            e.currentTarget.style.borderColor = '#eb459e';
+                            e.currentTarget.style.transform = 'scale(1.01)';
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#1e1f22';
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(235, 69, 158, 0.06) 0%, rgba(88, 101, 242, 0.06) 100%)';
                             e.currentTarget.style.borderColor = 'transparent';
+                            e.currentTarget.style.transform = 'scale(1)';
                         }}
                         title="Geliştiriciye Destek Ol"
                     >
-                        <FaHeart style={{ color: '#eb459e', fontSize: '20px', marginRight: '6px' }} />
-                        <div style={{ flex: 1, textAlign: 'left' }}>
-                            <div style={{ color: 'white', fontWeight: '600', fontSize: '14px' }}>
-                                Developer'ı Destekle
+                        <FaHeart style={{
+                            color: '#eb459e',
+                            fontSize: (isInVoice || isConnecting) ? '14px' : '18px',
+                            flexShrink: 0,
+                            animation: 'heartPulse 2s ease-in-out infinite',
+                        }} />
+                        <div style={{ flex: 1, textAlign: 'left', overflow: 'hidden' }}>
+                            <div style={{
+                                color: 'white',
+                                fontWeight: '600',
+                                fontSize: (isInVoice || isConnecting) ? '11px' : '13px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}>
+                                {(isInVoice || isConnecting) ? "Destekle" : "Developer'ı Destekle"}
                             </div>
                         </div>
                         <div style={{
-                            backgroundColor: 'rgba(88, 101, 242, 0.2)',
-                            padding: '4px 8px',
+                            background: 'linear-gradient(135deg, rgba(235, 69, 158, 0.2) 0%, rgba(88, 101, 242, 0.2) 100%)',
+                            padding: (isInVoice || isConnecting) ? '2px 6px' : '4px 8px',
                             borderRadius: '10px',
-                            fontSize: '12px',
-                            color: '#5865f2',
-                            fontWeight: 'bold'
+                            fontSize: (isInVoice || isConnecting) ? '10px' : '12px',
+                            color: '#eb459e',
+                            fontWeight: 'bold',
+                            flexShrink: 0,
                         }}>
                             ☕
                         </div>
@@ -2762,7 +2815,16 @@ if (typeof document !== 'undefined') {
         }
         
         /* Kanal İkon Pulse Animasyonu (Aktif Sesli Kanal için) */
-        .voice-channel.active svg {
+        
+    /* 💝 Developer Support Heart Animation */
+    @keyframes heartPulse {
+        0%, 100% { transform: scale(1); }
+        25% { transform: scale(1.15); }
+        50% { transform: scale(1); }
+        75% { transform: scale(1.1); }
+    }
+    
+    .voice-channel.active svg {
             animation: iconPulse 2s infinite;
         }
         
