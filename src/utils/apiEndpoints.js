@@ -142,9 +142,12 @@ export const ENDPOINTS = {
     // ==========================================
     POLLS: {
         CREATE: `${API_BASE}/polls/create/`,
+        CREATE_IN_ROOM: (roomId) => `${API_BASE}/rooms/${roomId}/polls/create/`,
         VOTE: (pollId) => `${API_BASE}/polls/${pollId}/vote/`,
         RESULTS: (pollId) => `${API_BASE}/polls/${pollId}/results/`,
+        CLOSE: (pollId) => `${API_BASE}/polls/${pollId}/close/`,
         LIST: `${API_BASE}/polls/`,
+        LIST_BY_ROOM: (roomId) => `${API_BASE}/rooms/${roomId}/polls/`,
         DELETE: (pollId) => `${API_BASE}/polls/${pollId}/delete/`,
     },
 
@@ -243,6 +246,8 @@ export const ENDPOINTS = {
         CREATE: (serverId) => `${API_BASE}/servers/${serverId}/autoroles/create/`,
         DELETE: (serverId, roleId) => `${API_BASE}/servers/${serverId}/autoroles/${roleId}/delete/`,
         TOGGLE: (serverId, roleId) => `${API_BASE}/servers/${serverId}/autoroles/${roleId}/toggle/`,
+        GET: (serverId) => `${API_BASE}/servers/${serverId}/auto-roles/`,
+        SET: (serverId) => `${API_BASE}/servers/${serverId}/auto-roles/`,
     },
 
     // ==========================================
@@ -256,18 +261,7 @@ export const ENDPOINTS = {
     },
 
     // ==========================================
-    // 🗳️ POLLS
-    // ==========================================
-    POLLS: {
-        LIST: (roomId) => `${API_BASE}/rooms/${roomId}/polls/`,
-        CREATE: (roomId) => `${API_BASE}/rooms/${roomId}/polls/create/`,
-        VOTE: (pollId) => `${API_BASE}/polls/${pollId}/vote/`,
-        RESULTS: (pollId) => `${API_BASE}/polls/${pollId}/results/`,
-        CLOSE: (pollId) => `${API_BASE}/polls/${pollId}/close/`,
-    },
-
-    // ==========================================
-    // 🔖 BOOKMARKS
+    //  BOOKMARKS
     // ==========================================
     BOOKMARKS: {
         LIST: `${API_BASE}/bookmarks/`,
@@ -420,13 +414,7 @@ export const ENDPOINTS = {
         CUSTOM: `${API_BASE}/status/custom/`,
     },
 
-    // ==========================================
-    // 🤖 AUTO-ROLE ASSIGNMENT
-    // ==========================================
-    AUTO_ROLES: {
-        GET: (serverId) => `${API_BASE}/servers/${serverId}/auto-roles/`,
-        SET: (serverId) => `${API_BASE}/servers/${serverId}/auto-roles/`,
-    },
+
 };
 
 /**
