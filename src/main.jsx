@@ -34,6 +34,9 @@ const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
 const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage'));
 
+// 📄 Legal Pages
+const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage'));
+
 // 📈 GROWTH: Landing Page & Growth Components (Lazy Load)
 const LandingPage = React.lazy(() => import('./components/LandingPage'));
 const ReferralProgram = React.lazy(() => import('./components/ReferralProgram'));
@@ -137,7 +140,19 @@ const RootApp = () => {
                                     </PageWrapper>
                                 } />
 
-                                {/* 📈 GROWTH: Landing Page & Growth System */}
+                                {/* � LEGAL: Privacy Policy & Terms */}
+                                <Route path="/privacy-policy" element={
+                                    <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
+                                        <PrivacyPolicyPage />
+                                    </React.Suspense>
+                                } />
+                                <Route path="/terms-of-service" element={
+                                    <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
+                                        <PrivacyPolicyPage />
+                                    </React.Suspense>
+                                } />
+
+                                {/* �📈 GROWTH: Landing Page & Growth System */}
                                 <Route path="/launch" element={
                                     <PageWrapper>
                                         <React.Suspense fallback={<div>Yükleniyor...</div>}>

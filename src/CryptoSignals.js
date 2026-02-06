@@ -75,6 +75,8 @@ const CryptoSignals = () => {
         if (key === 'ters_sinyal') return null;
 
         // Pozisyon yönü (LONG/SHORT)
+        // ⚠️ ÖZEL MANTIK: PNL'e bakarak karda mı zararda mı anlarız
+        // KARDA = Yeşil, ZARARDA = Kırmızı (pozisyon yönü fark etmez)
         if (key === 'pozisyon_yonu') {
             return (
                 <span style={{
@@ -562,8 +564,8 @@ const CryptoSignals = () => {
                                                     borderRadius: '4px',
                                                     fontSize: '0.75em',
                                                     fontWeight: 'bold',
-                                                    backgroundColor: row.pozisyon_yonu === 'LONG' ? '#23a55922' : '#ed424222',
-                                                    color: row.pozisyon_yonu === 'LONG' ? '#23a559' : '#ed4245'
+                                                    backgroundColor: pnl >= 0 ? '#23a55922' : '#ed424222',
+                                                    color: pnl >= 0 ? '#23a559' : '#ed4245'
                                                 }}>
                                                     {row.pozisyon_yonu === 'LONG' ? '📈 LONG' : '📉 SHORT'}
                                                 </span>
@@ -887,7 +889,7 @@ const styles = {
     },
     modalStats: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateColumns: window.innerWidth < 640 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
         gap: '12px',
         padding: '20px 24px',
         borderBottom: '1px solid #2f3136',
@@ -953,7 +955,7 @@ const styles = {
     },
     positionBody: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: window.innerWidth < 640 ? '1fr' : 'repeat(2, 1fr)',
         gap: '10px',
         marginBottom: '12px',
     },

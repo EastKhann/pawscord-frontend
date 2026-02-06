@@ -303,12 +303,8 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
         setAuthError('');
 
         try {
-            console.log('🔵 [Login] Giriş denemesi:', { username: formData.username, mode: isLoginMode ? 'login' : 'register' });
-            console.log('🔵 [Login] API URL:', API_BASE_URL);
-
             // 🤖 reCAPTCHA v3 token al
             const recaptchaToken = await getRecaptchaToken(isLoginMode ? 'login' : 'register');
-            console.log('✅ [reCAPTCHA] Token alındı:', recaptchaToken ? 'OK' : 'FAIL');
 
             if (isLoginMode) {
                 await onLogin(formData.username, formData.password, recaptchaToken);

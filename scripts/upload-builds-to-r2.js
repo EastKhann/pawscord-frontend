@@ -27,6 +27,7 @@ const s3Client = new S3Client({
 const MIME_TYPES = {
     '.exe': 'application/vnd.microsoft.portable-executable',
     '.apk': 'application/vnd.android.package-archive',
+    '.aab': 'application/x-authorware-bin',
     '.json': 'application/json',
 };
 
@@ -81,6 +82,11 @@ async function main() {
             name: 'Android APK'
         },
         {
+            local: path.join(mediaBuildPath, 'Pawscord.aab'),
+            r2Key: 'builds/Pawscord.aab',
+            name: 'Android App Bundle (Google Play)'
+        },
+        {
             local: path.join(mediaBuildPath, 'version.json'),
             r2Key: 'builds/version.json',
             name: 'Version Info'
@@ -109,6 +115,7 @@ async function main() {
     console.log('  📥 Download URLs:');
     console.log('     Windows: https://media.pawscord.com/builds/Pawscord-Setup.exe');
     console.log('     Android: https://media.pawscord.com/builds/Pawscord.apk');
+    console.log('     Play:    https://media.pawscord.com/builds/Pawscord.aab');
     console.log('     Version: https://media.pawscord.com/builds/version.json');
     console.log('═══════════════════════════════════════════════════════════');
     console.log('');
