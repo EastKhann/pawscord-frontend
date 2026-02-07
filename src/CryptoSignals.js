@@ -137,17 +137,16 @@ const CryptoSignals = () => {
                 const json = await res.json();
                 const files = json.files || [];
                 setAvailableFiles(files);
-                // İlk dosyayı seç (veya signal_export varsa onu)
                 if (files.length > 0) {
+                    // signal_export varsa onu seç, yoksa ilk dosyayı
                     const defaultFile = files.find(f => f.key === 'signal_export') || files[0];
                     setActiveFileKey(defaultFile.key);
                 } else {
-                    // Dosya listesi boş — direkt signal_export dene
+                    // Hiç dosya yok — varsayılanı dene
                     setActiveFileKey('signal_export');
                 }
             } catch (err) {
                 console.error('Signal list fetch error:', err);
-                // Fallback: signal_export kullan
                 setActiveFileKey('signal_export');
             }
         })();
@@ -405,7 +404,7 @@ const CryptoSignals = () => {
             </div>
 
             {/* ====== İŞLEM SAYISI TABS (Parent - dosya seçimi) ====== */}
-            {availableFiles.length > 1 && (
+            {availableFiles.length > 0 && (
                 <div style={S.tradeCountBar}>
                     <span style={S.tradeCountLabel}>📈 İşlem Sayısı:</span>
                     {availableFiles.map(f => {
@@ -413,13 +412,14 @@ const CryptoSignals = () => {
                         return (
                             <button
                                 key={f.key}
-                                onClick={() => setActiveFileKey(f.key)}
+                                onClick={() => { if (!isActive) setActiveFileKey(f.key); }}
                                 style={{
                                     ...S.tradeCountBtn,
                                     ...(isActive ? S.tradeCountBtnActive : {})
                                 }}
                             >
                                 {f.label}
+                                {isActive && loading && <span className="crypto-spin" style={{ marginLeft: 4, fontSize: '0.8em' }}>⏳</span>}
                             </button>
                         );
                     })}
