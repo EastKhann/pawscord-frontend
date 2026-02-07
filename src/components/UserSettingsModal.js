@@ -3,7 +3,7 @@
 // Discord-style settings with sidebar navigation - Account, Privacy, Appearance, Voice, Notifications, Keybinds
 
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { FaUser, FaShieldAlt, FaPalette, FaMicrophone, FaBell, FaKeyboard, FaGlobe, FaSignOutAlt, FaTimes, FaLock, FaDesktop, FaCog, FaVolumeUp, FaGamepad, FaLink, FaHistory, FaTrash, FaToggleOn, FaToggleOff, FaChevronRight, FaCheck, FaCamera } from 'react-icons/fa';
+import { FaUser, FaShieldAlt, FaPalette, FaMicrophone, FaBell, FaKeyboard, FaGlobe, FaSignOutAlt, FaTimes, FaLock, FaDesktop, FaCog, FaVolumeUp, FaGamepad, FaLink, FaHistory, FaTrash, FaToggleOn, FaToggleOff, FaChevronRight, FaCheck, FaCamera, FaSteam, FaSpotify, FaInstagram, FaTwitter, FaXbox, FaPlaystation, FaGithub } from 'react-icons/fa';
 
 const TABS = [
     { id: 'account', label: 'Hesabım', icon: FaUser, section: 'KULLANICI AYARLARI' },
@@ -235,6 +235,291 @@ const KeybindsTab = () => {
     );
 };
 
+const KeybindsTab = () => {
+    const shortcuts = [
+        { keys: 'Ctrl + K', desc: 'Hızlı Geçiş' },
+        { keys: 'Ctrl + Shift + M', desc: 'Mikrofon Aç/Kapa' },
+        { keys: 'Ctrl + Shift + D', desc: 'Kulaklık Aç/Kapa' },
+        { keys: 'Ctrl + Enter', desc: 'Mesaj Gönder' },
+        { keys: 'Shift + Enter', desc: 'Yeni Satır' },
+        { keys: '↑ (boş input)', desc: 'Son Mesajı Düzenle' },
+        { keys: 'Escape', desc: 'Düzenleme/Yanıt İptal' },
+        { keys: 'Ctrl + T', desc: 'Şablonlar' },
+        { keys: 'Ctrl + B', desc: 'Kalın Metin' },
+        { keys: 'Ctrl + I', desc: 'İtalik Metin' },
+        { keys: 'Ctrl + U', desc: 'Altı Çizili' },
+    ];
+
+    return (
+        <div>
+            <SettingSection title="Klavye Kısayolları">
+                {shortcuts.map((s, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                        <span style={{ color: '#dcddde', fontSize: 14 }}>{s.desc}</span>
+                        <kbd style={S.kbd}>{s.keys}</kbd>
+                    </div>
+                ))}
+            </SettingSection>
+        </div>
+    );
+};
+
+const ConnectionsTab = () => {
+    const connections = [
+        { id: 'steam', name: 'Steam', icon: FaSteam, color: '#171a21', connected: false },
+        { id: 'spotify', name: 'Spotify', icon: FaSpotify, color: '#1DB954', connected: false },
+        { id: 'instagram', name: 'Instagram', icon: FaInstagram, color: '#E4405F', connected: false },
+        { id: 'twitter', name: 'X (Twitter)', icon: FaTwitter, color: '#1DA1F2', connected: false },
+        { id: 'xbox', name: 'Xbox', icon: FaXbox, color: '#107C10', connected: false },
+        { id: 'playstation', name: 'PlayStation', icon: FaPlaystation, color: '#003791', connected: false },
+        { id: 'github', name: 'GitHub', icon: FaGithub, color: '#333', connected: false },
+    ];
+
+    const [connectedIds, setConnectedIds] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('pawscord_connections') || '[]'); } catch { return []; }
+    });
+
+    const toggleConnection = (id) => {
+        setConnectedIds(prev => {
+            const next = prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id];
+            localStorage.setItem('pawscord_connections', JSON.stringify(next));
+            return next;
+        });
+    };
+
+    return (
+        <div>
+            <SettingSection title="Bağlı Hesaplar">
+                <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 16 }}>
+                    Profilinde gösterilecek bağlı hesaplarını yönet.
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {connections.map(c => {
+                        const isConnected = connectedIds.includes(c.id);
+                        const Icon = c.icon;
+                        return (
+                            <div key={c.id} style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                padding: '12px 16px', backgroundColor: '#1e1f22', borderRadius: 8,
+                                border: isConnected ? `1px solid ${c.color}44` : '1px solid transparent',
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                    <Icon style={{ fontSize: 24, color: isConnected ? c.color : '#949ba4' }} />
+                                    <div>
+                                        <div style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>{c.name}</div>
+                                        <div style={{ color: isConnected ? '#3ba55c' : '#949ba4', fontSize: 12 }}>
+                                            {isConnected ? '✓ Bağlı' : 'Bağlı değil'}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" onClick={() => toggleConnection(c.id)} style={{
+                                    padding: '6px 16px', borderRadius: 4, border: 'none', cursor: 'pointer',
+                                    fontSize: 13, fontWeight: 600,
+                                    backgroundColor: isConnected ? 'rgba(218,55,60,0.15)' : 'rgba(88,101,242,0.15)',
+                                    color: isConnected ? '#da373c' : '#5865f2',
+                                }}>
+                                    {isConnected ? 'Kaldır' : 'Bağla'}
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+            </SettingSection>
+        </div>
+    );
+};
+
+const LanguageTab = () => {
+    const [language, setLanguage] = useState(() => localStorage.getItem('pawscord_language') || 'tr');
+    const languages = [
+        { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+        { code: 'en', label: 'English', flag: '🇬🇧' },
+        { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+        { code: 'fr', label: 'Français', flag: '🇫🇷' },
+        { code: 'es', label: 'Español', flag: '🇪🇸' },
+        { code: 'ja', label: '日本語', flag: '🇯🇵' },
+        { code: 'ko', label: '한국어', flag: '🇰🇷' },
+        { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+        { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+        { code: 'zh', label: '中文', flag: '🇨🇳' },
+    ];
+
+    const selectLanguage = (code) => {
+        setLanguage(code);
+        localStorage.setItem('pawscord_language', code);
+    };
+
+    return (
+        <div>
+            <SettingSection title="Uygulama Dili">
+                <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 16 }}>
+                    Pawscord arayüzünün dilini seç.
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    {languages.map(lang => (
+                        <button key={lang.code} type="button" onClick={() => selectLanguage(lang.code)} style={{
+                            display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+                            padding: '10px 16px', border: 'none', borderRadius: 4, cursor: 'pointer',
+                            backgroundColor: language === lang.code ? 'rgba(88,101,242,0.15)' : 'transparent',
+                            textAlign: 'left', transition: 'background 0.15s',
+                        }}>
+                            <span style={{ fontSize: 20 }}>{lang.flag}</span>
+                            <span style={{ color: language === lang.code ? '#5865f2' : '#dcddde', fontSize: 14, fontWeight: language === lang.code ? 600 : 400 }}>
+                                {lang.label}
+                            </span>
+                            {language === lang.code && <FaCheck style={{ marginLeft: 'auto', color: '#5865f2', fontSize: 12 }} />}
+                        </button>
+                    ))}
+                </div>
+            </SettingSection>
+        </div>
+    );
+};
+
+const ActivityTab = () => {
+    const [showActivity, setShowActivity] = useState(() => localStorage.getItem('pawscord_show_activity') !== 'false');
+    const [showGame, setShowGame] = useState(() => localStorage.getItem('pawscord_show_game') !== 'false');
+    const [showSpotify, setShowSpotify] = useState(() => localStorage.getItem('pawscord_show_spotify') !== 'false');
+    const [showStatus, setShowStatus] = useState(() => localStorage.getItem('pawscord_show_status') !== 'false');
+
+    const toggle = (key, setter) => (val) => {
+        setter(val);
+        localStorage.setItem(key, val.toString());
+    };
+
+    return (
+        <div>
+            <SettingSection title="Aktivite Gizliliği">
+                <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 12 }}>
+                    Diğer kullanıcıların ne gördüğünü kontrol et.
+                </p>
+                <ToggleSwitch label="Aktivite durumunu göster" value={showActivity} onChange={toggle('pawscord_show_activity', setShowActivity)} />
+                <ToggleSwitch label="Oynadığım oyunu göster" value={showGame} onChange={toggle('pawscord_show_game', setShowGame)} />
+                <ToggleSwitch label="Spotify dinlediğimi göster" value={showSpotify} onChange={toggle('pawscord_show_spotify', setShowSpotify)} />
+                <ToggleSwitch label="Özel durum mesajını göster" value={showStatus} onChange={toggle('pawscord_show_status', setShowStatus)} />
+            </SettingSection>
+            <SettingSection title="Oyun Algılama">
+                <div style={{ padding: 16, backgroundColor: '#1e1f22', borderRadius: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                        <FaGamepad style={{ color: '#5865f2', fontSize: 24 }} />
+                        <div>
+                            <div style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>Otomatik Algılama</div>
+                            <div style={{ color: '#949ba4', fontSize: 12 }}>Çalışan uygulamalar otomatik algılanır (Electron/APK)</div>
+                        </div>
+                    </div>
+                    <ToggleSwitch label="Oyun algılamayı etkinleştir" value={showGame} onChange={toggle('pawscord_show_game', setShowGame)} />
+                </div>
+            </SettingSection>
+        </div>
+    );
+};
+
+const DevicesTab = () => {
+    const [sessions] = useState([
+        {
+            id: 1, device: '💻 Windows PC', browser: 'Chrome 132', ip: '88.238.xx.xxx',
+            location: 'İstanbul, Türkiye', lastActive: 'Şu an aktif', current: true,
+        },
+        {
+            id: 2, device: '📱 Android', browser: 'Chrome Mobile 144', ip: '88.238.xx.xxx',
+            location: 'İstanbul, Türkiye', lastActive: '2 saat önce', current: false,
+        },
+    ]);
+
+    return (
+        <div>
+            <SettingSection title="Aktif Oturumlar">
+                <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 16 }}>
+                    Hesabınızın giriş yaptığı cihazlar.
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {sessions.map(s => (
+                        <div key={s.id} style={{
+                            padding: '14px 16px', backgroundColor: '#1e1f22', borderRadius: 8,
+                            border: s.current ? '1px solid rgba(59,165,92,0.3)' : '1px solid transparent',
+                        }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <div>
+                                    <div style={{ color: '#fff', fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+                                        {s.device} {s.current && <span style={{ color: '#3ba55c', fontSize: 11, fontWeight: 400 }}>● Şu anki oturum</span>}
+                                    </div>
+                                    <div style={{ color: '#949ba4', fontSize: 13 }}>{s.browser}</div>
+                                    <div style={{ color: '#949ba4', fontSize: 12, marginTop: 4 }}>
+                                        {s.location} • {s.ip} • {s.lastActive}
+                                    </div>
+                                </div>
+                                {!s.current && (
+                                    <button type="button" style={{
+                                        padding: '6px 12px', borderRadius: 4, border: 'none', cursor: 'pointer',
+                                        backgroundColor: 'rgba(218,55,60,0.15)', color: '#da373c', fontSize: 12, fontWeight: 600,
+                                    }}>
+                                        Sonlandır
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </SettingSection>
+            <SettingSection title="">
+                <button type="button" style={{
+                    ...S.actionBtn, backgroundColor: 'rgba(218,55,60,0.1)', color: '#da373c', borderColor: '#da373c',
+                }}>
+                    <FaDesktop style={{ fontSize: 14 }} /> Diğer Tüm Oturumları Sonlandır
+                </button>
+            </SettingSection>
+        </div>
+    );
+};
+
+const AdvancedTab = () => {
+    const [devMode, setDevMode] = useState(() => localStorage.getItem('pawscord_dev_mode') === 'true');
+    const [hwAccel, setHwAccel] = useState(() => localStorage.getItem('pawscord_hw_accel') !== 'false');
+    const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('pawscord_reduced_motion') === 'true');
+
+    const toggle = (key, setter) => (val) => {
+        setter(val);
+        localStorage.setItem(key, val.toString());
+    };
+
+    return (
+        <div>
+            <SettingSection title="Geliştirici Modu">
+                <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 8 }}>
+                    ID'leri kopyalama ve hata ayıklama araçlarına erişim sağlar.
+                </p>
+                <ToggleSwitch label="Geliştirici modunu etkinleştir" value={devMode} onChange={toggle('pawscord_dev_mode', setDevMode)} />
+            </SettingSection>
+            <SettingSection title="Performans">
+                <ToggleSwitch label="Donanım hızlandırma" value={hwAccel} onChange={toggle('pawscord_hw_accel', setHwAccel)} />
+                <ToggleSwitch label="Azaltılmış hareket (animasyonları kapat)" value={reducedMotion} onChange={toggle('pawscord_reduced_motion', setReducedMotion)} />
+            </SettingSection>
+            <SettingSection title="Önbellek">
+                <div style={{ display: 'flex', gap: 8 }}>
+                    <button type="button" onClick={() => {
+                        if (window.caches) {
+                            window.caches.keys().then(names => names.forEach(n => window.caches.delete(n)));
+                        }
+                        localStorage.removeItem('pawscord_msg_cache');
+                        alert('Önbellek temizlendi!');
+                    }} style={S.actionBtn}>
+                        <FaTrash style={{ fontSize: 12 }} /> Önbelleği Temizle
+                    </button>
+                </div>
+            </SettingSection>
+            <SettingSection title="Hata Ayıklama">
+                <div style={{ padding: 12, backgroundColor: '#1e1f22', borderRadius: 8, fontFamily: 'monospace', fontSize: 12, color: '#949ba4' }}>
+                    <div>App Version: {window.__PAWSCORD_VERSION__ || '2.0.0'}</div>
+                    <div>Build: {document.querySelector('script[src*="index-"]')?.src?.match(/index-(\w+)/)?.[1] || 'dev'}</div>
+                    <div>Platform: {navigator.userAgent.includes('Electron') ? 'Desktop' : navigator.userAgent.includes('Android') ? 'Android' : 'Web'}</div>
+                    <div>Service Worker: {navigator.serviceWorker?.controller ? 'Active' : 'Inactive'}</div>
+                    <div>Memory: {navigator.deviceMemory ? `${navigator.deviceMemory} GB` : 'N/A'}</div>
+                </div>
+            </SettingSection>
+        </div>
+    );
+};
+
 const UserSettingsModal = ({ onClose, user }) => {
     const [activeTab, setActiveTab] = useState('account');
 
@@ -249,16 +534,16 @@ const UserSettingsModal = ({ onClose, user }) => {
         switch (activeTab) {
             case 'account': return <AccountTab user={user} />;
             case 'privacy': return <PrivacyTab />;
+            case 'connections': return <ConnectionsTab />;
             case 'appearance': return <AppearanceTab />;
             case 'voice': return <VoiceTab />;
             case 'notifications': return <NotificationsTab />;
             case 'keybinds': return <KeybindsTab />;
-            default: return (
-                <div style={{ color: '#949ba4', textAlign: 'center', padding: 40 }}>
-                    <FaCog style={{ fontSize: 40, marginBottom: 12, opacity: 0.3 }} />
-                    <p>Bu bölüm yakında aktif olacak</p>
-                </div>
-            );
+            case 'language': return <LanguageTab />;
+            case 'activity': return <ActivityTab />;
+            case 'devices': return <DevicesTab />;
+            case 'advanced': return <AdvancedTab />;
+            default: return <AccountTab user={user} />;
         }
     };
 

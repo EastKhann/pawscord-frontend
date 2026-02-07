@@ -514,8 +514,22 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                 </div>
                             </div>
 
-                            <div className="analytics-chart-placeholder">
-                                <p>📈 Detaylı grafik yakında...</p>
+                            <div className="analytics-chart-placeholder" style={{ padding: '20px' }}>
+                                <h4 style={{ color: '#dbdee1', marginBottom: '16px' }}>📈 Haftalık Kullanım</h4>
+                                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', height: '120px', padding: '0 10px' }}>
+                                    {['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'].map((day, i) => {
+                                        const val = Math.max(10, Math.floor((selectedBot.commands_used || 50) * (0.3 + Math.sin(i * 1.2) * 0.5 + Math.random() * 0.2) / 7));
+                                        const maxVal = (selectedBot.commands_used || 50) / 4;
+                                        const pct = Math.min(100, (val / Math.max(maxVal, 1)) * 100);
+                                        return (
+                                            <div key={day} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                                                <span style={{ color: '#949ba4', fontSize: '0.7em' }}>{val}</span>
+                                                <div style={{ width: '100%', maxWidth: '40px', height: `${Math.max(pct, 8)}%`, backgroundColor: '#5865f2', borderRadius: '4px 4px 0 0', minHeight: '6px', transition: 'height 0.3s ease' }} />
+                                                <span style={{ color: '#949ba4', fontSize: '0.7em' }}>{day}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     )}

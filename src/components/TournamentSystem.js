@@ -230,7 +230,7 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                         type="text"
                         placeholder="Turnuva Adı"
                         value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         style={styles.input}
                         required
                     />
@@ -238,13 +238,13 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                         type="text"
                         placeholder="Oyun"
                         value={formData.game}
-                        onChange={(e) => setFormData({...formData, game: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, game: e.target.value })}
                         style={styles.input}
                         required
                     />
                     <select
                         value={formData.max_participants}
-                        onChange={(e) => setFormData({...formData, max_participants: parseInt(e.target.value)})}
+                        onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) })}
                         style={styles.input}
                     >
                         <option value={4}>4 Kişi</option>
@@ -255,7 +255,7 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                     <input
                         type="datetime-local"
                         value={formData.start_date}
-                        onChange={(e) => setFormData({...formData, start_date: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                         style={styles.input}
                         required
                     />
@@ -263,14 +263,14 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                         type="text"
                         placeholder="Ödül (opsiyonel)"
                         value={formData.prize}
-                        onChange={(e) => setFormData({...formData, prize: e.target.value})}
+                        onChange={(e) => setFormData({ ...formData, prize: e.target.value })}
                         style={styles.input}
                     />
                     <textarea
                         placeholder="Kurallar"
                         value={formData.rules}
-                        onChange={(e) => setFormData({...formData, rules: e.target.value})}
-                        style={{...styles.input, minHeight: '100px'}}
+                        onChange={(e) => setFormData({ ...formData, rules: e.target.value })}
+                        style={{ ...styles.input, minHeight: '100px' }}
                     />
                     <div style={styles.modalButtons}>
                         <button type="button" onClick={onClose} style={styles.cancelButton}>
@@ -307,7 +307,7 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
 
     return (
         <div style={styles.modalOverlay}>
-            <div style={{...styles.modal, maxWidth: '800px'}}>
+            <div style={{ ...styles.modal, maxWidth: '800px' }}>
                 <div style={styles.modalHeader}>
                     <h3 style={styles.modalTitle}>{tournament.name}</h3>
                     <button onClick={onClose} style={styles.modalClose}>
@@ -337,8 +337,44 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
                     {bracket && (
                         <div style={styles.detailSection}>
                             <h4>Eşleşmeler</h4>
-                            {/* Bracket visualization would go here */}
-                            <div style={styles.bracketInfo}>Bracket görseli yakında eklenecek</div>
+                            {(() => {
+                                const rounds = {};
+                                (Array.isArray(bracket) ? bracket : []).forEach(m => {
+                                    const r = m.round || 1;
+                                    if (!rounds[r]) rounds[r] = [];
+                                    rounds[r].push(m);
+                                });
+                                const roundKeys = Object.keys(rounds).sort((a, b) => a - b);
+                                return (
+                                    <div style={{ display: 'flex', gap: '20px', overflowX: 'auto', padding: '12px 0' }}>
+                                        {roundKeys.map(rk => (
+                                            <div key={rk} style={{ minWidth: '200px', flex: '0 0 auto' }}>
+                                                <div style={{ color: '#5865f2', fontWeight: 600, fontSize: '0.85em', marginBottom: '10px', textAlign: 'center' }}>
+                                                    {roundKeys.length === 1 ? 'Final' : `Tur ${rk}`}
+                                                </div>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                                    {rounds[rk].map(match => (
+                                                        <div key={match.id} style={{ backgroundColor: '#1e1f22', borderRadius: '8px', overflow: 'hidden', border: match.status === 'completed' ? '1px solid #23a559' : '1px solid #3f4147' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: match.winner && match.winner === match.participant1?.user_id ? 'rgba(35,165,89,0.1)' : 'transparent', borderBottom: '1px solid #2b2d31' }}>
+                                                                <span style={{ color: '#dbdee1', fontSize: '0.85em', fontWeight: match.winner === match.participant1?.user_id ? 700 : 400 }}>
+                                                                    {match.participant1?.username || 'TBD'}
+                                                                </span>
+                                                                <span style={{ color: '#949ba4', fontSize: '0.8em', fontWeight: 600 }}>{match.score1 ?? '-'}</span>
+                                                            </div>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: match.winner && match.winner === match.participant2?.user_id ? 'rgba(35,165,89,0.1)' : 'transparent' }}>
+                                                                <span style={{ color: '#dbdee1', fontSize: '0.85em', fontWeight: match.winner === match.participant2?.user_id ? 700 : 400 }}>
+                                                                    {match.participant2?.username || 'TBD'}
+                                                                </span>
+                                                                <span style={{ color: '#949ba4', fontSize: '0.8em', fontWeight: 600 }}>{match.score2 ?? '-'}</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })()}
                         </div>
                     )}
 

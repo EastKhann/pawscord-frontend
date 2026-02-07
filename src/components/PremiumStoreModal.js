@@ -548,8 +548,30 @@ const PremiumStoreModal = ({ onClose }) => {
                             </div>
 
                             <button
-                                onClick={() => alert('Server boost özelliği yakında!')}
+                                onClick={async () => {
+                                    const serverId = prompt('Boost yapmak istediğin sunucu ID\'sini gir:');
+                                    if (!serverId) return;
+                                    setLoading(true);
+                                    try {
+                                        const res = await fetch(`${API_BASE_URL}/api/servers/boost/`, {
+                                            method: 'POST',
+                                            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ server_id: serverId, level: 1 })
+                                        });
+                                        const data = await res.json();
+                                        if (data.status === 'boosted') {
+                                            toast.success('🚀 Sunucu başarıyla boost edildi!');
+                                        } else {
+                                            toast.error(`❌ ${data.error || 'Boost yapılamadı'}`);
+                                        }
+                                    } catch (err) {
+                                        toast.error('❌ Bir hata oluştu');
+                                    } finally {
+                                        setLoading(false);
+                                    }
+                                }}
                                 style={styles.boostPurchaseButton}
+                                disabled={loading}
                             >
                                 <span style={styles.boostButtonIcon}>🚀</span>
                                 Boost Satın Al (19.99 TL/ay)
