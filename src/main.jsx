@@ -1,8 +1,8 @@
 // frontend/src/index.js
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import VerifyEmailPage from './VerifyEmailPage';
@@ -22,8 +22,40 @@ import { GlobalWebSocketProvider } from './GlobalWebSocketContext';
 import SignalNotification from './components/SignalNotification';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import PageWrapper from './components/PageWrapper';
-import { AuthProvider } from './AuthContext';
+import { AuthProvider, useAuth } from './AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
+
+// 🔐 Whitelist Guard — sadece is_whitelisted kullanıcılar erişebilir
+const WhitelistGuard = ({ children }) => {
+    const { token, isAuthenticated } = useAuth();
+    const [allowed, setAllowed] = useState(null); // null = loading
+
+    useEffect(() => {
+        if (!isAuthenticated || !token) {
+            setAllowed(false);
+            return;
+        }
+        (async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/user/profile/`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setAllowed(!!data.is_whitelisted);
+                } else {
+                    setAllowed(false);
+                }
+            } catch {
+                setAllowed(false);
+            }
+        })();
+    }, [isAuthenticated, token]);
+
+    if (allowed === null) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#1e1f22', color: '#f0b232', fontSize: 18 }}>⏳ Kontrol ediliyor...</div>;
+    if (!allowed) return <Navigate to="/" replace />;
+    return children;
+};
 
 import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config';
 
@@ -230,11 +262,13 @@ const RootApp = () => {
                                     </PageWrapper>
                                 } />
 
-                                {/* Kripto Sinyaller (Yeni) */}
+                                {/* Kripto Sinyaller (Sadece Whitelist) */}
                                 <Route path="/crypto-analysis" element={
                                     <PageWrapper>
                                         <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <CryptoSignals />
+                                            <WhitelistGuard>
+                                                <CryptoSignals />
+                                            </WhitelistGuard>
                                         </React.Suspense>
                                     </PageWrapper>
                                 } />

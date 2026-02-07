@@ -153,16 +153,12 @@ const CryptoSignals = () => {
                 const files = json.files || [];
                 setAvailableFiles(files);
                 if (files.length > 0) {
-                    // signal_export varsa onu seç, yoksa ilk dosyayı
-                    const defaultFile = files.find(f => f.key === 'signal_export') || files[0];
-                    setActiveFileKey(defaultFile.key);
-                } else {
-                    // Hiç dosya yok — varsayılanı dene
-                    setActiveFileKey('signal_export');
+                    // İlk dosyayı seç
+                    setActiveFileKey(files[0].key);
                 }
             } catch (err) {
                 console.error('Signal list fetch error:', err);
-                setActiveFileKey('signal_export');
+                setError('Sinyal dosyaları yüklenemedi');
             }
         })();
     }, []);
@@ -174,7 +170,7 @@ const CryptoSignals = () => {
         try {
             if (tableRef.current) scrollRef.current = tableRef.current.scrollTop;
 
-            const fileParam = key && key !== 'signal_export' ? `&file=${key}` : '';
+            const fileParam = `&file=${key}`;
             const res = await fetch(`${SIGNALS_URL}?t=${Date.now()}${fileParam}`);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const json = await res.json();
@@ -202,10 +198,11 @@ const CryptoSignals = () => {
         }
     }, [activeFileKey]);
 
-    // activeFileKey değişince veri çek
+    // activeFileKey değişince veri çek ve tab'ı sıfırla
     useEffect(() => {
         if (activeFileKey) {
             setLoading(true);
+            setActiveTab(null); // Yeni dosya gelince tab sıfırla — ilk tab otomatik seçilir
             fetchData(activeFileKey);
         }
     }, [activeFileKey]);
@@ -240,10 +237,11 @@ const CryptoSignals = () => {
         return currentTab?.data || [];
     }, [currentTab]);
 
-    // İlk tab'ı otomatik seç (data yüklenince)
+    // İlk tab'ı otomatik seç (data yüklenince veya mevcut tab geçersizse)
     useEffect(() => {
-        if (allTabs && Object.keys(allTabs).length > 0 && !activeTab) {
-            setActiveTab(Object.keys(allTabs)[0]);
+        const tabKeys = Object.keys(allTabs);
+        if (tabKeys.length > 0 && (!activeTab || !allTabs[activeTab])) {
+            setActiveTab(tabKeys[0]);
         }
     }, [allTabs, activeTab]);
 
@@ -400,6 +398,28 @@ const CryptoSignals = () => {
                     </button>
                 </div>
             </header>
+
+            {/* ====== DOSYA SEKMELERİ (İşlem Sayısı) ====== */}
+            {availableFiles.length > 1 && (
+                <div style={S.fileTabBar}>
+                    {availableFiles.map(f => {
+                        const isActive = activeFileKey === f.key;
+                        return (
+                            <button
+                                key={f.key}
+                                onClick={() => { if (!isActive) { setActiveFileKey(f.key); } }}
+                                style={{
+                                    ...S.fileTabBtn,
+                                    ...(isActive ? S.fileTabBtnActive : {})
+                                }}
+                            >
+                                📊 {f.label}
+                                {isActive && loading && <span className="crypto-spin" style={{ marginLeft: 6, fontSize: '0.85em' }}>⏳</span>}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
 
             {/* ====== MODE TOGGLE (Balance / Winrate) ====== */}
             <div style={S.modeToggle}>
@@ -925,25 +945,22 @@ const S = {
         fontSize: '0.85em', transition: 'background-color 0.2s'
     },
     modeToggle: { display: 'flex', gap: 8, marginBottom: 12 },
-    // 🔥 İşlem Sayısı (Trade Count) Parent Tabs
-    tradeCountBar: {
-        display: 'flex', gap: 6, marginBottom: 12, alignItems: 'center',
-        overflowX: 'auto', paddingBottom: 4, paddingTop: 2,
-        borderBottom: '1px solid #2f3136', paddingBottom: 10
+    // � Dosya Sekmeleri (İşlem Sayısı)
+    fileTabBar: {
+        display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center',
+        overflowX: 'auto', paddingBottom: 8, paddingTop: 2,
+        borderBottom: '2px solid #2f3136'
     },
-    tradeCountLabel: {
-        color: '#949ba4', fontSize: '0.82em', fontWeight: 600,
-        whiteSpace: 'nowrap', marginRight: 4, flexShrink: 0
+    fileTabBtn: {
+        backgroundColor: '#2b2d31', border: '2px solid #40444b',
+        color: '#949ba4', padding: '10px 20px', borderRadius: 10,
+        cursor: 'pointer', fontWeight: 700, fontSize: '0.9em',
+        whiteSpace: 'nowrap', transition: 'all 0.2s', flexShrink: 0,
+        display: 'flex', alignItems: 'center', gap: 6
     },
-    tradeCountBtn: {
-        backgroundColor: '#2b2d31', border: '1px solid #40444b',
-        color: '#949ba4', padding: '6px 14px', borderRadius: 8,
-        cursor: 'pointer', fontWeight: 600, fontSize: '0.82em',
-        whiteSpace: 'nowrap', transition: 'all 0.2s', flexShrink: 0
-    },
-    tradeCountBtnActive: {
+    fileTabBtnActive: {
         backgroundColor: '#5865f2', borderColor: '#5865f2',
-        color: '#fff', boxShadow: '0 2px 10px rgba(88,101,242,0.3)'
+        color: '#fff', boxShadow: '0 4px 14px rgba(88,101,242,0.35)'
     },
     modeBtn: {
         flex: 1, padding: '10px 16px', borderRadius: 10,
