@@ -23,9 +23,9 @@ export default defineConfig({
     : (process.env.VITE_CDN_URL || '/'),
 
   plugins: [
-    // ⚡ React with classic JSX runtime - SES/lockdown uyumluluğu için
+    // ⚡ React with automatic JSX runtime (React 19 default)
     react({
-      jsxRuntime: 'classic',
+      jsxRuntime: 'automatic',
     }),
 
     // 📊 Bundle analyzer - generate stats.html after build
@@ -346,8 +346,8 @@ export default defineConfig({
     port: 5173,
   },
 
-  // Environment variables prefix
-  envPrefix: 'REACT_APP_',
+  // Environment variables prefix (Vite uses VITE_ by default)
+  envPrefix: 'VITE_',
 
   // Define global constants - 🔥 VERSION ARTIK DİNAMİK!
   define: {

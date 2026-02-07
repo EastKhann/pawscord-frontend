@@ -792,30 +792,36 @@ const MessageInput = ({
                             <FaMicrophone />
                         </button>
                     ) : isRecording ? (
-                        <div style={styles.recordingContainer}>
-                            {/* Pulsing red dot + timer */}
+                        <div style={styles.recordingContainer} className="rec-container-glow">
+                            {/* Waveform background animation */}
+                            <div style={styles.waveformBg} className="rec-waveform">
+                                {[...Array(12)].map((_, i) => (
+                                    <div key={i} className="rec-wave-bar" style={{
+                                        animationDelay: `${i * 0.08}s`,
+                                        opacity: 0.4 + Math.random() * 0.6,
+                                    }} />
+                                ))}
+                            </div>
+
+                            {/* Left: pulsing dot + timer */}
                             <div style={styles.recLeft}>
                                 <div style={styles.recordingDot} className="rec-pulse" />
                                 <span style={styles.recordingTime}>{formatTime(recordingTime)}</span>
                             </div>
 
                             {!isRecordingLocked ? (
-                                /* Slide-to-lock indicator with animated mic icon */
-                                <div
-                                    style={{
-                                        ...styles.slideToLock,
-                                        transform: `translateY(${-slideProgress * 40}px)`,
-                                        opacity: 1 - slideProgress * 0.3,
-                                    }}
-                                    className="slide-to-lock"
-                                >
+                                /* Slide-to-lock indicator */
+                                <div style={styles.slideToLock}>
                                     <div
                                         style={{
                                             ...styles.slideMicCircle,
                                             backgroundColor: slideProgress > 0.7
                                                 ? '#43b581'
                                                 : `rgba(237, 66, 69, ${0.6 + slideProgress * 0.4})`,
-                                            transform: `scale(${1 + slideProgress * 0.3})`,
+                                            transform: `scale(${1 + slideProgress * 0.3}) translateY(${-slideProgress * 20}px)`,
+                                            boxShadow: slideProgress > 0.5
+                                                ? '0 0 12px rgba(67,181,129,0.5)'
+                                                : '0 0 8px rgba(237,66,69,0.3)',
                                         }}
                                     >
                                         {slideProgress > 0.7 ? '🔒' : <FaMicrophone style={{ color: 'white', fontSize: '14px' }} />}
@@ -824,6 +830,7 @@ const MessageInput = ({
                                         <div style={{
                                             ...styles.slideTrackFill,
                                             height: `${slideProgress * 100}%`,
+                                            backgroundColor: slideProgress > 0.7 ? '#43b581' : '#ed4245',
                                         }} />
                                     </div>
                                     <span style={{
@@ -1098,32 +1105,49 @@ const styles = {
     recordingContainer: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px',
+        gap: '12px',
         position: 'relative',
         flex: 1,
-        backgroundColor: 'rgba(237, 66, 69, 0.08)',
-        borderRadius: '8px',
-        padding: '8px 12px',
-        border: '1px solid rgba(237, 66, 69, 0.2)',
-        transition: 'all 0.2s ease',
+        backgroundColor: 'rgba(237, 66, 69, 0.06)',
+        borderRadius: '12px',
+        padding: '10px 16px',
+        border: '1px solid rgba(237, 66, 69, 0.25)',
+        transition: 'all 0.3s ease',
+        overflow: 'hidden',
+    },
+    waveformBg: {
+        position: 'absolute',
+        left: '80px',
+        right: '120px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '3px',
+        height: '24px',
+        pointerEvents: 'none',
+        zIndex: 0,
     },
     recLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: '10px',
+        zIndex: 1,
     },
     recordingDot: {
-        width: '10px',
-        height: '10px',
+        width: '12px',
+        height: '12px',
         borderRadius: '50%',
         backgroundColor: '#ed4245',
     },
     recordingTime: {
-        fontSize: '14px',
+        fontSize: '15px',
         color: '#ed4245',
-        fontWeight: '600',
+        fontWeight: '700',
         fontVariantNumeric: 'tabular-nums',
-        minWidth: '40px',
+        minWidth: '44px',
+        letterSpacing: '0.5px',
     },
     slideToLock: {
         display: 'flex',
@@ -1131,24 +1155,24 @@ const styles = {
         alignItems: 'center',
         gap: '4px',
         marginLeft: 'auto',
-        transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+        zIndex: 1,
         cursor: 'default',
     },
     slideMicCircle: {
-        width: '32px',
-        height: '32px',
+        width: '36px',
+        height: '36px',
         borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'background-color 0.15s ease, transform 0.15s ease',
+        transition: 'all 0.15s ease',
         fontSize: '14px',
     },
     slideTrack: {
         width: '4px',
-        height: '20px',
+        height: '22px',
         borderRadius: '2px',
-        backgroundColor: 'rgba(114, 118, 125, 0.3)',
+        backgroundColor: 'rgba(114, 118, 125, 0.25)',
         overflow: 'hidden',
         position: 'relative',
     },
@@ -1157,13 +1181,12 @@ const styles = {
         bottom: 0,
         left: 0,
         width: '100%',
-        backgroundColor: '#ed4245',
         borderRadius: '2px',
         transition: 'height 0.05s linear',
     },
     slideLabel: {
         fontSize: '10px',
-        fontWeight: '600',
+        fontWeight: '700',
         textTransform: 'uppercase',
         letterSpacing: '0.5px',
         transition: 'color 0.15s ease',
@@ -1172,44 +1195,47 @@ const styles = {
     lockedActions: {
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: '10px',
         marginLeft: 'auto',
+        zIndex: 1,
     },
     lockedBadge: {
-        fontSize: '11px',
+        fontSize: '12px',
         color: '#43b581',
         backgroundColor: 'rgba(67, 181, 129, 0.15)',
-        padding: '3px 8px',
-        borderRadius: '10px',
-        fontWeight: '600',
+        padding: '4px 10px',
+        borderRadius: '12px',
+        fontWeight: '700',
+        border: '1px solid rgba(67,181,129,0.3)',
     },
     cancelRecButton: {
         display: 'flex',
         alignItems: 'center',
-        gap: '4px',
-        padding: '6px 12px',
-        backgroundColor: 'rgba(237, 66, 69, 0.15)',
+        gap: '5px',
+        padding: '7px 14px',
+        backgroundColor: 'rgba(237, 66, 69, 0.12)',
         color: '#ed4245',
         border: '1px solid rgba(237, 66, 69, 0.3)',
-        borderRadius: '6px',
+        borderRadius: '8px',
         cursor: 'pointer',
-        fontSize: '12px',
+        fontSize: '13px',
         fontWeight: '600',
         transition: 'all 0.15s',
     },
     sendVoiceButton: {
         display: 'flex',
         alignItems: 'center',
-        gap: '4px',
-        padding: '6px 12px',
+        gap: '5px',
+        padding: '7px 14px',
         backgroundColor: '#5865f2',
         color: 'white',
         border: 'none',
-        borderRadius: '6px',
+        borderRadius: '8px',
         cursor: 'pointer',
-        fontSize: '12px',
+        fontSize: '13px',
         fontWeight: '600',
         transition: 'all 0.15s',
+        boxShadow: '0 2px 8px rgba(88,101,242,0.3)',
     },
     // 🆕 Pending Files Styles
     pendingFilesContainer: {
@@ -1345,19 +1371,39 @@ styleSheet.textContent = `
         to { opacity: 1; transform: translateY(0); }
     }
     
-    @keyframes slideUp {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
+    /* 🎤 Recording container glow */
+    .rec-container-glow {
+        animation: recGlow 2s ease-in-out infinite;
     }
-    
-    /* 🎤 Recording pulse animation */
+    @keyframes recGlow {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(237, 66, 69, 0); border-color: rgba(237, 66, 69, 0.25); }
+        50% { box-shadow: 0 0 16px 2px rgba(237, 66, 69, 0.12); border-color: rgba(237, 66, 69, 0.45); }
+    }
+
+    /* 🎤 Recording pulse dot */
     .rec-pulse {
-        animation: recPulse 1.2s ease-in-out infinite;
+        animation: recPulse 1s ease-in-out infinite;
     }
     @keyframes recPulse {
-        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(237, 66, 69, 0.5); }
-        50% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(237, 66, 69, 0); }
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(237, 66, 69, 0.6); }
+        50% { transform: scale(1.2); box-shadow: 0 0 0 8px rgba(237, 66, 69, 0); }
         100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(237, 66, 69, 0); }
+    }
+    
+    /* 🎤 Waveform bars */
+    .rec-waveform {
+        display: flex !important;
+    }
+    .rec-wave-bar {
+        width: 3px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, #ed4245 0%, #f04747 50%, #ed4245 100%);
+        animation: waveBar 0.8s ease-in-out infinite alternate;
+    }
+    @keyframes waveBar {
+        0% { height: 4px; opacity: 0.3; }
+        50% { height: 18px; opacity: 0.7; }
+        100% { height: 6px; opacity: 0.4; }
     }
     
     /* 🎤 Mic button hover/active states */
@@ -1366,18 +1412,9 @@ styleSheet.textContent = `
         background: rgba(237, 66, 69, 0.1) !important;
     }
     .mic-button:active {
-        transform: scale(1.2);
+        transform: scale(1.15);
         color: #ed4245 !important;
         background: rgba(237, 66, 69, 0.2) !important;
-    }
-    
-    /* 🎤 Slide-to-lock bounce hint */
-    .slide-to-lock {
-        animation: lockHint 2s ease-in-out infinite;
-    }
-    @keyframes lockHint {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-6px); }
     }
     
     textarea::-webkit-scrollbar {
