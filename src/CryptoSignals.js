@@ -425,29 +425,6 @@ const CryptoSignals = () => {
                 </button>
             </div>
 
-            {/* ====== İŞLEM SAYISI TABS (Parent - dosya seçimi) ====== */}
-            {availableFiles.length > 0 && (
-                <div style={S.tradeCountBar}>
-                    <span style={S.tradeCountLabel}>📈 İşlem Sayısı:</span>
-                    {availableFiles.map(f => {
-                        const isActive = activeFileKey === f.key;
-                        return (
-                            <button
-                                key={f.key}
-                                onClick={() => { if (!isActive) setActiveFileKey(f.key); }}
-                                style={{
-                                    ...S.tradeCountBtn,
-                                    ...(isActive ? S.tradeCountBtnActive : {})
-                                }}
-                            >
-                                {f.label}
-                                {isActive && loading && <span className="crypto-spin" style={{ marginLeft: 4, fontSize: '0.8em' }}>⏳</span>}
-                            </button>
-                        );
-                    })}
-                </div>
-            )}
-
             {/* ====== ÖZET İSTATİSTİK BAR ====== */}
             {stats && (
                 <div style={S.statsBar}>
