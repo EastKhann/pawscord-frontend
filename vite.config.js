@@ -45,14 +45,16 @@ export default defineConfig({
         // 🔥 skipWaiting + clientsClaim: Yeni SW hemen devreye girsin
         skipWaiting: true,
         clientsClaim: true,
-        // Sadece kritik dosyaları precache'le - JS/CSS hariç (hash'li, runtime'da yüklensin)
-        globPatterns: ['**/*.{html,ico,png,svg,webp}'],
+        // ⚠️ HTML precache'den ÇIKARILDI - stale index.html sorunu çözüldü
+        // JS/CSS zaten hariç (hash'li, runtime'da yüklensin)
+        globPatterns: ['**/*.{ico,png,svg,webp}'],
         // Büyük dosyaları precache'den hariç tut
-        globIgnores: ['**/bot/*.png', '**/static/js/*.js', '**/static/css/*.css'],
+        globIgnores: ['**/bot/*.png', '**/static/js/*.js', '**/static/css/*.css', '**/*.html'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
         // Eski cache'leri otomatik temizle
         cleanupOutdatedCaches: true,
-        // 🔥 Eski service-worker.js navigasyonlarını engelle
+        // 🔥 navigateFallback kapatıldı - index.html her zaman sunucudan alınacak
+        navigateFallback: null,
         navigationPreload: false,
         runtimeCaching: [
           // 🔥 JS/CSS: NetworkFirst - her zaman güncel dosyaları yükle, offline ise cache'den
