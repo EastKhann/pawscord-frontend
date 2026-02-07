@@ -2443,6 +2443,8 @@ const AppContent = () => {
         }
 
         let intentionalClose = false;
+        let reconnectAttempts = 0;
+        const MAX_RECONNECT_ATTEMPTS = 10;
 
         const createSocket = () => {
             const tok = tokenRef.current || currentToken;
@@ -2461,6 +2463,7 @@ const AppContent = () => {
             socket.onopen = () => {
                 console.log('[StatusWS] Connected successfully');
                 setGlobalWsConnected(true);
+                reconnectAttempts = 0; // Reset on successful connection
             };
 
             socket.onerror = (error) => {
@@ -2472,13 +2475,19 @@ const AppContent = () => {
                 setGlobalWsConnected(false);
                 // Auto-reconnect after 5s if NOT intentional close
                 if (!intentionalClose && event.code !== 1000 && event.code !== 1001) {
-                    console.log('[StatusWS] Auto-reconnecting in 5s...');
+                    if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+                        console.warn(`[StatusWS] Max reconnect attempts (${MAX_RECONNECT_ATTEMPTS}) reached, giving up`);
+                        return;
+                    }
+                    reconnectAttempts++;
+                    const delay = Math.min(5000 * Math.pow(2, reconnectAttempts - 1), 60000); // 5s, 10s, 20s, 40s, 60s max
+                    console.log(`[StatusWS] Auto-reconnecting in ${delay / 1000}s... (attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`);
                     statusWsReconnectRef.current = setTimeout(() => {
                         if (!intentionalClose) {
                             const newSocket = createSocket();
                             if (newSocket) statusWsRef.current = newSocket;
                         }
-                    }, 5000);
+                    }, delay);
                 }
             };
 

@@ -15,10 +15,17 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
     }, [serverId]);
 
     const loadExistingVanity = async () => {
+        if (!serverId) { setLoadingExisting(false); return; }
         setLoadingExisting(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/vanity/get/${serverId}/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/vanity/get/${serverId}/`);
             if (res.ok) {
+                const contentType = res.headers.get('content-type') || '';
+                if (!contentType.includes('application/json')) {
+                    console.warn('[Vanity] Non-JSON response:', contentType);
+                    setExistingVanity(null);
+                    return;
+                }
                 const data = await res.json();
                 if (data.exists) {
                     setExistingVanity(data);
@@ -47,7 +54,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
 
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/vanity/create/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/vanity/create/`, {
                 method: 'POST',
                 body: JSON.stringify({
                     path: vanityPath,
@@ -78,7 +85,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
 
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/vanity/delete/${serverId}/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/vanity/delete/${serverId}/`, {
                 method: 'DELETE'
             });
 
