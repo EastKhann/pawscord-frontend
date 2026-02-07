@@ -812,6 +812,7 @@ const AppContent = () => {
 
     const ws = useRef(null);
     const statusWsRef = useRef(null);
+    const activeChatRef = useRef(activeChat); // 🚨 PERF FIX: Ref for StatusWS to avoid reconnect on chat switch
     const messagesEndRef = useRef(null);
     const fileInputRefNormal = useRef(null);
     const richTextRef = useRef(null);
@@ -819,7 +820,10 @@ const AppContent = () => {
     const searchInputRef = useRef(null);
     const historyCacheRef = useRef({});
 
-    // 🔥 Admin kontrolü - Eastkhan her zaman admin, diğerleri için role kontrolü
+    // � PERF FIX: Keep activeChatRef in sync (no re-render / no WS reconnect)
+    useEffect(() => { activeChatRef.current = activeChat; }, [activeChat]);
+
+    // �🔥 Admin kontrolü - Eastkhan her zaman admin, diğerleri için role kontrolü
     const isAdmin = username === 'Eastkhan' || username === 'PawPaw' || currentUserProfile?.role === 'admin';
 
     // 🔥 YENİ: Kullanıcı izinleri - context menu için
@@ -2268,25 +2272,8 @@ const AppContent = () => {
     // ⚠️ fetchMessageHistory dependency'den KALDIRILDI - useCallback değil, fonksiyon tanımı
     // connectWebSocket useCallback olduğu için güvenle eklenebilir
 
-    // 🔥 REAL-TIME SERVER STRUCTURE UPDATE
-    useEffect(() => {
-        if (globalData?.type === 'server_structure_update') {
-            console.log("🔄 Real-time Update: Refetching Server List...");
-            // Re-fetch only the server structure part of fetchInit
-            const fetchCategories = async () => {
-                try {
-                    const res = await fetchWithAuth(ROOM_LIST_URL);
-                    if (res.ok) {
-                        const data = await res.json();
-                        setCategories(data);
-                    }
-                } catch (e) {
-                    console.error("Real-time Update Failed:", e);
-                }
-            };
-            fetchCategories();
-        }
-    }, [globalData, fetchWithAuth]);
+    // � PERF: server_structure_update is now handled directly in StatusWS onmessage handler above
+    // This duplicate useEffect was causing EXTRA API calls on every structure update
 
 
     // 🔥 PERIODIC ACTIVITY POLLING (Spotify/Steam)
@@ -2514,14 +2501,21 @@ const AppContent = () => {
 
                 if (data.type === 'global_message_notification' && data.username !== username) {
                     const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
-                    const currentKey = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
+                    const chat = activeChatRef.current;
+                    const currentKey = chat.type === 'room' ? `room-${chat.id}` : `dm-${chat.id}`;
                     if (key !== currentKey) incrementUnread(key);
                 }
 
                 // ✨ Handle Real-time Server/Channel Updates
                 if (data.type === 'server_structure_update') {
-                    console.log("Server structure update received, refreshing...");
-                    fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                    // 🚀 PERF: WS already sends categories data — use it directly instead of re-fetching
+                    if (data.categories && Array.isArray(data.categories)) {
+                        console.log("Server structure update received via WS, using inline data");
+                        setCategories(data.categories);
+                    } else {
+                        console.log("Server structure update received, refetching...");
+                        fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                    }
                 }
             } catch (parseError) {
                 console.error('❌ [StatusWS] Failed to parse message:', parseError);
@@ -2534,7 +2528,7 @@ const AppContent = () => {
                 // Ignore close errors
             }
         };
-    }, [isAuthenticated, isInitialDataLoaded, username, token, activeChat]);
+    }, [isAuthenticated, isInitialDataLoaded, username, token]);
 
     // 🎤 SESLİ SOHBETE GİRİNCE CHAT ALANINI OTOMATİK DEĞİŞTİR
     useEffect(() => {
