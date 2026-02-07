@@ -30,6 +30,12 @@ export const API_URL_BASE_STRING = (() => {
 
 export const API_BASE_URL = `${API_URL_BASE_STRING}/api`;
 export const ABSOLUTE_HOST_URL = API_URL_BASE_STRING;
+
+// 🔥 ErrorBoundary gibi class component'ler import edemez, global'e koy
+if (typeof window !== 'undefined') {
+    window.__PAWSCORD_API_BASE__ = `${API_URL_BASE_STRING}/api`;
+}
+
 // 🔥 NEW: Media files için ayrı URL (her zaman production)
 export const MEDIA_BASE_URL = (isNative || isElectron || !window.location.hostname.includes('localhost'))
     ? "https://media.pawscord.com"

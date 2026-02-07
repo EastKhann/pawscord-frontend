@@ -34,9 +34,11 @@ class ErrorBoundary extends React.Component {
       errorInfo
     });
 
-    // 🔥 Error logging - Backend'e gönder
+    // 🔥 Error logging - Backend'e gönder (API domain üzerinden)
     try {
-      fetch('/api/errors/report/', {
+      const apiBase = (typeof window !== 'undefined' && window.__PAWSCORD_API_BASE__)
+        || 'https://api.pawscord.com/api';
+      fetch(`${apiBase}/errors/report/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

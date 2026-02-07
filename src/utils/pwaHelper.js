@@ -23,33 +23,53 @@ export const registerServiceWorker = async () => {
 
     if ('serviceWorker' in navigator) {
         try {
-            const registration = await navigator.serviceWorker.register('/service-worker.js', {
-                scope: '/'
-            });
-
-            console.log('✅ Service Worker registered:', registration.scope);
-
-            // Update checker
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New Service Worker installing...');
-
-                newWorker.addEventListener('statechange', () => {
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Yeni versiyon hazır!
-                        showUpdateNotification();
+            // 🔥 Eski service-worker.js'yi unregister et (workbox sw.js kullanılıyor)
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (const reg of registrations) {
+                if (reg.active && reg.active.scriptURL.includes('service-worker.js')) {
+                    console.log('🗑️ Eski service-worker.js unregister ediliyor...');
+                    await reg.unregister();
+                    // Eski cache'leri temizle
+                    const cacheNames = await caches.keys();
+                    for (const name of cacheNames) {
+                        if (name.includes('pawscord-v')) {
+                            console.log('🗑️ Eski cache siliniyor:', name);
+                            await caches.delete(name);
+                        }
                     }
-                });
-            });
+                }
+            }
 
-            // Periyodik update kontrolü (her 1 saatte)
-            setInterval(() => {
-                registration.update();
-            }, 60 * 60 * 1000);
+            // ✅ Workbox sw.js zaten registerSW.js tarafından register ediliyor
+            // Burada sadece update kontrolü yapıyoruz
+            const registration = await navigator.serviceWorker.getRegistration('/');
+            if (registration) {
+                console.log('✅ Service Worker active:', registration.scope);
+
+                // Update checker
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('🔄 New Service Worker installing...');
+
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Yeni versiyon hazır — otomatik aktive et
+                            newWorker.postMessage({ type: 'SKIP_WAITING' });
+                            console.log('🔄 Yeni SW aktive ediliyor, sayfa yenilenecek...');
+                            window.location.reload();
+                        }
+                    });
+                });
+
+                // Periyodik update kontrolü (her 30 dakikada)
+                setInterval(() => {
+                    registration.update();
+                }, 30 * 60 * 1000);
+            }
 
             return registration;
         } catch (error) {
-            console.error('❌ Service Worker registration failed:', error);
+            console.error('❌ Service Worker error:', error);
             return null;
         }
     }

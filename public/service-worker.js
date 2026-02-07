@@ -1,48 +1,32 @@
 // frontend/public/service-worker.js
 /**
- * 🔧 Service Worker - PWA Cache Stratejisi (OPTIMIZED)
- * Aggressive caching for performance
+ * � DEPRECATED: Bu eski service worker.
+ * Workbox sw.js kullanılıyor. Bu dosya kendini unregister eder.
  */
 
-const CACHE_NAME = 'pawscord-v1.1.134-perf-webp';
-const CRITICAL_CACHE = [
-    '/',
-    '/index.html',
-    '/offline.html',
-    '/logo192.webp',
-    '/logo512.webp',
-    '/logo.webp'
-];
-
-// Install event - cache critical files ONLY
-self.addEventListener('install', event => {
-    console.log('🔧 SW installing (v1.1.134)');
-
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => {
-                console.log('📦 Critical cache opened');
-                return cache.addAll(CRITICAL_CACHE);
-            })
-            .then(() => self.skipWaiting()) // Activate immediately
-    );
+// Install → hemen aktive ol
+self.addEventListener('install', () => {
+    console.log('🔥 [OLD-SW] Self-destructing service-worker.js installing...');
+    self.skipWaiting();
 });
 
-// Activate event - clean old caches aggressively
+// Activate → tüm cache'leri sil, kendini unregister et
 self.addEventListener('activate', event => {
-    console.log('✅ SW activating...');
-
+    console.log('🔥 [OLD-SW] Nuking all caches and unregistering...');
     event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        console.log('🗑️ Deleting old cache:', cacheName);
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        }).then(() => self.clients.claim())
+        caches.keys()
+            .then(names => Promise.all(names.map(name => {
+                console.log('🗑️ Cache silindi:', name);
+                return caches.delete(name);
+            })))
+            .then(() => self.clients.claim())
+            .then(() => self.registration.unregister())
+            .then(() => {
+                // Tüm açık sekmeleri yenile
+                self.clients.matchAll().then(clients => {
+                    clients.forEach(client => client.navigate(client.url));
+                });
+            })
     );
 });
 

@@ -39,30 +39,33 @@ export default defineConfig({
 
     // ⚡ PWA Support - SADECE web build için (Electron'da devre dışı)
     ...(process.env.VITE_ELECTRON !== 'true' ? [VitePWA({
-      // 🔥 FIX: autoUpdate yerine prompt kullan - otomatik sayfa yenilemesi mesaj kaybına sebep oluyor!
-      registerType: 'prompt',
+      // 🔥 autoUpdate: Yeni deploy anında aktif olsun (chunk hatalarını önler)
+      registerType: 'autoUpdate',
       workbox: {
-        // 🔥 KRITIK: skipWaiting false olmalı - aksi halde SW otomatik aktive olur ve sayfa yenilenir!
-        skipWaiting: false,
-        clientsClaim: false,
-        // 🔥 FIX: Sadece kritik dosyaları precache'le - JS/CSS hariç (runtime'da yüklensin)
+        // 🔥 skipWaiting + clientsClaim: Yeni SW hemen devreye girsin
+        skipWaiting: true,
+        clientsClaim: true,
+        // Sadece kritik dosyaları precache'le - JS/CSS hariç (hash'li, runtime'da yüklensin)
         globPatterns: ['**/*.{html,ico,png,svg,webp}'],
-        // 🔥 FIX: Büyük dosyaları precache'den hariç tut
+        // Büyük dosyaları precache'den hariç tut
         globIgnores: ['**/bot/*.png', '**/static/js/*.js', '**/static/css/*.css'],
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB limit (varsayılan 2MB)
-        // 🔥 FIX: Eski cache'leri otomatik temizle
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
+        // Eski cache'leri otomatik temizle
         cleanupOutdatedCaches: true,
+        // 🔥 Eski service-worker.js navigasyonlarını engelle
+        navigationPreload: false,
         runtimeCaching: [
-          // 🔥 JS/CSS dosyaları için StaleWhileRevalidate - network öncelikli ama cache fallback
+          // 🔥 JS/CSS: NetworkFirst - her zaman güncel dosyaları yükle, offline ise cache'den
           {
             urlPattern: /\/static\/(?:js|css)\/.*/i,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
-              cacheName: 'static-assets',
+              cacheName: 'static-assets-v2',
               expiration: {
                 maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
-              }
+              },
+              networkTimeoutSeconds: 5
             }
           },
           {
