@@ -819,11 +819,13 @@ const AppContent = () => {
     const messageBoxRef = useRef(null);
     const searchInputRef = useRef(null);
     const historyCacheRef = useRef({});
+    const statusWsReconnectRef = useRef(null);
+    const tokenRef = useRef(token);
 
-    // � PERF FIX: Keep activeChatRef in sync (no re-render / no WS reconnect)
     useEffect(() => { activeChatRef.current = activeChat; }, [activeChat]);
+    useEffect(() => { tokenRef.current = token; }, [token]);
 
-    // �🔥 Admin kontrolü - Eastkhan her zaman admin, diğerleri için role kontrolü
+    // 🔥 Admin kontrolü - Eastkhan her zaman admin, diğerleri için role kontrolü
     const isAdmin = username === 'Eastkhan' || username === 'PawPaw' || currentUserProfile?.role === 'admin';
 
     // 🔥 YENİ: Kullanıcı izinleri - context menu için
@@ -2400,140 +2402,144 @@ const AppContent = () => {
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
 
-        // ✨ Load Theme on Startup
+        // Load Theme on Startup
         const saved = loadSavedTheme();
         setCurrentTheme(saved);
 
-        // 📱 APK CRASH FIX: Token yoksa WebSocket açma
-        if (!token) {
-            console.warn('⚠️ [StatusWS] No token available, skipping WebSocket connection');
+        // Token yoksa WebSocket acma
+        const currentToken = tokenRef.current;
+        if (!currentToken) {
+            console.warn('[StatusWS] No token available, skipping WebSocket connection');
             return;
         }
 
-        const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(username)}&token=${token}`;
-        console.log('🌐 [StatusWS] Connecting to:', url.replace(token, 'TOKEN_HIDDEN'));
+        let intentionalClose = false;
 
-        let socket;
-        try {
-            socket = new WebSocket(url);
-        } catch (err) {
-            console.error('❌ [StatusWS] WebSocket creation failed:', err);
-            return;
-        }
+        const createSocket = () => {
+            const tok = tokenRef.current || currentToken;
+            const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(username)}&token=${tok}`;
+            console.log('[StatusWS] Connecting to:', url.replace(tok, 'TOKEN_HIDDEN'));
 
-        statusWsRef.current = socket;
-
-        socket.onopen = () => {
-            console.log('✅ [StatusWS] Connected successfully');
-            setGlobalWsConnected(true);
-        };
-
-        socket.onerror = (error) => {
-            console.error('❌ [StatusWS] WebSocket error:', error);
-            // Don't crash - just log
-        };
-
-        socket.onclose = (event) => {
-            console.log(`🔌 [StatusWS] Connection closed: code=${event.code}, reason=${event.reason || 'none'}`);
-            setGlobalWsConnected(false);            // Auto-reconnect after 5 seconds if not intentional close
-            if (event.code !== 1000 && event.code !== 1001) {
-                console.log('🔄 [StatusWS] Will attempt reconnect in 5s...');
-            }
-        };
-
-        socket.onmessage = (e) => {
+            let socket;
             try {
-                const data = JSON.parse(e.data);
+                socket = new WebSocket(url);
+            } catch (err) {
+                console.error('[StatusWS] WebSocket creation failed:', err);
+                return null;
+            }
 
-                // � PERF: Forward ALL messages to GlobalWebSocketContext
-                // so FriendsTab, VoiceUserList, SignalNotification etc. still receive updates
-                forwardToGlobalContext(data);
+            socket.onopen = () => {
+                console.log('[StatusWS] Connected successfully');
+                setGlobalWsConnected(true);
+            };
 
-                // �🔧 FIX: Online users - sadece username array'i olarak set et
-                if (data.type === 'online_user_list_update') {
-                    // Backend'den gelen data.users array'ini kontrol et
-                    // Eğer object array'i ise username'leri çıkar, string array'i ise direkt kullan
-                    const onlineUsernames = Array.isArray(data.users)
-                        ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
-                        : [];
+            socket.onerror = (error) => {
+                console.error('[StatusWS] WebSocket error:', error);
+            };
 
-                    console.log('👥 [Online Users] Updated:', onlineUsernames);
-                    setOnlineUsers(onlineUsernames);
-                }
-
-                if (data.type === 'voice_users_update') {
-                    console.log('🔊 [GlobalWS] Received voice_users_update:', data.voice_users);
-                    setVoiceUsersState(data.voice_users);
-                }
-
-                if (data.type === 'user_activity_update') {
-                    setAllUsers(prevUsers => prevUsers.map(u => {
-                        if (u.username === data.username) {
-                            return { ...u, current_activity: data.activity };
+            socket.onclose = (event) => {
+                console.log(`[StatusWS] Connection closed: code=${event.code}, reason=${event.reason || "none"}`);
+                setGlobalWsConnected(false);
+                // Auto-reconnect after 5s if NOT intentional close
+                if (!intentionalClose && event.code !== 1000 && event.code !== 1001) {
+                    console.log('[StatusWS] Auto-reconnecting in 5s...');
+                    statusWsReconnectRef.current = setTimeout(() => {
+                        if (!intentionalClose) {
+                            const newSocket = createSocket();
+                            if (newSocket) statusWsRef.current = newSocket;
                         }
-                        return u;
-                    }));
+                    }, 5000);
                 }
+            };
 
-                // 🔥 Profil güncelleme (avatar, status_message vb.) - currentUserProfile'ı güncelle
-                if (data.type === 'user_profile_update' && data.user_data) {
-                    const updatedUser = data.user_data;
+            socket.onmessage = (e) => {
+                try {
+                    const data = JSON.parse(e.data);
 
-                    // Kendi profilimizi mi güncelledi?
-                    if (updatedUser.username === username) {
-                        console.log('👤 [Profile Update] Updating currentUserProfile:', updatedUser);
-                        setCurrentUserProfile(prevProfile => ({
-                            ...prevProfile,
-                            avatar: updatedUser.avatar,
-                            status_message: updatedUser.status_message,
-                            social_links: updatedUser.social_links,
-                            coins: updatedUser.coins,
-                            xp: updatedUser.xp,
-                            level: updatedUser.level,
-                            status: updatedUser.status,
-                            role: updatedUser.role
+                    // Forward ALL messages to GlobalWebSocketContext
+                    forwardToGlobalContext(data);
+
+                    if (data.type === 'online_user_list_update') {
+                        const onlineUsernames = Array.isArray(data.users)
+                            ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
+                            : [];
+                        console.log('[Online Users] Updated:', onlineUsernames);
+                        setOnlineUsers(onlineUsernames);
+                    }
+
+                    if (data.type === 'voice_users_update') {
+                        console.log('[GlobalWS] Received voice_users_update:', data.voice_users);
+                        setVoiceUsersState(data.voice_users);
+                    }
+
+                    if (data.type === 'user_activity_update') {
+                        setAllUsers(prevUsers => prevUsers.map(u => {
+                            if (u.username === data.username) {
+                                return { ...u, current_activity: data.activity };
+                            }
+                            return u;
                         }));
                     }
 
-                    // AllUsers listesini de güncelle
-                    setAllUsers(prevUsers => prevUsers.map(u => {
-                        if (u.username === updatedUser.username) {
-                            return { ...u, ...updatedUser };
+                    if (data.type === 'user_profile_update' && data.user_data) {
+                        const updatedUser = data.user_data;
+                        if (updatedUser.username === username) {
+                            console.log('[Profile Update] Updating currentUserProfile:', updatedUser);
+                            setCurrentUserProfile(prevProfile => ({
+                                ...prevProfile,
+                                avatar: updatedUser.avatar,
+                                status_message: updatedUser.status_message,
+                                social_links: updatedUser.social_links,
+                                coins: updatedUser.coins,
+                                xp: updatedUser.xp,
+                                level: updatedUser.level,
+                                status: updatedUser.status,
+                                role: updatedUser.role
+                            }));
                         }
-                        return u;
-                    }));
-                }
-
-                if (data.type === 'global_message_notification' && data.username !== username) {
-                    const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
-                    const chat = activeChatRef.current;
-                    const currentKey = chat.type === 'room' ? `room-${chat.id}` : `dm-${chat.id}`;
-                    if (key !== currentKey) incrementUnread(key);
-                }
-
-                // ✨ Handle Real-time Server/Channel Updates
-                if (data.type === 'server_structure_update') {
-                    // 🚀 PERF: WS already sends categories data — use it directly instead of re-fetching
-                    if (data.categories && Array.isArray(data.categories)) {
-                        console.log("Server structure update received via WS, using inline data");
-                        setCategories(data.categories);
-                    } else {
-                        console.log("Server structure update received, refetching...");
-                        fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                        setAllUsers(prevUsers => prevUsers.map(u => {
+                            if (u.username === updatedUser.username) {
+                                return { ...u, ...updatedUser };
+                            }
+                            return u;
+                        }));
                     }
+
+                    if (data.type === 'global_message_notification' && data.username !== username) {
+                        const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
+                        const chat = activeChatRef.current;
+                        const currentKey = chat.type === 'room' ? `room-${chat.id}` : `dm-${chat.id}`;
+                        if (key !== currentKey) incrementUnread(key);
+                    }
+
+                    if (data.type === 'server_structure_update') {
+                        if (data.categories && Array.isArray(data.categories)) {
+                            console.log('Server structure update received via WS, using inline data');
+                            setCategories(data.categories);
+                        } else {
+                            console.log('Server structure update received, refetching...');
+                            fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                        }
+                    }
+                } catch (parseError) {
+                    console.error('[StatusWS] Failed to parse message:', parseError);
                 }
-            } catch (parseError) {
-                console.error('❌ [StatusWS] Failed to parse message:', parseError);
-            }
+            };
+
+            return socket;
         };
+
+        const socket = createSocket();
+        if (socket) statusWsRef.current = socket;
+
         return () => {
+            intentionalClose = true;
+            clearTimeout(statusWsReconnectRef.current);
             try {
-                socket.close(1000, 'Component unmount');
-            } catch (e) {
-                // Ignore close errors
-            }
+                if (statusWsRef.current) statusWsRef.current.close(1000, 'Component unmount');
+            } catch (e) { /* Ignore */ }
         };
-    }, [isAuthenticated, isInitialDataLoaded, username, token]);
+    }, [isAuthenticated, isInitialDataLoaded, username]);
 
     // 🎤 SESLİ SOHBETE GİRİNCE CHAT ALANINI OTOMATİK DEĞİŞTİR
     useEffect(() => {
