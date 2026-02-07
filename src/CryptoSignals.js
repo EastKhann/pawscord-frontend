@@ -37,13 +37,28 @@ const parsePnl = (pnl) => {
     return parseFloat(String(pnl).replace('%', '').replace('+', '')) || 0;
 };
 
-// === TAB CONFIG ===
-const TAB_CONFIG = {
-    TUM_STRATEJILER: { icon: '📊', label: 'Tüm Stratejiler', shortLabel: 'Tümü', color: '#5865f2' },
-    ACIK_POZISYONLAR: { icon: '💼', label: 'Açık Pozisyonlar', shortLabel: 'Açık Poz.', color: '#f0b232' },
-    POZISYON_OLMAYAN: { icon: '🔍', label: 'Pozisyon Olmayan', shortLabel: 'Poz. Yok', color: '#949ba4' },
-    ZARARDA_OLANLAR: { icon: '🔴', label: 'Zararda Olanlar', shortLabel: 'Zararda', color: '#da373c' },
-    ALIM_FIRSATI: { icon: '💰', label: 'Alım Fırsatı', shortLabel: 'Alım Fır.', color: '#23a559' }
+// === TAB CONFIG - DİNAMİK ===
+const getTabConfig = (tabKey) => {
+    const defaults = {
+        icon: '📋', label: tabKey.replace(/_/g, ' '), shortLabel: tabKey.slice(0, 8), color: '#5865f2'
+    };
+
+    // İsimden icon ve renk tahmin et
+    const key = tabKey.toUpperCase();
+    if (key.includes('ACIK') || key.includes('POZISYON')) {
+        return { icon: '💼', label: tabKey.replace(/_/g, ' '), shortLabel: 'Açık Poz.', color: '#f0b232' };
+    }
+    if (key.includes('ZARAR')) {
+        return { icon: '🔴', label: tabKey.replace(/_/g, ' '), shortLabel: 'Zararda', color: '#da373c' };
+    }
+    if (key.includes('ALIM') || key.includes('FIRSAT')) {
+        return { icon: '💰', label: tabKey.replace(/_/g, ' '), shortLabel: 'Alım Fır.', color: '#23a559' };
+    }
+    if (key.includes('OLMAYAN') || key.includes('YOK')) {
+        return { icon: '🔍', label: tabKey.replace(/_/g, ' '), shortLabel: 'Poz. Yok', color: '#949ba4' };
+    }
+
+    return defaults;
 };
 
 // === PNL RENK ===
@@ -104,7 +119,7 @@ const CryptoSignals = () => {
 
     // Mode & Tab
     const [activeMode, setActiveMode] = useState('balance_mode');
-    const [activeTab, setActiveTab] = useState('TUM_STRATEJILER');
+    const [activeTab, setActiveTab] = useState(null); // İlk tab JSON'dan gelince otomatik seçilecek
 
     // Filters
     const [searchQuery, setSearchQuery] = useState('');
@@ -224,6 +239,13 @@ const CryptoSignals = () => {
     const tabData = useMemo(() => {
         return currentTab?.data || [];
     }, [currentTab]);
+
+    // İlk tab'ı otomatik seç (data yüklenince)
+    useEffect(() => {
+        if (allTabs && Object.keys(allTabs).length > 0 && !activeTab) {
+            setActiveTab(Object.keys(allTabs)[0]);
+        }
+    }, [allTabs, activeTab]);
 
     // ===== FİLTRE & SIRALAMA =====
     const processedData = useMemo(() => {
@@ -467,7 +489,7 @@ const CryptoSignals = () => {
             {/* ====== TAB BAR ====== */}
             <div style={S.tabBar}>
                 {Object.keys(allTabs).map(tabKey => {
-                    const cfg = TAB_CONFIG[tabKey] || { icon: '📋', label: tabKey, shortLabel: tabKey, color: '#949ba4' };
+                    const cfg = getTabConfig(tabKey);
                     const tab = allTabs[tabKey];
                     const isActive = activeTab === tabKey;
                     return (
