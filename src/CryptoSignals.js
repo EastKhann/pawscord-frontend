@@ -244,7 +244,10 @@ const CryptoSignals = () => {
         const avgPnl = tabData.reduce((s, i) => s + parsePnl(i.pnl_percent), 0) / tabData.length;
         const avgWr = tabData.reduce((s, i) => s + parseFloat(String(i.win_rate || '0').replace('%', '')), 0) / tabData.length;
         const uniqueCoins = [...new Set(tabData.map(i => i.coin))];
-        return { profits: profits.length, losses: losses.length, avgPnl, avgWr, uniqueCoins: uniqueCoins.length, total: tabData.length };
+        // Ters sinyal / uyumlu sayıları (pozisyon tabında kullanılır)
+        const tersSinyal = tabData.filter(i => i.ters_sinyal === true).length;
+        const uyumluSinyal = tabData.filter(i => i.ters_sinyal !== true).length;
+        return { profits: profits.length, losses: losses.length, avgPnl, avgWr, uniqueCoins: uniqueCoins.length, total: tabData.length, tersSinyal, uyumluSinyal };
     }, [tabData]);
 
     // Pozisyon coinleri için ters sinyal durumu hesapla
@@ -374,12 +377,16 @@ const CryptoSignals = () => {
                         <span style={S.statLabel}>Coin</span>
                     </div>
                     <div style={S.statCard}>
-                        <span style={{ ...S.statNum, color: '#23a559' }}>{stats.profits}</span>
-                        <span style={S.statLabel}>Kârda</span>
+                        <span style={{ ...S.statNum, color: '#23a559' }}>
+                            {isPositionsTab ? stats.uyumluSinyal : stats.profits}
+                        </span>
+                        <span style={S.statLabel}>{isPositionsTab ? '✅ Uyumlu' : 'Kârda'}</span>
                     </div>
                     <div style={S.statCard}>
-                        <span style={{ ...S.statNum, color: '#da373c' }}>{stats.losses}</span>
-                        <span style={S.statLabel}>Zararda</span>
+                        <span style={{ ...S.statNum, color: '#da373c' }}>
+                            {isPositionsTab ? stats.tersSinyal : stats.losses}
+                        </span>
+                        <span style={S.statLabel}>{isPositionsTab ? '⚠️ Ters Sinyal' : 'Zararda'}</span>
                     </div>
                     <div style={S.statCard}>
                         <span style={{ ...S.statNum, color: stats.avgPnl >= 0 ? '#23a559' : '#da373c' }}>
@@ -685,6 +692,8 @@ const CryptoSignals = () => {
                                 const rows = selectedCoin.data;
                                 const profits = rows.filter(r => parsePnl(r.pnl_percent) > 0).length;
                                 const losses = rows.filter(r => parsePnl(r.pnl_percent) < 0).length;
+                                const tersCount = rows.filter(r => r.ters_sinyal === true).length;
+                                const uyumluCount = rows.filter(r => r.ters_sinyal !== true).length;
                                 const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
                                 const avgWr = rows.reduce((s, r) => s + parseFloat(String(r.win_rate || '0').replace('%', '')), 0) / rows.length;
                                 const price = rows[0]?.current_price;
@@ -692,12 +701,16 @@ const CryptoSignals = () => {
                                 return (
                                     <>
                                         <div style={S.mStatCard}>
-                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#23a559' }}>{profits}</span>
-                                            <span style={S.mStatLabel}>Kârda</span>
+                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#23a559' }}>
+                                                {isPositionsTab ? uyumluCount : profits}
+                                            </span>
+                                            <span style={S.mStatLabel}>{isPositionsTab ? '✅ Uyumlu' : 'Kârda'}</span>
                                         </div>
                                         <div style={S.mStatCard}>
-                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#da373c' }}>{losses}</span>
-                                            <span style={S.mStatLabel}>Zararda</span>
+                                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#da373c' }}>
+                                                {isPositionsTab ? tersCount : losses}
+                                            </span>
+                                            <span style={S.mStatLabel}>{isPositionsTab ? '⚠️ Ters Sinyal' : 'Zararda'}</span>
                                         </div>
                                         <div style={S.mStatCard}>
                                             <span style={{ fontSize: '1.3em', fontWeight: 700, color: avgPnl >= 0 ? '#23a559' : '#da373c' }}>
