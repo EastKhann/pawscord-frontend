@@ -151,10 +151,12 @@ export default defineConfig({
   },
 
   // Allow .js files with JSX (CRA compatibility)
+  // ⚡ drop: production build'de TÜM console.log ve debugger ifadelerini siler
   esbuild: {
     loader: 'jsx',
     include: /src\/.*\.jsx?$/,
     exclude: [],
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
   },
 
   optimizeDeps: {
@@ -282,10 +284,7 @@ export default defineConfig({
     // ⚡ OPTIMIZATION: esbuild minification (faster than terser)
     minify: 'esbuild',
 
-    // ⚡ OPTIMIZATION: Remove console.log in production (esbuild)
-    esbuildOptions: {
-      drop: ['console', 'debugger'],
-    },
+    // ⚡ console.log drop artık top-level esbuild config'de (build.esbuildOptions geçersizdi)
 
     // ⚡ OPTIMIZATION: CSS code splitting
     cssCodeSplit: true,

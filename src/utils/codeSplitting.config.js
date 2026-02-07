@@ -63,19 +63,18 @@ export const ComponentChunks = {
 
 /**
  * Preloading strategy
- * Kullanıcı etkileşiminden önce critical chunks yükle
+ * 🚀 Kullanıcı etkileşiminden ÖNCE en çok kullanılan chunk'ları yükle
  */
 export const preloadCriticalChunks = () => {
-  // User likely to open these
+  // En sık açılan bileşenler — hemen preload et (500ms sonra çağrılıyor)
   const criticalChunks = [
     ComponentChunks.userProfile,
     ComponentChunks.imageModal,
+    ComponentChunks.serverSettings,
   ];
-
-  // Preload after 3 seconds
-  setTimeout(() => {
-    criticalChunks.forEach(chunk => chunk());
-  }, 3000);
+  criticalChunks.forEach(chunk => {
+    try { chunk(); } catch (e) { /* ignore */ }
+  });
 };
 
 /**
@@ -83,13 +82,15 @@ export const preloadCriticalChunks = () => {
  * Idle time'da gelecek chunks'ı prefetch et
  */
 export const prefetchNextChunks = () => {
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      // Prefetch likely next components
-      ComponentChunks.gifPicker();
-      ComponentChunks.stickerPicker();
-    });
-  }
+  const secondaryChunks = [
+    ComponentChunks.gifPicker,
+    ComponentChunks.stickerPicker,
+    ComponentChunks.poll,
+    ComponentChunks.codeSnippet,
+  ];
+  secondaryChunks.forEach(chunk => {
+    try { chunk(); } catch (e) { /* ignore */ }
+  });
 };
 
 export default {

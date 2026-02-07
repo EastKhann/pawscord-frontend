@@ -97,13 +97,14 @@ const GOOGLE_CLIENT_ID = GOOGLE_WEB_CLIENT_ID;
 
 const RootApp = () => {
     useEffect(() => {
+        // 🚀 Critical chunk'ları hemen preload et (eski: 3s bekliyordu)
         const preloadTimer = setTimeout(() => {
             try {
                 preloadCriticalChunks();
             } catch (e) {
                 console.warn('preloadCriticalChunks error', e);
             }
-        }, 3000);
+        }, 500); // 500ms — React mount olduktan hemen sonra
 
         if ('requestIdleCallback' in window) {
             window.requestIdleCallback(() => {
@@ -112,7 +113,7 @@ const RootApp = () => {
                 } catch (e) {
                     console.warn('prefetchNextChunks error', e);
                 }
-            }, { timeout: 2000 });
+            }, { timeout: 1500 }); // 1.5s timeout (eski: 2s)
         } else {
             const fallbackTimer = setTimeout(() => {
                 try {
@@ -120,7 +121,7 @@ const RootApp = () => {
                 } catch (e) {
                     console.warn('prefetchNextChunks error', e);
                 }
-            }, 4000);
+            }, 2000); // 2s (eski: 4s)
             return () => clearTimeout(fallbackTimer);
         }
 

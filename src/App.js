@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import SparkMD5 from 'spark-md5';
+// 🚀 SparkMD5 lazy import — sadece dosya upload'da kullanılır, başlangıçta yüklenmesine gerek yok
+// import SparkMD5 from 'spark-md5';  // → calculateFileHash içinde dynamic import edilecek
 import './index.css';
 import './styles/modern-theme.css'; // 🎨 Modern Elegant Theme
 import { Capacitor } from '@capacitor/core';
@@ -425,7 +426,8 @@ const DRAFT_STORAGE_KEY = 'chat_drafts_v1';
 
 const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();
 
-const calculateFileHash = (file) => {
+const calculateFileHash = async (file) => {
+    const SparkMD5 = (await import('spark-md5')).default;
     return new Promise((resolve, reject) => {
         const chunkSize = 2 * 1024 * 1024;
         const totalChunks = Math.ceil(file.size / chunkSize);
@@ -819,6 +821,7 @@ const AppContent = () => {
     const messageBoxRef = useRef(null);
     const searchInputRef = useRef(null);
     const historyCacheRef = useRef({});
+    const serverMembersCacheRef = useRef({}); // 🚀 Server members cache — aynı sunucuda oda değiştirince tekrar fetch etme
     const statusWsReconnectRef = useRef(null);
     const tokenRef = useRef(token);
     const usernameRef = useRef(username);
@@ -880,23 +883,25 @@ const AppContent = () => {
     const optimizedOnlineUsers = useOnlineUsers(allUsers);
 
 
-    // --- SPLASH SCREEN LOGIC ---
+    // --- SPLASH SCREEN LOGIC (veri hazırsa erken kapat) ---
     useEffect(() => {
         if (animationState === 'finished') return;
         setAnimationState('start');
-        // ⚡ Animasyonun tam görünmesi için yeterli süre: 2-2.5s
-        const timer1 = setTimeout(() => setAnimationState('pre-transition'), 1500); // Logo animasyonu için bekle
-        const timer2 = setTimeout(() => setAnimationState('finished'), 2200); // Normal bitiş - animasyon tamamlansın
-        const forceFinishTimer = setTimeout(() => setAnimationState('finished'), 3000); // Max bekle
+        // ⚡ Minimum animasyon: 800ms (logo animasyonu), data hazırsa hemen kapat
+        const minTimer = setTimeout(() => setAnimationState('pre-transition'), 800);
+        const forceFinishTimer = setTimeout(() => setAnimationState('finished'), 2000); // Max bekle
         return () => {
-            clearTimeout(timer1);
-            clearTimeout(timer2);
+            clearTimeout(minTimer);
             clearTimeout(forceFinishTimer);
         };
     }, []);
 
-    // 🔥 NOT: Veri yüklendiğinde splash erken kapatmıyoruz - animasyon tamamlansın
-    // Timer'lar splash'ı kontrol eder, veri hazır olsa bile animasyon biter
+    // 🚀 Veri yüklendiğinde splash'ı erken kapat (minimum 800ms sonra)
+    useEffect(() => {
+        if (isInitialDataLoaded && animationState === 'pre-transition') {
+            setAnimationState('finished');
+        }
+    }, [isInitialDataLoaded, animationState]);
 
     // 📧 EMAIL VERIFICATION: Check URL parameters for verification status
     useEffect(() => {
@@ -1895,7 +1900,7 @@ const AppContent = () => {
 
     // 🔥 OLD resize listener REMOVED - useResponsive hook handles it
 
-    // 🚀 PERFORM OPTIMIZASYONU: Tüm kullanıcıları peşin peşin çekme işlemi KALDIRILDI.
+    // 🚀 COMBINED INIT — TEK istekte tüm veriyi yükle (7 API → 1 API)
     useEffect(() => {
         if (!isAuthenticated || isInitialDataLoaded) return;
         if (fetchingInitRef.current) return; // 🛡️ Prevent duplicate fetch
@@ -1904,14 +1909,50 @@ const AppContent = () => {
         const fetchInit = async () => {
             try {
                 const currentUsername = usernameRef.current || username;
-                const [avatars, rooms, convs, friendsData, currentUserData] = await Promise.all([
-                    fetchWithAuth(DEFAULT_AVATARS_URL).then(r => r.json()),
-                    fetchWithAuth(ROOM_LIST_URL).then(r => r.json()),
-                    fetchWithAuth(`${CONVERSATION_LIST_URL}?username=${encodeURIComponent(currentUsername)}`).then(r => r.json()),
-                    fetchWithAuth(`${API_BASE_URL}/friends/list/`).then(r => r.json()),
-                    fetchWithAuth(`${API_BASE_URL}/users/me/`).then(r => r.json())
-                ]);
-                setDefaultAvatars(avatars);
+
+                // 🚀 TEK İSTEK: /api/init/ — user, servers, conversations, friends, server_order, turn, maintenance
+                let initData = null;
+                try {
+                    const initRes = await fetchWithAuth(`${API_BASE_URL}/init/`);
+                    if (initRes.ok) {
+                        initData = await initRes.json();
+                    }
+                } catch (e) {
+                    console.warn('⚠️ [Init] Combined endpoint failed, falling back to individual calls');
+                }
+
+                let currentUserData, rooms, convs, friendsData;
+
+                if (initData) {
+                    // ✅ Combined endpoint başarılı — tek istekte tüm veri geldi
+                    currentUserData = initData.user;
+                    rooms = initData.servers;
+                    convs = initData.conversations;
+                    friendsData = initData.friends;
+                    // Server order & maintenance da init'ten geliyor
+                    if (initData.server_order) {
+                        setServerOrder(initData.server_order);
+                    }
+                    if (initData.maintenance?.is_maintenance) {
+                        setMaintenanceMode({
+                            message: initData.maintenance.message || 'System maintenance in progress',
+                            endTime: initData.maintenance.estimated_end,
+                            level: 'info'
+                        });
+                    }
+                } else {
+                    // ⚡ Fallback: Eski 5-istek yöntemi (combined endpoint yoksa)
+                    const [rooms_, convs_, friendsData_, currentUserData_] = await Promise.all([
+                        fetchWithAuth(ROOM_LIST_URL).then(r => r.json()),
+                        fetchWithAuth(`${CONVERSATION_LIST_URL}?username=${encodeURIComponent(currentUsername)}`).then(r => r.json()),
+                        fetchWithAuth(`${API_BASE_URL}/friends/list/`).then(r => r.json()),
+                        fetchWithAuth(`${API_BASE_URL}/users/me/`).then(r => r.json()),
+                    ]);
+                    currentUserData = currentUserData_;
+                    rooms = rooms_;
+                    convs = convs_;
+                    friendsData = friendsData_;
+                }
 
                 const currentUser = {
                     username: currentUserData?.username || username,
@@ -1925,10 +1966,9 @@ const AppContent = () => {
                     level: currentUserData?.level || 1,
                     status: 'online',
                     role: currentUserData?.role || 'member',
-                    is_whitelisted: currentUserData?.is_whitelisted || false  // 🔥 Premium whitelist
+                    is_whitelisted: currentUserData?.is_whitelisted || false
                 };
                 setCurrentUserProfile(currentUser);
-                console.log('🔥 [DEBUG] currentUserProfile with is_whitelisted:', currentUser);
 
                 const friendProfiles = (friendsData.friends || []).map(f => {
                     const isSender = f.sender_username === username;
@@ -1968,15 +2008,17 @@ const AppContent = () => {
         fetchInit();
     }, [isAuthenticated, isInitialDataLoaded, fetchWithAuth]);
 
-    // 🔥 YENİ: Sunucu sırasını yükle
+    // 🔥 Sunucu sırasını yükle (sadece fallback — combined init yoksa veya güncellenirse)
     useEffect(() => {
+        // ⚡ Combined init zaten server_order yüklüyor — duplicate fetch'i önle
+        if (isInitialDataLoaded) return;
+
         const fetchServerOrder = async () => {
             try {
                 const res = await fetchWithAuth(`${API_BASE_URL}/user/server-order/`);
                 if (res.ok) {
                     const data = await res.json();
                     setServerOrder(data.server_order || []);
-                    console.log('🎯 Server order loaded:', data.server_order);
                 }
             } catch (error) {
                 console.error('Server order fetch error:', error);
@@ -1986,7 +2028,7 @@ const AppContent = () => {
         if (username) {
             fetchServerOrder();
         }
-    }, [username, fetchWithAuth]);
+    }, [username, fetchWithAuth, isInitialDataLoaded]);
 
     // 🆕 Sticky Messages - Current room için sticky message çek
     useEffect(() => {
@@ -2020,22 +2062,28 @@ const AppContent = () => {
         }
     }, [activeChat.id, activeChat.type, isAuthenticated, fetchWithAuth]);
 
-    // 🔥 YENİ: Server Members - Sunucuya girildiğinde veya sunucu seçildiğinde üyeleri fetch et
-    const fetchServerMembersById = useCallback(async (serverId) => {
+    // � Server Members - Cache destekli (aynı sunucuda oda değiştirirken tekrar fetch etmez)
+    const fetchServerMembersById = useCallback(async (serverId, forceRefresh = false) => {
         if (!serverId) {
             setServerMembers([]);
             return;
         }
+
+        // 🚀 Cache kontrolü — 2 dakika geçerli
+        const cached = serverMembersCacheRef.current[serverId];
+        if (!forceRefresh && cached && (Date.now() - cached.timestamp < 120000)) {
+            setServerMembers(cached.members);
+            return;
+        }
+
         try {
-            console.log(`🔍 [Server Members] Fetching members for server ${serverId}...`);
             const res = await fetchWithAuth(`${API_BASE_URL}/servers/${serverId}/members/`);
             if (res.ok) {
                 const members = await res.json();
-                console.log(`👥 [Server Members] Fetched ${members.length} members for server ${serverId}:`, members);
+                // Cache'e kaydet
+                serverMembersCacheRef.current[serverId] = { members, timestamp: Date.now() };
                 setServerMembers(members);
             } else {
-                const errorText = await res.text();
-                console.error('❌ Server members fetch failed:', res.status, errorText);
                 setServerMembers([]);
             }
         } catch (error) {
@@ -2115,7 +2163,7 @@ const AppContent = () => {
         }
     }, [activeChat.id, activeChat.type, isAuthenticated, fetchServerMembersById, categories]);
 
-    // 🆕 Maintenance Mode Check
+    // 🆕 Maintenance Mode Check — Initial check is done by combined init, this is for periodic polling
     useEffect(() => {
         const checkMaintenanceMode = async () => {
             try {
@@ -2137,8 +2185,7 @@ const AppContent = () => {
             }
         };
 
-        checkMaintenanceMode();
-        // Check every 5 minutes
+        // ⚡ İlk kontrol combined init'ten geliyor, sadece 5dk'da bir poll yap
         const interval = setInterval(checkMaintenanceMode, 5 * 60 * 1000);
         return () => clearInterval(interval);
     }, []);
