@@ -3596,7 +3596,7 @@ const AppContent = () => {
                     <VanityURLManager
                         serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
                         fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        apiBaseUrl={API_BASE_URL}
                         onClose={() => setShowVanityURL(false)}
                     />
                 )}
@@ -3708,7 +3708,7 @@ const AppContent = () => {
                 {chartSymbol && <CryptoChartModal symbol={chartSymbol} onClose={() => setChartSymbol(null)} />}
                 {showCinema && <CinemaModal onClose={() => setShowCinema(false)} ws={ws} username={username} />}
                 {showSnippetModal && <CodeSnippetModal onClose={() => setShowSnippetModal(false)} onSend={handleSendSnippet} />}
-                {serverToEdit && <ServerSettingsModal onClose={() => setServerToEdit(null)} server={serverToEdit} currentUsername={username} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} serverMembers={serverMembers} />}
+                {serverToEdit && <ServerSettingsModal onClose={() => setServerToEdit(null)} server={serverToEdit} currentUsername={username} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} serverMembers={serverMembers} />}
                 {showEncModal && <EncryptionKeyModal onClose={() => setShowEncModal(false)} onSetKey={(key) => setEncryptionKey(currentKeyId, key)} existingKey={encryptionKeys[currentKeyId]} />}
                 {showDownloadModal && <DownloadModal onClose={() => setShowDownloadModal(false)} apiBaseUrl={ABSOLUTE_HOST_URL} />}
                 {showSummary && <SummaryModal isLoading={isSummaryLoading} summaryText={summaryResult} onClose={() => setShowSummary(false)} />}

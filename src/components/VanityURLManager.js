@@ -18,7 +18,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
         if (!serverId) { setLoadingExisting(false); return; }
         setLoadingExisting(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/vanity/get/${serverId}/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/vanity/get/${serverId}/`);
             if (res.ok) {
                 const contentType = res.headers.get('content-type') || '';
                 if (!contentType.includes('application/json')) {
@@ -54,7 +54,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
 
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/vanity/create/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/vanity/create/`, {
                 method: 'POST',
                 body: JSON.stringify({
                     path: vanityPath,
@@ -85,7 +85,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
 
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/vanity/delete/${serverId}/`, {
+            const res = await fetchWithAuth(`${apiBaseUrl}/vanity/delete/${serverId}/`, {
                 method: 'DELETE'
             });
 

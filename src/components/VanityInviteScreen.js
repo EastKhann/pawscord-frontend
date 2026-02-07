@@ -14,9 +14,15 @@ function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) 
     const loadServerInfo = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${apiBaseUrl}/vanity/resolve/${vanityPath}/`);
+            // Fast endpoint: /api/vanity/<path>/ (select_related, no Session scan)
+            const response = await fetch(`${apiBaseUrl}/vanity/${vanityPath}/`);
 
             if (!response.ok) {
+                throw new Error('Sunucu bulunamadı');
+            }
+
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
                 throw new Error('Sunucu bulunamadı');
             }
 
