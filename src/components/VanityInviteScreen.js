@@ -14,7 +14,7 @@ function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) 
     const loadServerInfo = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${apiBaseUrl}/vanity/${vanityPath}/`);
+            const response = await fetch(`${apiBaseUrl}/vanity/resolve/${vanityPath}/`);
 
             if (!response.ok) {
                 throw new Error('Sunucu bulunamadı');

@@ -1,56 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { FaCopy, FaClock, FaUserCheck, FaCalendarAlt, FaTimes, FaCheck, FaSearch, FaPaperPlane, FaUserPlus } from 'react-icons/fa';
+import { FaCopy, FaTimes, FaCheck, FaSearch, FaLink, FaUserFriends, FaHashtag } from 'react-icons/fa';
 import toast from '../utils/toast';
 
 const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }) => {
-    // --- MEVCUT STATE'LER ---
-    const [inviteLink, setInviteLink] = useState('');
-    const [maxUses, setMaxUses] = useState(0);
-    const [expiresAfter, setExpiresAfter] = useState(0);
-    const [copied, setCopied] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-
-    // --- YENİ EKLENEN STATE'LER (ARKADAŞLAR İÇİN) ---
     const [friends, setFriends] = useState([]);
     const [loadingFriends, setLoadingFriends] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [invitedUsers, setInvitedUsers] = useState(new Set());
-    const [myUsername, setMyUsername] = useState(currentUser || '');
+    const [inviteLink, setInviteLink] = useState('');
+    const [copied, setCopied] = useState(false);
+    const [loadingLink, setLoadingLink] = useState(true);
+    const searchRef = useRef(null);
 
-    // Modal açılınca verileri çek
+    // Modal açılınca: arkadaşları çek + mevcut sınırsız linki kontrol et/oluştur
     useEffect(() => {
-        fetchMyUser();
         fetchFriends();
+        getOrCreatePermanentLink();
+        setTimeout(() => searchRef.current?.focus(), 100);
     }, []);
 
-    // Eğer currentUser prop olarak gelmediyse, API'den kendimizi öğrenelim
-    const fetchMyUser = async () => {
-        if (myUsername) return;
+    // Otomatik sınırsız link oluştur
+    const getOrCreatePermanentLink = async () => {
+        if (!server?.id) { setLoadingLink(false); return; }
+        setLoadingLink(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/users/me/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    server_id: server.id,
+                    max_uses: 0,
+                    expires_in_hours: 0
+                })
+            });
             if (res.ok) {
                 const data = await res.json();
-                setMyUsername(data.username);
+                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
+                setInviteLink(link);
+            } else {
+                const err = await res.json().catch(() => ({}));
+                console.error('[InviteModal] Create failed:', err);
             }
-        } catch (e) { console.error(e); }
+        } catch (e) {
+            console.error('[InviteModal] Create error:', e);
+        } finally {
+            setLoadingLink(false);
+        }
     };
 
-    // Arkadaş listesini getir
     const fetchFriends = async () => {
         setLoadingFriends(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/friends/list/`);
             if (res.ok) {
                 const data = await res.json();
-                console.log('[InviteModal] Friends response:', data);
-
-                // Backend response array olarak geliyor (Friendship objelerinin listesi)
-                // Her obje: { id, sender_username, receiver_username, ... }
                 const friendsList = Array.isArray(data) ? data : (data.friends || []);
                 setFriends(friendsList);
-
-                console.log('[InviteModal] Friends loaded:', friendsList.length);
             }
         } catch (e) {
             console.error("Arkadaş listesi hatası:", e);
@@ -59,81 +65,48 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
         }
     };
 
-    // Arkadaşa davet linki gönder (YENİ SİSTEM - ServerInvite)
     const sendInviteToFriend = async (friendUsername) => {
-        console.log(`📨 [InviteModal] Sending invite to: ${friendUsername}`);
         setInvitedUsers(prev => new Set(prev).add(friendUsername));
-
         try {
-            // 1. Önce bir davet linki oluştur
-            const invitePayload = {
-                server_id: server.id,
-                max_uses: 1, // Sadece bu arkadaş kullanabilsin
-                expires_in_hours: 24 // 24 saat geçerli
-            };
-
-            console.log('📤 [InviteModal] Creating invite:', invitePayload);
-
-            const inviteRes = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(invitePayload)
-            });
-
-            if (!inviteRes.ok) {
-                const errorData = await inviteRes.json();
-                throw new Error(errorData.error || 'Davet oluşturulamadı');
+            // Eğer link yoksa önce oluştur
+            let link = inviteLink;
+            if (!link) {
+                const inviteRes = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ server_id: server.id, max_uses: 1, expires_in_hours: 24 })
+                });
+                if (!inviteRes.ok) throw new Error('Davet oluşturulamadı');
+                const inviteData = await inviteRes.json();
+                link = inviteData.url || inviteData.invite_link;
             }
 
-            const inviteData = await inviteRes.json();
-            const inviteCode = inviteData.code;
-            const inviteUrl = inviteData.url || inviteData.invite_link;
+            // DM conversation bul/oluştur
+            const convRes = await fetchWithAuth(`${apiBaseUrl}/conversations/find_or_create/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_username: friendUsername })
+            });
+            if (!convRes.ok) throw new Error('DM oluşturulamadı');
+            const convData = await convRes.json();
 
-            console.log('✅ [InviteModal] Invite created:', { code: inviteCode, url: inviteUrl });
-
-            // 2. Arkadaşa DM olarak davet linkini gönder
-            // find_or_create endpoint'ini kullan
-            const conversationRes = await fetchWithAuth(`${apiBaseUrl}/conversations/find_or_create/`, {
+            // DM gönder
+            const msgRes = await fetchWithAuth(`${apiBaseUrl}/messages/send_dm/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    target_username: friendUsername
+                    conversation_id: convData.conversation_id,
+                    content: `Hey! Seni **${server?.name || 'sunucu'}** sunucusuna davet ediyorum! 🎉\n${link}`
                 })
             });
 
-            if (!conversationRes.ok) {
-                throw new Error('DM oluşturulamadı');
-            }
-
-            const conversationData = await conversationRes.json();
-            const conversationId = conversationData.conversation_id;
-
-            console.log('💬 [InviteModal] Conversation created/found:', conversationId);
-
-            // 3. Mesajı gönder
-            const messagePayload = {
-                conversation_id: conversationId,
-                content: `Hey! Seni **${server.name}** sunucusuna davet ediyorum. Katılmak için:\n${inviteUrl}`
-            };
-
-            const messageRes = await fetchWithAuth(`${apiBaseUrl}/messages/send_dm/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(messagePayload)
-            });
-
-            if (!messageRes.ok) {
-                // Mesaj gönderilemedi ama link oluşturuldu
-                console.warn('⚠️ [InviteModal] Message send failed');
-                navigator.clipboard.writeText(inviteUrl);
-                toast.success(`Davet linki oluşturuldu ve panoya kopyalandı!\n\n${friendUsername} ile manuel olarak paylaşabilirsiniz:\n\n${inviteUrl}`, 5000);
+            if (msgRes.ok) {
+                toast.success(`✅ ${friendUsername} kullanıcısına davet gönderildi!`);
             } else {
-                console.log('✅ [InviteModal] Message sent successfully');
-                toast.success(`${friendUsername} kullanıcısına davet DM olarak gönderildi!`);
+                navigator.clipboard.writeText(link);
+                toast.success(`Link kopyalandı! ${friendUsername} ile paylaşabilirsiniz.`);
             }
-
         } catch (e) {
-            console.error('❌ [InviteModal] Error:', e);
             setInvitedUsers(prev => {
                 const next = new Set(prev);
                 next.delete(friendUsername);
@@ -143,228 +116,153 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
         }
     };
 
-    // Arkadaşın ismini bulma (Friendship objesinde gönderen mi alıcı mı biziz?)
     const getFriendName = (friendship) => {
-        if (!myUsername) return friendship.receiver_username; // Fallback
-        return friendship.sender_username === myUsername
+        if (!currentUser) return friendship.receiver_username;
+        return friendship.sender_username === currentUser
             ? friendship.receiver_username
             : friendship.sender_username;
     };
 
-    // Listeyi filtrele
+    const getFriendAvatar = (friendship) => {
+        const name = getFriendName(friendship);
+        return friendship.sender_username === name
+            ? friendship.sender_avatar
+            : friendship.receiver_avatar;
+    };
+
     const filteredFriends = friends.filter(f => {
         const name = getFriendName(f);
-        return name.toLowerCase().includes(searchQuery.toLowerCase());
+        return name?.toLowerCase().includes(searchQuery.toLowerCase());
     });
-
-    // --- MEVCUT FONKSİYONLAR ---
-    const generateInvite = async () => {
-        console.log('🎬 [InviteModal] Starting invite creation...', {
-            server: server ? { id: server.id, name: server.name } : null,
-            maxUses,
-            expiresAfter
-        });
-
-        if (!server || !server.id) {
-            toast.error('Hata: Sunucu bilgisi bulunamadı!');
-            console.error('❌ [InviteModal] No server provided!');
-            return;
-        }
-
-        setIsGenerating(true);
-        try {
-            // YENİ SİSTEM: ServerInvite API
-            const payload = {
-                server_id: server.id,
-                max_uses: maxUses === 0 ? 0 : maxUses,
-                expires_in_hours: Math.floor(expiresAfter / 60) // dakikadan saate çevir
-            };
-
-            console.log('📤 [InviteModal] Payload:', payload);
-
-            const response = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            console.log('📥 [InviteModal] Response status:', response.status);
-            const data = await response.json();
-            console.log('📋 [InviteModal] Response data:', data);
-
-            if (response.ok) {
-                // Backend'den gelen tam URL'i al
-                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
-
-                console.log('✅ [InviteModal] Invite created:', {
-                    code: data.code,
-                    url: link,
-                    rawData: data
-                });
-
-                if (!link) {
-                    console.error('❌ [InviteModal] No URL in response!', data);
-                    toast.error('Hata: Davet linki oluşturulamadı (URL yok)');
-                    return;
-                }
-
-                setInviteLink(link);
-                console.log('🔗 [InviteModal] Link set to:', link);
-                toast.success(`Davet linki oluşturuldu!\n${link}`, 4000);
-            } else {
-                console.error('❌ [InviteModal] Error:', data.error);
-                toast.error(data.error || "Davet oluşturulamadı.");
-            }
-        } catch (error) {
-            console.error("❌ [InviteModal] Exception:", error);
-            toast.error("Bağlantı hatası: " + error.message);
-        } finally {
-            setIsGenerating(false);
-        }
-    };
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(inviteLink);
         setCopied(true);
+        toast.success('📋 Davet linki kopyalandı!');
         setTimeout(() => setCopied(false), 2000);
     };
 
-    const presetOptions = [
-        { label: '30 Dk', value: 30 },
-        { label: '1 Gün', value: 1440 },
-        { label: 'Süresiz', value: 0 },
-    ];
-
     const modalContent = (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-                <div style={styles.header}>
-                    <h2 style={styles.title}>
-                        Arkadaşlarını Davet Et
-                    </h2>
-                    <button onClick={onClose} style={styles.closeBtn}>
-                        <FaTimes />
-                    </button>
+        <div style={st.overlay} onClick={onClose}>
+            <div style={st.modal} onClick={(e) => e.stopPropagation()}>
+                {/* Header */}
+                <div style={st.header}>
+                    <div>
+                        <div style={st.headerRow}>
+                            <FaHashtag style={{ color: '#b5bac1', fontSize: '14px' }} />
+                            <span style={st.serverLabel}>{server?.name || 'Sunucu'}</span>
+                        </div>
+                        <h2 style={st.title}>Arkadaşlarını Davet Et</h2>
+                    </div>
+                    <button onClick={onClose} style={st.closeBtn}><FaTimes /></button>
                 </div>
 
-                <div style={styles.content}>
+                {/* Search */}
+                <div style={st.searchWrap}>
+                    <div style={st.searchBox}>
+                        <FaSearch style={st.searchIcon} />
+                        <input
+                            ref={searchRef}
+                            type="text"
+                            placeholder="Arkadaş ara..."
+                            style={st.searchInput}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </div>
 
-                    {/* --- ÜST KISIM: ARKADAŞ LİSTESİ --- */}
-                    <div style={styles.friendSection}>
-                        <div style={styles.searchBox}>
-                            <FaSearch style={styles.searchIcon} />
-                            <input
-                                type="text"
-                                placeholder="Arkadaş ara..."
-                                style={styles.searchInput}
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
+                {/* Friends List */}
+                <div style={st.friendList}>
+                    {loadingFriends ? (
+                        <div style={st.emptyState}>
+                            <div style={st.spinner} />
+                            <span style={st.emptyText}>Yükleniyor...</span>
                         </div>
-
-                        <div style={styles.friendList}>
-                            {loadingFriends ? (
-                                <div style={styles.loadingText}>Yükleniyor...</div>
-                            ) : filteredFriends.length === 0 ? (
-                                <div style={styles.emptyText}>Arkadaş bulunamadı.</div>
-                            ) : (
-                                filteredFriends.map(f => {
-                                    const name = getFriendName(f);
-                                    const isInvited = invitedUsers.has(name);
-                                    // Avatar (API'den geliyorsa kullan, yoksa harf)
-                                    const avatar = f.sender_username === name ? f.sender_avatar : f.receiver_avatar;
-
-                                    return (
-                                        <div key={f.id} style={styles.friendItem}>
-                                            <div style={styles.friendInfo}>
-                                                <div style={styles.friendAvatar}>
-                                                    {avatar ? (
-                                                        <img src={avatar} alt={name} style={styles.avatarImg} />
-                                                    ) : (
-                                                        <span>{name.charAt(0).toUpperCase()}</span>
-                                                    )}
-                                                </div>
-                                                <span style={styles.friendName}>{name}</span>
-                                            </div>
-                                            <button
-                                                onClick={() => !isInvited && sendInviteToFriend(name)}
-                                                style={{
-                                                    ...styles.inviteBtn,
-                                                    ...(isInvited ? styles.inviteBtnSent : {})
-                                                }}
-                                                disabled={isInvited}
-                                            >
-                                                {isInvited ? 'Gönderildi' : 'Davet Et'}
-                                            </button>
+                    ) : filteredFriends.length === 0 ? (
+                        <div style={st.emptyState}>
+                            <FaUserFriends style={{ fontSize: '32px', color: '#4e5058', marginBottom: '8px' }} />
+                            <span style={st.emptyText}>
+                                {searchQuery ? 'Sonuç bulunamadı.' : friends.length === 0 ? 'Henüz arkadaşın yok.' : 'Eşleşen arkadaş yok.'}
+                            </span>
+                        </div>
+                    ) : (
+                        filteredFriends.map(f => {
+                            const name = getFriendName(f);
+                            const avatar = getFriendAvatar(f);
+                            const isInvited = invitedUsers.has(name);
+                            return (
+                                <div key={f.id} style={st.friendItem} className="invite-friend-item">
+                                    <div style={st.friendInfo}>
+                                        <div style={st.friendAvatar}>
+                                            {avatar ? (
+                                                <img src={avatar} alt={name} style={st.avatarImg} />
+                                            ) : (
+                                                <span style={st.avatarLetter}>{name?.charAt(0).toUpperCase()}</span>
+                                            )}
                                         </div>
-                                    );
-                                })
-                            )}
-                        </div>
-                    </div>
+                                        <span style={st.friendName}>{name}</span>
+                                    </div>
+                                    <button
+                                        onClick={() => !isInvited && sendInviteToFriend(name)}
+                                        style={{
+                                            ...st.inviteBtn,
+                                            ...(isInvited ? st.inviteBtnSent : {})
+                                        }}
+                                        disabled={isInvited}
+                                    >
+                                        {isInvited ? (
+                                            <><FaCheck style={{ marginRight: '4px' }} /> Gönderildi</>
+                                        ) : (
+                                            'Davet Et'
+                                        )}
+                                    </button>
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
 
-                    <div style={styles.divider}>
-                        <span>VEYA LİNK OLUŞTUR</span>
-                    </div>
-
-                    {/* --- ALT KISIM: LİNK OLUŞTURMA (Eski Kod) --- */}
-                    <div style={styles.linkSection}>
-                        <div style={styles.optionsRow}>
-                            {presetOptions.map((option) => (
-                                <button
-                                    key={option.value}
-                                    onClick={() => setExpiresAfter(option.value)}
-                                    style={{
-                                        ...styles.miniOptionBtn,
-                                        ...(expiresAfter === option.value && styles.optionBtnActive)
-                                    }}
-                                >
-                                    {option.label}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Link Kutusu */}
-                        <div style={styles.linkBoxContainer}>
-                            {inviteLink ? (
-                                <div style={styles.linkBox}>
+                {/* Bottom Link Section */}
+                <div style={st.linkSection}>
+                    <div style={st.linkLabel}>VEYA BİR SUNUCU DAVET LİNKİ GÖNDER</div>
+                    <div style={st.linkBox}>
+                        {loadingLink ? (
+                            <div style={st.linkLoading}>
+                                <div style={st.spinner} />
+                                <span style={{ color: '#b5bac1', fontSize: '13px' }}>Link hazırlanıyor...</span>
+                            </div>
+                        ) : inviteLink ? (
+                            <>
+                                <div style={st.linkInputWrap}>
+                                    <FaLink style={{ color: '#b5bac1', marginRight: '8px', flexShrink: 0 }} />
                                     <input
                                         type="text"
                                         value={inviteLink}
                                         readOnly
-                                        style={styles.linkInput}
+                                        style={st.linkInput}
+                                        onClick={(e) => e.target.select()}
                                     />
-                                    <button
-                                        onClick={copyToClipboard}
-                                        style={{
-                                            ...styles.copyBtn,
-                                            ...(copied && styles.copyBtnSuccess)
-                                        }}
-                                    >
-                                        {copied ? <FaCheck /> : <FaCopy />}
-                                    </button>
                                 </div>
-                            ) : (
                                 <button
-                                    onClick={generateInvite}
-                                    disabled={isGenerating}
-                                    style={styles.generateBtn}
+                                    onClick={copyToClipboard}
+                                    style={{
+                                        ...st.copyBtn,
+                                        ...(copied ? st.copyBtnDone : {})
+                                    }}
                                 >
-                                    {isGenerating ? 'Link Oluşturuluyor...' : 'Davet Linki Oluştur'}
+                                    {copied ? 'Kopyalandı!' : 'Kopyala'}
                                 </button>
-                            )}
-                        </div>
-
-                        {inviteLink && (
-                            <div style={styles.footerLinkOpts}>
-                                <small style={{ color: '#b9bbbe' }}>
-                                    {expiresAfter === 0 ? 'Süre sınırı yok' : `${expiresAfter} dakika geçerli`}
-                                </small>
-                                <button onClick={() => setInviteLink('')} style={styles.textBtn}>
-                                    Yeni Link
-                                </button>
+                            </>
+                        ) : (
+                            <div style={st.linkError}>
+                                <span style={{ color: '#f0b232', fontSize: '13px' }}>Link oluşturulamadı</span>
+                                <button onClick={getOrCreatePermanentLink} style={st.retryBtn}>Tekrar Dene</button>
                             </div>
                         )}
+                    </div>
+                    <div style={st.linkNote}>
+                        Bu davet linki süresiz geçerli ve sınırsız kullanımlı.
                     </div>
                 </div>
             </div>
@@ -374,84 +272,95 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
     return ReactDOM.createPortal(modalContent, document.body);
 };
 
-const styles = {
+// Hover styles
+if (typeof document !== 'undefined') {
+    const id = 'invite-modal-styles';
+    if (!document.getElementById(id)) {
+        const tag = document.createElement('style');
+        tag.id = id;
+        tag.textContent = `
+            .invite-friend-item:hover { background: rgba(88, 101, 242, 0.06) !important; }
+            @keyframes inviteSpin { to { transform: rotate(360deg); } }
+        `;
+        document.head.appendChild(tag);
+    }
+}
+
+const st = {
     overlay: {
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        width: '100%',
-        height: '100%',
+        top: 0, left: 0, right: 0, bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.85)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 99999,
-        backdropFilter: 'blur(5px)',
-        margin: 0,
-        padding: 0
+        backdropFilter: 'blur(4px)',
     },
     modal: {
         backgroundColor: '#313338',
-        borderRadius: '8px',
-        width: '440px',
-        maxWidth: '90%',
-        maxHeight: '85%',
+        borderRadius: '12px',
+        width: '460px',
+        maxWidth: '92vw',
+        maxHeight: '80vh',
         display: 'flex',
         flexDirection: 'column',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+        boxShadow: '0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)',
         overflow: 'hidden',
-        position: 'relative',
-        margin: 0
+        animation: 'contextMenuIn 0.15s ease-out',
     },
     header: {
-        padding: '20px',
+        padding: '20px 20px 8px 20px',
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    headerRow: {
+        display: 'flex',
         alignItems: 'center',
+        gap: '6px',
+        marginBottom: '4px',
+    },
+    serverLabel: {
+        color: '#b5bac1',
+        fontSize: '12px',
+        fontWeight: '600',
+        textTransform: 'uppercase',
+        letterSpacing: '0.02em',
     },
     title: {
         margin: 0,
         color: '#f2f3f5',
-        fontSize: '16px',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
+        fontSize: '18px',
+        fontWeight: '700',
     },
     closeBtn: {
         background: 'none',
         border: 'none',
         color: '#b5bac1',
         cursor: 'pointer',
-        fontSize: '20px',
-    },
-    content: {
-        padding: '0 20px 20px 20px',
+        fontSize: '18px',
+        padding: '4px',
+        borderRadius: '4px',
         display: 'flex',
-        flexDirection: 'column',
-        flex: 1,
-        overflow: 'hidden', // Scroll friend list inside
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    // --- ARKADAŞ LİSTESİ STİLLERİ ---
-    friendSection: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '200px',
-        marginBottom: '10px',
+    searchWrap: {
+        padding: '8px 20px 4px 20px',
     },
     searchBox: {
         backgroundColor: '#1e1f22',
-        borderRadius: '4px',
-        padding: '0 10px',
+        borderRadius: '8px',
+        padding: '0 12px',
         display: 'flex',
         alignItems: 'center',
-        marginBottom: '10px',
-        border: '1px solid #1e1f22',
     },
     searchIcon: {
-        color: '#b5bac1',
-        marginRight: '8px',
+        color: '#6d6f78',
+        marginRight: '10px',
+        fontSize: '14px',
+        flexShrink: 0,
     },
     searchInput: {
         backgroundColor: 'transparent',
@@ -465,170 +374,179 @@ const styles = {
     friendList: {
         flex: 1,
         overflowY: 'auto',
-        paddingRight: '5px',
+        padding: '8px 12px',
+        minHeight: '120px',
+        maxHeight: '280px',
     },
     friendItem: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '8px 0',
-        borderBottom: '1px solid #3f4147',
+        padding: '8px 10px',
+        borderRadius: '8px',
+        transition: 'background 0.15s',
+        cursor: 'default',
     },
     friendInfo: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px',
+        gap: '12px',
+        minWidth: 0,
     },
     friendAvatar: {
-        width: '32px',
-        height: '32px',
+        width: '36px',
+        height: '36px',
         borderRadius: '50%',
         backgroundColor: '#5865f2',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: 'white',
-        fontSize: '14px',
         overflow: 'hidden',
+        flexShrink: 0,
     },
     avatarImg: {
         width: '100%',
         height: '100%',
         objectFit: 'cover',
     },
+    avatarLetter: {
+        color: '#fff',
+        fontSize: '15px',
+        fontWeight: '600',
+    },
     friendName: {
         color: '#f2f3f5',
         fontSize: '14px',
         fontWeight: '500',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
     inviteBtn: {
         padding: '6px 16px',
         backgroundColor: 'transparent',
-        border: '1px solid #23a559',
-        color: '#23a559',
-        borderRadius: '3px',
+        border: '1px solid #248046',
+        color: '#2dc770',
+        borderRadius: '4px',
         cursor: 'pointer',
-        fontSize: '12px',
+        fontSize: '13px',
         fontWeight: '500',
-        transition: 'all 0.2s',
-    },
-    inviteBtnSent: {
-        backgroundColor: 'transparent',
-        border: '1px solid #b5bac1',
-        color: '#b5bac1',
-        cursor: 'default',
-    },
-    loadingText: {
-        color: '#b5bac1',
-        textAlign: 'center',
-        marginTop: '20px',
-        fontSize: '13px',
-    },
-    emptyText: {
-        color: '#b5bac1',
-        textAlign: 'center',
-        marginTop: '20px',
-        fontSize: '13px',
-    },
-
-    // --- ALT KISIM ---
-    divider: {
+        transition: 'all 0.15s',
+        whiteSpace: 'nowrap',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        margin: '15px 0',
+        flexShrink: 0,
+    },
+    inviteBtnSent: {
+        border: '1px solid #4e5058',
         color: '#b5bac1',
-        fontSize: '11px',
-        fontWeight: 'bold',
-        position: 'relative',
+        cursor: 'default',
+        backgroundColor: 'transparent',
+    },
+    emptyState: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '32px 20px',
+        gap: '4px',
+    },
+    emptyText: {
+        color: '#6d6f78',
+        fontSize: '14px',
+        textAlign: 'center',
+    },
+    spinner: {
+        width: '20px',
+        height: '20px',
+        border: '2px solid #4e5058',
+        borderTopColor: '#5865f2',
+        borderRadius: '50%',
+        animation: 'inviteSpin 0.6s linear infinite',
     },
     linkSection: {
         backgroundColor: '#2b2d31',
-        margin: '0 -20px -20px -20px', // Content padding'i iptal et
-        padding: '20px',
-        borderTop: '1px solid #1e1f22',
+        padding: '16px 20px',
+        borderTop: '1px solid rgba(255,255,255,0.04)',
     },
-    optionsRow: {
-        display: 'flex',
-        gap: '10px',
-        marginBottom: '15px',
-    },
-    miniOptionBtn: {
-        flex: 1,
-        padding: '8px',
-        backgroundColor: '#1e1f22',
-        border: 'none',
-        borderRadius: '4px',
+    linkLabel: {
         color: '#b5bac1',
-        fontSize: '12px',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-    },
-    optionBtnActive: {
-        backgroundColor: '#404249',
-        color: '#f2f3f5',
-    },
-    linkBoxContainer: {
-        display: 'flex',
-        gap: '10px',
+        fontSize: '11px',
+        fontWeight: '700',
+        textTransform: 'uppercase',
+        letterSpacing: '0.02em',
+        marginBottom: '10px',
     },
     linkBox: {
         display: 'flex',
-        flex: 1,
-        backgroundColor: '#1e1f22',
-        borderRadius: '4px',
-        padding: '2px',
-        border: '1px solid #1e1f22',
         alignItems: 'center',
+        gap: '8px',
+        backgroundColor: '#1e1f22',
+        borderRadius: '8px',
+        padding: '4px 4px 4px 12px',
+        minHeight: '44px',
+    },
+    linkInputWrap: {
+        display: 'flex',
+        alignItems: 'center',
+        flex: 1,
+        minWidth: 0,
     },
     linkInput: {
         flex: 1,
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#f2f3f5',
-        padding: '10px',
+        color: '#00a8fc',
         fontSize: '13px',
         outline: 'none',
         textOverflow: 'ellipsis',
+        minWidth: 0,
+    },
+    linkLoading: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '10px',
+        flex: 1,
+        padding: '4px 0',
+    },
+    linkError: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1,
+        padding: '4px 0',
     },
     copyBtn: {
-        padding: '8px 20px',
+        padding: '8px 16px',
         backgroundColor: '#5865f2',
         border: 'none',
-        borderRadius: '3px',
+        borderRadius: '4px',
         color: 'white',
-        cursor: 'pointer',
-        height: '100%',
-        marginRight: '2px',
-    },
-    copyBtnSuccess: {
-        backgroundColor: '#23a559',
-    },
-    generateBtn: {
-        width: '100%',
-        padding: '10px',
-        backgroundColor: '#5865f2',
-        border: 'none',
-        borderRadius: '3px',
-        color: 'white',
-        fontWeight: '500',
         cursor: 'pointer',
         fontSize: '13px',
+        fontWeight: '600',
+        transition: 'background 0.15s',
+        whiteSpace: 'nowrap',
+        flexShrink: 0,
     },
-    footerLinkOpts: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: '10px',
-        alignItems: 'center',
+    copyBtnDone: {
+        backgroundColor: '#248046',
     },
-    textBtn: {
-        background: 'none',
+    retryBtn: {
+        padding: '6px 12px',
+        backgroundColor: '#5865f2',
         border: 'none',
-        color: '#00a8fc',
-        fontSize: '12px',
+        borderRadius: '4px',
+        color: 'white',
         cursor: 'pointer',
-        padding: 0,
-    }
+        fontSize: '12px',
+        fontWeight: '500',
+    },
+    linkNote: {
+        color: '#6d6f78',
+        fontSize: '11px',
+        marginTop: '8px',
+    },
 };
 
 export default InviteModal;

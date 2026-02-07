@@ -3431,7 +3431,7 @@ const AppContent = () => {
                 <VanityInviteScreen
                     vanityPath={showVanityInvite}
                     fetchWithAuth={fetchWithAuth}
-                    apiBaseUrl={ABSOLUTE_HOST_URL}
+                    apiBaseUrl={API_BASE_URL}
                     onClose={() => {
                         setShowVanityInvite(null);
                         window.location.hash = '#/';
@@ -4912,9 +4912,18 @@ const AppContent = () => {
                 <Suspense fallback={<div>📨 Davet Yükleniyor...</div>}>
                     <InviteModal
                         fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        serverId={activeChat.server_id}
+                        apiBaseUrl={API_BASE_URL}
+                        server={(() => {
+                            for (const srv of (categories || [])) {
+                                for (const cat of (srv.categories || [])) {
+                                    if (cat.rooms?.some(r => r.slug === activeChat.id)) {
+                                        return { id: srv.id, name: srv.name, avatar: srv.avatar };
+                                    }
+                                }
+                            }
+                            return { id: activeChat.server_id, name: 'Sunucu' };
+                        })()}
+                        currentUser={username}
                         onClose={() => setShowInviteModal(false)}
                     />
                 </Suspense>
