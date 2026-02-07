@@ -6,9 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import FaMicrophone from 'react-icons/fa/FaMicrophone';
-import FaClosedCaptioning from 'react-icons/fa/FaClosedCaptioning';
-import FaSpinner from 'react-icons/fa/FaSpinner';
+import { FaMicrophone, FaClosedCaptioning, FaSpinner } from 'react-icons/fa';
 
 const VoiceTranscription = ({
     audioUrl,

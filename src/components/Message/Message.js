@@ -20,6 +20,7 @@ import { MessageContextMenu } from './MessageContextMenu';
 import { MessageMedia, LazyMount } from './MessageMedia';
 import { MessagePoll } from './MessagePoll';
 import ReadReceipt from '../ReadReceipt';
+import UserCardPopover from '../UserCardPopover';
 
 // Lazy load heavy components
 const LinkPreview = lazy(() => import(/* webpackChunkName: "message-ui" */ '../../LinkPreview'));
@@ -194,16 +195,29 @@ const Message = ({
             id={`message-${msg.id}`}
             onClick={() => isSelectionMode && onToggleSelection(msg.id)}
         >
-            {/* Avatar */}
-            <div style={styles.avatarContainer}>
-                <LazyImage
-                    src={userAvatar}
-                    alt={msg.username}
-                    style={styles.userAvatar}
-                    onClick={() => onViewProfile(msg.username)}
-                    placeholder={getDeterministicAvatar(msg.username)}
-                />
-            </div>
+            {/* Avatar with User Card Popover */}
+            <UserCardPopover
+                user={{
+                    username: msg.username,
+                    avatar: userAvatar,
+                    status: msg.user_status,
+                    roles: msg.user_roles || [],
+                    level: msg.user_level,
+                    custom_status: msg.custom_status,
+                }}
+                onMessage={() => onViewProfile(msg.username)}
+                onProfile={() => onViewProfile(msg.username)}
+            >
+                <div style={styles.avatarContainer}>
+                    <LazyImage
+                        src={userAvatar}
+                        alt={msg.username}
+                        style={styles.userAvatar}
+                        onClick={() => onViewProfile(msg.username)}
+                        placeholder={getDeterministicAvatar(msg.username)}
+                    />
+                </div>
+            </UserCardPopover>
 
             <div style={styles.contentWrapper}>
                 {/* Reply Preview */}

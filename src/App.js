@@ -219,6 +219,144 @@ const MiniGamesPanel = React.lazy(() => import(/* webpackChunkName: "features" *
 const ProjectCollaborationPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ProjectCollaborationPanel')); //  Project Collaboration
 const AvatarStudioPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AvatarStudioPanel')); //  Avatar Studio
 
+// 🔥 BATCH 9: Essential UX Features (2026-02-01)
+const ImageLightbox = React.lazy(() => import(/* webpackChunkName: "essential-ux" */ './components/ImageLightbox')); // 🔍 Enhanced Image Viewer
+const ChannelAboutPanel = React.lazy(() => import(/* webpackChunkName: "essential-ux" */ './components/ChannelAboutPanel')); // ℹ️ Channel Info Panel
+const MessageSchedulePicker = React.lazy(() => import(/* webpackChunkName: "essential-ux" */ './components/MessageSchedulePicker')); // 📅 Message Scheduler
+import ConnectionStatusBar from './components/ConnectionStatusBar'; // 🌐 Connection Status (direct - always needed)
+import ScrollToBottomButton from './components/ScrollToBottomButton'; // ⬇️ Scroll FAB (direct - always visible)
+import MessageDateDivider from './components/MessageDateDivider'; // 📅 Date Dividers (direct - always shown)
+import TypingIndicatorEnhanced from './components/TypingIndicatorEnhanced'; // ⌨️ Enhanced Typing
+import NewMessagesDivider from './components/NewMessagesDivider'; // 🔴 New Messages Divider
+
+// 🔥 BATCH 10: 50 Essential Features Integration (2026-02-01)
+// -- Core UX --
+const UserSettingsModal = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/UserSettingsModal')); // ⚙️ Unified User Settings
+const KeyboardShortcutsModal = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/KeyboardShortcutsModal')); // ⌨️ Keyboard Shortcuts
+const CommandPalette = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/CommandPalette')); // 🔍 Quick Switcher
+const ServerDiscoveryPage = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/ServerDiscoveryPage')); // 🌍 Server Discovery
+const AppearanceSettingsPanel = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/AppearanceSettingsPanel')); // 🎨 Appearance Settings
+const LanguageSelector = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/LanguageSelector')); // 🌐 Language Selector
+const ChangelogPanel = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/ChangelogPanel')); // 📋 Changelog
+const LogoutModal = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/LogoutModal')); // 🚪 Logout Confirm
+const NotificationSoundSettings = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/NotificationSoundSettings')); // 🔊 Notification Sounds
+const QuickSwitcher = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/QuickSwitcher')); // ⚡ Quick Switcher
+
+// -- Security & Account --
+const LoginHistory = React.lazy(() => import(/* webpackChunkName: "security" */ './components/LoginHistory')); // 🔐 Login History
+const SecuritySettingsPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/SecuritySettingsPanel')); // 🛡️ Security Settings
+const PrivacySettingsPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/PrivacySettingsPanel')); // 🔒 Privacy Settings
+const AccountDeletionModal = React.lazy(() => import(/* webpackChunkName: "security" */ './components/AccountDeletionModal')); // ❌ Account Deletion
+const BlockListPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/BlockListPanel')); // 🚫 Block List
+const E2EESettingsPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/E2EESettingsPanel')); // 🔐 E2EE Settings
+
+// -- Communication --
+const ThreadView = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ThreadView')); // 💬 Thread Conversations
+const ScheduledMessagesPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ScheduledMessagesPanel')); // ⏰ Scheduled Messages
+const ReminderPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ReminderPanel')); // ⏰ Reminders
+const ForumPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ForumPanel')); // 📋 Forum Channels
+const StageChannelPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/StageChannelPanel')); // 🎤 Stage Channels
+const VideoCallModal = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/VideoCallModal')); // 📹 Video Calls
+const VoiceSettingsPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/VoiceSettingsPanel')); // 🎙️ Voice Settings
+const MessageSearchPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/MessageSearchPanel')); // 🔍 Message Search
+const WatchTogether = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/WatchTogether')); // 🎬 Watch Together
+
+// -- Server Management --
+const AutoRolesPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/AutoRolesPanel')); // 🤖 Auto Roles
+const ReactionRolesPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/ReactionRolesPanel')); // 🎭 Reaction Roles
+const WelcomeMessagesPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/WelcomeMessagesPanel')); // 👋 Welcome Messages
+const EventCalendar = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/EventCalendar')); // 📅 Event Calendar
+const GiveawayPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/GiveawayPanel')); // 🎉 Giveaways
+const TicketSystemPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/TicketSystemPanel')); // 🎫 Ticket System
+const StarboardPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/StarboardPanel')); // ⭐ Starboard
+const ServerBackupPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/ServerBackupPanel')); // 💾 Server Backup
+const BanAppealsPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/BanAppealsPanel')); // ⚖️ Ban Appeals
+const CustomCommandsPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/CustomCommandsPanel')); // 🤖 Custom Commands
+const LevelingSystemPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/LevelingSystemPanel')); // 📊 Leveling System
+const LiveStreamPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/LiveStreamPanel')); // 📺 Live Streaming
+
+// -- Engagement & Social --
+const AchievementsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/AchievementsPanel')); // 🏆 Achievements
+const BirthdaySystemPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/BirthdaySystemPanel')); // 🎂 Birthday System
+const PremiumModal = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/PremiumModal')); // 💎 Premium
+const MusicPlayer = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/MusicPlayer')); // 🎵 Music Player
+const BotMarketplace = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/BotMarketplace')); // 🤖 Bot Marketplace
+const ProfileCustomization = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ProfileCustomization')); // 👤 Profile Customization
+const IntegrationHubPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/IntegrationHubPanel')); // 🔗 Integration Hub
+const TournamentSystem = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/TournamentSystem')); // 🏆 Tournaments
+
+// -- Advanced Features --
+const HighlightsPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/HighlightsPanel')); // 💡 Keyword Highlights
+const CustomEmbedPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/CustomEmbedPanel')); // 📦 Custom Embeds
+const SpotifyIntegrationPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/SpotifyIntegrationPanel')); // 🎵 Spotify
+const ServerClonePanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/ServerClonePanel')); // 📋 Server Clone
+const WeeklyChallengesPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/WeeklyChallengesPanel')); // 🎯 Weekly Challenges
+
+// 🔥 BATCH 11: 50 More Essential Features (2026-02-02)
+// -- 🔰 Moderation & Admin --
+const ModeratorTools = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/ModeratorTools')); // 🛡️ Moderator Tools
+const AIModerationPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AIModerationPanel')); // 🤖 AI Moderation
+const SpamDetectionPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/SpamDetectionPanel')); // 🚫 Spam Detection
+const AuditLogsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AuditLogsPanel')); // 📋 Audit Logs
+const BanHistoryPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/BanHistoryPanel')); // ⛔ Ban History
+const ModerationLogsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/ModerationLogsPanel')); // 📜 Moderation Logs
+const RaidProtectionDashboard = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/RaidProtectionDashboard')); // 🛡️ Raid Protection
+const SecurityAlertsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/SecurityAlertsPanel')); // 🚨 Security Alerts
+
+// -- 💬 Communication & Messages --
+const BookmarksPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/BookmarksPanel')); // 🔖 Bookmarks
+const GIFPickerPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/GIFPickerPanel')); // 🎞️ GIF Picker
+const PollCreator = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/PollCreator')); // 📊 Poll Creator
+const StickersPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/StickersPanel')); // 🎨 Stickers
+const SavedMessagesModal = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/SavedMessagesModal')); // 💾 Saved Messages
+const NotificationsCenter = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/NotificationsCenter')); // 🔔 Notifications Center
+const MessageSummaryPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/MessageSummaryPanel')); // 📝 Message Summary
+const TranslationPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/TranslationPanel')); // 🌍 Translation
+
+// -- 🏠 Server Management --
+const ChannelSettingsModal = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/ChannelSettingsModal')); // ⚙️ Channel Settings
+const InviteModal = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/InviteModal')); // 📨 Invite Manager
+const ServerTemplates = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/ServerTemplates')); // 📋 Server Templates
+const ServerAnalyticsDashboard = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/ServerAnalyticsDashboard')); // 📊 Server Analytics
+const RolesManager = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/RolesManager')); // 👑 Roles Manager
+const WelcomeScreenEditor = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/WelcomeScreenEditor')); // 👋 Welcome Screen Editor
+const CommunitySettingsPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/CommunitySettingsPanel')); // 🏘️ Community Settings
+const InviteLinkManager = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/InviteLinkManager')); // 🔗 Invite Links
+
+// -- 🤖 Bot & Developer --
+const BotBuilder = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/BotBuilder')); // 🤖 Bot Builder
+const BotDeveloperPortal = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/BotDeveloperPortal')); // 🧑‍💻 Bot Developer Portal
+const WebhookManager = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/WebhookManager')); // 🔗 Webhook Manager
+const APIKeysPanel = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/APIKeysPanel')); // 🔑 API Keys
+const SlashCommandsPanel = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/SlashCommandsPanel')); // ⚡ Slash Commands
+const CodeRunnerPanel = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/CodeRunnerPanel')); // 💻 Code Runner
+
+// -- 👤 Profile & Social --
+const ProfileCard = React.lazy(() => import(/* webpackChunkName: "social" */ './components/ProfileCard')); // 👤 Profile Card
+const UserNotesModal = React.lazy(() => import(/* webpackChunkName: "social" */ './components/UserNotesModal')); // 📝 User Notes
+const StatusPicker = React.lazy(() => import(/* webpackChunkName: "social" */ './components/StatusPicker')); // 🟢 Status Picker
+const MutualsPanel = React.lazy(() => import(/* webpackChunkName: "social" */ './components/MutualsPanel')); // 👥 Mutual Friends/Servers
+const ProfileShowcasePanel = React.lazy(() => import(/* webpackChunkName: "social" */ './components/ProfileShowcasePanel')); // 🏅 Profile Showcase
+const SessionManagerModal = React.lazy(() => import(/* webpackChunkName: "social" */ './components/SessionManagerModal')); // 📱 Session Manager
+
+// -- 💎 Premium & Economy --
+const CoinStoreModal = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/CoinStoreModal')); // 🪙 Coin Store
+const PremiumManagementPanel = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/PremiumManagementPanel')); // 💎 Premium Management
+const SubscriptionManager = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/SubscriptionManager')); // 📋 Subscription Manager
+const GiftPremiumPanel = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/GiftPremiumPanel')); // 🎁 Gift Premium
+const PremiumMarketplace = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/PremiumMarketplace')); // 🛒 Premium Marketplace
+const ThemeMarketplace = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/ThemeMarketplace')); // 🎨 Theme Marketplace
+
+// -- 🔧 Advanced --
+const AIChatbotPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/AIChatbotPanel')); // 🤖 AI Chatbot
+const CollaborativeCodeEditor = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/CollaborativeCodeEditor')); // 👨‍💻 Collaborative Code Editor
+const ScreenShareModal = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ScreenShareModal')); // 🖥️ Screen Share
+const LiveStreamModal = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/LiveStreamModal')); // 📺 Live Stream Modal
+const AdvancedAnalyticsDashboard = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/AdvancedAnalyticsDashboard')); // 📈 Advanced Analytics
+const FileManagerPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/FileManagerPanel')); // 📁 File Manager
+const ReportsPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ReportsPanel')); // 📊 Reports
+const ErrorReportingPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ErrorReportingPanel')); // 🐛 Error Reporting
+
 // --- AYARLAR ---
 // Bu kısmı tamamen değiştiriyoruz:
 
@@ -485,6 +623,123 @@ const AppContent = () => {
     const [showArchivedRooms, setShowArchivedRooms] = useState(false); // 📦 Archived Rooms
     const [showSlowMode, setShowSlowMode] = useState(false); // ⏱️ Slow Mode
     const [showEmojiManagement, setShowEmojiManagement] = useState(false); // 😀 Emoji Management
+
+    // 🔥 BATCH 10: 50 Essential Features States (2026-02-01)
+    // -- Core UX --
+    const [showUserSettings, setShowUserSettings] = useState(false); // ⚙️ User Settings
+    const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false); // ⌨️ Keyboard Shortcuts
+    const [showCommandPalette, setShowCommandPalette] = useState(false); // 🔍 Command Palette
+    const [showServerDiscovery, setShowServerDiscovery] = useState(false); // 🌍 Server Discovery
+    const [showAppearanceSettings, setShowAppearanceSettings] = useState(false); // 🎨 Appearance
+    const [showLanguageSelector, setShowLanguageSelector] = useState(false); // 🌐 Language
+    const [showChangelog, setShowChangelog] = useState(false); // 📋 Changelog
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // 🚪 Logout
+    const [showNotificationSounds, setShowNotificationSounds] = useState(false); // 🔊 Sounds
+    const [showQuickSwitcher, setShowQuickSwitcher] = useState(false); // ⚡ Quick Switcher
+    // -- Security --
+    const [showLoginHistory, setShowLoginHistory] = useState(false); // 🔐 Login History
+    const [showSecuritySettings, setShowSecuritySettings] = useState(false); // 🛡️ Security
+    const [showPrivacySettings, setShowPrivacySettings] = useState(false); // 🔒 Privacy
+    const [showAccountDeletion, setShowAccountDeletion] = useState(false); // ❌ Delete Account
+    const [showBlockList, setShowBlockList] = useState(false); // 🚫 Block List
+    const [showE2EESettings, setShowE2EESettings] = useState(false); // 🔐 E2EE
+    // -- Communication --
+    const [showThreadView, setShowThreadView] = useState(false); // 💬 Threads
+    const [showScheduledMessages, setShowScheduledMessages] = useState(false); // ⏰ Scheduled
+    const [showReminders, setShowReminders] = useState(false); // ⏰ Reminders
+    const [showForum, setShowForum] = useState(false); // 📋 Forum
+    const [showStageChannel, setShowStageChannel] = useState(false); // 🎤 Stage
+    const [showVideoCall, setShowVideoCall] = useState(false); // 📹 Video Call
+    const [showVoiceSettings, setShowVoiceSettings] = useState(false); // 🎙️ Voice Settings
+    const [showMessageSearch, setShowMessageSearch] = useState(false); // 🔍 Search
+    const [showWatchTogether, setShowWatchTogether] = useState(false); // 🎬 Watch Together
+    // -- Server Management --
+    const [showAutoRoles, setShowAutoRoles] = useState(false); // 🤖 Auto Roles
+    const [showReactionRoles, setShowReactionRoles] = useState(false); // 🎭 Reaction Roles
+    const [showWelcomeMessages, setShowWelcomeMessages] = useState(false); // 👋 Welcome
+    const [showEventCalendar, setShowEventCalendar] = useState(false); // 📅 Events
+    const [showGiveaway, setShowGiveaway] = useState(false); // 🎉 Giveaway
+    const [showTicketSystem, setShowTicketSystem] = useState(false); // 🎫 Tickets
+    const [showStarboard, setShowStarboard] = useState(false); // ⭐ Starboard
+    const [showServerBackup, setShowServerBackup] = useState(false); // 💾 Backup
+    const [showBanAppeals, setShowBanAppeals] = useState(false); // ⚖️ Appeals
+    const [showCustomCommands, setShowCustomCommands] = useState(false); // 🤖 Commands
+    const [showLevelingSystem, setShowLevelingSystem] = useState(false); // 📊 Levels
+    const [showLiveStream, setShowLiveStream] = useState(false); // 📺 Live Stream
+    // -- Engagement --
+    const [showAchievements, setShowAchievements] = useState(false); // 🏆 Achievements
+    const [showBirthdaySystem, setShowBirthdaySystem] = useState(false); // 🎂 Birthdays
+    const [showPremium, setShowPremium] = useState(false); // 💎 Premium
+    const [showMusicPlayer, setShowMusicPlayer] = useState(false); // 🎵 Music
+    const [showBotMarketplace, setShowBotMarketplace] = useState(false); // 🤖 Bot Store
+    const [showProfileCustomization, setShowProfileCustomization] = useState(false); // 👤 Profile
+    const [showIntegrationHub, setShowIntegrationHub] = useState(false); // 🔗 Integrations
+    const [showTournaments, setShowTournaments] = useState(false); // 🏆 Tournaments
+    // -- Advanced --
+    const [showHighlights, setShowHighlights] = useState(false); // 💡 Highlights
+    const [showCustomEmbed, setShowCustomEmbed] = useState(false); // 📦 Embeds
+    const [showSpotifyIntegration, setShowSpotifyIntegration] = useState(false); // 🎵 Spotify
+    const [showServerClone, setShowServerClone] = useState(false); // 📋 Clone
+    const [showWeeklyChallenges, setShowWeeklyChallenges] = useState(false); // 🎯 Challenges
+    // -- Feature Hub --
+    const [showFeatureHub, setShowFeatureHub] = useState(false); // 🚀 Feature Hub Mega Menu
+
+    // 🔥 BATCH 11: 50 More Essential Features States (2026-02-02)
+    // -- 🔰 Moderation --
+    const [showModeratorTools, setShowModeratorTools] = useState(false); // 🛡️ Moderator Tools
+    const [showAIModeration, setShowAIModeration] = useState(false); // 🤖 AI Moderation
+    const [showSpamDetection, setShowSpamDetection] = useState(false); // 🚫 Spam Detection
+    const [showAuditLogs, setShowAuditLogs] = useState(false); // 📋 Audit Logs
+    const [showBanHistory, setShowBanHistory] = useState(false); // ⛔ Ban History
+    const [showModerationLogs, setShowModerationLogs] = useState(false); // 📜 Mod Logs
+    const [showSecurityAlerts, setShowSecurityAlerts] = useState(false); // 🚨 Security Alerts
+    // -- 💬 Communication --
+    const [showGIFPicker, setShowGIFPicker] = useState(false); // 🎞️ GIF Picker
+    const [showPollCreator, setShowPollCreator] = useState(false); // 📊 Poll Creator
+    const [showStickers, setShowStickers] = useState(false); // 🎨 Stickers
+    const [showSavedMessages, setShowSavedMessages] = useState(false); // 💾 Saved Messages
+    const [showNotificationsCenter, setShowNotificationsCenter] = useState(false); // 🔔 Notifications
+    const [showMessageSummary, setShowMessageSummary] = useState(false); // 📝 Summary
+    const [showTranslation, setShowTranslation] = useState(false); // 🌍 Translation
+    // -- 🏠 Server Management --
+    const [showChannelSettings, setShowChannelSettings] = useState(false); // ⚙️ Channel Settings
+    const [showInviteModal, setShowInviteModal] = useState(false); // 📨 Invite
+    const [showServerTemplates, setShowServerTemplates] = useState(false); // 📋 Templates
+    const [showServerAnalytics, setShowServerAnalytics] = useState(false); // 📊 Analytics
+    const [showRolesManager, setShowRolesManager] = useState(false); // 👑 Roles
+    const [showWelcomeScreenEditor, setShowWelcomeScreenEditor] = useState(false); // 👋 Welcome Editor
+    const [showCommunitySettings, setShowCommunitySettings] = useState(false); // 🏘️ Community
+    const [showInviteLinkManager, setShowInviteLinkManager] = useState(false); // 🔗 Invite Links
+    // -- 🤖 Bot/Dev --
+    const [showBotBuilder, setShowBotBuilder] = useState(false); // 🤖 Bot Builder
+    const [showBotDevPortal, setShowBotDevPortal] = useState(false); // 🧑‍💻 Dev Portal
+    const [showWebhookManager, setShowWebhookManager] = useState(false); // 🔗 Webhooks
+    const [showAPIKeys, setShowAPIKeys] = useState(false); // 🔑 API Keys
+    const [showSlashCommands, setShowSlashCommands] = useState(false); // ⚡ Slash Commands
+    const [showCodeRunner, setShowCodeRunner] = useState(false); // 💻 Code Runner
+    // -- 👤 Profile & Social --
+    const [showProfileCard, setShowProfileCard] = useState(false); // 👤 Profile Card
+    const [showUserNotes, setShowUserNotes] = useState(false); // 📝 User Notes
+    const [showStatusPicker, setShowStatusPicker] = useState(false); // 🟢 Status Picker
+    const [showMutuals, setShowMutuals] = useState(false); // 👥 Mutuals
+    const [showProfileShowcase, setShowProfileShowcase] = useState(false); // 🏅 Showcase
+    const [showSessionManager, setShowSessionManager] = useState(false); // 📱 Sessions
+    // -- 💎 Premium --
+    const [showCoinStore, setShowCoinStore] = useState(false); // 🪙 Coins
+    const [showPremiumManagement, setShowPremiumManagement] = useState(false); // 💎 Premium Mgmt
+    const [showSubscriptionManager, setShowSubscriptionManager] = useState(false); // 📋 Subscriptions
+    const [showGiftPremium, setShowGiftPremium] = useState(false); // 🎁 Gift Premium
+    const [showPremiumMarketplace, setShowPremiumMarketplace] = useState(false); // 🛒 Premium Shop
+    const [showThemeMarketplace, setShowThemeMarketplace] = useState(false); // 🎨 Theme Shop
+    // -- 🔧 Advanced --
+    const [showAIChatbot, setShowAIChatbot] = useState(false); // 🤖 AI Chatbot
+    const [showCodeEditor, setShowCodeEditor] = useState(false); // 👨‍💻 Code Editor
+    const [showScreenShare, setShowScreenShare] = useState(false); // 🖥️ Screen Share
+    const [showLiveStreamModal, setShowLiveStreamModal] = useState(false); // 📺 Live Stream Modal
+    const [showAdvancedAnalytics, setShowAdvancedAnalytics] = useState(false); // 📈 Analytics
+    const [showFileManager, setShowFileManager] = useState(false); // 📁 Files
+    const [showReports, setShowReports] = useState(false); // 📊 Reports
+    const [showErrorReporting, setShowErrorReporting] = useState(false); // 🐛 Error Reports
 
     const [currentTheme, setCurrentTheme] = useState('default');
     const [stickyMessage, setStickyMessage] = useState(null);
@@ -1559,6 +1814,17 @@ const AppContent = () => {
                 });
 
                 setTypingUser(data.username, false);
+                // 🔔 Play notification sound for incoming messages from others
+                if (data.username !== username) {
+                    try {
+                        const { soundManager } = require('./utils/notificationSounds');
+                        const isMention = data.content?.includes(`@${username}`) || data.mentions?.includes(username);
+                        const isDM = data.type === 'dm';
+                        if (isMention) soundManager.play('mention');
+                        else if (isDM) soundManager.play('dm');
+                        else soundManager.play('message');
+                    } catch (e) { /* sound not critical */ }
+                }
                 if (isNearBottom()) {
                     scrollToBottom('smooth');
                 } else {
@@ -2114,14 +2380,34 @@ const AppContent = () => {
 
     useEffect(() => {
         const handler = (e) => {
+            // Ctrl+K: Quick Switcher / Command Palette
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
-                searchInputRef.current?.focus();
+                setShowQuickSwitcher(prev => !prev);
+            }
+            // Ctrl+/: Keyboard Shortcuts
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                setShowKeyboardShortcuts(prev => !prev);
+            }
+            // Ctrl+Shift+P: Command Palette
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                setShowCommandPalette(prev => !prev);
+            }
+            // Ctrl+,: User Settings
+            if ((e.ctrlKey || e.metaKey) && e.key === ',') {
+                e.preventDefault();
+                setShowUserSettings(prev => !prev);
+            }
+            // Escape: Close all feature hub
+            if (e.key === 'Escape' && showFeatureHub) {
+                setShowFeatureHub(false);
             }
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, []);
+    }, [showFeatureHub]);
 
     // Global Status WebSocket
     useEffect(() => {
@@ -3714,8 +4000,1545 @@ const AppContent = () => {
                 </Suspense>
             )}
 
+            {/* 🔥 BATCH 10: 50 Essential Features (2026-02-01) */}
+
+            {/* ⚙️ 1. User Settings Modal */}
+            {showUserSettings && (
+                <Suspense fallback={<div>⚙️ Ayarlar Yükleniyor...</div>}>
+                    <UserSettingsModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        currentUser={currentUserProfile}
+                        username={username}
+                        onClose={() => setShowUserSettings(false)}
+                        onOpenAppearance={() => setShowAppearanceSettings(true)}
+                        onOpenPrivacy={() => setShowPrivacySettings(true)}
+                        onOpenSecurity={() => setShowSecuritySettings(true)}
+                        onOpenNotifications={() => setShowNotificationSounds(true)}
+                        onOpenConnections={() => setShowConnectionsPanel(true)}
+                        onOpenLanguage={() => setShowLanguageSelector(true)}
+                        onLogout={() => setShowLogoutConfirm(true)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⌨️ 2. Keyboard Shortcuts */}
+            {showKeyboardShortcuts && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <KeyboardShortcutsModal onClose={() => setShowKeyboardShortcuts(false)} />
+                </Suspense>
+            )}
+
+            {/* 🔍 3. Command Palette */}
+            {showCommandPalette && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <CommandPalette
+                        onClose={() => setShowCommandPalette(false)}
+                        onNavigate={(target) => {
+                            if (target.type === 'room') setActiveChat({ type: 'room', slug: target.slug });
+                            else if (target.type === 'dm') setActiveChat({ type: 'dm', id: target.id });
+                            setShowCommandPalette(false);
+                        }}
+                        categories={categories}
+                        conversations={conversations}
+                        allUsers={allUsers}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🌍 4. Server Discovery */}
+            {showServerDiscovery && (
+                <Suspense fallback={<div>🌍 Sunucu Keşfet Yükleniyor...</div>}>
+                    <ServerDiscoveryPage
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        currentUsername={username}
+                        onClose={() => setShowServerDiscovery(false)}
+                        onJoinServer={(server) => {
+                            toast.success(`${server.name} sunucusuna katıldın!`);
+                            setShowServerDiscovery(false);
+                        }}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎨 5. Appearance Settings */}
+            {showAppearanceSettings && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <AppearanceSettingsPanel
+                        onClose={() => setShowAppearanceSettings(false)}
+                        currentTheme={currentTheme}
+                        onThemeChange={setCurrentTheme}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🌐 6. Language Selector */}
+            {showLanguageSelector && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <LanguageSelector onClose={() => setShowLanguageSelector(false)} />
+                </Suspense>
+            )}
+
+            {/* 📋 7. Changelog */}
+            {showChangelog && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ChangelogPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowChangelog(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🚪 8. Logout Confirm */}
+            {showLogoutConfirm && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <LogoutModal
+                        onConfirm={() => { logout(); setShowLogoutConfirm(false); }}
+                        onClose={() => setShowLogoutConfirm(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔊 9. Notification Sound Settings */}
+            {showNotificationSounds && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <NotificationSoundSettings
+                        soundSettings={soundSettings}
+                        onUpdateSettings={setSoundSettings}
+                        onClose={() => setShowNotificationSounds(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⚡ 10. Quick Switcher */}
+            {showQuickSwitcher && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <QuickSwitcher
+                        onClose={() => setShowQuickSwitcher(false)}
+                        categories={categories}
+                        conversations={conversations}
+                        onSelect={(item) => {
+                            if (item.type === 'room') setActiveChat({ type: 'room', slug: item.slug });
+                            else if (item.type === 'dm') setActiveChat({ type: 'dm', id: item.id });
+                            setShowQuickSwitcher(false);
+                        }}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔐 11. Login History */}
+            {showLoginHistory && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <LoginHistory
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowLoginHistory(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🛡️ 12. Security Settings */}
+            {showSecuritySettings && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <SecuritySettingsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowSecuritySettings(false)}
+                        onOpen2FA={() => setShowTwoFactorSetup(true)}
+                        onOpenLoginHistory={() => setShowLoginHistory(true)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔒 13. Privacy Settings */}
+            {showPrivacySettings && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <PrivacySettingsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowPrivacySettings(false)}
+                        onOpenBlockList={() => setShowBlockList(true)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ❌ 14. Account Deletion */}
+            {showAccountDeletion && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <AccountDeletionModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowAccountDeletion(false)}
+                        onConfirm={() => { logout(); setShowAccountDeletion(false); }}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🚫 15. Block List */}
+            {showBlockList && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <BlockListPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowBlockList(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔐 16. E2EE Settings */}
+            {showE2EESettings && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <E2EESettingsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        encryptionKeys={encryptionKeys}
+                        onClose={() => setShowE2EESettings(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💬 17. Thread View */}
+            {showThreadView && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ThreadView
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowThreadView(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⏰ 18. Scheduled Messages */}
+            {showScheduledMessages && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ScheduledMessagesPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowScheduledMessages(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⏰ 19. Reminders */}
+            {showReminders && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ReminderPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowReminders(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📋 20. Forum Panel */}
+            {showForum && activeChat?.type === 'room' && (
+                <Suspense fallback={<div>📋 Forum Yükleniyor...</div>}>
+                    <ForumPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat.slug}
+                        serverId={activeChat.server_id}
+                        currentUser={username}
+                        onClose={() => setShowForum(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎤 21. Stage Channel */}
+            {showStageChannel && (
+                <Suspense fallback={<div>🎤 Sahne Yükleniyor...</div>}>
+                    <StageChannelPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        currentUser={username}
+                        onClose={() => setShowStageChannel(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📹 22. Video Call */}
+            {showVideoCall && (
+                <Suspense fallback={<div>📹 Video Arama Yükleniyor...</div>}>
+                    <VideoCallModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        currentUser={username}
+                        targetUser={activeChat?.type === 'dm' ? activeChat.name : null}
+                        onClose={() => setShowVideoCall(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎙️ 23. Voice Settings */}
+            {showVoiceSettings && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <VoiceSettingsPanel
+                        onClose={() => setShowVoiceSettings(false)}
+                        isMuted={isMuted}
+                        isDeafened={isDeafened}
+                        onToggleMute={toggleMute}
+                        onToggleDeafened={toggleDeafened}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔍 24. Message Search */}
+            {showMessageSearch && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <MessageSearchPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowMessageSearch(false)}
+                        onMessageClick={(msg) => {
+                            if (msg.room) setActiveChat({ type: 'room', slug: msg.room });
+                            setShowMessageSearch(false);
+                        }}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎬 25. Watch Together */}
+            {showWatchTogether && (
+                <Suspense fallback={<div>🎬 Birlikte İzle Yükleniyor...</div>}>
+                    <WatchTogether
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        currentUser={username}
+                        onClose={() => setShowWatchTogether(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🤖 26. Auto Roles */}
+            {showAutoRoles && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <AutoRolesPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowAutoRoles(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎭 27. Reaction Roles */}
+            {showReactionRoles && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ReactionRolesPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowReactionRoles(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👋 28. Welcome Messages */}
+            {showWelcomeMessages && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <WelcomeMessagesPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowWelcomeMessages(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📅 29. Event Calendar */}
+            {showEventCalendar && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>📅 Etkinlikler Yükleniyor...</div>}>
+                    <EventCalendar
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        currentUser={username}
+                        onClose={() => setShowEventCalendar(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎉 30. Giveaway */}
+            {showGiveaway && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>🎉 Çekiliş Yükleniyor...</div>}>
+                    <GiveawayPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        currentUser={username}
+                        onClose={() => setShowGiveaway(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎫 31. Ticket System */}
+            {showTicketSystem && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>🎫 Destek Sistemi Yükleniyor...</div>}>
+                    <TicketSystemPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        currentUser={username}
+                        onClose={() => setShowTicketSystem(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⭐ 32. Starboard */}
+            {showStarboard && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <StarboardPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowStarboard(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💾 33. Server Backup */}
+            {showServerBackup && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ServerBackupPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowServerBackup(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⚖️ 34. Ban Appeals */}
+            {showBanAppeals && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <BanAppealsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowBanAppeals(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🤖 35. Custom Commands */}
+            {showCustomCommands && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <CustomCommandsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowCustomCommands(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📊 36. Leveling System */}
+            {showLevelingSystem && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>📊 Seviye Sistemi Yükleniyor...</div>}>
+                    <LevelingSystemPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        currentUser={username}
+                        onClose={() => setShowLevelingSystem(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📺 37. Live Stream */}
+            {showLiveStream && (
+                <Suspense fallback={<div>📺 Canlı Yayın Yükleniyor...</div>}>
+                    <LiveStreamPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        currentUser={username}
+                        onClose={() => setShowLiveStream(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🏆 38. Achievements */}
+            {showAchievements && (
+                <Suspense fallback={<div>🏆 Başarımlar Yükleniyor...</div>}>
+                    <AchievementsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowAchievements(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎂 39. Birthday System */}
+            {showBirthdaySystem && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <BirthdaySystemPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowBirthdaySystem(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💎 40. Premium */}
+            {showPremium && (
+                <Suspense fallback={<div>💎 Premium Yükleniyor...</div>}>
+                    <PremiumModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowPremium(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎵 41. Music Player */}
+            {showMusicPlayer && (
+                <Suspense fallback={<div>🎵 Müzik Yükleniyor...</div>}>
+                    <MusicPlayer
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowMusicPlayer(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🤖 42. Bot Marketplace */}
+            {showBotMarketplace && (
+                <Suspense fallback={<div>🤖 Bot Mağazası Yükleniyor...</div>}>
+                    <BotMarketplace
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowBotMarketplace(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👤 43. Profile Customization */}
+            {showProfileCustomization && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ProfileCustomization
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        currentUser={currentUserProfile}
+                        onClose={() => setShowProfileCustomization(false)}
+                        onProfileUpdate={(updated) => setCurrentUserProfile(updated)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔗 44. Integration Hub */}
+            {showIntegrationHub && (
+                <Suspense fallback={<div>🔗 Entegrasyonlar Yükleniyor...</div>}>
+                    <IntegrationHubPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowIntegrationHub(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🏆 45. Tournaments */}
+            {showTournaments && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>🏆 Turnuvalar Yükleniyor...</div>}>
+                    <TournamentSystem
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        currentUser={username}
+                        onClose={() => setShowTournaments(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💡 46. Highlights */}
+            {showHighlights && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <HighlightsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowHighlights(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📦 47. Custom Embed */}
+            {showCustomEmbed && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <CustomEmbedPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowCustomEmbed(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎵 48. Spotify Integration */}
+            {showSpotifyIntegration && (
+                <Suspense fallback={<div>🎵 Spotify Yükleniyor...</div>}>
+                    <SpotifyIntegrationPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowSpotifyIntegration(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📋 49. Server Clone */}
+            {showServerClone && activeChat?.type === 'room' && activeChat.server_id && (
+                <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <ServerClonePanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowServerClone(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎯 50. Weekly Challenges */}
+            {showWeeklyChallenges && (
+                <Suspense fallback={<div>🎯 Haftalık Görevler Yükleniyor...</div>}>
+                    <WeeklyChallengesPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowWeeklyChallenges(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ═══════════════════════════════════════════════════════════════ */}
+            {/* 🔥 BATCH 11: 50 More Essential Features (2026-02-02)          */}
+            {/* ═══════════════════════════════════════════════════════════════ */}
+
+            {/* 🛡️ 1. Moderator Tools */}
+            {showModeratorTools && (
+                <Suspense fallback={<div>🛡️ Moderasyon Araçları Yükleniyor...</div>}>
+                    <ModeratorTools
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowModeratorTools(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🤖 2. AI Moderation */}
+            {showAIModeration && (
+                <Suspense fallback={<div>🤖 AI Moderasyon Yükleniyor...</div>}>
+                    <AIModerationPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowAIModeration(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🚫 3. Spam Detection */}
+            {showSpamDetection && (
+                <Suspense fallback={<div>🚫 Spam Koruması Yükleniyor...</div>}>
+                    <SpamDetectionPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowSpamDetection(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📋 4. Audit Logs */}
+            {showAuditLogs && (
+                <Suspense fallback={<div>📋 Denetim Kayıtları Yükleniyor...</div>}>
+                    <AuditLogsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowAuditLogs(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⛔ 5. Ban History */}
+            {showBanHistory && (
+                <Suspense fallback={<div>⛔ Ban Geçmişi Yükleniyor...</div>}>
+                    <BanHistoryPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowBanHistory(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📜 6. Moderation Logs */}
+            {showModerationLogs && (
+                <Suspense fallback={<div>📜 Moderasyon Logları Yükleniyor...</div>}>
+                    <ModerationLogsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowModerationLogs(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/*  8. Security Alerts */}
+            {showSecurityAlerts && (
+                <Suspense fallback={<div>🚨 Güvenlik Uyarıları Yükleniyor...</div>}>
+                    <SecurityAlertsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowSecurityAlerts(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎞️ 10. GIF Picker */}
+            {showGIFPicker && (
+                <Suspense fallback={<div>🎞️ GIF Seçici Yükleniyor...</div>}>
+                    <GIFPickerPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onSelect={(gif) => { /* handle gif insert */ setShowGIFPicker(false); }}
+                        onClose={() => setShowGIFPicker(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📊 11. Poll Creator */}
+            {showPollCreator && (
+                <Suspense fallback={<div>📊 Anket Oluşturucu Yükleniyor...</div>}>
+                    <PollCreator
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowPollCreator(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎨 12. Stickers */}
+            {showStickers && (
+                <Suspense fallback={<div>🎨 Çıkartmalar Yükleniyor...</div>}>
+                    <StickersPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onSelect={(sticker) => { /* handle sticker insert */ setShowStickers(false); }}
+                        onClose={() => setShowStickers(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💾 13. Saved Messages */}
+            {showSavedMessages && (
+                <Suspense fallback={<div>💾 Kayıtlı Mesajlar Yükleniyor...</div>}>
+                    <SavedMessagesModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowSavedMessages(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔔 14. Notifications Center */}
+            {showNotificationsCenter && (
+                <Suspense fallback={<div>🔔 Bildirimler Yükleniyor...</div>}>
+                    <NotificationsCenter
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowNotificationsCenter(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📝 15. Message Summary */}
+            {showMessageSummary && (
+                <Suspense fallback={<div>📝 Özet Yükleniyor...</div>}>
+                    <MessageSummaryPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowMessageSummary(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🌍 16. Translation */}
+            {showTranslation && (
+                <Suspense fallback={<div>🌍 Çeviri Yükleniyor...</div>}>
+                    <TranslationPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowTranslation(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⚙️ 17. Channel Settings */}
+            {showChannelSettings && activeChat?.type === 'room' && (
+                <Suspense fallback={<div>⚙️ Kanal Ayarları Yükleniyor...</div>}>
+                    <ChannelSettingsModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat.slug}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowChannelSettings(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📨 18. Invite Modal */}
+            {showInviteModal && activeChat?.type === 'room' && (
+                <Suspense fallback={<div>📨 Davet Yükleniyor...</div>}>
+                    <InviteModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat.slug}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowInviteModal(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📋 19. Server Templates */}
+            {showServerTemplates && (
+                <Suspense fallback={<div>📋 Şablonlar Yükleniyor...</div>}>
+                    <ServerTemplates
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowServerTemplates(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📊 20. Server Analytics */}
+            {showServerAnalytics && (
+                <Suspense fallback={<div>📊 Analitik Yükleniyor...</div>}>
+                    <ServerAnalyticsDashboard
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowServerAnalytics(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👑 21. Roles Manager */}
+            {showRolesManager && activeChat?.type === 'room' && (
+                <Suspense fallback={<div>👑 Rol Yöneticisi Yükleniyor...</div>}>
+                    <RolesManager
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat.server_id}
+                        onClose={() => setShowRolesManager(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👋 22. Welcome Screen Editor */}
+            {showWelcomeScreenEditor && (
+                <Suspense fallback={<div>👋 Karşılama Ekranı Yükleniyor...</div>}>
+                    <WelcomeScreenEditor
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowWelcomeScreenEditor(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🏘️ 23. Community Settings */}
+            {showCommunitySettings && (
+                <Suspense fallback={<div>🏘️ Topluluk Ayarları Yükleniyor...</div>}>
+                    <CommunitySettingsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowCommunitySettings(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔗 24. Invite Link Manager */}
+            {showInviteLinkManager && (
+                <Suspense fallback={<div>🔗 Davet Linkleri Yükleniyor...</div>}>
+                    <InviteLinkManager
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowInviteLinkManager(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🤖 25. Bot Builder */}
+            {showBotBuilder && (
+                <Suspense fallback={<div>🤖 Bot Oluşturucu Yükleniyor...</div>}>
+                    <BotBuilder
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowBotBuilder(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🧑‍💻 26. Bot Developer Portal */}
+            {showBotDevPortal && (
+                <Suspense fallback={<div>🧑‍💻 Geliştirici Portalı Yükleniyor...</div>}>
+                    <BotDeveloperPortal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowBotDevPortal(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔗 27. Webhook Manager */}
+            {showWebhookManager && (
+                <Suspense fallback={<div>🔗 Webhook Yöneticisi Yükleniyor...</div>}>
+                    <WebhookManager
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowWebhookManager(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🔑 28. API Keys */}
+            {showAPIKeys && (
+                <Suspense fallback={<div>🔑 API Anahtarları Yükleniyor...</div>}>
+                    <APIKeysPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowAPIKeys(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* ⚡ 29. Slash Commands */}
+            {showSlashCommands && (
+                <Suspense fallback={<div>⚡ Komut Yöneticisi Yükleniyor...</div>}>
+                    <SlashCommandsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowSlashCommands(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💻 30. Code Runner */}
+            {showCodeRunner && (
+                <Suspense fallback={<div>💻 Kod Çalıştırıcı Yükleniyor...</div>}>
+                    <CodeRunnerPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowCodeRunner(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👤 31. Profile Card */}
+            {showProfileCard && (
+                <Suspense fallback={<div>👤 Profil Kartı Yükleniyor...</div>}>
+                    <ProfileCard
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        currentUser={currentUserProfile}
+                        onClose={() => setShowProfileCard(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📝 32. User Notes */}
+            {showUserNotes && (
+                <Suspense fallback={<div>📝 Notlar Yükleniyor...</div>}>
+                    <UserNotesModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowUserNotes(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🟢 33. Status Picker */}
+            {showStatusPicker && (
+                <Suspense fallback={<div>🟢 Durum Seçici Yükleniyor...</div>}>
+                    <StatusPicker
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        currentUser={currentUserProfile}
+                        onClose={() => setShowStatusPicker(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👥 34. Mutuals Panel */}
+            {showMutuals && (
+                <Suspense fallback={<div>👥 Ortak Arkadaşlar Yükleniyor...</div>}>
+                    <MutualsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowMutuals(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🏅 35. Profile Showcase */}
+            {showProfileShowcase && (
+                <Suspense fallback={<div>🏅 Profil Vitrini Yükleniyor...</div>}>
+                    <ProfileShowcasePanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        currentUser={currentUserProfile}
+                        onClose={() => setShowProfileShowcase(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📱 36. Session Manager */}
+            {showSessionManager && (
+                <Suspense fallback={<div>📱 Oturum Yöneticisi Yükleniyor...</div>}>
+                    <SessionManagerModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowSessionManager(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🪙 37. Coin Store */}
+            {showCoinStore && (
+                <Suspense fallback={<div>🪙 Mağaza Yükleniyor...</div>}>
+                    <CoinStoreModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowCoinStore(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 💎 38. Premium Management */}
+            {showPremiumManagement && (
+                <Suspense fallback={<div>💎 Premium Yönetimi Yükleniyor...</div>}>
+                    <PremiumManagementPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowPremiumManagement(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📋 39. Subscription Manager */}
+            {showSubscriptionManager && (
+                <Suspense fallback={<div>📋 Abonelikler Yükleniyor...</div>}>
+                    <SubscriptionManager
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowSubscriptionManager(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎁 40. Gift Premium */}
+            {showGiftPremium && (
+                <Suspense fallback={<div>🎁 Hediye Premium Yükleniyor...</div>}>
+                    <GiftPremiumPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowGiftPremium(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🛒 41. Premium Marketplace */}
+            {showPremiumMarketplace && (
+                <Suspense fallback={<div>🛒 Premium Mağaza Yükleniyor...</div>}>
+                    <PremiumMarketplace
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowPremiumMarketplace(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🎨 42. Theme Marketplace */}
+            {showThemeMarketplace && (
+                <Suspense fallback={<div>🎨 Tema Mağazası Yükleniyor...</div>}>
+                    <ThemeMarketplace
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowThemeMarketplace(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🤖 43. AI Chatbot */}
+            {showAIChatbot && (
+                <Suspense fallback={<div>🤖 AI Chatbot Yükleniyor...</div>}>
+                    <AIChatbotPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        username={username}
+                        onClose={() => setShowAIChatbot(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 👨‍💻 44. Collaborative Code Editor */}
+            {showCodeEditor && (
+                <Suspense fallback={<div>👨‍💻 Kod Editörü Yükleniyor...</div>}>
+                    <CollaborativeCodeEditor
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        username={username}
+                        onClose={() => setShowCodeEditor(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🖥️ 45. Screen Share */}
+            {showScreenShare && (
+                <Suspense fallback={<div>🖥️ Ekran Paylaşımı Yükleniyor...</div>}>
+                    <ScreenShareModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowScreenShare(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📺 46. Live Stream Modal */}
+            {showLiveStreamModal && (
+                <Suspense fallback={<div>📺 Canlı Yayın Yükleniyor...</div>}>
+                    <LiveStreamModal
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        username={username}
+                        onClose={() => setShowLiveStreamModal(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📈 47. Advanced Analytics */}
+            {showAdvancedAnalytics && (
+                <Suspense fallback={<div>📈 Gelişmiş Analitik Yükleniyor...</div>}>
+                    <AdvancedAnalyticsDashboard
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowAdvancedAnalytics(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📁 48. File Manager */}
+            {showFileManager && (
+                <Suspense fallback={<div>📁 Dosya Yöneticisi Yükleniyor...</div>}>
+                    <FileManagerPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        roomSlug={activeChat?.slug}
+                        onClose={() => setShowFileManager(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 📊 49. Reports */}
+            {showReports && (
+                <Suspense fallback={<div>📊 Raporlar Yükleniyor...</div>}>
+                    <ReportsPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        serverId={activeChat?.server_id}
+                        onClose={() => setShowReports(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🐛 50. Error Reporting */}
+            {showErrorReporting && (
+                <Suspense fallback={<div>🐛 Hata Raporlama Yükleniyor...</div>}>
+                    <ErrorReportingPanel
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onClose={() => setShowErrorReporting(false)}
+                    />
+                </Suspense>
+            )}
+
+            {/* 🚀 FEATURE HUB - Mega Menu (All Features Access Point) */}
+            {showFeatureHub && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999,
+                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    backdropFilter: 'blur(8px)'
+                }} onClick={(e) => { if (e.target === e.currentTarget) setShowFeatureHub(false); }}>
+                    <div style={{
+                        backgroundColor: '#2f3136', borderRadius: '16px', width: '90%', maxWidth: '900px',
+                        maxHeight: '85vh', overflow: 'auto', padding: '32px',
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                            <h2 style={{ margin: 0, fontSize: '1.5em', color: '#fff' }}>🚀 Tüm Özellikler</h2>
+                            <button onClick={() => setShowFeatureHub(false)} style={{ background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.5em', cursor: 'pointer' }}>✕</button>
+                        </div>
+
+                        {/* ⚙️ CORE UX */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#7289da', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>⚙️ Genel Ayarlar</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '⚙️', label: 'Kullanıcı Ayarları', action: () => setShowUserSettings(true) },
+                                    { icon: '⌨️', label: 'Kısayol Tuşları', action: () => setShowKeyboardShortcuts(true) },
+                                    { icon: '🔍', label: 'Komut Paleti', action: () => setShowCommandPalette(true) },
+                                    { icon: '🌍', label: 'Sunucu Keşfet', action: () => setShowServerDiscovery(true) },
+                                    { icon: '🎨', label: 'Görünüm', action: () => setShowAppearanceSettings(true) },
+                                    { icon: '🌐', label: 'Dil Seçimi', action: () => setShowLanguageSelector(true) },
+                                    { icon: '📋', label: 'Değişiklik Günlüğü', action: () => setShowChangelog(true) },
+                                    { icon: '🔊', label: 'Bildirim Sesleri', action: () => setShowNotificationSounds(true) },
+                                    { icon: '⚡', label: 'Hızlı Geçiş', action: () => setShowQuickSwitcher(true) },
+                                    { icon: '🚪', label: 'Çıkış Yap', action: () => setShowLogoutConfirm(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(88,101,242,0.2)'; e.currentTarget.style.borderColor = '#5865f2'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🔐 SECURITY */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#ed4245', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🔐 Güvenlik & Gizlilik</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🔐', label: 'Giriş Geçmişi', action: () => setShowLoginHistory(true) },
+                                    { icon: '🛡️', label: 'Güvenlik Ayarları', action: () => setShowSecuritySettings(true) },
+                                    { icon: '🔒', label: 'Gizlilik Ayarları', action: () => setShowPrivacySettings(true) },
+                                    { icon: '🚫', label: 'Engel Listesi', action: () => setShowBlockList(true) },
+                                    { icon: '🔐', label: 'E2E Şifreleme', action: () => setShowE2EESettings(true) },
+                                    { icon: '❌', label: 'Hesap Silme', action: () => setShowAccountDeletion(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(237,66,69,0.2)'; e.currentTarget.style.borderColor = '#ed4245'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 💬 COMMUNICATION */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#3ba55d', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>💬 İletişim</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '💬', label: 'Mesaj Konuları', action: () => setShowThreadView(true) },
+                                    { icon: '⏰', label: 'Zamanlanmış Mesajlar', action: () => setShowScheduledMessages(true) },
+                                    { icon: '⏰', label: 'Hatırlatıcılar', action: () => setShowReminders(true) },
+                                    { icon: '📋', label: 'Forum', action: () => setShowForum(true) },
+                                    { icon: '🎤', label: 'Sahne Kanalı', action: () => setShowStageChannel(true) },
+                                    { icon: '📹', label: 'Görüntülü Arama', action: () => setShowVideoCall(true) },
+                                    { icon: '🎙️', label: 'Ses Ayarları', action: () => setShowVoiceSettings(true) },
+                                    { icon: '🔍', label: 'Mesaj Arama', action: () => setShowMessageSearch(true) },
+                                    { icon: '🎬', label: 'Birlikte İzle', action: () => setShowWatchTogether(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(59,165,93,0.2)'; e.currentTarget.style.borderColor = '#3ba55d'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🏠 SERVER MANAGEMENT */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#faa61a', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🏠 Sunucu Yönetimi</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🤖', label: 'Otomatik Roller', action: () => setShowAutoRoles(true) },
+                                    { icon: '🎭', label: 'Tepki Rolleri', action: () => setShowReactionRoles(true) },
+                                    { icon: '👋', label: 'Hoş Geldin Mesajları', action: () => setShowWelcomeMessages(true) },
+                                    { icon: '📅', label: 'Etkinlik Takvimi', action: () => setShowEventCalendar(true) },
+                                    { icon: '🎉', label: 'Çekiliş', action: () => setShowGiveaway(true) },
+                                    { icon: '🎫', label: 'Destek Sistemi', action: () => setShowTicketSystem(true) },
+                                    { icon: '⭐', label: 'Yıldız Panosu', action: () => setShowStarboard(true) },
+                                    { icon: '💾', label: 'Sunucu Yedekleme', action: () => setShowServerBackup(true) },
+                                    { icon: '⚖️', label: 'Ban İtirazları', action: () => setShowBanAppeals(true) },
+                                    { icon: '🤖', label: 'Özel Komutlar', action: () => setShowCustomCommands(true) },
+                                    { icon: '📊', label: 'Seviye Sistemi', action: () => setShowLevelingSystem(true) },
+                                    { icon: '📺', label: 'Canlı Yayın', action: () => setShowLiveStream(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(250,166,26,0.2)'; e.currentTarget.style.borderColor = '#faa61a'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🎮 ENGAGEMENT */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#9b59b6', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🎮 Eğlence & Sosyal</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🏆', label: 'Başarımlar', action: () => setShowAchievements(true) },
+                                    { icon: '🎂', label: 'Doğum Günleri', action: () => setShowBirthdaySystem(true) },
+                                    { icon: '💎', label: 'Premium', action: () => setShowPremium(true) },
+                                    { icon: '🎵', label: 'Müzik Çalar', action: () => setShowMusicPlayer(true) },
+                                    { icon: '🤖', label: 'Bot Mağazası', action: () => setShowBotMarketplace(true) },
+                                    { icon: '👤', label: 'Profil Özelleştir', action: () => setShowProfileCustomization(true) },
+                                    { icon: '🔗', label: 'Entegrasyonlar', action: () => setShowIntegrationHub(true) },
+                                    { icon: '🏆', label: 'Turnuvalar', action: () => setShowTournaments(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(155,89,182,0.2)'; e.currentTarget.style.borderColor = '#9b59b6'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🔧 ADVANCED */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#e67e22', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🔧 Gelişmiş</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '💡', label: 'Öne Çıkanlar', action: () => setShowHighlights(true) },
+                                    { icon: '📦', label: 'Özel Embed', action: () => setShowCustomEmbed(true) },
+                                    { icon: '🎵', label: 'Spotify Bağlantısı', action: () => setShowSpotifyIntegration(true) },
+                                    { icon: '📋', label: 'Sunucu Klonla', action: () => setShowServerClone(true) },
+                                    { icon: '🎯', label: 'Haftalık Görevler', action: () => setShowWeeklyChallenges(true) },
+                                    { icon: '🤖', label: 'AI Chatbot', action: () => setShowAIChatbot(true) },
+                                    { icon: '👨‍💻', label: 'Kod Editörü', action: () => setShowCodeEditor(true) },
+                                    { icon: '🖥️', label: 'Ekran Paylaşımı', action: () => setShowScreenShare(true) },
+                                    { icon: '📺', label: 'Canlı Yayın', action: () => setShowLiveStreamModal(true) },
+                                    { icon: '📈', label: 'Gelişmiş Analitik', action: () => setShowAdvancedAnalytics(true) },
+                                    { icon: '📁', label: 'Dosya Yöneticisi', action: () => setShowFileManager(true) },
+                                    { icon: '📊', label: 'Raporlar', action: () => setShowReports(true) },
+                                    { icon: '🐛', label: 'Hata Raporlama', action: () => setShowErrorReporting(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(230,126,34,0.2)'; e.currentTarget.style.borderColor = '#e67e22'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🔰 MODERATION - BATCH 11 */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#e74c3c', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🔰 Moderasyon & Yönetim</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🛡️', label: 'Moderasyon Araçları', action: () => setShowModeratorTools(true) },
+                                    { icon: '🤖', label: 'AI Moderasyon', action: () => setShowAIModeration(true) },
+                                    { icon: '🚫', label: 'Spam Koruması', action: () => setShowSpamDetection(true) },
+                                    { icon: '📋', label: 'Denetim Kayıtları', action: () => setShowAuditLogs(true) },
+                                    { icon: '⛔', label: 'Ban Geçmişi', action: () => setShowBanHistory(true) },
+                                    { icon: '📜', label: 'Moderasyon Logları', action: () => setShowModerationLogs(true) },
+                                    { icon: '🛡️', label: 'Baskın Koruması', action: () => setShowRaidProtection(true) },
+                                    { icon: '🚨', label: 'Güvenlik Uyarıları', action: () => setShowSecurityAlerts(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.2)'; e.currentTarget.style.borderColor = '#e74c3c'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 💬 MESSAGING - BATCH 11 */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#1abc9c', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>💬 Mesajlaşma & Medya</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🔖', label: 'Yer İmleri', action: () => setShowBookmarks(true) },
+                                    { icon: '🎞️', label: 'GIF Seçici', action: () => setShowGIFPicker(true) },
+                                    { icon: '📊', label: 'Anket Oluştur', action: () => setShowPollCreator(true) },
+                                    { icon: '🎨', label: 'Çıkartmalar', action: () => setShowStickers(true) },
+                                    { icon: '💾', label: 'Kayıtlı Mesajlar', action: () => setShowSavedMessages(true) },
+                                    { icon: '🔔', label: 'Bildirim Merkezi', action: () => setShowNotificationsCenter(true) },
+                                    { icon: '📝', label: 'Mesaj Özeti', action: () => setShowMessageSummary(true) },
+                                    { icon: '🌍', label: 'Çeviri Paneli', action: () => setShowTranslation(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(26,188,156,0.2)'; e.currentTarget.style.borderColor = '#1abc9c'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🏠 SERVER EXTENDED - BATCH 11 */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#2ecc71', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🏠 Sunucu Yönetimi (Genişletilmiş)</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '⚙️', label: 'Kanal Ayarları', action: () => setShowChannelSettings(true) },
+                                    { icon: '📨', label: 'Davet Yönetimi', action: () => setShowInviteModal(true) },
+                                    { icon: '📋', label: 'Sunucu Şablonları', action: () => setShowServerTemplates(true) },
+                                    { icon: '📊', label: 'Sunucu Analitiği', action: () => setShowServerAnalytics(true) },
+                                    { icon: '👑', label: 'Rol Yöneticisi', action: () => setShowRolesManager(true) },
+                                    { icon: '👋', label: 'Karşılama Ekranı', action: () => setShowWelcomeScreenEditor(true) },
+                                    { icon: '🏘️', label: 'Topluluk Ayarları', action: () => setShowCommunitySettings(true) },
+                                    { icon: '🔗', label: 'Davet Linkleri', action: () => setShowInviteLinkManager(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(46,204,113,0.2)'; e.currentTarget.style.borderColor = '#2ecc71'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 🤖 BOT & DEVELOPER - BATCH 11 */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#3498db', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🤖 Bot & Geliştirici</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🤖', label: 'Bot Oluşturucu', action: () => setShowBotBuilder(true) },
+                                    { icon: '🧑‍💻', label: 'Geliştirici Portalı', action: () => setShowBotDevPortal(true) },
+                                    { icon: '🔗', label: 'Webhook Yöneticisi', action: () => setShowWebhookManager(true) },
+                                    { icon: '🔑', label: 'API Anahtarları', action: () => setShowAPIKeys(true) },
+                                    { icon: '⚡', label: 'Slash Komutları', action: () => setShowSlashCommands(true) },
+                                    { icon: '💻', label: 'Kod Çalıştırıcı', action: () => setShowCodeRunner(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(52,152,219,0.2)'; e.currentTarget.style.borderColor = '#3498db'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 👤 PROFILE & SOCIAL - BATCH 11 */}
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ color: '#e91e63', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>👤 Profil & Sosyal</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '👤', label: 'Profil Kartı', action: () => setShowProfileCard(true) },
+                                    { icon: '📝', label: 'Kullanıcı Notları', action: () => setShowUserNotes(true) },
+                                    { icon: '🟢', label: 'Durum Seçici', action: () => setShowStatusPicker(true) },
+                                    { icon: '👥', label: 'Ortak Arkadaşlar', action: () => setShowMutuals(true) },
+                                    { icon: '🏅', label: 'Profil Vitrini', action: () => setShowProfileShowcase(true) },
+                                    { icon: '📱', label: 'Oturum Yöneticisi', action: () => setShowSessionManager(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(233,30,99,0.2)'; e.currentTarget.style.borderColor = '#e91e63'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 💎 PREMIUM & ECONOMY - BATCH 11 */}
+                        <div>
+                            <h3 style={{ color: '#f1c40f', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>💎 Premium & Ekonomi</h3>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
+                                {[
+                                    { icon: '🪙', label: 'Coin Mağazası', action: () => setShowCoinStore(true) },
+                                    { icon: '💎', label: 'Premium Yönetimi', action: () => setShowPremiumManagement(true) },
+                                    { icon: '📋', label: 'Abonelik Yönetimi', action: () => setShowSubscriptionManager(true) },
+                                    { icon: '🎁', label: 'Premium Hediye Et', action: () => setShowGiftPremium(true) },
+                                    { icon: '🛒', label: 'Premium Mağaza', action: () => setShowPremiumMarketplace(true) },
+                                    { icon: '🎨', label: 'Tema Mağazası', action: () => setShowThemeMarketplace(true) },
+                                ].map((item, i) => (
+                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
+                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(241,196,15,0.2)'; e.currentTarget.style.borderColor = '#f1c40f'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                                    >
+                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* --- STANDART MODALLAR --- */}
-            {zoomedImage && <ImageModal imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} />}
+            {zoomedImage && <Suspense fallback={null}><ImageLightbox imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} /></Suspense>}
             {showPinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => setShowPinned(false)} /></Suspense>}
             {viewingProfile && <UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} />}
 
@@ -3728,6 +5551,9 @@ const AppContent = () => {
             {isMobile && isRightSidebarVisible && (
                 <div style={styles.mobileOverlay} onClick={() => setIsRightSidebarVisible(false)} />
             )}
+
+            {/* 🌐 Connection Status Bar */}
+            <ConnectionStatusBar />
 
             <div style={styles.chatLayout}>
                 {(!isMobile || isLeftSidebarVisible) && (
@@ -3970,11 +5796,9 @@ const AppContent = () => {
                                         <FaSearch style={styles.searchIcon} />
                                     </form>
 
-                                    {/* ⌨️ Yazıyor göstergesi */}
+                                    {/* ⌨️ Gelişmiş Yazıyor Göstergesi */}
                                     {!isMobile && activeTypingUsers.length > 0 && (
-                                        <span style={styles.typingIndicator}>
-                                            {activeTypingUsers.join(', ')} yazıyor...
-                                        </span>
+                                        <TypingIndicatorEnhanced users={activeTypingUsers} />
                                     )}
 
                                     {/* 🔔 Bildirimler (Her zaman görünür) */}
@@ -4330,6 +6154,31 @@ const AppContent = () => {
                                                         )}
                                                     </>
                                                 )}
+
+                                                {/* 🚀 TÜM ÖZELLİKLER - Feature Hub */}
+                                                <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
+                                                <button
+                                                    onClick={() => {
+                                                        setShowFeatureHub(true);
+                                                        setShowToolbarMenu(false);
+                                                    }}
+                                                    style={{
+                                                        ...styles.menuItem,
+                                                        color: '#5865f2',
+                                                        fontWeight: 'bold'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        e.currentTarget.style.backgroundColor = '#5865f2';
+                                                        e.currentTarget.style.color = '#ffffff';
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.currentTarget.style.backgroundColor = 'transparent';
+                                                        e.currentTarget.style.color = '#5865f2';
+                                                    }}
+                                                >
+                                                    🚀
+                                                    <span>Tüm Özellikler</span>
+                                                </button>}
                                             </div>
                                         )}
                                     </div>
@@ -4388,35 +6237,45 @@ const AppContent = () => {
                                     <>
                                         {optimizedMessages.map((msg, index) => {
                                             const key = msg.id || msg.temp_id || index;
+                                            const prevMsg = index > 0 ? optimizedMessages[index - 1] : null;
+                                            const showDateDivider = !prevMsg || (
+                                                msg.timestamp && prevMsg.timestamp &&
+                                                new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()
+                                            );
                                             return (
-                                                <Message
-                                                    key={key}
-                                                    msg={msg}
-                                                    currentUser={username}
-                                                    absoluteHostUrl={ABSOLUTE_HOST_URL}
-                                                    isAdmin={isAdmin}
-                                                    onImageClick={setZoomedImage}
-                                                    fetchWithAuth={fetchWithAuth}
-                                                    allUsers={allUsers}
-                                                    getDeterministicAvatar={getDeterministicAvatar}
-                                                    onShowChart={setChartSymbol}
-                                                    onDelete={handleDeleteMessage}
-                                                    onStartEdit={setEditingMessage}
-                                                    onSetReply={setReplyingTo}
-                                                    onToggleReaction={() => { }}
-                                                    onStartForward={setForwardingMessage}
-                                                    isSelectionMode={isSelectionMode}
-                                                    isSelected={selectedMessages.has(msg.id)}
-                                                    onToggleSelection={(id) => {
-                                                        const newSet = new Set(selectedMessages);
-                                                        if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
-                                                        setSelectedMessages(newSet);
-                                                    }}
-                                                    onScrollToMessage={scrollToMessage}
-                                                    onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                    onTogglePin={handleTogglePin}
-                                                    onVisible={handleMessageVisible}
-                                                />
+                                                <React.Fragment key={key}>
+                                                    {showDateDivider && msg.timestamp && (
+                                                        <MessageDateDivider date={msg.timestamp} />
+                                                    )}
+                                                    <Message
+                                                        key={key}
+                                                        msg={msg}
+                                                        currentUser={username}
+                                                        absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                                        isAdmin={isAdmin}
+                                                        onImageClick={setZoomedImage}
+                                                        fetchWithAuth={fetchWithAuth}
+                                                        allUsers={allUsers}
+                                                        getDeterministicAvatar={getDeterministicAvatar}
+                                                        onShowChart={setChartSymbol}
+                                                        onDelete={handleDeleteMessage}
+                                                        onStartEdit={setEditingMessage}
+                                                        onSetReply={setReplyingTo}
+                                                        onToggleReaction={() => { }}
+                                                        onStartForward={setForwardingMessage}
+                                                        isSelectionMode={isSelectionMode}
+                                                        isSelected={selectedMessages.has(msg.id)}
+                                                        onToggleSelection={(id) => {
+                                                            const newSet = new Set(selectedMessages);
+                                                            if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
+                                                            setSelectedMessages(newSet);
+                                                        }}
+                                                        onScrollToMessage={scrollToMessage}
+                                                        onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
+                                                        onTogglePin={handleTogglePin}
+                                                        onVisible={handleMessageVisible}
+                                                    />
+                                                </React.Fragment>
                                             );
                                         })}
                                         <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
@@ -4425,14 +6284,10 @@ const AppContent = () => {
                             </div>
 
                             {showScrollToBottom && (
-                                <button
-                                    type="button"
-                                    style={styles.scrollToBottomButton}
+                                <ScrollToBottomButton
                                     onClick={() => { scrollToBottom('smooth'); setShowScrollToBottom(false); }}
-                                    aria-label="En alta in"
-                                >
-                                    En alta in
-                                </button>
+                                    unreadCount={0}
+                                />
                             )}
                             <div style={{ ...styles.inputContainer, paddingBottom: isNative ? `calc(16px + ${safeAreaBottom})` : (isMobile ? '25px' : '16px') }}>
                                 {isDragging && (

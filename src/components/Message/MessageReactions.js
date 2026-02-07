@@ -1,7 +1,8 @@
 // frontend/src/components/Message/MessageReactions.js
-// ❤️ MESSAGE REACTIONS - Emoji reactions display
+// ❤️ MESSAGE REACTIONS - Emoji reactions display with hover user popup
 
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useState, useRef } from 'react';
+import ReactionUsersPopup from '../ReactionUsersPopup';
 
 export const MessageReactions = memo(({
     reactions,
@@ -9,6 +10,10 @@ export const MessageReactions = memo(({
     onToggleReaction,
     messageId
 }) => {
+    const [hoveredEmoji, setHoveredEmoji] = useState(null);
+    const [popupAnchor, setPopupAnchor] = useState(null);
+    const hoverTimeoutRef = useRef(null);
+
     // Group reactions by emoji
     const groupedReactions = useCallback(() => {
         if (!reactions) return [];
@@ -30,14 +35,34 @@ export const MessageReactions = memo(({
         [reactions, currentUser]
     );
 
+    const handleReactionHover = useCallback((emoji, users, e) => {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = setTimeout(() => {
+            setHoveredEmoji(emoji);
+            setPopupAnchor(e.currentTarget);
+        }, 300);
+    }, []);
+
+    const handleReactionLeave = useCallback(() => {
+        clearTimeout(hoverTimeoutRef.current);
+        hoverTimeoutRef.current = setTimeout(() => {
+            setHoveredEmoji(null);
+            setPopupAnchor(null);
+        }, 200);
+    }, []);
+
     if (groupedReactions.length === 0) return null;
+
+    const hoveredGroup = hoveredEmoji ? groupedReactions.find(g => g.emoji === hoveredEmoji) : null;
 
     return (
         <div style={styles.reactionsRow}>
-            {groupedReactions.map(({ emoji, count }) => (
+            {groupedReactions.map(({ emoji, users, count }) => (
                 <span
                     key={emoji}
                     onClick={() => onToggleReaction(messageId, emoji)}
+                    onMouseEnter={(e) => handleReactionHover(emoji, users, e)}
+                    onMouseLeave={handleReactionLeave}
                     style={{
                         ...styles.reactionTag,
                         border: myReaction(emoji) ? '1px solid #5865f2' : '1px solid transparent',
@@ -48,6 +73,15 @@ export const MessageReactions = memo(({
                     {emoji} {count}
                 </span>
             ))}
+            {hoveredGroup && popupAnchor && (
+                <ReactionUsersPopup
+                    emoji={hoveredGroup.emoji}
+                    users={hoveredGroup.users}
+                    currentUser={currentUser}
+                    anchorEl={popupAnchor}
+                    onClose={() => { setHoveredEmoji(null); setPopupAnchor(null); }}
+                />
+            )}
         </div>
     );
 });

@@ -6,12 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaPlay from 'react-icons/fa/FaPlay';
-import FaPause from 'react-icons/fa/FaPause';
-import FaCut from 'react-icons/fa/FaCut';
-import FaSave from 'react-icons/fa/FaSave';
-import FaUndo from 'react-icons/fa/FaUndo';
-import FaRedo from 'react-icons/fa/FaRedo';
+import { FaPlay, FaPause, FaCut, FaSave, FaUndo, FaRedo } from 'react-icons/fa';
 
 const MediaTrimmer = ({
     mediaUrl,

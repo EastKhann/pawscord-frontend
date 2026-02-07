@@ -6,13 +6,8 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaCode from 'react-icons/fa/FaCode';
-import FaPlay from 'react-icons/fa/FaPlay';
+import { FaCode, FaPlay, FaSave, FaUsers, FaCopy, FaDownload } from 'react-icons/fa';
 import toast from '../utils/toast';
-import FaSave from 'react-icons/fa/FaSave';
-import FaUsers from 'react-icons/fa/FaUsers';
-import FaCopy from 'react-icons/fa/FaCopy';
-import FaDownload from 'react-icons/fa/FaDownload';
 
 const CollaborativeCodeEditor = ({
     roomId,
@@ -46,42 +41,11 @@ const CollaborativeCodeEditor = ({
 
     const loadMonacoEditor = async () => {
         try {
-            // Dynamically import Monaco
-            const monaco = await import('monaco-editor');
-            monacoRef.current = monaco;
-
-            // Create editor
-            const editor = monaco.editor.create(editorRef.current, {
-                value: code,
-                language: language,
-                theme: 'vs-dark',
-                automaticLayout: true,
-                fontSize: 14,
-                minimap: { enabled: true },
-                scrollBeyondLastLine: false,
-                renderWhitespace: 'selection',
-                cursorBlinking: 'smooth',
-                smoothScrolling: true
-            });
-
-            // Listen to content changes
-            editor.onDidChangeModelContent((e) => {
-                const newCode = editor.getValue();
-                setCode(newCode);
-                broadcastCodeChange(newCode, e.changes);
-            });
-
-            // Listen to cursor position changes
-            editor.onDidChangeCursorPosition((e) => {
-                broadcastCursorPosition(e.position);
-            });
-
-            // Store editor reference
-            window.monacoEditor = editor;
-
-            console.log('✅ [CodeEditor] Monaco loaded');
+            // Monaco is optional - use basic textarea fallback
+            setMonacoLoaded(false);
+            console.log('✅ [CodeEditor] Using textarea fallback (monaco-editor not installed)');
         } catch (error) {
-            console.error('❌ [CodeEditor] Failed to load Monaco:', error);
+            console.error('❌ [CodeEditor] Editor init error:', error);
         }
     };
 

@@ -6,12 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaDesktop from 'react-icons/fa/FaDesktop';
-import FaStop from 'react-icons/fa/FaStop';
-import FaCog from 'react-icons/fa/FaCog';
-import FaTimes from 'react-icons/fa/FaTimes';
-import FaExpand from 'react-icons/fa/FaExpand';
-import FaCompress from 'react-icons/fa/FaCompress';
+import { FaDesktop, FaStop, FaCog, FaTimes, FaExpand, FaCompress } from 'react-icons/fa';
 
 const ScreenShareModal = ({
     isOpen,

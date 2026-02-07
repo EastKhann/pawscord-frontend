@@ -1,7 +1,7 @@
 // frontend/src/components/RaidProtectionDashboard.js - Complete Raid Protection UI
 import React, { useState, useEffect, useRef } from 'react';
 import {
-    FaShield, FaLock, FaUnlock, FaExclamationTriangle, FaUserShield,
+    FaShieldAlt, FaLock, FaUnlock, FaExclamationTriangle, FaUserShield,
     FaHistory, FaCog, FaBan, FaCheck, FaTimes, FaUsers, FaRobot,
     FaClock, FaChartLine, FaEye, FaBell, FaQuestionCircle
 } from 'react-icons/fa';
@@ -243,7 +243,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
         <div className="raid-dashboard-overlay" onClick={onClose}>
             <div className="raid-dashboard" onClick={e => e.stopPropagation()}>
                 <div className="dashboard-header">
-                    <h2><FaShield /> Raid Koruma Paneli</h2>
+                    <h2><FaShieldAlt /> Raid Koruma Paneli</h2>
                     <div className="header-status">
                         <span className={`status-badge ${protectionStatus.enabled ? 'active' : 'inactive'}`}>
                             {protectionStatus.enabled ? '🛡️ Koruma Aktif' : '⚠️ Koruma Kapalı'}
@@ -296,7 +296,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
                                     className={`action-btn ${protectionStatus.enabled ? 'enabled' : ''}`}
                                     onClick={handleToggleProtection}
                                 >
-                                    <FaShield />
+                                    <FaShieldAlt />
                                     {protectionStatus.enabled ? 'Korumayı Kapat' : 'Korumayı Aç'}
                                 </button>
                                 <button

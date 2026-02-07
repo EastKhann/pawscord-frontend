@@ -1,7 +1,6 @@
 // frontend/src/components/LazyLoadErrorBoundary.js
 import React from 'react';
-import FaExclamationTriangle from 'react-icons/fa/FaExclamationTriangle';
-import FaRedo from 'react-icons/fa/FaRedo';
+import { FaExclamationTriangle, FaRedo } from 'react-icons/fa';
 
 /**
  * 🛡️ Lazy Load Error Boundary

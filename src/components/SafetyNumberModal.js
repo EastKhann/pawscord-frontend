@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaShieldAlt, FaCheck, FaTimes, FaQrcode } from 'react-icons/fa';
 import { generateSafetyNumber } from '../utils/e2ee';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG as QRCode } from 'qrcode.react';
 
 /**
  * Safety Number Verification Modal

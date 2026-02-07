@@ -7,13 +7,7 @@
 
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
-import FaPlus from 'react-icons/fa/FaPlus';
-import FaTimes from 'react-icons/fa/FaTimes';
-import FaUpload from 'react-icons/fa/FaUpload';
-import FaTrash from 'react-icons/fa/FaTrash';
-import FaEdit from 'react-icons/fa/FaEdit';
-import FaFire from 'react-icons/fa/FaFire';
-import FaSearch from 'react-icons/fa/FaSearch';
+import { FaPlus, FaTimes, FaUpload, FaTrash, FaEdit, FaFire, FaSearch } from 'react-icons/fa';
 
 const CustomEmojiManager = ({
     serverId,

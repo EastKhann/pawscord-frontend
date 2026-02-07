@@ -6,13 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import FaLock from 'react-icons/fa/FaLock';
-import FaUnlock from 'react-icons/fa/FaUnlock';
-import FaUsers from 'react-icons/fa/FaUsers';
-import FaUserPlus from 'react-icons/fa/FaUserPlus';
-import FaTimes from 'react-icons/fa/FaTimes';
-import FaSave from 'react-icons/fa/FaSave';
-import FaCrown from 'react-icons/fa/FaCrown';
+import { FaLock, FaUnlock, FaUsers, FaUserPlus, FaTimes, FaSave, FaCrown } from 'react-icons/fa';
 
 const VoiceChannelPermissions = ({
     channel,

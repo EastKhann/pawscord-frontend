@@ -1,7 +1,6 @@
 // frontend/src/components/OfflineBanner.js
 import React from 'react';
-import FaWifi from 'react-icons/fa/FaWifi';
-import FaExclamationTriangle from 'react-icons/fa/FaExclamationTriangle';
+import { FaWifi, FaExclamationTriangle } from 'react-icons/fa';
 import { useOfflineMode } from '../utils/offlineMode';
 
 /**

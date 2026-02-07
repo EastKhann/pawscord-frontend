@@ -6,9 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaRobot from 'react-icons/fa/FaRobot';
-import FaArrowUp from 'react-icons/fa/FaArrowUp';
-import FaArrowDown from 'react-icons/fa/FaArrowDown';
+import { FaRobot, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 const ContextAwareAutocomplete = ({
     inputValue,

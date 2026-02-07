@@ -6,10 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaReply from 'react-icons/fa/FaReply';
-import FaTimes from 'react-icons/fa/FaTimes';
-import FaArrowLeft from 'react-icons/fa/FaArrowLeft';
-import FaUsers from 'react-icons/fa/FaUsers';
+import { FaReply, FaTimes, FaArrowLeft, FaUsers } from 'react-icons/fa';
 
 const MessageThreadPanel = ({
     parentMessage,

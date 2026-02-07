@@ -7,9 +7,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import toast from '../utils/toast';
-import FaClosedCaptioning from 'react-icons/fa/FaClosedCaptioning';
-import FaCog from 'react-icons/fa/FaCog';
-import FaTimes from 'react-icons/fa/FaTimes';
+import { FaClosedCaptioning, FaCog, FaTimes } from 'react-icons/fa';
 
 const LiveSubtitles = ({
     audioStream,

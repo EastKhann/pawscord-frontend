@@ -8,6 +8,9 @@ import EmojiPicker from './EmojiPicker';
 const GifPicker = lazy(() => import('../GifPicker'));
 import MessageTemplateModal from './MessageTemplateModal';
 import ScheduledMessageModal from './ScheduledMessageModal';
+import MarkdownPreviewToggle from './MarkdownPreviewToggle';
+import ChatAutocomplete from './ChatAutocomplete';
+import { useChatStore } from '../stores/useChatStore';
 import '../styles/MessageInputMobile.css';
 
 // ⚡ OPTIMIZATION: Performance hooks
@@ -39,6 +42,7 @@ const MessageInput = ({
     const [showGifPicker, setShowGifPicker] = useState(false);
     const [showTemplates, setShowTemplates] = useState(false); // 🆕 Templates
     const [showScheduled, setShowScheduled] = useState(false); // 🆕 Scheduled
+    const [showMarkdownPreview, setShowMarkdownPreview] = useState(false); // 🆕 Markdown Preview
     const [showMobileMenu, setShowMobileMenu] = useState(false); // 🆕 Mobil açılır menü
     const [isRecording, setIsRecording] = useState(false);
     const [isRecordingLocked, setIsRecordingLocked] = useState(false); // 🎤 Kayıt kilitlendi mi
@@ -49,6 +53,10 @@ const MessageInput = ({
     const [slideProgress, setSlideProgress] = useState(0); // 🎤 0-1 arası kaydırma ilerlemesi
     const [isDragging, setIsDragging] = useState(false); // 🆕 Drag & Drop state
     const [pendingFiles, setPendingFiles] = useState([]); // 🆕 Dosya önizleme için bekleyen dosyalar
+    const [cursorPos, setCursorPos] = useState(0); // 🆕 Autocomplete cursor tracking
+
+    // 🆕 Store data for autocomplete
+    const onlineUsers = useChatStore(state => state.onlineUsers);
 
     // ⚡ PERFORMANCE: Debounce message state for draft saving (500ms delay)
     const debouncedMessage = useDebounce(message, 500);
@@ -279,6 +287,14 @@ const MessageInput = ({
             handleSubmit();
         }
 
+        // 🆕 Feature 6: Arrow Up to edit last message
+        if (e.key === 'ArrowUp' && !message.trim() && !editingMessage) {
+            // Empty input + ArrowUp = edit last own message
+            e.preventDefault();
+            // Dispatch custom event - App.js will handle finding the last message
+            window.dispatchEvent(new CustomEvent('pawscord:editLastMessage'));
+        }
+
         // 🆕 Ctrl+T - Templates
         if (e.ctrlKey && e.key === 't') {
             e.preventDefault();
@@ -294,7 +310,7 @@ const MessageInput = ({
                 onCancelReply();
             }
         }
-    }, [editingMessage, onCancelEdit, replyingTo, onCancelReply, handleSubmit]);
+    }, [editingMessage, onCancelEdit, replyingTo, onCancelReply, handleSubmit, message]);
 
     const handleEmojiSelect = useCallback((emoji) => {
         const textarea = textareaRef.current;
@@ -739,12 +755,58 @@ const MessageInput = ({
                     </div>
                 </div>
 
+                {/* 📝 Markdown Preview Toggle */}
+                <MarkdownPreviewToggle
+                    text={message}
+                    isPreviewMode={showMarkdownPreview}
+                    onToggle={() => setShowMarkdownPreview(prev => !prev)}
+                />
+
+                {/* 🔥 Autocomplete Popup */}
+                <ChatAutocomplete
+                    message={message}
+                    cursorPosition={cursorPos}
+                    users={onlineUsers || []}
+                    channels={activeChat?.rooms || []}
+                    textareaRef={textareaRef}
+                    onSelect={(newText, newCursorPos) => {
+                        setMessage(newText);
+                        setCursorPos(newCursorPos);
+                        setTimeout(() => {
+                            if (textareaRef.current) {
+                                textareaRef.current.selectionStart = newCursorPos;
+                                textareaRef.current.selectionEnd = newCursorPos;
+                                textareaRef.current.focus();
+                            }
+                        }, 0);
+                    }}
+                />
+
                 {/* Text Input */}
                 <textarea
                     ref={textareaRef}
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => { setMessage(e.target.value); setCursorPos(e.target.selectionStart); }}
                     onKeyDown={handleKeyDown}
+                    onSelect={(e) => setCursorPos(e.target.selectionStart)}
+                    onKeyUp={(e) => setCursorPos(e.target.selectionStart)}
+                    onPaste={(e) => {
+                        // 🆕 Feature 4: Clipboard image paste (Ctrl+V)
+                        const items = e.clipboardData?.items;
+                        if (!items) return;
+                        const imageItems = Array.from(items).filter(i => i.type.startsWith('image/'));
+                        if (imageItems.length > 0) {
+                            e.preventDefault();
+                            imageItems.forEach(item => {
+                                const file = item.getAsFile();
+                                if (file) {
+                                    const previewUrl = URL.createObjectURL(file);
+                                    setPendingFiles(prev => [...prev, { file, previewUrl, name: file.name || 'pasted-image.png', size: file.size, type: file.type }]);
+                                }
+                            });
+                            toast.success('📋 Görsel yapıştırıldı!');
+                        }
+                    }}
                     placeholder={placeholder}
                     style={styles.textarea}
                     disabled={disabled}

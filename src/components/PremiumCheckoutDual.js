@@ -1,16 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import toast from '../utils/toast';
-import { loadStripe } from '@stripe/stripe-js';
-import {
-    Elements,
-    CardElement,
-    useStripe,
-    useElements
-} from '@stripe/react-stripe-js';
 import axios from 'axios';
 import './PremiumCheckoutDual.css';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const PremiumCheckoutDual = ({ plan, onClose }) => {
     const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'crypto'
@@ -58,13 +49,11 @@ const PremiumCheckoutDual = ({ plan, onClose }) => {
 
             {/* Payment Form */}
             {paymentMethod === 'card' ? (
-                <Elements stripe={stripePromise}>
-                    <StripeCheckoutForm
-                        plan={plan}
-                        setLoading={setLoading}
-                        setError={setError}
-                    />
-                </Elements>
+                <StripeCheckoutForm
+                    plan={plan}
+                    setLoading={setLoading}
+                    setError={setError}
+                />
             ) : (
                 <CryptoCheckoutForm
                     plan={plan}
@@ -89,10 +78,8 @@ const PremiumCheckoutDual = ({ plan, onClose }) => {
     );
 };
 
-// Stripe Card Payment Component
+// Stripe Card Payment Component (uses backend Checkout Session redirect - no @stripe/* packages needed)
 const StripeCheckoutForm = ({ plan, setLoading, setError }) => {
-    const stripe = useStripe();
-    const elements = useElements();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -100,31 +87,21 @@ const StripeCheckoutForm = ({ plan, setLoading, setError }) => {
         setError(null);
 
         try {
-            // Backend'den PaymentIntent al
+            // Backend creates a Stripe Checkout Session and returns the redirect URL
             const { data } = await axios.post('/api/payments/create-stripe-payment/', {
                 plan_id: plan.id,
             });
 
-            // Card bilgisini onayla
-            const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(
-                data.client_secret,
-                {
-                    payment_method: {
-                        card: elements.getElement(CardElement),
-                    },
-                }
-            );
-
-            if (stripeError) {
-                setError(stripeError.message);
-                setLoading(false);
+            if (data.checkout_url) {
+                // Redirect to Stripe-hosted checkout page
+                window.location.href = data.checkout_url;
                 return;
             }
 
-            if (paymentIntent.status === 'succeeded') {
-                // Premium aktif et
+            if (data.payment_id) {
+                // Payment already confirmed server-side
                 await axios.post('/api/payments/confirm-payment/', {
-                    payment_id: paymentIntent.id,
+                    payment_id: data.payment_id,
                     payment_type: 'stripe',
                 });
 
@@ -140,26 +117,13 @@ const StripeCheckoutForm = ({ plan, setLoading, setError }) => {
     return (
         <form onSubmit={handleSubmit} className="stripe-form">
             <div className="card-element-wrapper">
-                <CardElement
-                    options={{
-                        style: {
-                            base: {
-                                fontSize: '16px',
-                                color: '#ffffff',
-                                fontFamily: '"Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                                '::placeholder': { color: '#72767d' },
-                            },
-                            invalid: {
-                                color: '#ed4245',
-                            },
-                        },
-                    }}
-                />
+                <p style={{ color: '#b9bbbe', textAlign: 'center', padding: '16px 0' }}>
+                    You will be redirected to a secure Stripe checkout page to enter your card details.
+                </p>
             </div>
 
             <button
                 type="submit"
-                disabled={!stripe}
                 className="submit-btn stripe-btn"
             >
                 Pay ${plan.price} with Card

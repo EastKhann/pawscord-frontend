@@ -38,12 +38,11 @@ const PremiumMarketplace = () => {
                 billing_cycle: billingCycle
             });
 
-            // Redirect to Stripe checkout
-            const stripe = await import('@stripe/stripe-js');
-            const stripePromise = stripe.loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-            // Handle payment
-            // ... Stripe integration
+            // Redirect to backend-generated checkout URL (Stripe Checkout Session)
+            if (response.data.checkout_url) {
+                window.location.href = response.data.checkout_url;
+                return;
+            }
 
             toast.info(`📋 Purchasing ${plan.name} - ${billingCycle} plan`);
         } catch (error) {

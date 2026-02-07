@@ -1,8 +1,6 @@
 // frontend/src/components/TwoFactorModal.js
 import React, { useState } from 'react';
-import FaLock from 'react-icons/fa/FaLock';
-import FaTimes from 'react-icons/fa/FaTimes';
-import FaShieldAlt from 'react-icons/fa/FaShieldAlt';
+import { FaLock, FaTimes, FaShieldAlt } from 'react-icons/fa';
 
 /**
  * 🔐 2FA (Two-Factor Authentication) Modal

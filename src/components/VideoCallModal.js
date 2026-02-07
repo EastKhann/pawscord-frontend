@@ -6,15 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaVideo from 'react-icons/fa/FaVideo';
-import FaVideoSlash from 'react-icons/fa/FaVideoSlash';
-import FaMicrophone from 'react-icons/fa/FaMicrophone';
-import FaMicrophoneSlash from 'react-icons/fa/FaMicrophoneSlash';
-import FaPhone from 'react-icons/fa/FaPhone';
-import FaExpand from 'react-icons/fa/FaExpand';
-import FaCompress from 'react-icons/fa/FaCompress';
-import FaCog from 'react-icons/fa/FaCog';
-import FaTimes from 'react-icons/fa/FaTimes';
+import { FaVideo, FaVideoSlash, FaMicrophone, FaMicrophoneSlash, FaPhone, FaExpand, FaCompress, FaCog, FaTimes } from 'react-icons/fa';
 
 const VideoCallModal = ({
     isOpen,

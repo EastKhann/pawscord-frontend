@@ -6,10 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaGamepad from 'react-icons/fa/FaGamepad';
-import FaTrophy from 'react-icons/fa/FaTrophy';
-import FaClock from 'react-icons/fa/FaClock';
-import FaUsers from 'react-icons/fa/FaUsers';
+import { FaGamepad, FaTrophy, FaClock, FaUsers } from 'react-icons/fa';
 
 const GamingIntegration = ({
     userId,

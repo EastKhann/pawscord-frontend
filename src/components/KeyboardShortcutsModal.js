@@ -1,10 +1,42 @@
 // frontend/src/components/KeyboardShortcutsModal.js
 import React from 'react';
 import { FaTimes, FaKeyboard } from 'react-icons/fa';
-import { KEYBOARD_SHORTCUTS } from '../hooks/useKeyboardShortcuts';
+
+const KEYBOARD_SHORTCUTS = [
+    {
+        category: 'Genel', shortcuts: [
+            { keys: ['Ctrl', 'K'], description: 'Hızlı Geçiş / Arama' },
+            { keys: ['Ctrl', ','], description: 'Kullanıcı Ayarları' },
+            { keys: ['Ctrl', '/'], description: 'Kısayol Tuşları' },
+            { keys: ['Ctrl', 'Shift', 'P'], description: 'Komut Paleti' },
+            { keys: ['Escape'], description: 'Paneli Kapat' },
+        ]
+    },
+    {
+        category: 'Mesajlaşma', shortcuts: [
+            { keys: ['Enter'], description: 'Mesaj Gönder' },
+            { keys: ['Shift', 'Enter'], description: 'Yeni Satır' },
+            { keys: ['↑'], description: 'Son Mesajı Düzenle' },
+            { keys: ['Ctrl', 'E'], description: 'Emoji Seçici' },
+        ]
+    },
+    {
+        category: 'Navigasyon', shortcuts: [
+            { keys: ['Alt', '↑'], description: 'Önceki Kanal' },
+            { keys: ['Alt', '↓'], description: 'Sonraki Kanal' },
+            { keys: ['Ctrl', 'Shift', 'U'], description: 'Dosya Yükle' },
+        ]
+    },
+    {
+        category: 'Sesli Sohbet', shortcuts: [
+            { keys: ['Ctrl', 'Shift', 'M'], description: 'Mikrofon Aç/Kapat' },
+            { keys: ['Ctrl', 'Shift', 'D'], description: 'Sağır Modu' },
+        ]
+    },
+];
 
 const KeyboardShortcutsModal = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
+    if (typeof isOpen !== 'undefined' && !isOpen) return null;
 
     const renderKey = (key) => {
         const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;

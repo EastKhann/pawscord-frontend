@@ -491,6 +491,10 @@ const CryptoSignals = () => {
                     {Object.entries(coinGroups).map(([coin, rows]) => {
                         const profitRows = rows.filter(r => parsePnl(r.pnl_percent) > 0);
                         const lossRows = rows.filter(r => parsePnl(r.pnl_percent) < 0);
+                        const uyumluRows = rows.filter(r => r.ters_sinyal !== true);
+                        const tersRows = rows.filter(r => r.ters_sinyal === true);
+                        const goodRows = isPositionsTab ? uyumluRows : profitRows;
+                        const badRows = isPositionsTab ? tersRows : lossRows;
                         const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
                         const bestWr = Math.max(...rows.map(r => parseFloat(String(r.win_rate || '0').replace('%', ''))));
                         const firstRow = rows[0] || {};
@@ -531,11 +535,11 @@ const CryptoSignals = () => {
                                 </div>
                                 <div style={S.cardFooter}>
                                     <div style={S.miniBarBg}>
-                                        <div style={{ ...S.miniBar, width: `${(profitRows.length / Math.max(rows.length, 1)) * 100}%` }} />
+                                        <div style={{ ...S.miniBar, width: `${(goodRows.length / Math.max(rows.length, 1)) * 100}%` }} />
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75em', marginTop: 4 }}>
-                                        <span style={{ color: '#23a559' }}>✓ {profitRows.length}</span>
-                                        <span style={{ color: '#da373c' }}>✗ {lossRows.length}</span>
+                                        <span style={{ color: '#23a559' }}>{isPositionsTab ? '✅' : '✓'} {goodRows.length}</span>
+                                        <span style={{ color: '#da373c' }}>{isPositionsTab ? '⚠️' : '✗'} {badRows.length}</span>
                                     </div>
                                 </div>
                             </div>

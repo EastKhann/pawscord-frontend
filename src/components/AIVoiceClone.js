@@ -6,12 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import FaMicrophone from 'react-icons/fa/FaMicrophone';
-import FaStop from 'react-icons/fa/FaStop';
-import FaPlay from 'react-icons/fa/FaPlay';
-import FaUpload from 'react-icons/fa/FaUpload';
-import FaRobot from 'react-icons/fa/FaRobot';
-import FaTrash from 'react-icons/fa/FaTrash';
+import { FaMicrophone, FaStop, FaPlay, FaUpload, FaRobot, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 
 const AIVoiceClone = ({

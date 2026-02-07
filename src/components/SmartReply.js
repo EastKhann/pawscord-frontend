@@ -6,8 +6,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import FaRobot from 'react-icons/fa/FaRobot';
-import FaSpinner from 'react-icons/fa/FaSpinner';
+import { FaRobot, FaSpinner } from 'react-icons/fa';
 
 const SmartReply = ({
     messageId,
