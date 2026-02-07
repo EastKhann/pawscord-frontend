@@ -304,7 +304,7 @@ const RootApp = () => {
     );
 };
 
-// 🔄 Global chunk load error handler — yakalanmamış dynamic import hatalarını yakala
+// 🔄 Global chunk load error handler (max 2 reload, sonsuz döngü koruması)
 window.addEventListener('unhandledrejection', (event) => {
     const msg = event?.reason?.message || '';
     if (
@@ -313,15 +313,34 @@ window.addEventListener('unhandledrejection', (event) => {
         msg.includes('ChunkLoadError')
     ) {
         const RELOAD_KEY = 'pawscord_chunk_reload';
+        const RELOAD_COUNT_KEY = 'pawscord_chunk_reload_count';
         const lastReload = sessionStorage.getItem(RELOAD_KEY);
+        const reloadCount = parseInt(sessionStorage.getItem(RELOAD_COUNT_KEY) || '0', 10);
         const now = Date.now();
+
+        // 🛡️ Maksimum 2 reload — sonra dur (sonsuz döngü koruması)
+        if (reloadCount >= 2) {
+            console.error('❌ Chunk reload limiti aşıldı (2/2). Sonsuz döngü engellendi.');
+            console.error('💡 Lütfen Ctrl+Shift+R ile sayfayı tamamen yenileyin.');
+            return;
+        }
+
         if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
-            console.warn('🔄 Chunk hatası yakalandı, sayfa yenileniyor...');
+            console.warn(`🔄 Chunk hatası yakalandı, sayfa yenileniyor... (${reloadCount + 1}/2)`);
             sessionStorage.setItem(RELOAD_KEY, now.toString());
+            sessionStorage.setItem(RELOAD_COUNT_KEY, (reloadCount + 1).toString());
             event.preventDefault();
             window.location.reload();
         }
     }
+});
+
+// ✅ Başarılı yükleme sonrası reload sayacını sıfırla
+window.addEventListener('load', () => {
+    // Sayfa başarıyla yüklendiyse 5 saniye sonra sayacı sıfırla
+    setTimeout(() => {
+        sessionStorage.removeItem('pawscord_chunk_reload_count');
+    }, 5000);
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

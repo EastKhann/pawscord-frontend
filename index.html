@@ -542,14 +542,23 @@
     );
 
     if (!isElectronSW && 'serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('✅ SW registered:', registration.scope);
-          })
-          .catch(error => {
-            console.log('❌ SW registration failed:', error);
-          });
+      window.addEventListener('load', async () => {
+        // 🔥 FIX: Önce mevcut SW'leri temizle, sonra yeniden kaydetme
+        // Eski self-destruct SW sonsuz reload döngüsü yapıyordu
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const reg of registrations) {
+            // Eğer eski service-worker.js kayıtlıysa, unregister et
+            if (reg.active && reg.active.scriptURL.includes('service-worker.js')) {
+              await reg.unregister();
+              console.log('🗑️ Eski SW temizlendi');
+            }
+          }
+        } catch (e) {
+          console.warn('SW cleanup error:', e);
+        }
+        // NOT: service-worker.js artık kayıt edilmiyor
+        // VitePWA kendi SW'sini (sw.js) otomatik yönetiyor
       });
     } else if (isElectronSW) {
       console.log('ℹ️ SW skipped: Electron detected');

@@ -50,9 +50,9 @@ const AuthCallback = ({ apiBaseUrl }) => {
             if (accessToken && refreshToken) {
                 console.log('🔐 [AuthCallback] Direct token mode');
                 try {
-                    // Store tokens securely
+                    // Store tokens securely (🔥 FIX: refresh_token snake_case kullan)
                     localStorage.setItem('access_token', accessToken);
-                    localStorage.setItem('refreshToken', refreshToken);
+                    localStorage.setItem('refresh_token', refreshToken);
 
                     // Update auth context
                     if (login) {

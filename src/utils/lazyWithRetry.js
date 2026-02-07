@@ -5,7 +5,9 @@
 import React from 'react';
 
 const RELOAD_KEY = 'pawscord_chunk_reload';
+const RELOAD_COUNT_KEY = 'pawscord_chunk_reload_count';
 const RELOAD_COOLDOWN = 10000; // 10 saniye içinde tekrar reload yapma
+const MAX_RELOADS = 2; // Maksimum reload sayısı
 
 /**
  * Chunk load hatası mı kontrol et
@@ -59,15 +61,24 @@ export function lazyWithRetry(importFn, retries = 1) {
  */
 function handleChunkReload() {
     const lastReload = sessionStorage.getItem(RELOAD_KEY);
+    const reloadCount = parseInt(sessionStorage.getItem(RELOAD_COUNT_KEY) || '0', 10);
     const now = Date.now();
+
+    // 🛡️ Maksimum reload limiti — sonsuz döngü koruma
+    if (reloadCount >= MAX_RELOADS) {
+        console.error('❌ Chunk reload limiti aşıldı. Sonsuz döngü engellendi.');
+        console.error('💡 Lütfen Ctrl+Shift+R ile sayfayı tamamen yenileyin.');
+        return;
+    }
 
     if (lastReload && (now - parseInt(lastReload, 10)) < RELOAD_COOLDOWN) {
         console.error('❌ Chunk reload cooldown aktif — sonsuz döngü engellendi');
         return;
     }
 
-    console.warn('🔄 Yeni versiyon algılandı, sayfa yenileniyor...');
+    console.warn(`🔄 Yeni versiyon algılandı, sayfa yenileniyor... (${reloadCount + 1}/${MAX_RELOADS})`);
     sessionStorage.setItem(RELOAD_KEY, now.toString());
+    sessionStorage.setItem(RELOAD_COUNT_KEY, (reloadCount + 1).toString());
     window.location.reload();
 }
 
