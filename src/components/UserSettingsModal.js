@@ -235,35 +235,6 @@ const KeybindsTab = () => {
     );
 };
 
-const KeybindsTab = () => {
-    const shortcuts = [
-        { keys: 'Ctrl + K', desc: 'Hızlı Geçiş' },
-        { keys: 'Ctrl + Shift + M', desc: 'Mikrofon Aç/Kapa' },
-        { keys: 'Ctrl + Shift + D', desc: 'Kulaklık Aç/Kapa' },
-        { keys: 'Ctrl + Enter', desc: 'Mesaj Gönder' },
-        { keys: 'Shift + Enter', desc: 'Yeni Satır' },
-        { keys: '↑ (boş input)', desc: 'Son Mesajı Düzenle' },
-        { keys: 'Escape', desc: 'Düzenleme/Yanıt İptal' },
-        { keys: 'Ctrl + T', desc: 'Şablonlar' },
-        { keys: 'Ctrl + B', desc: 'Kalın Metin' },
-        { keys: 'Ctrl + I', desc: 'İtalik Metin' },
-        { keys: 'Ctrl + U', desc: 'Altı Çizili' },
-    ];
-
-    return (
-        <div>
-            <SettingSection title="Klavye Kısayolları">
-                {shortcuts.map((s, i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                        <span style={{ color: '#dcddde', fontSize: 14 }}>{s.desc}</span>
-                        <kbd style={S.kbd}>{s.keys}</kbd>
-                    </div>
-                ))}
-            </SettingSection>
-        </div>
-    );
-};
-
 const ConnectionsTab = () => {
     const connections = [
         { id: 'steam', name: 'Steam', icon: FaSteam, color: '#171a21', connected: false },
