@@ -821,9 +821,12 @@ const AppContent = () => {
     const historyCacheRef = useRef({});
     const statusWsReconnectRef = useRef(null);
     const tokenRef = useRef(token);
+    const usernameRef = useRef(username);
+    const fetchingInitRef = useRef(false);
 
     useEffect(() => { activeChatRef.current = activeChat; }, [activeChat]);
     useEffect(() => { tokenRef.current = token; }, [token]);
+    useEffect(() => { usernameRef.current = username; }, [username]);
 
     // 🔥 Admin kontrolü - Eastkhan her zaman admin, diğerleri için role kontrolü
     const isAdmin = username === 'Eastkhan' || username === 'PawPaw' || currentUserProfile?.role === 'admin';
@@ -1032,7 +1035,7 @@ const AppContent = () => {
         return () => window.removeEventListener('openConnectionsPanel', handleOpenConnectionsPanel);
     }, []);
 
-    // ⚡ OPTIMIZATION: PWA & Critical CSS Initialization
+    // ⚡ OPTIMIZATION: PWA & Critical CSS Initialization (run once on mount)
     useEffect(() => {
         // Register Service Worker for offline support
         registerServiceWorker();
@@ -1058,23 +1061,24 @@ const AppContent = () => {
             });
         }
 
-        // 🔔 Initialize Push Notifications
-        if (isAuthenticated && user) {
-            import('./utils/pushNotifications').then(({ pushNotificationManager }) => {
-                pushNotificationManager.init(API_BASE_URL, fetchWithAuth);
-            });
-        }
-
         // 🔗 Initialize Deep Link Handler (APK)
         if (isNative) {
             import('./utils/urlHandlers').then(({ initializeDeepLinkHandler }) => {
-                // Deep link handler needs navigate function - will be added when routing is available
                 console.log('✅ Deep link handler ready');
             });
         }
 
         console.log('✅ PWA ve optimizasyonlar aktif!');
-    }, [isAuthenticated, user]);
+    }, []);
+
+    // 🔔 Push Notifications (depends on auth)
+    useEffect(() => {
+        if (isAuthenticated) {
+            import('./utils/pushNotifications').then(({ pushNotificationManager }) => {
+                pushNotificationManager.init(API_BASE_URL, fetchWithAuth);
+            });
+        }
+    }, [isAuthenticated]);
 
 
 
@@ -1873,12 +1877,17 @@ const AppContent = () => {
 
     // 🚀 PERFORM OPTIMIZASYONU: Tüm kullanıcıları peşin peşin çekme işlemi KALDIRILDI.
     useEffect(() => {
+        if (!isAuthenticated || isInitialDataLoaded) return;
+        if (fetchingInitRef.current) return; // 🛡️ Prevent duplicate fetch
+        fetchingInitRef.current = true;
+
         const fetchInit = async () => {
             try {
+                const currentUsername = usernameRef.current || username;
                 const [avatars, rooms, convs, friendsData, currentUserData] = await Promise.all([
                     fetchWithAuth(DEFAULT_AVATARS_URL).then(r => r.json()),
                     fetchWithAuth(ROOM_LIST_URL).then(r => r.json()),
-                    fetchWithAuth(`${CONVERSATION_LIST_URL}?username=${encodeURIComponent(username)}`).then(r => r.json()),
+                    fetchWithAuth(`${CONVERSATION_LIST_URL}?username=${encodeURIComponent(currentUsername)}`).then(r => r.json()),
                     fetchWithAuth(`${API_BASE_URL}/friends/list/`).then(r => r.json()),
                     fetchWithAuth(`${API_BASE_URL}/users/me/`).then(r => r.json())
                 ]);
@@ -1934,10 +1943,10 @@ const AppContent = () => {
                 import('./utils/imageCaching').then(({ prefetchUserAvatars }) => {
                     prefetchUserAvatars(uniqueFriendProfiles);
                 });
-            } catch (e) { console.error("Init Data Error", e); setAuthError("Veriler yüklenemedi."); }
+            } catch (e) { console.error("Init Data Error", e); setAuthError("Veriler yüklenemedi."); fetchingInitRef.current = false; }
         };
-        if (isAuthenticated && !isInitialDataLoaded) fetchInit();
-    }, [isAuthenticated, isInitialDataLoaded, fetchWithAuth, username]);
+        fetchInit();
+    }, [isAuthenticated, isInitialDataLoaded, fetchWithAuth]);
 
     // 🔥 YENİ: Sunucu sırasını yükle
     useEffect(() => {
@@ -2417,7 +2426,8 @@ const AppContent = () => {
 
         const createSocket = () => {
             const tok = tokenRef.current || currentToken;
-            const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(username)}&token=${tok}`;
+            const currentUser = usernameRef.current || username;
+            const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}&token=${tok}`;
             console.log('[StatusWS] Connecting to:', url.replace(tok, 'TOKEN_HIDDEN'));
 
             let socket;
@@ -2539,7 +2549,7 @@ const AppContent = () => {
                 if (statusWsRef.current) statusWsRef.current.close(1000, 'Component unmount');
             } catch (e) { /* Ignore */ }
         };
-    }, [isAuthenticated, isInitialDataLoaded, username]);
+    }, [isAuthenticated, isInitialDataLoaded]);
 
     // 🎤 SESLİ SOHBETE GİRİNCE CHAT ALANINI OTOMATİK DEĞİŞTİR
     useEffect(() => {

@@ -19,7 +19,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
         try {
             setLoading(true);
             const token = localStorage.getItem('access_token');
-            const response = await fetch(`${apiBaseUrl}/user/achievements/`, {
+            const response = await fetch(`${apiBaseUrl}/api/user/achievements/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -40,7 +40,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
     const fetchBadges = async () => {
         try {
             const token = localStorage.getItem('access_token');
-            const response = await fetch(`${apiBaseUrl}/user/badges/`, {
+            const response = await fetch(`${apiBaseUrl}/api/user/badges/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -54,15 +54,15 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
     };
 
     const filteredAchievements = achievements.filter(achievement => {
-        const matchesFilter = 
-            filter === 'all' || 
+        const matchesFilter =
+            filter === 'all' ||
             (filter === 'unlocked' && achievement.unlocked) ||
             (filter === 'locked' && !achievement.unlocked);
-        
-        const matchesCategory = 
-            category === 'all' || 
+
+        const matchesCategory =
+            category === 'all' ||
             achievement.category === category;
-        
+
         return matchesFilter && matchesCategory;
     });
 
@@ -70,7 +70,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
         total: achievements.length,
         unlocked: achievements.filter(a => a.unlocked).length,
         locked: achievements.filter(a => !a.unlocked).length,
-        progress: achievements.length > 0 
+        progress: achievements.length > 0
             ? Math.round((achievements.filter(a => a.unlocked).length / achievements.length) * 100)
             : 0
     };
@@ -129,7 +129,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                 {/* Progress Bar */}
                 <div className="progress-section">
                     <div className="progress-bar">
-                        <div 
+                        <div
                             className="progress-fill"
                             style={{ width: `${stats.progress}%` }}
                         ></div>
@@ -140,19 +140,19 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                 {/* Filters */}
                 <div className="achievements-filters">
                     <div className="filter-group">
-                        <button 
+                        <button
                             className={filter === 'all' ? 'active' : ''}
                             onClick={() => setFilter('all')}
                         >
                             Tümü ({stats.total})
                         </button>
-                        <button 
+                        <button
                             className={filter === 'unlocked' ? 'active' : ''}
                             onClick={() => setFilter('unlocked')}
                         >
                             ✓ Açık ({stats.unlocked})
                         </button>
-                        <button 
+                        <button
                             className={filter === 'locked' ? 'active' : ''}
                             onClick={() => setFilter('locked')}
                         >
@@ -161,25 +161,25 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                     </div>
 
                     <div className="category-group">
-                        <button 
+                        <button
                             className={category === 'all' ? 'active' : ''}
                             onClick={() => setCategory('all')}
                         >
                             Tüm Kategoriler
                         </button>
-                        <button 
+                        <button
                             className={category === 'social' ? 'active' : ''}
                             onClick={() => setCategory('social')}
                         >
                             👥 Sosyal
                         </button>
-                        <button 
+                        <button
                             className={category === 'activity' ? 'active' : ''}
                             onClick={() => setCategory('activity')}
                         >
                             ⚡ Aktivite
                         </button>
-                        <button 
+                        <button
                             className={category === 'special' ? 'active' : ''}
                             onClick={() => setCategory('special')}
                         >
@@ -217,8 +217,8 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                             </div>
                         ) : (
                             filteredAchievements.map(achievement => (
-                                <div 
-                                    key={achievement.id} 
+                                <div
+                                    key={achievement.id}
                                     className={`achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'} ${achievement.rarity}`}
                                     style={{
                                         boxShadow: achievement.unlocked ? getRarityGlow(achievement.rarity) : 'none'
@@ -242,9 +242,9 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                                         {achievement.progress !== undefined && !achievement.unlocked && (
                                             <div className="achievement-progress">
                                                 <div className="mini-progress-bar">
-                                                    <div 
+                                                    <div
                                                         className="mini-progress-fill"
-                                                        style={{ 
+                                                        style={{
                                                             width: `${(achievement.current / achievement.target) * 100}%`,
                                                             backgroundColor: getRarityColor(achievement.rarity)
                                                         }}
@@ -263,9 +263,9 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
                                         )}
                                     </div>
 
-                                    <div 
+                                    <div
                                         className="rarity-badge"
-                                        style={{ 
+                                        style={{
                                             backgroundColor: getRarityColor(achievement.rarity),
                                             color: 'white'
                                         }}
