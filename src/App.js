@@ -6178,7 +6178,7 @@ const AppContent = () => {
                                                 >
                                                     🚀
                                                     <span>Tüm Özellikler</span>
-                                                </button>}
+                                                </button>
                                             </div>
                                         )}
                                     </div>

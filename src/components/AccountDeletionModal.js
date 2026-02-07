@@ -113,7 +113,7 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
 
                         <div style={styles.infoBox}>
                             <p>
-                                <strong>Not:</strong> Üye olduğunuz sunuculardaki mesajlarınız görünür kalacak 
+                                <strong>Not:</strong> Üye olduğunuz sunuculardaki mesajlarınız görünür kalacak
                                 ancak kullanıcı adınız "Silinmiş Kullanıcı" olarak gösterilecektir.
                             </p>
                         </div>
@@ -176,14 +176,14 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
                         </div>
 
                         <div style={styles.buttonGroup}>
-                            <button 
-                                style={styles.cancelButton} 
+                            <button
+                                style={styles.cancelButton}
                                 onClick={() => setStep(1)}
                                 disabled={isDeleting}
                             >
                                 Geri
                             </button>
-                            <button 
+                            <button
                                 style={{
                                     ...styles.deleteButton,
                                     opacity: (confirmText !== CONFIRM_PHRASE || !password || isDeleting) ? 0.5 : 1,
@@ -292,7 +292,6 @@ const styles = {
     },
     deleteList: {
         listStyle: 'none',
-        padding: 0,
         margin: '16px 0',
         backgroundColor: '#2f3136',
         borderRadius: '8px',

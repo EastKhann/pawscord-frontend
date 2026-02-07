@@ -91,6 +91,7 @@ const RoomList = ({
     const [draggedServerId, setDraggedServerId] = useState(null); // 🔥 YENİ: Sürüklenen sunucu
     const [dropTargetIndex, setDropTargetIndex] = useState(null); // 🔥 YENİ: Drop hedefi index
     const [dropPosition, setDropPosition] = useState(null); // 🔥 YENİ: 'before' veya 'after'
+    const [hoveredServerId, setHoveredServerId] = useState(null); // 🔥 Discord-style hover effect
     const [actionMenu, setActionMenu] = useState(null); // { type: 'category' | 'room', id: string, name: string }
     const [serverContextMenu, setServerContextMenu] = useState(null); // { x, y, server, isOwner }
 
@@ -349,7 +350,7 @@ const RoomList = ({
     const handleLeaveServer = async (serverId) => {
         // Owner kontrolü - eğer owner ise sunucuyu silmesi gerektiğini söyle
         const server = servers.find(s => s.id === serverId);
-        if (server && server.owner && server.owner.user.username === username) {
+        if (server && server.owner_username === currentUsername) {
             toast.warning('Sunucu sahibi sunucudan ayrılamaz!\n\nSunucuyu silmek için:\n1. Sunucuya sağ tıklayın\n2. "Sunucuyu Sil" seçeneğini tıklayın\n\nVeya önce sahipliği başka birine devredin.', 7000);
             return;
         }
@@ -371,8 +372,8 @@ const RoomList = ({
                 setSelectedServerId('home');
                 onWelcomeClick();
 
-                // Sayfayı yenile (sunucu listesi güncellensin)
-                window.location.reload();
+                // WebSocket sunucu listesini otomatik güncelleyecek
+                toast.success('✅ Sunucudan başarıyla ayrıldınız!');
             } else {
                 const error = await res.json();
                 const errorMessage = error.error || 'Sunucudan ayrılırken hata oluştu';
@@ -648,7 +649,7 @@ const RoomList = ({
             if (res.ok) {
                 console.log("✅ Sunucuya katıldın!");
                 setShowDiscovery(false);
-                window.location.reload();
+                toast.success('✅ Sunucuya başarıyla katıldın!');
             }
         } catch (e) {
             console.error("❌ Sunucuya katılma hatası:", e);
@@ -668,7 +669,7 @@ const RoomList = ({
                 console.log(`✅ Başarılı! "${data.server_name}" sunucusuna katıldın.`);
                 setInviteCodeInput('');
                 setShowDiscovery(false);
-                window.location.reload();
+                toast.success(`✅ "${data.server_name}" sunucusuna katıldın!`);
             } else {
                 console.error("❌ Sunucuya katılma hatası:", data.error || "Sunucuya katılınamadı.");
             }
@@ -697,8 +698,7 @@ const RoomList = ({
 
             if (res.ok) {
                 toast.success('✅ Konuşma temizlendi!');
-                // Sayfayı yenile veya state'i güncelle
-                window.location.reload();
+                // WebSocket state'i otomatik güncelleyecek
             } else {
                 const data = await res.json();
                 toast.error(`❌ Hata: ${data.error || 'Konuşma temizlenemedi'}`);
@@ -723,8 +723,7 @@ const RoomList = ({
 
             if (res.ok) {
                 toast.success('✅ Konuşma gizlendi!');
-                // Sayfayı yenile veya state'i güncelle
-                window.location.reload();
+                // WebSocket state'i otomatik güncelleyecek
             } else {
                 const data = await res.json();
                 toast.error(`❌ Hata: ${data.error || 'Konuşma gizlenemedi'}`);
@@ -843,7 +842,7 @@ const RoomList = ({
 
             if (res.ok) {
                 toast.success(`✅ ${username} engellendi!`);
-                window.location.reload();
+                // WebSocket otomatik güncelleyecek
             } else {
                 toast.error('❌ Kullanıcı engellenemedi');
             }
@@ -1021,8 +1020,35 @@ const RoomList = ({
 
             {/* 1. KOLON: SERVER RAIL */}
             <div style={styles.serverRail}>
-                <div style={{ ...styles.serverIcon, backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#313338', width: '56px', height: '56px' }} onClick={() => { setSelectedServerId('home'); onWelcomeClick(); }} title="Ana Sayfa">
-                    <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" style={{ width: '48px', height: '48px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none' }} />
+                {/* 🏠 Home Icon - Discord Style with Active Pill */}
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center', marginBottom: '8px' }}>
+                    {/* Active Pill Indicator */}
+                    <div style={{
+                        position: 'absolute',
+                        left: 0,
+                        width: '4px',
+                        height: selectedServerId === 'home' ? '40px' : (hoveredServerId === 'home' ? '20px' : '0px'),
+                        backgroundColor: '#fff',
+                        borderRadius: '0 4px 4px 0',
+                        transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                    }} />
+                    <div
+                        style={{
+                            ...styles.serverIcon,
+                            backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#313338',
+                            borderRadius: selectedServerId === 'home' || hoveredServerId === 'home' ? '16px' : '50%',
+                            width: '48px',
+                            height: '48px',
+                            marginBottom: 0,
+                            transition: 'border-radius 0.3s ease, background-color 0.3s ease'
+                        }}
+                        onClick={() => { setSelectedServerId('home'); onWelcomeClick(); }}
+                        onMouseEnter={() => setHoveredServerId('home')}
+                        onMouseLeave={() => setHoveredServerId(null)}
+                        title="Ana Sayfa"
+                    >
+                        <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" style={{ width: '32px', height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none' }} />
+                    </div>
                 </div>
                 <div style={styles.separator} />
 
@@ -1042,9 +1068,24 @@ const RoomList = ({
                             key={server.id}
                             style={{
                                 position: 'relative',
-                                marginBottom: '8px'
+                                marginBottom: '8px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                width: '100%',
+                                justifyContent: 'center'
                             }}
                         >
+                            {/* 🔥 Discord Active Pill Indicator */}
+                            <div style={{
+                                position: 'absolute',
+                                left: 0,
+                                width: '4px',
+                                height: isActive ? '40px' : (hoveredServerId === server.id ? '20px' : (serverUnread > 0 ? '8px' : '0px')),
+                                backgroundColor: '#fff',
+                                borderRadius: '0 4px 4px 0',
+                                transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                            }} />
+
                             {/* 🔥 YENİ: Üst drop indicator çizgisi */}
                             {isDropTarget && dropPosition === 'before' && (
                                 <div style={{
@@ -1069,15 +1110,18 @@ const RoomList = ({
                                 onDrop={(e) => handleServerDropWrapper(e, index)}
                                 style={{
                                     ...styles.serverIcon,
-                                    backgroundColor: isActive ? '#5865f2' : '#313338',
+                                    backgroundColor: isActive ? '#5865f2' : (hoveredServerId === server.id ? '#5865f2' : '#313338'),
+                                    borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
                                     cursor: isDragging ? 'grabbing' : 'grab',
                                     position: 'relative',
-                                    transition: 'opacity 0.2s ease, transform 0.1s ease',
+                                    transition: 'border-radius 0.3s ease, background-color 0.3s ease, opacity 0.2s ease, transform 0.1s ease',
                                     opacity: isDragging ? 0.4 : 1,
                                     marginBottom: 0
                                 }}
                                 onClick={() => handleServerClick(server)}
                                 onContextMenu={(e) => handleServerContextMenu(e, server)}
+                                onMouseEnter={() => setHoveredServerId(server.id)}
+                                onMouseLeave={() => setHoveredServerId(null)}
                                 onMouseDown={(e) => {
                                     e.currentTarget.style.cursor = 'grabbing';
                                     e.currentTarget.style.transform = 'scale(0.95)';
@@ -1089,7 +1133,7 @@ const RoomList = ({
                                 title={server.name}
                             >
                                 {server.icon ? (
-                                    <LazyImage src={server.icon} alt={server.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                                    <LazyImage src={server.icon} alt={server.name} style={{ width: '100%', height: '100%', borderRadius: 'inherit', objectFit: 'cover' }} />
                                 ) : (
                                     <span style={{ fontWeight: 'bold', fontSize: '14px', color: 'white' }}>{initials}</span>
                                 )}
@@ -1117,7 +1161,20 @@ const RoomList = ({
                     );
                 })}
 
-                <div style={{ ...styles.serverIcon, backgroundColor: '#23a559', color: 'white', marginTop: '10px' }} onClick={handleOpenDiscovery} title="Sunucu Keşfet">
+                <div
+                    style={{
+                        ...styles.serverIcon,
+                        backgroundColor: hoveredServerId === 'discover' ? '#23a559' : '#313338',
+                        color: hoveredServerId === 'discover' ? 'white' : '#23a559',
+                        marginTop: '10px',
+                        borderRadius: hoveredServerId === 'discover' ? '16px' : '50%',
+                        transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'
+                    }}
+                    onClick={handleOpenDiscovery}
+                    onMouseEnter={() => setHoveredServerId('discover')}
+                    onMouseLeave={() => setHoveredServerId(null)}
+                    title="Sunucu Keşfet"
+                >
                     <FaCompass size={24} />
                 </div>
 
@@ -1125,18 +1182,36 @@ const RoomList = ({
                 <div
                     style={{
                         ...styles.serverIcon,
-                        background: 'linear-gradient(135deg, #F1C40F 0%, #F39C12 100%)',
-                        color: '#000',
+                        background: hoveredServerId === 'store' ? 'linear-gradient(135deg, #F1C40F 0%, #F39C12 100%)' : '#313338',
+                        color: hoveredServerId === 'store' ? '#000' : '#F1C40F',
                         fontWeight: 'bold',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        borderRadius: hoveredServerId === 'store' ? '16px' : '50%',
+                        transition: 'border-radius 0.3s ease, background 0.3s ease, color 0.3s ease'
                     }}
                     onClick={onOpenStore}
+                    onMouseEnter={() => setHoveredServerId('store')}
+                    onMouseLeave={() => setHoveredServerId(null)}
                     title="Premium Mağaza"
                 >
                     🛒
                 </div>
 
-                <div style={{ ...styles.serverIcon, backgroundColor: '#23a559', color: 'white' }} onClick={() => setShowAddMenu(true)} title="Ekle"><FaPlus size={20} /></div>
+                <div
+                    style={{
+                        ...styles.serverIcon,
+                        backgroundColor: hoveredServerId === 'add' ? '#23a559' : '#313338',
+                        color: hoveredServerId === 'add' ? 'white' : '#23a559',
+                        borderRadius: hoveredServerId === 'add' ? '16px' : '50%',
+                        transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'
+                    }}
+                    onClick={() => setShowAddMenu(true)}
+                    onMouseEnter={() => setHoveredServerId('add')}
+                    onMouseLeave={() => setHoveredServerId(null)}
+                    title="Ekle"
+                >
+                    <FaPlus size={20} />
+                </div>
             </div>
 
             {/* 2. KOLON: PANEL */}
@@ -2557,8 +2632,7 @@ const RoomList = ({
                                 setSelectedServerId('home');
                                 onWelcomeClick();
 
-                                // Sunucu listesini yenile
-                                window.location.reload();
+                                // WebSocket sunucu listesini otomatik güncelleyecek
                             } else {
                                 const error = await response.json();
                                 console.error('❌ Sunucu silinirken hata:', error);

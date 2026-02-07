@@ -161,6 +161,8 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
     const [isMuted, setIsMuted] = useState(false);
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [serverName, setServerName] = useState(server.name || '');
+    const [isRenamingServer, setIsRenamingServer] = useState(false);
 
     useEffect(() => {
         const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
@@ -321,10 +323,6 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
             return;
         }
 
-        if (!window.confirm(`"${server.name}" sunucusunu KALİCİ OLARAK silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`)) {
-            return;
-        }
-
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/delete/`, {
                 method: 'DELETE'
@@ -333,8 +331,8 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
             if (res.ok) {
                 toast.success('Sunucu başarıyla silindi!');
                 onClose();
-                if (onRefreshServers) onRefreshServers(); // Ana listeyi yenile
-                window.location.href = '/'; // Ana sayfaya dön
+                if (onRefreshServers) onRefreshServers();
+                setTimeout(() => { window.location.href = '/'; }, 500);
             } else {
                 const data = await res.json();
                 toast.error(data.error || 'Sunucu silinemedi.');
@@ -342,6 +340,35 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
         } catch (e) {
             console.error('Delete hatası:', e);
             toast.error('Sunucu silinirken bir hata oluştu.');
+        }
+    };
+
+    // 🆕 Sunucu adı değiştirme
+    const handleRenameServer = async () => {
+        const trimmed = serverName.trim();
+        if (!trimmed || trimmed === server.name) {
+            toast.warning('Geçerli bir isim girin.');
+            return;
+        }
+        setIsRenamingServer(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: trimmed })
+            });
+            if (res.ok) {
+                toast.success('Sunucu adı güncellendi!');
+                if (onRefreshServers) onRefreshServers();
+            } else {
+                const data = await res.json();
+                toast.error(data.error || 'Sunucu adı değiştirilemedi.');
+            }
+        } catch (e) {
+            console.error('Rename hatası:', e);
+            toast.error('Sunucu adı değiştirilirken bir hata oluştu.');
+        } finally {
+            setIsRenamingServer(false);
         }
     };
 
@@ -578,6 +605,53 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                         <>
                                             <h3 style={styles.sectionTitle}>🎨 Sunucu Özelleştirme</h3>
 
+                                            {/* 🆕 Sunucu Adı Değiştirme */}
+                                            <div style={styles.settingBox}>
+                                                <div style={styles.settingInfo}>
+                                                    <div style={styles.settingLabel}>
+                                                        <FaEdit style={{ marginRight: '8px' }} />
+                                                        Sunucu Adı
+                                                    </div>
+                                                    <div style={styles.settingDesc}>
+                                                        Sunucunuzun görünen adını değiştirin
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                    <input
+                                                        type="text"
+                                                        value={serverName}
+                                                        onChange={(e) => setServerName(e.target.value)}
+                                                        maxLength={100}
+                                                        style={{
+                                                            padding: '10px 14px',
+                                                            backgroundColor: '#1e1f22',
+                                                            border: '1px solid #40444b',
+                                                            borderRadius: '8px',
+                                                            color: '#dcddde',
+                                                            fontSize: '14px',
+                                                            outline: 'none',
+                                                            width: '220px',
+                                                            transition: 'border-color 0.2s'
+                                                        }}
+                                                        onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
+                                                        onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                                                        placeholder="Sunucu adı..."
+                                                    />
+                                                    <button
+                                                        onClick={handleRenameServer}
+                                                        disabled={isRenamingServer || serverName.trim() === server.name}
+                                                        style={{
+                                                            ...styles.actionBtn,
+                                                            backgroundColor: serverName.trim() !== server.name ? '#5865f2' : '#4e5058',
+                                                            opacity: isRenamingServer || serverName.trim() === server.name ? 0.5 : 1,
+                                                            cursor: isRenamingServer || serverName.trim() === server.name ? 'not-allowed' : 'pointer'
+                                                        }}
+                                                    >
+                                                        {isRenamingServer ? '...' : 'Kaydet'}
+                                                    </button>
+                                                </div>
+                                            </div>
+
                                             {/* İkon Değiştirme */}
                                             <div style={styles.settingBox}>
                                                 <div style={styles.settingInfo}>
@@ -614,7 +688,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                                                                 if (res.ok) {
                                                                     toast.success('Sunucu ikonu güncellendi!');
-                                                                    window.location.reload();
+                                                                    if (onRefreshServers) onRefreshServers();
                                                                 } else {
                                                                     const error = await res.json();
                                                                     toast.error(`Hata: ${error.error || 'Bilinmeyen hata'}`);
@@ -664,7 +738,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                                                             if (res.ok) {
                                                                 toast.success(`Sunucu ${newPrivacy ? 'herkese açık' : 'özel'} yapıldı!`);
-                                                                window.location.reload();
+                                                                if (onRefreshServers) onRefreshServers();
                                                             } else {
                                                                 const error = await res.json();
                                                                 toast.error(`Hata: ${error.error || 'Bilinmeyen hata'}`);

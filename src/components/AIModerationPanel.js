@@ -231,7 +231,6 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
         actionBtn: (type) => ({
             padding: '8px 16px',
             borderRadius: '6px',
-            border: 'none',
             fontSize: '14px',
             fontWeight: '500',
             cursor: 'pointer',

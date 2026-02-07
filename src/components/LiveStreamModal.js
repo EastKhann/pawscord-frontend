@@ -328,7 +328,6 @@ const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
         controlBtn: (active) => ({
             padding: '12px 24px',
             borderRadius: '8px',
-            border: 'none',
             fontSize: '15px',
             fontWeight: '600',
             cursor: 'pointer',

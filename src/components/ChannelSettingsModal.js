@@ -27,6 +27,8 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
     const [selectedUserForPerm, setSelectedUserForPerm] = useState(null); // 🔥 YENİ: Seçilen kullanıcı
     const [searchUser, setSearchUser] = useState('');
     const [searchResults, setSearchResults] = useState([]); // 🔥 YENİ: Arama sonuçları
+    const [notificationPref, setNotificationPref] = useState('all'); // 🔥 YENİ: Bildirim tercihi
+    const [deleteHistoryDays, setDeleteHistoryDays] = useState('7'); // 🔥 YENİ: Mesaj geçmişi silme süresi
 
     const isVoiceChannel = room.channel_type === 'voice';
 
@@ -655,7 +657,24 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                                         <p style={styles.integrationDesc}>Bu kanal için bildirim tercihlerini yapılandırın</p>
                                     </div>
                                 </div>
-                                <select style={{ ...styles.input, maxWidth: '200px' }}>
+                                <select
+                                    style={{ ...styles.input, maxWidth: '200px' }}
+                                    value={notificationPref}
+                                    onChange={async (e) => {
+                                        const val = e.target.value;
+                                        setNotificationPref(val);
+                                        try {
+                                            await fetchWithAuth(`${apiBaseUrl}/channels/${room.slug}/notification-preference/`, {
+                                                method: 'POST',
+                                                body: JSON.stringify({ preference: val })
+                                            });
+                                            toast.success('Bildirim tercihi güncellendi!');
+                                        } catch (err) {
+                                            console.error('Bildirim tercihi güncellenemedi:', err);
+                                            toast.error('Bildirim tercihi güncellenemedi');
+                                        }
+                                    }}
+                                >
                                     <option value="all">Tüm Mesajlar</option>
                                     <option value="mentions">Sadece Mention</option>
                                     <option value="none">Bildirimsiz</option>
@@ -673,7 +692,30 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                                         <p style={styles.integrationDesc}>Bu kanalı başka bir sunucuya yansıtın (mirror)</p>
                                     </div>
                                 </div>
-                                <button style={{ ...styles.integrationBtn, backgroundColor: '#43b581' }}>
+                                <button
+                                    style={{ ...styles.integrationBtn, backgroundColor: '#43b581' }}
+                                    onClick={async () => {
+                                        try {
+                                            const res = await fetchWithAuth(`${apiBaseUrl}/channels/${room.slug}/follow-link/`, {
+                                                method: 'POST'
+                                            });
+                                            if (res.ok) {
+                                                const data = await res.json();
+                                                if (data.url) {
+                                                    navigator.clipboard.writeText(data.url);
+                                                    toast.success('Takip linki oluşturuldu ve kopyalandı!');
+                                                } else {
+                                                    toast.success('Kanal takibi aktif edildi!');
+                                                }
+                                            } else {
+                                                toast.error('Takip linki oluşturulamadı');
+                                            }
+                                        } catch (err) {
+                                            console.error('Takip linki hatası:', err);
+                                            toast.error('Hata oluştu');
+                                        }
+                                    }}
+                                >
                                     <FaLink /> Takip Linki Oluştur
                                 </button>
                             </div>
@@ -703,13 +745,36 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                                         <p style={styles.advancedOptionDesc}>Son X günün mesajlarını toplu olarak sil</p>
                                     </div>
                                     <div style={{ display: 'flex', gap: '8px' }}>
-                                        <select style={{ ...styles.input, width: '100px' }}>
+                                        <select
+                                            style={{ ...styles.input, width: '100px' }}
+                                            value={deleteHistoryDays}
+                                            onChange={(e) => setDeleteHistoryDays(e.target.value)}
+                                        >
                                             <option value="1">1 Gün</option>
                                             <option value="7">7 Gün</option>
                                             <option value="30">30 Gün</option>
                                             <option value="all">Tümü</option>
                                         </select>
-                                        <button style={styles.dangerBtnSmall}>Sil</button>
+                                        <button
+                                            style={styles.dangerBtnSmall}
+                                            onClick={async () => {
+                                                if (!window.confirm(`Son ${deleteHistoryDays === 'all' ? 'tüm' : deleteHistoryDays + ' günlük'} mesajları silmek istediğinize emin misiniz? Bu işlem geri alınamaz!`)) return;
+                                                try {
+                                                    const res = await fetchWithAuth(`${apiBaseUrl}/rooms/${room.slug}/clear-history/`, {
+                                                        method: 'POST',
+                                                        body: JSON.stringify({ days: deleteHistoryDays })
+                                                    });
+                                                    if (res.ok) {
+                                                        toast.success('Mesaj geçmişi silindi!');
+                                                    } else {
+                                                        toast.error('Mesaj geçmişi silinemedi');
+                                                    }
+                                                } catch (err) {
+                                                    console.error('Mesaj geçmişi silme hatası:', err);
+                                                    toast.error('Hata oluştu');
+                                                }
+                                            }}
+                                        >Sil</button>
                                     </div>
                                 </div>
                             </div>
