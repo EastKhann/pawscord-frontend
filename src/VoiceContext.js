@@ -351,14 +351,15 @@ export const VoiceProvider = ({ children }) => {
         source.connect(analyser);
 
         let talkingTimeout = null;
-        const THRESHOLD = vadSensitivity;  // 🔥 YENİ: Dinamik threshold (kullanıcı ayarlayabilir)
+        const THRESHOLD = vadSensitivity;
         const TALKING_DELAY = 150;
-        let animationId = null;
 
-        const checkAudioLevel = () => {
+        // 🚀 OPTIMIZATION: setInterval (25ms = 40Hz) — requestAnimationFrame yerine
+        // Background tab'larda RAF 1Hz'e düşüyor ve VAD çalışmıyor, setInterval tutarlı.
+        const vadIntervalId = setInterval(() => {
             analyser.getByteFrequencyData(dataArray);
 
-            // 🔥 Sadece konuşma frekanslarını (300Hz - 3kHz) kontrol et
+            // Konuşma frekansları (300Hz - 3kHz)
             const speechRange = dataArray.slice(10, 100);
             const average = speechRange.reduce((a, b) => a + b, 0) / speechRange.length;
 
@@ -367,20 +368,12 @@ export const VoiceProvider = ({ children }) => {
                 if (talkingTimeout) clearTimeout(talkingTimeout);
                 talkingTimeout = setTimeout(() => setIsTalking(false), TALKING_DELAY);
             }
-
-            if (isInVoice && !isMuted) {
-                animationId = requestAnimationFrame(checkAudioLevel);
-            }
-        };
-
-        checkAudioLevel();
+        }, 25); // 40Hz — yeterince hızlı, CPU-friendly
 
         return () => {
+            clearInterval(vadIntervalId);
             if (talkingTimeout) clearTimeout(talkingTimeout);
-            if (animationId) cancelAnimationFrame(animationId);
             source.disconnect();
-            // 🔥 PERFORMANS: Global context'i kapatma, sadece disconnect et
-            // audioContext.close(); // Kaldırıldı - global context korunuyor
         };
     }, [localAudioStream, isInVoice, isMuted, vadSensitivity]); // 🔥 YENİ: vadSensitivity dependency
 
@@ -1120,10 +1113,9 @@ export const VoiceProvider = ({ children }) => {
             if (pc.iceConnectionState === 'failed') {
                 console.warn(`[WebRTC] ICE failed with ${partnerUsername}, attempting restart...`);
                 setIsReconnecting(true);
-                refreshIceServers().finally(() => {
-                    pc.restartIce();
-                    setTimeout(() => setIsReconnecting(false), 1500);
-                });
+                // 🚀 OPTIMIZATION: Cached TURN creds kullan (1-saat TTL), re-fetch yapma!
+                pc.restartIce();
+                setTimeout(() => setIsReconnecting(false), 3000);
 
             } else if (pc.iceConnectionState === 'disconnected') {
                 console.warn(`[WebRTC] ICE disconnected from ${partnerUsername}, waiting for reconnection...`);
@@ -1742,50 +1734,36 @@ export const VoiceProvider = ({ children }) => {
     const joinVoiceRoom = useCallback(async (roomSlug) => {
         // 🔄 Eğer zaten bir kanalda ise ve farklı bir kanala geçmek isteniyorsa
         if (isInVoice && currentRoom && currentRoom !== roomSlug && !isSwitchingRef.current) {
-            console.log(`[Voice] Switching from ${currentRoom} to ${roomSlug}`);
+            console.log(`[Voice] ⚡ Fast-switching from ${currentRoom} to ${roomSlug}`);
 
             // 🔒 Switching flag set et (sonsuz döngü önleme)
             isSwitchingRef.current = true;
 
-            // 🔥 DÜZELTME: WebSocket cleanup için Promise kullan
-            const cleanupPromise = new Promise((resolve) => {
-                if (voiceWsRef.current) {
-                    const ws = voiceWsRef.current;
+            // 🚀 OPTIMIZATION: Fire-and-forget WS close — bekleme yok!
+            if (voiceWsRef.current) {
+                const ws = voiceWsRef.current;
+                // Leave sinyali gönder (diğer kullanıcılar anında haberdar olsun)
+                try {
+                    ws.send(JSON.stringify({ type: 'user_leaving', sender_username: username }));
+                } catch (e) { /* WS zaten kapalı olabilir */ }
+                ws.onclose = null; // Reconnect tetiklemesin
+                ws.onerror = null;
+                ws.onmessage = null;
+                ws.close(1000, 'Switching channel');
+                voiceWsRef.current = null;
+            }
 
-                    // WebSocket kapanınca resolve et
-                    const originalOnClose = ws.onclose;
-                    ws.onclose = (event) => {
-                        if (originalOnClose) originalOnClose(event);
-                        console.log('[Voice] Old WebSocket fully closed');
-                        resolve();
-                    };
-
-                    // WebSocket'i kapat
-                    ws.close(1000, 'Switching channel');
-                    voiceWsRef.current = null;
-
-                    // Max 2 saniye timeout
-                    setTimeout(resolve, 2000);
-                } else {
-                    resolve();
-                }
-            });
-
-            // WebSocket'in kapanmasını bekle
-            await cleanupPromise;
-
-            // Peer connections'ı kapat
-            Object.values(peerConnectionsRef.current).forEach((pc) => {
-                pc.close();
-            });
+            // Peer connections'ı hemen kapat (sıfır bekleme)
+            Object.values(peerConnectionsRef.current).forEach((pc) => pc.close());
             peerConnectionsRef.current = {};
             setRemoteStreams({});
+            iceCandidateBufferRef.current = {};
 
-            // Ekstra kısa bekleme (ağ stack temizliği için)
-            await new Promise(resolve => setTimeout(resolve, 150));
+            // 🚀 OPTIMIZATION: Mic stream'i KORUYORUZ — yeniden getUserMedia çağrısı yok!
+            // localStreamRef.current hâlâ canlı, yeni kanala taşınacak
 
             isSwitchingRef.current = false; // Reset flag
-            console.log(`[Voice] Now joining ${roomSlug}`);
+            console.log(`[Voice] ⚡ Cleanup done, now joining ${roomSlug}`);
 
             // Şimdi yeni kanala katılmayı devam ettir (aşağıdaki normal flow)
         }
@@ -1810,59 +1788,60 @@ export const VoiceProvider = ({ children }) => {
             // 🔥 TURN bilgisi zaten state’de; ikinci kez fetch etme
             if (iceServers && iceServers.length > 0) {
                 setRtcIceServers(iceServers);
-                console.log(`🔐 [TURN] Using cached ICE servers (${iceServers.length})`);
             }
 
-            // 1. Mikrofon İzni Al - 🔥 AGRESİF GÜRÜLTÜ ENGELLEMİE
-            const stream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    // 🔥 Echo Cancellation (Yankı Önleme) - AÇIK
-                    echoCancellation: true,
-                    // 🔥 Noise Suppression (Gürültü Engelleme) - HER ZAMAN AÇIK
-                    noiseSuppression: true,
-                    // 🔥 Auto Gain Control - AÇIK (ses seviyesi dengelemesi)
-                    autoGainControl: true,
-                    // 🔥 CIZIRTIYI ÖNLE: Sample rate ve buffer ayarları
-                    sampleRate: { ideal: 48000 },  // WebRTC standart (exact yerine ideal)
-                    sampleSize: { ideal: 16 },     // 16-bit audio
-                    channelCount: { ideal: 1 },    // Mono (stereo cızırtı yapabilir)
-                    // 🔥 Chrome-specific AGRESIF gürültü engelleme
-                    googEchoCancellation: true,
-                    googAutoGainControl: true,
-                    googNoiseSuppression: true,    // 🔥 HER ZAMAN AÇIK
-                    googHighpassFilter: true,      // 🔥 Düşük frekans cızırtıları engeller
-                    googTypingNoiseDetection: true, // Klavye sesi engeller
-                    googAudioMirroring: false,     // 🔥 Ses yansımasını engelle
-                    // 🔥 CIZIRTIYI ÖNLE: Latency ayarı
-                    latency: { ideal: 0.02 }       // 20ms (10ms çok düşük - cızırtı yapabilir)
-                },
-                video: false
-            });
-            console.log("[Voice] 🎤 Got microphone access with AGGRESSIVE noise suppression");
+            // 🚀 OPTIMIZATION: Mevcut mic stream varsa yeniden getUserMedia çağırma!
+            let processedStream;
+            const existingTrack = localStreamRef.current?.getAudioTracks()?.[0];
+            if (existingTrack && existingTrack.readyState === 'live') {
+                // ⚡ Channel switch — mevcut mic stream'i kullan (0ms!)
+                processedStream = localStreamRef.current;
+                console.log('[Voice] ⚡ Reusing existing mic stream (fast channel switch)');
+            } else {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        // 🔥 Echo Cancellation (Yankı Önleme) - AÇIK
+                        echoCancellation: true,
+                        // 🔥 Noise Suppression (Gürültü Engelleme) - HER ZAMAN AÇIK
+                        noiseSuppression: true,
+                        // 🔥 Auto Gain Control - AÇIK (ses seviyesi dengelemesi)
+                        autoGainControl: true,
+                        // 🔥 CIZIRTIYI ÖNLE: Sample rate ve buffer ayarları
+                        sampleRate: { ideal: 48000 },  // WebRTC standart (exact yerine ideal)
+                        sampleSize: { ideal: 16 },     // 16-bit audio
+                        channelCount: { ideal: 1 },    // Mono (stereo cızırtı yapabilir)
+                        // 🔥 Chrome-specific AGRESIF gürültü engelleme
+                        googEchoCancellation: true,
+                        googAutoGainControl: true,
+                        googNoiseSuppression: true,    // 🔥 HER ZAMAN AÇIK
+                        googHighpassFilter: true,      // 🔥 Düşük frekans cızırtıları engeller
+                        googTypingNoiseDetection: true, // Klavye sesi engeller
+                        googAudioMirroring: false,     // 🔥 Ses yansımasını engelle
+                        // 🔥 CIZIRTIYI ÖNLE: Latency ayarı
+                        latency: { ideal: 0.02 }       // 20ms (10ms çok düşük - cızırtı yapabilir)
+                    },
+                    video: false
+                });
+                console.log("[Voice] 🎤 Got microphone access");
 
-            // 🔥 Profesyonel gürültü filtrelerini uygula (opsiyonel - daha agresif filtreleme)
-            let processedStream = stream;
-            if (isNoiseSuppressionEnabled) {
-                try {
-                    processedStream = applyProfessionalAudioFilters(stream);
-                    console.log('🎚️ [Voice] Professional audio filters APPLIED');
-                } catch (filterError) {
-                    console.warn('⚠️ [Voice] Could not apply professional filters, using raw stream:', filterError);
-                    processedStream = stream;
+                processedStream = stream;
+                if (isNoiseSuppressionEnabled) {
+                    try {
+                        processedStream = applyProfessionalAudioFilters(stream);
+                    } catch (filterError) {
+                        console.warn('⚠️ [Voice] Professional filters failed:', filterError);
+                        processedStream = stream;
+                    }
                 }
-            }
+            } // end else (new mic acquisition)
 
             setLocalAudioStream(processedStream);
             localStreamRef.current = processedStream;
 
-            console.log('🎤 [Voice] Stream ready with noise suppression');
-            console.log('🎤 [Voice] Stream tracks:', processedStream.getAudioTracks().map(t => ({
-                id: t.id,
-                label: t.label,
-                enabled: t.enabled,
-                readyState: t.readyState,
-                muted: t.muted
-            })));
+            // 🔥 Muted ise track'i kapat, switch sonrası mute durumunu koru
+            processedStream.getAudioTracks().forEach(track => {
+                track.enabled = !isMuted;
+            });
 
             initializeAudio();
             // 🔥 Mic watchdog başlat
@@ -1946,7 +1925,6 @@ export const VoiceProvider = ({ children }) => {
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    console.log("[VoiceWS] Message received:", data.type || data);
                     handleSignalMessage(data);
                 } catch (e) {
                     console.error("[VoiceWS] Parse error:", e);
