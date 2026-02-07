@@ -21,6 +21,7 @@ const useWindowWidth = () => {
 // === YARDIMCI FONKSİYONLAR ===
 const API_BASE = getApiBase();
 const SIGNALS_URL = `${API_BASE}/api/crypto/signals/`;
+const SIGNALS_LIST_URL = `${API_BASE}/api/crypto/signals/list/`;
 
 const formatPrice = (price) => {
     if (!price || price === '-') return '-';
@@ -97,6 +98,10 @@ const CryptoSignals = () => {
     const [error, setError] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
 
+    // 🔥 İşlem Sayısı (Parent Tab) — signal dosya seçimi
+    const [availableFiles, setAvailableFiles] = useState([]);
+    const [activeFileKey, setActiveFileKey] = useState(''); // '' = henüz yüklenmedi
+
     // Mode & Tab
     const [activeMode, setActiveMode] = useState('balance_mode');
     const [activeTab, setActiveTab] = useState('TUM_STRATEJILER');
@@ -120,15 +125,43 @@ const CryptoSignals = () => {
     const scrollRef = useRef(0);
     const { isMobile } = useWindowWidth();
 
-    // Tab/mode değişince sayfa sıfırla
-    useEffect(() => { setPage(1); }, [activeTab, activeMode, searchQuery]);
+    // Tab/mode/file değişince sayfa sıfırla
+    useEffect(() => { setPage(1); }, [activeTab, activeMode, searchQuery, activeFileKey]);
+
+    // ===== MEVCUT DOSYA LİSTESİ =====
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await fetch(SIGNALS_LIST_URL);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const json = await res.json();
+                const files = json.files || [];
+                setAvailableFiles(files);
+                // İlk dosyayı seç (veya signal_export varsa onu)
+                if (files.length > 0) {
+                    const defaultFile = files.find(f => f.key === 'signal_export') || files[0];
+                    setActiveFileKey(defaultFile.key);
+                } else {
+                    // Dosya listesi boş — direkt signal_export dene
+                    setActiveFileKey('signal_export');
+                }
+            } catch (err) {
+                console.error('Signal list fetch error:', err);
+                // Fallback: signal_export kullan
+                setActiveFileKey('signal_export');
+            }
+        })();
+    }, []);
 
     // ===== VERİ ÇEKME =====
-    const fetchData = useCallback(async () => {
+    const fetchData = useCallback(async (fileKey) => {
+        const key = fileKey || activeFileKey;
+        if (!key) return;
         try {
             if (tableRef.current) scrollRef.current = tableRef.current.scrollTop;
 
-            const res = await fetch(`${SIGNALS_URL}?t=${Date.now()}`);
+            const fileParam = key && key !== 'signal_export' ? `&file=${key}` : '';
+            const res = await fetch(`${SIGNALS_URL}?t=${Date.now()}${fileParam}`);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const json = await res.json();
 
@@ -153,15 +186,21 @@ const CryptoSignals = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [activeFileKey]);
 
-    useEffect(() => { fetchData(); }, []);
+    // activeFileKey değişince veri çek
+    useEffect(() => {
+        if (activeFileKey) {
+            setLoading(true);
+            fetchData(activeFileKey);
+        }
+    }, [activeFileKey]);
 
     useEffect(() => {
-        if (!autoRefresh) return;
-        const iv = setInterval(fetchData, 30000);
+        if (!autoRefresh || !activeFileKey) return;
+        const iv = setInterval(() => fetchData(activeFileKey), 30000);
         return () => clearInterval(iv);
-    }, [autoRefresh, fetchData]);
+    }, [autoRefresh, fetchData, activeFileKey]);
 
     // ===== VERİ ERİŞİMİ (v3.0 JSON YAPISI) =====
     // ✅ KRİTİK FİX: data.balance_mode.tabs / data.winrate_mode.tabs
@@ -306,7 +345,7 @@ const CryptoSignals = () => {
                 <div style={{ textAlign: 'center', marginTop: 80 }}>
                     <div style={{ fontSize: 60, marginBottom: 16 }}>⚠️</div>
                     <h3 style={{ color: '#da373c', marginBottom: 8 }}>{error}</h3>
-                    <button onClick={fetchData} style={S.primaryBtn}>Tekrar Dene</button>
+                    <button onClick={() => fetchData(activeFileKey)} style={S.primaryBtn}>Tekrar Dene</button>
                 </div>
             </div>
         );
@@ -335,7 +374,7 @@ const CryptoSignals = () => {
                         <input type="checkbox" checked={autoRefresh} onChange={e => setAutoRefresh(e.target.checked)} />
                         Oto
                     </label>
-                    <button onClick={fetchData} style={S.primaryBtn}>
+                    <button onClick={() => fetchData(activeFileKey)} style={S.primaryBtn}>
                         <FaSync className={loading ? 'crypto-spin' : ''} /> Yenile
                     </button>
                 </div>
@@ -364,6 +403,28 @@ const CryptoSignals = () => {
                     <FaTrophy /> {isMobile ? 'Winrate' : '🏆 Winrate Sıralama'}
                 </button>
             </div>
+
+            {/* ====== İŞLEM SAYISI TABS (Parent - dosya seçimi) ====== */}
+            {availableFiles.length > 1 && (
+                <div style={S.tradeCountBar}>
+                    <span style={S.tradeCountLabel}>📈 İşlem Sayısı:</span>
+                    {availableFiles.map(f => {
+                        const isActive = activeFileKey === f.key;
+                        return (
+                            <button
+                                key={f.key}
+                                onClick={() => setActiveFileKey(f.key)}
+                                style={{
+                                    ...S.tradeCountBtn,
+                                    ...(isActive ? S.tradeCountBtnActive : {})
+                                }}
+                            >
+                                {f.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
 
             {/* ====== ÖZET İSTATİSTİK BAR ====== */}
             {stats && (
@@ -865,6 +926,26 @@ const S = {
         fontSize: '0.85em', transition: 'background-color 0.2s'
     },
     modeToggle: { display: 'flex', gap: 8, marginBottom: 12 },
+    // 🔥 İşlem Sayısı (Trade Count) Parent Tabs
+    tradeCountBar: {
+        display: 'flex', gap: 6, marginBottom: 12, alignItems: 'center',
+        overflowX: 'auto', paddingBottom: 4, paddingTop: 2,
+        borderBottom: '1px solid #2f3136', paddingBottom: 10
+    },
+    tradeCountLabel: {
+        color: '#949ba4', fontSize: '0.82em', fontWeight: 600,
+        whiteSpace: 'nowrap', marginRight: 4, flexShrink: 0
+    },
+    tradeCountBtn: {
+        backgroundColor: '#2b2d31', border: '1px solid #40444b',
+        color: '#949ba4', padding: '6px 14px', borderRadius: 8,
+        cursor: 'pointer', fontWeight: 600, fontSize: '0.82em',
+        whiteSpace: 'nowrap', transition: 'all 0.2s', flexShrink: 0
+    },
+    tradeCountBtnActive: {
+        backgroundColor: '#5865f2', borderColor: '#5865f2',
+        color: '#fff', boxShadow: '0 2px 10px rgba(88,101,242,0.3)'
+    },
     modeBtn: {
         flex: 1, padding: '10px 16px', borderRadius: 10,
         border: '2px solid #40444b', backgroundColor: '#2b2d31',

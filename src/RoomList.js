@@ -65,6 +65,9 @@ const RoomList = ({
     // --- GÜVENLİK ÖNLEMİ ---
     const safeUnreadCounts = unreadCounts || {};
 
+    // 🔥 API URL - apiBaseUrl bare host (e.g. https://api.pawscord.com), /api prefix ekle
+    const apiUrl = `${apiBaseUrl}/api`;
+
     // 🔥 Avatar URL Helper - relative path'leri tam URL'ye çevir
     const getAvatarUrl = useCallback((avatarPath, fallbackUsername) => {
         // 🔥 FIX: avatarPath string değilse veya boşsa fallback kullan
@@ -241,7 +244,7 @@ const RoomList = ({
     // 🆕 KULLANICIYI BAŞKA KANALA TAŞI
     const handleMoveUserToChannel = async (username, fromChannel, toChannel) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/voice/move_user/`, {
+            const res = await fetchWithAuth(`${apiUrl}/voice/move_user/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -266,7 +269,7 @@ const RoomList = ({
     // 🆕 KULLANICIYI KANALDAN AT
     const handleKickUserFromChannel = async (username, channel) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/voice/kick_user/`, {
+            const res = await fetchWithAuth(`${apiUrl}/voice/kick_user/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -360,7 +363,7 @@ const RoomList = ({
         }
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/leave/`, {
+            const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/leave/`, {
                 method: 'POST'
             });
 
@@ -410,7 +413,7 @@ const RoomList = ({
         }));
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/reorder/`, {
+            const res = await fetchWithAuth(`${apiUrl}/servers/reorder/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -451,7 +454,7 @@ const RoomList = ({
             formData.append('icon', file);
 
             try {
-                const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/icon/`, {
+                const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/icon/`, {
                     method: 'POST',
                     body: formData
                 });
@@ -488,7 +491,7 @@ const RoomList = ({
         }
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/privacy/`, {
+            const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/privacy/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ is_public: newPrivacy })
@@ -511,7 +514,7 @@ const RoomList = ({
     // 🔥 YENİ: ARKADAŞ EKLEME
     const handleAddFriend = async (username) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, {
+            const res = await fetchWithAuth(`${apiUrl}/friends/send/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
@@ -539,7 +542,7 @@ const RoomList = ({
     // 🔥 YENİ: ARKADAŞ ÇIKARMA
     const handleRemoveFriend = async (username) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/friends/remove/`, {
+            const res = await fetchWithAuth(`${apiUrl}/friends/remove/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
@@ -567,7 +570,7 @@ const RoomList = ({
     // 🆕 DAVET LİNKİ KOPYALA
     const handleCopyServerInvite = async (serverId) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
+            const res = await fetchWithAuth(`${apiUrl}/invites/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -635,7 +638,7 @@ const RoomList = ({
     const handleOpenDiscovery = async () => {
         setShowDiscovery(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/public/`);
+            const res = await fetchWithAuth(`${apiUrl}/servers/public/`);
             const data = await res.json();
             setPublicServers(data);
         } catch (e) {
@@ -645,7 +648,7 @@ const RoomList = ({
 
     const handleJoinServer = async (serverId) => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/join/`, { method: 'POST' });
+            const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/join/`, { method: 'POST' });
             if (res.ok) {
                 console.log("✅ Sunucuya katıldın!");
                 setShowDiscovery(false);
@@ -660,7 +663,7 @@ const RoomList = ({
         e.preventDefault();
         if (!inviteCodeInput.trim()) return;
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/invites/join/`, {
+            const res = await fetchWithAuth(`${apiUrl}/invites/join/`, {
                 method: 'POST',
                 body: JSON.stringify({ code: inviteCodeInput })
             });
@@ -692,7 +695,7 @@ const RoomList = ({
         }
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/conversations/${conversationId}/clear/`, {
+            const res = await fetchWithAuth(`${apiUrl}/conversations/${conversationId}/clear/`, {
                 method: 'POST'
             });
 
@@ -717,7 +720,7 @@ const RoomList = ({
         }
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/conversations/${conversationId}/hide/`, {
+            const res = await fetchWithAuth(`${apiUrl}/conversations/${conversationId}/hide/`, {
                 method: 'POST'
             });
 
@@ -761,7 +764,7 @@ const RoomList = ({
     const handleSendServerInvite = async (serverId, username) => {
         try {
             // Sunucu davetiyesi oluştur
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/invite/`, {
+            const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/invite/`, {
                 method: 'POST',
                 body: JSON.stringify({ target_username: username })
             });
@@ -836,7 +839,7 @@ const RoomList = ({
         }
 
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/users/${username}/block/`, {
+            const res = await fetchWithAuth(`${apiUrl}/users/${username}/block/`, {
                 method: 'POST'
             });
 
@@ -863,7 +866,7 @@ const RoomList = ({
 
     const handleRenameCategory = async (e, catId) => {
         e.preventDefault();
-        await fetchWithAuth(`${apiBaseUrl}/categories/${catId}/rename/`, {
+        await fetchWithAuth(`${apiUrl}/categories/${catId}/rename/`, {
             method: 'POST', body: JSON.stringify({ new_name: editName })
         });
         setEditingItemId(null);
@@ -872,12 +875,12 @@ const RoomList = ({
     const handleDeleteCategory = async (e, catId) => {
         e.stopPropagation();
         if (!window.confirm("Kategoriyi silmek istediğine emin misin? İçindeki odalar da silinecek!")) return;
-        await fetchWithAuth(`${apiBaseUrl}/categories/${catId}/delete/`, { method: 'POST' });
+        await fetchWithAuth(`${apiUrl}/categories/${catId}/delete/`, { method: 'POST' });
     };
 
     const handleRenameRoom = async (e, slug) => {
         e.preventDefault();
-        await fetchWithAuth(`${apiBaseUrl}/rooms/${slug}/rename/`, {
+        await fetchWithAuth(`${apiUrl}/rooms/${slug}/rename/`, {
             method: 'POST', body: JSON.stringify({ new_name: editName })
         });
         setEditingItemId(null);
@@ -886,13 +889,13 @@ const RoomList = ({
     const handleDeleteRoom = async (e, slug) => {
         e.stopPropagation();
         if (!window.confirm("Kanalı silmek istediğine emin misin?")) return;
-        await fetchWithAuth(`${apiBaseUrl}/rooms/${slug}/delete/`, { method: 'POST' });
+        await fetchWithAuth(`${apiUrl}/rooms/${slug}/delete/`, { method: 'POST' });
     };
 
     const handleCreateServer = async (e) => {
         e.preventDefault();
         if (!newServerName.trim()) return;
-        await fetchWithAuth(`${apiBaseUrl}/servers/create/`, {
+        await fetchWithAuth(`${apiUrl}/servers/create/`, {
             method: 'POST',
             body: JSON.stringify({ name: newServerName, is_public: isNewServerPublic })
         });
@@ -905,7 +908,7 @@ const RoomList = ({
     const handleCreateCategory = async (e, serverId) => {
         e.preventDefault();
         if (!newCategoryName.trim()) return;
-        await fetchWithAuth(`${apiBaseUrl}/categories/create/`, { method: 'POST', body: JSON.stringify({ server_id: serverId, name: newCategoryName }) });
+        await fetchWithAuth(`${apiUrl}/categories/create/`, { method: 'POST', body: JSON.stringify({ server_id: serverId, name: newCategoryName }) });
         setNewCategoryName('');
         setActiveServerIdForCategory(null);
     };
@@ -913,7 +916,7 @@ const RoomList = ({
     const handleCreateRoom = async (e, categoryId) => {
         e.preventDefault();
         if (!newRoomName.trim()) return;
-        await fetchWithAuth(`${apiBaseUrl}/categories/${categoryId}/create_room/`, { method: 'POST', body: JSON.stringify({ name: newRoomName, channel_type: newRoomType }) });
+        await fetchWithAuth(`${apiUrl}/categories/${categoryId}/create_room/`, { method: 'POST', body: JSON.stringify({ name: newRoomName, channel_type: newRoomType }) });
         setNewRoomName('');
         setActiveCategoryIdForRoom(null);
     };
@@ -2620,7 +2623,7 @@ const RoomList = ({
                         const serverName = deleteServerModal.server.name;
 
                         try {
-                            const response = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/delete/`, {
+                            const response = await fetchWithAuth(`${apiUrl}/servers/${serverId}/delete/`, {
                                 method: 'DELETE'
                             });
 
