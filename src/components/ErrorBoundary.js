@@ -2,6 +2,7 @@
 // 🛡️ Error Boundary - Crash Prevention
 
 import React from 'react';
+import { isChunkLoadError, handleChunkErrorInBoundary } from '../utils/lazyWithRetry';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -18,6 +19,13 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
+    // 🔄 Chunk load hatası → otomatik sayfa yenile (yeni deploy algılandı)
+    if (isChunkLoadError(error)) {
+      console.warn('🔄 Chunk yükleme hatası algılandı, sayfa yenileniyor...');
+      handleChunkErrorInBoundary(error);
+      return; // reload yapılacak, devam etmeye gerek yok
+    }
+
     console.error('🔴 App Crashed:', error);
     console.error('Error Info:', errorInfo);
 

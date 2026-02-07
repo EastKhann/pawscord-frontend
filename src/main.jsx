@@ -8,14 +8,16 @@ import App from './App';
 import VerifyEmailPage from './VerifyEmailPage';
 import InvitePage from './InvitePage';
 
-// ⚡ OPTIMIZATION: Lazy load English learning pages
-const EnglishHub = React.lazy(() => import('./EnglishHub'));
-const GrammarQuizPage = React.lazy(() => import('./GrammarQuizPage'));
-const EnglishLearningPage = React.lazy(() => import('./EnglishLearningPage'));
+import lazyWithRetry from './utils/lazyWithRetry';
+
+// ⚡ OPTIMIZATION: Lazy load English learning pages (with retry)
+const EnglishHub = lazyWithRetry(() => import('./EnglishHub'));
+const GrammarQuizPage = lazyWithRetry(() => import('./GrammarQuizPage'));
+const EnglishLearningPage = lazyWithRetry(() => import('./EnglishLearningPage'));
 import EnglishVoicePractice from './EnglishVoicePractice';
 import PronunciationPage from './PronunciationPage';
-const CryptoDashboard = React.lazy(() => import('./CryptoDashboard'));
-const CryptoSignals = React.lazy(() => import('./CryptoSignals'));
+const CryptoDashboard = lazyWithRetry(() => import('./CryptoDashboard'));
+const CryptoSignals = lazyWithRetry(() => import('./CryptoSignals'));
 import SpotifyCallback from './SpotifyCallback';
 import reportWebVitals from './reportWebVitals';
 import { GlobalWebSocketProvider } from './GlobalWebSocketContext';
@@ -61,24 +63,24 @@ import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting
 
 // 🔐 Auth & Security Pages
 import AuthCallback from './AuthCallback';  // 🔐 Direct import for OAuth callback reliability
-const ForgotPasswordPage = React.lazy(() => import('./pages/ForgotPasswordPage'));
-const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
-const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
-const VerifyEmailPageNew = React.lazy(() => import('./pages/VerifyEmailPage'));
+const ForgotPasswordPage = lazyWithRetry(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazyWithRetry(() => import('./pages/ResetPasswordPage'));
+const TwoFactorLoginPage = lazyWithRetry(() => import('./pages/TwoFactorLoginPage'));
+const VerifyEmailPageNew = lazyWithRetry(() => import('./pages/VerifyEmailPage'));
 
 // 📄 Legal Pages
-const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage'));
+const PrivacyPolicyPage = lazyWithRetry(() => import('./pages/PrivacyPolicyPage'));
 
-// � Store Page
-const StorePage = React.lazy(() => import('./pages/StorePage'));
+// 🛒 Store Page
+const StorePage = lazyWithRetry(() => import('./pages/StorePage'));
 
-// �📈 GROWTH: Landing Page & Growth Components (Lazy Load)
-const LandingPage = React.lazy(() => import('./components/LandingPage'));
-const ReferralProgram = React.lazy(() => import('./components/ReferralProgram'));
-const GrowthDashboard = React.lazy(() => import('./components/GrowthDashboard'));
+// 📈 GROWTH: Landing Page & Growth Components (Lazy Load)
+const LandingPage = lazyWithRetry(() => import('./components/LandingPage'));
+const ReferralProgram = lazyWithRetry(() => import('./components/ReferralProgram'));
+const GrowthDashboard = lazyWithRetry(() => import('./components/GrowthDashboard'));
 
 // 🎨 DEMO: Toast Notification Demo (Lazy Load)
-const ToastDemo = React.lazy(() => import('./components/ToastDemo'));
+const ToastDemo = lazyWithRetry(() => import('./components/ToastDemo'));
 
 // --- URL AYARLARI (constants.js'den import) ---
 import { API_URL_BASE_STRING, API_BASE_URL, GOOGLE_WEB_CLIENT_ID } from './utils/constants';
@@ -292,6 +294,26 @@ const RootApp = () => {
         </GoogleOAuthProvider>
     );
 };
+
+// 🔄 Global chunk load error handler — yakalanmamış dynamic import hatalarını yakala
+window.addEventListener('unhandledrejection', (event) => {
+    const msg = event?.reason?.message || '';
+    if (
+        msg.includes('Failed to fetch dynamically imported module') ||
+        msg.includes('Loading chunk') ||
+        msg.includes('ChunkLoadError')
+    ) {
+        const RELOAD_KEY = 'pawscord_chunk_reload';
+        const lastReload = sessionStorage.getItem(RELOAD_KEY);
+        const now = Date.now();
+        if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
+            console.warn('🔄 Chunk hatası yakalandı, sayfa yenileniyor...');
+            sessionStorage.setItem(RELOAD_KEY, now.toString());
+            event.preventDefault();
+            window.location.reload();
+        }
+    }
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<RootApp />);
