@@ -39,7 +39,7 @@ const WhitelistGuard = ({ children }) => {
         }
         (async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/user/profile/`, {
+                const res = await fetch(`${API_BASE_URL}/user/profile/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
