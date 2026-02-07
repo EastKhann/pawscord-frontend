@@ -1,6 +1,6 @@
 // frontend/src/index.js
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './index.css';
@@ -31,12 +31,17 @@ import ErrorBoundary from './components/ErrorBoundary';
 const WhitelistGuard = ({ children }) => {
     const { token, isAuthenticated } = useAuth();
     const [allowed, setAllowed] = useState(null); // null = loading
+    const checkedRef = useRef(false);
 
     useEffect(() => {
         if (!isAuthenticated || !token) {
             setAllowed(false);
+            checkedRef.current = false;
             return;
         }
+        // Zaten kontrol edildiyse token değişince tekrar kontrol etme
+        if (checkedRef.current) return;
+
         (async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/users/me/`, {
@@ -45,6 +50,10 @@ const WhitelistGuard = ({ children }) => {
                 if (res.ok) {
                     const data = await res.json();
                     setAllowed(!!data.is_whitelisted);
+                    checkedRef.current = true;
+                } else if (res.status === 401) {
+                    // Token expired — don't set allowed=false yet, wait for refresh
+                    console.warn('⚠️ [WhitelistGuard] 401 - waiting for token refresh');
                 } else {
                     setAllowed(false);
                 }

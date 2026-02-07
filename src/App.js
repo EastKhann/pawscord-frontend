@@ -450,7 +450,7 @@ const calculateFileHash = (file) => {
 
 // --- ANA İÇERİK BİLEŞENİ ---
 const AppContent = () => {
-    const { user, isAuthenticated, token, login, logout, isLoading: isAuthLoading } = useAuth();
+    const { user, isAuthenticated, token, login, logout, isLoading: isAuthLoading, refreshAccessToken } = useAuth();
     const {
         isInVoice, isConnecting, currentRoom: currentVoiceRoom, joinChannel, leaveChannel,
         isMuted, isDeafened, toggleMute, toggleDeafened, toggleVideo, toggleScreenShare,
@@ -1233,9 +1233,13 @@ const AppContent = () => {
         return getDeterministicAvatar(targetUsername);
     }, [allUsers, getDeterministicAvatar]);
 
-    const fetchWithAuth = useCallback(async (url, options = {}) => {
-        const headers = options.headers || {};
-        if (token) headers['Authorization'] = `Bearer ${token}`;
+    const isRefreshingRef = useRef(false);
+    const refreshPromiseRef = useRef(null);
+
+    const fetchWithAuth = useCallback(async (url, options = {}, _isRetry = false) => {
+        const currentToken = tokenRef.current || token;
+        const headers = { ...(options.headers || {}) };
+        if (currentToken) headers['Authorization'] = `Bearer ${currentToken}`;
         if (!(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
         try {
             // 🚀 Upload için 5 dakika timeout, diğerleri için 30 saniye
@@ -1253,28 +1257,44 @@ const AppContent = () => {
 
             clearTimeout(timeoutId);
 
-            // 🔥 401'de hemen logout etme, sadece critical endpoint'lerde logout yap
-            if (response.status === 401) {
-                // Login/auth endpoint'lerinde logout yap
+            // 🔄 401 → Token refresh & retry (tek sefer)
+            if (response.status === 401 && !_isRetry) {
+                // Auth endpoint'lerinde direkt logout
                 if (url.includes('/auth/') || url.includes('/login')) {
                     console.warn('⚠️ [Auth] 401 on auth endpoint, logging out');
                     logout();
-                } else {
-                    // Diğer endpoint'lerde sadece warning ver, logout yapma
-                    console.warn('⚠️ [Auth] 401 error on:', url, '- NOT logging out');
+                    throw new Error("Unauthorized");
                 }
-                throw new Error("Unauthorized");
+
+                // 🔄 Token refresh - deduplicate concurrent refreshes
+                console.warn('⚠️ [Auth] 401, refreshing token for:', url.split('?')[0]);
+                if (!isRefreshingRef.current) {
+                    isRefreshingRef.current = true;
+                    refreshPromiseRef.current = refreshAccessToken().finally(() => {
+                        isRefreshingRef.current = false;
+                    });
+                }
+
+                const refreshed = await refreshPromiseRef.current;
+                if (refreshed) {
+                    // Retry with new token
+                    return fetchWithAuth(url, options, true);
+                } else {
+                    throw new Error("Unauthorized");
+                }
             }
+
             return response;
         } catch (err) {
             if (err.name === 'AbortError') {
                 console.error('⏱️ [Fetch] Request timed out:', url);
                 throw new Error('İstek zaman aşımına uğradı');
             }
+            if (err.message === 'Unauthorized') throw err;
             console.error("Fetch error:", err);
             throw err;
         }
-    }, [token, logout]);
+    }, [token, logout, refreshAccessToken]);
 
     // 📊 ANALYTICS: Page view tracking (fetchWithAuth tanımından SONRA!)
     usePageTracking();

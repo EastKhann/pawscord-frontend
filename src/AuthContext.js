@@ -14,7 +14,8 @@ export const AuthProvider = ({ children }) => {
         if (!storedToken) return false;
         try {
             const decoded = jwtDecode(storedToken);
-            return decoded.exp > (Date.now() / 1000 - 300); // 5 dakika tolerans
+            // Sadece gerçekten geçerli token'lar için true (grace period yok)
+            return decoded.exp > (Date.now() / 1000);
         } catch { return false; }
     })();
 
@@ -96,44 +97,56 @@ export const AuthProvider = ({ children }) => {
 
     // Token kontrolü ve Kullanıcı set etme
     useEffect(() => {
-        const storedToken = localStorage.getItem('access_token');
-        if (storedToken) {
-            try {
-                const decoded = jwtDecode(storedToken);
-                const currentTime = Date.now() / 1000;
-                const gracePeriod = 5 * 60; // 5 dakika tolerans
-                const isTokenValid = decoded.exp > (currentTime - gracePeriod);
+        const checkToken = async () => {
+            const storedToken = localStorage.getItem('access_token');
+            if (storedToken) {
+                try {
+                    const decoded = jwtDecode(storedToken);
+                    const currentTime = Date.now() / 1000;
+                    const gracePeriod = 5 * 60; // 5 dakika tolerans
+                    const isTokenActuallyValid = decoded.exp > currentTime;
+                    const isWithinGrace = decoded.exp > (currentTime - gracePeriod);
 
-                console.log('🔐 [Auth] Token check:', {
-                    exp: decoded.exp,
-                    currentTime,
-                    gracePeriod,
-                    isValid: isTokenValid,
-                    username: decoded.username
-                });
+                    console.log('🔐 [Auth] Token check:', {
+                        exp: decoded.exp,
+                        currentTime,
+                        gracePeriod,
+                        isValid: isTokenActuallyValid,
+                        isWithinGrace,
+                        username: decoded.username
+                    });
 
-                if (isTokenValid) {
-                    setToken(storedToken);
-                    setUser({ username: decoded.username });
-                    setIsAuthenticated(true);
-                    localStorage.setItem('chat_username', decoded.username);
+                    if (isTokenActuallyValid) {
+                        // Token hala geçerli — direkt kullan
+                        setToken(storedToken);
+                        setUser({ username: decoded.username });
+                        setIsAuthenticated(true);
+                        localStorage.setItem('chat_username', decoded.username);
 
-                    // Auto-refresh schedule
-                    scheduleTokenRefresh(storedToken);
+                        // Auto-refresh schedule
+                        scheduleTokenRefresh(storedToken);
 
-                    console.log('✅ [Auth] User authenticated:', decoded.username);
-                } else {
-                    console.warn('⚠️ [Auth] Token expired, attempting refresh...');
-                    // Don't block on refresh, just try it in background
-                    refreshAccessToken();
+                        console.log('✅ [Auth] User authenticated:', decoded.username);
+                    } else if (isWithinGrace) {
+                        // Token expired ama grace period içinde — önce refresh et
+                        console.warn('⚠️ [Auth] Token expired but within grace, refreshing first...');
+                        const refreshed = await refreshAccessToken();
+                        if (!refreshed) {
+                            console.error('❌ [Auth] Grace period refresh failed');
+                        }
+                    } else {
+                        console.warn('⚠️ [Auth] Token expired beyond grace period, attempting refresh...');
+                        refreshAccessToken();
+                    }
+                } catch (e) {
+                    console.error('❌ [Auth] Invalid token:', e);
+                    logout();
                 }
-            } catch (e) {
-                console.error('❌ [Auth] Invalid token:', e);
-                logout();
+            } else {
+                console.log('ℹ️ [Auth] No token found');
             }
-        } else {
-            console.log('ℹ️ [Auth] No token found');
-        }
+        };
+        checkToken();
 
         // Cleanup on unmount
         return () => {
