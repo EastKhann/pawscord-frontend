@@ -991,14 +991,22 @@ const AppContent = () => {
     }, []);
 
 
-    // 🔗 VANITY URL CHECK: Eğer URL /#/join/path formatındaysa invite ekranını aç
+    // 🔗 VANITY URL CHECK: /#/join/path VE /join/path her ikisini de destekle
     useEffect(() => {
-        const hash = window.location.hash; // /#/join/pawpaw
+        // 1️⃣ Hash-based: /#/join/pawpaw
+        const hash = window.location.hash;
         const vanityMatch = hash.match(/^#\/join\/([^/?]+)/);
-
         if (vanityMatch) {
-            const vanityPath = vanityMatch[1];
-            console.log('🔗 [Vanity] Detected vanity path:', vanityPath);
+            setShowVanityInvite(vanityMatch[1]);
+            return;
+        }
+
+        // 2️⃣ Path-based: /join/pawpaw (nginx veya direkt URL)
+        const pathMatch = window.location.pathname.match(/^\/join\/([^/?]+)/);
+        if (pathMatch) {
+            const vanityPath = pathMatch[1];
+            // Hash'e taşı ki SPA düzgün çalışsın
+            window.history.replaceState({}, '', `/#/join/${vanityPath}`);
             setShowVanityInvite(vanityPath);
         }
     }, []);
@@ -5754,7 +5762,7 @@ const AppContent = () => {
                         <div style={{ width: '100%', height: '100%', paddingTop: mobileWebPadding }}>
                             <FriendsTab
                                 fetchWithAuth={fetchWithAuth}
-                                apiBaseUrl={ABSOLUTE_HOST_URL}
+                                apiBaseUrl={API_BASE_URL}
                                 onStartDM={handleDMClick}
                                 getDeterministicAvatar={getDeterministicAvatar}
                                 onClose={() => setActiveChat('welcome', 'welcome')}
