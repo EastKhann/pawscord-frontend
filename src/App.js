@@ -463,8 +463,8 @@ const AppContent = () => {
         mutedUsers // 🔥 EKLENDİ
     } = useVoice();
 
-    // Global WebSocket Data
-    const { globalData } = useGlobalWebSocket();
+    // Global WebSocket Data — App.js is the SINGLE WS connection, forwards to context
+    const { setGlobalData: forwardToGlobalContext, setIsConnected: setGlobalWsConnected } = useGlobalWebSocket();
 
 
     // Store State
@@ -2425,6 +2425,7 @@ const AppContent = () => {
 
         socket.onopen = () => {
             console.log('✅ [StatusWS] Connected successfully');
+            setGlobalWsConnected(true);
         };
 
         socket.onerror = (error) => {
@@ -2434,7 +2435,7 @@ const AppContent = () => {
 
         socket.onclose = (event) => {
             console.log(`🔌 [StatusWS] Connection closed: code=${event.code}, reason=${event.reason || 'none'}`);
-            // Auto-reconnect after 5 seconds if not intentional close
+            setGlobalWsConnected(false);            // Auto-reconnect after 5 seconds if not intentional close
             if (event.code !== 1000 && event.code !== 1001) {
                 console.log('🔄 [StatusWS] Will attempt reconnect in 5s...');
             }
@@ -2444,7 +2445,11 @@ const AppContent = () => {
             try {
                 const data = JSON.parse(e.data);
 
-                // 🔧 FIX: Online users - sadece username array'i olarak set et
+                // � PERF: Forward ALL messages to GlobalWebSocketContext
+                // so FriendsTab, VoiceUserList, SignalNotification etc. still receive updates
+                forwardToGlobalContext(data);
+
+                // �🔧 FIX: Online users - sadece username array'i olarak set et
                 if (data.type === 'online_user_list_update') {
                     // Backend'den gelen data.users array'ini kontrol et
                     // Eğer object array'i ise username'leri çıkar, string array'i ise direkt kullan
