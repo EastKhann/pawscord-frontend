@@ -25,16 +25,31 @@ export const useChatStore = create((set, get) => ({
     // --- ACTIONS (Fonksiyonlar) ---
 
     // Sohbet Değiştirme
-    setActiveChat: (type, id, targetUser = null) => {
-        console.log('🔄 [Store] setActiveChat called:', { type, id, targetUser });
+    // 🔥 FIX: Hem positional (type, id, targetUser) hem object ({type, id, slug}) formatını destekle
+    setActiveChat: (typeOrObj, id, targetUser = null) => {
+        let type, chatId, chatTargetUser;
+
+        if (typeOrObj && typeof typeOrObj === 'object') {
+            // Object format: setActiveChat({ type: 'room', slug: 'xyz' }) veya { type: 'dm', id: 5 }
+            type = typeOrObj.type;
+            chatId = typeOrObj.id || typeOrObj.slug;
+            chatTargetUser = typeOrObj.targetUser || null;
+        } else {
+            // Positional format: setActiveChat('dm', 5, 'username')
+            type = typeOrObj;
+            chatId = id;
+            chatTargetUser = targetUser;
+        }
+
+        console.log('🔄 [Store] setActiveChat called:', { type, id: chatId, targetUser: chatTargetUser });
         console.log('🔄 [Store] Current messages count:', get().messages.length);
 
         // ✅ FIX: messages'ı burada temizleme!
         // Mesajlar fetchMessageHistory veya cache'den yüklenecek
-        set({ activeChat: { type, id, targetUser } });
+        set({ activeChat: { type, id: chatId, targetUser: chatTargetUser } });
 
         // Okundu bilgisini sıfırla
-        const key = type === 'room' ? `room-${id}` : `dm-${id}`;
+        const key = type === 'room' ? `room-${chatId}` : `dm-${chatId}`;
         set((state) => {
             const newCounts = { ...state.unreadCounts };
             delete newCounts[key];
