@@ -184,6 +184,7 @@ const TwoFactorLogin = React.lazy(() => import(/* webpackChunkName: "security" *
 
 // 🔗 Vanity URL Invite Screen
 const VanityInviteScreen = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VanityInviteScreen'));
+const InviteCodeScreen = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InviteCodeScreen'));
 const EmailVerification = React.lazy(() => import(/* webpackChunkName: "security" */ './components/EmailVerification'));
 
 // 📱 NEW: Mobile Components
@@ -795,6 +796,7 @@ const AppContent = () => {
 
     // 🔗 YENİ: Vanity URL Invite Screen (2026-01-23)
     const [showVanityInvite, setShowVanityInvite] = useState(null); // vanity path veya null
+    const [showInviteCode, setShowInviteCode] = useState(null); // 🔥 FIX: invite code veya null
 
     // 🔗 YENİ: Platform Connections Panel
     const [showConnectionsPanel, setShowConnectionsPanel] = useState(false);
@@ -992,9 +994,18 @@ const AppContent = () => {
 
 
     // 🔗 VANITY URL CHECK: /#/join/path VE /join/path her ikisini de destekle
+    // 🔥 FIX: /#/invite/CODE desteği de eklendi
     useEffect(() => {
-        // 1️⃣ Hash-based: /#/join/pawpaw
         const hash = window.location.hash;
+
+        // 0️⃣ Invite code: /#/invite/ABCD1234
+        const inviteMatch = hash.match(/^#\/invite\/([^/?]+)/);
+        if (inviteMatch) {
+            setShowInviteCode(inviteMatch[1]);
+            return;
+        }
+
+        // 1️⃣ Hash-based: /#/join/pawpaw
         const vanityMatch = hash.match(/^#\/join\/([^/?]+)/);
         if (vanityMatch) {
             setShowVanityInvite(vanityMatch[1]);
@@ -3434,6 +3445,23 @@ const AppContent = () => {
                     apiBaseUrl={API_BASE_URL}
                     onClose={() => {
                         setShowVanityInvite(null);
+                        window.location.hash = '#/';
+                    }}
+                />
+            </Suspense>
+        );
+    }
+
+    // 🔥 FIX: Invite code ekranı (/#/invite/CODE)
+    if (showInviteCode) {
+        return (
+            <Suspense fallback={<LoadingSpinner size="large" text="Davet yükleniyor..." />}>
+                <InviteCodeScreen
+                    inviteCode={showInviteCode}
+                    fetchWithAuth={fetchWithAuth}
+                    apiBaseUrl={API_BASE_URL}
+                    onClose={() => {
+                        setShowInviteCode(null);
                         window.location.hash = '#/';
                     }}
                 />
