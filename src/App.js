@@ -1433,25 +1433,52 @@ const AppContent = () => {
         e.currentTarget.style.opacity = '1';
     };
 
+    // 🔥 FIX: Context menu Move Up/Down — App.js tarafında state güncelle
+    const handleMoveServer = useCallback((serverId, direction) => {
+        let currentOrder = serverOrder.length > 0 ? [...serverOrder] : categories.map(c => c.id);
+        categories.forEach(c => {
+            if (!currentOrder.includes(c.id)) currentOrder.push(c.id);
+        });
+
+        const sourceIndex = currentOrder.indexOf(serverId);
+        if (sourceIndex === -1) return;
+
+        const targetIndex = direction === 'up' ? sourceIndex - 1 : sourceIndex + 1;
+        if (targetIndex < 0 || targetIndex >= currentOrder.length) return;
+
+        const [draggedId] = currentOrder.splice(sourceIndex, 1);
+        currentOrder.splice(targetIndex, 0, draggedId);
+
+        setServerOrder(currentOrder);
+        saveServerOrder(currentOrder);
+    }, [serverOrder, categories, saveServerOrder]);
+
     const handleServerDrop = useCallback((e, targetIndex) => {
         e.preventDefault();
 
         const serverId = parseInt(e.dataTransfer.getData('serverId'));
-        const sourceIndex = parseInt(e.dataTransfer.getData('sourceIndex'));
+        if (isNaN(serverId)) return;
 
-        console.log('📝 DROP: sourceIndex:', sourceIndex, '→ targetIndex:', targetIndex);
-
-        // Aynı yere veya hemen yanına bırakıyorsa işlem yapma
-        // ANCAK sadece yukarıdan aşağıya değil, gerçek pozisyon kontrolü yap
-        if (sourceIndex === targetIndex) {
-            console.log('❌ Aynı yere bırakılıyor (sourceIndex === targetIndex), işlem iptal');
-            return;
-        }
-
+        // 🔥 FIX: Build currentOrder from all servers, using serverOrder as base
         let currentOrder = serverOrder.length > 0 ? [...serverOrder] : categories.map(c => c.id);
 
-        console.log('📝 Mevcut sıralama:', currentOrder);
-        console.log('🔄 Kaynak index:', sourceIndex, '→ Hedef index:', targetIndex);
+        // Ensure all current servers are in the order (handles newly joined servers)
+        categories.forEach(c => {
+            if (!currentOrder.includes(c.id)) currentOrder.push(c.id);
+        });
+
+        // 🔥 FIX: Use serverId to find the real index in currentOrder (not the visual sourceIndex
+        // which can be stale or mismatched if serverOrder is out of sync)
+        const sourceIndex = currentOrder.indexOf(serverId);
+        if (sourceIndex === -1) return;
+
+        console.log('📝 DROP: serverId:', serverId, 'sourceIndex:', sourceIndex, '→ targetIndex:', targetIndex);
+
+        // Aynı yere bırakıyorsa işlem yapma
+        if (sourceIndex === targetIndex || sourceIndex + 1 === targetIndex) {
+            console.log('❌ Aynı pozisyon, işlem iptal');
+            return;
+        }
 
         // Kaynak elementi çıkar
         const [draggedId] = currentOrder.splice(sourceIndex, 1);
@@ -2322,7 +2349,7 @@ const AppContent = () => {
     // 🔥 FIX: activeChat değiştiğinde cache kontrol et, sonra mesaj yükle ve WebSocket bağla
     // 🔥 TEK BİR useEffect - çakışma yok!
     useEffect(() => {
-        if (!isInitialDataLoaded || !activeChat.id || activeChat.type === 'friends' || activeChat.type === 'welcome') return;
+        if (!isInitialDataLoaded || !activeChat.id || activeChat.type === 'friends' || activeChat.type === 'welcome' || activeChat.type === 'server') return;
 
         console.log('🔄 [DEBUG activeChat] Chat değişti:', activeChat);
 
@@ -5723,6 +5750,7 @@ const AppContent = () => {
                             onServerDragOver={handleServerDragOver}
                             onServerDragEnd={handleServerDragEnd}
                             onServerDrop={handleServerDrop}
+                            onMoveServer={handleMoveServer}
                             conversations={conversations}
                             allUsers={allUsers}
                             onlineUsers={onlineUsers}

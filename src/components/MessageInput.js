@@ -146,6 +146,8 @@ const MessageInput = ({
     // 🆕 Draft Yükleme - Chat değiştiğinde
     useEffect(() => {
         if (!activeChat || !fetchWithAuth || !apiBaseUrl) return;
+        // 🔥 FIX: Sadece room ve dm tipleri için draft yükle
+        if (activeChat.type !== 'room' && activeChat.type !== 'dm') return;
 
         const loadDraft = async () => {
             try {
@@ -170,6 +172,8 @@ const MessageInput = ({
     // 🆕 Draft Auto-Save - Her 2 saniyede
     useEffect(() => {
         if (!activeChat || !fetchWithAuth || !apiBaseUrl) return;
+        // 🔥 FIX: Sadece room ve dm tipleri için draft kaydet
+        if (activeChat.type !== 'room' && activeChat.type !== 'dm') return;
         if (!message.trim()) return; // Boş mesaj için kaydetme
 
         // Clear previous timer
@@ -268,7 +272,7 @@ const MessageInput = ({
         }
 
         // 🆕 Draft'i temizle
-        if (activeChat && fetchWithAuth && apiBaseUrl) {
+        if (activeChat && fetchWithAuth && apiBaseUrl && (activeChat.type === 'room' || activeChat.type === 'dm')) {
             const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
             fetchWithAuth(`${apiBaseUrl}/api/drafts/${chatKey}/`, {
                 method: 'DELETE'

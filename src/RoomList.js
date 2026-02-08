@@ -43,7 +43,7 @@ const RoomList = ({
     pendingFriendRequests = 0, // 🔥 YENİ: Bekleyen arkadaşlık istekleri sayısı
     toggleMute, toggleDeafened, isMuted, isDeafened, // 🎤 YENİ: Ses Kontrolleri
     isInVoice, isConnecting, toggleVideo, toggleScreenShare, isVideoEnabled, isScreenSharing, // 🎥 YENİ: Video/Ekran
-    onServerDragStart, onServerDragOver, onServerDragEnd, onServerDrop, // 🔥 YENİ: Drag & Drop
+    onServerDragStart, onServerDragOver, onServerDragEnd, onServerDrop, onMoveServer, // 🔥 YENİ: Drag & Drop
     updateAvailable = false, // 🔥 YENİ: Güncelleme durumu
     onUpdateClick, // 🔥 YENİ: Güncelleme butonu handler
     onOpenStore, // 🔥 YENİ: Mağaza modal'ı aç
@@ -336,7 +336,13 @@ const RoomList = ({
     };
 
     const handleServerDropWrapper = (e, index) => {
-        const position = dropPosition; // Mevcut pozisyonu al
+        // 🔥 FIX: Compute position directly from mouse coordinates instead of
+        // reading React state (dropPosition), which can be stale due to batching.
+        const rect = e.currentTarget.getBoundingClientRect();
+        const mouseY = e.clientY;
+        const elementMiddle = rect.top + (rect.height / 2);
+        const position = mouseY < elementMiddle ? 'before' : 'after';
+
         setDropTargetIndex(null);
         setDropPosition(null);
         setDraggedServerId(null);
@@ -391,46 +397,10 @@ const RoomList = ({
         }
     };
 
-    // 🆕 SUNUCU SIRASI DEĞİŞTİRME
-    const handleMoveServer = async (serverId, direction) => {
-        if (!servers || !Array.isArray(servers)) return;
-
-        const serverIndex = servers.findIndex(s => s.id === serverId);
-        if (serverIndex === -1) return;
-
-        const newIndex = direction === 'up' ? serverIndex - 1 : serverIndex + 1;
-        if (newIndex < 0 || newIndex >= servers.length) return;
-
-        // Yeni sıralamayı oluştur
-        const newServers = [...servers];
-        const [movedServer] = newServers.splice(serverIndex, 1);
-        newServers.splice(newIndex, 0, movedServer);
-
-        // Sıra numaralarını güncelle
-        const updatedServers = newServers.map((server, index) => ({
-            id: server.id,
-            order: index
-        }));
-
-        try {
-            const res = await fetchWithAuth(`${apiUrl}/servers/reorder/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: 'server',
-                    items: updatedServers
-                })
-            });
-
-            if (res.ok) {
-                console.log('✅ Sunucu sırası güncellendi');
-                // Global WebSocket zaten güncelleme gönderecek
-            } else {
-                const error = await res.json();
-                console.error('❌ Sıralama hatası:', error);
-            }
-        } catch (error) {
-            console.error('❌ Sunucu sıralama hatası:', error);
+    // 🆕 SUNUCU SIRASI DEĞİŞTİRME — App.js'deki handleMoveServer'ı kullan
+    const handleMoveServer = (serverId, direction) => {
+        if (onMoveServer) {
+            onMoveServer(serverId, direction);
         }
     };
 
@@ -2122,8 +2092,8 @@ const RoomList = ({
                         </div>
                     )}
 
-                    {/* 💝 DEVELOPER SUPPORT BUTTON - Sesli sohbet moduna uyumlu */}
-                    <div
+                    {/* 💝 DEVELOPER SUPPORT BUTTON - Sesli sohbette gizle */}
+                    {!(isInVoice || isConnecting) && <div
                         onClick={() => setShowSupportModal(true)}
                         style={{
                             backgroundColor: '#1e1f22',
@@ -2182,7 +2152,7 @@ const RoomList = ({
                         }}>
                             ☕
                         </div>
-                    </div>
+                    </div>}
 
                     {/* 👤 USER FOOTER - Profesyonel ses kontrolleri ile */}
                     <UserFooter
@@ -2253,7 +2223,8 @@ const RoomList = ({
                         }}
                         server={inviteModalServer}
                         fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
+                        apiBaseUrl={apiUrl}
+                        currentUser={currentUsername}
                     />
                 )
             }
