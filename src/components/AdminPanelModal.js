@@ -53,6 +53,11 @@ const AdminPanelModal = ({
     const [dbStats, setDbStats] = useState(null);
     const [realtimeStats, setRealtimeStats] = useState({ online: 0, messages: 0, voice: 0 });
     const [editUserModal, setEditUserModal] = useState(null);
+    const [editUserForm, setEditUserForm] = useState({});
+    const [editUserLoading, setEditUserLoading] = useState(false);
+    const [selectedServer, setSelectedServer] = useState(null);
+    const [serverDetailLoading, setServerDetailLoading] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState(null);
     const [broadcastModal, setBroadcastModal] = useState(false);
     const [maintenanceMode, setMaintenanceMode] = useState(false);
     const [backupStatus, setBackupStatus] = useState(null);
@@ -331,6 +336,107 @@ const AdminPanelModal = ({
         }
     };
 
+    // 🔥 Kullanıcı Düzenleme
+    const openEditUserModal = (user) => {
+        setEditUserForm({
+            username: user.username || '',
+            email: user.email || '',
+            coins: user.coins || 0,
+            level: user.level || 1,
+            xp: user.xp || 0,
+            role: user.role || 'member',
+            is_active: user.is_active !== false,
+            is_staff: user.is_staff || false,
+            is_premium: user.is_premium || false,
+            status_message: user.status_message || '',
+            email_verified: user.email_verified || false,
+        });
+        setEditUserModal(user);
+    };
+
+    const handleUpdateUser = async () => {
+        if (!editUserModal) return;
+        setEditUserLoading(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/update-user/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: editUserModal.id, ...editUserForm })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                toast.success(`✅ ${data.message}`);
+                setEditUserModal(null);
+                fetchUsers();
+            } else {
+                const data = await res.json();
+                toast.error(`❌ ${data.error || 'Güncelleme başarısız!'}`);
+            }
+        } catch (err) {
+            toast.error('❌ Hata oluştu!');
+        }
+        setEditUserLoading(false);
+    };
+
+    // 🔥 Sunucu İşlemleri
+    const handleServerDetails = async (server) => {
+        setServerDetailLoading(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/server-action/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'details', server_id: server.id })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setSelectedServer(data);
+            } else {
+                toast.error('❌ Sunucu detayları yüklenemedi!');
+            }
+        } catch (err) {
+            toast.error('❌ Hata oluştu!');
+        }
+        setServerDetailLoading(false);
+    };
+
+    const handleServerDelete = async (serverId, serverName) => {
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/server-action/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete', server_id: serverId })
+            });
+            if (res.ok) {
+                toast.success(`✅ "${serverName}" sunucusu silindi!`);
+                setDeleteConfirm(null);
+                fetchServers();
+            } else {
+                toast.error('❌ Sunucu silinemedi!');
+            }
+        } catch (err) {
+            toast.error('❌ Hata oluştu!');
+        }
+    };
+
+    // 🔥 Eski Logları Sil
+    const handleDeleteOldLogs = async () => {
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/delete-old-logs/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ days: 30 })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                toast.success(`✅ ${data.message}`);
+            } else {
+                toast.error('❌ Loglar silinemedi!');
+            }
+        } catch (err) {
+            toast.error('❌ Hata oluştu!');
+        }
+    };
+
     // ===== EFFECTS =====
     useEffect(() => {
         fetchStats();
@@ -343,7 +449,7 @@ const AdminPanelModal = ({
     useEffect(() => {
         if (activeTab === 'users') fetchUsers();
         if (activeTab === 'servers') fetchServers();
-        if (activeTab === 'logs') fetchLogs();
+        if (activeTab === 'logs') { fetchLogs(); fetchSystemLogs(); }
         if (activeTab === 'moderation') fetchBannedUsers();
         if (activeTab === 'database') fetchDbStats();
     }, [activeTab, fetchUsers, fetchServers, fetchLogs, fetchBannedUsers, fetchDbStats]);
@@ -920,7 +1026,7 @@ const AdminPanelModal = ({
                                     <button style={styles.actionBtn('#5865f2')} onClick={() => setSelectedUser(user)} title="Görüntüle">
                                         <FaEye />
                                     </button>
-                                    <button style={styles.actionBtn('#f0b132')} onClick={() => setEditUserModal(user)} title="Düzenle">
+                                    <button style={styles.actionBtn('#f0b132')} onClick={() => openEditUserModal(user)} title="Düzenle">
                                         <FaEdit />
                                     </button>
                                     <button style={styles.actionBtn('#e74c3c')} onClick={() => setActionModal({ type: 'ban', user })} title="Yasakla">
@@ -997,10 +1103,10 @@ const AdminPanelModal = ({
                             </div>
                         </div>
                         <div style={{ display: 'flex', gap: '6px' }}>
-                            <button style={{ ...styles.actionBtn('#5865f2'), flex: 1, padding: '8px' }}>
+                            <button style={{ ...styles.actionBtn('#5865f2'), flex: 1, padding: '8px' }} onClick={() => handleServerDetails(server)}>
                                 <FaEye /> Görüntüle
                             </button>
-                            <button style={{ ...styles.actionBtn('#e74c3c'), flex: 1, padding: '8px' }}>
+                            <button style={{ ...styles.actionBtn('#e74c3c'), flex: 1, padding: '8px' }} onClick={() => setDeleteConfirm({ type: 'server', id: server.id, name: server.name })}>
                                 <FaTrash /> Sil
                             </button>
                         </div>
@@ -1455,13 +1561,13 @@ const AdminPanelModal = ({
                         <button onClick={handleBackup} style={{ ...styles.actionBtn('#5865f2'), padding: '12px' }}>
                             <FaCloudUploadAlt /> Yedekle
                         </button>
-                        <button style={{ ...styles.actionBtn('#23a559'), padding: '12px' }}>
+                        <button style={{ ...styles.actionBtn('#23a559'), padding: '12px' }} onClick={() => toast.info('📦 Geri yükleme özelliği yakında!')}>
                             <FaCloudDownloadAlt /> Geri Yükle
                         </button>
                         <button onClick={handleClearCache} style={{ ...styles.actionBtn('#f0b132'), padding: '12px' }}>
                             <FaBroom /> Cache Temizle
                         </button>
-                        <button style={{ ...styles.actionBtn('#e74c3c'), padding: '12px' }}>
+                        <button style={{ ...styles.actionBtn('#e74c3c'), padding: '12px' }} onClick={handleDeleteOldLogs}>
                             <MdDelete /> Eski Logları Sil
                         </button>
                     </div>
@@ -1591,7 +1697,7 @@ const AdminPanelModal = ({
                     <button onClick={handleBroadcast} style={{ ...styles.actionBtn('#5865f2'), padding: '10px 20px' }}>
                         <FaPaperPlane /> Gönder
                     </button>
-                    <button style={{ ...styles.actionBtn('#6b7280'), padding: '10px 20px' }}>
+                    <button style={{ ...styles.actionBtn('#6b7280'), padding: '10px 20px' }} onClick={() => toast.info('⏰ Zamanlı duyuru özelliği yakında!')}>
                         <FaClock /> Zamanla
                     </button>
                 </div>
@@ -1608,10 +1714,10 @@ const AdminPanelModal = ({
                 {[
                     { icon: <FaCloudUploadAlt />, title: 'Yedekleme', desc: 'Veritabanı yedekle', color: '#5865f2', action: handleBackup },
                     { icon: <FaBroom />, title: 'Cache Temizle', desc: 'Önbellek temizle', color: '#f0b132', action: handleClearCache },
-                    { icon: <FaSync />, title: 'Yeniden Başlat', desc: 'Servisleri yeniden başlat', color: '#e74c3c' },
-                    { icon: <FaTerminal />, title: 'Konsol', desc: 'Admin konsolu', color: '#23a559' },
-                    { icon: <FaBug />, title: 'Debug Modu', desc: 'Hata ayıklama', color: '#9b59b6' },
-                    { icon: <FaFileExport />, title: 'Export', desc: 'Veri dışa aktar', color: '#1abc9c' },
+                    { icon: <FaSync />, title: 'Yeniden Başlat', desc: 'Servisleri yeniden başlat', color: '#e74c3c', action: () => toast.info('🔄 Bu özellik güvenlik nedeniyle sunucu üzerinden yapılmalıdır') },
+                    { icon: <FaTerminal />, title: 'Konsol', desc: 'Admin konsolu', color: '#23a559', action: () => toast.info('🖥️ Konsol erişimi SSH üzerinden yapılmalıdır') },
+                    { icon: <FaBug />, title: 'Debug Modu', desc: 'Hata ayıklama', color: '#9b59b6', action: () => toast.info('🐛 Debug modu güvenlik nedeniyle devre dışı') },
+                    { icon: <FaFileExport />, title: 'Export', desc: 'Veri dışa aktar', color: '#1abc9c', action: handleBackup },
                 ].map((item, idx) => (
                     <div key={idx} style={{ ...styles.statCard, cursor: 'pointer' }} onClick={item.action}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1837,7 +1943,7 @@ const AdminPanelModal = ({
 
                             {/* Actions */}
                             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                <button style={styles.actionBtn('#5865f2')} onClick={() => { setEditUserModal(selectedUser); setSelectedUser(null); }}>
+                                <button style={styles.actionBtn('#5865f2')} onClick={() => { openEditUserModal(selectedUser); setSelectedUser(null); }}>
                                     <FaEdit /> Düzenle
                                 </button>
                                 <button style={styles.actionBtn('#f0b132')} onClick={() => handleUserAction('warn', selectedUser.id)}>
@@ -1911,6 +2017,260 @@ const AdminPanelModal = ({
                                     <FaPaperPlane /> Gönder
                                 </button>
                                 <button style={styles.actionBtn('#6b7280')} onClick={() => setBroadcastModal(false)}>
+                                    İptal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 🔥 Edit User Modal */}
+                {editUserModal && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex',
+                        justifyContent: 'center', alignItems: 'center', zIndex: 15
+                    }} onClick={() => setEditUserModal(null)}>
+                        <div style={{
+                            backgroundColor: '#1a1a1e', borderRadius: '12px',
+                            padding: '24px', width: '600px', maxHeight: '85vh', overflowY: 'auto',
+                            border: '1px solid #2a2a2e'
+                        }} onClick={e => e.stopPropagation()}>
+                            {/* Header */}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+                                <div style={{
+                                    width: '48px', height: '48px', borderRadius: '50%',
+                                    background: 'linear-gradient(135deg, #f0b132, #e67e22)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    color: '#fff', fontWeight: '700', fontSize: '20px'
+                                }}>
+                                    <FaEdit />
+                                </div>
+                                <div>
+                                    <h3 style={{ color: '#fff', margin: 0, fontSize: '18px' }}>✏️ Kullanıcı Düzenle</h3>
+                                    <div style={{ color: '#6b7280', fontSize: '12px' }}>ID: {editUserModal.id} | {editUserModal.username}</div>
+                                </div>
+                                <button onClick={() => setEditUserModal(null)} style={{ ...styles.actionBtn('#e74c3c'), marginLeft: 'auto', padding: '8px 12px' }}>
+                                    <FaTimes />
+                                </button>
+                            </div>
+
+                            {/* Form */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                                {/* Username */}
+                                <div>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>👤 Kullanıcı Adı</label>
+                                    <input
+                                        type="text"
+                                        value={editUserForm.username || ''}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, username: e.target.value }))}
+                                        style={styles.searchInput}
+                                    />
+                                </div>
+                                {/* Email */}
+                                <div>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>📧 Email</label>
+                                    <input
+                                        type="email"
+                                        value={editUserForm.email || ''}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, email: e.target.value }))}
+                                        style={styles.searchInput}
+                                    />
+                                </div>
+                                {/* Coins */}
+                                <div>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>💰 Coin</label>
+                                    <input
+                                        type="number"
+                                        value={editUserForm.coins || 0}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, coins: parseInt(e.target.value) || 0 }))}
+                                        style={styles.searchInput}
+                                    />
+                                </div>
+                                {/* Level */}
+                                <div>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>⭐ Seviye</label>
+                                    <input
+                                        type="number"
+                                        value={editUserForm.level || 1}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, level: parseInt(e.target.value) || 1 }))}
+                                        style={styles.searchInput}
+                                    />
+                                </div>
+                                {/* XP */}
+                                <div>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>🎮 XP</label>
+                                    <input
+                                        type="number"
+                                        value={editUserForm.xp || 0}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, xp: parseInt(e.target.value) || 0 }))}
+                                        style={styles.searchInput}
+                                    />
+                                </div>
+                                {/* Role */}
+                                <div>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>🎭 Rol</label>
+                                    <select
+                                        value={editUserForm.role || 'member'}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, role: e.target.value }))}
+                                        style={styles.searchInput}
+                                    >
+                                        <option value="member">Üye</option>
+                                        <option value="admin">Yönetici</option>
+                                    </select>
+                                </div>
+                                {/* Status Message */}
+                                <div style={{ gridColumn: '1 / -1' }}>
+                                    <label style={{ color: '#9ca3af', fontSize: '11px', display: 'block', marginBottom: '4px' }}>📝 Durum Mesajı</label>
+                                    <input
+                                        type="text"
+                                        value={editUserForm.status_message || ''}
+                                        onChange={(e) => setEditUserForm(f => ({ ...f, status_message: e.target.value }))}
+                                        style={styles.searchInput}
+                                        placeholder="Durum mesajı..."
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Toggles */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginTop: '16px' }}>
+                                {[
+                                    { key: 'is_active', label: '✅ Aktif', color: '#23a559' },
+                                    { key: 'is_staff', label: '👑 Admin', color: '#e74c3c' },
+                                    { key: 'is_premium', label: '⭐ Premium', color: '#ffd700' },
+                                    { key: 'email_verified', label: '📧 Doğrulanmış', color: '#5865f2' },
+                                ].map((toggle) => (
+                                    <div
+                                        key={toggle.key}
+                                        onClick={() => setEditUserForm(f => ({ ...f, [toggle.key]: !f[toggle.key] }))}
+                                        style={{
+                                            padding: '10px', borderRadius: '8px', cursor: 'pointer', textAlign: 'center',
+                                            backgroundColor: editUserForm[toggle.key] ? `${toggle.color}20` : '#2a2a2e',
+                                            border: `1px solid ${editUserForm[toggle.key] ? toggle.color : '#3a3a3e'}`,
+                                            transition: 'all 0.2s'
+                                        }}
+                                    >
+                                        <div style={{ fontSize: '12px', fontWeight: '600', color: editUserForm[toggle.key] ? toggle.color : '#6b7280' }}>
+                                            {toggle.label}
+                                        </div>
+                                        <div style={{ fontSize: '10px', color: editUserForm[toggle.key] ? '#fff' : '#6b7280', marginTop: '2px' }}>
+                                            {editUserForm[toggle.key] ? 'Açık' : 'Kapalı'}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Buttons */}
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '20px', justifyContent: 'flex-end' }}>
+                                <button style={{ ...styles.actionBtn('#6b7280'), padding: '10px 20px' }} onClick={() => setEditUserModal(null)}>
+                                    İptal
+                                </button>
+                                <button
+                                    style={{ ...styles.actionBtn('#23a559'), padding: '10px 20px', opacity: editUserLoading ? 0.6 : 1 }}
+                                    onClick={handleUpdateUser}
+                                    disabled={editUserLoading}
+                                >
+                                    {editUserLoading ? '⏳ Kaydediliyor...' : '💾 Kaydet'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 🔥 Server Detail Modal */}
+                {selectedServer && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex',
+                        justifyContent: 'center', alignItems: 'center', zIndex: 15
+                    }} onClick={() => setSelectedServer(null)}>
+                        <div style={{
+                            backgroundColor: '#1a1a1e', borderRadius: '12px',
+                            padding: '24px', width: '600px', maxHeight: '80vh', overflowY: 'auto',
+                            border: '1px solid #2a2a2e'
+                        }} onClick={e => e.stopPropagation()}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                <h3 style={{ color: '#fff', margin: 0 }}>🏠 {selectedServer.name}</h3>
+                                <button onClick={() => setSelectedServer(null)} style={styles.actionBtn('#e74c3c')}>
+                                    <FaTimes />
+                                </button>
+                            </div>
+
+                            {/* Server Info */}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+                                <div style={styles.miniCard}>
+                                    <div style={{ fontSize: '20px', fontWeight: '700', color: '#5865f2' }}>{selectedServer.member_count}</div>
+                                    <div style={{ fontSize: '10px', color: '#6b7280' }}>Üye</div>
+                                </div>
+                                <div style={styles.miniCard}>
+                                    <div style={{ fontSize: '20px', fontWeight: '700', color: '#23a559' }}>{selectedServer.channel_count}</div>
+                                    <div style={{ fontSize: '10px', color: '#6b7280' }}>Kanal</div>
+                                </div>
+                                <div style={styles.miniCard}>
+                                    <div style={{ fontSize: '20px', fontWeight: '700', color: '#f0b132' }}>{selectedServer.owner}</div>
+                                    <div style={{ fontSize: '10px', color: '#6b7280' }}>Sahip</div>
+                                </div>
+                            </div>
+
+                            {/* Members */}
+                            <div style={{ marginBottom: '16px' }}>
+                                <h4 style={{ color: '#fff', fontSize: '14px', marginBottom: '8px' }}>👥 Üyeler ({selectedServer.members?.length || 0})</h4>
+                                <div style={{ maxHeight: '200px', overflowY: 'auto', backgroundColor: '#111113', borderRadius: '8px' }}>
+                                    {selectedServer.members?.map((member, idx) => (
+                                        <div key={idx} style={{
+                                            display: 'flex', justifyContent: 'space-between', padding: '8px 12px',
+                                            borderBottom: '1px solid #2a2a2e', fontSize: '12px'
+                                        }}>
+                                            <span style={{ color: '#fff' }}>{member.username}</span>
+                                            <span style={styles.badge(member.role === 'admin' ? '#e74c3c' : '#5865f2')}>{member.role}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Channels */}
+                            <div>
+                                <h4 style={{ color: '#fff', fontSize: '14px', marginBottom: '8px' }}>📁 Kanallar ({selectedServer.channels?.length || 0})</h4>
+                                <div style={{ maxHeight: '200px', overflowY: 'auto', backgroundColor: '#111113', borderRadius: '8px' }}>
+                                    {selectedServer.channels?.map((channel, idx) => (
+                                        <div key={idx} style={{
+                                            display: 'flex', justifyContent: 'space-between', padding: '8px 12px',
+                                            borderBottom: '1px solid #2a2a2e', fontSize: '12px'
+                                        }}>
+                                            <span style={{ color: '#fff' }}>#{channel.name}</span>
+                                            <span style={styles.badge('#5865f2')}>{channel.type}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 🔥 Delete Confirmation Modal */}
+                {deleteConfirm && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex',
+                        justifyContent: 'center', alignItems: 'center', zIndex: 20
+                    }} onClick={() => setDeleteConfirm(null)}>
+                        <div style={{
+                            backgroundColor: '#1a1a1e', borderRadius: '12px',
+                            padding: '24px', width: '400px', border: '1px solid #e74c3c40'
+                        }} onClick={e => e.stopPropagation()}>
+                            <h3 style={{ color: '#e74c3c', marginTop: 0 }}>⚠️ Silme Onayı</h3>
+                            <p style={{ color: '#9ca3af' }}>
+                                <strong style={{ color: '#fff' }}>"{deleteConfirm.name}"</strong> silmek istediğinizden emin misiniz?
+                                <br /><span style={{ color: '#e74c3c', fontSize: '12px' }}>Bu işlem geri alınamaz!</span>
+                            </p>
+                            <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+                                <button style={{ ...styles.actionBtn('#e74c3c'), padding: '10px 20px' }}
+                                    onClick={() => {
+                                        if (deleteConfirm.type === 'server') handleServerDelete(deleteConfirm.id, deleteConfirm.name);
+                                    }}>
+                                    🗑️ Sil
+                                </button>
+                                <button style={{ ...styles.actionBtn('#6b7280'), padding: '10px 20px' }} onClick={() => setDeleteConfirm(null)}>
                                     İptal
                                 </button>
                             </div>
