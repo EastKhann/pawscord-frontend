@@ -425,10 +425,9 @@ const MessageInput = ({
         const files = Array.from(e.dataTransfer?.files || []);
         if (files.length === 0) return;
 
-        // 🆕 Dosyaları önizleme listesine ekle (hemen yükleme)
+        // 🔥 FIX: Dosyaları direkt gönder (preview'a eklemek yerine)
         const processedFiles = [];
         for (const file of files) {
-            // Önizleme URL'i oluştur
             const previewUrl = file.type.startsWith('image/') || file.type.startsWith('video/')
                 ? URL.createObjectURL(file)
                 : null;
@@ -443,8 +442,9 @@ const MessageInput = ({
             });
         }
 
-        setPendingFiles(prev => [...prev, ...processedFiles]);
-    }, []);
+        // 🔥 Hemen gönder - preview'a eklemek yerine direkt upload
+        sendPendingFiles(processedFiles);
+    }, [sendPendingFiles]);
 
     const startRecording = async () => {
         try {

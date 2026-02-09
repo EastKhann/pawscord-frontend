@@ -451,6 +451,150 @@ const calculateFileHash = async (file) => {
     });
 };
 
+// --- 🖼️ WhatsApp-style Image Gallery Group ---
+const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, isAdmin, onImageClick, onViewProfile, onDelete, allUsers, getDeterministicAvatar, fetchWithAuth, onVisible }) => {
+    const firstMsg = messages[0];
+    const isMyMessage = firstMsg.username === currentUser;
+
+    // Avatar
+    const userAvatarBase = (() => {
+        let url = firstMsg.avatar;
+        if (!url) {
+            const userObj = allUsers?.find(u => u.username === firstMsg.username);
+            url = userObj?.avatar;
+        }
+        if (!url) url = getDeterministicAvatar(firstMsg.username);
+        if (url && !url.startsWith('http') && !url.startsWith('blob:')) {
+            url = `${absoluteHostUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
+        }
+        return url;
+    })();
+
+    // Get full URL for image
+    const getFullUrl = (url) => {
+        if (!url) return null;
+        if (url.startsWith('http') || url.startsWith('blob:')) return url;
+        return `${absoluteHostUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
+    };
+
+    // Collect all image URLs
+    const images = messages.map(msg => {
+        const imgUrl = msg.image_url || msg.image;
+        if (imgUrl) return getFullUrl(imgUrl);
+        const fileUrl = msg.file_url || msg.file;
+        if (fileUrl && /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(msg.file_name || '')) {
+            return getFullUrl(fileUrl);
+        }
+        return null;
+    }).filter(Boolean);
+
+    const count = images.length;
+
+    // Grid layout based on count (WhatsApp-style)
+    const getGridStyle = () => {
+        if (count === 2) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
+        if (count === 3) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
+        if (count >= 4) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
+        return { gridTemplateColumns: '1fr', maxWidth: '300px' };
+    };
+
+    const getImageStyle = (idx) => {
+        const base = {
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            cursor: 'pointer',
+            display: 'block',
+        };
+        // 3 images: first one spans full width
+        if (count === 3 && idx === 0) {
+            return { ...base, gridColumn: '1 / -1' };
+        }
+        return base;
+    };
+
+    const timestamp = firstMsg.timestamp ? new Date(firstMsg.timestamp) : null;
+    const timeStr = timestamp ?
+        (timestamp.toDateString() === new Date().toDateString()
+            ? timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            : timestamp.toLocaleString([], { hour: '2-digit', minute: '2-digit' }))
+        : '';
+
+    return (
+        <div style={{
+            display: 'flex',
+            padding: '4px 48px 4px 16px',
+            gap: '12px',
+            position: 'relative',
+        }}>
+            {/* Avatar */}
+            <div style={{ flexShrink: 0, width: '40px', paddingTop: '2px' }}>
+                <img
+                    src={userAvatarBase}
+                    alt={firstMsg.username}
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', objectFit: 'cover' }}
+                    onClick={() => onViewProfile(firstMsg.username)}
+                />
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <strong style={{
+                        cursor: 'pointer',
+                        color: isAdmin && firstMsg.username === currentUser ? '#f0b232' : '#fff',
+                        fontSize: '0.95em'
+                    }} onClick={() => onViewProfile(firstMsg.username)}>
+                        {firstMsg.username}
+                    </strong>
+                    <span style={{ color: '#72767d', fontSize: '0.75em' }}>{timeStr}</span>
+                </div>
+
+                {/* 🖼️ Image Grid */}
+                <div style={{
+                    display: 'grid',
+                    ...getGridStyle(),
+                    gap: '4px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                }}>
+                    {images.map((imgUrl, idx) => (
+                        <div
+                            key={messages[idx]?.id || idx}
+                            style={{
+                                aspectRatio: count === 1 ? 'auto' : (count === 3 && idx === 0 ? '2/1' : '1/1'),
+                                overflow: 'hidden',
+                                position: 'relative',
+                                ...(count === 3 && idx === 0 ? { gridColumn: '1 / -1' } : {}),
+                                maxHeight: count === 1 ? '300px' : (count === 3 && idx === 0 ? '200px' : '200px'),
+                            }}
+                        >
+                            <img
+                                src={imgUrl}
+                                alt={`gallery-${idx}`}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    cursor: 'pointer',
+                                    display: 'block',
+                                    transition: 'transform 0.2s',
+                                }}
+                                onClick={() => onImageClick(imgUrl)}
+                                loading="lazy"
+                                onMouseEnter={(e) => { e.target.style.transform = 'scale(1.03)'; }}
+                                onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; }}
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+});
+
 // --- ANA İÇERİK BİLEŞENİ ---
 const AppContent = () => {
     const { user, isAuthenticated, token, login, logout, isLoading: isAuthLoading, refreshAccessToken } = useAuth();
@@ -886,8 +1030,17 @@ const AppContent = () => {
     const optimizedMessages = useOptimizedMessages(rawMessages, debouncedSearchQuery, activeChat);
     const optimizedOnlineUsers = useOnlineUsers(allUsers);
 
-    // � Gallery grouping kaldırıldı — her mesaj ayrı ayrı gösterilsin
-
+    // 🖼️ Gallery grouping: Ayni kullanicinin ardisik resim-only mesajlarini grupla
+    const isImageOnlyMessage = (msg) => {
+        if (!msg) return false;
+        const hasImage = !!(msg.image_url || msg.image);
+        const hasFileImage = !!(msg.file_url || msg.file) && !msg.is_voice_message &&
+            /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(msg.file_name || '');
+        const hasContent = !!(msg.content && msg.content.trim());
+        const hasPoll = !!msg.poll;
+        const hasReply = !!msg.reply_to;
+        return (hasImage || hasFileImage) && !hasContent && !hasPoll && !hasReply;
+    };
 
     // --- SPLASH SCREEN LOGIC (veri hazırsa erken kapat) ---
     useEffect(() => {
@@ -6444,49 +6597,102 @@ const AppContent = () => {
                                 ) : (
                                     // Standard rendering for <50 messages
                                     <>
-                                        {optimizedMessages.map((msg, index) => {
-                                            const key = msg.id || msg.temp_id || index;
-                                            const prevMsg = index > 0 ? optimizedMessages[index - 1] : null;
-                                            const showDateDivider = !prevMsg || (
-                                                msg.timestamp && prevMsg.timestamp &&
-                                                new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()
-                                            );
-                                            return (
-                                                <React.Fragment key={key}>
-                                                    {showDateDivider && msg.timestamp && (
-                                                        <MessageDateDivider date={msg.timestamp} />
-                                                    )}
-                                                    <Message
-                                                        key={key}
-                                                        msg={msg}
-                                                        currentUser={username}
-                                                        absoluteHostUrl={ABSOLUTE_HOST_URL}
-                                                        isAdmin={isAdmin}
-                                                        onImageClick={setZoomedImage}
-                                                        fetchWithAuth={fetchWithAuth}
-                                                        allUsers={allUsers}
-                                                        getDeterministicAvatar={getDeterministicAvatar}
-                                                        onShowChart={setChartSymbol}
-                                                        onDelete={handleDeleteMessage}
-                                                        onStartEdit={setEditingMessage}
-                                                        onSetReply={setReplyingTo}
-                                                        onToggleReaction={() => { }}
-                                                        onStartForward={setForwardingMessage}
-                                                        isSelectionMode={isSelectionMode}
-                                                        isSelected={selectedMessages.has(msg.id)}
-                                                        onToggleSelection={(id) => {
-                                                            const newSet = new Set(selectedMessages);
-                                                            if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
-                                                            setSelectedMessages(newSet);
-                                                        }}
-                                                        onScrollToMessage={scrollToMessage}
-                                                        onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                        onTogglePin={handleTogglePin}
-                                                        onVisible={handleMessageVisible}
-                                                    />
-                                                </React.Fragment>
-                                            );
-                                        })}
+                                        {(() => {
+                                            // 🖼️ WhatsApp-style gallery grouping
+                                            const elements = [];
+                                            let i = 0;
+                                            while (i < optimizedMessages.length) {
+                                                const msg = optimizedMessages[i];
+                                                const key = msg.id || msg.temp_id || i;
+                                                const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
+                                                const showDateDivider = !prevMsg || (
+                                                    msg.timestamp && prevMsg.timestamp &&
+                                                    new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()
+                                                );
+
+                                                // Check if this starts a gallery group
+                                                if (isImageOnlyMessage(msg)) {
+                                                    const galleryMsgs = [msg];
+                                                    let j = i + 1;
+                                                    while (j < optimizedMessages.length &&
+                                                        isImageOnlyMessage(optimizedMessages[j]) &&
+                                                        optimizedMessages[j].username === msg.username &&
+                                                        // Max 30 saniye aralık
+                                                        msg.timestamp && optimizedMessages[j].timestamp &&
+                                                        Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000
+                                                    ) {
+                                                        galleryMsgs.push(optimizedMessages[j]);
+                                                        j++;
+                                                    }
+
+                                                    if (galleryMsgs.length >= 2) {
+                                                        // 🖼️ Gallery render - WhatsApp style grid
+                                                        const galleryKey = galleryMsgs.map(m => m.id || m.temp_id).join('-');
+                                                        elements.push(
+                                                            <React.Fragment key={`gallery-${galleryKey}`}>
+                                                                {showDateDivider && msg.timestamp && (
+                                                                    <MessageDateDivider date={msg.timestamp} />
+                                                                )}
+                                                                <ImageGalleryGroup
+                                                                    messages={galleryMsgs}
+                                                                    currentUser={username}
+                                                                    absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                                                    isAdmin={isAdmin}
+                                                                    onImageClick={setZoomedImage}
+                                                                    onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
+                                                                    onDelete={handleDeleteMessage}
+                                                                    allUsers={allUsers}
+                                                                    getDeterministicAvatar={getDeterministicAvatar}
+                                                                    fetchWithAuth={fetchWithAuth}
+                                                                    onVisible={handleMessageVisible}
+                                                                />
+                                                            </React.Fragment>
+                                                        );
+                                                        i = j;
+                                                        continue;
+                                                    }
+                                                }
+
+                                                // Normal single message
+                                                elements.push(
+                                                    <React.Fragment key={key}>
+                                                        {showDateDivider && msg.timestamp && (
+                                                            <MessageDateDivider date={msg.timestamp} />
+                                                        )}
+                                                        <Message
+                                                            key={key}
+                                                            msg={msg}
+                                                            currentUser={username}
+                                                            absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                                            isAdmin={isAdmin}
+                                                            onImageClick={setZoomedImage}
+                                                            fetchWithAuth={fetchWithAuth}
+                                                            allUsers={allUsers}
+                                                            getDeterministicAvatar={getDeterministicAvatar}
+                                                            onShowChart={setChartSymbol}
+                                                            onDelete={handleDeleteMessage}
+                                                            onStartEdit={setEditingMessage}
+                                                            onSetReply={setReplyingTo}
+                                                            onToggleReaction={() => { }}
+                                                            onStartForward={setForwardingMessage}
+                                                            isSelectionMode={isSelectionMode}
+                                                            isSelected={selectedMessages.has(msg.id)}
+                                                            onToggleSelection={(id) => {
+                                                                const newSet = new Set(selectedMessages);
+                                                                if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
+                                                                setSelectedMessages(newSet);
+                                                            }}
+                                                            onScrollToMessage={scrollToMessage}
+                                                            onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
+                                                            onTogglePin={handleTogglePin}
+                                                            onVisible={handleMessageVisible}
+                                                        />
+                                                    </React.Fragment>
+                                                );
+                                                i++;
+                                            }
+                                            return elements;
+                                        })()}
                                         <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
                                     </>
                                 )}
