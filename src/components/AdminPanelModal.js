@@ -2019,16 +2019,16 @@ const AdminPanelModal = ({
                         }} onClick={e => e.stopPropagation()}>
                             <h3 style={{ color: actionModal.type === 'delete' ? '#dc2626' : '#f0b132', marginTop: 0 }}>
                                 {actionModal.type === 'delete' ? '🗑️ Kullanıcıyı Sil' :
-                                 actionModal.type === 'ban' ? '⛔ Kullanıcıyı Yasakla' :
-                                 '⚠️ İşlem Onayla'}
+                                    actionModal.type === 'ban' ? '⛔ Kullanıcıyı Yasakla' :
+                                        '⚠️ İşlem Onayla'}
                             </h3>
                             <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
                                 <strong style={{ color: '#fff' }}>{actionModal.user?.username}</strong>
                                 {actionModal.type === 'delete'
                                     ? ' kullanıcısını kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz! Tüm mesajları, sunucu üyelikleri ve profili silinecektir.'
                                     : actionModal.type === 'ban'
-                                    ? ' kullanıcısını yasaklamak istediğinizden emin misiniz? Kullanıcı giriş yapamayacaktır.'
-                                    : ' üzerinde bu işlemi yapmak istediğinizden emin misiniz?'
+                                        ? ' kullanıcısını yasaklamak istediğinizden emin misiniz? Kullanıcı giriş yapamayacaktır.'
+                                        : ' üzerinde bu işlemi yapmak istediğinizden emin misiniz?'
                                 }
                             </p>
                             <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>

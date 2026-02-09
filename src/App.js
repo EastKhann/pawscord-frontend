@@ -769,6 +769,7 @@ const AppContent = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0); // 📊 Upload progress %
+    const [pendingFilesFromDrop, setPendingFilesFromDrop] = useState([]); // 🆕 Chat area drop'tan gelen dosyalar
     const [isRecordingVoice, setIsRecordingVoice] = useState(false);
     const [hasDraftMessage, setHasDraftMessage] = useState(false);
     const [draftText, setDraftText] = useState('');
@@ -818,6 +819,7 @@ const AppContent = () => {
     const statusWsRef = useRef(null);
     const activeChatRef = useRef(activeChat); // 🚨 PERF FIX: Ref for StatusWS to avoid reconnect on chat switch
     const messagesEndRef = useRef(null);
+    const dragCounterRef = useRef(0); // 🆕 Drag counter for reliable drag leave detection
     const fileInputRefNormal = useRef(null);
     const richTextRef = useRef(null);
     const messageBoxRef = useRef(null);
@@ -883,6 +885,54 @@ const AppContent = () => {
     const rawMessages = useChatStore(state => state.messages);
     const optimizedMessages = useOptimizedMessages(rawMessages, debouncedSearchQuery, activeChat);
     const optimizedOnlineUsers = useOnlineUsers(allUsers);
+
+    // 🖼️ GALLERY GROUPING: Aynı kullanıcıdan arka arkaya gelen medya mesajlarını grup yap
+    const groupedMessages = useMemo(() => {
+        if (!optimizedMessages || optimizedMessages.length === 0) return [];
+        const result = [];
+        let i = 0;
+
+        while (i < optimizedMessages.length) {
+            const msg = optimizedMessages[i];
+            // Sadece medya olan mesajları kontrol et (metin yok, voice değil)
+            const isMediaOnly = !msg.content && (msg.image || msg.image_url || msg.file || msg.file_url) && !msg.is_voice_message;
+
+            if (isMediaOnly) {
+                const group = [msg];
+                let j = i + 1;
+
+                while (j < optimizedMessages.length) {
+                    const nextMsg = optimizedMessages[j];
+                    const nextIsMediaOnly = !nextMsg.content && (nextMsg.image || nextMsg.image_url || nextMsg.file || nextMsg.file_url) && !nextMsg.is_voice_message;
+                    const sameUser = nextMsg.username === msg.username;
+                    const timeDiff = msg.timestamp && nextMsg.timestamp
+                        ? Math.abs(new Date(nextMsg.timestamp) - new Date(msg.timestamp)) / 1000
+                        : 999;
+
+                    if (nextIsMediaOnly && sameUser && timeDiff < 120) {
+                        group.push(nextMsg);
+                        j++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (group.length > 1) {
+                    // İlk mesajı galeri bilgisiyle genişlet
+                    result.push({ ...group[0], _galleryGroup: group });
+                    i = j;
+                } else {
+                    result.push(msg);
+                    i++;
+                }
+            } else {
+                result.push(msg);
+                i++;
+            }
+        }
+
+        return result;
+    }, [optimizedMessages]);
 
 
     // --- SPLASH SCREEN LOGIC (veri hazırsa erken kapat) ---
@@ -2898,8 +2948,12 @@ const AppContent = () => {
     };
 
     const uploadFile = useCallback(async (file, isVoice = false, duration = 0, targetOverride = null) => {
-        setIsUploading(true);
-        setUploadProgress(0);
+        // 🔥 FIX: 5MB altı dosyalar için progress bar gösterme
+        const showProgress = file.size >= 5 * 1024 * 1024;
+        if (showProgress) {
+            setIsUploading(true);
+            setUploadProgress(0);
+        }
 
         const target = targetOverride || activeChat;
         const tempId = getTemporaryId();
@@ -2941,9 +2995,8 @@ const AppContent = () => {
             // Dosya zaten varsa — backend mesajı oluşturdu, direkt göster
             if (initData.file_exists) {
                 console.log('✅ [R2] File already exists, message created with existing file');
-                setIsUploading(false);
-                setUploadProgress(100);
-                
+                if (showProgress) { setIsUploading(false); setUploadProgress(100); }
+
                 // Backend mesaj verisi döndüyse listeye ekle
                 if (initData.id) {
                     if (target.id === activeChat.id) {
@@ -3002,7 +3055,7 @@ const AppContent = () => {
 
                 completedParts++;
                 const progress = Math.round((completedParts / totalParts) * 95); // %95'e kadar
-                setUploadProgress(progress);
+                if (showProgress) setUploadProgress(progress);
 
                 console.log(`✅ [R2] Part ${partNumber}/${totalParts} complete (${progress}%), ETag: ${etag}`);
 
@@ -3050,7 +3103,7 @@ const AppContent = () => {
             }
 
             const data = await completeRes.json();
-            setUploadProgress(100);
+            if (showProgress) setUploadProgress(100);
 
             console.log('✅ [R2 Multipart] Upload complete!', data);
 
@@ -3078,46 +3131,61 @@ const AppContent = () => {
             toast.error(`Yükleme hatası: ${e.message}`);
         }
 
-        setIsUploading(false);
+        if (showProgress) setIsUploading(false);
     }, [activeChat, username, fetchWithAuth]);
 
     const handleChatDrop = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        dragCounterRef.current = 0; // 🔥 FIX: Drop sonrası counter sıfırla
         setIsDragging(false);
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            uploadFile(e.dataTransfer.files[0]);
+            // 🔥 FIX: TÜM dosyaları MessageInput'a pendingFiles olarak gönder
+            const files = Array.from(e.dataTransfer.files);
+            const processedFiles = files.map(file => ({
+                id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                file,
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                previewUrl: (file.type.startsWith('image/') || file.type.startsWith('video/'))
+                    ? URL.createObjectURL(file)
+                    : null
+            }));
+            setPendingFilesFromDrop(processedFiles);
         }
     };
     const handleSidebarDrop = (e, target) => {
         e.preventDefault(); e.stopPropagation(); setDropTarget(null);
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            const file = e.dataTransfer.files[0];
+            const files = Array.from(e.dataTransfer.files);
 
             // DM'e dosya atıldıysa
             if (target.type === 'dm') {
-                // DM'i aç ve dosyayı yükle
                 const conversation = conversations.find(c => c.id === target.id);
                 if (conversation) {
                     const otherUser = conversation.participants.find(p => p.username !== username);
                     if (otherUser) {
-                        // DM'i aktif et
                         handleDMClick(otherUser.username);
-                        // Dosyayı yükle
-                        setTimeout(() => {
-                            uploadFile(file, false, 0, target);
+                        // 🔥 FIX: TÜM dosyaları sırayla yükle
+                        setTimeout(async () => {
+                            for (const file of files) {
+                                await uploadFile(file, false, 0, target);
+                            }
                         }, 300);
                     }
                 }
             }
             // Odaya dosya atıldıysa
             else if (target.type === 'room') {
-                // Odayı aç ve dosyayı yükle
                 const room = roomsWithCategories.find(r => r.room_slug === target.id);
                 if (room) {
                     handleRoomClick(target.id);
-                    setTimeout(() => {
-                        uploadFile(file, false, 0, target);
+                    // 🔥 FIX: TÜM dosyaları sırayla yükle
+                    setTimeout(async () => {
+                        for (const file of files) {
+                            await uploadFile(file, false, 0, target);
+                        }
                     }, 300);
                 }
             }
@@ -5941,9 +6009,9 @@ const AppContent = () => {
                         <div
                             style={{ ...styles.chatArea, position: 'relative', paddingTop: mobileWebPadding, boxSizing: 'border-box' }}
                             onDrop={handleChatDrop}
-                            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                            onDragEnter={(e) => { e.preventDefault(); setIsDragging(true); }}
-                            onDragLeave={(e) => { e.preventDefault(); if (e.target === e.currentTarget) setIsDragging(false); }}
+                            onDragOver={(e) => { e.preventDefault(); }}
+                            onDragEnter={(e) => { e.preventDefault(); dragCounterRef.current++; setIsDragging(true); }}
+                            onDragLeave={(e) => { e.preventDefault(); dragCounterRef.current--; if (dragCounterRef.current <= 0) { dragCounterRef.current = 0; setIsDragging(false); } }}
                         >
                             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '8px' }}>
@@ -6383,10 +6451,10 @@ const AppContent = () => {
                             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}>
                                 {messageHistoryLoading ? (
                                     <p style={styles.systemMessage}>Yükleniyor...</p>
-                                ) : optimizedMessages.length > 50 ? (
+                                ) : groupedMessages.length > 50 ? (
                                     // Virtual scrolling for 50+ messages
                                     <VirtualMessageList
-                                        messages={optimizedMessages}
+                                        messages={groupedMessages}
                                         scrollToBottom={true}
                                         renderMessage={(msg, index) => (
                                             <Message
@@ -6422,9 +6490,9 @@ const AppContent = () => {
                                 ) : (
                                     // Standard rendering for <50 messages
                                     <>
-                                        {optimizedMessages.map((msg, index) => {
+                                        {groupedMessages.map((msg, index) => {
                                             const key = msg.id || msg.temp_id || index;
-                                            const prevMsg = index > 0 ? optimizedMessages[index - 1] : null;
+                                            const prevMsg = index > 0 ? groupedMessages[index - 1] : null;
                                             const showDateDivider = !prevMsg || (
                                                 msg.timestamp && prevMsg.timestamp &&
                                                 new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()
@@ -6470,6 +6538,34 @@ const AppContent = () => {
                                 )}
                             </div>
 
+                            {/* 🖼️ Drag overlay - Tüm chat alanını kaplar */}
+                            {isDragging && (
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    backgroundColor: 'rgba(30, 31, 34, 0.9)',
+                                    border: '3px dashed #5865f2',
+                                    borderRadius: '8px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    pointerEvents: 'none',
+                                    zIndex: 1000
+                                }}>
+                                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>📁</div>
+                                    <div style={{ color: '#5865f2', fontSize: '1.4em', fontWeight: 'bold' }}>
+                                        Dosyaları buraya bırakın
+                                    </div>
+                                    <div style={{ color: '#b9bbbe', fontSize: '0.9em', marginTop: '6px' }}>
+                                        Birden fazla dosya seçebilirsiniz
+                                    </div>
+                                </div>
+                            )}
+
                             {showScrollToBottom && (
                                 <ScrollToBottomButton
                                     onClick={() => { scrollToBottom('smooth'); setShowScrollToBottom(false); }}
@@ -6477,27 +6573,6 @@ const AppContent = () => {
                                 />
                             )}
                             <div style={{ ...styles.inputContainer, paddingBottom: isNative ? `calc(16px + ${safeAreaBottom})` : (isMobile ? '25px' : '16px') }}>
-                                {isDragging && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        backgroundColor: 'rgba(88, 101, 242, 0.2)',
-                                        border: '2px dashed #5865f2',
-                                        borderRadius: '8px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        pointerEvents: 'none',
-                                        zIndex: 1000
-                                    }}>
-                                        <div style={{ color: '#5865f2', fontSize: '1.2em', fontWeight: 'bold' }}>
-                                            📁 Dosyayı buraya bırakın
-                                        </div>
-                                    </div>
-                                )}
                                 {/* 📊 Upload Progress Bar */}
                                 {isUploading && uploadProgress > 0 && (
                                     <div style={{
@@ -6539,6 +6614,8 @@ const AppContent = () => {
                                     fetchWithAuth={fetchWithAuth}
                                     apiBaseUrl={ABSOLUTE_HOST_URL}
                                     activeChat={activeChat}
+                                    pendingFilesFromDrop={pendingFilesFromDrop}
+                                    onClearPendingFiles={() => setPendingFilesFromDrop([])}
                                 />
                             </div>
 

@@ -363,6 +363,8 @@ const Message = ({
                     transcription={localTranscription}
                     isTranscribing={localIsTranscribing}
                     onTranscribe={handleTranscribe}
+                    galleryGroup={msg._galleryGroup}
+                    absoluteHostUrl={absoluteHostUrl}
                 />
 
                 {/* Footer: Reactions & Read Receipt */}
