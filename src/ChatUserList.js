@@ -69,11 +69,11 @@ const ChatUserList = ({
                 return {
                     username: member.username,
                     display_name: userInfo.display_name || member.username,
-                    avatar: userInfo.avatar || getDeterministicAvatar?.(member.username),
+                    avatar: userInfo.avatar || member.avatar || getDeterministicAvatar?.(member.username),
                     status: isOnline ? 'online' : 'offline',
                     is_online: isOnline,
                     role: member.role || 'member',
-                    current_activity: userInfo.current_activity || {} // 🔥 YENİ: Rich Presence (Spotify/Steam)
+                    current_activity: userInfo.current_activity || member.current_activity || {}
                 };
             });
 
@@ -103,7 +103,7 @@ const ChatUserList = ({
                 return {
                     username: friendUsername,
                     display_name: userInfo.display_name || friendUsername,
-                    avatar: userInfo.avatar || getDeterministicAvatar?.(friendUsername),
+                    avatar: userInfo.avatar || friend.avatar || getDeterministicAvatar?.(friendUsername),
                     status: isOnline ? 'online' : (userInfo.status || 'offline'),
                     is_online: isOnline,
                     role: 'friend',
