@@ -886,53 +886,7 @@ const AppContent = () => {
     const optimizedMessages = useOptimizedMessages(rawMessages, debouncedSearchQuery, activeChat);
     const optimizedOnlineUsers = useOnlineUsers(allUsers);
 
-    // 🖼️ GALLERY GROUPING: Aynı kullanıcıdan arka arkaya gelen medya mesajlarını grup yap
-    const groupedMessages = useMemo(() => {
-        if (!optimizedMessages || optimizedMessages.length === 0) return [];
-        const result = [];
-        let i = 0;
-
-        while (i < optimizedMessages.length) {
-            const msg = optimizedMessages[i];
-            // Sadece medya olan mesajları kontrol et (metin yok, voice değil)
-            const isMediaOnly = !msg.content && (msg.image || msg.image_url || msg.file || msg.file_url) && !msg.is_voice_message;
-
-            if (isMediaOnly) {
-                const group = [msg];
-                let j = i + 1;
-
-                while (j < optimizedMessages.length) {
-                    const nextMsg = optimizedMessages[j];
-                    const nextIsMediaOnly = !nextMsg.content && (nextMsg.image || nextMsg.image_url || nextMsg.file || nextMsg.file_url) && !nextMsg.is_voice_message;
-                    const sameUser = nextMsg.username === msg.username;
-                    const timeDiff = msg.timestamp && nextMsg.timestamp
-                        ? Math.abs(new Date(nextMsg.timestamp) - new Date(msg.timestamp)) / 1000
-                        : 999;
-
-                    if (nextIsMediaOnly && sameUser && timeDiff < 120) {
-                        group.push(nextMsg);
-                        j++;
-                    } else {
-                        break;
-                    }
-                }
-
-                if (group.length > 1) {
-                    // İlk mesajı galeri bilgisiyle genişlet
-                    result.push({ ...group[0], _galleryGroup: group });
-                    i = j;
-                } else {
-                    result.push(msg);
-                    i++;
-                }
-            } else {
-                result.push(msg);
-                i++;
-            }
-        }
-
-        return result;
-    }, [optimizedMessages]);
+    // � Gallery grouping kaldırıldı — her mesaj ayrı ayrı gösterilsin
 
 
     // --- SPLASH SCREEN LOGIC (veri hazırsa erken kapat) ---
@@ -6451,10 +6405,10 @@ const AppContent = () => {
                             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}>
                                 {messageHistoryLoading ? (
                                     <p style={styles.systemMessage}>Yükleniyor...</p>
-                                ) : groupedMessages.length > 50 ? (
+                                ) : optimizedMessages.length > 50 ? (
                                     // Virtual scrolling for 50+ messages
                                     <VirtualMessageList
-                                        messages={groupedMessages}
+                                        messages={optimizedMessages}
                                         scrollToBottom={true}
                                         renderMessage={(msg, index) => (
                                             <Message
@@ -6490,9 +6444,9 @@ const AppContent = () => {
                                 ) : (
                                     // Standard rendering for <50 messages
                                     <>
-                                        {groupedMessages.map((msg, index) => {
+                                        {optimizedMessages.map((msg, index) => {
                                             const key = msg.id || msg.temp_id || index;
-                                            const prevMsg = index > 0 ? groupedMessages[index - 1] : null;
+                                            const prevMsg = index > 0 ? optimizedMessages[index - 1] : null;
                                             const showDateDivider = !prevMsg || (
                                                 msg.timestamp && prevMsg.timestamp &&
                                                 new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()

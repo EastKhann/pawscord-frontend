@@ -71,16 +71,18 @@ const MessageInput = ({
     const isRecordingLockedRef = useRef(false); // 🎤 Document event handler için
     const touchStartYRef = useRef(0); // 🎤 Document event handler için
 
-    // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını pendingFiles'a ekle
+    // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını HEMEN GÖNDER
     useEffect(() => {
         if (pendingFilesFromDrop && pendingFilesFromDrop.length > 0) {
-            setPendingFiles(prev => [...prev, ...pendingFilesFromDrop]);
-            // Parent'taki state'i temizle (duplicate önlemek için)
+            // Parent'taki state'i temizle
             if (onClearPendingFiles) {
                 onClearPendingFiles();
             }
+            // 🔥 FIX: Dosyaları pendingFiles'a eklemek yerine direkt gönder
+            const filesToSend = [...pendingFilesFromDrop];
+            sendPendingFiles(filesToSend);
         }
-    }, [pendingFilesFromDrop, onClearPendingFiles]);
+    }, [pendingFilesFromDrop, onClearPendingFiles, sendPendingFiles]);
 
     // 📱 APK FIX: Prevent scroll issues on mobile
     useEffect(() => {
@@ -145,6 +147,11 @@ const MessageInput = ({
             }
         }
     }, [message]);
+
+    // 🔥 FIX: Chat değiştiğinde bekleyen dosyaları temizle
+    useEffect(() => {
+        setPendingFiles([]);
+    }, [activeChat?.id, activeChat?.type]);
 
     // 🆕 Draft Yükleme - Chat değiştiğinde
     useEffect(() => {
