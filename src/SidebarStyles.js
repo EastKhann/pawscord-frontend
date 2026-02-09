@@ -6,7 +6,7 @@ const GLASS_BORDER = "1px solid rgba(255, 255, 255, 0.08)";
 const GLASS_HIGHLIGHT = "rgba(255, 255, 255, 0.1)";
 const GLASS_SHADOW = "0 8px 32px 0 rgba(0, 0, 0, 0.37)";
 const BACKDROP_FILTER = "blur(12px)";
-const FONT_FAMILY = "'Inter', system-ui, -apple-system, sans-serif";
+const FONT_FAMILY = "'gg sans', 'Noto Sans', system-ui, -apple-system, sans-serif";
 
 export const styles = {
     // --- SOL EN DAR KISIM (SERVER RAIL) ---

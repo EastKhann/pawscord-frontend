@@ -18,12 +18,16 @@ const CodeBlock = lazy(() => import(/* webpackChunkName: "message-ui" */ './comp
 const Spoiler = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/Spoiler'));
 const VoiceMessagePlayer = lazy(() => import(/* webpackChunkName: "media" */ './components/VoiceMessagePlayer'));
 const TicTacToe = lazy(() => import(/* webpackChunkName: "games" */ './components/TicTacToe'));
+const FileCodePreview = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/FileCodePreview'));
 const BookmarkButton = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/BookmarkButton').then(m => ({ default: m.BookmarkButton })));
 const StarButton = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/BookmarkButton').then(m => ({ default: m.StarButton })));
 const ReadLaterButton = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/BookmarkButton').then(m => ({ default: m.ReadLaterButton })));
 const ReminderModal = lazy(() => import(/* webpackChunkName: "modals" */ './components/ReminderModal'));
 const MessageThreads = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/MessageThreads'));
 const GameMessage = lazy(() => import(/* webpackChunkName: "games" */ './components/GameMessage'));
+
+// 🔥 File Code Preview utility
+import { isCodeFile } from './components/FileCodePreview';
 
 // ✨ Store ve Şifreleme Importları
 import { decryptMessage, isEncrypted } from './utils/encryption';
@@ -896,6 +900,27 @@ const Message = ({
                             />
                         );
                     }
+                    // 🔥 Kod/Text dosyaları için Discord-style önizleme
+                    if (isCodeFile(msg.file_name)) {
+                        return (
+                            <Suspense fallback={
+                                <div style={styles.fileAttachment} className="file-attachment-hover">
+                                    <div style={styles.fileIcon}>📄</div>
+                                    <div style={styles.fileInfo}>
+                                        <div style={styles.fileName}>{msg.file_name}</div>
+                                        <div style={styles.fileDetails}>Yükleniyor...</div>
+                                    </div>
+                                </div>
+                            }>
+                                <FileCodePreview
+                                    fileUrl={finalFileUrl}
+                                    fileName={msg.file_name}
+                                    fileSize={msg.file_size}
+                                />
+                            </Suspense>
+                        );
+                    }
+
                     // RAR, ZIP, PDF vb. dosyalar için gelişmiş indirme butonu
                     const fileExt = ext.toUpperCase();
                     const fileSize = msg.file_size ? `(${(msg.file_size / 1024 / 1024).toFixed(2)} MB)` : '';
@@ -990,21 +1015,26 @@ const styles = {
         fontWeight: '600',
         cursor: 'pointer',
         fontSize: '1rem',
-        textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+        lineHeight: '1.375rem',
+        fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     timestamp: {
         fontSize: '0.75rem',
         color: '#949ba4',
-        fontWeight: '400'
+        fontWeight: '400',
+        lineHeight: '1.375rem',
+        marginLeft: '4px',
+        fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     // Mesaj içeriği
     messageContent: {
-        color: '#dbdee1',
+        color: '#dcddde',
         fontSize: '1rem',
-        lineHeight: '1.4rem',
+        lineHeight: '1.375rem',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
-        fontWeight: '400'
+        fontWeight: '400',
+        fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     contentWrapper: { flex: 1, minWidth: 0, maxWidth: '100%' },
 
@@ -1079,52 +1109,58 @@ const styles = {
         width: 'fit-content'
     },
 
-    // 🆕 Modern File Attachment Styles
+    // 🆕 Modern File Attachment Styles (Discord-style)
     fileAttachment: {
         display: 'flex',
         alignItems: 'center',
-        padding: '14px 16px',
+        padding: '12px 16px',
         backgroundColor: '#2b2d31',
-        borderRadius: '8px',
-        marginTop: '8px',
-        border: '1px solid #3a3d44',
-        maxWidth: '450px',
+        borderRadius: 8,
+        marginTop: 8,
+        border: '1px solid rgba(255,255,255,0.06)',
+        maxWidth: 490,
         transition: 'all 0.2s ease',
         cursor: 'default'
     },
     fileIcon: {
-        fontSize: '32px',
-        marginRight: '12px',
-        flexShrink: 0
+        fontSize: 28,
+        marginRight: 12,
+        flexShrink: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 40,
+        height: 40,
     },
     fileInfo: {
         flex: 1,
         minWidth: 0,
-        marginRight: '12px'
+        marginRight: 12
     },
     fileName: {
-        color: '#f2f3f5',
-        fontSize: '14px',
-        fontWeight: '500',
-        marginBottom: '4px',
+        color: '#00a8fc',
+        fontSize: 14,
+        fontWeight: 500,
+        marginBottom: 2,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
+        fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     fileDetails: {
-        color: '#b9bbbe',
-        fontSize: '12px'
+        color: '#72767d',
+        fontSize: 12,
+        fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     downloadButton: {
         display: 'flex',
         alignItems: 'center',
         padding: '8px 14px',
-        backgroundColor: '#5865f2',
-        color: 'white',
-        borderRadius: '6px',
+        backgroundColor: 'transparent',
+        color: '#b5bac1',
+        borderRadius: 4,
         textDecoration: 'none',
-        fontSize: '13px',
-        fontWeight: '600',
+        fontSize: 20,
         transition: 'all 0.2s ease',
         border: 'none',
         cursor: 'pointer',
@@ -1250,17 +1286,27 @@ styleSheet.innerText = `
     /* 🆕 File Attachment Hover Effects */
     .file-attachment-hover:hover {
         background-color: #32353b !important;
-        border-color: #4e5159 !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.1) !important;
     }
     .download-button-hover:hover {
-        background-color: #4752c4 !important;
-        transform: scale(1.05);
-        box-shadow: 0 2px 8px rgba(88, 101, 242, 0.4);
+        color: #dcddde !important;
+        background-color: rgba(255,255,255,0.06) !important;
+        border-radius: 4px;
     }
     .download-button-hover:active {
-        transform: scale(0.98);
+        transform: scale(0.95);
+    }
+    
+    /* FileCodePreview hover */
+    .file-code-preview-hover:hover {
+        border-color: rgba(255,255,255,0.12) !important;
+    }
+    .file-code-header-btn:hover {
+        background-color: rgba(255,255,255,0.1) !important;
+        color: #dcddde !important;
+    }
+    .file-code-footer:hover {
+        background-color: #32353b !important;
     }
 `;
 document.head.appendChild(styleSheet);
