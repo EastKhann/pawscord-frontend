@@ -67,6 +67,9 @@ const MessageInput = ({
     const recordingTimerRef = useRef(null);
     const draftTimerRef = useRef(null); // 🆕 Draft timer
     const micButtonRef = useRef(null); // 🎤 Mikrofon butonu ref
+    const isRecordingRef = useRef(false); // 🎤 Document event handler için
+    const isRecordingLockedRef = useRef(false); // 🎤 Document event handler için
+    const touchStartYRef = useRef(0); // 🎤 Document event handler için
 
     // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını pendingFiles'a ekle
     useEffect(() => {
@@ -487,8 +490,76 @@ const MessageInput = ({
     // 🎤 Mikrofon butonu gesture handlers
     const LOCK_THRESHOLD = 80; // px yukarı kaydırma eşiği
 
+    // 🔥 FIX: Ref'leri state ile senkron tut (document event listener'lar state closure yakalar)
+    useEffect(() => {
+        isRecordingRef.current = isRecording;
+    }, [isRecording]);
+    useEffect(() => {
+        isRecordingLockedRef.current = isRecordingLocked;
+    }, [isRecordingLocked]);
+
+    // 🔥 FIX: Document-level mouse/touch event handlers
+    // Mic butonu recording başlayınca DOM'dan kalkıyor, bu yüzden document üzerinden dinliyoruz
+    useEffect(() => {
+        if (!isRecording || isRecordingLocked) return;
+
+        const handleDocMouseMove = (e) => {
+            if (!isRecordingRef.current || isRecordingLockedRef.current) return;
+            const startY = touchStartYRef.current;
+            const deltaY = startY - e.clientY;
+            const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
+            setSlideProgress(progress);
+            setCurrentTouchY(e.clientY);
+            if (deltaY > LOCK_THRESHOLD) {
+                setIsRecordingLocked(true);
+                setSlideProgress(1);
+            }
+        };
+
+        const handleDocMouseUp = () => {
+            if (!isRecordingRef.current) return;
+            if (!isRecordingLockedRef.current) {
+                stopRecording();
+            }
+        };
+
+        const handleDocTouchMove = (e) => {
+            if (!isRecordingRef.current || isRecordingLockedRef.current) return;
+            const currentY = e.touches[0].clientY;
+            const startY = touchStartYRef.current;
+            const deltaY = startY - currentY;
+            const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
+            setSlideProgress(progress);
+            setCurrentTouchY(currentY);
+            if (deltaY > LOCK_THRESHOLD) {
+                setIsRecordingLocked(true);
+                setSlideProgress(1);
+            }
+        };
+
+        const handleDocTouchEnd = () => {
+            if (!isRecordingRef.current) return;
+            if (!isRecordingLockedRef.current) {
+                stopRecording();
+            }
+        };
+
+        document.addEventListener('mousemove', handleDocMouseMove);
+        document.addEventListener('mouseup', handleDocMouseUp);
+        document.addEventListener('touchmove', handleDocTouchMove, { passive: false });
+        document.addEventListener('touchend', handleDocTouchEnd);
+
+        return () => {
+            document.removeEventListener('mousemove', handleDocMouseMove);
+            document.removeEventListener('mouseup', handleDocMouseUp);
+            document.removeEventListener('touchmove', handleDocTouchMove);
+            document.removeEventListener('touchend', handleDocTouchEnd);
+        };
+    }, [isRecording, isRecordingLocked]);
+
     const handleMicMouseDown = (e) => {
         e.preventDefault();
+        touchStartYRef.current = e.clientY;
         setTouchStartY(e.clientY);
         setCurrentTouchY(e.clientY);
         setSlideProgress(0);
@@ -498,49 +569,11 @@ const MessageInput = ({
     const handleMicTouchStart = (e) => {
         e.preventDefault();
         const startY = e.touches[0].clientY;
+        touchStartYRef.current = startY;
         setTouchStartY(startY);
         setCurrentTouchY(startY);
         setSlideProgress(0);
         startRecording();
-    };
-
-    const handleMicMouseMove = (e) => {
-        if (!isRecording || isRecordingLocked) return;
-        setCurrentTouchY(e.clientY);
-        const deltaY = touchStartY - e.clientY;
-        const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
-        setSlideProgress(progress);
-        if (deltaY > LOCK_THRESHOLD) {
-            setIsRecordingLocked(true);
-            setSlideProgress(1);
-        }
-    };
-
-    const handleMicTouchMove = (e) => {
-        if (!isRecording || isRecordingLocked) return;
-        const currentY = e.touches[0].clientY;
-        setCurrentTouchY(currentY);
-        const deltaY = touchStartY - currentY;
-        const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
-        setSlideProgress(progress);
-        if (deltaY > LOCK_THRESHOLD) {
-            setIsRecordingLocked(true);
-            setSlideProgress(1);
-        }
-    };
-
-    const handleMicMouseUp = () => {
-        if (!isRecording) return;
-        if (!isRecordingLocked) {
-            stopRecording();
-        }
-    };
-
-    const handleMicTouchEnd = () => {
-        if (!isRecording) return;
-        if (!isRecordingLocked) {
-            stopRecording();
-        }
     };
 
     const formatTime = (seconds) => {
@@ -844,12 +877,7 @@ const MessageInput = ({
                         <button
                             ref={micButtonRef}
                             onMouseDown={handleMicMouseDown}
-                            onMouseMove={handleMicMouseMove}
-                            onMouseUp={handleMicMouseUp}
-                            onMouseLeave={handleMicMouseUp}
                             onTouchStart={handleMicTouchStart}
-                            onTouchMove={handleMicTouchMove}
-                            onTouchEnd={handleMicTouchEnd}
                             style={styles.micButton}
                             className="mic-button action-button"
                             title="Basılı tut — yukarı kaydır kilitle"
