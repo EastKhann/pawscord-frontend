@@ -60,6 +60,8 @@ const AdminPanelModal = ({
     const [deleteConfirm, setDeleteConfirm] = useState(null);
     const [broadcastModal, setBroadcastModal] = useState(false);
     const [maintenanceMode, setMaintenanceMode] = useState(false);
+    const [passwordResetModal, setPasswordResetModal] = useState(null);
+    const [newPassword, setNewPassword] = useState('');
     const [backupStatus, setBackupStatus] = useState(null);
     const [selectedTab, setSelectedTab] = useState('overview');
 
@@ -1023,15 +1025,29 @@ const AdminPanelModal = ({
                                     </div>
                                 </td>
                                 <td style={styles.td}>
-                                    <button style={styles.actionBtn('#5865f2')} onClick={() => setSelectedUser(user)} title="Görüntüle">
-                                        <FaEye />
-                                    </button>
-                                    <button style={styles.actionBtn('#f0b132')} onClick={() => openEditUserModal(user)} title="Düzenle">
-                                        <FaEdit />
-                                    </button>
-                                    <button style={styles.actionBtn('#e74c3c')} onClick={() => setActionModal({ type: 'ban', user })} title="Yasakla">
-                                        <FaBan />
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                        <button style={styles.actionBtn('#5865f2')} onClick={() => setSelectedUser(user)} title="Görüntüle">
+                                            <FaEye />
+                                        </button>
+                                        <button style={styles.actionBtn('#f0b132')} onClick={() => openEditUserModal(user)} title="Düzenle">
+                                            <FaEdit />
+                                        </button>
+                                        <button style={styles.actionBtn('#f59e0b')} onClick={() => setPasswordResetModal(user)} title="Şifre Değiştir">
+                                            <FaKey />
+                                        </button>
+                                        {user.is_active !== false ? (
+                                            <button style={styles.actionBtn('#e74c3c')} onClick={() => setActionModal({ type: 'ban', user })} title="Yasakla">
+                                                <FaBan />
+                                            </button>
+                                        ) : (
+                                            <button style={styles.actionBtn('#23a559')} onClick={() => handleUserAction('unban', user.id)} title="Yasağı Kaldır">
+                                                <FaCheckCircle />
+                                            </button>
+                                        )}
+                                        <button style={styles.actionBtn('#dc2626')} onClick={() => setActionModal({ type: 'delete', user })} title="Sil">
+                                            <FaTrash />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -1946,11 +1962,41 @@ const AdminPanelModal = ({
                                 <button style={styles.actionBtn('#5865f2')} onClick={() => { openEditUserModal(selectedUser); setSelectedUser(null); }}>
                                     <FaEdit /> Düzenle
                                 </button>
+                                <button style={styles.actionBtn('#f59e0b')} onClick={() => { setPasswordResetModal(selectedUser); setSelectedUser(null); }}>
+                                    <FaKey /> Şifre Değiştir
+                                </button>
                                 <button style={styles.actionBtn('#f0b132')} onClick={() => handleUserAction('warn', selectedUser.id)}>
                                     <FaExclamationTriangle /> Uyar
                                 </button>
-                                <button style={styles.actionBtn('#e74c3c')} onClick={() => handleUserAction('ban', selectedUser.id)}>
-                                    <FaBan /> Yasakla
+                                <button style={styles.actionBtn('#8b5cf6')} onClick={() => handleUserAction('reset_2fa', selectedUser.id)}>
+                                    <FaLock /> 2FA Sıfırla
+                                </button>
+                                <button style={styles.actionBtn('#06b6d4')} onClick={() => handleUserAction('verify_email', selectedUser.id)}>
+                                    <FaEnvelope /> Email Doğrula
+                                </button>
+                                <button style={styles.actionBtn('#10b981')} onClick={() => handleUserAction('give_premium', selectedUser.id)}>
+                                    <FaStar /> Premium Ver
+                                </button>
+                                <button style={styles.actionBtn('#ec4899')} onClick={() => handleUserAction('remove_premium', selectedUser.id)}>
+                                    <FaStar /> Premium Kaldır
+                                </button>
+                                <button style={styles.actionBtn('#6366f1')} onClick={() => handleUserAction('force_logout', selectedUser.id)}>
+                                    <FaLock /> Oturumu Sonlandır
+                                </button>
+                                <button style={styles.actionBtn('#f97316')} onClick={() => handleUserAction('reset_avatar', selectedUser.id)}>
+                                    <FaImage /> Avatar Sıfırla
+                                </button>
+                                {selectedUser.is_active !== false ? (
+                                    <button style={styles.actionBtn('#e74c3c')} onClick={() => setActionModal({ type: 'ban', user: selectedUser })}>
+                                        <FaBan /> Yasakla
+                                    </button>
+                                ) : (
+                                    <button style={styles.actionBtn('#23a559')} onClick={() => handleUserAction('unban', selectedUser.id)}>
+                                        <FaCheckCircle /> Yasağı Kaldır
+                                    </button>
+                                )}
+                                <button style={styles.actionBtn('#dc2626')} onClick={() => setActionModal({ type: 'delete', user: selectedUser })}>
+                                    <FaTrash /> Kullanıcıyı Sil
                                 </button>
                                 <button style={{ ...styles.actionBtn('#6b7280'), marginLeft: 'auto' }} onClick={() => setSelectedUser(null)}>
                                     Kapat
@@ -1969,19 +2015,82 @@ const AdminPanelModal = ({
                     }} onClick={() => setActionModal(null)}>
                         <div style={{
                             backgroundColor: '#1a1a1e', borderRadius: '12px',
-                            padding: '24px', width: '400px', border: '1px solid #2a2a2e'
+                            padding: '24px', width: '420px', border: '1px solid #2a2a2e'
                         }} onClick={e => e.stopPropagation()}>
-                            <h3 style={{ color: '#fff', marginTop: 0 }}>
-                                ⚠️ {actionModal.type === 'ban' ? 'Kullanıcıyı Yasakla' : 'İşlem Onayla'}
+                            <h3 style={{ color: actionModal.type === 'delete' ? '#dc2626' : '#f0b132', marginTop: 0 }}>
+                                {actionModal.type === 'delete' ? '🗑️ Kullanıcıyı Sil' :
+                                 actionModal.type === 'ban' ? '⛔ Kullanıcıyı Yasakla' :
+                                 '⚠️ İşlem Onayla'}
                             </h3>
-                            <p style={{ color: '#9ca3af' }}>
-                                <strong>{actionModal.user?.username}</strong> kullanıcısını yasaklamak istediğinizden emin misiniz?
+                            <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
+                                <strong style={{ color: '#fff' }}>{actionModal.user?.username}</strong>
+                                {actionModal.type === 'delete'
+                                    ? ' kullanıcısını kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz! Tüm mesajları, sunucu üyelikleri ve profili silinecektir.'
+                                    : actionModal.type === 'ban'
+                                    ? ' kullanıcısını yasaklamak istediğinizden emin misiniz? Kullanıcı giriş yapamayacaktır.'
+                                    : ' üzerinde bu işlemi yapmak istediğinizden emin misiniz?'
+                                }
                             </p>
                             <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-                                <button style={styles.actionBtn('#e74c3c')} onClick={() => handleUserAction(actionModal.type, actionModal.user?.id)}>
-                                    Onayla
+                                <button
+                                    style={styles.actionBtn(actionModal.type === 'delete' ? '#dc2626' : '#e74c3c')}
+                                    onClick={() => {
+                                        handleUserAction(actionModal.type, actionModal.user?.id);
+                                        setSelectedUser(null);
+                                    }}
+                                >
+                                    {actionModal.type === 'delete' ? '🗑️ Kalıcı Olarak Sil' : 'Onayla'}
                                 </button>
                                 <button style={styles.actionBtn('#6b7280')} onClick={() => setActionModal(null)}>
+                                    İptal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Password Reset Modal */}
+                {passwordResetModal && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex',
+                        justifyContent: 'center', alignItems: 'center', zIndex: 10
+                    }} onClick={() => { setPasswordResetModal(null); setNewPassword(''); }}>
+                        <div style={{
+                            backgroundColor: '#1a1a1e', borderRadius: '12px',
+                            padding: '24px', width: '420px', border: '1px solid #2a2a2e'
+                        }} onClick={e => e.stopPropagation()}>
+                            <h3 style={{ color: '#f59e0b', marginTop: 0 }}>
+                                🔑 Şifre Değiştir — {passwordResetModal.username}
+                            </h3>
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ color: '#9ca3af', fontSize: '13px', display: 'block', marginBottom: '6px' }}>Yeni Şifre</label>
+                                <input
+                                    type="text"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="Yeni şifre girin (min 6 karakter)"
+                                    style={{
+                                        width: '100%', padding: '10px 14px',
+                                        backgroundColor: '#111113', border: '1px solid #2a2a2e',
+                                        borderRadius: '8px', color: '#fff', fontSize: '14px',
+                                        outline: 'none', boxSizing: 'border-box'
+                                    }}
+                                />
+                            </div>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                                <button
+                                    style={{ ...styles.actionBtn('#f59e0b'), opacity: newPassword.length < 6 ? 0.5 : 1 }}
+                                    disabled={newPassword.length < 6}
+                                    onClick={async () => {
+                                        await handleUserAction('reset_password', passwordResetModal.id, { new_password: newPassword });
+                                        setPasswordResetModal(null);
+                                        setNewPassword('');
+                                    }}
+                                >
+                                    <FaKey /> Şifreyi Değiştir
+                                </button>
+                                <button style={styles.actionBtn('#6b7280')} onClick={() => { setPasswordResetModal(null); setNewPassword(''); }}>
                                     İptal
                                 </button>
                             </div>

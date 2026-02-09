@@ -2927,18 +2927,41 @@ const AppContent = () => {
                     file_name: file.name,
                     file_size: file.size,
                     content_type: contentType,
-                    file_hash: hash
+                    file_hash: hash,
+                    room_slug: target.type === 'room' ? target.id : null,
+                    conversation_id: target.type === 'dm' ? target.id : null,
+                    temp_id: tempId,
+                    is_voice_message: isVoice ? 'true' : 'false',
+                    duration: duration.toString()
                 })
             });
 
             const initData = await initRes.json();
 
-            // Dosya zaten varsa
+            // Dosya zaten varsa — backend mesajı oluşturdu, direkt göster
             if (initData.file_exists) {
-                console.log('✅ [R2] File already exists, skipping upload');
-                toast.success('Dosya zaten yüklü!');
+                console.log('✅ [R2] File already exists, message created with existing file');
                 setIsUploading(false);
                 setUploadProgress(100);
+                
+                // Backend mesaj verisi döndüyse listeye ekle
+                if (initData.id) {
+                    if (target.id === activeChat.id) {
+                        setMessages(prev => {
+                            if (initData.temp_id) {
+                                const tempIndex = prev.findIndex(msg => msg.temp_id === initData.temp_id);
+                                if (tempIndex !== -1) {
+                                    const newMessages = [...prev];
+                                    newMessages[tempIndex] = initData;
+                                    return newMessages;
+                                }
+                            }
+                            if (prev.some(msg => msg.id === initData.id)) return prev;
+                            return [...prev, initData];
+                        });
+                        scrollToBottom('smooth');
+                    }
+                }
                 return;
             }
 
