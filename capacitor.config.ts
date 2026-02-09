@@ -18,7 +18,7 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true,
     captureInput: true,
-    webContentsDebuggingEnabled: true
+    webContentsDebuggingEnabled: false  // ⚠️ Production: false olmalı!
   },
   plugins: {
     GoogleAuth: {

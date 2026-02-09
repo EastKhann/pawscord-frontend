@@ -37,7 +37,7 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
     }, [expiresIn, maxUses, onCreateInvite]);
 
     const handleCopy = useCallback((invite) => {
-        const link = `${window.location.origin}/invite/${invite.code}`;
+        const link = `${window.location.origin}/#/invite/${invite.code}`;
         navigator.clipboard.writeText(link);
         setCopiedId(invite.id);
         setTimeout(() => setCopiedId(null), 2000);

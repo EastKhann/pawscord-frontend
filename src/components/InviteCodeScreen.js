@@ -53,8 +53,12 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
 
         try {
             setJoining(true);
-            // POST /api/invites/<code>/accept/ - Daveti kabul et
-            const response = await fetchWithAuth(`${apiBaseUrl}/invites/${inviteCode}/accept/`, {
+            // Vanity URL ise server join, değilse invite accept endpoint'ini kullan
+            const isVanity = inviteInfo?.type === 'vanity';
+            const url = isVanity
+                ? `${apiBaseUrl}/servers/${inviteInfo.server.id}/join/`
+                : `${apiBaseUrl}/invites/${inviteCode}/accept/`;
+            const response = await fetchWithAuth(url, {
                 method: 'POST',
             });
 

@@ -50,13 +50,23 @@ const InvitePage = () => {
 
         try {
             const res = await fetch(`${API_BASE_URL}/invites/${code}/`);
+
+            // 🛡️ HTML response koruması (Cloudflare/nginx 404 sayfası olabilir)
+            const contentType = res.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
+                console.error('❌ [Invite Page] Non-JSON response:', contentType);
+                setError('Davet bulunamadı veya geçersiz');
+                setLoading(false);
+                return;
+            }
+
             const data = await res.json();
 
             console.log('📦 [Invite Page] Response:', { status: res.status, data });
 
             if (res.ok) {
                 setInviteInfo(data);
-                console.log('✅ [Invite Page] Invite info loaded');
+                console.log('✅ [Invite Page] Invite info loaded, type:', data.type || 'invite');
             } else {
                 setError(data.error || 'Davet bulunamadı');
                 console.error('❌ [Invite Page] Error:', data.error);
@@ -86,6 +96,7 @@ const InvitePage = () => {
 
         console.log('🎫 [Invite Page] Accepting invite...', {
             code,
+            type: inviteInfo?.type || 'invite',
             apiUrl: `${API_BASE_URL}/invites/${code}/accept/`,
             hasToken: !!token
         });
@@ -93,8 +104,12 @@ const InvitePage = () => {
         setError('');
 
         try {
-            const url = `${API_BASE_URL}/invites/${code}/accept/`;
-            console.log('📡 [Invite Page] POST to:', url);
+            // Vanity URL ise server join endpoint'ini, değilse invite accept endpoint'ini kullan
+            const isVanity = inviteInfo?.type === 'vanity';
+            const url = isVanity
+                ? `${API_BASE_URL}/servers/${inviteInfo.server.id}/join/`
+                : `${API_BASE_URL}/invites/${code}/accept/`;
+            console.log('📡 [Invite Page] POST to:', url, isVanity ? '(vanity)' : '(invite)');
 
             const res = await fetch(url, {
                 method: 'POST',

@@ -37,7 +37,7 @@ const CreateInviteModal = ({ server, room, onClose, apiBaseUrl, fetchWithAuth })
 
                 // Vanity URL kontrolü
                 if (server.vanity_url) {
-                    setVanityUrl(`https://www.pawscord.com/invite/${server.vanity_url}`);
+                    setVanityUrl(`https://www.pawscord.com/#/invite/${server.vanity_url}`);
                 }
             } catch (err) {
                 console.error("Mevcut davetler alınamadı:", err);

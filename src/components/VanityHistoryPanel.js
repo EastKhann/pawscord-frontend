@@ -82,7 +82,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleCopy = (url, id) => {
-        const fullUrl = `https://pawscord.app/invite/${url}`;
+        const fullUrl = `https://pawscord.app/#/invite/${url}`;
         navigator.clipboard.writeText(fullUrl);
         setCopiedId(id);
         toast.success('📋 URL kopyalandı');
@@ -136,7 +136,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
                             <FaLink /> Mevcut Vanity URL
                         </div>
                         <div className="current-url">
-                            <span className="url-text">pawscord.app/invite/<strong>{currentVanity}</strong></span>
+                            <span className="url-text">pawscord.app/#/invite/<strong>{currentVanity}</strong></span>
                             <div className="url-actions">
                                 <button
                                     className="copy-btn"
@@ -145,7 +145,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                     {copiedId === 'current' ? <FaCheck /> : <FaCopy />}
                                 </button>
                                 <a
-                                    href={`https://pawscord.app/invite/${currentVanity}`}
+                                    href={`https://pawscord.app/#/invite/${currentVanity}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="open-btn"

@@ -13,6 +13,8 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const [template, setTemplate] = useState('');
     const [enabled, setEnabled] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [preview, setPreview] = useState('');
 
     useEffect(() => {
         const loadTemplate = async () => {
@@ -32,8 +34,21 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         loadTemplate();
     }, [serverId, fetchWithAuth, apiBaseUrl]);
 
+    // Live preview
+    useEffect(() => {
+        if (!template) { setPreview(''); return; }
+        let p = template
+            .replace(/\{username\}/g, 'Kullanıcı')
+            .replace(/\{mention\}/g, '@Kullanıcı')
+            .replace(/\{server\}/g, 'Sunucu')
+            .replace(/\{memberCount\}/g, '42')
+            .replace(/\{inviter\}/g, 'Davetçi')
+            .replace(/\{date\}/g, new Date().toLocaleDateString('tr-TR'));
+        setPreview(p);
+    }, [template]);
+
     const handleSave = async () => {
-        setLoading(true);
+        setSaving(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/servers/welcome/set/`, {
                 method: 'POST',
@@ -45,105 +60,141 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 })
             });
             if (res.ok) {
-                toast.success('Welcome message saved!');
+                toast.success('Hoş geldin mesajı kaydedildi!');
             } else {
-                toast.error('Failed to save');
+                const data = await res.json().catch(() => ({}));
+                toast.error(data.error || 'Kaydetme başarısız');
             }
         } catch (e) {
             console.error('Save error:', e);
-            toast.error('Error saving');
+            toast.error('Kaydederken hata oluştu');
         } finally {
-            setLoading(false);
+            setSaving(false);
         }
     };
 
     const variables = [
-        '{username}', '{mention}', '{server}', '{memberCount}', '{inviter}', '{date}'
+        { key: '{username}', label: 'Kullanıcı Adı' },
+        { key: '{mention}', label: '@Etiket' },
+        { key: '{server}', label: 'Sunucu Adı' },
+        { key: '{memberCount}', label: 'Üye Sayısı' },
+        { key: '{inviter}', label: 'Davet Eden' },
+        { key: '{date}', label: 'Tarih' }
     ];
 
-    if (loading) return <div style={{ padding: '20px', color: '#b9bbbe' }}>Loading...</div>;
+    if (loading) return <div style={{ padding: '20px', color: '#b9bbbe', textAlign: 'center' }}>Yükleniyor...</div>;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <input
-                    type="checkbox"
-                    checked={enabled}
-                    onChange={(e) => setEnabled(e.target.checked)}
-                    id="welcome-enabled"
-                />
-                <label htmlFor="welcome-enabled" style={{ color: '#dcddde', cursor: 'pointer' }}>
-                    Enable Welcome Messages
-                </label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            {/* Enable Toggle */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px', backgroundColor: '#2b2d31', borderRadius: '8px' }}>
+                <div
+                    onClick={() => setEnabled(!enabled)}
+                    style={{
+                        width: '44px', height: '24px', borderRadius: '12px',
+                        backgroundColor: enabled ? '#23a559' : '#72767d',
+                        cursor: 'pointer', position: 'relative', transition: 'background-color 0.2s'
+                    }}
+                >
+                    <div style={{
+                        width: '20px', height: '20px', borderRadius: '50%', backgroundColor: '#fff',
+                        position: 'absolute', top: '2px',
+                        left: enabled ? '22px' : '2px',
+                        transition: 'left 0.2s'
+                    }} />
+                </div>
+                <div>
+                    <div style={{ color: '#dcddde', fontWeight: '600' }}>
+                        {enabled ? '✅ Hoş Geldin Mesajları Aktif' : '❌ Hoş Geldin Mesajları Kapalı'}
+                    </div>
+                    <div style={{ color: '#72767d', fontSize: '12px', marginTop: '2px' }}>
+                        Yeni üyeler katıldığında otomatik mesaj gönderilir
+                    </div>
+                </div>
             </div>
 
+            {/* Template Editor */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
-                    Welcome Message Template
+                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    Mesaj Şablonu
                 </label>
                 <textarea
                     value={template}
                     onChange={(e) => setTemplate(e.target.value)}
-                    placeholder="Welcome {mention} to {server}! You are member #{memberCount}!"
+                    placeholder="Hoş geldin {mention}! {server} sunucusuna katıldın! Sen #{memberCount}. üyesin! 🎉"
+                    maxLength={500}
                     style={{
-                        width: '100%',
-                        minHeight: '120px',
-                        padding: '10px',
-                        backgroundColor: '#1e1f22',
-                        border: '1px solid #40444b',
-                        borderRadius: '4px',
-                        color: '#dcddde',
-                        fontFamily: 'inherit',
-                        resize: 'vertical'
+                        width: '100%', minHeight: '120px', padding: '12px',
+                        backgroundColor: '#1e1f22', border: '1px solid #40444b',
+                        borderRadius: '8px', color: '#dcddde', fontFamily: 'inherit',
+                        resize: 'vertical', fontSize: '14px', lineHeight: '1.5',
+                        outline: 'none', transition: 'border-color 0.2s'
                     }}
+                    onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
                 />
-                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '5px' }}>
-                    {template.length}/500 characters
+                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px', textAlign: 'right' }}>
+                    {template.length}/500 karakter
                 </div>
             </div>
 
+            {/* Variables */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>
-                    Available Variables
+                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    Kullanılabilir Değişkenler
                 </label>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {variables.map(v => (
                         <button
-                            key={v}
-                            onClick={() => setTemplate(template + ' ' + v)}
+                            key={v.key}
+                            onClick={() => setTemplate(prev => prev + (prev.endsWith(' ') || !prev ? '' : ' ') + v.key)}
+                            title={v.label}
                             style={{
-                                padding: '6px 12px',
-                                backgroundColor: '#2f3136',
-                                border: '1px solid #40444b',
-                                borderRadius: '4px',
-                                color: '#5865f2',
-                                cursor: 'pointer',
-                                fontFamily: 'monospace',
-                                fontSize: '13px'
+                                padding: '6px 12px', backgroundColor: '#1e1f22',
+                                border: '1px solid #40444b', borderRadius: '6px',
+                                color: '#5865f2', cursor: 'pointer',
+                                fontFamily: 'monospace', fontSize: '13px',
+                                transition: 'all 0.15s'
                             }}
+                            onMouseEnter={(e) => { e.target.style.backgroundColor = '#5865f2'; e.target.style.color = '#fff'; }}
+                            onMouseLeave={(e) => { e.target.style.backgroundColor = '#1e1f22'; e.target.style.color = '#5865f2'; }}
                         >
-                            {v}
+                            {v.key}
                         </button>
                     ))}
                 </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+            {/* Live Preview */}
+            {preview && (
+                <div>
+                    <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                        Önizleme
+                    </label>
+                    <div style={{
+                        padding: '14px', backgroundColor: '#1e1f22', borderRadius: '8px',
+                        border: '1px solid #40444b', color: '#dcddde', fontSize: '14px',
+                        lineHeight: '1.5', fontStyle: 'italic'
+                    }}>
+                        {preview}
+                    </div>
+                </div>
+            )}
+
+            {/* Save Button */}
+            <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
                 <button
                     onClick={handleSave}
-                    disabled={loading}
+                    disabled={saving}
                     style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#5865f2',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        fontWeight: 'bold',
-                        opacity: loading ? 0.5 : 1
+                        padding: '12px 24px', backgroundColor: '#5865f2', color: 'white',
+                        border: 'none', borderRadius: '8px', cursor: saving ? 'not-allowed' : 'pointer',
+                        fontWeight: '600', fontSize: '14px', opacity: saving ? 0.5 : 1,
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        transition: 'opacity 0.2s'
                     }}
                 >
-                    {loading ? 'Saving...' : 'Save Welcome Message'}
+                    {saving ? '⏳ Kaydediliyor...' : '💾 Hoş Geldin Mesajını Kaydet'}
                 </button>
             </div>
         </div>
@@ -163,6 +214,24 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [serverName, setServerName] = useState(server.name || '');
     const [isRenamingServer, setIsRenamingServer] = useState(false);
+    const [serverDescription, setServerDescription] = useState(server.description || '');
+    const [isSavingDescription, setIsSavingDescription] = useState(false);
+
+    // 🔇 Mute durumunu backend'den yükle
+    useEffect(() => {
+        const loadMuteStatus = async () => {
+            try {
+                const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/mute-status/`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setIsMuted(data.is_muted || false);
+                }
+            } catch (e) {
+                console.error('Mute status load error:', e);
+            }
+        };
+        loadMuteStatus();
+    }, [server.id, fetchWithAuth, apiBaseUrl]);
 
     useEffect(() => {
         const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
@@ -340,6 +409,30 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
         } catch (e) {
             console.error('Delete hatası:', e);
             toast.error('Sunucu silinirken bir hata oluştu.');
+        }
+    };
+
+    // 🆕 Sunucu açıklaması kaydetme
+    const handleSaveDescription = async () => {
+        setIsSavingDescription(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: serverDescription })
+            });
+            if (res.ok) {
+                toast.success('Sunucu açıklaması güncellendi!');
+                if (onRefreshServers) onRefreshServers();
+            } else {
+                const data = await res.json();
+                toast.error(data.error || 'Açıklama kaydedilemedi.');
+            }
+        } catch (e) {
+            console.error('Description hatası:', e);
+            toast.error('Açıklama kaydedilirken bir hata oluştu.');
+        } finally {
+            setIsSavingDescription(false);
         }
     };
 
@@ -652,13 +745,61 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                                 </div>
                                             </div>
 
-                                            {/* İkon Değiştirme */}
-                                            <div style={styles.settingBox}>
+                                            {/* 🆕 Sunucu Açıklaması */}
+                                            <div style={{ ...styles.settingBox, flexDirection: 'column', alignItems: 'stretch' }}>
                                                 <div style={styles.settingInfo}>
                                                     <div style={styles.settingLabel}>
-                                                        <FaImage style={{ marginRight: '8px' }} />
-                                                        Sunucu İkonu
+                                                        <FaFileAlt style={{ marginRight: '8px' }} />
+                                                        Sunucu Açıklaması
                                                     </div>
+                                                    <div style={styles.settingDesc}>
+                                                        Sunucunuz hakkında kısa bir açıklama yazın
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                                                    <textarea
+                                                        value={serverDescription}
+                                                        onChange={(e) => setServerDescription(e.target.value)}
+                                                        maxLength={300}
+                                                        placeholder="Bu sunucu hakkında bir açıklama yazın..."
+                                                        style={{
+                                                            flex: 1, padding: '10px 14px',
+                                                            backgroundColor: '#1e1f22',
+                                                            border: '1px solid #40444b',
+                                                            borderRadius: '8px', color: '#dcddde',
+                                                            fontSize: '14px', outline: 'none',
+                                                            resize: 'vertical', minHeight: '60px',
+                                                            fontFamily: 'inherit',
+                                                            transition: 'border-color 0.2s'
+                                                        }}
+                                                        onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
+                                                        onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                                                    />
+                                                    <button
+                                                        onClick={handleSaveDescription}
+                                                        disabled={isSavingDescription || serverDescription === (server.description || '')}
+                                                        style={{
+                                                            ...styles.actionBtn,
+                                                            backgroundColor: serverDescription !== (server.description || '') ? '#5865f2' : '#4e5058',
+                                                            opacity: isSavingDescription || serverDescription === (server.description || '') ? 0.5 : 1,
+                                                            cursor: isSavingDescription || serverDescription === (server.description || '') ? 'not-allowed' : 'pointer',
+                                                            alignSelf: 'flex-start'
+                                                        }}
+                                                    >
+                                                        {isSavingDescription ? '...' : 'Kaydet'}
+                                                    </button>
+                                                </div>
+                                                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px', textAlign: 'right' }}>
+                                                    {serverDescription.length}/300 karakter
+                                                </div>
+                                            </div>
+
+                                            {/* İkon Değiştirme */}
+                                            <div style={styles.settingBox}>
+                                                <div style={styles.settingInfo}>                                                    <div style={styles.settingLabel}>
+                                                    <FaImage style={{ marginRight: '8px' }} />
+                                                    Sunucu İkonu
+                                                </div>
                                                     <div style={styles.settingDesc}>
                                                         Sunucunuzun profil resmini değiştirin (Maks 5MB)
                                                     </div>
@@ -1096,25 +1237,45 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                         <div style={styles.quickActionsGrid}>
                                             <button
                                                 style={styles.quickActionBtn}
-                                                onClick={() => toast.info('Lockdown aktifleştirildi!')}
+                                                onClick={async () => {
+                                                    if (!window.confirm('Sunucuyu kilitlemek istediğinize emin misiniz? Sadece yöneticiler mesaj yazabilir.')) return;
+                                                    try {
+                                                        const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
+                                                            method: 'PATCH',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ metadata: { ...server.metadata, lockdown: true } })
+                                                        });
+                                                        toast.success('🔒 Sunucu lockdown moduna alındı!');
+                                                    } catch (e) { toast.error('İşlem başarısız'); }
+                                                }}
                                             >
                                                 <FaLock /> Sunucuyu Kilitle
                                             </button>
                                             <button
                                                 style={styles.quickActionBtn}
-                                                onClick={() => toast.info('Tüm kanallar temizlendi!')}
+                                                onClick={() => toast.info('🚧 Bu özellik yakında eklenecek')}
                                             >
                                                 <FaTrash /> Tüm Mesajları Temizle
                                             </button>
                                             <button
                                                 style={styles.quickActionBtn}
-                                                onClick={() => toast.info('Yeni üyelik durduruldu!')}
+                                                onClick={async () => {
+                                                    if (!window.confirm('Yeni üyelikleri durdurmak istediğinize emin misiniz?')) return;
+                                                    try {
+                                                        await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
+                                                            method: 'PATCH',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ metadata: { ...server.metadata, join_disabled: true } })
+                                                        });
+                                                        toast.success('🚫 Yeni üyelikler durduruldu!');
+                                                    } catch (e) { toast.error('İşlem başarısız'); }
+                                                }}
                                             >
                                                 <FaUserSlash /> Yeni Üyeliği Durdur
                                             </button>
                                             <button
                                                 style={styles.quickActionBtn}
-                                                onClick={() => toast.info('Bildirimleri yayınla!')}
+                                                onClick={() => toast.info('🚧 Bu özellik yakında eklenecek')}
                                             >
                                                 <FaBell /> Duyuru Gönder
                                             </button>
