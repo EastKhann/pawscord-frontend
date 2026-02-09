@@ -71,18 +71,7 @@ const MessageInput = ({
     const isRecordingLockedRef = useRef(false); // 🎤 Document event handler için
     const touchStartYRef = useRef(0); // 🎤 Document event handler için
 
-    // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını HEMEN GÖNDER
-    useEffect(() => {
-        if (pendingFilesFromDrop && pendingFilesFromDrop.length > 0) {
-            // Parent'taki state'i temizle
-            if (onClearPendingFiles) {
-                onClearPendingFiles();
-            }
-            // 🔥 FIX: Dosyaları pendingFiles'a eklemek yerine direkt gönder
-            const filesToSend = [...pendingFilesFromDrop];
-            sendPendingFiles(filesToSend);
-        }
-    }, [pendingFilesFromDrop, onClearPendingFiles, sendPendingFiles]);
+    // 🆕 AppContent'ten gelen sürükle-bırak dosyaları → sendPendingFiles tanımlandıktan sonra useEffect var (aşağıda)
 
     // 📱 APK FIX: Prevent scroll issues on mobile
     useEffect(() => {
@@ -261,6 +250,19 @@ const MessageInput = ({
             toast.success(`✅ ${filesToSend.length} dosya yükleniyor...`);
         }
     }, [onFileUpload]);
+
+    // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını HEMEN GÖNDER
+    useEffect(() => {
+        if (pendingFilesFromDrop && pendingFilesFromDrop.length > 0) {
+            // Parent'taki state'i temizle
+            if (onClearPendingFiles) {
+                onClearPendingFiles();
+            }
+            // 🔥 FIX: Dosyaları pendingFiles'a eklemek yerine direkt gönder
+            const filesToSend = [...pendingFilesFromDrop];
+            sendPendingFiles(filesToSend);
+        }
+    }, [pendingFilesFromDrop, onClearPendingFiles, sendPendingFiles]);
 
     const handleSubmit = useCallback(async (e) => {
         e?.preventDefault();
