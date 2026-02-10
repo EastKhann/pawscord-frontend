@@ -1,7 +1,7 @@
 // frontend/src/utils/performanceOptimization.js
 // ⚡ PERFORMANS OPTİMİZASYONU UTİLİTY'LERİ
 
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 /**
  * 🎯 Debounce Hook
@@ -68,13 +68,13 @@ export const useThrottle = (callback, limit) => {
  */
 export const useIntersectionObserver = (options = {}) => {
     const ref = useRef(null);
-    const [isIntersecting, setIsIntersecting] = useRef(false);
+    const [isIntersecting, setIsIntersecting] = useState(false);
 
     useEffect(() => {
         if (!ref.current) return;
 
         const observer = new IntersectionObserver(([entry]) => {
-            setIsIntersecting.current = entry.isIntersecting;
+            setIsIntersecting(entry.isIntersecting);
         }, {
             threshold: options.threshold || 0.1,
             rootMargin: options.rootMargin || '0px'
@@ -89,7 +89,7 @@ export const useIntersectionObserver = (options = {}) => {
         };
     }, [options.threshold, options.rootMargin]);
 
-    return [ref, isIntersecting.current];
+    return [ref, isIntersecting];
 };
 
 /**
@@ -155,7 +155,7 @@ export const useEventListener = (eventName, handler, element = window) => {
  * const [user, setUser, removeUser] = useLocalStorage('user', null);
  */
 export const useLocalStorage = (key, initialValue) => {
-    const [storedValue, setStoredValue] = useRef(() => {
+    const [storedValue, setStoredValue] = useState(() => {
         try {
             const item = window.localStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
@@ -167,24 +167,24 @@ export const useLocalStorage = (key, initialValue) => {
 
     const setValue = useCallback((value) => {
         try {
-            const valueToStore = value instanceof Function ? value(storedValue.current) : value;
-            storedValue.current = valueToStore;
+            const valueToStore = value instanceof Function ? value(storedValue) : value;
+            setStoredValue(valueToStore);
             window.localStorage.setItem(key, JSON.stringify(valueToStore));
         } catch (error) {
             console.error(`Error setting localStorage key "${key}":`, error);
         }
-    }, [key]);
+    }, [key, storedValue]);
 
     const removeValue = useCallback(() => {
         try {
             window.localStorage.removeItem(key);
-            storedValue.current = initialValue;
+            setStoredValue(initialValue);
         } catch (error) {
             console.error(`Error removing localStorage key "${key}":`, error);
         }
     }, [key, initialValue]);
 
-    return [storedValue.current, setValue, removeValue];
+    return [storedValue, setValue, removeValue];
 };
 
 /**
@@ -264,6 +264,9 @@ export const useMeasurePerformance = (componentName) => {
  * 
  * @example
  * const prevCount = usePrevious(count);
+ */
+export const usePrevious = (value) => {
+    const ref = useRef();
 
     useEffect(() => {
         ref.current = value;
@@ -283,7 +286,7 @@ export const useMeasurePerformance = (componentName) => {
  * const isMobile = width < 768;
  */
 export const useWindowSize = () => {
-    const [windowSize, setWindowSize] = useRef({
+    const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
     });
@@ -293,10 +296,10 @@ export const useWindowSize = () => {
         const handleResize = () => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
-                setWindowSize.current = {
+                setWindowSize({
                     width: window.innerWidth,
                     height: window.innerHeight,
-                };
+                });
             }, 150);
         };
 
@@ -307,7 +310,7 @@ export const useWindowSize = () => {
         };
     }, []);
 
-    return windowSize.current;
+    return windowSize;
 };
 
 /**
@@ -319,13 +322,16 @@ export const useWindowSize = () => {
  * 
  * @example
  * const isIdle = useIdleDetection(5 * 60 * 1000); // 5 dakika
+ */
+export const useIdleDetection = (timeout = 5 * 60 * 1000) => {
+    const [isIdle, setIsIdle] = useState(false);
     const timeoutIdRef = useRef(null);
 
     const resetTimer = useCallback(() => {
-        setIsIdle.current = false;
+        setIsIdle(false);
         clearTimeout(timeoutIdRef.current);
         timeoutIdRef.current = setTimeout(() => {
-            setIsIdle.current = true;
+            setIsIdle(true);
         }, timeout);
     }, [timeout]);
 
@@ -346,7 +352,7 @@ export const useWindowSize = () => {
         };
     }, [resetTimer]);
 
-    return isIdle.current;
+    return isIdle;
 };
 
 /**
