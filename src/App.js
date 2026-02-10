@@ -452,9 +452,8 @@ const calculateFileHash = async (file) => {
 };
 
 // --- 🖼️ WhatsApp-style Image Gallery Group ---
-const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, isAdmin, onImageClick, onViewProfile, onDelete, allUsers, getDeterministicAvatar, fetchWithAuth, onVisible }) => {
+const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, isAdmin, onOpenGallery, onViewProfile, onDelete, allUsers, getDeterministicAvatar, fetchWithAuth, onVisible }) => {
     const firstMsg = messages[0];
-    const isMyMessage = firstMsg.username === currentUser;
 
     // Avatar
     const userAvatarBase = (() => {
@@ -478,7 +477,7 @@ const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, 
     };
 
     // Collect all image URLs
-    const images = messages.map(msg => {
+    const allImages = messages.map(msg => {
         const imgUrl = msg.image_url || msg.image;
         if (imgUrl) return getFullUrl(imgUrl);
         const fileUrl = msg.file_url || msg.file;
@@ -488,29 +487,18 @@ const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, 
         return null;
     }).filter(Boolean);
 
-    const count = images.length;
+    const MAX_VISIBLE = 4;
+    const totalCount = allImages.length;
+    const visibleImages = allImages.slice(0, MAX_VISIBLE);
+    const visibleCount = visibleImages.length;
+    const extraCount = Math.max(0, totalCount - MAX_VISIBLE);
 
-    // Grid layout based on count (WhatsApp-style)
+    // Grid layout based on visible count
     const getGridStyle = () => {
-        if (count === 2) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
-        if (count === 3) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
-        if (count >= 4) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
-        return { gridTemplateColumns: '1fr', maxWidth: '300px' };
-    };
-
-    const getImageStyle = (idx) => {
-        const base = {
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            cursor: 'pointer',
-            display: 'block',
-        };
-        // 3 images: first one spans full width
-        if (count === 3 && idx === 0) {
-            return { ...base, gridColumn: '1 / -1' };
-        }
-        return base;
+        if (visibleCount === 1) return { gridTemplateColumns: '1fr', maxWidth: '300px' };
+        if (visibleCount === 2) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
+        if (visibleCount === 3) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
+        return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
     };
 
     const timestamp = firstMsg.timestamp ? new Date(firstMsg.timestamp) : null;
@@ -519,6 +507,12 @@ const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, 
             ? timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             : timestamp.toLocaleString([], { hour: '2-digit', minute: '2-digit' }))
         : '';
+
+    const handleImageClick = (clickedIndex) => {
+        if (onOpenGallery) {
+            onOpenGallery(allImages, clickedIndex);
+        }
+    };
 
     return (
         <div style={{
@@ -549,46 +543,83 @@ const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, 
                         {firstMsg.username}
                     </strong>
                     <span style={{ color: '#72767d', fontSize: '0.75em' }}>{timeStr}</span>
+                    {totalCount > 1 && (
+                        <span style={{ color: '#5865f2', fontSize: '0.72em', fontWeight: 600 }}>
+                            📷 {totalCount} fotoğraf
+                        </span>
+                    )}
                 </div>
 
-                {/* 🖼️ Image Grid */}
+                {/* 🖼️ Image Grid - Max 4 visible */}
                 <div style={{
                     display: 'grid',
                     ...getGridStyle(),
-                    gap: '4px',
+                    gap: '3px',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
                 }}>
-                    {images.map((imgUrl, idx) => (
-                        <div
-                            key={messages[idx]?.id || idx}
-                            style={{
-                                aspectRatio: count === 1 ? 'auto' : (count === 3 && idx === 0 ? '2/1' : '1/1'),
-                                overflow: 'hidden',
-                                position: 'relative',
-                                ...(count === 3 && idx === 0 ? { gridColumn: '1 / -1' } : {}),
-                                maxHeight: count === 1 ? '300px' : (count === 3 && idx === 0 ? '200px' : '200px'),
-                            }}
-                        >
-                            <img
-                                src={imgUrl}
-                                alt={`gallery-${idx}`}
+                    {visibleImages.map((imgUrl, idx) => {
+                        const isLastWithExtra = idx === MAX_VISIBLE - 1 && extraCount > 0;
+                        return (
+                            <div
+                                key={messages[idx]?.id || idx}
                                 style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'cover',
+                                    aspectRatio: visibleCount === 1 ? 'auto' : (visibleCount === 3 && idx === 0 ? '2/1' : '1/1'),
+                                    overflow: 'hidden',
+                                    position: 'relative',
+                                    ...(visibleCount === 3 && idx === 0 ? { gridColumn: '1 / -1' } : {}),
+                                    maxHeight: visibleCount === 1 ? '300px' : (visibleCount === 3 && idx === 0 ? '200px' : '200px'),
                                     cursor: 'pointer',
-                                    display: 'block',
-                                    transition: 'transform 0.2s',
                                 }}
-                                onClick={() => onImageClick(imgUrl)}
-                                loading="lazy"
-                                onMouseEnter={(e) => { e.target.style.transform = 'scale(1.03)'; }}
-                                onMouseLeave={(e) => { e.target.style.transform = 'scale(1)'; }}
-                            />
-                        </div>
-                    ))}
+                                onClick={() => handleImageClick(idx)}
+                            >
+                                <img
+                                    src={imgUrl}
+                                    alt={`gallery-${idx}`}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                        display: 'block',
+                                        transition: 'transform 0.2s, filter 0.2s',
+                                        filter: isLastWithExtra ? 'brightness(0.4)' : 'none',
+                                    }}
+                                    loading="lazy"
+                                    onMouseEnter={(e) => {
+                                        e.target.style.transform = 'scale(1.05)';
+                                        if (!isLastWithExtra) e.target.style.filter = 'brightness(0.85)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.transform = 'scale(1)';
+                                        if (!isLastWithExtra) e.target.style.filter = 'none';
+                                        else e.target.style.filter = 'brightness(0.4)';
+                                    }}
+                                />
+                                {/* +N overlay on last visible image */}
+                                {isLastWithExtra && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        top: 0, left: 0, right: 0, bottom: 0,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        pointerEvents: 'none',
+                                    }}>
+                                        <span style={{
+                                            color: '#fff',
+                                            fontSize: '2rem',
+                                            fontWeight: 700,
+                                            textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+                                            letterSpacing: '1px',
+                                        }}>
+                                            +{extraCount}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
@@ -680,6 +711,7 @@ const AppContent = () => {
     const [showStickerPicker, setShowStickerPicker] = useState(false);
     const [selectedMessages, setSelectedMessages] = useState(new Set());
     const [zoomedImage, setZoomedImage] = useState(null);
+    const [galleryData, setGalleryData] = useState(null); // {images: [], startIndex: 0} for gallery viewer
     const [viewingProfile, setViewingProfile] = useState(null);
     const [dropTarget, setDropTarget] = useState(null);
     const [showStore, setShowStore] = useState(false);
@@ -5900,6 +5932,7 @@ const AppContent = () => {
 
             {/* --- STANDART MODALLAR --- */}
             {zoomedImage && <Suspense fallback={null}><ImageLightbox imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} /></Suspense>}
+            {galleryData && <Suspense fallback={null}><ImageLightbox images={galleryData.images} startIndex={galleryData.startIndex} onClose={() => setGalleryData(null)} /></Suspense>}
             {showPinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => setShowPinned(false)} /></Suspense>}
             {viewingProfile && <UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} />}
 
@@ -6638,7 +6671,7 @@ const AppContent = () => {
                                                                     currentUser={username}
                                                                     absoluteHostUrl={ABSOLUTE_HOST_URL}
                                                                     isAdmin={isAdmin}
-                                                                    onImageClick={setZoomedImage}
+                                                                    onOpenGallery={(images, startIndex) => setGalleryData({ images, startIndex })}
                                                                     onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
                                                                     onDelete={handleDeleteMessage}
                                                                     allUsers={allUsers}
