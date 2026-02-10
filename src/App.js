@@ -32,7 +32,8 @@ import toast from './utils/toast';
 import useResponsive from './hooks/useResponsive'; // 🔥 RESPONSIVE HOOK
 import { useOptimizedMessages, useOnlineUsers } from './hooks/useOptimizedMessages'; // 🚀 PERFORMANS HOOK
 import usePageTracking from './hooks/usePageTracking'; // 📊 PAGE VIEW TRACKING
-import { useDebounce, useThrottle } from './utils/performanceOptimization'; // ⚡ DEBOUNCE & THROTTLE HOOKS
+import { useThrottle } from './utils/performanceOptimization'; // ⚡ THROTTLE HOOK (callback API)
+import { useDebounce } from './hooks/usePerformanceHooks'; // ⚡ DEBOUNCE HOOK (value API)
 
 // --- CONTEXT ---
 import { useAuth } from './AuthContext';
@@ -3381,7 +3382,9 @@ const AppContent = () => {
     if (!isAuthenticated) return (
         <>
             {showSplash && <SplashScreen animationState={animationState} />}
-            <LoginPage onLogin={handleLogin} onRegister={handleRegister} error={authError} setAuthError={setAuthError} />
+            <Suspense fallback={<LoadingSpinner size="large" text="Yükleniyor..." />}>
+                <LoginPage onLogin={handleLogin} onRegister={handleRegister} error={authError} setAuthError={setAuthError} />
+            </Suspense>
         </>
     );
 
@@ -5631,7 +5634,7 @@ const AppContent = () => {
             {zoomedImage && <Suspense fallback={null}><ImageLightbox imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} /></Suspense>}
             {galleryData && <Suspense fallback={null}><ImageLightbox images={galleryData.images} startIndex={galleryData.startIndex} onClose={() => setGalleryData(null)} /></Suspense>}
             {showPinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => setShowPinned(false)} /></Suspense>}
-            {viewingProfile && <UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} />}
+            {viewingProfile && <Suspense fallback={null}><UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} /></Suspense>}
 
             {/* Mobile overlay for left sidebar */}
             {isMobile && isLeftSidebarVisible && (
@@ -5660,132 +5663,140 @@ const AppContent = () => {
                                 </button>
                             </div>
                         )}
-                        <RoomList
-                            onFriendsClick={() => setActiveChat('friends', 'friends')}
-                            onRoomSelect={handleRoomChange}
-                            onDMSelect={(id, targetUsername) => setActiveChat('dm', id, targetUsername)}
-                            onWelcomeClick={handleWelcomeClick}
-                            setIsLeftSidebarVisible={setIsLeftSidebarVisible}
-                            onProfileClick={() => setShowProfilePanel(true)}
-                            onViewUserProfile={(username) => {
-                                const user = allUsers.find(u => u.username === username);
-                                if (user) setViewingProfile(user);
-                            }}
-                            onOpenStore={() => setShowStore(true)}
-                            onOpenServerSettings={(server) => setServerToEdit(server)}
-                            categories={sortedServers}
-                            onServerDragStart={handleServerDragStart}
-                            onServerDragOver={handleServerDragOver}
-                            onServerDragEnd={handleServerDragEnd}
-                            onServerDrop={handleServerDrop}
-                            onMoveServer={handleMoveServer}
-                            conversations={conversations}
-                            allUsers={allUsers}
-                            onlineUsers={onlineUsers}
-                            serverMembers={serverMembers}
-                            isAdmin={isAdmin}
-                            friendsList={friendsList}
-                            pendingFriendRequests={pendingFriendRequests} // 🔥 YENİ: Bekleyen arkadaşlık istekleri
-                            currentUsername={username}
-                            currentUserProfile={currentUserProfile} // 🔥 DÜZELTME: Kullanıcının profil verisi
-                            getRealUserAvatar={getRealUserAvatar}
-                            getDeterministicAvatar={getDeterministicAvatar}
-                            unreadCounts={unreadCounts} // 🔥 YENİ: Okunmamış mesaj sayıları
-                            joinVoiceChat={joinChannel}
-                            leaveVoiceChat={leaveChannel}
-                            voiceUsers={voiceUsers}
-                            isConnecting={isConnecting}
-                            currentVoiceRoom={currentVoiceRoom}
-                            currentRoom={currentVoiceRoom} // 🔥 EKLENDI: ScheduledMessageModal için
-                            currentConversationId={activeChat.type === 'dm' ? activeChat.id : null} // 🔥 EKLENDI
-                            remoteVolumes={remoteVolumes}
-                            setRemoteVolume={setRemoteVolume}
-                            isPttActive={isPttActive}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            fetchWithAuth={fetchWithAuth}
-                            onHideConversation={handleHideConversation}
-                            handleDrop={handleSidebarDrop}
-                            dropTarget={dropTarget}
-                            setDropTarget={setDropTarget}
-                            isDragging={isDragging}
-                            onOpenCreateGroup={() => setShowGroupModal(true)}
-                            // Voice Controls
-                            toggleMute={toggleMute}
-                            toggleDeafened={toggleDeafened}
-                            isMuted={isMuted}
-                            isDeafened={isDeafened}
-                            isInVoice={isInVoice}
-                            toggleVideo={toggleVideo}
-                            toggleScreenShare={toggleScreenShare}
-                            isVideoEnabled={isVideoEnabled}
-                            isScreenSharing={isScreenSharing}
-                            // 🔥 Update System
-                            updateAvailable={updateAvailable}
-                            onUpdateClick={() => setShowDownloadModal(true)}
-                            // 🔥 Analytics System
-                            onOpenAnalytics={() => setShowAnalytics(true)}
-                            onOpenAdminPanel={() => setShowAdminPanel(true)}
-                            // 💰 Payment & Engagement System (2026-01-19)
-                            onOpenPaymentPanel={() => setShowPaymentPanel(true)}
-                            onOpenStoreModal={() => setShowStoreModal(true)}
-                            onOpenDailyRewards={() => setShowDailyRewards(true)}
-                            onOpenAPIUsage={() => setShowAPIUsagePanel(true)}
-                            onOpenExportJobs={() => setShowExportJobsPanel(true)}
-                            onOpenScheduledAnnouncements={() => setShowScheduledAnnouncements(true)}
-                            // 🎮 New Features (2026-01-28)
-                            onOpenMiniGames={() => setShowMiniGames(true)}
-                            onOpenProjectCollaboration={() => setShowProjectCollaboration(true)}
-                            onOpenAvatarStudio={() => setShowAvatarStudio(true)}
-                            // 🔥 YENİ: Sunucu seçildiğinde sağ panelde üyeleri göster
-                            onServerSelect={handleServerSelect}
-                        />
+                        <Suspense fallback={<LoadingSpinner size="medium" text="Kanallar yükleniyor..." />}>
+                            <RoomList
+                                onFriendsClick={() => setActiveChat('friends', 'friends')}
+                                onRoomSelect={handleRoomChange}
+                                onDMSelect={(id, targetUsername) => setActiveChat('dm', id, targetUsername)}
+                                onWelcomeClick={handleWelcomeClick}
+                                setIsLeftSidebarVisible={setIsLeftSidebarVisible}
+                                onProfileClick={() => setShowProfilePanel(true)}
+                                onViewUserProfile={(username) => {
+                                    const user = allUsers.find(u => u.username === username);
+                                    if (user) setViewingProfile(user);
+                                }}
+                                onOpenStore={() => setShowStore(true)}
+                                onOpenServerSettings={(server) => setServerToEdit(server)}
+                                categories={sortedServers}
+                                onServerDragStart={handleServerDragStart}
+                                onServerDragOver={handleServerDragOver}
+                                onServerDragEnd={handleServerDragEnd}
+                                onServerDrop={handleServerDrop}
+                                onMoveServer={handleMoveServer}
+                                conversations={conversations}
+                                allUsers={allUsers}
+                                onlineUsers={onlineUsers}
+                                serverMembers={serverMembers}
+                                isAdmin={isAdmin}
+                                friendsList={friendsList}
+                                pendingFriendRequests={pendingFriendRequests} // 🔥 YENİ: Bekleyen arkadaşlık istekleri
+                                currentUsername={username}
+                                currentUserProfile={currentUserProfile} // 🔥 DÜZELTME: Kullanıcının profil verisi
+                                getRealUserAvatar={getRealUserAvatar}
+                                getDeterministicAvatar={getDeterministicAvatar}
+                                unreadCounts={unreadCounts} // 🔥 YENİ: Okunmamış mesaj sayıları
+                                joinVoiceChat={joinChannel}
+                                leaveVoiceChat={leaveChannel}
+                                voiceUsers={voiceUsers}
+                                isConnecting={isConnecting}
+                                currentVoiceRoom={currentVoiceRoom}
+                                currentRoom={currentVoiceRoom} // 🔥 EKLENDI: ScheduledMessageModal için
+                                currentConversationId={activeChat.type === 'dm' ? activeChat.id : null} // 🔥 EKLENDI
+                                remoteVolumes={remoteVolumes}
+                                setRemoteVolume={setRemoteVolume}
+                                isPttActive={isPttActive}
+                                apiBaseUrl={ABSOLUTE_HOST_URL}
+                                fetchWithAuth={fetchWithAuth}
+                                onHideConversation={handleHideConversation}
+                                handleDrop={handleSidebarDrop}
+                                dropTarget={dropTarget}
+                                setDropTarget={setDropTarget}
+                                isDragging={isDragging}
+                                onOpenCreateGroup={() => setShowGroupModal(true)}
+                                // Voice Controls
+                                toggleMute={toggleMute}
+                                toggleDeafened={toggleDeafened}
+                                isMuted={isMuted}
+                                isDeafened={isDeafened}
+                                isInVoice={isInVoice}
+                                toggleVideo={toggleVideo}
+                                toggleScreenShare={toggleScreenShare}
+                                isVideoEnabled={isVideoEnabled}
+                                isScreenSharing={isScreenSharing}
+                                // 🔥 Update System
+                                updateAvailable={updateAvailable}
+                                onUpdateClick={() => setShowDownloadModal(true)}
+                                // 🔥 Analytics System
+                                onOpenAnalytics={() => setShowAnalytics(true)}
+                                onOpenAdminPanel={() => setShowAdminPanel(true)}
+                                // 💰 Payment & Engagement System (2026-01-19)
+                                onOpenPaymentPanel={() => setShowPaymentPanel(true)}
+                                onOpenStoreModal={() => setShowStoreModal(true)}
+                                onOpenDailyRewards={() => setShowDailyRewards(true)}
+                                onOpenAPIUsage={() => setShowAPIUsagePanel(true)}
+                                onOpenExportJobs={() => setShowExportJobsPanel(true)}
+                                onOpenScheduledAnnouncements={() => setShowScheduledAnnouncements(true)}
+                                // 🎮 New Features (2026-01-28)
+                                onOpenMiniGames={() => setShowMiniGames(true)}
+                                onOpenProjectCollaboration={() => setShowProjectCollaboration(true)}
+                                onOpenAvatarStudio={() => setShowAvatarStudio(true)}
+                                // 🔥 YENİ: Sunucu seçildiğinde sağ panelde üyeleri göster
+                                onServerSelect={handleServerSelect}
+                            />
+                        </Suspense>
                     </div>
                 )}
 
                 <div style={styles.mainContent}>
                     {/* ✨ STICKY BANNER */}
                     <div style={{ position: 'absolute', top: 60, left: 0, right: 0, zIndex: 90 }}>
-                        <StickyMessageBanner
-                            message={stickyMessage?.message}
-                            type={stickyMessage?.type}
-                            onDismiss={() => setStickyMessage(null)}
-                        />
+                        <Suspense fallback={null}>
+                            <StickyMessageBanner
+                                message={stickyMessage?.message}
+                                type={stickyMessage?.type}
+                                onDismiss={() => setStickyMessage(null)}
+                            />
+                        </Suspense>
                     </div>
                     {activeChat.type === 'friends' ? (
                         <div style={{ width: '100%', height: '100%', paddingTop: mobileWebPadding }}>
-                            <FriendsTab
-                                fetchWithAuth={fetchWithAuth}
-                                apiBaseUrl={API_BASE_URL}
-                                onStartDM={handleDMClick}
-                                getDeterministicAvatar={getDeterministicAvatar}
-                                onClose={() => setActiveChat('welcome', 'welcome')}
-                                onPendingCountChange={setPendingFriendRequests}
-                                onlineUsers={onlineUsers} // 🔥 DÜZELTME: Gerçek zamanlı online durumu için
-                            />
+                            <Suspense fallback={<LoadingSpinner size="medium" text="Arkadaşlar yükleniyor..." />}>
+                                <FriendsTab
+                                    fetchWithAuth={fetchWithAuth}
+                                    apiBaseUrl={API_BASE_URL}
+                                    onStartDM={handleDMClick}
+                                    getDeterministicAvatar={getDeterministicAvatar}
+                                    onClose={() => setActiveChat('welcome', 'welcome')}
+                                    onPendingCountChange={setPendingFriendRequests}
+                                    onlineUsers={onlineUsers} // 🔥 DÜZELTME: Gerçek zamanlı online durumu için
+                                />
+                            </Suspense>
                         </div>
                     ) : activeChat.type === 'welcome' ? (
                         <div style={{ width: '100%', height: '100%' }}>
-                            <WelcomeScreen
-                                isMobile={isMobile}
-                                onOpenMenu={() => setIsLeftSidebarVisible(true)}
-                                onOpenRightMenu={() => setIsRightSidebarVisible(true)}
-                                updateAvailable={updateAvailable}
-                                isDownloading={isDownloading}
-                                downloadProgress={downloadProgress}
-                                updateStatusText={updateStatusText}
-                                onStartUpdate={handleStartUpdate}
-                                onSwitchToFriends={() => {
-                                    setActiveChat('friends', 'friends');
-                                    if (isMobile) setIsLeftSidebarVisible(false);
-                                }}
-                                onSwitchToAI={() => {
-                                    handleRoomChange('ai');
-                                }}
-                                onSwitchToCinema={() => {
-                                    setShowCinema(true);
-                                    if (isMobile) setIsLeftSidebarVisible(false);
-                                }}
-                            />
+                            <Suspense fallback={<LoadingSpinner size="medium" text="Yükleniyor..." />}>
+                                <WelcomeScreen
+                                    isMobile={isMobile}
+                                    onOpenMenu={() => setIsLeftSidebarVisible(true)}
+                                    onOpenRightMenu={() => setIsRightSidebarVisible(true)}
+                                    updateAvailable={updateAvailable}
+                                    isDownloading={isDownloading}
+                                    downloadProgress={downloadProgress}
+                                    updateStatusText={updateStatusText}
+                                    onStartUpdate={handleStartUpdate}
+                                    onSwitchToFriends={() => {
+                                        setActiveChat('friends', 'friends');
+                                        if (isMobile) setIsLeftSidebarVisible(false);
+                                    }}
+                                    onSwitchToAI={() => {
+                                        handleRoomChange('ai');
+                                    }}
+                                    onSwitchToCinema={() => {
+                                        setShowCinema(true);
+                                        if (isMobile) setIsLeftSidebarVisible(false);
+                                    }}
+                                />
+                            </Suspense>
                         </div>
                     ) : activeRoomType === 'kanban' ? (
                         <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
@@ -6286,146 +6297,148 @@ const AppContent = () => {
 
                             {/* ⚡ VIRTUAL MESSAGE LIST - 10x Performance Boost */}
                             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}>
-                                {messageHistoryLoading ? (
-                                    <p style={styles.systemMessage}>Yükleniyor...</p>
-                                ) : optimizedMessages.length > 50 ? (
-                                    // Virtual scrolling for 50+ messages
-                                    <VirtualMessageList
-                                        messages={optimizedMessages}
-                                        scrollToBottom={true}
-                                        renderMessage={(msg, index) => (
-                                            <Message
-                                                key={msg.id || msg.temp_id || index}
-                                                msg={msg}
-                                                currentUser={username}
-                                                absoluteHostUrl={ABSOLUTE_HOST_URL}
-                                                isAdmin={isAdmin}
-                                                onImageClick={setZoomedImage}
-                                                fetchWithAuth={fetchWithAuth}
-                                                allUsers={allUsers}
-                                                getDeterministicAvatar={getDeterministicAvatar}
-                                                onShowChart={setChartSymbol}
-                                                onDelete={handleDeleteMessage}
-                                                onStartEdit={setEditingMessage}
-                                                onSetReply={setReplyingTo}
-                                                onToggleReaction={() => { }}
-                                                onStartForward={setForwardingMessage}
-                                                isSelectionMode={isSelectionMode}
-                                                isSelected={selectedMessages.has(msg.id)}
-                                                onToggleSelection={(id) => {
-                                                    const newSet = new Set(selectedMessages);
-                                                    if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
-                                                    setSelectedMessages(newSet);
-                                                }}
-                                                onScrollToMessage={scrollToMessage}
-                                                onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                onTogglePin={handleTogglePin}
-                                                onVisible={handleMessageVisible}
-                                            />
-                                        )}
-                                    />
-                                ) : (
-                                    // Standard rendering for <50 messages
-                                    <>
-                                        {(() => {
-                                            // 🖼️ WhatsApp-style gallery grouping
-                                            const elements = [];
-                                            let i = 0;
-                                            while (i < optimizedMessages.length) {
-                                                const msg = optimizedMessages[i];
-                                                const key = msg.id || msg.temp_id || i;
-                                                const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
-                                                const showDateDivider = !prevMsg || (
-                                                    msg.timestamp && prevMsg.timestamp &&
-                                                    new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()
-                                                );
+                                <Suspense fallback={<p style={styles.systemMessage}>Mesajlar yükleniyor...</p>}>
+                                    {messageHistoryLoading ? (
+                                        <p style={styles.systemMessage}>Yükleniyor...</p>
+                                    ) : optimizedMessages.length > 50 ? (
+                                        // Virtual scrolling for 50+ messages
+                                        <VirtualMessageList
+                                            messages={optimizedMessages}
+                                            scrollToBottom={true}
+                                            renderMessage={(msg, index) => (
+                                                <Message
+                                                    key={msg.id || msg.temp_id || index}
+                                                    msg={msg}
+                                                    currentUser={username}
+                                                    absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                                    isAdmin={isAdmin}
+                                                    onImageClick={setZoomedImage}
+                                                    fetchWithAuth={fetchWithAuth}
+                                                    allUsers={allUsers}
+                                                    getDeterministicAvatar={getDeterministicAvatar}
+                                                    onShowChart={setChartSymbol}
+                                                    onDelete={handleDeleteMessage}
+                                                    onStartEdit={setEditingMessage}
+                                                    onSetReply={setReplyingTo}
+                                                    onToggleReaction={() => { }}
+                                                    onStartForward={setForwardingMessage}
+                                                    isSelectionMode={isSelectionMode}
+                                                    isSelected={selectedMessages.has(msg.id)}
+                                                    onToggleSelection={(id) => {
+                                                        const newSet = new Set(selectedMessages);
+                                                        if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
+                                                        setSelectedMessages(newSet);
+                                                    }}
+                                                    onScrollToMessage={scrollToMessage}
+                                                    onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
+                                                    onTogglePin={handleTogglePin}
+                                                    onVisible={handleMessageVisible}
+                                                />
+                                            )}
+                                        />
+                                    ) : (
+                                        // Standard rendering for <50 messages
+                                        <>
+                                            {(() => {
+                                                // 🖼️ WhatsApp-style gallery grouping
+                                                const elements = [];
+                                                let i = 0;
+                                                while (i < optimizedMessages.length) {
+                                                    const msg = optimizedMessages[i];
+                                                    const key = msg.id || msg.temp_id || i;
+                                                    const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
+                                                    const showDateDivider = !prevMsg || (
+                                                        msg.timestamp && prevMsg.timestamp &&
+                                                        new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString()
+                                                    );
 
-                                                // Check if this starts a gallery group
-                                                if (isImageOnlyMessage(msg)) {
-                                                    const galleryMsgs = [msg];
-                                                    let j = i + 1;
-                                                    while (j < optimizedMessages.length &&
-                                                        isImageOnlyMessage(optimizedMessages[j]) &&
-                                                        optimizedMessages[j].username === msg.username &&
-                                                        // Max 30 saniye aralık
-                                                        msg.timestamp && optimizedMessages[j].timestamp &&
-                                                        Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000
-                                                    ) {
-                                                        galleryMsgs.push(optimizedMessages[j]);
-                                                        j++;
+                                                    // Check if this starts a gallery group
+                                                    if (isImageOnlyMessage(msg)) {
+                                                        const galleryMsgs = [msg];
+                                                        let j = i + 1;
+                                                        while (j < optimizedMessages.length &&
+                                                            isImageOnlyMessage(optimizedMessages[j]) &&
+                                                            optimizedMessages[j].username === msg.username &&
+                                                            // Max 30 saniye aralık
+                                                            msg.timestamp && optimizedMessages[j].timestamp &&
+                                                            Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000
+                                                        ) {
+                                                            galleryMsgs.push(optimizedMessages[j]);
+                                                            j++;
+                                                        }
+
+                                                        if (galleryMsgs.length >= 2) {
+                                                            // 🖼️ Gallery render - WhatsApp style grid
+                                                            const galleryKey = galleryMsgs.map(m => m.id || m.temp_id).join('-');
+                                                            elements.push(
+                                                                <React.Fragment key={`gallery-${galleryKey}`}>
+                                                                    {showDateDivider && msg.timestamp && (
+                                                                        <MessageDateDivider date={msg.timestamp} />
+                                                                    )}
+                                                                    <ImageGalleryGroup
+                                                                        messages={galleryMsgs}
+                                                                        currentUser={username}
+                                                                        absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                                                        isAdmin={isAdmin}
+                                                                        onOpenGallery={(images, startIndex) => setGalleryData({ images, startIndex })}
+                                                                        onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
+                                                                        onDelete={handleDeleteMessage}
+                                                                        allUsers={allUsers}
+                                                                        getDeterministicAvatar={getDeterministicAvatar}
+                                                                        fetchWithAuth={fetchWithAuth}
+                                                                        onVisible={handleMessageVisible}
+                                                                    />
+                                                                </React.Fragment>
+                                                            );
+                                                            i = j;
+                                                            continue;
+                                                        }
                                                     }
 
-                                                    if (galleryMsgs.length >= 2) {
-                                                        // 🖼️ Gallery render - WhatsApp style grid
-                                                        const galleryKey = galleryMsgs.map(m => m.id || m.temp_id).join('-');
-                                                        elements.push(
-                                                            <React.Fragment key={`gallery-${galleryKey}`}>
-                                                                {showDateDivider && msg.timestamp && (
-                                                                    <MessageDateDivider date={msg.timestamp} />
-                                                                )}
-                                                                <ImageGalleryGroup
-                                                                    messages={galleryMsgs}
-                                                                    currentUser={username}
-                                                                    absoluteHostUrl={ABSOLUTE_HOST_URL}
-                                                                    isAdmin={isAdmin}
-                                                                    onOpenGallery={(images, startIndex) => setGalleryData({ images, startIndex })}
-                                                                    onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                                    onDelete={handleDeleteMessage}
-                                                                    allUsers={allUsers}
-                                                                    getDeterministicAvatar={getDeterministicAvatar}
-                                                                    fetchWithAuth={fetchWithAuth}
-                                                                    onVisible={handleMessageVisible}
-                                                                />
-                                                            </React.Fragment>
-                                                        );
-                                                        i = j;
-                                                        continue;
-                                                    }
+                                                    // Normal single message
+                                                    elements.push(
+                                                        <React.Fragment key={key}>
+                                                            {showDateDivider && msg.timestamp && (
+                                                                <MessageDateDivider date={msg.timestamp} />
+                                                            )}
+                                                            <Message
+                                                                key={key}
+                                                                msg={msg}
+                                                                currentUser={username}
+                                                                absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                                                isAdmin={isAdmin}
+                                                                onImageClick={setZoomedImage}
+                                                                fetchWithAuth={fetchWithAuth}
+                                                                allUsers={allUsers}
+                                                                getDeterministicAvatar={getDeterministicAvatar}
+                                                                onShowChart={setChartSymbol}
+                                                                onDelete={handleDeleteMessage}
+                                                                onStartEdit={setEditingMessage}
+                                                                onSetReply={setReplyingTo}
+                                                                onToggleReaction={() => { }}
+                                                                onStartForward={setForwardingMessage}
+                                                                isSelectionMode={isSelectionMode}
+                                                                isSelected={selectedMessages.has(msg.id)}
+                                                                onToggleSelection={(id) => {
+                                                                    const newSet = new Set(selectedMessages);
+                                                                    if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
+                                                                    setSelectedMessages(newSet);
+                                                                }}
+                                                                onScrollToMessage={scrollToMessage}
+                                                                onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
+                                                                onTogglePin={handleTogglePin}
+                                                                onVisible={handleMessageVisible}
+                                                            />
+                                                        </React.Fragment>
+                                                    );
+                                                    i++;
                                                 }
-
-                                                // Normal single message
-                                                elements.push(
-                                                    <React.Fragment key={key}>
-                                                        {showDateDivider && msg.timestamp && (
-                                                            <MessageDateDivider date={msg.timestamp} />
-                                                        )}
-                                                        <Message
-                                                            key={key}
-                                                            msg={msg}
-                                                            currentUser={username}
-                                                            absoluteHostUrl={ABSOLUTE_HOST_URL}
-                                                            isAdmin={isAdmin}
-                                                            onImageClick={setZoomedImage}
-                                                            fetchWithAuth={fetchWithAuth}
-                                                            allUsers={allUsers}
-                                                            getDeterministicAvatar={getDeterministicAvatar}
-                                                            onShowChart={setChartSymbol}
-                                                            onDelete={handleDeleteMessage}
-                                                            onStartEdit={setEditingMessage}
-                                                            onSetReply={setReplyingTo}
-                                                            onToggleReaction={() => { }}
-                                                            onStartForward={setForwardingMessage}
-                                                            isSelectionMode={isSelectionMode}
-                                                            isSelected={selectedMessages.has(msg.id)}
-                                                            onToggleSelection={(id) => {
-                                                                const newSet = new Set(selectedMessages);
-                                                                if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
-                                                                setSelectedMessages(newSet);
-                                                            }}
-                                                            onScrollToMessage={scrollToMessage}
-                                                            onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                            onTogglePin={handleTogglePin}
-                                                            onVisible={handleMessageVisible}
-                                                        />
-                                                    </React.Fragment>
-                                                );
-                                                i++;
-                                            }
-                                            return elements;
-                                        })()}
-                                        <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
-                                    </>
-                                )}
+                                                return elements;
+                                            })()}
+                                            <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
+                                        </>
+                                    )}
+                                </Suspense>
                             </div>
 
                             {/* 🖼️ Drag overlay - Tüm chat alanını kaplar */}
@@ -6493,20 +6506,22 @@ const AppContent = () => {
                                     </div>
                                 )}
                                 {/* ✨ Modern MessageInput Component */}
-                                <MessageInput
-                                    onSendMessage={sendMessage}
-                                    onFileUpload={uploadFile}
-                                    onShowCodeSnippet={() => setShowSnippetModal(true)}
-                                    placeholder={chatTitle
-                                        ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalına mesaj gönder`
-                                        : 'Mesaj yaz...'}
-                                    disabled={isUploading}
-                                    fetchWithAuth={fetchWithAuth}
-                                    apiBaseUrl={ABSOLUTE_HOST_URL}
-                                    activeChat={activeChat}
-                                    pendingFilesFromDrop={pendingFilesFromDrop}
-                                    onClearPendingFiles={() => setPendingFilesFromDrop([])}
-                                />
+                                <Suspense fallback={<div style={{ padding: '12px', color: '#72767d' }}>Yükleniyor...</div>}>
+                                    <MessageInput
+                                        onSendMessage={sendMessage}
+                                        onFileUpload={uploadFile}
+                                        onShowCodeSnippet={() => setShowSnippetModal(true)}
+                                        placeholder={chatTitle
+                                            ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalına mesaj gönder`
+                                            : 'Mesaj yaz...'}
+                                        disabled={isUploading}
+                                        fetchWithAuth={fetchWithAuth}
+                                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                                        activeChat={activeChat}
+                                        pendingFilesFromDrop={pendingFilesFromDrop}
+                                        onClearPendingFiles={() => setPendingFilesFromDrop([])}
+                                    />
+                                </Suspense>
                             </div>
 
                         </div>
@@ -7107,22 +7122,24 @@ const AppContent = () => {
             {/* 🔥 USER CONTEXT MENU */}
             {
                 userContextMenu && (
-                    <UserContextMenu
-                        x={userContextMenu.x}
-                        y={userContextMenu.y}
-                        user={userContextMenu.user}
-                        currentUser={username}
-                        onClose={() => setUserContextMenu(null)}
-                        onAction={handleUserContextAction}
-                        voiceChannels={categories.flatMap(server =>
-                            (server.categories || []).flatMap(category =>
-                                (category.rooms || []).filter(room => room.is_voice)
-                            )
-                        )}
-                        isAdmin={isAdmin}
-                        isInVoiceRoom={isInVoice}
-                        friendsList={friendsList}
-                    />
+                    <Suspense fallback={null}>
+                        <UserContextMenu
+                            x={userContextMenu.x}
+                            y={userContextMenu.y}
+                            user={userContextMenu.user}
+                            currentUser={username}
+                            onClose={() => setUserContextMenu(null)}
+                            onAction={handleUserContextAction}
+                            voiceChannels={categories.flatMap(server =>
+                                (server.categories || []).flatMap(category =>
+                                    (category.rooms || []).filter(room => room.is_voice)
+                                )
+                            )}
+                            isAdmin={isAdmin}
+                            isInVoiceRoom={isInVoice}
+                            friendsList={friendsList}
+                        />
+                    </Suspense>
                 )
             }
 
