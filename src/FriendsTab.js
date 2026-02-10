@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { FaCheck, FaTimes, FaUserFriends, FaPaperPlane, FaBell } from './utils/iconOptimization'; // ⚡ OPTIMIZATION
 import { useGlobalWebSocket } from './GlobalWebSocketContext';
 import LazyImage from './components/LazyImage'; // ⚡ OPTIMIZATION: Progressive image loading
+import confirmDialog from './utils/confirmDialog';
 
 // 🚫 Oyun olarak gösterilmeyecek uygulamalar
 const IGNORED_APPS = new Set([
@@ -124,7 +125,7 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
 
     // 🔥 YENİ: Arkadaşlıktan Çıkarma
     const handleRemoveFriend = useCallback(async (friendId, friendUsername) => {
-        if (!window.confirm(`${friendUsername} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) {
+        if (!await confirmDialog(`${friendUsername} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) {
             return;
         }
 

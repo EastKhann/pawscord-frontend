@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './IPWhitelistPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const IPWhitelistPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [activeTab, setActiveTab] = useState('whitelist'); // 'whitelist', 'blacklist', 'logs'
@@ -117,7 +118,7 @@ const IPWhitelistPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleDelete = async (ipId, type) => {
-        if (!window.confirm('Bu IP adresini listeden kaldırmak istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu IP adresini listeden kaldırmak istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

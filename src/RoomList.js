@@ -129,6 +129,9 @@ const RoomList = ({
     // 🔥 YENİ: Sunucu silme confirmation modal state
     const [deleteServerModal, setDeleteServerModal] = useState(null); // { server: {...}, isOpen: boolean }
 
+    // 🔥 YENİ: Sunucudan ayrılma confirmation modal state
+    const [leaveServerModal, setLeaveServerModal] = useState(null); // { server: {...}, isOpen: boolean }
+
     // Düzenleme State'leri
     const [editingItemId, setEditingItemId] = useState(null);
     const [editName, setEditName] = useState('');
@@ -364,10 +367,12 @@ const RoomList = ({
             return;
         }
 
-        if (!window.confirm('Bu sunucudan ayrılmak istediğinizden emin misiniz?')) {
-            return;
-        }
+        // Styled modal ile onayla
+        setLeaveServerModal({ server, isOpen: true });
+    };
 
+    // Gerçek leave işlemi - modal onayından sonra çağrılır
+    const executeLeaveServer = async (serverId) => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/leave/`, {
                 method: 'POST'
@@ -387,9 +392,7 @@ const RoomList = ({
                 const error = await res.json();
                 const errorMessage = error.error || 'Sunucudan ayrılırken hata oluştu';
                 console.error('❌ Sunucudan ayrılma hatası:', errorMessage);
-
-                // Kullanıcıya hata mesajını göster
-                toast.error(`❌ Hata: ${errorMessage}\n\nEğer sunucu sahibiyseniz, sunucuyu silmeniz gerekir.\nSunucuya sağ tıklayıp "Sunucuyu Sil" seçeneğini kullanın.`);
+                toast.error(`❌ Hata: ${errorMessage}`);
             }
         } catch (error) {
             console.error('❌ Sunucudan ayrılma hatası:', error);
@@ -456,7 +459,7 @@ const RoomList = ({
             ? 'Sunucuyu herkese açık yapmak istediğinize emin misiniz? Herkes bu sunucuyu bulabilir ve katılabilir.'
             : 'Sunucuyu özel yapmak istediğinize emin misiniz? Sadece davet edilen kişiler katılabilir.';
 
-        if (!window.confirm(message)) {
+        if (!await confirmDialog(message)) {
             return;
         }
 
@@ -844,7 +847,7 @@ const RoomList = ({
 
     const handleDeleteCategory = async (e, catId) => {
         e.stopPropagation();
-        if (!window.confirm("Kategoriyi silmek istediğine emin misin? İçindeki odalar da silinecek!")) return;
+        if (!await confirmDialog("Kategoriyi silmek istediğine emin misin? İçindeki odalar da silinecek!")) return;
         await fetchWithAuth(`${apiUrl}/categories/${catId}/delete/`, { method: 'POST' });
     };
 
@@ -858,7 +861,7 @@ const RoomList = ({
 
     const handleDeleteRoom = async (e, slug) => {
         e.stopPropagation();
-        if (!window.confirm("Kanalı silmek istediğine emin misin?")) return;
+        if (!await confirmDialog("Kanalı silmek istediğine emin misin?")) return;
         await fetchWithAuth(`${apiUrl}/rooms/${slug}/delete/`, { method: 'POST' });
     };
 
@@ -2634,6 +2637,27 @@ const RoomList = ({
                 />
             )}
 
+            {/* 🔥 Server Leave Confirmation Modal */}
+            {leaveServerModal?.isOpen && (
+                <ConfirmModal
+                    isOpen={leaveServerModal.isOpen}
+                    onClose={() => setLeaveServerModal(null)}
+                    onConfirm={async () => {
+                        await executeLeaveServer(leaveServerModal.server.id);
+                    }}
+                    title="🚪 Sunucudan Ayrıl"
+                    message={`"${leaveServerModal.server.name}" sunucusundan ayrılmak istediğinize emin misiniz?`}
+                    confirmText="Ayrıl"
+                    cancelText="Vazgeç"
+                    type="warning"
+                    dangerDetails={[
+                        'Sunucudaki mesajlarınız silinmeyecek',
+                        'Tekrar katılmak için davet almanız gerekecek',
+                        'Sunucuyla ilgili tüm bildirimler duracak'
+                    ]}
+                />
+            )}
+
             {/* 🆕 SUNUCUYA DAVET MODAL - Sunucu Seçimi */}
             {inviteToServerModal && inviteToServerModal.isOpen && createPortal(
                 <div
@@ -2903,6 +2927,7 @@ if (typeof document !== 'undefined') {
         /* Context Menu Slide Animation */
         @keyframes contextMenuSlide {
             from {
+import confirmDialog from './utils/confirmDialog';
                 opacity: 0;
                 transform: translateY(-8px) scale(0.96);
             }

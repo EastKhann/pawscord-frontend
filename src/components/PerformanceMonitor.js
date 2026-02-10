@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTachometerAlt, FaDatabase, FaMemory, FaServer, FaSync, FaTrash, FaCheck } from 'react-icons/fa';
 import './PerformanceMonitor.css';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 📊 Performance Monitoring Dashboard
@@ -48,7 +49,7 @@ const PerformanceMonitor = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
     };
 
     const handleAction = async (action, confirmMessage) => {
-        if (confirmMessage && !window.confirm(confirmMessage)) {
+        if (confirmMessage && !await confirmDialog(confirmMessage)) {
             return;
         }
 

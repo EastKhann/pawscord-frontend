@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import { FaExclamationTriangle, FaRedo, FaHome, FaBug } from 'react-icons/fa';
+import toast from '../../utils/toast';
 
 /**
  * Error severity levels
@@ -134,7 +135,7 @@ Time: ${new Date().toISOString()}
         `.trim();
 
         navigator.clipboard.writeText(details);
-        alert('Hata detayları kopyalandı!');
+        toast.success('Hata detayları kopyalandı!');
     };
 
     render() {

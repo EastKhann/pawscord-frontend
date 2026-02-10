@@ -1,6 +1,7 @@
 // frontend/src/components/SubscriptionManager.js
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaCrown, FaCreditCard, FaCheck, FaHistory, FaBan, FaGift, FaArrowRight } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) => {
     const [activeTab, setActiveTab] = useState('current');
@@ -51,8 +52,8 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
         }
     };
 
-    const handleCancel = (subId) => {
-        if (window.confirm('Bu aboneliği iptal etmek istediğinize emin misiniz?')) {
+    const handleCancel = async (subId) => {
+        if (await confirmDialog('Bu aboneliği iptal etmek istediğinize emin misiniz?')) {
             setSubscriptions(prev => prev.map(s =>
                 s.id === subId ? { ...s, status: 'cancelled' } : s
             ));

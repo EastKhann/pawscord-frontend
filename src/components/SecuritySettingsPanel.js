@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SecuritySettingsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const SecuritySettingsPanel = ({ onClose }) => {
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
@@ -137,7 +138,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
     };
 
     const disable2FA = async () => {
-        if (!window.confirm('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`${apiBaseUrl}/security/2fa/disable/`, {
@@ -212,7 +213,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
     };
 
     const revokeAllSessions = async () => {
-        if (!window.confirm('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`${apiBaseUrl}/security/sessions/revoke-all/`, {

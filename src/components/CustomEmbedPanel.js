@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CustomEmbedPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const CustomEmbedPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -115,7 +116,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
   };
 
   const deleteEmbed = async (id) => {
-    if (!window.confirm('Embed\'i silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Embed\'i silmek istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/custom-embeds/${id}/delete/`, {
         method: 'DELETE',

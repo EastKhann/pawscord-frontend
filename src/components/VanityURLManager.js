@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaLink, FaCopy, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedded = false }) => {
     const [vanityPath, setVanityPath] = useState('');
@@ -79,7 +80,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
     };
 
     const handleDelete = async () => {
-        if (!window.confirm('Vanity URL\'i silmek istediğinize emin misiniz?')) {
+        if (!await confirmDialog('Vanity URL\'i silmek istediğinize emin misiniz?')) {
             return;
         }
 

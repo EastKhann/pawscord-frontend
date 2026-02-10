@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './LevelingSystemPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const LevelingSystemPanel = ({ serverId, onClose }) => {
   const [config, setConfig] = useState({
@@ -188,7 +189,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
   };
 
   const resetUserXP = async (userId) => {
-    if (!window.confirm('Bu kullanıcının XP\'sini sıfırlamak istediğinizden emin misiniz?')) {
+    if (!await confirmDialog('Bu kullanıcının XP\'sini sıfırlamak istediğinizden emin misiniz?')) {
       return;
     }
 

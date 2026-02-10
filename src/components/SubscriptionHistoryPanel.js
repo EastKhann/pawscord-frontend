@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './SubscriptionHistoryPanel.css';
+import toast from '../utils/toast';
 
 const SubscriptionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [history, setHistory] = useState([]);
@@ -91,7 +92,7 @@ const SubscriptionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl }
     };
 
     const handleDownloadInvoice = (invoiceId) => {
-        alert(`Downloading invoice ${invoiceId}...`);
+        toast.info(`Downloading invoice ${invoiceId}...`);
     };
 
     const filteredHistory = history.filter(item => {

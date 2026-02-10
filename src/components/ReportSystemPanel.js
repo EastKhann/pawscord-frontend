@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaFlag, FaCheck, FaTimes, FaEye, FaBan, FaTrash, FaFilter, FaUser, FaComment } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 🚩 Report System Panel
@@ -332,8 +333,8 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                     </button>
                                     {selectedReport.message_id && (
                                         <button
-                                            onClick={() => {
-                                                if (window.confirm('Delete this message?')) {
+                                            onClick={async () => {
+                                                if (await confirmDialog('Delete this message?')) {
                                                     handleReport(selectedReport.id, 'delete_message');
                                                 }
                                             }}
@@ -344,8 +345,8 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                     )}
                                     {selectedReport.reported_user && (
                                         <button
-                                            onClick={() => {
-                                                if (window.confirm('Ban this user?')) {
+                                            onClick={async () => {
+                                                if (await confirmDialog('Ban this user?')) {
                                                     const reason = prompt('Ban reason:');
                                                     if (reason) {
                                                         handleReport(selectedReport.id, 'ban_user', reason);

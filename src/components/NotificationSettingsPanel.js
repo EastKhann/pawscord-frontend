@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './NotificationSettingsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const NotificationSettingsPanel = ({ onClose }) => {
     const [settings, setSettings] = useState({
@@ -147,7 +148,7 @@ const NotificationSettingsPanel = ({ onClose }) => {
     };
 
     const clearAllNotifications = async () => {
-        if (!window.confirm('Tüm bildirimleri temizlemek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Tüm bildirimleri temizlemek istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`${apiBaseUrl}/notifications/clear_all/`, {

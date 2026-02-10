@@ -339,7 +339,7 @@ const SSOConfigModal = ({ provider, onClose, onSave }) => {
         } catch (error) {
             }
                 loadSSOProviders();
-                alert(`${provider.toUpperCase()} SSO başarıyla yapılandırıldı`);
+                toast.success(`${provider.toUpperCase()} SSO başarıyla yapılandırıldı`);
             if (res.ok) {
 
             });
@@ -364,6 +364,7 @@ const SSOIntegration = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
 
 import { FaKey, FaGoogle, FaMicrosoft, FaGithub, FaLock } from 'react-icons/fa';
 import React, { useState } from 'react';
+import toast from '../utils/toast';
 
 
 

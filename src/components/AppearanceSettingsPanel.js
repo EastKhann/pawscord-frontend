@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './AppearanceSettingsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const AppearanceSettingsPanel = ({ onClose }) => {
   const [settings, setSettings] = useState({
@@ -125,7 +126,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
 
   // Reset to defaults
   const resetToDefaults = async () => {
-    if (!window.confirm('Tüm görünüm ayarlarını varsayılana döndürmek istediğinizden emin misiniz?')) {
+    if (!await confirmDialog('Tüm görünüm ayarlarını varsayılana döndürmek istediğinizden emin misiniz?')) {
       return;
     }
 

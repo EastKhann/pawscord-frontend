@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaShoppingCart, FaCoins, FaStar, FaFire, FaCrown, FaPalette, FaMedal, FaGift } from 'react-icons/fa';
 import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 🛒 Store Modal - Virtual Item Shop
@@ -63,7 +64,7 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
             return;
         }
 
-        if (!window.confirm(`Purchase ${item.name} for ${item.price} coins?`)) {
+        if (!await confirmDialog(`Purchase ${item.name} for ${item.price} coins?`)) {
             return;
         }
 

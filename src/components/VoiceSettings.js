@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './VoiceSettings.css';
 import { FaMicrophone, FaTimes, FaHeadphones, FaVolumeUp, FaVideo, FaCog, FaExclamationTriangle } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const VoiceSettings = ({ userId, onClose }) => {
     const [devices, setDevices] = useState({ input: [], output: [], video: [] });
@@ -149,7 +150,7 @@ const VoiceSettings = ({ userId, onClose }) => {
     };
 
     const resetToDefaults = async () => {
-        if (!window.confirm('Are you sure you want to reset all voice settings to defaults?')) return;
+        if (!await confirmDialog('Are you sure you want to reset all voice settings to defaults?')) return;
 
         try {
             const data = await fetchWithAuth(`${getApiBase()}/voice/${userId}/reset/`, {

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './GrowthWaitlist.css';
 import { getApiBase } from '../../utils/apiEndpoints';
+import toast from '../../utils/toast';
 
 const API_URL = getApiBase();
 
@@ -41,7 +42,7 @@ function GrowthWaitlist() {
   const copyReferralLink = () => {
     const link = `${window.location.origin}/?ref=${myReferralCode}`;
     navigator.clipboard.writeText(link);
-    alert('Referral link kopyalandı!');
+    toast.success('Referral link kopyalandı!');
   };
 
   if (success) {

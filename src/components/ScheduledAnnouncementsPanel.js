@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaBullhorn, FaClock, FaCalendar, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 📢 Scheduled Announcements Panel
@@ -90,7 +91,7 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
     };
 
     const deleteAnnouncement = async (announcementId) => {
-        if (!window.confirm('Delete this scheduled announcement?')) return;
+        if (!await confirmDialog('Delete this scheduled announcement?')) return;
 
         try {
             await fetchWithAuth(

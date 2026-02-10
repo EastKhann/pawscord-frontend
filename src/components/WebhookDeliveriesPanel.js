@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './WebhookDeliveriesPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [activeTab, setActiveTab] = useState('deliveries'); // 'deliveries', 'stats', 'webhooks'
@@ -99,7 +100,7 @@ const WebhookDeliveriesPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     const handleRetryAll = async () => {
         const failedCount = deliveries.filter(d => d.status === 'failed').length;
-        if (!window.confirm(`${failedCount} başarısız webhook'u yeniden göndermek istiyor musunuz?`)) return;
+        if (!await confirmDialog(`${failedCount} başarısız webhook'u yeniden göndermek istiyor musunuz?`)) return;
 
         try {
             const token = localStorage.getItem('access_token');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ServerBoost.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ServerBoost = ({ serverId, onClose }) => {
   const [boostData, setBoostData] = useState(null);
@@ -111,7 +112,7 @@ const ServerBoost = ({ serverId, onClose }) => {
   };
 
   const removeBoost = async (boostId) => {
-    if (!window.confirm('Remove your boost from this server?')) return;
+    if (!await confirmDialog('Remove your boost from this server?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

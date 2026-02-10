@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { viewPreferencesApi } from '../services/niceToHaveApi';
 import './ViewPreferencesPanel.css';
+import toast from '../utils/toast';
 
 const VIEW_MODES = [
     { id: 'cozy', name: 'Cozy', icon: '🛋️', desc: 'Spacious layout with large avatars' },
@@ -43,9 +44,9 @@ function ViewPreferencesPanel({ onClose }) {
         setLoading(true);
         try {
             await viewPreferencesApi.updatePreferences(prefs);
-            alert('Preferences saved! 🎨');
+            toast.success('Preferences saved! 🎨');
         } catch (err) {
-            alert('Failed to save: ' + err.message);
+            toast.error('Failed to save: ' + err.message);
         }
         setLoading(false);
     };

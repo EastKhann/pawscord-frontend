@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './DJModePanel.css';
+import toast from '../utils/toast';
 
 const DJModePanel = ({ roomId, serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [queue, setQueue] = useState([]);
@@ -98,7 +99,7 @@ const DJModePanel = ({ roomId, serverId, onClose, fetchWithAuth, apiBaseUrl }) =
     };
 
     const handleLoadPlaylist = (playlistId) => {
-        alert(`Loading playlist ${playlistId} to queue...`);
+        toast.info(`Loading playlist ${playlistId} to queue...`);
     };
 
     const progressPercent = currentTrack ? (currentTrack.elapsed / currentTrack.duration) * 100 : 0;

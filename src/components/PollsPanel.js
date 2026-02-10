@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PollsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const PollsPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -138,7 +139,7 @@ const PollsPanel = ({ serverId, onClose }) => {
   };
 
   const endPoll = async (pollId) => {
-    if (!window.confirm('Anketi sonlandırmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Anketi sonlandırmak istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/polls/${pollId}/end/`, {
@@ -161,7 +162,7 @@ const PollsPanel = ({ serverId, onClose }) => {
   };
 
   const deletePoll = async (pollId) => {
-    if (!window.confirm('Anketi silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Anketi silmek istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/polls/${pollId}/delete/`, {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ReminderPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const ReminderPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -84,7 +85,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
   };
 
   const deleteReminder = async (id) => {
-    if (!window.confirm('Hatırlatıcıyı silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Hatırlatıcıyı silmek istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/reminders/${id}/delete/`, {
         method: 'DELETE',

@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './ReferralManagementPanel.css';
+import toast from '../utils/toast';
 
 const ReferralManagementPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [referralData, setReferralData] = useState(null);
@@ -74,7 +75,7 @@ const ReferralManagementPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl })
     };
 
     const handleClaimReward = (tier) => {
-        alert(`Claiming reward for Tier ${tier}...`);
+        toast.info(`Claiming reward for Tier ${tier}...`);
     };
 
     const formatDate = (dateStr) => {

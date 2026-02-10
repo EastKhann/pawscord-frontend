@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PermissionsPanel.css';
 import { FaShieldAlt, FaTimes, FaPlus, FaEdit, FaTrash, FaUsers, FaCrown, FaLock } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const PermissionsPanel = ({ serverId, roleId, onClose }) => {
     const [roles, setRoles] = useState([]);
@@ -167,7 +168,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
     };
 
     const resetPermissions = async () => {
-        if (!window.confirm('Are you sure you want to reset all permissions to default?')) return;
+        if (!await confirmDialog('Are you sure you want to reset all permissions to default?')) return;
 
         try {
             const data = await fetchWithAuth(`${getApiBase()}/permissions/${serverId}/${selectedRole.id}/reset/`, {

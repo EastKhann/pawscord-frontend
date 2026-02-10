@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 import './EventPlanner.css';
+import toast from '../utils/toast';
 
 // Event Types
 const EVENT_TYPES = [
@@ -94,7 +95,7 @@ const CreateEventModal = ({ serverId, voiceChannels, onClose, onCreate }) => {
 
     const handleCreate = async () => {
         if (!formData.name || !formData.start_time) {
-            alert('Etkinlik adı ve başlangıç zamanı gerekli');
+            toast.info('Etkinlik adı ve başlangıç zamanı gerekli');
             return;
         }
 
@@ -116,7 +117,7 @@ const CreateEventModal = ({ serverId, voiceChannels, onClose, onCreate }) => {
                 onClose();
             } else {
                 const error = await response.json();
-                alert(error.error || 'Etkinlik oluşturulamadı');
+                toast.error(error.error || 'Etkinlik oluşturulamadı');
             }
         } catch (e) {
             console.error('Create event failed:', e);

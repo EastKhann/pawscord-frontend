@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './RolesManager.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const RolesManager = ({ serverId, onClose }) => {
   const [roles, setRoles] = useState([]);
@@ -113,7 +114,7 @@ const RolesManager = ({ serverId, onClose }) => {
   };
 
   const deleteRole = async (roleId) => {
-    if (!window.confirm('Are you sure you want to delete this role?')) return;
+    if (!await confirmDialog('Are you sure you want to delete this role?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

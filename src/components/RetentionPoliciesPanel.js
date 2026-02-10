@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './RetentionPoliciesPanel.css';
 import { FaTrash, FaClock, FaPlus, FaHistory } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 function RetentionPoliciesPanel({ apiBaseUrl, fetchWithAuth }) {
   const [policies, setPolicies] = useState([]);
@@ -70,7 +71,7 @@ function RetentionPoliciesPanel({ apiBaseUrl, fetchWithAuth }) {
   };
 
   const deletePolicy = async (policyId) => {
-    if (!window.confirm('Delete this retention policy?')) return;
+    if (!await confirmDialog('Delete this retention policy?')) return;
 
     try {
       const response = await fetchWithAuth(`${apiBaseUrl}/retention/${policyId}/delete/`, {

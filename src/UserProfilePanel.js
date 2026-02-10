@@ -6,6 +6,7 @@ import AvatarCropper from './components/AvatarCropper';
 import LogoutModal from './components/LogoutModal';
 import { getApiBase } from './utils/apiEndpoints';
 import './UserProfilePanel.css';
+import confirmDialog from './utils/confirmDialog';
 
 const API_URL = getApiBase();
 // Get BASE_URL from VITE_BACKEND_URL or derive from window.location for production
@@ -320,7 +321,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
   };
 
   const disable2FA = async () => {
-    if (!window.confirm('2FA\'yı devre dışı bırakmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('2FA\'yı devre dışı bırakmak istediğinize emin misiniz?')) return;
 
     try {
       setLoading({ ...loading, disable2fa: true });
@@ -737,7 +738,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
   };
 
   const removeFriend = async (friendshipId) => {
-    if (!window.confirm('Arkadaşı kaldırmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Arkadaşı kaldırmak istediğinize emin misiniz?')) return;
 
     try {
       const token = localStorage.getItem('access_token');
@@ -1040,7 +1041,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
   };
 
   const revokeAllSessions = async () => {
-    if (!window.confirm('Tüm aktif oturumları sonlandırmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Tüm aktif oturumları sonlandırmak istediğinize emin misiniz?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

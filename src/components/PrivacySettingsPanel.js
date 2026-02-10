@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PrivacySettingsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const PrivacySettingsPanel = ({ onClose }) => {
   const [settings, setSettings] = useState({
@@ -173,7 +174,7 @@ const PrivacySettingsPanel = ({ onClose }) => {
 
   // Request data export
   const requestDataExport = async () => {
-    if (!window.confirm('Verilerinizi dışa aktarmak istediğinizden emin misiniz? Bu işlem biraz zaman alabilir.')) {
+    if (!await confirmDialog('Verilerinizi dışa aktarmak istediğinizden emin misiniz? Bu işlem biraz zaman alabilir.')) {
       return;
     }
 

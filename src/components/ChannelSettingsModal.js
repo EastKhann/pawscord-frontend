@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { FaTimes, FaTrash, FaSave, FaLock, FaGlobe, FaExclamationTriangle, FaUserFriends, FaBroadcastTower, FaClock, FaShieldAlt, FaCog, FaUserShield, FaPlus, FaChartLine, FaHistory, FaBell, FaEye, FaRobot, FaLink, FaCopy, FaCheck } from 'react-icons/fa';
 import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [activeTab, setActiveTab] = useState('general'); // 'general', 'permissions'
@@ -117,7 +118,7 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
     };
 
     const handleDelete = async () => {
-        if (!window.confirm("Bu kanalı kalıcı olarak silmek istiyor musun?")) return;
+        if (!await confirmDialog("Bu kanalı kalıcı olarak silmek istiyor musun?")) return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/rooms/${room.slug}/settings/`, {
                 method: 'POST',
@@ -202,7 +203,7 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
     };
 
     const removePermission = async (permId) => {
-        if (!window.confirm('Bu izni kaldırmak istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu izni kaldırmak istediğinizden emin misiniz?')) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/channels/permissions/${permId}/remove/`, {
@@ -758,7 +759,7 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                                         <button
                                             style={styles.dangerBtnSmall}
                                             onClick={async () => {
-                                                if (!window.confirm(`Son ${deleteHistoryDays === 'all' ? 'tüm' : deleteHistoryDays + ' günlük'} mesajları silmek istediğinize emin misiniz? Bu işlem geri alınamaz!`)) return;
+                                                if (!await confirmDialog(`Son ${deleteHistoryDays === 'all' ? 'tüm' : deleteHistoryDays + ' günlük'} mesajları silmek istediğinize emin misiniz? Bu işlem geri alınamaz!`)) return;
                                                 try {
                                                     const res = await fetchWithAuth(`${apiBaseUrl}/rooms/${room.slug}/clear-history/`, {
                                                         method: 'POST',

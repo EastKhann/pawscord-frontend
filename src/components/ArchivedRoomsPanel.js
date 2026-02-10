@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaArchive, FaUndo, FaTrash, FaClock } from 'react-icons/fa';
 import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 📦 Archived Rooms Panel
@@ -50,7 +51,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
     };
 
     const permanentlyDelete = async (roomSlug) => {
-        if (!window.confirm('Bu kanalı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) {
+        if (!await confirmDialog('Bu kanalı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!')) {
             return;
         }
 

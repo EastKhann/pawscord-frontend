@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './GeoLocationLogsPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const GeoLocationLogsPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [activeView, setActiveView] = useState('logs'); // 'logs', 'map', 'stats', 'alerts'
@@ -83,7 +84,7 @@ const GeoLocationLogsPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleBlockCountry = async (countryCode) => {
-        if (!window.confirm(`${countryCode} ülkesini engellemek istiyor musunuz?`)) return;
+        if (!await confirmDialog(`${countryCode} ülkesini engellemek istiyor musunuz?`)) return;
 
         try {
             const token = localStorage.getItem('access_token');

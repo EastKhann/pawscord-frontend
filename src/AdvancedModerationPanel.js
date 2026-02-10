@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AdvancedModerationPanel.css';
+import confirmDialog from './utils/confirmDialog';
 
 /**
  * AdvancedModerationPanel Component
@@ -177,7 +178,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
       return;
     }
 
-    if (!window.confirm(`Execute mass ${massActionType}? This cannot be undone.`)) {
+    if (!await confirmDialog(`Execute mass ${massActionType}? This cannot be undone.`)) {
       return;
     }
 
@@ -300,7 +301,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
    * Clear user warnings
    */
   const clearWarnings = async (userId) => {
-    if (!window.confirm('Clear all warnings for this user?')) return;
+    if (!await confirmDialog('Clear all warnings for this user?')) return;
 
     try {
       const response = await fetch(`/api/moderation/warning/${userId}/clear/`, {

@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './MusicPlaylistsPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
     const [view, setView] = useState('playlists'); // 'playlists', 'create', 'djqueue', 'browse'
@@ -192,7 +193,7 @@ const MusicPlaylistsPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
     };
 
     const handleDeletePlaylist = async (playlistId) => {
-        if (!window.confirm('Bu playlist\'i silmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu playlist\'i silmek istediğinizden emin misiniz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './NotificationsCenter.css';
 import { FaBell, FaTimes, FaCog, FaCheck, FaEnvelope, FaMobileAlt, FaBellSlash, FaFilter } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const NotificationsCenter = ({ userId, onClose }) => {
     const [notifications, setNotifications] = useState([]);
@@ -105,7 +106,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
     };
 
     const clearAll = async () => {
-        if (!window.confirm('Are you sure you want to clear all notifications?')) return;
+        if (!await confirmDialog('Are you sure you want to clear all notifications?')) return;
 
         try {
             await fetchWithAuth(`${getApiBase()}/notifications/${userId}/clear/`, {

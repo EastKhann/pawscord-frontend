@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './AnnouncementsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const AnnouncementsPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -120,7 +121,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
   };
 
   const deleteAnnouncement = async (id) => {
-    if (!window.confirm('Duyuruyu silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Duyuruyu silmek istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/announcements/${id}/delete/`, {
         method: 'DELETE',

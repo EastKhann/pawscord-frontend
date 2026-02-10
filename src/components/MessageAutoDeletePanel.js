@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { autoDeleteApi } from '../services/niceToHaveApi';
 import './MessageAutoDeletePanel.css';
+import toast from '../utils/toast';
 
 const TIME_OPTIONS = [
     { value: 0, label: 'Disabled' },
@@ -40,9 +41,9 @@ function MessageAutoDeletePanel({ onClose }) {
         setLoading(true);
         try {
             await autoDeleteApi.updateSettings(settings);
-            alert('Settings saved! 💾');
+            toast.success('Settings saved! 💾');
         } catch (err) {
-            alert('Failed to save settings: ' + err.message);
+            toast.error('Failed to save settings: ' + err.message);
         }
         setLoading(false);
     };

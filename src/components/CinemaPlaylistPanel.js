@@ -9,6 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
 import './CinemaPlaylistPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
     const [activeTab, setActiveTab] = useState('queue');
@@ -200,7 +201,7 @@ const CinemaPlaylistPanel = ({ serverId, channelId, onClose }) => {
     };
 
     const handleDeletePlaylist = async (playlistId) => {
-        if (!window.confirm('Bu oynatma listesini silmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu oynatma listesini silmek istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`${getApiBase()}/api/servers/${serverId}/cinema/playlists/${playlistId}/`, {

@@ -36,6 +36,7 @@ import toast from './utils/toast';
 
 // 🔒 GÜVENLİK: XSS Koruması
 import { sanitizeHTML, sanitizeMessage } from './utils/security';
+import confirmDialog from './utils/confirmDialog';
 
 // --- YARDIMCI BİLEŞENLER ---
 
@@ -648,7 +649,7 @@ const Message = ({
                                 className="context-menu-item danger"
                                 style={{ ...styles.contextMenuItem, color: '#ed4245' }}
                                 onClick={async () => {
-                                    if (window.confirm('Bu mesajı silmek istediğinize emin misiniz?')) {
+                                    if (await confirmDialog('Bu mesajı silmek istediğinize emin misiniz?')) {
                                         await onDelete(msg.id);
                                         setContextMenu(null);
                                     }

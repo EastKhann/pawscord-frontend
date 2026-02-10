@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './PinRemindersPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const PinRemindersPanel = ({ serverId, onClose }) => {
     const [activeTab, setActiveTab] = useState('active');
@@ -78,7 +79,7 @@ const PinRemindersPanel = ({ serverId, onClose }) => {
     };
 
     const handleDeleteReminder = async (reminderId) => {
-        if (!window.confirm('Bu hatırlatıcıyı silmek istediğinize emin misiniz?')) return;
+        if (!await confirmDialog('Bu hatırlatıcıyı silmek istediğinize emin misiniz?')) return;
 
         try {
             const response = await fetch(`/api/servers/${serverId}/pin-reminders/${reminderId}/`, {

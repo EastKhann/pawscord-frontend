@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './WebhooksPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const WebhooksPanel = ({ serverId, onClose }) => {
   const [webhooks, setWebhooks] = useState([]);
@@ -131,7 +132,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
 
   // Delete webhook
   const deleteWebhook = async (webhookId) => {
-    if (!window.confirm('Bu webhook\'u silmek istediğinizden emin misiniz?')) {
+    if (!await confirmDialog('Bu webhook\'u silmek istediğinizden emin misiniz?')) {
       return;
     }
 
@@ -180,7 +181,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
 
   // Regenerate webhook token
   const regenerateToken = async (webhookId) => {
-    if (!window.confirm('Webhook tokenini yenilemek istediğinizden emin misiniz? Eski token geçersiz hale gelecek.')) {
+    if (!await confirmDialog('Webhook tokenini yenilemek istediğinizden emin misiniz? Eski token geçersiz hale gelecek.')) {
       return;
     }
 

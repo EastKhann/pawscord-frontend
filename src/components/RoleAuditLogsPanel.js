@@ -6,6 +6,8 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './RoleAuditLogsPanel.css';
+import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 const RoleAuditLogsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [logs, setLogs] = useState([]);
@@ -93,8 +95,8 @@ const RoleAuditLogsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) =>
     };
 
     const handleRevert = async (logId) => {
-        if (!window.confirm('Are you sure you want to revert this action?')) return;
-        alert('Revert functionality - API call would be made here');
+        if (!await confirmDialog('Are you sure you want to revert this action?')) return;
+        toast.info('Revert functionality - API call would be made here');
     };
 
     const handleExport = () => {
@@ -107,7 +109,7 @@ const RoleAuditLogsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) =>
             timestamp: new Date(log.timestamp).toISOString()
         }));
         console.log('Exporting:', csv);
-        alert('Export started - CSV download would begin');
+        toast.info('Export started - CSV download would begin');
     };
 
     const filteredLogs = logs.filter(log => {

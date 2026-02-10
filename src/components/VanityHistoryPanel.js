@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './VanityHistoryPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [history, setHistory] = useState([]);
@@ -54,7 +55,7 @@ const VanityHistoryPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleRevert = async (vanityUrl) => {
-        if (!window.confirm(`"${vanityUrl}" vanity URL'sine geri dönmek istiyor musunuz?`)) return;
+        if (!await confirmDialog(`"${vanityUrl}" vanity URL'sine geri dönmek istiyor musunuz?`)) return;
 
         try {
             const token = localStorage.getItem('access_token');

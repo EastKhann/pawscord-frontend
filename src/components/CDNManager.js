@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './CDNManager.css';
 import { FaCloud, FaTimes, FaUpload, FaTrash, FaLink, FaCopy, FaImage, FaVideo, FaFileAudio, FaFile } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const CDNManager = ({ serverId, onClose }) => {
     const [files, setFiles] = useState([]);
@@ -68,7 +69,7 @@ const CDNManager = ({ serverId, onClose }) => {
     };
 
     const deleteFile = async (fileId, fileUrl) => {
-        if (!window.confirm('Are you sure you want to delete this file?')) return;
+        if (!await confirmDialog('Are you sure you want to delete this file?')) return;
 
         try {
             await fetchWithAuth(`${getApiBase()}/cdn/delete/`, {

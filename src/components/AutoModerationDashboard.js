@@ -1,6 +1,7 @@
 // frontend/src/components/AutoModerationDashboard.js
 import React, { useState, useEffect } from 'react';
 import { FaShieldAlt, FaBan, FaExclamationTriangle, FaClock, FaCheck, FaTimes, FaPlus, FaCog, FaChartLine } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 🛡️ Auto-Moderation Dashboard
@@ -90,7 +91,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
     };
 
     const deleteRule = async (ruleId) => {
-        if (!window.confirm('Bu kuralı silmek istediğine emin misin?')) return;
+        if (!await confirmDialog('Bu kuralı silmek istediğine emin misin?')) return;
         
         try {
             await fetchWithAuth(`${apiBaseUrl}/moderation/rules/${ruleId}/`, {

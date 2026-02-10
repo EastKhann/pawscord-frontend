@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PaymentMethodsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const PaymentMethodsPanel = ({ onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -128,7 +129,7 @@ const PaymentMethodsPanel = ({ onClose }) => {
   };
 
   const removeCard = async (cardId) => {
-    if (!window.confirm('Bu kartı silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Bu kartı silmek istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/payments/cards/${cardId}/delete/`, {

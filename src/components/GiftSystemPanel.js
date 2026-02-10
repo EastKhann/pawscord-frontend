@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { giftApi } from '../services/niceToHaveApi';
 import './GiftSystemPanel.css';
+import toast from '../utils/toast';
 
 const GIFT_TYPES = [
     { id: 'coins', name: 'Coins', emoji: '💰', cost: null },
@@ -57,9 +58,9 @@ function GiftSystemPanel({ onClose }) {
             setIsAnonymous(false);
 
             loadGifts();
-            alert('Gift sent successfully! 🎁');
+            toast.success('Gift sent successfully! 🎁');
         } catch (err) {
-            alert('Failed to send gift: ' + err.message);
+            toast.error('Failed to send gift: ' + err.message);
         }
         setLoading(false);
     };
@@ -72,7 +73,7 @@ function GiftSystemPanel({ onClose }) {
                 loadGifts();
             }
         } catch (err) {
-            alert('Failed to open gift');
+            toast.error('Failed to open gift');
         }
     };
 

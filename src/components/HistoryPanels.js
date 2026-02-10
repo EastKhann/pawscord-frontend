@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './HistoryPanels.css';
+import confirmDialog from '../utils/confirmDialog';
 
 // Main History Tabs Component
 const HistoryPanels = ({ serverId, apiBaseUrl, onClose }) => {
@@ -88,7 +89,7 @@ const NicknameHistory = ({ serverId, apiBaseUrl }) => {
     };
 
     const handleRevertNickname = async (userId, nickname) => {
-        if (!window.confirm(`${nickname} takma adına geri dönmek istiyor musunuz?`)) return;
+        if (!await confirmDialog(`${nickname} takma adına geri dönmek istiyor musunuz?`)) return;
 
         try {
             const token = localStorage.getItem('access_token');
@@ -260,7 +261,7 @@ const TopicHistory = ({ serverId, apiBaseUrl }) => {
     };
 
     const handleRevertTopic = async (channelId, topic) => {
-        if (!window.confirm('Bu konuya geri dönmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu konuya geri dönmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

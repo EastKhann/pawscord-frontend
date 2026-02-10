@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './AnnouncementTemplatesPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [templates, setTemplates] = useState([]);
@@ -110,7 +111,7 @@ const AnnouncementTemplatesPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const deleteTemplate = async (templateId) => {
-        if (!window.confirm('Bu şablonu silmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu şablonu silmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

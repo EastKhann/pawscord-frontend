@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ServerBackupPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const ServerBackupPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -63,7 +64,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
   };
 
   const restoreBackup = async (backupId) => {
-    if (!window.confirm('Sunucuyu bu yedeğe geri yüklemek istediğinize emin misiniz? Bu işlem geri alınamaz!')) return;
+    if (!await confirmDialog('Sunucuyu bu yedeğe geri yüklemek istediğinize emin misiniz? Bu işlem geri alınamaz!')) return;
     
     try {
       const response = await fetch(`${apiBaseUrl}/backups/${backupId}/restore/`, {
@@ -100,7 +101,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
   };
 
   const deleteBackup = async (backupId) => {
-    if (!window.confirm('Yedeği silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Yedeği silmek istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/backups/${backupId}/delete/`, {
         method: 'DELETE',

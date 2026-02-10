@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './AuditLogs.css';
 import { FaHistory, FaTimes, FaFilter, FaSearch, FaUserShield, FaTrash, FaEdit, FaPlus, FaBan } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const AuditLogs = ({ serverId, onClose, fetchWithAuth: propsFetchWithAuth, apiBaseUrl: propsApiBaseUrl }) => {
     const apiBaseUrl = propsApiBaseUrl || getApiBase();
@@ -109,7 +110,7 @@ const AuditLogs = ({ serverId, onClose, fetchWithAuth: propsFetchWithAuth, apiBa
     };
 
     const clearOldLogs = async () => {
-        if (!window.confirm('Are you sure you want to delete logs older than 90 days?')) return;
+        if (!await confirmDialog('Are you sure you want to delete logs older than 90 days?')) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/audit/${serverId}/clear/`, {

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaTrophy, FaRedo, FaCheckDouble } from 'react-icons/fa';
 import { QUESTIONS_DB, LEVELS } from './data/grammarQuestions';
 import { API_BASE_URL } from './utils/constants';
+import toast from './utils/toast';
 
 // --- API AYARLARI (Centralized from constants.js) ---
 const API_URL_BASE = API_BASE_URL;
@@ -153,7 +154,7 @@ const GrammarQuizPage = () => {
             return (
                 <button
                     key={lvl.id}
-                    onClick={() => remaining > 0 ? startQuiz(lvl.id) : alert("Tebrikler! Bu seviyedeki tüm soruları tamamladın.")}
+                    onClick={() => remaining > 0 ? startQuiz(lvl.id) : toast.success("Tebrikler! Bu seviyedeki tüm soruları tamamladın.")}
                     style={{
                         ...styles.levelCard,
                         borderTop: `5px solid ${lvl.color}`,

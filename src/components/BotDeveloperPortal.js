@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './BotDeveloperPortal.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
     const [view, setView] = useState('list'); // 'list', 'create', 'edit', 'analytics', 'docs'
@@ -121,7 +122,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
     };
 
     const handleDeleteBot = async (botId) => {
-        if (!window.confirm('Bu botu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) return;
+        if (!await confirmDialog('Bu botu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) return;
 
         try {
             const token = localStorage.getItem('access_token');
@@ -143,7 +144,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
     };
 
     const handleRegenerateToken = async (botId) => {
-        if (!window.confirm('Token yenilenecek. Eski token geçersiz olacak. Devam?')) return;
+        if (!await confirmDialog('Token yenilenecek. Eski token geçersiz olacak. Devam?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

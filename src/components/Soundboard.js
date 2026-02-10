@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Soundboard.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const Soundboard = ({ serverId, onClose }) => {
   const [sounds, setSounds] = useState([]);
@@ -97,7 +98,7 @@ const Soundboard = ({ serverId, onClose }) => {
   };
 
   const deleteSound = async (soundId) => {
-    if (!window.confirm('Delete this sound?')) return;
+    if (!await confirmDialog('Delete this sound?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

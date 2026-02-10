@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './InvoiceHistoryPanel.css';
+import toast from '../utils/toast';
 
 const InvoiceHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [invoices, setInvoices] = useState([]);
@@ -80,14 +81,14 @@ const InvoiceHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBaseUrl }) => 
         try {
             const baseUrl = apiBaseUrl || getApiBase();
             await fetchWithAuth(`${baseUrl}/invoices/${invoiceId}/email/`, { method: 'POST' });
-            alert('Fatura e-posta adresinize gönderildi!');
+            toast.info('Fatura e-posta adresinize gönderildi!');
         } catch (error) {
             console.error('Error emailing invoice:', error);
         }
     };
 
     const handlePrint = (invoiceId) => {
-        alert(`Opening print dialog for invoice ${invoiceId}`);
+        toast.info(`Opening print dialog for invoice ${invoiceId}`);
     };
 
     const getStatusIcon = (status) => {

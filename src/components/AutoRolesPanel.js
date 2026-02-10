@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './AutoRolesPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const AutoRolesPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -134,7 +135,7 @@ const AutoRolesPanel = ({ serverId, onClose }) => {
   };
 
   const deleteAutoRole = async (autoRoleId) => {
-    if (!window.confirm('Otomatik rolü silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Otomatik rolü silmek istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/auto-roles/${autoRoleId}/delete/`, {

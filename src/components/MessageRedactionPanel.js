@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './MessageRedactionPanel.css';
 import { FaEraser, FaEyeSlash, FaLock } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 function MessageRedactionPanel({ apiBaseUrl, fetchWithAuth, messageId, onRedact }) {
   const [reason, setReason] = useState('');
@@ -18,7 +19,7 @@ function MessageRedactionPanel({ apiBaseUrl, fetchWithAuth, messageId, onRedact 
       return;
     }
 
-    if (!window.confirm('Redact this message? This action cannot be undone!')) {
+    if (!await confirmDialog('Redact this message? This action cannot be undone!')) {
       return;
     }
 

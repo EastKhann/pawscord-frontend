@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './TranslationSuggestionsPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -155,7 +156,7 @@ const TranslationSuggestionsPanel = ({ apiBaseUrl, onClose }) => {
     };
 
     const deleteSuggestion = async (suggestionId) => {
-        if (!window.confirm('Bu öneriyi silmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu öneriyi silmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

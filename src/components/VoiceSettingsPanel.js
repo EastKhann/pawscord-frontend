@@ -9,6 +9,7 @@ import {
     FaTimes, FaPlay, FaStop, FaMicrophoneSlash,
     FaExclamationTriangle, FaBolt, FaMusic
 } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 const VoiceSettingsPanel = ({ onClose, channelId }) => {
     // 🔥 VoiceContext'ten gerçek zamanlı ayarları al
@@ -246,8 +247,8 @@ const VoiceSettingsPanel = ({ onClose, channelId }) => {
         setMicLevel(0);
     };
 
-    const resetSettings = () => {
-        if (!window.confirm('Tüm ayarları varsayılana döndürmek istiyor musunuz?')) return;
+    const resetSettings = async () => {
+        if (!await confirmDialog('Tüm ayarları varsayılana döndürmek istiyor musunuz?')) return;
 
         const defaults = {
             input_device: 'default',

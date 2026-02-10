@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './RateLimitConfigPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const RateLimitConfigPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [config, setConfig] = useState(null);
@@ -106,8 +107,8 @@ const RateLimitConfigPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
     };
 
-    const handleReset = () => {
-        if (!window.confirm('Tüm ayarları varsayılana sıfırlamak istiyor musunuz?')) return;
+    const handleReset = async () => {
+        if (!await confirmDialog('Tüm ayarları varsayılana sıfırlamak istiyor musunuz?')) return;
         setConfig(defaultConfig);
         setHasChanges(true);
     };

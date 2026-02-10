@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ClipsSystem.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ClipsSystem = ({ serverId, onClose }) => {
   const [clips, setClips] = useState([]);
@@ -111,7 +112,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
   };
 
   const deleteClip = async (clipId) => {
-    if (!window.confirm('Delete this clip?')) return;
+    if (!await confirmDialog('Delete this clip?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './ScheduledRolesPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [activeTab, setActiveTab] = useState('scheduled'); // 'scheduled', 'history', 'create'
@@ -123,7 +124,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleDelete = async (scheduleId) => {
-        if (!window.confirm('Bu zamanlamayı silmek istediğinize emin misiniz?')) return;
+        if (!await confirmDialog('Bu zamanlamayı silmek istediğinize emin misiniz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');
@@ -142,7 +143,7 @@ const ScheduledRolesPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleExecuteNow = async (scheduleId) => {
-        if (!window.confirm('Bu zamanlamayı şimdi çalıştırmak istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu zamanlamayı şimdi çalıştırmak istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

@@ -5,6 +5,7 @@ import { FaTimes, FaCrown, FaShoppingCart, FaRocket, FaCheck, FaStar } from 'rea
 import { useAuth } from '../AuthContext';
 import CoinStoreModal from './CoinStoreModal';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const PremiumStoreModal = ({ onClose }) => {
     const { user, token } = useAuth();
@@ -224,7 +225,7 @@ const PremiumStoreModal = ({ onClose }) => {
                 await fetchUserInventory(); // 🔥 Envanteri güncelle
             } else if (data.insufficient_coins) {
                 // 💰 Yetersiz coin - coin store'u aç
-                const buyCoins = window.confirm(
+                const buyCoins = await confirmDialog(
                     `❌ Yetersiz bakiye!\n\n` +
                     `Gerekli: ${data.required} coin\n` +
                     `Mevcut: ${data.current} coin\n` +

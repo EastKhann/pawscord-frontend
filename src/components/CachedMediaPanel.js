@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './CachedMediaPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const CachedMediaPanel = ({ serverId, serverName, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [media, setMedia] = useState([]);
@@ -164,7 +165,7 @@ const CachedMediaPanel = ({ serverId, serverName, onClose, fetchWithAuth, apiBas
     };
 
     const handleClearAll = async () => {
-        if (!window.confirm('Tüm önbelleği temizlemek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Tüm önbelleği temizlemek istediğinizden emin misiniz?')) return;
 
         try {
             await fetch(`/api/servers/${serverId}/media/cached/clear/`, {

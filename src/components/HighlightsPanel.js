@@ -3,6 +3,7 @@ import './HighlightsPanel.css';
 import { toast } from 'react-toastify';
 import DOMPurify from 'dompurify';
 import { api } from '../services/ApiService';  // 🚀 Centralized API service
+import confirmDialog from '../utils/confirmDialog';
 
 const HighlightsPanel = ({ serverId, onClose }) => {
   const [config, setConfig] = useState({
@@ -68,7 +69,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
   };
 
   const clearHighlights = async () => {
-    if (!window.confirm('Tüm highlight geçmişini temizlemek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Tüm highlight geçmişini temizlemek istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/highlights/server/${serverId}/clear/`, {
         method: 'POST',

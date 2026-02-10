@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { emergencyBroadcastApi } from '../services/niceToHaveApi';
 import './EmergencyBroadcastPanel.css';
+import toast from '../utils/toast';
 
 const SEVERITY_OPTIONS = [
     { id: 'info', label: 'Info', color: '#3498db', icon: 'ℹ️' },
@@ -50,7 +51,7 @@ function EmergencyBroadcastPanel({ serverId, onClose }) {
             setShowCreate(false);
             loadBroadcasts();
         } catch (err) {
-            alert('Failed to create broadcast: ' + err.message);
+            toast.error('Failed to create broadcast: ' + err.message);
         }
         setLoading(false);
     };
@@ -60,7 +61,7 @@ function EmergencyBroadcastPanel({ serverId, onClose }) {
             await emergencyBroadcastApi.acknowledge(broadcastId);
             loadBroadcasts();
         } catch (err) {
-            alert('Failed to acknowledge');
+            toast.error('Failed to acknowledge');
         }
     };
 

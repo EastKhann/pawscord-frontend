@@ -1,6 +1,7 @@
 // 💎 Nitro Subscription Panel - Premium Membership Management
 import React, { useState, useEffect } from 'react';
 import './NitroSubscriptionPanel.css';
+import toast from '../utils/toast';
 
 const NitroSubscriptionPanel = ({ apiBaseUrl, token }) => {
     const [pricing, setPricing] = useState([]);
@@ -68,12 +69,12 @@ const NitroSubscriptionPanel = ({ apiBaseUrl, token }) => {
             if (data.checkout_url) {
                 window.location.href = data.checkout_url;
             } else {
-                alert('✅ Abonelik başlatıldı!');
+                toast.success('✅ Abonelik başlatıldı!');
                 loadSubscription();
             }
         } catch (error) {
             console.error('❌ Abonelik başlatılamadı:', error);
-            alert('❌ Abonelik başlatılamadı!');
+            toast.error('❌ Abonelik başlatılamadı!');
         }
     };
 
@@ -84,11 +85,11 @@ const NitroSubscriptionPanel = ({ apiBaseUrl, token }) => {
             await fetchWithAuth(`${apiBaseUrl}/nitro/cancel/`, {
                 method: 'POST',
             });
-            alert('✅ Abonelik iptal edildi!');
+            toast.success('✅ Abonelik iptal edildi!');
             loadSubscription();
         } catch (error) {
             console.error('❌ Abonelik iptal edilemedi:', error);
-            alert('❌ Abonelik iptal edilemedi!');
+            toast.error('❌ Abonelik iptal edilemedi!');
         }
     };
 
@@ -98,28 +99,28 @@ const NitroSubscriptionPanel = ({ apiBaseUrl, token }) => {
                 method: 'POST',
                 body: JSON.stringify({ tier_id: tierId }),
             });
-            alert('✅ Abonelik yükseltildi!');
+            toast.success('✅ Abonelik yükseltildi!');
             loadSubscription();
         } catch (error) {
             console.error('❌ Abonelik yükseltilemedi:', error);
-            alert('❌ Abonelik yükseltilemedi!');
+            toast.error('❌ Abonelik yükseltilemedi!');
         }
     };
 
     const handleRedeemGift = async () => {
-        if (!giftCode.trim()) return alert('❌ Lütfen bir kod girin!');
+        if (!giftCode.trim()) return toast.error('❌ Lütfen bir kod girin!');
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/nitro/redeem/`, {
                 method: 'POST',
                 body: JSON.stringify({ code: giftCode }),
             });
-            alert('✅ Hediye kodu kullanıldı!');
+            toast.success('✅ Hediye kodu kullanıldı!');
             setGiftCode('');
             loadSubscription();
         } catch (error) {
             console.error('❌ Kod kullanılamadı:', error);
-            alert('❌ Geçersiz veya kullanılmış kod!');
+            toast.error('❌ Geçersiz veya kullanılmış kod!');
         }
     };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './QuotesPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const QuotesPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -75,7 +76,7 @@ const QuotesPanel = ({ serverId, onClose }) => {
   };
 
   const deleteQuote = async (id) => {
-    if (!window.confirm('Alıntıyı silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Alıntıyı silmek istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/quotes/${id}/delete/`, {
         method: 'DELETE',

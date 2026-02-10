@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './AdvancedRoleHierarchyPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
     const [activeTab, setActiveTab] = useState('hierarchy');
@@ -156,7 +157,7 @@ const AdvancedRoleHierarchyPanel = ({ serverId, onClose }) => {
             return;
         }
 
-        if (!window.confirm(`"${role?.name}" rolünü silmek istediğinize emin misiniz?`)) return;
+        if (!await confirmDialog(`"${role?.name}" rolünü silmek istediğinize emin misiniz?`)) return;
 
         try {
             const response = await fetch(`/api/servers/${serverId}/roles/${roleId}/`, {

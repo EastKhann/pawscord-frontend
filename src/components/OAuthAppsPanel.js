@@ -66,7 +66,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
             // Show client ID and secret
             if (data.client_id && data.client_secret) {
-                alert(`Client ID: ${data.client_id}\nClient Secret: ${data.client_secret}\n\nSave these credentials securely. The secret will not be shown again.`);
+                toast.info(`Client ID: ${data.client_id}\nClient Secret: ${data.client_secret}\n\nSave these credentials securely. The secret will not be shown again.`);
             }
         } catch (error) {
             toast.error('Failed to create OAuth app');
@@ -94,7 +94,7 @@ const OAuthAppsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
             // Show bot token
             if (data.token) {
-                alert(`Bot Token: ${data.token}\n\nSave this token securely. It will not be shown again.`);
+                toast.info(`Bot Token: ${data.token}\n\nSave this token securely. It will not be shown again.`);
             }
         } catch (error) {
             toast.error('Failed to create bot');

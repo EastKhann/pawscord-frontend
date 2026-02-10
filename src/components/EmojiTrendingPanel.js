@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './EmojiTrendingPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const [trending, setTrending] = useState([]);
@@ -117,7 +118,7 @@ const EmojiTrendingPanel = ({ apiBaseUrl, serverId, onClose }) => {
     };
 
     const deleteEmoji = async (emojiId) => {
-        if (!window.confirm('Bu emojiyi silmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu emojiyi silmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

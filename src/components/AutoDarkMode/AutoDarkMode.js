@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import './AutoDarkMode.css';
+import toast from '../../utils/toast';
 
 // Theme Context
 const ThemeContext = createContext();
@@ -93,7 +94,7 @@ export const ThemeProvider = ({ children }) => {
     // Sunrise/Sunset based on location (simplified)
     const useSunriseSunset = useCallback(async () => {
         if (!navigator.geolocation) {
-            alert('Konum servisi desteklenmiyor');
+            toast.info('Konum servisi desteklenmiyor');
             return;
         }
 
@@ -120,11 +121,11 @@ export const ThemeProvider = ({ children }) => {
                     }
                 } catch (error) {
                     console.error('Sunrise/Sunset API error:', error);
-                    alert('Gün doğumu/batımı bilgisi alınamadı');
+                    toast.error('Gün doğumu/batımı bilgisi alınamadı');
                 }
             },
             (error) => {
-                alert('Konum alınamadı: ' + error.message);
+                toast.error('Konum alınamadı: ' + error.message);
             }
         );
     }, []);

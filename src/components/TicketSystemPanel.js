@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './TicketSystemPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const TicketSystemPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -141,7 +142,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
   };
 
   const closeTicket = async (ticketId) => {
-    if (!window.confirm('Ticket\'ı kapatmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Ticket\'ı kapatmak istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/close/`, {

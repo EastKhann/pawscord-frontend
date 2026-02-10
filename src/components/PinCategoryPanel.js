@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './PinCategoryPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
     const [categories, setCategories] = useState([]);
@@ -112,7 +113,7 @@ const PinCategoryPanel = ({ channelId, channelName, onClose }) => {
     };
 
     const handleDeleteCategory = async (categoryId) => {
-        if (!window.confirm('Bu kategoriyi silmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu kategoriyi silmek istediğinizden emin misiniz?')) return;
 
         try {
             await fetch(`/api/channels/${channelId}/pins/categories/${categoryId}/`, {

@@ -7,6 +7,7 @@ import toast from '../utils/toast';
 import ServerMembers from './ServerMembers';
 import AutoResponderManager from './AutoResponderManager';
 import VanityURLManager from './VanityURLManager';
+import confirmDialog from '../utils/confirmDialog';
 
 // 🆕 Welcome Templates component (creating inline for now)
 const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
@@ -354,7 +355,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
     };
 
     const handleDeleteRole = async (roleId) => {
-        if (!window.confirm("Bu rolü silmek istediğinize emin misiniz?")) return;
+        if (!await confirmDialog("Bu rolü silmek istediğinize emin misiniz?")) return;
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/roles/${roleId}/delete/`, { method: 'DELETE' });
             if (res.ok) {
@@ -868,7 +869,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                                             ? 'Sunucuyu herkese açık yapmak istediğinize emin misiniz? Herkes bu sunucuyu bulabilir ve katılabilir.'
                                                             : 'Sunucuyu özel yapmak istediğinize emin misiniz? Sadece davet edilen kişiler katılabilir.';
 
-                                                        if (!window.confirm(message)) return;
+                                                        if (!await confirmDialog(message)) return;
 
                                                         try {
                                                             const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/privacy/`, {
@@ -1238,7 +1239,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                             <button
                                                 style={styles.quickActionBtn}
                                                 onClick={async () => {
-                                                    if (!window.confirm('Sunucuyu kilitlemek istediğinize emin misiniz? Sadece yöneticiler mesaj yazabilir.')) return;
+                                                    if (!await confirmDialog('Sunucuyu kilitlemek istediğinize emin misiniz? Sadece yöneticiler mesaj yazabilir.')) return;
                                                     try {
                                                         const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
                                                             method: 'PATCH',
@@ -1260,7 +1261,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                             <button
                                                 style={styles.quickActionBtn}
                                                 onClick={async () => {
-                                                    if (!window.confirm('Yeni üyelikleri durdurmak istediğinize emin misiniz?')) return;
+                                                    if (!await confirmDialog('Yeni üyelikleri durdurmak istediğinize emin misiniz?')) return;
                                                     try {
                                                         await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
                                                             method: 'PATCH',

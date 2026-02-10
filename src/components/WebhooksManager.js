@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './WebhooksManager.css';
 import { FaPlug, FaTimes, FaPlus, FaTrash, FaEdit, FaCopy, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const WebhooksManager = ({ serverId, onClose }) => {
     const [webhooks, setWebhooks] = useState([]);
@@ -113,7 +114,7 @@ const WebhooksManager = ({ serverId, onClose }) => {
     };
 
     const deleteWebhook = async (webhookId) => {
-        if (!window.confirm('Are you sure you want to delete this webhook?')) return;
+        if (!await confirmDialog('Are you sure you want to delete this webhook?')) return;
 
         try {
             await fetchWithAuth(`${getApiBase()}/webhooks/${serverId}/${webhookId}/delete/`, {

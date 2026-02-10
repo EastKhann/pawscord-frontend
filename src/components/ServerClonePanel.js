@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './ServerClonePanel.css';
+import toast from '../utils/toast';
 
 const ServerClonePanel = ({ serverId, serverName, onClose, onClone }) => {
     const [loading, setLoading] = useState(true);
@@ -94,15 +95,15 @@ const ServerClonePanel = ({ serverId, serverName, onClose, onClone }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                alert(`Server "${newServerName}" created successfully!`);
+                toast.success(`Server "${newServerName}" created successfully!`);
                 if (onClone) onClone({ name: newServerName, ...options, newServerId: data.server_id });
             } else {
                 const data = await response.json();
-                alert(data.error || 'Failed to clone server');
+                toast.error(data.error || 'Failed to clone server');
             }
         } catch (error) {
             console.error('Error cloning server:', error);
-            alert('Failed to clone server');
+            toast.error('Failed to clone server');
         }
         onClose();
     };

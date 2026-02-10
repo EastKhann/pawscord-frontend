@@ -8,6 +8,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './ThemePresetsPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
     const [activeTab, setActiveTab] = useState('presets'); // 'presets', 'custom', 'create'
@@ -271,7 +272,7 @@ const ThemePresetsPanel = ({ serverId, apiBaseUrl, onClose, onApplyTheme }) => {
     };
 
     const deleteCustomTheme = async (themeId) => {
-        if (!window.confirm('Bu temayı silmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu temayı silmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

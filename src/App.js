@@ -423,6 +423,7 @@ const CHANGE_USERNAME_URL = `${API_BASE_URL}/users/change_username/`;
 const LOCAL_GIF_LIST_URL = `${API_BASE_URL}/gifs/list_local/`;
 // Google Client ID imported from constants.js
 import { GOOGLE_WEB_CLIENT_ID } from './utils/constants';
+import confirmDialog from './utils/confirmDialog';
 const DRAFT_STORAGE_KEY = 'chat_drafts_v1';
 
 const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();
@@ -1693,7 +1694,7 @@ const AppContent = () => {
     }
 
     const handleClearChat = async () => {
-        if (!window.confirm("Bu odadaki tüm mesajları silmek istediğine emin misin?")) return;
+        if (!await confirmDialog("Bu odadaki tüm mesajları silmek istediğine emin misin?")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/rooms/${activeChat.id}/clear/`, { method: 'POST' });
             if (res.ok) setMessages([]);
@@ -3379,7 +3380,7 @@ const AppContent = () => {
     }, [fetchWithAuth, username]);
 
     const handleDeleteMessage = async (messageId) => {
-        if (!window.confirm("Bu mesajı silmek istediğine emin misin?")) return;
+        if (!await confirmDialog("Bu mesajı silmek istediğine emin misin?")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/messages/${messageId}/delete/`, { method: 'DELETE' });
             if (res.ok) setMessages(prev => prev.filter(m => m.id !== messageId));
@@ -3415,7 +3416,7 @@ const AppContent = () => {
     };
 
     const handleHideConversation = async (conversationId) => {
-        if (!window.confirm("Bu sohbeti listenizden gizlemek istiyor musunuz?")) return;
+        if (!await confirmDialog("Bu sohbeti listenizden gizlemek istiyor musunuz?")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/conversations/${conversationId}/hide/`, { method: 'POST' });
             if (res.ok) {
@@ -3429,7 +3430,7 @@ const AppContent = () => {
 
     // 🔥 ADMIN: Permanently delete entire conversation (from both sides)
     const handleAdminDeleteConversation = async (conversationId) => {
-        if (!window.confirm("⚠️ ADMİN: Bu konuşmayı HER İKİ TARAFTAN KALICI OLARAK silmek istediğinize emin misiniz?\n\nBu işlem GERİ ALINAMAZ!")) return;
+        if (!await confirmDialog("⚠️ ADMİN: Bu konuşmayı HER İKİ TARAFTAN KALICI OLARAK silmek istediğinize emin misiniz?\n\nBu işlem GERİ ALINAMAZ!")) return;
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/conversations/${conversationId}/admin-delete/`, { method: 'DELETE' });
             if (res.ok) {
@@ -3495,7 +3496,7 @@ const AppContent = () => {
 
             case 'kick':
                 // Kanaldan at (admin/mod)
-                if (isAdmin && window.confirm(`${user.username} kullanıcısını kanaldan atmak istediğine emin misin?`)) {
+                if (isAdmin && await confirmDialog(`${user.username} kullanıcısını kanaldan atmak istediğine emin misin?`)) {
                     try {
                         const res = await fetchWithAuth(`${API_BASE_URL}/voice/kick_user/`, {
                             method: 'POST',
@@ -3557,7 +3558,7 @@ const AppContent = () => {
 
             case 'remove_friend':
                 // Arkadaştan çıkar
-                if (window.confirm(`${user.username} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) {
+                if (await confirmDialog(`${user.username} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) {
                     try {
                         // Friendship ID'sini bul
                         const friendship = friendsList.find(f =>
@@ -3611,7 +3612,7 @@ const AppContent = () => {
 
             case 'block_user':
                 // 🚫 Kullanıcıyı engelle
-                if (window.confirm(`${user.username} kullanıcısını engellemek istediğinize emin misiniz?`)) {
+                if (await confirmDialog(`${user.username} kullanıcısını engellemek istediğinize emin misiniz?`)) {
                     try {
                         const res = await fetchWithAuth(`${API_BASE_URL}/users/${user.username}/block/`, {
                             method: 'POST'

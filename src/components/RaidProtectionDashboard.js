@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './RaidProtectionDashboard.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
     const [view, setView] = useState('overview'); // 'overview', 'settings', 'logs', 'verify'
@@ -137,7 +138,7 @@ const RaidProtectionDashboard = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleLockdown = async () => {
-        const confirmed = window.confirm(
+        const confirmed = await confirmDialog(
             protectionStatus.lockdown_active
                 ? 'Sunucu kilidini açmak istediğinizden emin misiniz?'
                 : 'UYARI: Bu işlem sunucuyu kilitleyecek. Yeni üyeler katılamayacak. Devam?'

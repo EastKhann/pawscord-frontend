@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaExclamationTriangle, FaTimes, FaPlus, FaUser, FaBan, FaHistory, FaSearch, FaTrash } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * ⚠️ User Warnings Panel
@@ -96,7 +97,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                 
                 // Check if auto-ban threshold reached
                 if (data.total_warnings >= newWarning.auto_ban_on) {
-                    if (window.confirm(`User has ${data.total_warnings} warnings. Auto-ban now?`)) {
+                    if (await confirmDialog(`User has ${data.total_warnings} warnings. Auto-ban now?`)) {
                         await banUser(newWarning.user_id, `Auto-ban: ${newWarning.auto_ban_on} warnings reached`);
                     }
                 }
@@ -120,7 +121,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
     };
 
     const removeWarning = async (warningId) => {
-        if (!window.confirm('Remove this warning?')) return;
+        if (!await confirmDialog('Remove this warning?')) return;
 
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/${warningId}/`, {

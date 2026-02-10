@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './GiveawayPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const GiveawayPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -129,7 +130,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
   };
 
   const endGiveaway = async (giveawayId) => {
-    if (!window.confirm('Çekilişi sonlandırmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Çekilişi sonlandırmak istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/giveaways/${giveawayId}/end/`, {
@@ -175,7 +176,7 @@ const GiveawayPanel = ({ serverId, onClose }) => {
   };
 
   const deleteGiveaway = async (giveawayId) => {
-    if (!window.confirm('Çekilişi silmek istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Çekilişi silmek istediğinize emin misiniz?')) return;
 
     try {
       const response = await fetch(`${apiBaseUrl}/giveaways/${giveawayId}/delete/`, {

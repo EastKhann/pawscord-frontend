@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './IntegrationHubPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const IntegrationHubPanel = ({ serverId, onClose }) => {
     const [activeTab, setActiveTab] = useState('connected');
@@ -100,7 +101,7 @@ const IntegrationHubPanel = ({ serverId, onClose }) => {
     };
 
     const handleDisconnect = async (integrationId) => {
-        if (!window.confirm('Bu entegrasyonu kaldırmak istediğinize emin misiniz?')) return;
+        if (!await confirmDialog('Bu entegrasyonu kaldırmak istediğinize emin misiniz?')) return;
 
         try {
             const response = await fetch(`/api/servers/${serverId}/integrations/${integrationId}/disconnect/`, {
@@ -377,7 +378,7 @@ const WebhooksView = ({ serverId, token }) => {
     };
 
     const handleDeleteWebhook = async (webhookId) => {
-        if (!window.confirm('Bu webhook\'u silmek istediğinize emin misiniz?')) return;
+        if (!await confirmDialog('Bu webhook\'u silmek istediğinize emin misiniz?')) return;
 
         try {
             const response = await fetch(`/api/servers/${serverId}/webhooks/${webhookId}/`, {

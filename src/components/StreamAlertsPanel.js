@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './StreamAlertsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const StreamAlertsPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -144,7 +145,7 @@ const StreamAlertsPanel = ({ serverId, onClose }) => {
   };
 
   const removeStreamer = async (streamerId) => {
-    if (!window.confirm('Yayıncıyı kaldırmak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('Yayıncıyı kaldırmak istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/stream-alerts/streamer/${streamerId}/remove/`, {
         method: 'DELETE',

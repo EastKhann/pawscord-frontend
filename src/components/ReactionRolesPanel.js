@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './ReactionRolesPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const ReactionRolesPanel = ({ serverId, onClose }) => {
   const [reactionRoles, setReactionRoles] = useState([]);
@@ -119,7 +120,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
   };
 
   const deleteReactionRole = async (id) => {
-    if (!window.confirm('Bu reaction role\'ü silmek istediğinizden emin misiniz?')) {
+    if (!await confirmDialog('Bu reaction role\'ü silmek istediğinizden emin misiniz?')) {
       return;
     }
 

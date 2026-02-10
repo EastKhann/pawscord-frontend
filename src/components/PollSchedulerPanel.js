@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './PollSchedulerPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
     const [activeView, setActiveView] = useState('scheduled'); // 'scheduled', 'create', 'history'
@@ -110,7 +111,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleDelete = async (pollId) => {
-        if (!window.confirm('Bu zamanlanmış anketi silmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu zamanlanmış anketi silmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');
@@ -129,7 +130,7 @@ const PollSchedulerPanel = ({ serverId, apiBaseUrl, onClose }) => {
     };
 
     const handleStartNow = async (pollId) => {
-        if (!window.confirm('Bu anketi şimdi başlatmak istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu anketi şimdi başlatmak istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

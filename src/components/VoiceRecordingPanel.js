@@ -8,6 +8,7 @@ import {
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
 import './VoiceRecordingPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     const [activeTab, setActiveTab] = useState('record');
@@ -179,7 +180,7 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     };
 
     const deleteRecording = async (recordingId) => {
-        if (!window.confirm('Bu kaydı silmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu kaydı silmek istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/${recordingId}/`, {

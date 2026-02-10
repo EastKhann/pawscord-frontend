@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { profileThemeApi } from '../services/niceToHaveApi';
 import './ProfileThemePanel.css';
+import toast from '../utils/toast';
 
 const PRESETS = [
     { name: 'Ocean', primary: '#0066CC', secondary: '#004080', accent: '#00BFFF' },
@@ -55,9 +56,9 @@ function ProfileThemePanel({ onClose }) {
         setLoading(true);
         try {
             await profileThemeApi.setTheme(theme);
-            alert('Theme saved! 🎨');
+            toast.success('Theme saved! 🎨');
         } catch (err) {
-            alert('Failed to save theme: ' + err.message);
+            toast.error('Failed to save theme: ' + err.message);
         }
         setLoading(false);
     };

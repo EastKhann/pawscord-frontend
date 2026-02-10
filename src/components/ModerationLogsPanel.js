@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './ModerationLogsPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ModerationLogsPanel = ({ serverId, onClose }) => {
     const [logs, setLogs] = useState([]);
@@ -119,7 +120,7 @@ const ModerationLogsPanel = ({ serverId, onClose }) => {
     };
 
     const handleRevertAction = async (logId) => {
-        if (!window.confirm('Bu moderasyon eylemini geri almak istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu moderasyon eylemini geri almak istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`/api/servers/${serverId}/moderation/logs/${logId}/revert/`, {

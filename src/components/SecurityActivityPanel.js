@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { securityApi } from '../services/niceToHaveApi';
 import './SecurityActivityPanel.css';
+import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 const ACTIVITY_ICONS = {
     login: '🔓',
@@ -39,13 +41,13 @@ function SecurityActivityPanel({ onClose }) {
     };
 
     const handleRemoveDevice = async (deviceId) => {
-        if (!window.confirm('Remove this device? They will need to log in again.')) return;
+        if (!await confirmDialog('Remove this device? They will need to log in again.')) return;
 
         try {
             await securityApi.removeDevice(deviceId);
             setDevices(devices.filter(d => d.id !== deviceId));
         } catch (err) {
-            alert('Failed to remove device');
+            toast.error('Failed to remove device');
         }
     };
 

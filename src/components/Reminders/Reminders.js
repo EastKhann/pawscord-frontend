@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './Reminders.css';
+import toast from '../../utils/toast';
 
 // Parse time string like "30m", "2h", "1d", "15:30"
 const parseTimeString = (timeStr) => {
@@ -150,18 +151,18 @@ const Reminders = ({ userId, onReminderDue }) => {
 
     const handleAddReminder = () => {
         if (!timeInput || !messageInput.trim()) {
-            alert('Zaman ve mesaj girin!');
+            toast.info('Zaman ve mesaj girin!');
             return;
         }
 
         const time = parseTimeString(timeInput);
         if (!time) {
-            alert('Geçersiz zaman formatı! Örnek: 30m, 2h, 15:30');
+            toast.error('Geçersiz zaman formatı! Örnek: 30m, 2h, 15:30');
             return;
         }
 
         if (time <= Date.now()) {
-            alert('Geçmiş bir zaman seçemezsiniz!');
+            toast.info('Geçmiş bir zaman seçemezsiniz!');
             return;
         }
 

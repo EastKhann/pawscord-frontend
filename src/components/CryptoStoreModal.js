@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaCoins, FaShoppingBag, FaTshirt, FaCheck, FaLock, FaBitcoin } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     const [activeTab, setActiveTab] = useState('store'); // store, inventory, deposit
@@ -86,7 +87,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     }, [onClose]);
 
     const handleBuy = async (itemId) => {
-        if (!window.confirm("Bu ürünü satın almak istiyor musunuz?")) return;
+        if (!await confirmDialog("Bu ürünü satın almak istiyor musunuz?")) return;
         setLoading(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/store/buy/`, {

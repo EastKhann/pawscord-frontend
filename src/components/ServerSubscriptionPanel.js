@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './ServerSubscriptionPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ServerSubscriptionPanel = ({ serverId, onClose }) => {
     const [activeTab, setActiveTab] = useState('tiers');
@@ -114,7 +115,7 @@ const ServerSubscriptionPanel = ({ serverId, onClose }) => {
     };
 
     const handleDeleteTier = async (tierId) => {
-        if (!window.confirm('Bu abonelik seviyesini silmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu abonelik seviyesini silmek istediğinizden emin misiniz?')) return;
 
         try {
             await fetch(`/api/servers/${serverId}/subscriptions/tiers/${tierId}/`, {

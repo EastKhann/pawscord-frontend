@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaKey, FaUsb, FaFingerprint, FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 import './WebAuthnSetup.css';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 🔐 WebAuthn/FIDO2 Hardware Key Setup
@@ -123,7 +124,7 @@ const WebAuthnSetup = ({ apiBaseUrl, fetchWithAuth, onClose }) => {
     };
 
     const handleDelete = async (credentialId) => {
-        if (!window.confirm('Are you sure you want to remove this security key?')) {
+        if (!await confirmDialog('Are you sure you want to remove this security key?')) {
             return;
         }
 

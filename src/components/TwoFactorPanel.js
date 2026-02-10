@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaShieldAlt, FaKey, FaCopy, FaCheck, FaQrcode, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './TwoFactorPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const TwoFactorPanel = ({ onClose }) => {
     const [step, setStep] = useState('check'); // check, setup, verify, backup, complete
@@ -93,7 +94,7 @@ const TwoFactorPanel = ({ onClose }) => {
     };
 
     const disable2FA = async () => {
-        if (!window.confirm('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) {
+        if (!await confirmDialog('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) {
             return;
         }
 

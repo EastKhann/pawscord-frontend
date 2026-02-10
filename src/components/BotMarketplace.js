@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 import './BotMarketplace.css';
+import toast from '../utils/toast';
 
 // Bot Card Component
 const BotCard = ({ bot, onClick }) => (
@@ -83,10 +84,10 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
             if (response.ok) {
                 onInstall?.(bot, selectedServer);
                 setShowServerSelect(false);
-                alert(`${bot.name} başarıyla ${selectedServer.name} sunucusuna eklendi!`);
+                toast.success(`${bot.name} başarıyla ${selectedServer.name} sunucusuna eklendi!`);
             } else {
                 const error = await response.json();
-                alert(error.error || 'Yükleme başarısız');
+                toast.error(error.error || 'Yükleme başarısız');
             }
         } catch (e) {
             console.error('Install failed:', e);

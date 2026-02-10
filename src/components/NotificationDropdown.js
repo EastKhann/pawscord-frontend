@@ -1,6 +1,7 @@
 // frontend/src/components/NotificationDropdown.js
 import React, { useState, useEffect, useRef } from 'react';
 import { FaBell, FaTimes, FaCheck, FaCheckDouble, FaTrash } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 const NotificationDropdown = ({
     fetchWithAuth,
@@ -81,7 +82,7 @@ const NotificationDropdown = ({
     };
 
     const clearAll = async () => {
-        if (!window.confirm('Tüm bildirimleri silmek istediğinize emin misiniz?')) return;
+        if (!await confirmDialog('Tüm bildirimleri silmek istediğinize emin misiniz?')) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/notifications/clear_all/`, {

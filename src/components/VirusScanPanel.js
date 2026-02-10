@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaShieldAlt, FaCheckCircle, FaExclamationTriangle, FaTrash, FaDownload, FaSync } from 'react-icons/fa';
 import './VirusScanPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 🛡️ Virus Scan Panel
@@ -52,7 +53,7 @@ const VirusScanPanel = ({ serverId, apiBaseUrl, fetchWithAuth, onClose }) => {
     };
 
     const handleDelete = async (messageId) => {
-        if (!window.confirm('Are you sure you want to delete this file?')) {
+        if (!await confirmDialog('Are you sure you want to delete this file?')) {
             return;
         }
 

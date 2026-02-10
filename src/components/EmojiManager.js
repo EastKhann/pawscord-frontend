@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EmojiManager.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const EmojiManager = ({ serverId, onClose }) => {
   const [emojis, setEmojis] = useState([]);
@@ -113,7 +114,7 @@ const EmojiManager = ({ serverId, onClose }) => {
   };
 
   const deleteEmoji = async (emojiId) => {
-    if (!window.confirm('Delete this emoji?')) return;
+    if (!await confirmDialog('Delete this emoji?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

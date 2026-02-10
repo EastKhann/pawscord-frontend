@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaDownload, FaFile, FaClock, FaCheckCircle, FaSpinner, FaExclamationCircle } from 'react-icons/fa';
 import toast from '../utils/toast';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 📥 Export Jobs Panel
@@ -95,7 +96,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
     };
 
     const deleteJob = async (jobId) => {
-        if (!window.confirm('Delete this export job?')) return;
+        if (!await confirmDialog('Delete this export job?')) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/exports/${jobId}/delete/`, {

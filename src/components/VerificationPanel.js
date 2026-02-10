@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './VerificationPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const VerificationPanel = ({ serverId, onClose }) => {
   const apiBaseUrl = getApiBase();
@@ -127,7 +128,7 @@ const VerificationPanel = ({ serverId, onClose }) => {
   };
 
   const resetStats = async () => {
-    if (!window.confirm('İstatistikleri sıfırlamak istediğinize emin misiniz?')) return;
+    if (!await confirmDialog('İstatistikleri sıfırlamak istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/verification/server/${serverId}/reset-stats/`, {
         method: 'POST',

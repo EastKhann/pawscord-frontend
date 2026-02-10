@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaPlus, FaTrash, FaCheck, FaStickyNote } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, isAdmin }) => {
     const [templates, setTemplates] = useState([]);
@@ -45,7 +46,7 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
 
     const handleDelete = async (id, e) => {
         e.stopPropagation();
-        if (!window.confirm("Bu şablonu silmek istediğine emin misin?")) return;
+        if (!await confirmDialog("Bu şablonu silmek istediğine emin misin?")) return;
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/templates/${id}/`, { method: 'DELETE' });
             if (res.ok) {

@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './ProfileShowcasePanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBaseUrl }) => {
     const [showcases, setShowcases] = useState([]);
@@ -105,7 +106,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Bu öğeyi silmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Bu öğeyi silmek istediğinizden emin misiniz?')) return;
 
         try {
             await fetch(`/api/users/${userId}/showcase/${id}/`, {

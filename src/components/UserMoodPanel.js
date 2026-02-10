@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { moodApi } from '../services/niceToHaveApi';
 import './UserMoodPanel.css';
+import toast from '../utils/toast';
 
 const MOOD_OPTIONS = [
     { id: 'happy', emoji: '😊', label: 'Happy' },
@@ -65,9 +66,9 @@ function UserMoodPanel({ onClose }) {
             });
 
             loadMood();
-            alert('Mood updated! 🎭');
+            toast.info('Mood updated! 🎭');
         } catch (err) {
-            alert('Failed to update mood: ' + err.message);
+            toast.error('Failed to update mood: ' + err.message);
         }
         setLoading(false);
     };
@@ -88,7 +89,7 @@ function UserMoodPanel({ onClose }) {
             setCustomText('');
             setActivity('');
         } catch (err) {
-            alert('Failed to clear mood');
+            toast.error('Failed to clear mood');
         }
         setLoading(false);
     };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './CustomCommandsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const CustomCommandsPanel = ({ serverId, onClose }) => {
   const [commands, setCommands] = useState([]);
@@ -132,7 +133,7 @@ const CustomCommandsPanel = ({ serverId, onClose }) => {
   };
 
   const deleteCommand = async (commandId) => {
-    if (!window.confirm('Bu komutu silmek istediğinizden emin misiniz?')) return;
+    if (!await confirmDialog('Bu komutu silmek istediğinizden emin misiniz?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

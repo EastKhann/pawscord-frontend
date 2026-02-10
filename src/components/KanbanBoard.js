@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { FaPlus, FaTrash, FaEllipsisH, FaPencilAlt } from 'react-icons/fa';
 import KanbanCardModal from './KanbanCardModal';
+import confirmDialog from '../utils/confirmDialog';
 
 const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
     const [columns, setColumns] = useState([]);
@@ -143,7 +144,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
 
     const handleDeleteCard = async () => {
         if (!selectedCard) return;
-        if (!window.confirm("Are you sure you want to delete this card?")) return;
+        if (!await confirmDialog("Are you sure you want to delete this card?")) return;
 
         await fetchWithAuth(`${apiBaseUrl}/kanban/cards/${selectedCard.id}/delete/`, { method: 'DELETE' });
         setIsModalOpen(false);
@@ -163,7 +164,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
     };
 
     const handleDeleteColumn = async (colId) => {
-        if (!window.confirm("Delete this column and all its cards?")) return;
+        if (!await confirmDialog("Delete this column and all its cards?")) return;
         await fetchWithAuth(`${apiBaseUrl}/kanban/columns/${colId}/delete/`, { method: 'DELETE' });
         fetchBoard();
     };

@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import './GiveawayManagementPanel.css';
 import { getApiBase } from '../utils/apiEndpoints';
+import toast from '../utils/toast';
 
 const GiveawayManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [giveaways, setGiveaways] = useState([]);
@@ -100,7 +101,7 @@ const GiveawayManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
     };
 
     const handleRerollWinner = (id) => {
-        alert(`Rerolling winners for giveaway ${id}...`);
+        toast.info(`Rerolling winners for giveaway ${id}...`);
     };
 
     if (loading) {

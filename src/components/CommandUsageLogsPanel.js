@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './CommandUsageLogsPanel.css';
+import toast from '../utils/toast';
 
 const CommandUsageLogsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [logs, setLogs] = useState([]);
@@ -74,7 +75,7 @@ const CommandUsageLogsPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl })
     };
 
     const handleExport = () => {
-        alert('Exporting command logs...');
+        toast.info('Exporting command logs...');
     };
 
     if (loading) {

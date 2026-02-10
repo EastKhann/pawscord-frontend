@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './BookmarkTagsPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
     const [activeView, setActiveView] = useState('bookmarks'); // 'bookmarks', 'tags'
@@ -122,7 +123,7 @@ const BookmarkTagsPanel = ({ apiBaseUrl, onClose }) => {
     };
 
     const deleteTag = async (tagId) => {
-        if (!window.confirm('Bu etiketi silmek istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu etiketi silmek istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

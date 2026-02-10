@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './PremiumManagementPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
+import confirmDialog from '../utils/confirmDialog';
 
 const PremiumManagementPanel = ({ onClose }) => {
     const [pricingTiers, setPricingTiers] = useState([]);
@@ -78,7 +79,7 @@ const PremiumManagementPanel = ({ onClose }) => {
     };
 
     const cancelSubscription = async () => {
-        if (!window.confirm('Aboneliğinizi iptal etmek istediğinizden emin misiniz?')) return;
+        if (!await confirmDialog('Aboneliğinizi iptal etmek istediğinizden emin misiniz?')) return;
 
         try {
             const response = await fetch(`${apiBaseUrl}/nitro/cancel/`, {

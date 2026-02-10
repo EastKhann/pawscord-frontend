@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './DMPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 // 🔧 FIX: Avatar URL helper function
 const getFullAvatarUrl = (avatar) => {
@@ -259,7 +260,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
   };
 
   const removeFriend = async (friendId) => {
-    if (!window.confirm('Remove this friend?')) return;
+    if (!await confirmDialog('Remove this friend?')) return;
 
     try {
       const token = localStorage.getItem('access_token');
@@ -280,7 +281,7 @@ const DMPanel = ({ currentUserId, onClose }) => {
   };
 
   const deleteMessage = async (messageId) => {
-    if (!window.confirm('Delete this message?')) return;
+    if (!await confirmDialog('Delete this message?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

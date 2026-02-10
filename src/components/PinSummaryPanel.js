@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './PinSummaryPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const PinSummaryPanel = ({ apiBaseUrl, serverId, onClose }) => {
     const [channels, setChannels] = useState([]);
@@ -67,7 +68,7 @@ const PinSummaryPanel = ({ apiBaseUrl, serverId, onClose }) => {
     };
 
     const unpinMessage = async (messageId) => {
-        if (!window.confirm('Bu mesajı sabitlenmişlerden kaldırmak istiyor musunuz?')) return;
+        if (!await confirmDialog('Bu mesajı sabitlenmişlerden kaldırmak istiyor musunuz?')) return;
 
         try {
             const token = localStorage.getItem('access_token');

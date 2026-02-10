@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './ChannelAnalyticsPanel.css';
+import toast from '../utils/toast';
 
 const ChannelAnalyticsPanel = ({ channelId, channelName, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [analytics, setAnalytics] = useState(null);
@@ -76,7 +77,7 @@ const ChannelAnalyticsPanel = ({ channelId, channelName, onClose, fetchWithAuth,
     const getMaxValue = (data, key) => Math.max(...data.map(d => d[key]));
 
     const handleExport = () => {
-        alert('Exporting channel analytics...');
+        toast.info('Exporting channel analytics...');
     };
 
     if (loading) {

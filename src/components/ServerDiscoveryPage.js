@@ -1,6 +1,7 @@
 // 🔍 Server Discovery Page - Find & Join Public Servers
 import React, { useState, useEffect } from 'react';
 import './ServerDiscoveryPage.css';
+import toast from '../utils/toast';
 
 const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
     const [servers, setServers] = useState([]);
@@ -72,11 +73,11 @@ const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
             await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/join/`, {
                 method: 'POST',
             });
-            alert('✅ Sunucuya katıldınız!');
+            toast.success('✅ Sunucuya katıldınız!');
             if (onJoinServer) onJoinServer(serverId);
         } catch (error) {
             console.error('❌ Sunucuya katılınamadı:', error);
-            alert('❌ Sunucuya katılınamadı!');
+            toast.error('❌ Sunucuya katılınamadı!');
         }
     };
 

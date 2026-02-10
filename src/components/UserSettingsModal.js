@@ -4,6 +4,7 @@
 
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { FaUser, FaShieldAlt, FaPalette, FaMicrophone, FaBell, FaKeyboard, FaGlobe, FaSignOutAlt, FaTimes, FaLock, FaDesktop, FaCog, FaVolumeUp, FaGamepad, FaLink, FaHistory, FaTrash, FaToggleOn, FaToggleOff, FaChevronRight, FaCheck, FaCamera, FaSteam, FaSpotify, FaInstagram, FaTwitter, FaXbox, FaPlaystation, FaGithub } from 'react-icons/fa';
+import toast from '../utils/toast';
 
 const TABS = [
     { id: 'account', label: 'Hesabım', icon: FaUser, section: 'KULLANICI AYARLARI' },
@@ -472,7 +473,7 @@ const AdvancedTab = () => {
                             window.caches.keys().then(names => names.forEach(n => window.caches.delete(n)));
                         }
                         localStorage.removeItem('pawscord_msg_cache');
-                        alert('Önbellek temizlendi!');
+                        toast.info('Önbellek temizlendi!');
                     }} style={S.actionBtn}>
                         <FaTrash style={{ fontSize: 12 }} /> Önbelleği Temizle
                     </button>

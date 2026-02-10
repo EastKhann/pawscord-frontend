@@ -7,6 +7,7 @@ import {
     FaFileAlt, FaThumbtack, FaBell, FaComments, FaExclamationTriangle
 } from 'react-icons/fa';
 import toast from '../../utils/toast';
+import confirmDialog from '../../utils/confirmDialog';
 
 export const MessageContextMenu = memo(({
     msg,
@@ -129,7 +130,7 @@ export const MessageContextMenu = memo(({
                     className="context-menu-item danger"
                     style={{ ...styles.contextMenuItem, color: '#ed4245' }}
                     onClick={async () => {
-                        if (window.confirm('Bu mesajı silmek istediğinize emin misiniz?')) {
+                        if (await confirmDialog('Bu mesajı silmek istediğinize emin misiniz?')) {
                             await onDelete(msg.id);
                             onClose();
                         }

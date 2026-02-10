@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import './DiceRoller.css';
+import toast from '../../utils/toast';
 
 // Parse dice notation like "2d6", "1d20+5", "3d8-2"
 const parseDiceNotation = (notation) => {
@@ -76,7 +77,7 @@ const DiceRoller = ({ onRoll }) => {
     const handleRoll = useCallback(() => {
         const rollResult = rollDice(input);
         if (!rollResult) {
-            alert('Geçersiz format! Örnek: 1d20, 2d6+5, 3d8-2');
+            toast.error('Geçersiz format! Örnek: 1d20, 2d6+5, 3d8-2');
             return;
         }
 
@@ -196,7 +197,7 @@ export const RandomPicker = ({ onPick }) => {
     const handlePick = () => {
         const items = input.split(/[,\n]/).map(s => s.trim()).filter(s => s);
         if (items.length < 2) {
-            alert('En az 2 seçenek girin (virgül veya yeni satırla ayırın)');
+            toast.info('En az 2 seçenek girin (virgül veya yeni satırla ayırın)');
             return;
         }
 
@@ -320,7 +321,7 @@ export const RandomNumber = ({ onGenerate }) => {
 
     const handleGenerate = () => {
         if (min >= max) {
-            alert('Min değer Max değerden küçük olmalı!');
+            toast.info('Min değer Max değerden küçük olmalı!');
             return;
         }
 

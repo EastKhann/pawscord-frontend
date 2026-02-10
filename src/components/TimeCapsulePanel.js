@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { timeCapsuleApi } from '../services/niceToHaveApi';
 import './TimeCapsulePanel.css';
+import toast from '../utils/toast';
 
 function TimeCapsulePanel({ onClose }) {
     const [activeTab, setActiveTab] = useState('create');
@@ -27,7 +28,7 @@ function TimeCapsulePanel({ onClose }) {
 
     const handleCreate = async () => {
         if (!content || !deliverAt) {
-            alert('Please fill in the message and delivery date');
+            toast.info('Please fill in the message and delivery date');
             return;
         }
 
@@ -47,10 +48,10 @@ function TimeCapsulePanel({ onClose }) {
             setRecipientId('');
 
             loadCapsules();
-            alert('Time capsule created! 🔮');
+            toast.info('Time capsule created! 🔮');
             setActiveTab('pending');
         } catch (err) {
-            alert('Failed to create capsule: ' + err.message);
+            toast.error('Failed to create capsule: ' + err.message);
         }
         setLoading(false);
     };

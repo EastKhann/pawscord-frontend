@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CacheManagementPanel.css';
 import { FaRocket, FaDatabase, FaTrash, FaChartBar, FaServer, FaUsers, FaComments } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
   const [stats, setStats] = useState(null);
@@ -38,7 +39,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
   };
 
   const clearAllCache = async () => {
-    if (!window.confirm('Clear all cache? This may slow down the app temporarily.')) return;
+    if (!await confirmDialog('Clear all cache? This may slow down the app temporarily.')) return;
     
     setLoading(true);
     try {
@@ -75,7 +76,7 @@ function CacheManagementPanel({ apiBaseUrl, fetchWithAuth }) {
   };
 
   const optimizeDatabase = async () => {
-    if (!window.confirm('Optimize database? This may take a few seconds.')) return;
+    if (!await confirmDialog('Optimize database? This may take a few seconds.')) return;
     
     setLoading(true);
     try {

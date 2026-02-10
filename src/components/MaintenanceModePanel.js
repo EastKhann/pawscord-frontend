@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MaintenanceModePanel.css';
 import { FaTools, FaPowerOff, FaClock, FaBroadcastTower } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 function MaintenanceModePanel({ apiBaseUrl, fetchWithAuth }) {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -32,11 +33,11 @@ function MaintenanceModePanel({ apiBaseUrl, fetchWithAuth }) {
   };
 
   const toggleMaintenance = async () => {
-    if (isEnabled && !window.confirm('Disable maintenance mode? Users will regain access.')) {
+    if (isEnabled && !await confirmDialog('Disable maintenance mode? Users will regain access.')) {
       return;
     }
     
-    if (!isEnabled && !window.confirm('Enable maintenance mode? Regular users will be locked out!')) {
+    if (!isEnabled && !await confirmDialog('Enable maintenance mode? Regular users will be locked out!')) {
       return;
     }
 

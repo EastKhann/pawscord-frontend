@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaShieldAlt, FaExclamationCircle, FaUserSlash, FaBolt, FaChartBar, FaCog, FaTimes } from 'react-icons/fa';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * 🛡️ Raid Protection Panel
@@ -103,7 +104,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
     };
 
     const activateLockdown = async () => {
-        if (!window.confirm('⚠️ LOCKDOWN MODE\n\nThis will:\n- Block all new joins\n- Require manual approval for each user\n- Kick suspicious accounts\n\nActivate?')) return;
+        if (!await confirmDialog('⚠️ LOCKDOWN MODE\n\nThis will:\n- Block all new joins\n- Require manual approval for each user\n- Kick suspicious accounts\n\nActivate?')) return;
 
         try {
             await updateSetting('lockdown_mode', true);

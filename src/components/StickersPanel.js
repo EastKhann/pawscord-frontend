@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './StickersPanel.css';
+import confirmDialog from '../utils/confirmDialog';
 
 const StickersPanel = ({ serverId, onClose }) => {
   const [stickers, setStickers] = useState([]);
@@ -96,7 +97,7 @@ const StickersPanel = ({ serverId, onClose }) => {
   };
 
   const deleteSticker = async (stickerId) => {
-    if (!window.confirm('Delete this sticker?')) return;
+    if (!await confirmDialog('Delete this sticker?')) return;
 
     try {
       const token = localStorage.getItem('access_token');

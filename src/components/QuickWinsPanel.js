@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './QuickWinsPanel.css';
+import toast from '../utils/toast';
 
 const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
     const [challenges, setChallenges] = useState([]);
@@ -108,7 +109,7 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
             });
         } catch (error) {
             console.error('Challenge oluşturma hatası:', error);
-            alert('Challenge oluşturulamadı');
+            toast.info('Challenge oluşturulamadı');
         }
     };
 
@@ -117,13 +118,13 @@ const QuickWinsPanel = ({ serverId, apiBaseUrl, token }) => {
             const data = await fetchWithAuth(`${apiBaseUrl}/quickwins/challenge/${challengeId}/claim/`, {
                 method: 'POST'
             });
-            alert(`Tebrikler! ${data.points} puan kazandınız!`);
+            toast.success(`Tebrikler! ${data.points} puan kazandınız!`);
             loadChallenges();
             loadProgress();
             loadRewards();
         } catch (error) {
             console.error('Ödül alma hatası:', error);
-            alert('Ödül alınamadı');
+            toast.error('Ödül alınamadı');
         }
     };
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaLock, FaKey, FaSync, FaTrash, FaShieldAlt, FaCheckCircle, FaClock, FaExclamationTriangle } from 'react-icons/fa';
 import SafetyNumberModal from './SafetyNumberModal';
+import confirmDialog from '../utils/confirmDialog';
 
 /**
  * E2EE Settings Panel
@@ -36,7 +37,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
     };
 
     const handleRotateKeys = async () => {
-        if (!window.confirm('🔑 Anahtarları yenilemek istediğinizden emin misiniz?\n\nBu işlem:\n• Yeni kimlik anahtarları oluşturur\n• Eski şifreli mesajlar okunamaz hale gelir\n• Tüm kişilerle yeniden güvenlik doğrulaması gerekir')) {
+        if (!await confirmDialog('🔑 Anahtarları yenilemek istediğinizden emin misiniz?\n\nBu işlem:\n• Yeni kimlik anahtarları oluşturur\n• Eski şifreli mesajlar okunamaz hale gelir\n• Tüm kişilerle yeniden güvenlik doğrulaması gerekir')) {
             return;
         }
 
@@ -90,7 +91,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
     };
 
     const handleDisableE2EE = async () => {
-        if (!window.confirm('⚠️ E2EE\'yi devre dışı bırakmak istediğinizden emin misiniz?\n\nBu işlem:\n• Tüm şifreli mesajlarınızı siler\n• Anahtarlarınızı kaldırır\n• Geri alınamaz!')) {
+        if (!await confirmDialog('⚠️ E2EE\'yi devre dışı bırakmak istediğinizden emin misiniz?\n\nBu işlem:\n• Tüm şifreli mesajlarınızı siler\n• Anahtarlarınızı kaldırır\n• Geri alınamaz!')) {
             return;
         }
 

@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './GiftSubscriptionPanel.css';
+import toast from '../utils/toast';
 
 const GiftSubscriptionPanel = ({ userId, onClose }) => {
     const [activeTab, setActiveTab] = useState('send');
@@ -131,17 +132,17 @@ const GiftSubscriptionPanel = ({ userId, onClose }) => {
                 })
             });
             if (response.ok) {
-                alert(`Gift sent to ${selectedRecipient.username}!`);
+                toast.success(`Gift sent to ${selectedRecipient.username}!`);
                 setSelectedPlan(null);
                 setSelectedRecipient(null);
                 setMessage('');
             } else {
                 const data = await response.json();
-                alert(data.error || 'Failed to send gift');
+                toast.error(data.error || 'Failed to send gift');
             }
         } catch (error) {
             console.error('Error sending gift:', error);
-            alert('Failed to send gift');
+            toast.error('Failed to send gift');
         }
         setLoading(false);
     };

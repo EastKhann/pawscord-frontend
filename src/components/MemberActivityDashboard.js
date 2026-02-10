@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
 import './MemberActivityDashboard.css';
+import toast from '../utils/toast';
 
 const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
     const [members, setMembers] = useState([]);
@@ -104,7 +105,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
     };
 
     const handleExport = () => {
-        alert('Exporting member activity data...');
+        toast.info('Exporting member activity data...');
     };
 
     const sortedMembers = [...members]
