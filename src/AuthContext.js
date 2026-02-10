@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { API_URL_BASE_STRING } from './utils/constants';
 
@@ -175,8 +175,12 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(false);
     }, []);
 
+    const authValue = useMemo(() => ({
+        user, token, isAuthenticated, login, logout, isLoading, refreshAccessToken
+    }), [user, token, isAuthenticated, login, logout, isLoading, refreshAccessToken]);
+
     return (
-        <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout, isLoading, refreshAccessToken }}>
+        <AuthContext.Provider value={authValue}>
             {children}
         </AuthContext.Provider>
     );

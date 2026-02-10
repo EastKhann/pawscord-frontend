@@ -3,7 +3,7 @@
 // App.js statusWS is the SINGLE connection to /ws/status/.
 // App.js forwards messages here via setGlobalData so consumers still work.
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 
 const GlobalWebSocketContext = createContext(null);
 
@@ -28,12 +28,14 @@ export const GlobalWebSocketProvider = ({ children }) => {
         }
     }, []);
 
+    const contextValue = useMemo(() => ({
+        isConnected, setIsConnected,
+        globalData, setGlobalData: handleGlobalData,
+        unreadGlobal, setUnreadGlobal
+    }), [isConnected, globalData, unreadGlobal, handleGlobalData]);
+
     return (
-        <GlobalWebSocketContext.Provider value={{
-            isConnected, setIsConnected,
-            globalData, setGlobalData: handleGlobalData,
-            unreadGlobal, setUnreadGlobal
-        }}>
+        <GlobalWebSocketContext.Provider value={contextValue}>
             {children}
         </GlobalWebSocketContext.Provider>
     );

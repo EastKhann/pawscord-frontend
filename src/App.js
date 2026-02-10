@@ -1759,6 +1759,7 @@ const AppContent = () => {
             return;
         }
 
+        const newWs = new WebSocket(wsUrl);
         ws.current = newWs;
 
         newWs.onopen = () => {
