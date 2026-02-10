@@ -35,8 +35,7 @@ const ServerDiscoveryModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
             });
             if (res.ok) {
                 toast.success("✅ Sunucuya katıldın!");
-                // Sayfayı yenilemeye gerek yok, RoomList socket ile güncellenir ama garanti olsun:
-                window.location.reload();
+                onClose();
             } else {
                 const data = await res.json();
                 toast.error(data.error || "❌ Katılamadın.");

@@ -66,9 +66,8 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
 
             if (response.ok || data.success) {
                 toast.success(`✅ ${data.server_name || data.message || 'Sunucuya katıldınız!'}`);
-                // Ana sayfaya git
-                window.location.hash = '#/';
-                setTimeout(() => window.location.reload(), 200);
+                // Ana sayfaya git - sayfa yenileme yok
+                onClose();
             } else if (data.error && data.error.includes('zaten')) {
                 toast.info('ℹ️ Zaten bu sunucudasınız!');
                 onClose();
@@ -103,8 +102,8 @@ function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {
 
             if (response.ok) {
                 toast.success(`✅ ${data.server_name ? `"${data.server_name}" sunucusuna katıldınız!` : 'Sunucuya katıldınız!'}`);
-                window.location.hash = '#/';
-                setTimeout(() => window.location.reload(), 200);
+                // Ana sayfaya git - sayfa yenileme yok
+                onClose();
             } else {
                 throw new Error(data.error || 'Sunucuya katılınamadı');
             }

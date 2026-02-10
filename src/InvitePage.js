@@ -139,7 +139,6 @@ const InvitePage = () => {
                     } else {
                         // Internal route (ör: /)
                         navigate(redirectUrl);
-                        window.location.reload();
                     }
                 }, 2000);
             } else {

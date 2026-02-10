@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import { FaCopy, FaTimes, FaCheck, FaSearch, FaLink, FaUserFriends, FaHashtag } from 'react-icons/fa';
+import { FaCopy, FaTimes, FaCheck, FaSearch, FaLink, FaUserFriends, FaHashtag, FaSync } from 'react-icons/fa';
 import toast from '../utils/toast';
 
 const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }) => {
@@ -11,6 +11,7 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
     const [inviteLink, setInviteLink] = useState('');
     const [copied, setCopied] = useState(false);
     const [loadingLink, setLoadingLink] = useState(true);
+    const [isRegenerating, setIsRegenerating] = useState(false);
     const searchRef = useRef(null);
 
     // Modal açılınca: arkadaşları çek + mevcut sınırsız linki kontrol et/oluştur
@@ -46,6 +47,35 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
             console.error('[InviteModal] Create error:', e);
         } finally {
             setLoadingLink(false);
+        }
+    };
+
+    // 🔄 Yeni link oluştur (eski linki geçersiz kılmadan yeni bir tane)
+    const regenerateLink = async () => {
+        if (!server?.id) return;
+        setIsRegenerating(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    server_id: server.id,
+                    max_uses: 0,
+                    expires_in_hours: 0
+                })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
+                setInviteLink(link);
+                toast.success('🔗 Yeni davet linki oluşturuldu!');
+            } else {
+                toast.error('Link oluşturulamadı');
+            }
+        } catch (e) {
+            toast.error('Link oluşturulurken hata: ' + e.message);
+        } finally {
+            setIsRegenerating(false);
         }
     };
 
@@ -261,6 +291,31 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
                             </div>
                         )}
                     </div>
+                    {inviteLink && !loadingLink && (
+                        <button
+                            onClick={regenerateLink}
+                            disabled={isRegenerating}
+                            style={{
+                                background: 'transparent',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                color: '#b5bac1',
+                                padding: '6px 12px',
+                                borderRadius: '4px',
+                                cursor: isRegenerating ? 'wait' : 'pointer',
+                                fontSize: '12px',
+                                marginTop: '6px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                transition: 'all 0.15s',
+                            }}
+                            onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.06)'; e.target.style.color = '#fff'; }}
+                            onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#b5bac1'; }}
+                        >
+                            <FaSync style={{ fontSize: '11px', animation: isRegenerating ? 'inviteSpin 1s linear infinite' : 'none' }} />
+                            {isRegenerating ? 'Oluşturuluyor...' : 'Yeni Link Oluştur'}
+                        </button>
+                    )}
                     <div style={st.linkNote}>
                         Bu davet linki süresiz geçerli ve sınırsız kullanımlı.
                     </div>

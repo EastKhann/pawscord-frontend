@@ -60,11 +60,9 @@ function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) 
             // Başarılı katılım mesajı
             toast.success(`✅ ${serverInfo.server_name} sunucusuna katıldınız!`);
 
-            // Sunucuya katıldıktan sonra ana sayfaya git ve sunucuyu aç
-            window.location.hash = `#/?joined_server=${serverInfo.server_id}`;
-
-            // Sayfayı yenile (sunucu listesini güncellemek için)
-            setTimeout(() => window.location.reload(), 100);
+            // Sunucuya katıldıktan sonra ana sayfaya dön
+            if (onClose) onClose();
+            else window.location.hash = '#/';
         } catch (err) {
             // Hata mesajını toast ile göster
             if (err.message.includes('zaten')) {

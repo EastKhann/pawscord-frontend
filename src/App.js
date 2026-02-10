@@ -1555,8 +1555,21 @@ const AppContent = () => {
 
                         if (res.ok) {
                             toast.success('Sunucuya katıldınız!');
-                            // Sunucu listesini yenile
-                            window.location.reload();
+                            // 🔥 FIX: Sayfa yenileme yerine sunucu listesini API'den yenile
+                            try {
+                                const roomsRes = await fetchWithAuth(ROOM_LIST_URL);
+                                if (roomsRes.ok) {
+                                    const rooms = await roomsRes.json();
+                                    setCategories(rooms);
+                                    // Yeni sunucuya otomatik git
+                                    const joinedServer = rooms.find(s => s.id === parseInt(joinServerId));
+                                    if (joinedServer) {
+                                        handleServerSelect(joinedServer);
+                                    }
+                                }
+                            } catch (e) {
+                                console.warn('Server list refresh failed, continue anyway:', e);
+                            }
                         } else {
                             const data = await res.json();
                             toast.error(data.error || 'Sunucuya katılınamadı');
@@ -2328,13 +2341,43 @@ const AppContent = () => {
         }
     }, [fetchWithAuth]);
 
-    // 🔥 YENİ: Sunucu seçildiğinde üyeleri yükle (kanala basmadan)
+    // 🔥 YENİ: Sunucu seçildiğinde üyeleri yükle + ilk kanalı otomatik aç
     const handleServerSelect = useCallback((server) => {
         console.log('🖱️ [Server Select] Server clicked:', server.name, server.id);
         setSelectedServer(server);
         fetchServerMembersById(server.id);
-        // activeChat'i 'server' moduna al - sağ panelde üyeleri göster
-        setActiveChat('server', server.id, null);
+
+        // 🔥 FIX: Sunucuya girince ilk metin kanalını otomatik aç
+        // Sunucunun metadata'sında default_channel_slug varsa onu kullan
+        const defaultSlug = server.metadata?.default_channel_slug;
+        let selectedRoom = null;
+
+        if (server.categories && Array.isArray(server.categories)) {
+            for (const cat of server.categories) {
+                if (cat.rooms && Array.isArray(cat.rooms)) {
+                    for (const room of cat.rooms) {
+                        // Önce default channel'ı ara
+                        if (defaultSlug && room.slug === defaultSlug) {
+                            selectedRoom = room;
+                            break;
+                        }
+                        // İlk metin kanalını kaydet (voice olmayan)
+                        if (!selectedRoom && room.room_type !== 'voice') {
+                            selectedRoom = room;
+                        }
+                    }
+                    if (selectedRoom && defaultSlug && selectedRoom.slug === defaultSlug) break;
+                }
+            }
+        }
+
+        if (selectedRoom) {
+            console.log('📺 [Server Select] Auto-selecting room:', selectedRoom.name, selectedRoom.slug);
+            setActiveChat('room', selectedRoom.slug, null);
+        } else {
+            // Kanal bulunamadıysa server modunda kal
+            setActiveChat('server', server.id, null);
+        }
     }, [fetchServerMembersById, setActiveChat]);
 
     useEffect(() => {
