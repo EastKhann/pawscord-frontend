@@ -251,18 +251,17 @@ const MessageInput = ({
         }
     }, [onFileUpload]);
 
-    // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını HEMEN GÖNDER
+    // 🆕 AppContent'ten gelen sürükle-bırak dosyalarını ÖNİZLEMEYE EKLE
     useEffect(() => {
         if (pendingFilesFromDrop && pendingFilesFromDrop.length > 0) {
             // Parent'taki state'i temizle
             if (onClearPendingFiles) {
                 onClearPendingFiles();
             }
-            // 🔥 FIX: Dosyaları pendingFiles'a eklemek yerine direkt gönder
-            const filesToSend = [...pendingFilesFromDrop];
-            sendPendingFiles(filesToSend);
+            // 📋 Dosyaları önizleme listesine ekle (kullanıcı gönder/iptal seçer)
+            setPendingFiles(prev => [...prev, ...pendingFilesFromDrop]);
         }
-    }, [pendingFilesFromDrop, onClearPendingFiles, sendPendingFiles]);
+    }, [pendingFilesFromDrop, onClearPendingFiles]);
 
     const handleSubmit = useCallback(async (e) => {
         e?.preventDefault();
@@ -425,7 +424,7 @@ const MessageInput = ({
         const files = Array.from(e.dataTransfer?.files || []);
         if (files.length === 0) return;
 
-        // 🔥 FIX: Dosyaları direkt gönder (preview'a eklemek yerine)
+        // �️ Dosyaları önizleme listesine ekle (kullanıcı gönder/iptal seçer)
         const processedFiles = [];
         for (const file of files) {
             const previewUrl = file.type.startsWith('image/') || file.type.startsWith('video/')
@@ -442,9 +441,9 @@ const MessageInput = ({
             });
         }
 
-        // 🔥 Hemen gönder - preview'a eklemek yerine direkt upload
-        sendPendingFiles(processedFiles);
-    }, [sendPendingFiles]);
+        // 📋 Önizlemeye ekle - kullanıcı Enter ile gönderir veya X ile iptal eder
+        setPendingFiles(prev => [...prev, ...processedFiles]);
+    }, []);
 
     const startRecording = async () => {
         try {
