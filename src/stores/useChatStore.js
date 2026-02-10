@@ -41,8 +41,6 @@ export const useChatStore = create((set, get) => ({
             chatTargetUser = targetUser;
         }
 
-        console.log('🔄 [Store] setActiveChat called:', { type, id: chatId, targetUser: chatTargetUser });
-        console.log('🔄 [Store] Current messages count:', get().messages.length);
 
         // ✅ FIX: messages'ı burada temizleme!
         // Mesajlar fetchMessageHistory veya cache'den yüklenecek

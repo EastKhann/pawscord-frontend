@@ -195,7 +195,6 @@ export const inlineCriticalCSS = () => {
     style.id = 'critical-css';
     style.textContent = CRITICAL_CSS;
     document.head.insertBefore(style, document.head.firstChild);
-    console.log('✅ Critical CSS inlined');
 };
 
 /**
@@ -208,7 +207,6 @@ export const lazyLoadCSS = (href) => {
         link.rel = 'stylesheet';
         link.href = href;
         link.onload = () => {
-            console.log(`✅ Lazy loaded CSS: ${href}`);
             resolve();
         };
         link.onerror = reject;
@@ -258,12 +256,10 @@ export const optimizeFontLoading = () => {
     );
 
     if (isElectron) {
-        console.log('⚡ [Performance] Electron\'da font preload atlandı');
         return;
     }
 
     // Font preload kaldırıldı - artık kullanılmıyor (system font stack)
-    console.log('⚡ [Performance] Font preload atlandı - system fonts kullanılıyor');
 };
 
 /**
@@ -280,13 +276,11 @@ export const preloadKeyResources = () => {
     );
 
     if (isElectron) {
-        console.log('ℹ️ Preload skipped: Electron detected');
         return;
     }
 
     // ⚠️ Preload kaldırıldı - logo R2 CDN'den yükleniyor, local dosya yok
     // Bu sayede "preloaded but not used" uyarısı çıkmaz
-    console.log('✅ Key resources preloaded');
 };
 
 /**
@@ -299,7 +293,6 @@ export const removeCriticalCSS = () => {
         // Full CSS yüklendikten 1 saniye sonra kaldır
         setTimeout(() => {
             criticalStyle.remove();
-            console.log('🗑️ Critical CSS removed (full CSS loaded)');
         }, 1000);
     }
 };

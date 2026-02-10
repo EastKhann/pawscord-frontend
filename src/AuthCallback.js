@@ -20,7 +20,6 @@ const AuthCallback = ({ apiBaseUrl }) => {
         const handleCallback = async () => {
             // Prevent double execution (React StrictMode / re-renders)
             if (exchangeAttempted.current) {
-                console.log('🔐 [AuthCallback] Exchange already attempted, skipping...');
                 return;
             }
             exchangeAttempted.current = true;
@@ -31,11 +30,6 @@ const AuthCallback = ({ apiBaseUrl }) => {
             const errorParam = searchParams.get('error');
             const needsPassword = searchParams.get('needs_password') === 'true';
 
-            console.log('🔐 [AuthCallback] Starting...', {
-                hasCode: !!code,
-                hasAccessToken: !!accessToken,
-                apiBaseUrl
-            });
 
             // Check for error
             if (errorParam) {
@@ -48,7 +42,6 @@ const AuthCallback = ({ apiBaseUrl }) => {
 
             // 🔐 DIRECT TOKEN MODE: Tokens passed directly in URL
             if (accessToken && refreshToken) {
-                console.log('🔐 [AuthCallback] Direct token mode');
                 try {
                     // Store tokens securely (🔥 FIX: refresh_token snake_case kullan)
                     localStorage.setItem('access_token', accessToken);
@@ -87,14 +80,12 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 setStatus('exchanging');
 
                 const exchangeUrl = `${apiBaseUrl}/auth/exchange-code/`;
-                console.log('🔐 [AuthCallback] Exchanging code at:', exchangeUrl);
 
                 // Exchange auth code for tokens (secure exchange)
                 const response = await api.post(exchangeUrl, {
                     code: code
                 });
 
-                console.log('🔐 [AuthCallback] Response:', response.data);
 
                 if (response.data.success) {
                     const { access_token, refresh_token, user_id, needs_password } = response.data;

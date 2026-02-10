@@ -183,7 +183,6 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
     };
 
     const showToast = (message, type = 'success') => {
-        console.log(`[${type}] ${message}`);
     };
 
     const getRoleIcon = (roleName) => {

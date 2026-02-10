@@ -73,7 +73,6 @@ class APIClient {
             const cached = this.getFromCache(fullURL);
             if (cached) {
                 if (import.meta.env.MODE === 'development') {
-                    console.log('🎯 [API] Cache hit:', fullURL);
                 }
                 return cached;
             }
@@ -84,7 +83,6 @@ class APIClient {
             const pending = this.pendingRequests.get(fullURL);
             if (pending) {
                 if (import.meta.env.MODE === 'development') {
-                    console.log('⏳ [API] Deduplicating:', fullURL);
                 }
                 return pending;
             }
@@ -192,7 +190,6 @@ class APIClient {
             const delay = this.retryDelay * Math.pow(2, attempt - 1);
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`🔄 [API] Retrying ${config.url} (${attempt}/${this.retryAttempts}) in ${delay}ms`);
             }
 
             await new Promise(resolve => setTimeout(resolve, delay));

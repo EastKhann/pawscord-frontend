@@ -71,7 +71,6 @@ class StatePersistenceManager {
             }
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`💾 [StatePersistence] Set: ${key} (${storage})`);
             }
 
             return true;

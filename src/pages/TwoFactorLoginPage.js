@@ -44,7 +44,6 @@ const TwoFactorLoginPage = () => {
         }
 
         try {
-            console.log('🔐 [2FA] Verifying code with temp_token...');
             const response = await fetch(`${API_BASE_URL}/security/2fa/verify-login/`, {
                 method: 'POST',
                 headers: {
@@ -59,7 +58,6 @@ const TwoFactorLoginPage = () => {
             const data = await response.json();
 
             if (response.ok && data.verified) {
-                console.log('✅ [2FA] Verification successful, logging in...');
                 // Use AuthContext login — sets tokens, user state, schedules refresh
                 login(data.access, data.refresh);
                 navigate('/');

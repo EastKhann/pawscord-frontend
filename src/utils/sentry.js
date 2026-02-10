@@ -1,17 +1,23 @@
 // frontend/src/utils/sentry.js
-// 🐛 Sentry Error Tracking Integration
+// 🐛 Sentry Error Tracking Integration (v8+)
 
 import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
 
 // Initialize Sentry
 export const initSentry = () => {
+    const dsn = import.meta.env.VITE_SENTRY_DSN;
+
+    // Skip if no DSN or placeholder DSN
+    if (!dsn || dsn.includes('your-sentry-dsn')) {
+        return;
+    }
+
     if (import.meta.env.MODE === 'production') {
         Sentry.init({
-            dsn: import.meta.env.VITE_SENTRY_DSN || "https://your-sentry-dsn@sentry.io/project-id",
+            dsn,
             integrations: [
-                new BrowserTracing(),
-                new Sentry.Replay({
+                Sentry.browserTracingIntegration(),
+                Sentry.replayIntegration({
                     maskAllText: true,
                     blockAllMedia: true,
                 }),
@@ -68,9 +74,7 @@ export const initSentry = () => {
             },
         });
 
-        console.log('✅ Sentry initialized');
     } else {
-        console.log('ℹ️ Sentry disabled in development');
     }
 };
 
@@ -121,7 +125,7 @@ export const trackAction = (action, data = {}) => {
 
 // Performance tracking
 export const startTransaction = (name, op = 'custom') => {
-    return Sentry.startTransaction({ name, op });
+    return Sentry.startSpan({ name, op }, () => { });
 };
 
 export default {

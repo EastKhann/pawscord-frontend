@@ -13,7 +13,6 @@ export const measurePerformance = (metricName, fn) => {
   if (duration > 100) {
     console.warn(`⚠️ Slow operation: ${metricName} took ${duration.toFixed(2)}ms`);
   } else if (duration > 16) {
-    console.log(`ℹ️ ${metricName}: ${duration.toFixed(2)}ms`);
   }
 
   // Performance API'ye kaydet
@@ -108,7 +107,6 @@ class PerformanceMonitor {
   logMetric(name) {
     const result = this.endMeasure(name);
     if (result) {
-      console.log(`📊 ${result.name}: ${result.duration.toFixed(2)}ms`);
     }
   }
 
@@ -132,13 +130,6 @@ export const logNetworkTiming = (url) => {
   const entries = performance.getEntriesByName(url);
   if (entries.length > 0) {
     const entry = entries[entries.length - 1];
-    console.log(`🌐 Network timing for ${url}:`, {
-      DNS: entry.domainLookupEnd - entry.domainLookupStart,
-      TCP: entry.connectEnd - entry.connectStart,
-      Request: entry.responseStart - entry.requestStart,
-      Response: entry.responseEnd - entry.responseStart,
-      Total: entry.responseEnd - entry.requestStart
-    });
   }
 };
 
@@ -148,12 +139,6 @@ export const logNetworkTiming = (url) => {
 export const logMemoryUsage = () => {
   if (performance.memory) {
     const usage = performance.memory;
-    console.log('💾 Memory usage:', {
-      used: `${(usage.usedJSHeapSize / 1024 / 1024).toFixed(2)} MB`,
-      total: `${(usage.totalJSHeapSize / 1024 / 1024).toFixed(2)} MB`,
-      limit: `${(usage.jsHeapSizeLimit / 1024 / 1024).toFixed(2)} MB`,
-      percentage: `${((usage.usedJSHeapSize / usage.jsHeapSizeLimit) * 100).toFixed(2)}%`
-    });
   }
 };
 

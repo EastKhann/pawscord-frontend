@@ -23,8 +23,6 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
 
     const languages = [
         { id: 'python', name: 'Python', icon: <FaPython />, template: '# Python Code\nprint("Hello, World!")' },
-        { id: 'javascript', name: 'JavaScript', icon: <FaJs />, template: '// JavaScript Code\nconsole.log("Hello, World!");' },
-        { id: 'java', name: 'Java', icon: <FaJava />, template: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}' },
         { id: 'cpp', name: 'C++', icon: <FaCode />, template: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}' },
         { id: 'c', name: 'C', icon: <FaCode />, template: '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}' },
         { id: 'ruby', name: 'Ruby', icon: <FaCode />, template: '# Ruby Code\nputs "Hello, World!"' },

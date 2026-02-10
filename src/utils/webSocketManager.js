@@ -48,7 +48,6 @@ class WebSocketManager {
             this.setupEventHandlers();
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`🔌 [WebSocket] Connecting to ${this.url}...`);
             }
         } catch (error) {
             console.error('WebSocket connection error:', error);
@@ -67,7 +66,6 @@ class WebSocketManager {
             this.isReconnecting = false;
             this.reconnectAttempts = 0;
 
-            console.log('✅ [WebSocket] Connected');
             this.emit('open', event);
 
             // Send queued messages
@@ -95,7 +93,6 @@ class WebSocketManager {
                 }
 
                 if (import.meta.env.MODE === 'development') {
-                    console.log('📨 [WebSocket] Message received:', data);
                 }
             } catch (error) {
                 console.error('Failed to parse WebSocket message:', error);
@@ -112,7 +109,6 @@ class WebSocketManager {
             this.isConnected = false;
             this.stopHeartbeat();
 
-            console.log(`🔌 [WebSocket] Disconnected (code: ${event.code})`);
             this.emit('close', event);
 
             // Auto reconnect if not a normal closure
@@ -133,7 +129,6 @@ class WebSocketManager {
                 this.ws.send(message);
 
                 if (import.meta.env.MODE === 'development') {
-                    console.log('📤 [WebSocket] Message sent:', data);
                 }
 
                 return true;
@@ -159,7 +154,6 @@ class WebSocketManager {
         this.messageQueue.push(message);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`📦 [WebSocket] Message queued (${this.messageQueue.length})`);
         }
     }
 
@@ -169,7 +163,6 @@ class WebSocketManager {
     flushMessageQueue() {
         if (this.messageQueue.length === 0) return;
 
-        console.log(`📤 [WebSocket] Flushing ${this.messageQueue.length} queued messages`);
 
         while (this.messageQueue.length > 0) {
             const message = this.messageQueue.shift();
@@ -247,7 +240,6 @@ class WebSocketManager {
             this.maxReconnectDelay
         );
 
-        console.log(`🔄 [WebSocket] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
         this.reconnectTimer = setTimeout(() => {
             this.connect();

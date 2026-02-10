@@ -64,7 +64,6 @@ const PremiumStoreModal = ({ onClose }) => {
             // ✅ Array kontrolü ekle
             const inventoryArray = Array.isArray(data) ? data : [];
             setUserInventory(inventoryArray);
-            console.log('📦 [INVENTORY] Kullanıcı envanteri:', inventoryArray);
         } catch (error) {
             console.error('Inventory hatası:', error);
             setUserInventory([]); // Hata durumunda boş array
@@ -218,11 +217,10 @@ const PremiumStoreModal = ({ onClose }) => {
             });
 
             const data = await response.json();
-            console.log('🛒 [PURCHASE] Response:', data); // Debug için
-
-            if (data.success) {
-                toast.success(`🎉 ${item.name} başarıyla satın alındı!\n\nYeni bakiye: ${data.new_balance} coin`);
-                await fetchUserInventory(); // 🔥 Envanteri güncelle
+            if (response.ok) {
+                toast.success(`✅ ${item.name} satın alındı!`);
+                setUserCoins(data.remaining_coins || userCoins - item.price);
+                await fetchUserInventory();
             } else if (data.insufficient_coins) {
                 // 💰 Yetersiz coin - coin store'u aç
                 const buyCoins = await confirmDialog(

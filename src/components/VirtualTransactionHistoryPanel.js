@@ -97,7 +97,6 @@ const VirtualTransactionHistoryPanel = ({ userId, onClose, fetchWithAuth, apiBas
             description: t.description,
             balance: t.balance_after
         }));
-        console.log('Exporting:', csv);
     };
 
     const filteredTransactions = transactions.filter(t => {

@@ -97,7 +97,6 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
 
     const exportSummary = (summary) => {
         const content = `# Message Summary - ${summary.channel}\n\nGenerated: ${formatDate(summary.created_at)}\nMessages Analyzed: ${summary.message_count}\nTime Range: ${summary.time_range}\n\n${summary.summary}`;
-        console.log('Exporting:', content);
     };
 
     if (loading) {

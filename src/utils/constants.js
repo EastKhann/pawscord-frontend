@@ -60,6 +60,6 @@ export const URLS = {
     DOWNLOAD: "https://api.pawscord.com/api/download/latest/"
 };
 
-export const GOOGLE_WEB_CLIENT_ID = "774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com";
+export const GOOGLE_WEB_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com";
 export const VIDEO_ASPECT_RATIO = 16 / 9;
 

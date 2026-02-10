@@ -34,7 +34,6 @@ class Analytics {
 
     // Console log in development
     if (import.meta.env.MODE === 'development') {
-      console.log('📊 Analytics Event:', event);
     }
 
     // Send to backend

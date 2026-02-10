@@ -59,7 +59,6 @@ const RolesManager = ({ serverId, onClose }) => {
 
   const createRole = async () => {
     if (!newRole.name.trim()) {
-      console.log('⚠️ Role name required');
       return;
     }
 
@@ -76,7 +75,6 @@ const RolesManager = ({ serverId, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Role created successfully');
         setRoles([...roles, data.role]);
         setShowCreateModal(false);
         setNewRole({ name: '', color: '#8b5cf6', hoist: false, mentionable: true, permissions: 0 });
@@ -102,7 +100,6 @@ const RolesManager = ({ serverId, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Role updated');
         setRoles(roles.map(r => r.id === roleId ? data.role : r));
         setEditingRole(null);
       } else {
@@ -124,7 +121,6 @@ const RolesManager = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Role deleted');
         setRoles(roles.filter(r => r.id !== roleId));
       } else {
         console.error('❌ Failed to delete role');
@@ -147,7 +143,6 @@ const RolesManager = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Roles reordered');
         fetchRoles();
       } else {
         console.error('❌ Failed to reorder roles');
@@ -170,7 +165,6 @@ const RolesManager = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Role assigned');
       } else {
         console.error('❌ Failed to assign role');
       }
@@ -192,7 +186,6 @@ const RolesManager = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Role removed');
       } else {
         console.error('❌ Failed to remove role');
       }
@@ -237,7 +230,6 @@ const RolesManager = ({ serverId, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Role copied');
         setRoles([...roles, data.role]);
       } else {
         console.error('❌ Failed to copy role');

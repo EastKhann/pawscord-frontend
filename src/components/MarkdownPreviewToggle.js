@@ -4,6 +4,7 @@
 
 import React, { useState, memo, useMemo } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import DOMPurify from 'dompurify';
 
 const parseMarkdown = (text) => {
     if (!text) return '';
@@ -55,7 +56,7 @@ const MarkdownPreviewToggle = ({ text, show, onToggle }) => {
                     <div style={S.previewLabel}>Önizleme</div>
                     <div
                         style={S.previewContent}
-                        dangerouslySetInnerHTML={{ __html: html }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }}
                     />
                 </div>
             )}

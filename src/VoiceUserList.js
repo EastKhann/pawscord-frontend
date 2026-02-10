@@ -63,13 +63,6 @@ const VoiceUserList = ({
     // 🔍 Debug: Log users (only in development)
     useEffect(() => {
         if (import.meta.env.MODE === 'development') {
-            console.log(`🔊 [VoiceUserList] ${roomName}:`, {
-                propVoiceUsers,
-                globalVoiceUsers: globalData?.voice_users,
-                finalVoiceUsers: voiceUsers,
-                usersInRoom: usersInRoom,
-                userCount: usersInRoom.length
-            });
         }
     }, [propVoiceUsers, globalData, roomName, usersInRoom]);    // ✅ EVENT HANDLER'LARI
     const handleVolumeChange = useCallback((user, event) => {

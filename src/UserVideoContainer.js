@@ -8,11 +8,9 @@ const VideoPlayer = ({ stream, isMirrored, objectFit = 'cover', muted = false })
     useEffect(() => {
         if (videoRef.current && stream) {
             videoRef.current.srcObject = stream;
-            console.log('🎥 Video stream attached:', stream.id);
 
             // Video ready olduğunda log
             videoRef.current.onloadedmetadata = () => {
-                console.log('✅ Video metadata loaded');
                 videoRef.current.play().catch(err => {
                     console.error('❌ Video play error:', err);
                 });

@@ -36,7 +36,6 @@ class FeatureFlagsManager {
         }
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🚩 [FeatureFlags] Initialized');
         }
     }
 
@@ -79,7 +78,6 @@ class FeatureFlagsManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`✅ [FeatureFlags] Registered: ${key} = ${this.flags.get(key).enabled}`);
         }
     }
 
@@ -179,7 +177,6 @@ class FeatureFlagsManager {
         this.emit('flagChange', { key, value });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🚩 [FeatureFlags] Override: ${key} = ${value}`);
         }
     }
 
@@ -219,7 +216,6 @@ class FeatureFlagsManager {
             this.saveToCache();
 
             if (import.meta.env.MODE === 'development') {
-                console.log('🚩 [FeatureFlags] Fetched remote flags');
             }
         } catch (error) {
             console.error('Failed to fetch feature flags:', error);

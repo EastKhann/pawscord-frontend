@@ -8,7 +8,6 @@ export function registerServiceWorker() {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/service-worker.js')
                 .then(registration => {
-                    console.log('✅ Service Worker registered:', registration.scope);
 
                     // Check for updates
                     registration.addEventListener('updatefound', () => {
@@ -16,7 +15,6 @@ export function registerServiceWorker() {
                         newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                 // New service worker available
-                                console.log('ℹ️ Yeni service worker hazır - UI güncelleme butonu aktif');
                                 newWorker.postMessage({ type: 'SKIP_WAITING' });
                                 // Otomatik reload kaldırıldı - kullanıcı istediğinde güncellesin
                             }

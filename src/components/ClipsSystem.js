@@ -77,7 +77,6 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Clip started:', data.clip_id);
         setTimeout(() => {
           stopClip(data.clip_id);
         }, 30000); // Auto-stop after 30 seconds
@@ -100,7 +99,6 @@ const ClipsSystem = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Clip saved');
         setRecording(false);
         setClipName('');
         if (activeTab === 'my-clips') fetchMyClips();
@@ -122,7 +120,6 @@ const ClipsSystem = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Clip deleted');
         setClips(clips.filter(c => c.id !== clipId));
       }
     } catch (error) {
@@ -143,7 +140,6 @@ const ClipsSystem = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Clip shared');
       }
     } catch (error) {
       console.error('Error sharing clip:', error);

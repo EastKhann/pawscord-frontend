@@ -189,7 +189,6 @@ const VoiceSettingsPanel = ({ onClose, channelId }) => {
         if (audioTrack && audioTrack.applyConstraints) {
             try {
                 await audioTrack.applyConstraints(constraints);
-                console.log('🎛️ [Settings] Applied constraints:', constraints);
             } catch (err) {
                 console.warn('⚠️ [Settings] Could not apply constraints:', err);
             }

@@ -42,7 +42,6 @@ class DataPrefetcher {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🔮 [Prefetcher] Initialized');
         }
     }
 
@@ -114,7 +113,6 @@ class DataPrefetcher {
 
         try {
             if (import.meta.env.MODE === 'development') {
-                console.log(`🔮 [Prefetcher] Fetching: ${item.key}`);
             }
 
             const data = await item.fetchFn();
@@ -157,7 +155,6 @@ class DataPrefetcher {
         if (!cached) return null;
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🎯 [Prefetcher] Cache hit: ${key}`);
         }
 
         return cached.data;
@@ -266,7 +263,6 @@ class DataPrefetcher {
         const predicted = this.predictNextNavigation();
         if (predicted) {
             if (import.meta.env.MODE === 'development') {
-                console.log(`🔮 [Prefetcher] Predicted next: ${predicted}`);
             }
 
             // Trigger prediction event

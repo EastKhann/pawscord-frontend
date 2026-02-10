@@ -60,7 +60,6 @@ const setRtcIceServers = (servers) => {
 // 🔥 Platform detection now imported from constants.js
 // isElectron, API_URL_BASE_STRING, WS_PROTOCOL, API_HOST - all from constants.js
 
-console.log('[VoiceContext] 🎯 isElectron:', isElectron, 'API_URL:', API_URL_BASE_STRING, 'WS_PROTOCOL:', WS_PROTOCOL, 'API_HOST:', API_HOST);
 
 export const VoiceProvider = ({ children }) => {
     const { user, token } = useAuth();
@@ -234,7 +233,6 @@ export const VoiceProvider = ({ children }) => {
     const refreshIceServers = useCallback(async () => {
         // Skip if no token (not authenticated)
         if (!token) {
-            console.log('🧊 [RTC] No token, using STUN only');
             setIceServers(DEFAULT_ICE_SERVERS);
             setRtcIceServers(DEFAULT_ICE_SERVERS);
             return;
@@ -267,7 +265,6 @@ export const VoiceProvider = ({ children }) => {
             const newServers = [...DEFAULT_ICE_SERVERS, ...(data?.iceServers || [])];
             setIceServers(newServers);
             setRtcIceServers(newServers);
-            console.log('🧊 [RTC] ICE servers updated with TURN credentials:', newServers.length, 'servers');
         } catch (err) {
             // Fallback to STUN-only (always works)
             console.warn('🧊 [RTC] Using STUN-only mode:', err.message);
@@ -337,7 +334,6 @@ export const VoiceProvider = ({ children }) => {
         if (!globalAudioContextRef.current) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             globalAudioContextRef.current = new AudioContext();
-            console.log('🎵 [Performance] Global AudioContext created (reused for all users)');
         }
 
         const audioContext = globalAudioContextRef.current;
@@ -412,11 +408,9 @@ export const VoiceProvider = ({ children }) => {
                         };
 
                         spatialAudio.addUser(username, stream, position);
-                        console.log(`🎧 [Spatial] Added ${username} at angle ${(angle * 180 / Math.PI).toFixed(0)}°`);
                     }
                 });
 
-                console.log('🎧 [Spatial Audio] ENABLED - 3D audio active!');
             } catch (err) {
                 console.error('Failed to enable spatial audio:', err);
                 toast.warning('Spatial Audio başlatılamadı. Tarayıcınız desteklemiyor olabilir.');
@@ -425,7 +419,6 @@ export const VoiceProvider = ({ children }) => {
         } else {
             // Spatial audio'yu kapat
             spatialAudio.destroy();
-            console.log('🎧 [Spatial Audio] DISABLED - Normal stereo audio');
         }
 
         setIsSpatialAudioEnabled(newState);
@@ -437,7 +430,6 @@ export const VoiceProvider = ({ children }) => {
         const clamped = Math.max(20, Math.min(80, newSensitivity)); // 20-80 arası
         setVadSensitivity(clamped);
         localStorage.setItem('pawscord_vad_sensitivity', clamped.toString());
-        console.log(`🎚️ [VAD] Sensitivity updated: ${clamped}`);
     }, []);
 
     // 🔥 YENİ: Noise Suppression Toggle (fallback ile)
@@ -457,7 +449,6 @@ export const VoiceProvider = ({ children }) => {
                         echoCancellation: true,
                         autoGainControl: true
                     });
-                    console.log(`🎛️ [Noise Suppression] ${newState ? 'ENABLED' : 'DISABLED'}`);
                 } catch (err) {
                     console.warn('[Noise] Failed to apply, trying fallback getUserMedia:', err);
                     try {
@@ -482,7 +473,6 @@ export const VoiceProvider = ({ children }) => {
                         const newStream = new MediaStream([track]);
                         setLocalAudioStream(newStream);
                         localStreamRef.current = newStream;
-                        console.log('[Noise] Enhanced fallback stream acquired');
                     } catch (e2) {
                         console.error('[Noise] Fallback failed:', e2);
                     }
@@ -506,14 +496,12 @@ export const VoiceProvider = ({ children }) => {
             console.error('[Noise Level] Storage error:', e);
         }
 
-        console.log(`🎛️ [Noise Level] Updated to: ${newLevel}`);
     }, []);
 
     // 🔥 YENİ: System Audio Toggle (Ekran paylaşımında)
     const toggleSystemAudio = useCallback((enabled) => {
         setIncludeSystemAudio(enabled);
         localStorage.setItem('pawscord_system_audio', enabled.toString());
-        console.log(`🔊 [System Audio] ${enabled ? 'ENABLED' : 'DISABLED'}`);
     }, []);
 
     // 🔥 YENİ: PTT Mode Toggle
@@ -523,7 +511,6 @@ export const VoiceProvider = ({ children }) => {
         localStorage.setItem('pawscord_ptt_mode', newMode.toString());
 
         if (newMode) {
-            console.log('🎙️ [PTT] Mode enabled, VAD disabled');
             // PTT mode'da mikrofon başlangıçta kapalı
             if (localStreamRef.current) {
                 localStreamRef.current.getAudioTracks().forEach(track => {
@@ -532,7 +519,6 @@ export const VoiceProvider = ({ children }) => {
             }
             setIsMuted(true);
         } else {
-            console.log('🎙️ [PTT] Mode disabled, VAD enabled');
             // Normal mode'a dönünce mikrofonu aç
             if (localStreamRef.current) {
                 localStreamRef.current.getAudioTracks().forEach(track => {
@@ -547,7 +533,6 @@ export const VoiceProvider = ({ children }) => {
     const updatePTTKey = useCallback((key) => {
         setPTTKey(key);
         localStorage.setItem('pawscord_ptt_key', key);
-        console.log(`⌨️ [PTT] Key updated to: ${key}`);
     }, []);
 
     // 🔥 YENİ: PTT Keyboard Listener
@@ -569,7 +554,6 @@ export const VoiceProvider = ({ children }) => {
                         track.enabled = true;
                     });
                 }
-                console.log('🎙️ [PTT] Key pressed, mic ON');
             }
         };
 
@@ -582,7 +566,6 @@ export const VoiceProvider = ({ children }) => {
                         track.enabled = false;
                     });
                 }
-                console.log('🎙️ [PTT] Key released, mic OFF');
             }
         };
 
@@ -599,7 +582,6 @@ export const VoiceProvider = ({ children }) => {
     const updateScreenQuality = useCallback((quality) => {
         setScreenShareQuality(quality);
         localStorage.setItem('pawscord_screen_quality', quality);
-        console.log(`📺 [Screen Quality] Updated to: ${quality}`);
     }, []);
 
     // 🔥 YENİ: Screen FPS Update
@@ -607,7 +589,6 @@ export const VoiceProvider = ({ children }) => {
         const fpsInt = parseInt(fps);
         setScreenShareFPS(fpsInt);
         localStorage.setItem('pawscord_screen_fps', fpsInt.toString());
-        console.log(`🎬 [Screen FPS] Updated to: ${fpsInt}`);
     }, []);
 
     // 🔥 YENİ: Spatial audio state değişince remote stream'leri güncelle
@@ -631,7 +612,6 @@ export const VoiceProvider = ({ children }) => {
                     };
 
                     spatialAudio.addUser(username, stream, position);
-                    console.log(`🎧 [Spatial] Auto-added ${username}`);
                 }
             }
         });
@@ -739,7 +719,6 @@ export const VoiceProvider = ({ children }) => {
             };
 
             const settings = levelSettings[level] || levelSettings.high;
-            console.log(`🔊 [Audio] Noise suppression level: ${level}`, settings);
 
             // 🔥 PERFORMANS: Global AudioContext kullan (10 kullanıcı = 10 context yerine 1 context!)
             if (!globalAudioContextRef.current) {
@@ -749,7 +728,6 @@ export const VoiceProvider = ({ children }) => {
                     sampleRate: 48000,  // WebRTC standart sample rate
                     latencyHint: 'interactive'  // Düşük gecikme modu
                 });
-                console.log('🎵 [Performance] Global AudioContext created (48kHz, interactive mode)');
             }
 
             const audioContext = globalAudioContextRef.current;
@@ -757,7 +735,6 @@ export const VoiceProvider = ({ children }) => {
             // 🔥 CIZIRTIYI ÖNLE: Suspended context'i resume et
             if (audioContext.state === 'suspended') {
                 audioContext.resume().then(() => {
-                    console.log('🎵 [Audio] AudioContext resumed from suspended state');
                 });
             }
 
@@ -838,7 +815,6 @@ export const VoiceProvider = ({ children }) => {
 
                 if (learningPhase && silentFrames > 50) {
                     learningPhase = false;
-                    console.log('🎯 [Audio] Noise profile learned');
                 }
             };
 
@@ -897,10 +873,8 @@ export const VoiceProvider = ({ children }) => {
             // 🔥 CLEANUP: Stream temizlendiğinde interval'ı durdur
             destination.stream.addEventListener('inactive', () => {
                 clearInterval(noiseGateInterval);
-                console.log('🎚️ [Audio] Filter chain cleaned up');
             });
 
-            console.log('🎚️ [Audio] Professional filters applied: Notch(50Hz) + De-Esser + Compressor + Noise Gate');
 
             return destination.stream;
         } catch (error) {
@@ -925,7 +899,6 @@ export const VoiceProvider = ({ children }) => {
             const videoSender = senders.find(sender => sender.track?.kind === 'video');
 
             if (!videoSender) {
-                console.log('[Bandwidth] No video sender found, skipping adjustment');
                 return;
             }
 
@@ -948,7 +921,6 @@ export const VoiceProvider = ({ children }) => {
 
             videoSender.setParameters(parameters)
                 .then(() => {
-                    console.log(`✅ [Bandwidth] Video quality set to ${quality.toUpperCase()} (${settings.maxBitrate / 1000}kbps, ${settings.maxFramerate}fps)`);
                 })
                 .catch(err => {
                     console.warn('[Bandwidth] Failed to set parameters:', err);
@@ -979,7 +951,6 @@ export const VoiceProvider = ({ children }) => {
                 ? `${partnerUsername}_camera`
                 : partnerUsername; // Audio için base key
 
-        console.log(`📹 [WebRTC] Detected ${isScreenTrack ? 'SCREEN' : 'CAMERA'} track from ${partnerUsername}, key: ${streamKey}`);
 
         setRemoteStreams(prev => {
             const currentStream = prev[streamKey];
@@ -989,7 +960,6 @@ export const VoiceProvider = ({ children }) => {
                 if (!currentStream.getTracks().some(t => t.id === track.id)) {
                     currentStream.addTrack(track);
                     const refreshedStream = new MediaStream(currentStream.getTracks());
-                    console.log(`[WebRTC] Added track to existing stream: ${streamKey}`);
                     return { ...prev, [streamKey]: refreshedStream };
                 }
                 return prev;
@@ -997,12 +967,10 @@ export const VoiceProvider = ({ children }) => {
 
             // Yeni stream oluştur
             const newStream = new MediaStream([track]);
-            console.log(`[WebRTC] Created new stream: ${streamKey}`);
             return { ...prev, [streamKey]: newStream };
         });
 
         if (track.kind === 'audio') {
-            console.log(`[WebRTC] Audio track received from ${partnerUsername}`);
             initializeAudio();
 
             // 🔥 FIX: Tek yönlü ses sorunu - Audio elementi oluştur ve çal
@@ -1024,7 +992,6 @@ export const VoiceProvider = ({ children }) => {
 
                 // Play promise - autoplay engellenirse user gesture bekle
                 audioEl.play().then(() => {
-                    console.log(`🔊 [Audio] Playing remote audio from ${partnerUsername}`);
                 }).catch(err => {
                     console.warn(`[Audio] Autoplay blocked for ${partnerUsername}, waiting for interaction:`, err.message);
                     // User gesture sonrası tekrar dene
@@ -1035,12 +1002,10 @@ export const VoiceProvider = ({ children }) => {
                     document.addEventListener('click', resumeAudio, { once: true });
                 });
 
-                console.log(`✅ [Audio] Created audio element for ${partnerUsername}`);
             } catch (err) {
                 console.error(`[Audio] Failed to create audio element for ${partnerUsername}:`, err);
             }
         } else if (track.kind === 'video') {
-            console.log(`[WebRTC] Video track (${isScreenTrack ? 'screen' : 'camera'}) received from ${partnerUsername}`);
         }
     }, [initializeAudio]);
 
@@ -1070,7 +1035,6 @@ export const VoiceProvider = ({ children }) => {
                     const orderedCodecs = [...opusCodecs, ...otherCodecs];
                     if (transceiver.setCodecPreferences && orderedCodecs.length > 0) {
                         transceiver.setCodecPreferences(orderedCodecs);
-                        console.log('🎵 [Codec] Opus prioritized for audio');
                     }
                 }
             });
@@ -1108,7 +1072,6 @@ export const VoiceProvider = ({ children }) => {
         }
 
         pc.oniceconnectionstatechange = () => {
-            console.log(`[WebRTC] ICE State (${partnerUsername}):`, pc.iceConnectionState);
 
             if (pc.iceConnectionState === 'failed') {
                 console.warn(`[WebRTC] ICE failed with ${partnerUsername}, attempting restart...`);
@@ -1139,7 +1102,6 @@ export const VoiceProvider = ({ children }) => {
                 }, 15000); // 10000'den 15000'e artırıldı
 
             } else if (pc.iceConnectionState === 'closed') {
-                console.log(`[WebRTC] ICE closed for ${partnerUsername}, cleaning up...`);
                 setRemoteStreams(prev => {
                     const newStreams = { ...prev };
                     delete newStreams[partnerUsername];
@@ -1150,7 +1112,6 @@ export const VoiceProvider = ({ children }) => {
                 }
                 setIsReconnecting(false);
             } else if (pc.iceConnectionState === 'connected') {
-                console.log(`✅ [WebRTC] ICE connected with ${partnerUsername}`);
                 setIsReconnecting(false);
 
                 // 🔥 YENİ: Bandwidth Adaptasyonu - Ping ve packet loss'a göre kalite ayarla
@@ -1162,7 +1123,6 @@ export const VoiceProvider = ({ children }) => {
                             if (report.type === 'candidate-pair' && report.state === 'succeeded') {
                                 const rtt = report.currentRoundTripTime * 1000; // ms cinsine çevir
 
-                                console.log(`📊 [Bandwidth] ${partnerUsername} RTT: ${rtt.toFixed(0)}ms`);
 
                                 // Yüksek ping (300ms+) veya çok yüksek ping (500ms+)
                                 if (rtt > 500) {
@@ -1172,7 +1132,6 @@ export const VoiceProvider = ({ children }) => {
                                     console.warn(`⚠️ [Bandwidth] Medium latency detected (${rtt.toFixed(0)}ms), reducing video quality to MEDIUM`);
                                     adjustBandwidth(pc, 'medium');
                                 } else {
-                                    console.log(`✅ [Bandwidth] Good connection (${rtt.toFixed(0)}ms), using HIGH quality`);
                                     adjustBandwidth(pc, 'high');
                                 }
                             }
@@ -1183,7 +1142,6 @@ export const VoiceProvider = ({ children }) => {
                 }, 2000); // 2 saniye sonra kontrol et (bağlantı stabilize olsun)
 
             } else if (pc.iceConnectionState === 'checking') {
-                console.log(`🔍 [WebRTC] ICE checking with ${partnerUsername}`);
             }
         };
 
@@ -1205,7 +1163,6 @@ export const VoiceProvider = ({ children }) => {
             const streamType = data.streamType || 'camera';
             const streamKey = `${senderUsername}_${streamType}`;
 
-            console.log(`📹 [Video] ${senderUsername} ended ${streamType} stream`);
 
             // Remote stream'i temizle (siyah ekran önleme)
             setRemoteStreams(prev => {
@@ -1214,7 +1171,6 @@ export const VoiceProvider = ({ children }) => {
                     // Track'leri durdur
                     newStreams[streamKey].getTracks().forEach(t => t.stop());
                     delete newStreams[streamKey];
-                    console.log(`📹 [Video] Cleaned up ${streamKey} stream`);
                 }
                 return newStreams;
             });
@@ -1224,7 +1180,6 @@ export const VoiceProvider = ({ children }) => {
         // 💬 VOICE REACTION RECEIVED
         if (data.type === 'voice_reaction') {
             const senderUsername = data.from || data.username;
-            console.log(`💬 [Reaction] ${senderUsername} sent: ${data.emoji}`);
             setLastReaction({
                 username: senderUsername,
                 emoji: data.emoji,
@@ -1243,7 +1198,6 @@ export const VoiceProvider = ({ children }) => {
         // 🎮 GAME SIGNAL RECEIVED
         if (data.type === 'game_signal') {
             const senderUsername = data.from || data.username;
-            console.log(`🎮 [Game] ${senderUsername}:`, data.action, data.move);
 
             setGameState(prev => {
                 const newState = { ...prev };
@@ -1288,7 +1242,6 @@ export const VoiceProvider = ({ children }) => {
         // 🎬 CINEMA SYNC RECEIVED
         if (data.type === 'cinema_sync') {
             const senderUsername = data.from || data.username;
-            console.log(`🎬 [Cinema] ${senderUsername}:`, data.action);
 
             setCinemaState(prev => ({
                 ...prev,
@@ -1305,7 +1258,6 @@ export const VoiceProvider = ({ children }) => {
 
         // �🔥 Mevcut kullanıcı listesini al
         if (data.type === 'current_users') {
-            console.log('[Voice] Received current users from backend:', data.users);
 
             setConnectedUsers(prev => {
                 const backendUsers = data.users || [];
@@ -1319,11 +1271,9 @@ export const VoiceProvider = ({ children }) => {
                 // Backend listesini al, eğer ben yoksa ekle
                 let finalList = [...backendUsers];
                 if (!meInBackendList && myInfo) {
-                    console.log('[Voice] Backend list missing me, adding from local state');
                     finalList = [myInfo, ...backendUsers];
                 } else if (!meInBackendList && username) {
                     // Hiç yoksa default bilgilerle ekle
-                    console.log('[Voice] Backend list missing me, adding with defaults');
                     finalList = [{
                         username: username,
                         isMuted: isMuted,
@@ -1333,7 +1283,6 @@ export const VoiceProvider = ({ children }) => {
                     }, ...backendUsers];
                 }
 
-                console.log('✅ [Voice] Final connected users:', finalList.map(u => u.username));
                 return finalList;
             });
             return;
@@ -1350,11 +1299,9 @@ export const VoiceProvider = ({ children }) => {
         }
 
         if (senderUsername === username) {
-            console.log(`[Signal] Ignoring ${type} from self (${senderUsername})`);
             return;
         }
 
-        console.log(`[Signal] Received ${type} from ${senderUsername}`, data);
 
         let pc = peerConnectionsRef.current[senderUsername];
 
@@ -1379,13 +1326,6 @@ export const VoiceProvider = ({ children }) => {
                 pc = createPeerConnection(senderUsername, true);
 
                 // 🔥 CRITICAL FIX: Mevcut stream'leri yeni kullanıcıya ekle!
-                console.log(`[user_joined] Checking streams for ${senderUsername}:`, {
-                    hasAudio: !!localStreamRef.current,
-                    hasCamera: !!localCameraStreamRef.current,
-                    hasScreen: !!localScreenStreamRef.current,
-                    cameraEnabled: isVideoEnabled,
-                    screenEnabled: isScreenSharing
-                });
 
                 // 🔥 YENİ: Audio stream'i ekle (sesli chat için zorunlu!)
                 if (localStreamRef.current) {
@@ -1400,7 +1340,6 @@ export const VoiceProvider = ({ children }) => {
                             logger.webrtc(`⏭️ Audio track already added to ${senderUsername}, skipping`);
                         }
                     });
-                    console.log(`✅ [user_joined] Audio track added to ${senderUsername}`);
                 }
 
                 if (localCameraStreamRef.current) {
@@ -1415,7 +1354,6 @@ export const VoiceProvider = ({ children }) => {
                             logger.webrtc(`⏭️ Camera track already added to ${senderUsername}, skipping`);
                         }
                     });
-                    console.log(`✅ [user_joined] Camera track added to ${senderUsername}`);
                 }
 
                 if (localScreenStreamRef.current) {
@@ -1430,7 +1368,6 @@ export const VoiceProvider = ({ children }) => {
                             logger.webrtc(`⏭️ Screen track already added to ${senderUsername}, skipping`);
                         }
                     });
-                    console.log(`✅ [user_joined] Screen track added to ${senderUsername}`);
                 }
 
                 try {
@@ -1442,7 +1379,6 @@ export const VoiceProvider = ({ children }) => {
                         target: senderUsername
                     });
                     logger.signal(`Sent offer to ${senderUsername}`);
-                    console.log(`✅ [user_joined] Offer successfully sent to ${senderUsername}`);
                 } catch (e) {
                     logger.error("Offer creation failed", e);
                     console.error(`❌ [user_joined] Failed to create/send offer to ${senderUsername}:`, e);
@@ -1450,7 +1386,6 @@ export const VoiceProvider = ({ children }) => {
                 return;
             } else if (type === 'user_left') {
                 // Kullanıcı ayrıldı, temizlik yap
-                console.log(`[Signal] ${senderUsername} left the channel`);
 
                 // 🆕 Kullanıcıyı listeden çıkar
                 setConnectedUsers(prev => prev.filter(u => u.username !== senderUsername));
@@ -1461,7 +1396,6 @@ export const VoiceProvider = ({ children }) => {
                     audioEl.pause();
                     audioEl.srcObject = null;
                     audioEl.remove();
-                    console.log(`🔊 [Audio] Removed audio element for ${senderUsername}`);
                 }
 
                 setRemoteStreams(prev => {
@@ -1479,7 +1413,6 @@ export const VoiceProvider = ({ children }) => {
                 return;
             } else if (type === 'stream_update') {
                 // Stream durumu değişti (kamera açıldı/kapandı vb)
-                console.log(`[Signal] ${senderUsername} stream update:`, data);
 
                 // Kullanıcı listesini güncelle
                 setConnectedUsers(prev => prev.map(u => {
@@ -1495,7 +1428,6 @@ export const VoiceProvider = ({ children }) => {
 
                 // 🔥 CRITICAL FIX: Eğer stream aktifse ve peer connection yoksa, oluştur
                 if (data.enabled && !peerConnectionsRef.current[senderUsername]) {
-                    console.log(`[stream_update] Creating PC for ${senderUsername} due to ${data.streamType} stream`);
                     const newPC = createPeerConnection(senderUsername, true);
 
                     // 🔥 Kendi stream'lerimi ekle (audio dahil!)
@@ -1556,11 +1488,9 @@ export const VoiceProvider = ({ children }) => {
                     sdp: pc.localDescription,
                     target: senderUsername
                 });
-                console.log(`[Signal] Sent answer to ${senderUsername}`);
 
                 // 🔥 FIX: Process buffered ICE candidates after remote description is set
                 if (iceCandidateBufferRef.current[senderUsername]) {
-                    console.log(`[Signal] Processing ${iceCandidateBufferRef.current[senderUsername].length} buffered candidates for ${senderUsername}`);
                     for (const bufferedCandidate of iceCandidateBufferRef.current[senderUsername]) {
                         try {
                             await pc.addIceCandidate(bufferedCandidate);
@@ -1578,11 +1508,9 @@ export const VoiceProvider = ({ children }) => {
                 }
 
                 await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-                console.log(`[Signal] Set remote description from ${senderUsername}`);
 
                 // 🔥 FIX: Process buffered ICE candidates after remote description is set
                 if (iceCandidateBufferRef.current[senderUsername]) {
-                    console.log(`[Signal] Processing ${iceCandidateBufferRef.current[senderUsername].length} buffered candidates for ${senderUsername}`);
                     for (const bufferedCandidate of iceCandidateBufferRef.current[senderUsername]) {
                         try {
                             await pc.addIceCandidate(bufferedCandidate);
@@ -1595,10 +1523,8 @@ export const VoiceProvider = ({ children }) => {
             } else if (type === 'candidate') {
                 if (pc.remoteDescription) {
                     await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                    console.log(`[Signal] Added ICE candidate from ${senderUsername}`);
                 } else {
                     // 🔥 FIX: Buffer candidate until remote description is set
-                    console.log(`[Signal] Buffering ICE candidate from ${senderUsername} (no remote description yet)`);
                     if (!iceCandidateBufferRef.current[senderUsername]) {
                         iceCandidateBufferRef.current[senderUsername] = [];
                     }
@@ -1614,11 +1540,9 @@ export const VoiceProvider = ({ children }) => {
     const leaveVoiceRoom = useCallback(() => {
         // 🔥 FIX: Prevent recursive calls
         if (isLeavingRef.current) {
-            console.log("[Voice] Already leaving, skipping...");
             return;
         }
         isLeavingRef.current = true;
-        console.log("[Voice] Leaving voice room...");
 
         // 🔥 CRITICAL: Send leave signal BEFORE closing WebSocket
         if (voiceWsRef.current && voiceWsRef.current.readyState === WebSocket.OPEN) {
@@ -1636,7 +1560,6 @@ export const VoiceProvider = ({ children }) => {
         if (localStreamRef.current) {
             localStreamRef.current.getTracks().forEach(track => {
                 track.stop();
-                console.log(`[Voice] Stopped track: ${track.kind}`);
             });
             setLocalAudioStream(null);
             localStreamRef.current = null;
@@ -1646,7 +1569,6 @@ export const VoiceProvider = ({ children }) => {
         if (localCameraStream) {
             localCameraStream.getTracks().forEach(track => {
                 track.stop();
-                console.log(`[Voice] Stopped camera track: ${track.kind}`);
             });
             setLocalCameraStream(null);
             setIsVideoEnabled(false);
@@ -1656,7 +1578,6 @@ export const VoiceProvider = ({ children }) => {
         if (localScreenStream) {
             localScreenStream.getTracks().forEach(track => {
                 track.stop();
-                console.log(`[Voice] Stopped screen track: ${track.kind}`);
             });
             setLocalScreenStream(null);
             setIsScreenSharing(false);
@@ -1664,7 +1585,6 @@ export const VoiceProvider = ({ children }) => {
 
         // 2. Peer Connectionları Kapat
         Object.entries(peerConnectionsRef.current).forEach(([user, pc]) => {
-            console.log(`[Voice] Closing PC for ${user}`);
             pc.close();
         });
         peerConnectionsRef.current = {};
@@ -1688,7 +1608,6 @@ export const VoiceProvider = ({ children }) => {
 
         // 🔥 YENİ: Recording cleanup
         if (isRecording) {
-            console.log('[Voice] Stopping recording on leave');
             if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
                 mediaRecorderRef.current.stop();
             }
@@ -1710,7 +1629,6 @@ export const VoiceProvider = ({ children }) => {
         if (wsReconnectTimeoutRef.current) {
             clearTimeout(wsReconnectTimeoutRef.current);
             wsReconnectTimeoutRef.current = null;
-            console.log('[Voice] Cleared pending WebSocket reconnect');
         }
 
         // 🔥 YENİ: WebSocket health check temizliği
@@ -1734,7 +1652,6 @@ export const VoiceProvider = ({ children }) => {
     const joinVoiceRoom = useCallback(async (roomSlug) => {
         // 🔄 Eğer zaten bir kanalda ise ve farklı bir kanala geçmek isteniyorsa
         if (isInVoice && currentRoom && currentRoom !== roomSlug && !isSwitchingRef.current) {
-            console.log(`[Voice] ⚡ Fast-switching from ${currentRoom} to ${roomSlug}`);
 
             // 🔒 Switching flag set et (sonsuz döngü önleme)
             isSwitchingRef.current = true;
@@ -1763,24 +1680,20 @@ export const VoiceProvider = ({ children }) => {
             // localStreamRef.current hâlâ canlı, yeni kanala taşınacak
 
             isSwitchingRef.current = false; // Reset flag
-            console.log(`[Voice] ⚡ Cleanup done, now joining ${roomSlug}`);
 
             // Şimdi yeni kanala katılmayı devam ettir (aşağıdaki normal flow)
         }
 
         // 🛑 Eğer aynı kanalda isek, tekrar katılma
         if (isInVoice && currentRoom === roomSlug) {
-            console.log(`[Voice] Already in ${roomSlug}, skipping join`);
             return;
         }
 
         // Switching sırasında skip
         if (isSwitchingRef.current) {
-            console.log("[Voice] Currently switching channels, skipping...");
             return;
         }
 
-        console.log(`[Voice] Joining room: ${roomSlug}`);
         setIsConnecting(true);
         setCurrentRoom(roomSlug);
 
@@ -1796,7 +1709,6 @@ export const VoiceProvider = ({ children }) => {
             if (existingTrack && existingTrack.readyState === 'live') {
                 // ⚡ Channel switch — mevcut mic stream'i kullan (0ms!)
                 processedStream = localStreamRef.current;
-                console.log('[Voice] ⚡ Reusing existing mic stream (fast channel switch)');
             } else {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     audio: {
@@ -1822,7 +1734,6 @@ export const VoiceProvider = ({ children }) => {
                     },
                     video: false
                 });
-                console.log("[Voice] 🎤 Got microphone access");
 
                 processedStream = stream;
                 if (isNoiseSuppressionEnabled) {
@@ -1887,7 +1798,6 @@ export const VoiceProvider = ({ children }) => {
                                     .forEach((sender) => sender.replaceTrack(newTrack).catch(() => { }));
                             });
 
-                            console.log('🔄 [Mic Watchdog] Audio track yenilendi (basit stream)');
                         } catch (err) {
                             console.warn('[Mic Watchdog] Mic refresh failed:', err);
                         }
@@ -1897,12 +1807,10 @@ export const VoiceProvider = ({ children }) => {
 
             // 2. WebSocket Bağlantısı
             const wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/voice/${roomSlug}/?token=${token}`;
-            console.log(`[Voice] Connecting to ${wsUrl}`);
             const ws = new WebSocket(wsUrl);
             voiceWsRef.current = ws;
 
             ws.onopen = () => {
-                console.log("🎤 [VoiceWS] Connected to room:", roomSlug);
                 setIsInVoice(true);
                 setIsConnecting(false);
 
@@ -1911,7 +1819,6 @@ export const VoiceProvider = ({ children }) => {
                     const meInList = prev.some(u => u.username === username);
                     if (meInList) return prev;
 
-                    console.log('✅ [Voice] Added self to connected users immediately');
                     return [{
                         username: username,
                         isMuted: isMuted,
@@ -1942,13 +1849,11 @@ export const VoiceProvider = ({ children }) => {
             };
 
             ws.onclose = (event) => {
-                console.log("🎤 [VoiceWS] Disconnected, code:", event.code, "reason:", event.reason);
 
                 // 🔥 GELIŞMIŞ AUTO-RECONNECT SISTEMI
 
                 // 1️⃣ Bilinçli çıkış kontrolü
                 if (isLeavingRef.current || isSwitchingRef.current) {
-                    console.log("[VoiceWS] User intentionally left or switching, not reconnecting");
                     setIsReconnecting(false);
                     setWsReconnectAttempt(0);
                     setWsReconnectDelay(1000);
@@ -1961,7 +1866,6 @@ export const VoiceProvider = ({ children }) => {
 
                 // 2️⃣ Normal kapanma (code 1000) kontrolü
                 if (event.code === 1000) {
-                    console.log("[VoiceWS] Normal closure (1000), cleaning up");
                     leaveVoiceRoom();
                     return;
                 }
@@ -1984,7 +1888,6 @@ export const VoiceProvider = ({ children }) => {
                     const delay = Math.min(wsReconnectDelay, 30000);
 
                     console.warn(`[VoiceWS] 🔄 Unexpected disconnect (code: ${event.code})`);
-                    console.log(`[VoiceWS] 🔄 Reconnect attempt ${currentAttempt}/${maxRetries} in ${delay}ms...`);
 
                     setIsReconnecting(true);
                     setWsReconnectAttempt(currentAttempt);
@@ -1997,7 +1900,6 @@ export const VoiceProvider = ({ children }) => {
                     // Schedule reconnection
                     wsReconnectTimeoutRef.current = setTimeout(() => {
                         if (!isLeavingRef.current && !isSwitchingRef.current && roomSlug) {
-                            console.log(`[VoiceWS] ⚡ Executing reconnect attempt ${currentAttempt} to ${roomSlug}`);
 
                             // Exponential backoff: Double the delay for next time
                             setWsReconnectDelay(prev => Math.min(prev * 2, 30000));
@@ -2005,7 +1907,6 @@ export const VoiceProvider = ({ children }) => {
                             // Reconnect
                             joinVoiceRoom(roomSlug).then(() => {
                                 // Başarılı reconnection - Reset counters
-                                console.log("[VoiceWS] ✅ Reconnection successful! Resetting retry counters.");
                                 setWsReconnectAttempt(0);
                                 setWsReconnectDelay(1000);
                                 setIsReconnecting(false);
@@ -2014,14 +1915,12 @@ export const VoiceProvider = ({ children }) => {
                                 // Başarısız - bir sonraki deneme zaten schedule edilecek
                             });
                         } else {
-                            console.log("[VoiceWS] Reconnect cancelled (user left or room changed)");
                             setIsReconnecting(false);
                             setWsReconnectAttempt(0);
                             setWsReconnectDelay(1000);
                         }
                     }, delay);
                 } else {
-                    console.log("[VoiceWS] Not in voice or no room, cleaning up");
                     leaveVoiceRoom();
                 }
             };
@@ -2056,7 +1955,6 @@ export const VoiceProvider = ({ children }) => {
                     is_mic_off: newMuted
                 }));
             }
-            console.log(`[Voice] Mute: ${newMuted}`);
             return newMuted;
         });
     }, []);
@@ -2070,7 +1968,6 @@ export const VoiceProvider = ({ children }) => {
                     is_deafened: newDeafened
                 }));
             }
-            console.log(`[Voice] Deafened: ${newDeafened}`);
             return newDeafened;
         });
     }, []);
@@ -2081,7 +1978,6 @@ export const VoiceProvider = ({ children }) => {
     const toggleVideo = useCallback(async () => {
         // 🔒 Race condition önleme - işlem devam ediyorsa bekle
         if (cameraToggleLockRef.current) {
-            console.log('[Camera] Toggle already in progress, skipping...');
             return;
         }
 
@@ -2093,7 +1989,6 @@ export const VoiceProvider = ({ children }) => {
 
             if (currentStream) {
                 // 🎥 Kamerayı KAPAT
-                console.log('[Camera] Stopping camera stream');
 
                 // Önce state'i güncelle - UI hemen yanıt versin
                 setIsVideoEnabled(false);
@@ -2103,7 +1998,6 @@ export const VoiceProvider = ({ children }) => {
                 // Track'leri durdur
                 currentStream.getTracks().forEach(track => {
                     track.stop();
-                    console.log(`[Camera] Stopped ${track.kind} track`);
                 });
 
                 // 🔥 Peer işlemlerini paralel yap - sıralı await UI'ı donduruyor
@@ -2120,7 +2014,6 @@ export const VoiceProvider = ({ children }) => {
                             try {
                                 pc.removeTrack(sender);
                                 trackRemoved = true;
-                                console.log(`[Camera] Removed video track from peer: ${username}`);
                             } catch (e) {
                                 console.warn(`[Camera] Failed to remove track from ${username}:`, e);
                             }
@@ -2138,7 +2031,6 @@ export const VoiceProvider = ({ children }) => {
                                     sdp: pc.localDescription,
                                     target: username
                                 });
-                                console.log(`[Camera] Sent renegotiation offer to ${username} after removal`);
                             } catch (e) {
                                 console.warn(`[Camera] Renegotiation failed with ${username}:`, e);
                             }
@@ -2158,7 +2050,6 @@ export const VoiceProvider = ({ children }) => {
                         type: 'video_ended',
                         streamType: 'camera'
                     }));
-                    console.log('[Camera] Sent video_ended signal');
                 }
 
                 // Renegotiation'ları arka planda tamamla
@@ -2168,7 +2059,6 @@ export const VoiceProvider = ({ children }) => {
 
             } else {
                 // 🎥 Kamerayı AÇ
-                console.log('[Camera] Starting camera stream');
 
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
@@ -2180,12 +2070,10 @@ export const VoiceProvider = ({ children }) => {
 
                 // 🔥 Lock hala aktif mi kontrol et (iptal edilmiş olabilir)
                 if (!cameraToggleLockRef.current) {
-                    console.log('[Camera] Toggle was cancelled, stopping new stream');
                     stream.getTracks().forEach(t => t.stop());
                     return;
                 }
 
-                console.log('[Camera] Got camera stream:', stream.id);
 
                 // State'leri güncelle
                 localCameraStreamRef.current = stream;
@@ -2197,7 +2085,6 @@ export const VoiceProvider = ({ children }) => {
 
                 // 🔥 FIX: Track ended event - tarayıcı kamerayı kapattığında
                 videoTrack.onended = () => {
-                    console.log('[Camera] Track ended by browser/system');
                     setLocalCameraStream(null);
                     localCameraStreamRef.current = null;
                     setIsVideoEnabled(false);
@@ -2224,7 +2111,6 @@ export const VoiceProvider = ({ children }) => {
                     const addPromise = (async () => {
                         try {
                             pc.addTrack(videoTrack, stream);
-                            console.log(`[Camera] Added video track to peer: ${username}`);
 
                             // ✅ FIX: Renegotiation gerekli - yeni offer oluştur
                             const offer = await pc.createOffer();
@@ -2236,7 +2122,6 @@ export const VoiceProvider = ({ children }) => {
                                 target: username
                             });
 
-                            console.log(`[Camera] Sent renegotiation offer to ${username}`);
                         } catch (e) {
                             console.warn(`[Camera] Failed to add/renegotiate with ${username}:`, e);
                         }
@@ -2250,7 +2135,6 @@ export const VoiceProvider = ({ children }) => {
                         type: 'camera_state',
                         is_camera_on: true
                     }));
-                    console.log('[Camera] State sent to backend: is_camera_on=true');
                 }
 
                 // Track ekleme işlemlerini arka planda tamamla
@@ -2287,7 +2171,6 @@ export const VoiceProvider = ({ children }) => {
     const toggleScreenShare = useCallback(async () => {
         // 🔒 Race condition önleme
         if (screenToggleLockRef.current) {
-            console.log('[Screen] Toggle already in progress, skipping...');
             return;
         }
 
@@ -2298,7 +2181,6 @@ export const VoiceProvider = ({ children }) => {
 
             if (currentStream) {
                 // 🖥️ Ekran paylaşımını DURDUR
-                console.log('[Screen] Stopping screen share');
 
                 // Önce state'i güncelle
                 setIsScreenSharing(false);
@@ -2307,7 +2189,6 @@ export const VoiceProvider = ({ children }) => {
 
                 currentStream.getTracks().forEach(track => {
                     track.stop();
-                    console.log(`[Screen] Stopped ${track.kind} track`);
                 });
 
                 // 🔥 Peer işlemlerini paralel yap
@@ -2323,7 +2204,6 @@ export const VoiceProvider = ({ children }) => {
                             try {
                                 pc.removeTrack(sender);
                                 trackRemoved = true;
-                                console.log(`[Screen] Removed screen track from peer: ${username}`);
                             } catch (e) {
                                 console.warn(`[Screen] Failed to remove track from ${username}:`, e);
                             }
@@ -2341,7 +2221,6 @@ export const VoiceProvider = ({ children }) => {
                                     sdp: pc.localDescription,
                                     target: username
                                 });
-                                console.log(`[Screen] Sent renegotiation offer to ${username} after removal`);
                             } catch (e) {
                                 console.warn(`[Screen] Renegotiation failed with ${username}:`, e);
                             }
@@ -2361,7 +2240,6 @@ export const VoiceProvider = ({ children }) => {
                         type: 'video_ended',
                         streamType: 'screen'
                     }));
-                    console.log('[Screen] Sent video_ended signal');
                 }
 
                 // Arka planda tamamla
@@ -2371,7 +2249,6 @@ export const VoiceProvider = ({ children }) => {
 
             } else {
                 // 🖥️ Ekran paylaşımını BAŞLAT
-                console.log('[Screen] Starting screen share');
 
                 // 🔥 YENİ: Quality presets
                 const qualityPresets = {
@@ -2382,7 +2259,6 @@ export const VoiceProvider = ({ children }) => {
 
                 const quality = qualityPresets[screenShareQuality] || qualityPresets['1080p'];
 
-                console.log(`🎬 [Screen] Quality: ${screenShareQuality}, FPS: ${screenShareFPS}`);
 
                 const stream = await navigator.mediaDevices.getDisplayMedia({
                     video: {
@@ -2397,16 +2273,13 @@ export const VoiceProvider = ({ children }) => {
 
                 // 🔥 Lock hala aktif mi kontrol et
                 if (!screenToggleLockRef.current) {
-                    console.log('[Screen] Toggle was cancelled, stopping new stream');
                     stream.getTracks().forEach(t => t.stop());
                     return;
                 }
 
-                console.log('[Screen] Got screen stream:', stream.id);
 
                 // Kullanıcı "Stop sharing" butonuna basınca stream durduğunda otomatik temizlik
                 stream.getVideoTracks()[0].onended = () => {
-                    console.log('[Screen] User stopped sharing via browser');
                     setLocalScreenStream(null);
                     localScreenStreamRef.current = null;
                     setIsScreenSharing(false);
@@ -2447,7 +2320,6 @@ export const VoiceProvider = ({ children }) => {
                         try {
                             // 🔥 FIX: Önce basit addTrack dene (daha güvenilir)
                             pc.addTrack(screenTrack, stream);
-                            console.log(`[Screen] Added screen track to peer: ${username}`);
 
                             const offer = await pc.createOffer();
                             await pc.setLocalDescription(offer);
@@ -2458,7 +2330,6 @@ export const VoiceProvider = ({ children }) => {
                                 target: username
                             });
 
-                            console.log(`[Screen] Sent renegotiation offer to ${username}`);
                         } catch (e) {
                             console.error(`[Screen] Failed to add track to ${username}:`, e.message);
                         }
@@ -2483,7 +2354,6 @@ export const VoiceProvider = ({ children }) => {
             console.error('[Screen] Error:', error);
             if (error.name === 'NotAllowedError') {
                 // Kullanıcı iptal etti, sessizce geri dön
-                console.log('[Screen] User cancelled screen share');
             } else if (error.name === 'NotFoundError') {
                 toast.warning('Ekran paylaşımı desteklenmiyor.');
             } else {
@@ -2551,7 +2421,6 @@ export const VoiceProvider = ({ children }) => {
                 a.download = `pawscord-voice-${currentRoom}-${Date.now()}.webm`;
                 a.click();
                 URL.revokeObjectURL(url);
-                console.log('✅ [Recording] Saved recording');
             };
 
             mediaRecorder.start(1000); // Collect data every second
@@ -2564,7 +2433,6 @@ export const VoiceProvider = ({ children }) => {
                 setRecordingDuration(prev => prev + 1);
             }, 1000);
 
-            console.log('🔴 [Recording] Started');
         } catch (error) {
             console.error('[Recording] Start error:', error);
             toast.error('Kayıt başlatılamadı: ' + error.message);
@@ -2589,7 +2457,6 @@ export const VoiceProvider = ({ children }) => {
         mediaRecorderRef.current = null;
         setIsRecording(false);
         setRecordingDuration(0);
-        console.log('⏹️ [Recording] Stopped');
     }, [isRecording]);
 
     // 🔥 YENİ: Download Recording Manually
@@ -2608,7 +2475,6 @@ export const VoiceProvider = ({ children }) => {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        console.log('💾 [Recording] Downloaded manually');
     }, [currentRoom]);
 
     // 🎵 VOICE EFFECTS IMPLEMENTATION
@@ -2622,7 +2488,7 @@ export const VoiceProvider = ({ children }) => {
             // Clear previous effect
             if (voiceEffectNodesRef.current) {
                 voiceEffectNodesRef.current.forEach(node => {
-                    try { node.disconnect(); } catch (e) { }
+                    try { node.disconnect(); } catch (_) { /* AudioNode already disconnected */ }
                 });
                 voiceEffectNodesRef.current = null;
             }
@@ -2630,7 +2496,6 @@ export const VoiceProvider = ({ children }) => {
             // If effectType is null, remove effect
             if (!effectType) {
                 setActiveVoiceEffect(null);
-                console.log('🎵 [VoiceEffect] Cleared');
                 return;
             }
 
@@ -2804,7 +2669,6 @@ export const VoiceProvider = ({ children }) => {
             setActiveVoiceEffect(effectType);
             setVoiceEffectIntensity(intensity);
 
-            console.log(`🎵 [VoiceEffect] Applied: ${effectType} at ${intensity}%`);
 
         } catch (error) {
             console.error('[VoiceEffect] Error:', error);
@@ -2824,7 +2688,6 @@ export const VoiceProvider = ({ children }) => {
             emoji: emoji
         }));
 
-        console.log(`💬 [Reaction] Sent: ${emoji}`);
     }, []);
 
     // 🎮 SEND GAME SIGNAL
@@ -2842,7 +2705,6 @@ export const VoiceProvider = ({ children }) => {
             target: target
         }));
 
-        console.log(`🎮 [Game] Sent: ${gameType} - ${action}`, move);
     }, []);
 
     // 🎬 SEND CINEMA SYNC
@@ -2859,7 +2721,6 @@ export const VoiceProvider = ({ children }) => {
             url: url
         }));
 
-        console.log(`🎬 [Cinema] Sent: ${action}`, { time, url });
     }, []);
 
     // 📊 WEBRTC STATS MONITORING
@@ -2917,7 +2778,6 @@ export const VoiceProvider = ({ children }) => {
             setConnectionStats(stats);
         }, 2000); // Every 2 seconds
 
-        console.log('📊 [Stats] Monitoring started');
     }, []);
 
     const stopStatsMonitoring = useCallback(() => {
@@ -2925,7 +2785,6 @@ export const VoiceProvider = ({ children }) => {
             clearInterval(statsIntervalRef.current);
             statsIntervalRef.current = null;
             setConnectionStats({});
-            console.log('📊 [Stats] Monitoring stopped');
         }
     }, []);
 
@@ -2933,7 +2792,6 @@ export const VoiceProvider = ({ children }) => {
     const toggleNoiseGate = useCallback((enabled) => {
         setIsNoiseGateEnabled(enabled);
         localStorage.setItem('pawscord_noise_gate_enabled', enabled.toString());
-        console.log(`🎚️ [Noise Gate] ${enabled ? 'ENABLED' : 'DISABLED'}`);
     }, []);
 
     // 🎚️ YENİ: Noise Gate Threshold Güncelleme
@@ -2941,14 +2799,12 @@ export const VoiceProvider = ({ children }) => {
         const clamped = Math.max(-80, Math.min(-20, threshold));
         setNoiseGateThreshold(clamped);
         localStorage.setItem('pawscord_noise_gate', clamped.toString());
-        console.log(`🎚️ [Noise Gate] Threshold: ${clamped}dB`);
     }, []);
 
     // 📊 YENİ: Audio Visualizer Toggle
     const toggleVisualizer = useCallback((enabled) => {
         setIsVisualizerEnabled(enabled);
         localStorage.setItem('pawscord_visualizer', enabled.toString());
-        console.log(`📊 [Visualizer] ${enabled ? 'ENABLED' : 'DISABLED'}`);
     }, []);
 
     // 📊 YENİ: Audio Visualizer Ref
@@ -2999,7 +2855,6 @@ export const VoiceProvider = ({ children }) => {
                 setAudioVisualizerData({ local: localData, remote: remoteData });
             }, 33); // ~30fps for performance
 
-            console.log('📊 [Visualizer] Started');
         } catch (err) {
             console.error('[Visualizer] Failed to start:', err);
         }
@@ -3017,11 +2872,10 @@ export const VoiceProvider = ({ children }) => {
                 Object.values(visualizerAnalyserRef.current.remote).forEach(({ source }) => {
                     source?.disconnect();
                 });
-            } catch (e) { }
+            } catch (_) { /* AudioNode cleanup - safe to ignore */ }
             visualizerAnalyserRef.current = null;
         }
         setAudioVisualizerData({ local: new Uint8Array(128), remote: {} });
-        console.log('📊 [Visualizer] Stopped');
     }, []);
 
     // 📊 Auto-start/stop visualizer based on voice state

@@ -46,7 +46,6 @@ class KeyboardShortcutManager {
             handler.callback(event);
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`⌨️ [Shortcut] Triggered: ${shortcut}`);
             }
         }
     }
@@ -97,7 +96,6 @@ class KeyboardShortcutManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`✅ [Shortcut] Registered: ${normalized} - ${description}`);
         }
 
         return () => this.unregister(normalized);
@@ -124,7 +122,6 @@ class KeyboardShortcutManager {
         this.shortcuts.delete(normalized);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🗑️ [Shortcut] Unregistered: ${normalized}`);
         }
     }
 
@@ -133,7 +130,6 @@ class KeyboardShortcutManager {
      */
     unregisterAll() {
         this.shortcuts.clear();
-        console.log('🗑️ [Shortcut] All shortcuts cleared');
     }
 
     /**
@@ -283,7 +279,6 @@ export const registerDefaultShortcuts = (handlers = {}) => {
         keyboardManager.register('ctrl+shift+d', handlers.toggleDeafen, 'Toggle deafen');
     }
 
-    console.log('✅ [Shortcuts] Default shortcuts registered');
 };
 
 /**

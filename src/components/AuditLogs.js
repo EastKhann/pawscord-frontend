@@ -148,7 +148,6 @@ const AuditLogs = ({ serverId, onClose, fetchWithAuth: propsFetchWithAuth, apiBa
     };
 
     const showToast = (message, type = 'success') => {
-        console.log(`[${type}] ${message}`);
     };
 
     if (loading) {

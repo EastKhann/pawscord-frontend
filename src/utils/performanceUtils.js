@@ -197,7 +197,6 @@ export const useRenderCount = (componentName) => {
     useEffect(() => {
         renderCount.current += 1;
         if (import.meta.env.MODE === 'development') {
-            console.log(`[Render] ${componentName}: ${renderCount.current}`);
         }
     });
 

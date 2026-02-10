@@ -316,6 +316,5 @@ function diffArrays({ oldArray, newArray }) {
     return { added, removed, unchanged };
 }
 
-console.log('✅ [Worker] Data processor worker initialized');
 
 

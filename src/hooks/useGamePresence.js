@@ -55,7 +55,6 @@ const useGamePresence = () => {
                 })
             });
             lastReportedGame.current = game;
-            console.log('🎮 Game activity reported:', game.name);
         } catch (err) {
             console.error('Failed to report game activity:', err);
         }

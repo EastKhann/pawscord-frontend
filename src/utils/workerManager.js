@@ -36,7 +36,6 @@ class WorkerManager {
                 });
 
                 if (import.meta.env.MODE === 'development') {
-                    console.log(`✅ [Worker] Created worker: ${workerPath}`);
                 }
             } catch (error) {
                 console.error(`❌ [Worker] Failed to create worker:`, error);
@@ -145,7 +144,6 @@ class WorkerManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🔧 [Worker] Executing task ${task.id}: ${task.taskType}`);
         }
     }
 
@@ -159,7 +157,6 @@ class WorkerManager {
             this.workers.delete(workerPath);
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`🗑️ [Worker] Terminated worker: ${workerPath}`);
             }
         }
     }
@@ -176,7 +173,6 @@ class WorkerManager {
         this.activeWorkers = 0;
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🗑️ [Worker] All workers terminated');
         }
     }
 

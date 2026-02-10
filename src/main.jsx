@@ -93,7 +93,12 @@ const ToastDemo = lazyWithRetry(() => import('./components/ToastDemo'));
 
 // --- URL AYARLARI (constants.js'den import) ---
 import { API_URL_BASE_STRING, API_BASE_URL, GOOGLE_WEB_CLIENT_ID } from './utils/constants';
+import { initSentry } from './utils/sentry';
+import './i18n'; // 🌍 i18n initialization
 const GOOGLE_CLIENT_ID = GOOGLE_WEB_CLIENT_ID;
+
+// 🐛 Initialize Sentry error tracking (production only)
+initSentry();
 
 const RootApp = () => {
     useEffect(() => {

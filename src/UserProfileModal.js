@@ -66,14 +66,6 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
     );
     const isSelf = user.username === currentUser;
 
-    console.log('🔍 [ProfileModal Debug]:', {
-        username: user.username,
-        currentUser,
-        isFriend,
-        isSelf,
-        friendsListLength: friendsList?.length,
-        friendsList: friendsList?.slice(0, 3) // İlk 3 arkadaşı göster
-    });
 
     const handleAddFriend = async () => {
         setRequestStatus('loading');

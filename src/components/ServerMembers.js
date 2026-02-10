@@ -26,7 +26,6 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
             const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/members/`);
             if (res.ok) {
                 const data = await res.json();
-                console.log('📋 [ServerMembers] Fetched members:', data);
                 setMemberList(data.members || []);
             } else {
                 console.error('❌ [ServerMembers] Failed to fetch members');

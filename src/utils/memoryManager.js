@@ -43,7 +43,6 @@ class MemoryManager {
                 console.warn(`⚠️ [Memory] High usage: ${usedMB}MB / ${limitMB}MB (${usage.toFixed(1)}%)`);
                 this.cleanup();
             } else if (import.meta.env.MODE === 'development') {
-                console.log(`💾 [Memory] ${usedMB}MB / ${totalMB}MB (${usage.toFixed(1)}%)`);
             }
         }, 30000); // Her 30 saniyede bir kontrol et
     }
@@ -70,7 +69,6 @@ class MemoryManager {
         this.caches.set(key, cacheItem);
         this.currentCacheSize += size;
 
-        console.log(`💾 [Cache] Set ${key} (${(size / 1024).toFixed(2)}KB)`);
     }
 
     /**
@@ -102,7 +100,6 @@ class MemoryManager {
         if (item) {
             this.currentCacheSize -= item.size;
             this.caches.delete(key);
-            console.log(`🗑️ [Cache] Deleted ${key}`);
         }
     }
 
@@ -112,7 +109,6 @@ class MemoryManager {
     clear() {
         this.caches.clear();
         this.currentCacheSize = 0;
-        console.log('🗑️ [Cache] Cleared all');
     }
 
     /**
@@ -133,14 +129,12 @@ class MemoryManager {
             this.delete(sorted[i][0]);
         }
 
-        console.log(`🧹 [Cache] Evicted ${toRemove} old items`);
     }
 
     /**
      * Genel temizlik
      */
     cleanup() {
-        console.log('🧹 [Memory] Starting cleanup...');
 
         // Süresi dolmuş cache'leri temizle
         const now = Date.now();
@@ -153,7 +147,6 @@ class MemoryManager {
         // Garbage collection'ı tetikle (modern browser'larda)
         if (global.gc) {
             global.gc();
-            console.log('🗑️ [Memory] Garbage collection triggered');
         }
     }
 
@@ -249,12 +242,10 @@ export class SmartCache {
         // Cache'de var mı?
         const cached = this.get(key);
         if (cached !== null) {
-            console.log(`✅ [Cache] Hit: ${this.name}/${key}`);
             return cached;
         }
 
         // Cache'de yok, fetch et
-        console.log(`⏳ [Cache] Miss: ${this.name}/${key}, fetching...`);
         const value = await fetchFn();
         this.set(key, value);
         return value;

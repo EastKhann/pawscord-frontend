@@ -361,7 +361,6 @@ const MiniGames = ({ onClose }) => {
     ];
 
     const handleGameEnd = (result) => {
-        console.log('Game ended:', result);
     };
 
     if (selectedGame) {

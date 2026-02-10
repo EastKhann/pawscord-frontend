@@ -111,7 +111,6 @@ class WebSocketService {
             this.connections.set(channel, connection);
 
             ws.onopen = () => {
-                console.log(`🔌 [WS] Connected: ${channel}`);
                 connection.state = WS_STATES.CONNECTED;
                 connection.reconnectAttempts = 0;
                 this.startHeartbeat(channel);
@@ -125,7 +124,6 @@ class WebSocketService {
             };
 
             ws.onclose = (event) => {
-                console.log(`🔌 [WS] Closed: ${channel}`, event.code);
                 connection.state = WS_STATES.DISCONNECTED;
                 this.stopHeartbeat(channel);
                 this.emit('disconnect', { channel, code: event.code });
@@ -309,7 +307,6 @@ class WebSocketService {
         if (!connection) return;
 
         if (connection.reconnectAttempts >= this.config.reconnectAttempts) {
-            console.log(`🔌 [WS] Max reconnect attempts reached: ${channel}`);
             this.emit('maxReconnectAttempts', { channel });
             return;
         }
@@ -323,7 +320,6 @@ class WebSocketService {
             this.config.maxReconnectDelay
         );
 
-        console.log(`🔌 [WS] Reconnecting in ${delay}ms: ${channel}`);
 
         setTimeout(() => {
             this.reconnect(channel);

@@ -43,7 +43,6 @@ class SpatialAudioEngine {
             this.setupListener();
 
             this.initialized = true;
-            console.log('🎧 Spatial Audio Engine initialized');
         } catch (error) {
             console.error('Failed to initialize spatial audio:', error);
             throw error;
@@ -144,7 +143,6 @@ class SpatialAudioEngine {
                 audioElement: null
             };
 
-            console.log(`🎧 Added spatial audio for ${username} at position`, position);
             return this.spatialNodes[username];
         } catch (error) {
             console.error(`Failed to add spatial audio for ${username}:`, error);
@@ -225,7 +223,6 @@ class SpatialAudioEngine {
             node.gain.disconnect();
 
             delete this.spatialNodes[username];
-            console.log(`🎧 Removed spatial audio for ${username}`);
         } catch (error) {
             console.error(`Error removing spatial audio for ${username}:`, error);
         }
@@ -275,7 +272,6 @@ class SpatialAudioEngine {
         }
 
         this.initialized = false;
-        console.log('🎧 Spatial Audio Engine destroyed');
     }
 
     /**

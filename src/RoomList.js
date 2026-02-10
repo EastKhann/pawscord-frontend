@@ -182,7 +182,6 @@ const RoomList = ({
 
     const handleOpenActionMenu = (e, type, id, name) => {
         e.stopPropagation();
-        console.log('🎯 Context menu açılıyor:', { type, id, name });
         setActionMenu({ type, id, name });
     };
 
@@ -207,9 +206,6 @@ const RoomList = ({
     const executeSettings = (e) => {
         e.preventDefault();
 
-        console.log('🔧 executeSettings çağrıldı:', actionMenu);
-        console.log('🔧 Mevcut servers:', servers);
-        console.log('🔧 selectedServerId:', selectedServerId);
 
         if (actionMenu.type === 'room') {
             // Kanal ayarlarını aç - server.categories.rooms yapısında ara
@@ -217,13 +213,10 @@ const RoomList = ({
             let foundServerId = null;
 
             servers?.forEach(server => {
-                console.log(`🔍 ${server.name} sunucusunda arıyorum...`);
                 server.categories?.forEach(category => {
-                    console.log(`  📁 ${category.name} kategorisinde arıyorum...`);
                     if (category.rooms) {
                         const room = category.rooms.find(ch => ch.slug === actionMenu.id);
                         if (room) {
-                            console.log(`  ✅ Kanal bulundu:`, room);
                             foundRoom = { ...room, server_id: server.id, category_id: category.id };
                             foundServerId = server.id;
                         }
@@ -232,7 +225,6 @@ const RoomList = ({
             });
 
             if (foundRoom) {
-                console.log('✅ Kanal ayarları açılıyor:', foundRoom);
                 setSelectedRoom(foundRoom);
                 setSelectedServerId(foundServerId);
                 setShowChannelSettings(true);
@@ -259,7 +251,6 @@ const RoomList = ({
 
             if (res.ok) {
                 const data = await res.json();
-                console.log(`✅ ${data.message || `${username} başarıyla ${toChannel} kanalına taşındı!`}`);
             } else {
                 const error = await res.json();
                 console.error(`❌ ${error.error || 'Kullanıcı taşınamadı'}`);
@@ -283,7 +274,6 @@ const RoomList = ({
 
             if (res.ok) {
                 const data = await res.json();
-                console.log(`✅ ${data.message || `${username} kanaldan atıldı!`}`);
             } else {
                 const error = await res.json();
                 console.error(`❌ ${error.error || 'Kullanıcı atılamadı'}`);
@@ -380,7 +370,6 @@ const RoomList = ({
 
             if (res.ok) {
                 const data = await res.json();
-                console.log('✅ Sunucudan ayrıldınız:', data);
 
                 // Ana sayfaya dön
                 setSelectedServerId('home');
@@ -434,7 +423,6 @@ const RoomList = ({
 
                 if (res.ok) {
                     const data = await res.json();
-                    console.log('✅ Sunucu ikonu güncellendi:', data);
                     // WebSocket güncelleme gönderecek, sayfa otomatik yenilenecek
                 } else {
                     const error = await res.json();
@@ -472,7 +460,6 @@ const RoomList = ({
 
             if (res.ok) {
                 const data = await res.json();
-                console.log('✅ Sunucu gizlilik ayarı güncellendi:', data);
                 // WebSocket güncelleme gönderecek
             } else {
                 const error = await res.json();
@@ -494,7 +481,6 @@ const RoomList = ({
             });
 
             if (res.ok) {
-                console.log(`✅ ${username} kullanıcısına arkadaşlık isteği gönderildi`);
 
                 // 🔥 YENİ: Bildirim göster
                 if (window.Notification && Notification.permission === 'granted') {
@@ -522,7 +508,6 @@ const RoomList = ({
             });
 
             if (res.ok) {
-                console.log(`✅ ${username} arkadaş listesinden çıkarıldı`);
 
                 // Bildirim göster
                 if (window.Notification && Notification.permission === 'granted') {
@@ -569,16 +554,8 @@ const RoomList = ({
 
                 const baseUrl = isProduction ? productionUrl : window.location.origin;
 
-                console.log('🔍 [Invite] URL Bilgileri:', {
-                    NODE_ENV: process.env.NODE_ENV,
-                    hostname: window.location.hostname,
-                    origin: window.location.origin,
-                    isProduction,
-                    baseUrl
-                });
 
                 const inviteUrl = `${baseUrl}/#/invite/${data.code}`;
-                console.log('✅ [Invite] Oluşturulan link:', inviteUrl);
 
                 await navigator.clipboard.writeText(inviteUrl);
                 toast.success(`Davet linki kopyalandı!\n\n${inviteUrl}`, 4000);
@@ -623,7 +600,6 @@ const RoomList = ({
         try {
             const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/join/`, { method: 'POST' });
             if (res.ok) {
-                console.log("✅ Sunucuya katıldın!");
                 setShowDiscovery(false);
                 toast.success('✅ Sunucuya başarıyla katıldın!');
             }
@@ -642,7 +618,6 @@ const RoomList = ({
             });
             const data = await res.json();
             if (res.ok) {
-                console.log(`✅ Başarılı! "${data.server_name}" sunucusuna katıldın.`);
                 setInviteCodeInput('');
                 setShowDiscovery(false);
                 toast.success(`✅ "${data.server_name}" sunucusuna katıldın!`);
@@ -1584,7 +1559,6 @@ const RoomList = ({
                                                                                 if (conversation) {
                                                                                     onDMSelect(conversation.id, username);
                                                                                 } else {
-                                                                                    console.log(`💬 ${username} ile DM konuşması bulunamadı. Önce arkadaş ekleyin.`);
                                                                                 }
                                                                             } else if (action === 'add_friend') {
                                                                                 // 🔥 YENİ: Gerçek arkadaş ekleme
@@ -1594,7 +1568,6 @@ const RoomList = ({
                                                                                 handleRemoveFriend(username);
                                                                             } else if (action === 'mute_local') {
                                                                                 // Lokal susturma - console log yeterli
-                                                                                console.log(`🔇 ${username} lokal olarak sessize alındı`);
                                                                             } else if (action === 'move' && targetChannel) {
                                                                                 // Kullanıcıyı başka kanala taşı - direkt yap
                                                                                 handleMoveUserToChannel(username, room.slug, targetChannel);
@@ -1603,10 +1576,8 @@ const RoomList = ({
                                                                                 handleKickUserFromChannel(username, room.slug);
                                                                             } else if (action === 'server_mute') {
                                                                                 // Sunucu susturma - console log
-                                                                                console.log(`🔇 ${username} sunucu susturma yapılacak`);
                                                                             } else if (action === 'server_deafen') {
                                                                                 // Sunucu sağırlaştırma - console log
-                                                                                console.log(`🙉 ${username} sunucu sağırlaştırma yapılacak`);
                                                                             }
                                                                         }}
                                                                     />
@@ -2602,7 +2573,6 @@ const RoomList = ({
                             });
 
                             if (response.ok) {
-                                console.log('✅ Sunucu başarıyla silindi!');
                                 toast.success(`"${serverName}" sunucusu başarıyla silindi!`, 5000);
 
                                 // Ana sayfaya dön

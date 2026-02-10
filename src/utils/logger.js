@@ -6,7 +6,6 @@ const isDevelopment = import.meta.env.MODE === 'development';
 const logger = {
     log: (...args) => {
         if (isDevelopment) {
-            console.log(...args);
         }
     },
 
@@ -30,25 +29,21 @@ const logger = {
     // Kategorili loglama
     voice: (...args) => {
         if (isDevelopment) {
-            console.log('🎤 [Voice]', ...args);
         }
     },
 
     webrtc: (...args) => {
         if (isDevelopment) {
-            console.log('📡 [WebRTC]', ...args);
         }
     },
 
     signal: (...args) => {
         if (isDevelopment) {
-            console.log('📤 [Signal]', ...args);
         }
     },
 
     audio: (...args) => {
         if (isDevelopment) {
-            console.log('🔊 [Audio]', ...args);
         }
     }
 };

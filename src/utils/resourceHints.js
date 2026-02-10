@@ -28,7 +28,6 @@ class ResourceHintsManager {
         this.hints.set(`preconnect-${url}`, link);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🔗 [ResourceHints] Preconnect: ${url}`);
         }
     }
 
@@ -46,7 +45,6 @@ class ResourceHintsManager {
         this.hints.set(`dns-prefetch-${url}`, link);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🌐 [ResourceHints] DNS Prefetch: ${url}`);
         }
     }
 
@@ -69,7 +67,6 @@ class ResourceHintsManager {
         this.hints.set(`preload-${url}`, link);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`⚡ [ResourceHints] Preload (${as}): ${url}`);
         }
     }
 
@@ -90,7 +87,6 @@ class ResourceHintsManager {
         this.hints.set(`prefetch-${url}`, link);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`📥 [ResourceHints] Prefetch: ${url}`);
         }
     }
 
@@ -110,7 +106,6 @@ class ResourceHintsManager {
         this.hints.set(`prerender-${url}`, link);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🎨 [ResourceHints] Prerender: ${url}`);
         }
     }
 
@@ -130,7 +125,6 @@ class ResourceHintsManager {
         this.hints.set(`modulepreload-${url}`, link);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`📦 [ResourceHints] Module Preload: ${url}`);
         }
     }
 
@@ -174,7 +168,6 @@ class ResourceHintsManager {
         // This would prefetch the code chunk for a route
         // Implementation depends on your routing setup
         if (import.meta.env.MODE === 'development') {
-            console.log(`🛣️ [ResourceHints] Prefetch route: ${route}`);
         }
     }
 
@@ -217,7 +210,6 @@ class ResourceHintsManager {
         // Don't prefetch on slow connections
         if (connection.saveData) {
             if (import.meta.env.MODE === 'development') {
-                console.log('⚠️ [ResourceHints] Skipping prefetch (data saver mode)');
             }
             return;
         }
@@ -229,7 +221,6 @@ class ResourceHintsManager {
             this.prefetch(url, options);
         } else {
             if (import.meta.env.MODE === 'development') {
-                console.log(`⚠️ [ResourceHints] Skipping prefetch (${effectiveType} connection)`);
             }
         }
     }

@@ -15,12 +15,10 @@ export async function translateText(text, targetLang, apiBaseUrl, fetchWithAuth)
     const cacheKey = `${text.substring(0, 100)}_${targetLang}`;  // First 100 chars for key
 
     if (translationCache.has(cacheKey)) {
-        console.log('🎯 [Translation] Cache hit:', cacheKey);
         return translationCache.get(cacheKey);
     }
 
     try {
-        console.log(`🌐 [Translation] Translating to ${targetLang}:`, text.substring(0, 50));
 
         const response = await fetchWithAuth(`${apiBaseUrl}/translation/translate/`, {
             method: 'POST',
@@ -41,7 +39,6 @@ export async function translateText(text, targetLang, apiBaseUrl, fetchWithAuth)
         // Cache the result
         translationCache.set(cacheKey, data);
 
-        console.log('✅ [Translation] Success:', data.translated.substring(0, 50));
 
         return data;
 
@@ -68,7 +65,6 @@ export async function translateBatch(messages, targetLang, apiBaseUrl, fetchWith
     }
 
     try {
-        console.log(`🌐 [Translation] Batch translating ${messages.length} messages to ${targetLang}`);
 
         const response = await fetchWithAuth(`${apiBaseUrl}/translation/translate-batch/`, {
             method: 'POST',
@@ -95,7 +91,6 @@ export async function translateBatch(messages, targetLang, apiBaseUrl, fetchWith
             translationCache.set(cacheKey, result);
         });
 
-        console.log(`✅ [Translation] Batch complete: ${data.results.length} messages`);
 
         return data.results;
 
@@ -125,7 +120,6 @@ export async function getSupportedLanguages(apiBaseUrl) {
 
         const data = await response.json();
 
-        console.log(`✅ [Translation] Loaded ${data.count} languages`);
 
         return data.languages;
 
@@ -193,7 +187,6 @@ export function detectLanguageClient(text) {
  */
 export function clearTranslationCache() {
     translationCache.clear();
-    console.log('🗑️ [Translation] Cache cleared');
 }
 
 /**
@@ -203,7 +196,6 @@ export function getCacheSize() {
     return translationCache.size;
 }
 
-console.log('✅ Translation utils loaded');
 
 
 

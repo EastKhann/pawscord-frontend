@@ -20,7 +20,6 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/coins/packages/`);
       const data = await response.json();
-      console.log('💰 [COIN PACKAGES] Response:', data);
       if (data.success) {
         setPackages(data.packages);
       }
@@ -33,8 +32,6 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
     setSelectedPackage(pkg.id);
     setLoading(true);
 
-    console.log('🔑 [COIN PURCHASE] Token:', token ? 'EXISTS' : 'MISSING');
-    console.log('📦 [COIN PURCHASE] Package ID:', pkg.id);
 
     try {
       // Stripe checkout
@@ -51,7 +48,6 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
       });
 
       const data = await response.json();
-      console.log('🛒 [COIN PURCHASE] Response:', data);
 
       if (data.success) {
         if (data.test_mode) {

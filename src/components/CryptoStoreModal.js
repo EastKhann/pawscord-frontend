@@ -34,7 +34,6 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
             let data = null;
             try { data = await res.json(); } catch (_) { data = null; }
             // Log for debugging
-            console.log('[DailyReward] status', res.status, 'data', data);
             if (res.ok && data) {
                 // Ensure expected keys exist to avoid undefined in UI
                 const safe = {
@@ -137,7 +136,6 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 body: JSON.stringify({ txid: trimmed })
             });
             const data = await res.json();
-            console.log('[VerifyTXID]', res.status, data);
             if (res.ok) {
                 setTxidResult({ success: true, message: data.message || 'Ödeme doğrulandı!', added_coins: data.added_coins });
                 refreshData();

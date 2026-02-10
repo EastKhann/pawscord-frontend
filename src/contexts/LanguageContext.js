@@ -1,7 +1,8 @@
 // frontend/src/contexts/LanguageContext.js
-// 🌐 INTERNATIONALIZATION CONTEXT
+// 🌐 INTERNATIONALIZATION CONTEXT (Enhanced with i18next)
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import i18n from '../i18n';
 import api from '../api';
 
 const LanguageContext = createContext();
@@ -87,6 +88,8 @@ export const LanguageProvider = ({ children }) => {
     const changeLanguage = useCallback(async (langCode) => {
         setCurrentLanguage(langCode);
         localStorage.setItem('language', langCode);
+        localStorage.setItem('pawscord_language', langCode);
+        i18n.changeLanguage(langCode); // Sync i18next
         await loadTranslations(langCode);
 
         // Save to server if logged in
@@ -97,9 +100,20 @@ export const LanguageProvider = ({ children }) => {
         }
     }, []);
 
-    // Translation function with interpolation
+    // Translation function with interpolation + i18next fallback
     const t = useCallback((key, params = {}) => {
-        let text = translations[key] || key;
+        let text = translations[key];
+
+        // Fallback to i18next bundled translations if API translation missing
+        if (!text || text === key) {
+            const i18nKey = key.replace(/^([^.]+)\./, '$1.');
+            const i18nResult = i18n.t(i18nKey, params);
+            if (i18nResult !== i18nKey) {
+                return i18nResult;
+            }
+        }
+
+        if (!text) return key;
 
         // Handle interpolation {param}
         Object.entries(params).forEach(([param, value]) => {

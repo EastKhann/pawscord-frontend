@@ -28,7 +28,6 @@ class SecurityManager {
         }
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🔒 [Security] Initialized');
         }
     }
 

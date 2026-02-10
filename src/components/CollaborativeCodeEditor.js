@@ -43,7 +43,6 @@ const CollaborativeCodeEditor = ({
         try {
             // Monaco is optional - use basic textarea fallback
             setMonacoLoaded(false);
-            console.log('✅ [CodeEditor] Using textarea fallback (monaco-editor not installed)');
         } catch (error) {
             console.error('❌ [CodeEditor] Editor init error:', error);
         }

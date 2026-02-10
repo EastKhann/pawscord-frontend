@@ -327,7 +327,6 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
    * Show toast notification
    */
   const showToast = (message, type) => {
-    console.log(`[${type}] ${message}`);
   };
 
   /**

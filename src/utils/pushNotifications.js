@@ -48,7 +48,6 @@ class PushNotificationManager {
 
                 // Listen for registration
                 await PushNotifications.addListener('registration', async (token) => {
-                    if (import.meta.env.DEV) console.log('🔔 [Push] Token obtained (hidden for security)');
                     this.deviceToken = token.value;
                     await this.registerDevice(token.value);
                 });
@@ -60,17 +59,14 @@ class PushNotificationManager {
 
                 // Listen for push notifications
                 await PushNotifications.addListener('pushNotificationReceived', (notification) => {
-                    console.log('🔔 [Push] Notification received:', notification);
                     this.handleNotification(notification);
                 });
 
                 // Listen for notification actions
                 await PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-                    console.log('🔔 [Push] Action performed:', action);
                     this.handleNotificationAction(action);
                 });
 
-                console.log('✅ [Push] Capacitor notifications initialized');
             }
         } catch (error) {
             console.error('❌ [Push] Capacitor init failed:', error);
@@ -91,7 +87,6 @@ class PushNotificationManager {
         this.permission = permission;
 
         if (permission === 'granted') {
-            console.log('✅ [Push] Web notifications enabled');
         }
     }
 
@@ -111,7 +106,6 @@ class PushNotificationManager {
             });
 
             if (response.ok) {
-                console.log('✅ [Push] Device registered');
             }
         } catch (error) {
             console.error('❌ [Push] Device registration failed:', error);
@@ -180,7 +174,6 @@ class PushNotificationManager {
             await this.fetchWithAuth(`${this.apiBaseUrl}/push/test/`, {
                 method: 'POST'
             });
-            console.log('✅ [Push] Test notification sent');
         } catch (error) {
             console.error('❌ [Push] Test failed:', error);
         }
@@ -195,7 +188,6 @@ class PushNotificationManager {
                 await this.fetchWithAuth(`${this.apiBaseUrl}/devices/${this.deviceToken}/`, {
                     method: 'DELETE'
                 });
-                console.log('✅ [Push] Device unregistered');
             } catch (error) {
                 console.error('❌ [Push] Unregister failed:', error);
             }

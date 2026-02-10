@@ -161,7 +161,6 @@ const MessageInput = ({
                     }
                 }
             } catch (error) {
-                console.log('Draft yükleme hatası:', error);
             }
         };
 
@@ -197,7 +196,6 @@ const MessageInput = ({
                 // 1 saniye sonra draft saved badge'i gizle
                 setTimeout(() => setDraftSaved(false), 1000);
             } catch (error) {
-                console.log('Draft kaydetme hatası:', error);
             }
         }, 2000);
 
@@ -218,15 +216,9 @@ const MessageInput = ({
             // 🖼️ If it's an image, compress it first
             if (file.type.startsWith('image/')) {
                 try {
-                    console.log('🖼️ [MessageInput] Compressing image...');
                     const compressedBlob = await compressChatImage(file);
                     const compressedFile = new File([compressedBlob], file.name, { type: 'image/webp' });
 
-                    console.log('🖼️ [MessageInput] Compression complete:', {
-                        original: `${(file.size / 1024).toFixed(2)}KB`,
-                        compressed: `${(compressedBlob.size / 1024).toFixed(2)}KB`,
-                        savings: `${(((file.size - compressedBlob.size) / file.size) * 100).toFixed(1)}%`
-                    });
 
                     // ✅ await ile sıralı yükle (database lock önleme)
                     if (onFileUpload) await onFileUpload(compressedFile);
@@ -994,7 +986,6 @@ const MessageInput = ({
                     room={activeChat}
                     onClose={() => setShowScheduled(false)}
                     onSchedule={(scheduledTime) => {
-                        console.log('Message scheduled for:', scheduledTime);
                         setShowScheduled(false);
                         setMessage('');
                     }}

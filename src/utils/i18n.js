@@ -36,7 +36,6 @@ class I18nManager {
         }
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🌍 [i18n] Initialized with locale:', this.currentLocale);
         }
     }
 
@@ -53,7 +52,6 @@ class I18nManager {
         this.loadedLocales.add(locale);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`✅ [i18n] Registered translations for: ${locale}`);
         }
     }
 
@@ -103,7 +101,6 @@ class I18nManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🌍 [i18n] Locale changed to: ${locale}`);
         }
     }
 

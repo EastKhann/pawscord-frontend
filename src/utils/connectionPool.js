@@ -133,7 +133,6 @@ class ConnectionPoolManager {
             });
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`📋 [ConnectionPool] Queued request: ${url} (${this.requestQueue.length} in queue)`);
             }
         });
     }
@@ -228,7 +227,6 @@ class ConnectionPoolManager {
             img.src = `${origin}/favicon.ico?warm=${Date.now()}`;
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`🔥 [ConnectionPool] Warming up connection: ${origin}`);
             }
         });
     }
@@ -265,7 +263,6 @@ class ConnectionPoolManager {
                 this.pools.delete(origin);
 
                 if (import.meta.env.MODE === 'development') {
-                    console.log(`🗑️ [ConnectionPool] Cleaned up idle pool: ${origin}`);
                 }
             }
         });

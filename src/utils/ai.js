@@ -9,7 +9,6 @@
  */
 export async function askAI(question, apiBaseUrl, fetchWithAuth) {
     try {
-        console.log('🤖 [AI] Asking:', question.substring(0, 50));
 
         const response = await fetchWithAuth(`${apiBaseUrl}/ai/ask/`, {
             method: 'POST',
@@ -26,7 +25,6 @@ export async function askAI(question, apiBaseUrl, fetchWithAuth) {
             throw new Error(data.error || 'AI request failed');
         }
 
-        console.log('✅ [AI] Answer received');
         return data;
 
     } catch (error) {
@@ -40,7 +38,6 @@ export async function askAI(question, apiBaseUrl, fetchWithAuth) {
  */
 export async function summarizeChannel(roomId, count, apiBaseUrl, fetchWithAuth) {
     try {
-        console.log(`🤖 [AI] Summarizing ${count} messages from room ${roomId}`);
 
         const response = await fetchWithAuth(`${apiBaseUrl}/ai/summarize/`, {
             method: 'POST',
@@ -57,7 +54,6 @@ export async function summarizeChannel(roomId, count, apiBaseUrl, fetchWithAuth)
             throw new Error(data.error || 'Summarize request failed');
         }
 
-        console.log('✅ [AI] Summary received');
         return data;
 
     } catch (error) {
@@ -229,7 +225,6 @@ export function getAICommands() {
     ];
 }
 
-console.log('✅ AI utils loaded');
 
 
 

@@ -17,18 +17,11 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
 
     // 🔥 DEBUG: İlk render'da ve URL değişimlerinde log
     useEffect(() => {
-        console.log('[VoicePlayer] 🎙️ Yeni ses mesajı:', {
-            audioUrl,
-            currentAudioUrl,
-            triedProxy,
-            apiBaseUrl: apiBaseUrl || window.location.origin
-        });
     }, [audioUrl, currentAudioUrl, triedProxy, apiBaseUrl]);
 
     // 🔥 audioUrl değiştiğinde state'i sıfırla
     useEffect(() => {
         if (audioUrl && audioUrl !== currentAudioUrl && !triedProxy) {
-            console.log('[VoicePlayer] 🔄 URL değişti, state sıfırlanıyor');
             setCurrentAudioUrl(audioUrl);
             setTriedProxy(false);
             setHasError(false);
@@ -65,7 +58,6 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
         if (!audio) return;
 
         const handleLoadedMetadata = () => {
-            console.log('[VoicePlayer] ✅ Ses yüklendi:', audioUrl);
             setAudioDuration(audio.duration);
             generateWaveform();
             setHasError(false);
@@ -86,7 +78,6 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
 
             // 🔥 FIX: R2 hatası durumunda proxy'ye fallback yap
             if (!triedProxy && currentAudioUrl) {
-                console.log('[VoicePlayer] 🔄 R2/CDN hatası, proxy denenecek...');
 
                 // URL'den file path çıkar (birden fazla format destekle)
                 let filePath = null;
@@ -109,7 +100,6 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
                 if (filePath) {
                     // /api/ prefix ekle
                     const proxyUrl = `${apiBaseUrl || window.location.origin}/api/voice-proxy/${filePath}`;
-                    console.log('[VoicePlayer] 🔄 Proxy URL:', proxyUrl);
                     setCurrentAudioUrl(proxyUrl);
                     setTriedProxy(true);
                     setHasError(false);
@@ -121,7 +111,6 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
         };
 
         const handleCanPlay = () => {
-            console.log('[VoicePlayer] 🎵 Ses çalınabilir:', currentAudioUrl);
         };
 
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);

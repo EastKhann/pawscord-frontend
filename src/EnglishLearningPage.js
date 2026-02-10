@@ -238,7 +238,6 @@ function EnglishLearningPage() {
     // WebSocket'ten gelen veriyi dinle (Global Context üzerinden)
     useEffect(() => {
         if (globalData?.type === 'user_profile_update') {
-            console.log("EnglishLearnPage: Global soketten güncelleme alındı.");
             if (globalData.user_data && globalData.user_data.known_words) {
                 setKnownWords(globalData.user_data.known_words);
             }

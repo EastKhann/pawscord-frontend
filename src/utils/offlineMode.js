@@ -27,7 +27,6 @@ class OfflineModeManager {
         // IndexedDB'yi başlat
         await this.initDatabase();
 
-        console.log(`📡 [OfflineMode] Başlatıldı (${this.isOnline ? 'Online' : 'Offline'})`);
     }
 
     /**
@@ -44,7 +43,6 @@ class OfflineModeManager {
 
             request.onsuccess = () => {
                 this.db = request.result;
-                console.log('✅ [OfflineMode] IndexedDB hazır');
                 resolve();
             };
 
@@ -65,7 +63,6 @@ class OfflineModeManager {
                     actionStore.createIndex('timestamp', 'timestamp', { unique: false });
                 }
 
-                console.log('📊 [OfflineMode] IndexedDB tabloları oluşturuldu');
             };
         });
     }
@@ -74,7 +71,6 @@ class OfflineModeManager {
      * Online olduğunda tetiklenir
      */
     handleOnline() {
-        console.log('🟢 [OfflineMode] İnternet bağlantısı geri geldi');
         this.isOnline = true;
         this.notify('online');
 
@@ -133,7 +129,6 @@ class OfflineModeManager {
             const request = store.add(messageData);
 
             request.onsuccess = () => {
-                console.log('💾 [OfflineMode] Mesaj cache\'e kaydedildi:', message);
                 resolve(request.result);
             };
 
@@ -188,7 +183,6 @@ class OfflineModeManager {
             const request = store.add(actionData);
 
             request.onsuccess = () => {
-                console.log('📝 [OfflineMode] Pending action eklendi:', action);
                 this.pendingActions.push(action);
                 resolve(request.result);
             };
@@ -206,7 +200,6 @@ class OfflineModeManager {
     async syncPendingActions() {
         if (!this.db || this.pendingActions.length === 0) return;
 
-        console.log(`🔄 [OfflineMode] ${this.pendingActions.length} bekleyen işlem senkronize ediliyor...`);
 
         const transaction = this.db.transaction(['pendingActions'], 'readwrite');
         const store = transaction.objectStore('pendingActions');
@@ -229,7 +222,6 @@ class OfflineModeManager {
 
                     // Başarılı olduysa sil
                     store.delete(action.id);
-                    console.log('✅ [OfflineMode] Action senkronize edildi:', action);
 
                 } catch (error) {
                     console.error('❌ [OfflineMode] Senkronizasyon hatası:', error);
@@ -238,7 +230,6 @@ class OfflineModeManager {
             }
 
             this.pendingActions = [];
-            console.log('🎉 [OfflineMode] Tüm pending action\'lar senkronize edildi');
         };
     }
 
@@ -246,7 +237,6 @@ class OfflineModeManager {
      * Mesaj gönderme işlemini çalıştır
      */
     async executeSendMessage(data) {
-        console.log('📤 [OfflineMode] Mesaj gönderiliyor:', data);
 
         const token = localStorage.getItem('access_token');
         if (!token) {
@@ -283,7 +273,6 @@ class OfflineModeManager {
      * Dosya yükleme işlemini çalıştır
      */
     async executeUploadFile(data) {
-        console.log('📤 [OfflineMode] Dosya yükleniyor:', data);
 
         const token = localStorage.getItem('access_token');
         if (!token) {
@@ -350,7 +339,6 @@ class OfflineModeManager {
         transaction.objectStore('messages').clear();
         transaction.objectStore('pendingActions').clear();
 
-        console.log('🗑️ [OfflineMode] Cache temizlendi');
     }
 
     /**

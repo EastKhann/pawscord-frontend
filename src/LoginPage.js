@@ -7,7 +7,7 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import toast from './utils/toast';
 import { useRecaptcha } from './utils/recaptcha';
 import { jwtDecode } from 'jwt-decode'; // 🔥 FIX: Import jwtDecode for user extraction
-import { API_URL_BASE_STRING, API_BASE_URL, isElectron, isNative } from './utils/constants';
+import { API_URL_BASE_STRING, API_BASE_URL, isElectron, isNative, GOOGLE_WEB_CLIENT_ID } from './utils/constants';
 
 // --- ORTAM AYARLARI (Centralized from constants.js) ---
 const API_URL = API_BASE_URL;
@@ -21,14 +21,12 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
     // ✅ 0. GOOGLE AUTH INITIALIZE (Mobile için gerekli)
     useEffect(() => {
         if (Capacitor.isNativePlatform()) {
-            console.log('📱 [Google] Initializing Google Auth for mobile...');
             try {
                 GoogleAuth.initialize({
-                    clientId: '774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com',
+                    clientId: GOOGLE_WEB_CLIENT_ID,
                     scopes: ['profile', 'email'],
                     grantOfflineAccess: true,
                 });
-                console.log('✅ [Google] Initialized successfully');
             } catch (error) {
                 console.error('❌ [Google] Initialization failed:', error);
             }
@@ -42,13 +40,11 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
             // NEW: Handle auth success event from Electron main process
             const handleAuthSuccess = (event, data) => {
-                console.log("✅ [Electron] Google auth success received");
                 try {
                     const { access, refresh } = data;
 
                     if (access && refresh) {
                         const decoded = jwtDecode(access);
-                        console.log("👤 [Electron] User:", decoded.username);
 
                         localStorage.removeItem('chat_username');
                         localStorage.setItem('access_token', access);
@@ -71,20 +67,17 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
             // 🔥 NEW: Handle oauth-tokens from deep link (main process'den gelen)
             const handleOAuthTokens = (event, data) => {
-                console.log("🔗 [Electron] OAuth tokens received from main process");
                 try {
                     const { access, refresh } = data;
 
                     if (access && refresh) {
                         const decoded = jwtDecode(access);
-                        console.log("👤 [Electron] User from deep link:", decoded.username);
 
                         localStorage.removeItem('chat_username');
                         localStorage.setItem('access_token', access);
                         localStorage.setItem('refresh_token', refresh);
                         localStorage.setItem('chat_username', decoded.username);
 
-                        console.log("✅ [Electron] Tokens saved, reloading...");
                         setTimeout(() => window.location.reload(), 500);
                     }
                 } catch (e) {
@@ -94,7 +87,6 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
             };
 
             const handleDeepLink = (event, url) => {
-                console.log("🚀 [DeepLink] URL Yakalandı:", url);
                 try {
                     const urlObj = new URL(url);
                     const params = new URLSearchParams(urlObj.search);
@@ -102,11 +94,9 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                     const refreshToken = params.get('refresh');
 
                     if (accessToken && refreshToken) {
-                        console.log("✅ [DeepLink] Giriş Başarılı!");
 
                         // 🔥 FIX: Decode token and save username for Electron too
                         const decoded = jwtDecode(accessToken);
-                        console.log("👤 [Electron] Decoded user from token:", decoded.username);
 
                         // Clear old user data first
                         localStorage.removeItem('chat_username');
@@ -184,11 +174,9 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
             // Check for tokens (successful OAuth)
             if (accessToken && refreshToken) {
-                console.log("🌍 [Web] Tokenlar URL'den alındı (OAuth success)");
                 try {
                     // 🔥 FIX: Decode token and save username IMMEDIATELY
                     const decoded = jwtDecode(accessToken);
-                    console.log("👤 [Web] Decoded user from token:", decoded.username);
 
                     // Clear old user data first (CRITICAL!)
                     localStorage.removeItem('chat_username');
@@ -197,7 +185,6 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                     localStorage.setItem('access_token', accessToken);
                     localStorage.setItem('refresh_token', refreshToken);
                     localStorage.setItem('chat_username', decoded.username);
-                    console.log("✅ [Web] Tokens and username saved to localStorage");
 
                     // Clean URL and reload
                     window.history.replaceState({}, document.title, "/");
@@ -213,22 +200,13 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
     // ✅ 3. AKILLI GOOGLE GİRİŞ BUTONU
     const handleGoogleLogin = async () => {
         try {
-            console.log('🔵 [Google] Login başlatılıyor...', {
-                isNative: Capacitor.isNativePlatform(),
-                isElectron,
-                apiUrl: API_BASE_URL
-            });
 
             if (Capacitor.isNativePlatform()) {
                 // MOBILE: Capacitor Google Auth kullan
-                console.log('📱 [Google] Mobile auth flow');
                 const googleUser = await GoogleAuth.signIn();
-                console.log('✅ [Google] User signed in:', googleUser.email);
-                console.log('🔑 [Google] ID Token:', googleUser.authentication.idToken);
 
                 // Token'ı Backend'e Gönder (POST /auth/google/native/)
                 const url = `${API_BASE_URL}/auth/google/native/`;
-                console.log('📡 [Google] Sending to:', url);
 
                 const response = await fetch(url, {
                     method: 'POST',
@@ -239,12 +217,9 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                     body: JSON.stringify({ token: googleUser.authentication.idToken })
                 });
 
-                console.log('🔍 [Google] Response status:', response.status);
-                console.log('🔍 [Google] Response headers:', response.headers);
 
                 // Content-Type kontrolü
                 const contentType = response.headers.get('content-type');
-                console.log('🔍 [Google] Content-Type:', contentType);
 
                 if (!contentType || !contentType.includes('application/json')) {
                     const textResponse = await response.text();
@@ -254,10 +229,8 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 }
 
                 const data = await response.json();
-                console.log('📦 [Google] Backend response data:', data);
 
                 if (response.ok) {
-                    console.log('✅ [Google] Login successful');
                     if (data.access && data.refresh) {
                         localStorage.setItem('access_token', data.access);
                         localStorage.setItem('refresh_token', data.refresh);
@@ -272,17 +245,14 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 }
             } else {
                 // WEB & ELECTRON: Redirect to Google
-                console.log('🌐 [Google] Web/Electron redirect flow');
                 const source = isElectron ? 'electron' : 'web';
                 // 🔥 FIX: Electron için api.pawscord.com kullan (www subdomain /api route'u yok)
                 const oauthBaseUrl = isElectron ? 'https://api.pawscord.com/api' : API_BASE_URL;
                 const redirectUrl = `${oauthBaseUrl}/auth/google/start/?source=${source}`;
-                console.log('🔀 [Google] Redirecting to:', redirectUrl);
 
                 // 🔥 ELECTRON İÇİN: Popup window aç (IPC kullan)
                 if (isElectron && window.require) {
                     const { ipcRenderer } = window.require('electron');
-                    console.log('✅ [Google] Opening in Electron popup:', redirectUrl);
                     ipcRenderer.send('start-google-login', redirectUrl);
                 } else {
                     // WEB için: Normal redirect

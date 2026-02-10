@@ -24,7 +24,6 @@ const NativePlayer = memo(({
         onLoaded?.();
         videoRef.current?.play().catch(e => {
             // Autoplay blocked - that's okay, user can click play
-            console.log('Autoplay prevented:', e);
         });
     }, [onLoaded]);
 

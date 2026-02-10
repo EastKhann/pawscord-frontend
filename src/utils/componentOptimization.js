@@ -49,7 +49,6 @@ export const smartMemo = (Component, options = {}) => {
         const areEqual = compareProps(prev, next);
 
         if (debug && !areEqual) {
-            console.log(`[SmartMemo] ${displayName || Component.name} re-rendering`);
         }
 
         return areEqual;
@@ -133,10 +132,6 @@ export const withRenderTracker = (Component, componentName) => {
             });
 
             if (changedProps.length > 0) {
-                console.log(
-                    `[Render #${renderCount.current}] ${componentName}`,
-                    'Changed:', changedProps
-                );
             }
 
             prevProps.current = props;

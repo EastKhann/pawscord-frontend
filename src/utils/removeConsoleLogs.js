@@ -4,7 +4,6 @@
 export const logger = {
     log: (...args) => {
         if (import.meta.env.MODE === 'development') {
-            console.log(...args);
         }
     },
     warn: (...args) => {

@@ -79,7 +79,6 @@ const StickersPanel = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Sticker uploaded');
         setShowUploadModal(false);
         setStickerName('');
         setStickerFile(null);
@@ -107,7 +106,6 @@ const StickersPanel = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Sticker deleted');
         setStickers(stickers.filter(s => s.id !== stickerId));
       } else {
         console.error('❌ Failed to delete sticker');
@@ -130,7 +128,6 @@ const StickersPanel = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Sticker pack installed');
         fetchStickerPacks();
       } else {
         console.error('❌ Failed to install pack');

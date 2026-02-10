@@ -61,7 +61,6 @@ const refreshToken = async () => {
         localStorage.setItem('refresh_token', data.refresh);
     }
 
-    console.log('✅ [AuthFetch] Token refreshed successfully');
     return data.access;
 };
 
@@ -76,7 +75,6 @@ export const authFetch = async (url, options = {}) => {
 
     // Check if token needs refresh BEFORE making request
     if (isTokenExpired(accessToken)) {
-        console.log('⏰ [AuthFetch] Token expired, refreshing before request...');
 
         if (!isRefreshing) {
             isRefreshing = true;

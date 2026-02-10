@@ -35,7 +35,6 @@ const usePageTracking = () => {
                     })
                 });
 
-                console.log('📊 Page tracked:', location.pathname);
             } catch (error) {
                 console.error('Analytics tracking error:', error);
             }

@@ -36,7 +36,6 @@ const CinemaModal = ({ onClose, ws }) => {
                     isRemoteUpdate.current = true;
 
                     if (data.action === 'change_url') {
-                        console.log("🔗 [Remote] URL:", data.payload.url);
                         setPlaying(false);
                         setIsReady(false);
                         setUrl(data.payload.url);
@@ -71,7 +70,6 @@ const CinemaModal = ({ onClose, ws }) => {
         if (isRemoteUpdate.current) return;
 
         if (ws.current?.readyState === WebSocket.OPEN) {
-            console.log("📡 Sinyal:", action);
             ws.current.send(JSON.stringify({ type: 'media_sync', action, payload }));
         }
     };
@@ -130,7 +128,6 @@ const CinemaModal = ({ onClose, ws }) => {
                             style={{ position: 'absolute', top: 0, left: 0 }}
 
                             onReady={() => {
-                                console.log("✅ Video Hazır");
                                 setIsReady(true);
                             }}
 

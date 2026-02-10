@@ -6,7 +6,6 @@
  */
 export async function registerEnhancedServiceWorker() {
     if (!('serviceWorker' in navigator)) {
-        console.log('Service Worker not supported');
         return null;
     }
 
@@ -16,7 +15,6 @@ export async function registerEnhancedServiceWorker() {
             updateViaCache: 'none', // Always check for updates
         });
 
-        console.log('✅ Service Worker registered:', registration.scope);
 
         // Check for updates every 5 minutes
         setInterval(() => {
@@ -48,7 +46,6 @@ export async function registerEnhancedServiceWorker() {
  */
 function showUpdateNotification() {
     // Toast bildirim gösterme - sadece updateAvailable state kullan
-    console.log('ℹ️ Yeni versiyon mevcut - UI güncelleme butonu aktif');
 }
 
 /**
@@ -60,7 +57,6 @@ export async function unregisterServiceWorker() {
     try {
         const registration = await navigator.serviceWorker.ready;
         await registration.unregister();
-        console.log('Service Worker unregistered');
     } catch (error) {
         console.error('Service Worker unregistration failed:', error);
     }
@@ -77,7 +73,6 @@ export async function clearAllCaches() {
         await Promise.all(
             cacheNames.map(cacheName => caches.delete(cacheName))
         );
-        console.log('All caches cleared');
     } catch (error) {
         console.error('Failed to clear caches:', error);
     }
@@ -124,7 +119,6 @@ export async function precacheCriticalAssets(assets = []) {
     try {
         const cache = await caches.open(cacheName);
         await cache.addAll(assets);
-        console.log('Critical assets precached');
     } catch (error) {
         console.error('Failed to precache assets:', error);
     }
@@ -155,14 +149,12 @@ export function setupOfflineDetection(onOnline, onOffline) {
  */
 export async function registerBackgroundSync(tag) {
     if (!('serviceWorker' in navigator) || !('sync' in ServiceWorkerRegistration.prototype)) {
-        console.log('Background Sync not supported');
         return false;
     }
 
     try {
         const registration = await navigator.serviceWorker.ready;
         await registration.sync.register(tag);
-        console.log('Background sync registered:', tag);
         return true;
     } catch (error) {
         console.error('Background sync failed:', error);
@@ -175,7 +167,6 @@ export async function registerBackgroundSync(tag) {
  */
 export async function requestPersistentStorage() {
     if (!navigator.storage || !navigator.storage.persist) {
-        console.log('Persistent storage not supported');
         return false;
     }
 
@@ -184,7 +175,6 @@ export async function requestPersistentStorage() {
 
         if (!isPersisted) {
             const granted = await navigator.storage.persist();
-            console.log('Persistent storage:', granted ? 'granted' : 'denied');
             return granted;
         }
 

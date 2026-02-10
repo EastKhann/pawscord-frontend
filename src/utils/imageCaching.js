@@ -353,7 +353,6 @@ export const prefetchUserAvatars = async (users) => {
 
   if (avatarUrls.length === 0) return;
 
-  console.log(`🖼️ [AvatarCache] Prefetching ${avatarUrls.length} avatars...`);
 
   // Paralel yükle ama max 5 concurrent
   const batchSize = 5;
@@ -390,7 +389,6 @@ export const prefetchUserAvatars = async (users) => {
     }));
   }
 
-  console.log(`✅ [AvatarCache] Prefetch complete. Memory cache: ${inMemoryAvatarCache.size} items`);
 };
 
 /**

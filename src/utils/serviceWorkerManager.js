@@ -29,7 +29,6 @@ class ServiceWorkerManager {
                 scope: this.scope
             });
 
-            console.log('✅ Service Worker registered:', this.registration.scope);
 
             this.setupListeners();
             this.checkForUpdates();
@@ -51,7 +50,6 @@ class ServiceWorkerManager {
         this.registration.addEventListener('updatefound', () => {
             const newWorker = this.registration.installing;
 
-            console.log('🔄 Service Worker update found');
 
             newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
@@ -59,7 +57,6 @@ class ServiceWorkerManager {
                     this.emit('updateAvailable', newWorker);
 
                     if (import.meta.env.MODE === 'development') {
-                        console.log('🆕 New Service Worker installed');
                     }
                 }
             });
@@ -67,7 +64,6 @@ class ServiceWorkerManager {
 
         // Controller changed (new SW activated)
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('🔄 Service Worker controller changed');
             this.emit('controllerChange');
         });
 
@@ -96,7 +92,6 @@ class ServiceWorkerManager {
 
         try {
             await this.registration.update();
-            console.log('🔄 Checking for Service Worker updates...');
         } catch (error) {
             console.error('Service Worker update failed:', error);
         }
@@ -113,7 +108,6 @@ class ServiceWorkerManager {
         // 🔥 FIX: Otomatik sayfa yenilemesi KALDIRILDI
         // Kullanıcı zaten sayfayı kullanıyorsa mesajlar kaybolur!
         // Yenileme sadece kullanıcı manuel yapınca olsun
-        console.log('✅ [SW] New version activated - refresh to apply');
     }
 
     /**
@@ -126,7 +120,6 @@ class ServiceWorkerManager {
             const success = await this.registration.unregister();
 
             if (success) {
-                console.log('✅ Service Worker unregistered');
                 this.registration = null;
 
                 if (this.updateCheckInterval) {
@@ -191,7 +184,6 @@ class ServiceWorkerManager {
             cacheNames.map(name => caches.delete(name))
         );
 
-        console.log('✅ All caches cleared');
     }
 
     /**

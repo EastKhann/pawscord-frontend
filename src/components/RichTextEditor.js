@@ -33,7 +33,6 @@ const RichTextEditor = forwardRef(({ onSend, onChange, placeholder, initialValue
                             event.preventDefault();
                             const file = item.getAsFile();
                             if (file) {
-                                console.log('📎 Panodan dosya yapıştırıldı:', file.name, file.type);
                                 onFileUpload(file);
                             }
                             return true; // Event'i handle ettik

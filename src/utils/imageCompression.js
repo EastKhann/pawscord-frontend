@@ -62,7 +62,6 @@ export async function compressImage(file, options = {}) {
 
                     canvas.toBlob((blob) => {
                         if (blob) {
-                            console.log(`🖼️ [ImageCompression] Original: ${(file.size / 1024).toFixed(2)}KB -> Compressed: ${(blob.size / 1024).toFixed(2)}KB`);
                             resolve(blob);
                         } else {
                             reject(new Error('Failed to compress image'));

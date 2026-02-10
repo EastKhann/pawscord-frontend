@@ -81,7 +81,6 @@ const Soundboard = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Sound uploaded');
         setShowUploadModal(false);
         setSoundName('');
         setSoundFile(null);
@@ -108,7 +107,6 @@ const Soundboard = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Sound deleted');
         setSounds(sounds.filter(s => s.id !== soundId));
       } else {
         console.error('❌ Failed to delete sound');

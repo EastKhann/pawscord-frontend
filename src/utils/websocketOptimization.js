@@ -42,14 +42,12 @@ export class OptimizedWebSocket {
             this.isConnected = true;
             this.isReconnecting = false;
             this.reconnectAttempts = 0;
-            console.log('✅ WebSocket connected');
             this.emit('open');
             this.flushMessageQueue();
         };
 
         this.ws.onclose = (event) => {
             this.isConnected = false;
-            console.log('❌ WebSocket closed:', event.code, event.reason);
             this.emit('close', event);
             this.stopHeartbeat();
 
@@ -93,7 +91,6 @@ export class OptimizedWebSocket {
             this.options.maxReconnectInterval
         );
 
-        console.log(`🔄 Reconnecting in ${(interval / 1000).toFixed(1)}s (attempt ${this.reconnectAttempts}/${this.options.maxReconnectAttempts})`);
 
         this.reconnectTimer = setTimeout(() => {
             this.reconnectTimer = null;

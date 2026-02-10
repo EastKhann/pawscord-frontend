@@ -59,7 +59,6 @@ class AccessibilityManager {
         }, 100);
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`♿ [A11y] Announced: ${message} (${priority})`);
         }
     }
 

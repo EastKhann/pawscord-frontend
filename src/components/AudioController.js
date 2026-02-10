@@ -34,13 +34,11 @@ const AudioController = () => {
                 audioEl.autoplay = true;
                 audioEl.playsInline = true;
                 audioElementsRef.current[username] = audioEl;
-                console.log(`[AudioController] Created audio element for ${username}`);
             }
 
             // Update stream if changed
             if (audioEl.srcObject !== stream) {
                 audioEl.srcObject = stream;
-                console.log(`[AudioController] Set stream for ${username}`, stream.getTracks());
 
                 // Attempt to play (may require user interaction)
                 audioEl.play().catch(err => {
@@ -60,7 +58,6 @@ const AudioController = () => {
             const isMuted = mutedUsers.has(username);
             audioEl.muted = isMuted || isDeafened;
 
-            console.log(`[AudioController] ${username}: volume=${volume}, muted=${audioEl.muted}`);
         });
     }, [remoteStreams, remoteVolumes, mutedUsers, isDeafened]);
 

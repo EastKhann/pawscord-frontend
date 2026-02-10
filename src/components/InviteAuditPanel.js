@@ -75,7 +75,6 @@ const InviteAuditPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
             used_at: log.used_at || '-',
             uses: log.current_uses
         }));
-        console.log('Exporting:', csv);
     };
 
     const filteredLogs = logs.filter(log => {

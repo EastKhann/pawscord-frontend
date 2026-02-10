@@ -250,12 +250,6 @@ export const useMeasurePerformance = (componentName) => {
             totalTime.current += renderTime;
 
             if (renderCount.current % 10 === 0) {
-                console.log(
-                    `🎯 ${componentName} Performance Stats:`,
-                    `\n  Total Renders: ${renderCount.current}`,
-                    `\n  Average Time: ${(totalTime.current / renderCount.current).toFixed(2)}ms`,
-                    `\n  Last Render: ${renderTime.toFixed(2)}ms`
-                );
             }
         };
     });
@@ -270,10 +264,6 @@ export const useMeasurePerformance = (componentName) => {
  * 
  * @example
  * const prevCount = usePrevious(count);
- * if (count > prevCount) { console.log('Arttı!'); }
- */
-export const usePrevious = (value) => {
-    const ref = useRef();
 
     useEffect(() => {
         ref.current = value;
@@ -329,10 +319,6 @@ export const useWindowSize = () => {
  * 
  * @example
  * const isIdle = useIdleDetection(5 * 60 * 1000); // 5 dakika
- * if (isIdle) { console.log('Kullanıcı uzakta'); }
- */
-export const useIdleDetection = (timeout = 5 * 60 * 1000) => {
-    const [isIdle, setIsIdle] = useRef(false);
     const timeoutIdRef = useRef(null);
 
     const resetTimer = useCallback(() => {
@@ -380,9 +366,6 @@ export const useMemoryMonitor = () => {
                 const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(2);
                 const limit = (performance.memory.jsHeapSizeLimit / 1048576).toFixed(2);
 
-                console.log(
-                    `💾 Memory: ${used}MB / ${total}MB (Limit: ${limit}MB)`
-                );
             }
         }, 10000); // Her 10 saniyede bir
 

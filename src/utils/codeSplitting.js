@@ -86,7 +86,6 @@ export const estimateChunkSize = async (importFunc) => {
 
     // Rough estimate based on load time (not accurate but useful)
     const loadTime = endTime - startTime;
-    console.log(`📦 Chunk loaded in ${loadTime.toFixed(2)}ms`);
 
     return loadTime;
 };
@@ -198,7 +197,6 @@ export const smartPreload = async (userBehavior) => {
     if (preloads) {
         // Parallel preload
         await Promise.all(preloads.map(loader => loader()));
-        console.log(`✅ Preloaded components for: ${userBehavior}`);
     }
 };
 

@@ -42,7 +42,6 @@ class RouterManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🗺️ [Router] Initialized');
         }
     }
 
@@ -59,7 +58,6 @@ class RouterManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`✅ [Router] Registered: ${path}`);
         }
     }
 
@@ -144,7 +142,6 @@ class RouterManager {
         });
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🗺️ [Router] Navigated to: ${path}`);
         }
     }
 
@@ -237,7 +234,6 @@ class RouterManager {
             this.prefetchedRoutes.add(path);
 
             if (import.meta.env.MODE === 'development') {
-                console.log(`🔮 [Router] Prefetched: ${path}`);
             }
         } catch (error) {
             console.error(`Failed to prefetch ${path}:`, error);

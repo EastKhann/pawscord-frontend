@@ -90,7 +90,6 @@ class RateLimiter {
                 this.requests.delete(key);
             }
         }
-        console.log(`✅ [RateLimiter] Kullanıcı sıfırlandı: ${userId}`);
     }
 
     /**
@@ -98,7 +97,6 @@ class RateLimiter {
      */
     clearAll() {
         this.requests.clear();
-        console.log('🗑️ [RateLimiter] Tüm limitler temizlendi');
     }
 
     /**

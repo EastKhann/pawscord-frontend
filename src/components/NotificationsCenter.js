@@ -182,7 +182,6 @@ const NotificationsCenter = ({ userId, onClose }) => {
     };
 
     const showToast = (message, type = 'success') => {
-        console.log(`[${type}] ${message}`);
     };
 
     if (loading) {

@@ -32,11 +32,6 @@ class ImageOptimizer {
         this.checkFormatSupport();
 
         if (import.meta.env.MODE === 'development') {
-            console.log('🖼️ [ImageOptimizer] Initialized', {
-                nativeLazy: this.supportsNativeLazy,
-                webp: this.supportsWebP,
-                avif: this.supportsAvif
-            });
         }
     }
 

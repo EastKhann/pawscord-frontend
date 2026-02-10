@@ -24,7 +24,6 @@ class ComponentPreloader {
     setupIdleCallback() {
         window.requestIdleCallback(() => {
             this.isIdle = true;
-            console.log('🔄 [Preloader] Browser idle, starting preload...');
         }, { timeout: 2000 });
     }
 
@@ -38,13 +37,11 @@ class ComponentPreloader {
     async preload(importFn, name, priority = 5) {
         // Zaten yüklenmiş
         if (this.preloaded.has(name)) {
-            console.log(`✅ [Preload] ${name} already loaded`);
             return;
         }
 
         // Şu anda yükleniyor
         if (this.loading.has(name)) {
-            console.log(`⏳ [Preload] ${name} already loading`);
             return;
         }
 
@@ -76,7 +73,6 @@ class ComponentPreloader {
      */
     async loadNow(importFn, name) {
         this.loading.add(name);
-        console.log(`📦 [Preload] Loading ${name}...`);
 
         try {
             const startTime = performance.now();
@@ -86,7 +82,6 @@ class ComponentPreloader {
             this.preloaded.add(name);
             this.loading.delete(name);
 
-            console.log(`✅ [Preload] ${name} loaded in ${(endTime - startTime).toFixed(2)}ms`);
         } catch (error) {
             console.error(`❌ [Preload] ${name} failed:`, error);
             this.loading.delete(name);
@@ -134,7 +129,6 @@ export const componentPreloader = new ComponentPreloader();
  * Kritik componentleri preload et
  */
 export const preloadCriticalComponents = () => {
-    console.log('🚀 [Preloader] Starting critical component preload...');
 
     const components = [
         // Yüksek öncelik (8-10) - Sık kullanılan
@@ -210,7 +204,6 @@ export const preloadRouteComponents = (route) => {
 
     const components = routeMap[route];
     if (components) {
-        console.log(`🎯 [Preloader] Preloading components for route: ${route}`);
         componentPreloader.preloadBatch(components);
     }
 };

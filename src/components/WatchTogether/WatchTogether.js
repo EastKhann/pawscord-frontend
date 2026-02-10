@@ -53,7 +53,6 @@ const WatchTogether = ({ roomId, onClose }) => {
         const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
-            console.log('📺 Watch Party WebSocket connected');
             // Senkronizasyon talep et
             ws.send(JSON.stringify({ type: 'request_sync' }));
         };
@@ -64,7 +63,6 @@ const WatchTogether = ({ roomId, onClose }) => {
         };
 
         ws.onclose = () => {
-            console.log('📺 Watch Party WebSocket disconnected');
         };
 
         ws.onerror = (error) => {

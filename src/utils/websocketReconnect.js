@@ -128,7 +128,6 @@ class WebSocketReconnectManager {
      */
     log(...args) {
         if (this.options.debug) {
-            console.log('[WSReconnect]', ...args);
         }
     }
 
@@ -170,7 +169,6 @@ export class ReconnectingWebSocket {
             this.ws = new WebSocket(this.url);
 
             this.ws.onopen = () => {
-                console.log('✅ [ReconnectWS] Bağlantı kuruldu');
                 this.reconnectManager.reset();
 
                 // Kuyruktaki mesajları gönder

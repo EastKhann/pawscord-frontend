@@ -360,272 +360,22 @@ const ReportsPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */
 const ErrorReportingPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ErrorReportingPanel')); // 🐛 Error Reporting
 
 // --- AYARLAR ---
-// Bu kısmı tamamen değiştiriyoruz:
+// 🔥 Extracted to config/api.js for cleaner architecture
+import {
+    isElectron, isNative, isProductionBuild,
+    API_URL_BASE_STRING, MEDIA_BASE_URL, API_BASE_URL, ABSOLUTE_HOST_URL,
+    WS_PROTOCOL, API_HOST, LOGIN_URL, REGISTER_URL, UPLOAD_FILE_URL,
+    MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL, ROOM_LIST_URL,
+    CONVERSATION_LIST_URL, GET_OR_CREATE_CONVERSATION_URL, ALL_USERS_URL,
+    UPDATE_PROFILE_URL, DEFAULT_AVATARS_URL, CHANGE_USERNAME_URL, LOCAL_GIF_LIST_URL,
+    DRAFT_STORAGE_KEY, getTemporaryId, calculateFileHash
+} from './config/api';
+import styles from './styles/appStyles';
+import ImageGalleryGroup from './components/ImageGalleryGroup';
 
-const DJANGO_PORT = "8888";
-
-const isElectron = typeof window !== 'undefined' && typeof window.require === 'function';
-const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
-
-// 🔥 Production build kontrolü - EXE dağıtımı için
-const isProductionBuild = import.meta.env.PROD || process.env.NODE_ENV === 'production';
-
-const API_URL_BASE_STRING = (() => {
-    // 1. Mobil Uygulama ise gerçek siteye git
-    if (isNative) return "https://api.pawscord.com";
-
-    // 2. Electron Masaüstü ise
-    if (isElectron) {
-        // Production build'de (EXE dağıtımı) api.pawscord.com kullan
-        // Development'ta localhost kullan
-        return isProductionBuild ? "https://api.pawscord.com" : `http://127.0.0.1:${DJANGO_PORT}`;
-    }
-
-    // 3. Web Tarayıcısı ise (Chrome/Edge) adres çubuğundaki IP neyse onu kullan.
-    // Böylece "localhost" veya "192.168.x.x" fark etmeksizin çalışır.
-    const protocol = window.location.protocol;
-    const hostname = window.location.hostname;
-
-    if (hostname.includes('pawscord.com')) {
-        return "https://api.pawscord.com";
-    }
-
-    return `${protocol}//${hostname}:${DJANGO_PORT}`;
-})();
-
-// 🔥 FIX: Media dosyaları için ayrı URL (EXE/APK'da production URL kullan)
-const MEDIA_BASE_URL = (() => {
-    // EXE veya APK ise MUTLAKA production URL kullan (media dosyaları localhost'ta yok)
-    if (isElectron || isNative) return "https://www.pawscord.com";
-
-    // Web tarayıcısında ise normal API URL'i kullan
-    return API_URL_BASE_STRING;
-})();
-
-const API_BASE_URL = `${API_URL_BASE_STRING}/api`;
-const ABSOLUTE_HOST_URL = API_URL_BASE_STRING;
-const WS_PROTOCOL = API_URL_BASE_STRING.startsWith('https') ? 'wss' : 'ws';
-// API_HOST kısmını da dinamik yapıyoruz:
-const API_HOST = API_URL_BASE_STRING.replace(/^https?:\/\//, '');
-// URL CONSTANTS
-const LOGIN_URL = `${API_BASE_URL}/auth/login/`;
-const REGISTER_URL = `${API_BASE_URL}/auth/register/`;
-const UPLOAD_FILE_URL = `${API_BASE_URL}/messages/upload_file/`;
-const MESSAGE_HISTORY_ROOM_URL = `${API_BASE_URL}/messages/history/room/`;
-const MESSAGE_HISTORY_DM_URL = `${API_BASE_URL}/messages/history/dm/`;
-const ROOM_LIST_URL = `${API_BASE_URL}/rooms/list_with_categories/`;
-const CONVERSATION_LIST_URL = `${API_BASE_URL}/conversations/`;
-const GET_OR_CREATE_CONVERSATION_URL = `${API_BASE_URL}/conversations/find_or_create/`;
-const ALL_USERS_URL = `${API_BASE_URL}/users/list_all/`;
-const UPDATE_PROFILE_URL = `${API_BASE_URL}/users/update_profile/`;
-const DEFAULT_AVATARS_URL = `${API_BASE_URL}/users/default_avatars/`;
-const CHANGE_USERNAME_URL = `${API_BASE_URL}/users/change_username/`;
-const LOCAL_GIF_LIST_URL = `${API_BASE_URL}/gifs/list_local/`;
 // Google Client ID imported from constants.js
 import { GOOGLE_WEB_CLIENT_ID } from './utils/constants';
 import confirmDialog from './utils/confirmDialog';
-const DRAFT_STORAGE_KEY = 'chat_drafts_v1';
-
-const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();
-
-const calculateFileHash = async (file) => {
-    const SparkMD5 = (await import('spark-md5')).default;
-    return new Promise((resolve, reject) => {
-        const chunkSize = 2 * 1024 * 1024;
-        const totalChunks = Math.ceil(file.size / chunkSize);
-        let currentChunk = 0;
-        const spark = new SparkMD5.ArrayBuffer();
-        const fileReader = new FileReader();
-        fileReader.onload = (e) => {
-            spark.append(e.target.result);
-            currentChunk++;
-            if (currentChunk < totalChunks) loadNextChunk();
-            else resolve(spark.end());
-        };
-        fileReader.onerror = (err) => reject(err);
-        function loadNextChunk() {
-            const start = currentChunk * chunkSize;
-            const end = Math.min(start + chunkSize, file.size);
-            fileReader.readAsArrayBuffer(file.slice(start, end));
-        }
-        loadNextChunk();
-    });
-};
-
-// --- 🖼️ WhatsApp-style Image Gallery Group ---
-const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, isAdmin, onOpenGallery, onViewProfile, onDelete, allUsers, getDeterministicAvatar, fetchWithAuth, onVisible }) => {
-    const firstMsg = messages[0];
-
-    // Avatar
-    const userAvatarBase = (() => {
-        let url = firstMsg.avatar;
-        if (!url) {
-            const userObj = allUsers?.find(u => u.username === firstMsg.username);
-            url = userObj?.avatar;
-        }
-        if (!url) url = getDeterministicAvatar(firstMsg.username);
-        if (url && !url.startsWith('http') && !url.startsWith('blob:')) {
-            url = `${absoluteHostUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
-        }
-        return url;
-    })();
-
-    // Get full URL for image
-    const getFullUrl = (url) => {
-        if (!url) return null;
-        if (url.startsWith('http') || url.startsWith('blob:')) return url;
-        return `${absoluteHostUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`;
-    };
-
-    // Collect all image URLs
-    const allImages = messages.map(msg => {
-        const imgUrl = msg.image_url || msg.image;
-        if (imgUrl) return getFullUrl(imgUrl);
-        const fileUrl = msg.file_url || msg.file;
-        if (fileUrl && /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(msg.file_name || '')) {
-            return getFullUrl(fileUrl);
-        }
-        return null;
-    }).filter(Boolean);
-
-    const MAX_VISIBLE = 4;
-    const totalCount = allImages.length;
-    const visibleImages = allImages.slice(0, MAX_VISIBLE);
-    const visibleCount = visibleImages.length;
-    const extraCount = Math.max(0, totalCount - MAX_VISIBLE);
-
-    // Grid layout based on visible count
-    const getGridStyle = () => {
-        if (visibleCount === 1) return { gridTemplateColumns: '1fr', maxWidth: '300px' };
-        if (visibleCount === 2) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
-        if (visibleCount === 3) return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
-        return { gridTemplateColumns: '1fr 1fr', maxWidth: '400px' };
-    };
-
-    const timestamp = firstMsg.timestamp ? new Date(firstMsg.timestamp) : null;
-    const timeStr = timestamp ?
-        (timestamp.toDateString() === new Date().toDateString()
-            ? timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            : timestamp.toLocaleString([], { hour: '2-digit', minute: '2-digit' }))
-        : '';
-
-    const handleImageClick = (clickedIndex) => {
-        if (onOpenGallery) {
-            onOpenGallery(allImages, clickedIndex);
-        }
-    };
-
-    return (
-        <div style={{
-            display: 'flex',
-            padding: '4px 48px 4px 16px',
-            gap: '12px',
-            position: 'relative',
-        }}>
-            {/* Avatar */}
-            <div style={{ flexShrink: 0, width: '40px', paddingTop: '2px' }}>
-                <img
-                    src={userAvatarBase}
-                    alt={firstMsg.username}
-                    style={{ width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', objectFit: 'cover' }}
-                    onClick={() => onViewProfile(firstMsg.username)}
-                />
-            </div>
-
-            {/* Content */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-                {/* Header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <strong style={{
-                        cursor: 'pointer',
-                        color: isAdmin && firstMsg.username === currentUser ? '#f0b232' : '#fff',
-                        fontSize: '0.95em'
-                    }} onClick={() => onViewProfile(firstMsg.username)}>
-                        {firstMsg.username}
-                    </strong>
-                    <span style={{ color: '#72767d', fontSize: '0.75em' }}>{timeStr}</span>
-                    {totalCount > 1 && (
-                        <span style={{ color: '#5865f2', fontSize: '0.72em', fontWeight: 600 }}>
-                            📷 {totalCount} fotoğraf
-                        </span>
-                    )}
-                </div>
-
-                {/* 🖼️ Image Grid - Max 4 visible */}
-                <div style={{
-                    display: 'grid',
-                    ...getGridStyle(),
-                    gap: '3px',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-                }}>
-                    {visibleImages.map((imgUrl, idx) => {
-                        const isLastWithExtra = idx === MAX_VISIBLE - 1 && extraCount > 0;
-                        return (
-                            <div
-                                key={messages[idx]?.id || idx}
-                                style={{
-                                    aspectRatio: visibleCount === 1 ? 'auto' : (visibleCount === 3 && idx === 0 ? '2/1' : '1/1'),
-                                    overflow: 'hidden',
-                                    position: 'relative',
-                                    ...(visibleCount === 3 && idx === 0 ? { gridColumn: '1 / -1' } : {}),
-                                    maxHeight: visibleCount === 1 ? '300px' : (visibleCount === 3 && idx === 0 ? '200px' : '200px'),
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => handleImageClick(idx)}
-                            >
-                                <img
-                                    src={imgUrl}
-                                    alt={`gallery-${idx}`}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        display: 'block',
-                                        transition: 'transform 0.2s, filter 0.2s',
-                                        filter: isLastWithExtra ? 'brightness(0.4)' : 'none',
-                                    }}
-                                    loading="lazy"
-                                    onMouseEnter={(e) => {
-                                        e.target.style.transform = 'scale(1.05)';
-                                        if (!isLastWithExtra) e.target.style.filter = 'brightness(0.85)';
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.transform = 'scale(1)';
-                                        if (!isLastWithExtra) e.target.style.filter = 'none';
-                                        else e.target.style.filter = 'brightness(0.4)';
-                                    }}
-                                />
-                                {/* +N overlay on last visible image */}
-                                {isLastWithExtra && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0, left: 0, right: 0, bottom: 0,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        pointerEvents: 'none',
-                                    }}>
-                                        <span style={{
-                                            color: '#fff',
-                                            fontSize: '2rem',
-                                            fontWeight: 700,
-                                            textShadow: '0 2px 8px rgba(0,0,0,0.6)',
-                                            letterSpacing: '1px',
-                                        }}>
-                                            +{extraCount}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        </div>
-    );
-});
 
 // --- ANA İÇERİK BİLEŞENİ ---
 const AppContent = () => {
@@ -1118,7 +868,6 @@ const AppContent = () => {
 
         // 🔑 Google ile giriş yapan kullanıcılar için şifre belirleme kontrolü
         if (needsPassword === 'true') {
-            console.log('🔑 [Auth] Google user needs to set password');
             setShowPasswordSetupModal(true);
             // Clear URL parameters
             window.history.replaceState({}, document.title, window.location.pathname);
@@ -1278,11 +1027,9 @@ const AppContent = () => {
         // 🔗 Initialize Deep Link Handler (APK)
         if (isNative) {
             import('./utils/urlHandlers').then(({ initializeDeepLinkHandler }) => {
-                console.log('✅ Deep link handler ready');
             });
         }
 
-        console.log('✅ PWA ve optimizasyonlar aktif!');
     }, []);
 
     // 🔔 Push Notifications (depends on auth)
@@ -1523,13 +1270,11 @@ const AppContent = () => {
         const joinServerId = urlParams.get('join_server');
 
         if (joinServerId && isAuthenticated && categories && categories.length > 0) {
-            console.log('🔗 [Vanity URL] Found join_server parameter:', joinServerId);
             // Sunucuya katılma işlemi
             const targetServer = categories.find(s => s.id === parseInt(joinServerId));
 
             if (targetServer) {
                 // Kullanıcı zaten bu sunucuda mı?
-                console.log(`🔗 Vanity URL: Redirecting to server ${targetServer.name}`);
 
                 // İlk kanalı bul ve aç
                 if (targetServer.categories && targetServer.categories.length > 0) {
@@ -1544,7 +1289,6 @@ const AppContent = () => {
                 window.history.replaceState({}, document.title, '/#/');
             } else {
                 // Sunucu bulunamadı - invite link olabilir
-                console.log(`🔗 Vanity URL: Server ${joinServerId} not found, showing invite modal`);
 
                 // Sunucu invite modal'ı açmak için API çağrısı yap
                 const joinServer = async () => {
@@ -1596,7 +1340,6 @@ const AppContent = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ server_order: newOrder })
             });
-            console.log('💾 Server order saved:', newOrder);
         } catch (error) {
             console.error('Server order save error:', error);
         }
@@ -1675,11 +1418,9 @@ const AppContent = () => {
         const sourceIndex = currentOrder.indexOf(serverId);
         if (sourceIndex === -1) return;
 
-        console.log('📝 DROP: serverId:', serverId, 'sourceIndex:', sourceIndex, '→ targetIndex:', targetIndex);
 
         // Aynı yere bırakıyorsa işlem yapma
         if (sourceIndex === targetIndex || sourceIndex + 1 === targetIndex) {
-            console.log('❌ Aynı pozisyon, işlem iptal');
             return;
         }
 
@@ -1689,12 +1430,10 @@ const AppContent = () => {
         // Hedef index'i ayarla (splice sonrası kayma için)
         const adjustedTargetIndex = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
 
-        console.log('🎯 Adjusted target index:', adjustedTargetIndex);
 
         // Hedef konuma ekle
         currentOrder.splice(adjustedTargetIndex, 0, draggedId);
 
-        console.log('✅ Yeni sıralama:', currentOrder);
 
         setServerOrder(currentOrder);
         saveServerOrder(currentOrder);
@@ -1734,10 +1473,6 @@ const AppContent = () => {
 
 
     const sendMessage = (content) => {
-        console.log('📤 [DEBUG] sendMessage called with:', content);
-        console.log('📤 [DEBUG] ws.current:', ws.current);
-        console.log('📤 [DEBUG] ws.current.readyState:', ws.current?.readyState);
-        console.log('📤 [DEBUG] activeChat:', activeChat);
 
         if (!content) return;
         const trimmed = content.trim();
@@ -1987,7 +1722,6 @@ const AppContent = () => {
             }
 
             const data = await response.json();
-            console.log('Voice message uploaded:', data);
         } catch (error) {
             console.error('Error uploading voice message:', error);
             toast.error('Ses mesajı gönderilemedi');
@@ -2005,14 +1739,12 @@ const AppContent = () => {
                 : `/ws/dm/${activeChat.id}/`;
 
             if (currentWsUrl.includes(expectedPath)) {
-                console.log('⏭️ [WebSocket] Already connected to this chat, skipping reconnect');
                 return;
             }
         }
 
         // 🔥 FIX: Mevcut bağlantıyı kapat (eğer varsa)
         if (ws.current) {
-            console.log('🔌 [WebSocket] Closing existing connection before new one');
             ws.current.close(1000, 'change_room');
         }
 
@@ -2023,17 +1755,12 @@ const AppContent = () => {
 
 
         if (!wsUrl) {
-            console.log('⏭️ [WebSocket] Skipping - activeChat.type is not room/dm:', activeChat.type);
             return;
         }
 
-        console.log('🔌 [WebSocket] Connecting to:', wsUrl.split('?')[0]); // Token'sız URL'i logla
-
-        const newWs = new WebSocket(wsUrl);
         ws.current = newWs;
 
         newWs.onopen = () => {
-            console.log('✅ [WebSocket] Connected successfully');
             setIsConnected(true);
         };
 
@@ -2041,13 +1768,6 @@ const AppContent = () => {
             const data = JSON.parse(event.data);
             if (data.type === 'chat' || data.type === 'dm' || data.type === 'chat_message_handler') {
                 // 🔥 DEBUG: Gelen mesajın yapısını logla
-                console.log('📨 [WebSocket] Message data:', {
-                    type: data.type,
-                    id: data.id,
-                    temp_id: data.temp_id,
-                    room: data.room,
-                    conversation: data.conversation
-                });
 
                 // 🔥 FIX: Cache key'i gelen mesajdan hesapla (activeChat'e güvenme - stale closure olabilir!)
                 // data.room = room slug (string), data.conversation = conversation ID (number)
@@ -2065,7 +1785,6 @@ const AppContent = () => {
                     if (data.temp_id) {
                         const tempIndex = prev.findIndex(msg => msg.temp_id === data.temp_id);
                         if (tempIndex !== -1) {
-                            console.log('🔄 [WebSocket] Replacing temp message with real message:', data.temp_id, '→', data.id);
                             const newMessages = [...prev];
                             newMessages[tempIndex] = data; // Temp mesajı gerçek mesajla değiştir
 
@@ -2081,11 +1800,9 @@ const AppContent = () => {
 
                     // ID ile duplicate kontrolü (aynı mesaj tekrar gelirse)
                     if (data.id && prev.some(msg => msg.id === data.id)) {
-                        console.log('⏭️ [WebSocket] Duplicate message (by ID) skipped:', data.id);
                         return prev;
                     }
 
-                    console.log('📨 [WebSocket] New message received:', data);
                     const updatedMessages = [...prev, data];
 
                     // 🔥 FIX: Cache'i gelen mesajın room/conversation bilgisine göre güncelle
@@ -2133,7 +1850,6 @@ const AppContent = () => {
         };
 
         newWs.onclose = (event) => {
-            console.log('🔌 [WebSocket] Connection closed:', event.code, event.reason);
             setIsConnected(false);
         };
     }, [activeChat.id, activeChat.type, username, token]);
@@ -2343,7 +2059,6 @@ const AppContent = () => {
 
     // 🔥 YENİ: Sunucu seçildiğinde üyeleri yükle + ilk kanalı otomatik aç
     const handleServerSelect = useCallback((server) => {
-        console.log('🖱️ [Server Select] Server clicked:', server.name, server.id);
         setSelectedServer(server);
         fetchServerMembersById(server.id);
 
@@ -2372,7 +2087,6 @@ const AppContent = () => {
         }
 
         if (selectedRoom) {
-            console.log('📺 [Server Select] Auto-selecting room:', selectedRoom.name, selectedRoom.slug);
             setActiveChat('room', selectedRoom.slug, null);
         } else {
             // Kanal bulunamadıysa server modunda kal
@@ -2502,17 +2216,10 @@ const AppContent = () => {
             // Sadece Electron veya Native (Capacitor) platformlarda çalışsın
             // Debug modda da çalışsın (test için)
             if (!isElectron && !isNative && !isDebugMode) {
-                console.log('⏭️ Version check atlandı (web browser)');
                 return;
             }
 
             try {
-                console.log('🔍 Version kontrolü yapılıyor...', {
-                    isElectron,
-                    isNative,
-                    isDebugMode,
-                    hostname: window.location.hostname
-                });
 
                 // 🔥 FIX: Electron'da app.getVersion() kullan, fallback olarak VITE_APP_VERSION
                 let currentVersion = import.meta.env.VITE_APP_VERSION || '1.1.203';
@@ -2521,12 +2228,10 @@ const AppContent = () => {
                 if (window.electron?.getAppVersion) {
                     try {
                         currentVersion = await window.electron.getAppVersion();
-                        console.log('🖥️ Electron version:', currentVersion);
                     } catch (e) {
                         console.warn('⚠️ Electron version alınamadı:', e);
                     }
                 }
-                console.log('📦 Mevcut versiyon:', currentVersion);
 
                 // 🔥 R2 CDN'den son versiyonu kontrol et
                 const res = await fetch('https://media.pawscord.com/builds/version.json');
@@ -2538,18 +2243,11 @@ const AppContent = () => {
 
                 const data = await res.json();
                 const latestVersion = data.latest_version;
-                console.log('🌐 Son versiyon:', latestVersion);
-                console.log('📊 Karşılaştırma:', { current: currentVersion, latest: latestVersion });
 
                 // Versiyon karşılaştırması - semantic versioning
                 const isNewer = compareVersions(latestVersion, currentVersion);
-                console.log('🔍 İs newer?', isNewer);
 
                 if (latestVersion && isNewer) {
-                    console.log('✅ YENİ GÜNCELLEME MEVCUT!', {
-                        current: currentVersion,
-                        latest: latestVersion
-                    });
                     setUpdateAvailable(true);
 
                     // Optional: Electron'a bildirim gönder
@@ -2562,7 +2260,6 @@ const AppContent = () => {
                         });
                     }
                 } else {
-                    console.log('ℹ️ Versiyon güncel veya eski:', currentVersion, '>=', latestVersion);
                     setUpdateAvailable(false);
                 }
             } catch (error) {
@@ -2584,7 +2281,6 @@ const AppContent = () => {
     useEffect(() => {
         if (!isInitialDataLoaded || !activeChat.id || activeChat.type === 'friends' || activeChat.type === 'welcome' || activeChat.type === 'server') return;
 
-        console.log('🔄 [DEBUG activeChat] Chat değişti:', activeChat);
 
         // 🔥 CRITICAL: İşlemi iptal etmek için flag (cleanup için)
         let isCancelled = false;
@@ -2594,7 +2290,6 @@ const AppContent = () => {
 
         if (cached?.messages?.length > 0) {
             // ✅ Cache varsa SADECE cache'i göster, API'ye GITME
-            console.log('📦 [Cache] Restoring cached messages:', cached.messages.length, '(skipping API call)');
             setMessages(cached.messages);
             setHasMoreMessages(!!cached.hasMore);
             setMessageHistoryOffset(cached.offset || 0);
@@ -2607,7 +2302,6 @@ const AppContent = () => {
             if (!isCancelled) connectWebSocket();
         } else {
             // ❌ Cache yoksa server'dan çek
-            console.log('🌐 [Fetch] No cache, fetching from server...');
             setMessageHistoryOffset(0);
             setHasMoreMessages(true);
 
@@ -2623,7 +2317,6 @@ const AppContent = () => {
         // 🔥 CLEANUP: Component unmount veya activeChat değişince eski işlemleri iptal et
         return () => {
             isCancelled = true;
-            console.log('🧹 [Cleanup] activeChat useEffect cleanup triggered');
         };
     }, [activeChat.id, activeChat.type, isInitialDataLoaded, connectWebSocket]);
     // ⚠️ fetchMessageHistory dependency'den KALDIRILDI - useCallback değil, fonksiyon tanımı
@@ -2776,7 +2469,6 @@ const AppContent = () => {
             const tok = tokenRef.current || currentToken;
             const currentUser = usernameRef.current || username;
             const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}&token=${tok}`;
-            console.log('[StatusWS] Connecting to:', url.replace(tok, 'TOKEN_HIDDEN'));
 
             let socket;
             try {
@@ -2787,7 +2479,6 @@ const AppContent = () => {
             }
 
             socket.onopen = () => {
-                console.log('[StatusWS] Connected successfully');
                 setGlobalWsConnected(true);
                 reconnectAttempts = 0; // Reset on successful connection
             };
@@ -2797,7 +2488,6 @@ const AppContent = () => {
             };
 
             socket.onclose = (event) => {
-                console.log(`[StatusWS] Connection closed: code=${event.code}, reason=${event.reason || "none"}`);
                 setGlobalWsConnected(false);
                 // Auto-reconnect after 5s if NOT intentional close
                 if (!intentionalClose && event.code !== 1000 && event.code !== 1001) {
@@ -2807,7 +2497,6 @@ const AppContent = () => {
                     }
                     reconnectAttempts++;
                     const delay = Math.min(5000 * Math.pow(2, reconnectAttempts - 1), 60000); // 5s, 10s, 20s, 40s, 60s max
-                    console.log(`[StatusWS] Auto-reconnecting in ${delay / 1000}s... (attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`);
                     statusWsReconnectRef.current = setTimeout(() => {
                         if (!intentionalClose) {
                             const newSocket = createSocket();
@@ -2828,12 +2517,10 @@ const AppContent = () => {
                         const onlineUsernames = Array.isArray(data.users)
                             ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
                             : [];
-                        console.log('[Online Users] Updated:', onlineUsernames);
                         setOnlineUsers(onlineUsernames);
                     }
 
                     if (data.type === 'voice_users_update') {
-                        console.log('[GlobalWS] Received voice_users_update:', data.voice_users);
                         setVoiceUsersState(data.voice_users);
                     }
 
@@ -2849,7 +2536,6 @@ const AppContent = () => {
                     if (data.type === 'user_profile_update' && data.user_data) {
                         const updatedUser = data.user_data;
                         if (updatedUser.username === username) {
-                            console.log('[Profile Update] Updating currentUserProfile:', updatedUser);
                             setCurrentUserProfile(prevProfile => ({
                                 ...prevProfile,
                                 avatar: updatedUser.avatar,
@@ -2879,10 +2565,8 @@ const AppContent = () => {
 
                     if (data.type === 'server_structure_update') {
                         if (data.categories && Array.isArray(data.categories)) {
-                            console.log('Server structure update received via WS, using inline data');
                             setCategories(data.categories);
                         } else {
-                            console.log('Server structure update received, refetching...');
                             fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
                         }
                     }
@@ -2909,7 +2593,6 @@ const AppContent = () => {
     // 🎤 SESLİ SOHBETE GİRİNCE CHAT ALANINI OTOMATİK DEĞİŞTİR
     useEffect(() => {
         if (isInVoice && currentVoiceRoom) {
-            console.log(`🔊 [Voice] Switched to voice chat panel: ${currentVoiceRoom}`);
             setActiveChat('voice', currentVoiceRoom);
         }
     }, [isInVoice, currentVoiceRoom]);
@@ -2967,13 +2650,11 @@ const AppContent = () => {
 
         // 🔥 FIX: Voice chat için mesaj geçmişi yok
         if (activeChat.type === 'voice') {
-            console.log('[Voice] Skipping message history for voice chat');
             setMessages([]);
             setHasMoreMessages(false);
             return;
         }
 
-        console.log('🔄 [fetchMessageHistory] Starting fetch:', { isInitial, offset, activeChat });
         setMessageHistoryLoading(true);
         const urlBase = activeChat.type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
@@ -2981,7 +2662,6 @@ const AppContent = () => {
         // 🔥 FIX: Cache'i ARTIK TEMİZLEME - activeChat effect'inde cache varsa bu fonksiyon zaten çağrılmıyor
         // Sadece ilk yüklemede (cache yoksa) buraya gelir, o yüzden cache temizlemeye gerek yok
         // if (isInitial) {
-        //     console.log('🗑️ [fetchMessageHistory] Clearing cache for:', key);
         //     delete historyCacheRef.current[key];
         // }
 
@@ -3011,16 +2691,13 @@ const AppContent = () => {
                 }
 
                 const newMsgs = validMessages.reverse();
-                console.log('✅ [fetchMessageHistory] Fetched messages:', newMsgs.length);
 
                 let combinedMessages = newMsgs;
                 if (isInitial) {
-                    console.log('📝 [fetchMessageHistory] Setting messages (INITIAL):', newMsgs.length);
                     setMessages(newMsgs);
                     setTimeout(() => scrollToBottom('auto'), 100);
                 } else {
                     setMessages(prev => {
-                        console.log('📝 [fetchMessageHistory] Appending to existing:', prev.length, '+', newMsgs.length);
                         combinedMessages = [...newMsgs, ...prev];
                         return combinedMessages;
                     });
@@ -3038,7 +2715,6 @@ const AppContent = () => {
                     offset: nextOffset,
                     hasMore,
                 };
-                console.log('💾 [fetchMessageHistory] Cached:', key, 'with', (combinedMessages || cachedCombined).length, 'messages');
             }
         } catch (e) {
             console.error('❌ [fetchMessageHistory] Error:', e);
@@ -3048,25 +2724,21 @@ const AppContent = () => {
 
     const handleLogin = async (u, p) => {
         try {
-            console.log('🔑 [Auth] Login attempt:', { username: u, url: LOGIN_URL });
             const res = await fetch(LOGIN_URL, {
                 method: 'POST',
                 body: JSON.stringify({ username: u, password: p }),
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            console.log('🔑 [Auth] Response status:', res.status);
             const data = await res.json();
 
             if (res.ok) {
-                console.log('✅ [Auth] Login successful');
                 login(data.access, data.refresh);
             } else {
                 console.error('❌ [Auth] Login failed:', data);
 
                 // 🔐 2FA KONTROLÜ - Backend 2FA gerektiriyorsa
                 if (res.status === 401 && data.requires_2fa && data.temp_token) {
-                    console.log('🔐 [Auth] 2FA required, redirecting...');
                     // 2FA sayfasına yönlendir - temp_token'ı URL'de taşı
                     window.location.href = `/#/2fa-login?temp_token=${encodeURIComponent(data.temp_token)}`;
                     return;
@@ -3090,17 +2762,14 @@ const AppContent = () => {
 
     const handleRegister = async (u, e, p) => {
         try {
-            console.log('📝 [Auth] Register attempt:', { username: u, email: e, url: REGISTER_URL });
             const res = await fetch(REGISTER_URL, {
                 method: 'POST',
                 body: JSON.stringify({ username: u, email: e, password: p }),
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            console.log('📝 [Auth] Response status:', res.status);
 
             if (res.status === 201) {
-                console.log('✅ [Auth] Registration successful');
                 return true;
             }
 
@@ -3150,12 +2819,6 @@ const AppContent = () => {
             const PARALLEL_UPLOADS = 5; // 5 part aynı anda
             const totalParts = Math.ceil(file.size / CHUNK_SIZE);
 
-            console.log(`🚀 [R2 Multipart] Starting upload:`, {
-                fileName: file.name,
-                fileSize: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-                totalParts,
-                parallelUploads: PARALLEL_UPLOADS
-            });
 
             // 1️⃣ Multipart upload başlat
             const initRes = await fetchWithAuth(`${API_BASE_URL}/upload/multipart/init/`, {
@@ -3177,7 +2840,6 @@ const AppContent = () => {
 
             // Dosya zaten varsa — backend mesajı oluşturdu, direkt göster
             if (initData.file_exists) {
-                console.log('✅ [R2] File already exists, message created with existing file');
                 if (showProgress) { setIsUploading(false); setUploadProgress(100); }
 
                 // Backend mesaj verisi döndüyse listeye ekle
@@ -3202,7 +2864,6 @@ const AppContent = () => {
             }
 
             const { upload_id, key } = initData;
-            console.log(`📦 [R2] Upload ID: ${upload_id.substring(0, 20)}..., Key: ${key}`);
 
             // 2️⃣ Her part için backend üzerinden R2'ye yükle (ETag almak için)
             const parts = [];
@@ -3213,7 +2874,6 @@ const AppContent = () => {
                 const end = Math.min(start + CHUNK_SIZE, file.size);
                 const chunk = file.slice(start, end);
 
-                console.log(`📤 [R2] Part ${partNumber}/${totalParts} uploading...`);
 
                 // Backend üzerinden yükle (ETag döner)
                 const formData = new FormData();
@@ -3240,7 +2900,6 @@ const AppContent = () => {
                 const progress = Math.round((completedParts / totalParts) * 95); // %95'e kadar
                 if (showProgress) setUploadProgress(progress);
 
-                console.log(`✅ [R2] Part ${partNumber}/${totalParts} complete (${progress}%), ETag: ${etag}`);
 
                 return {
                     ETag: etag,
@@ -3261,7 +2920,6 @@ const AppContent = () => {
             // Parts'ı PartNumber'a göre sırala
             parts.sort((a, b) => a.PartNumber - b.PartNumber);
 
-            console.log(`📋 [R2] All parts uploaded, completing...`, parts);
 
             // 3️⃣ Multipart upload'ı tamamla ve mesaj oluştur
             const completeRes = await fetchWithAuth(`${API_BASE_URL}/upload/multipart/complete/`, {
@@ -3288,7 +2946,6 @@ const AppContent = () => {
             const data = await completeRes.json();
             if (showProgress) setUploadProgress(100);
 
-            console.log('✅ [R2 Multipart] Upload complete!', data);
 
             // Mesajı listeye ekle
             if (target.id === activeChat.id) {
@@ -3529,7 +3186,6 @@ const AppContent = () => {
                             })
                         });
                         if (res.ok) {
-                            console.log(`✅ ${user.username} moved to ${extraData}`);
                         }
                     } catch (e) {
                         console.error('Move user error:', e);
@@ -3549,7 +3205,6 @@ const AppContent = () => {
                             })
                         });
                         if (res.ok) {
-                            console.log(`✅ ${user.username} kicked from voice`);
                         }
                     } catch (e) {
                         console.error('Kick user error:', e);
@@ -3569,7 +3224,6 @@ const AppContent = () => {
                             })
                         });
                         if (res.ok) {
-                            console.log(`✅ ${user.username} server muted`);
                         }
                     } catch (e) {
                         console.error('Server mute error:', e);
@@ -3680,7 +3334,6 @@ const AppContent = () => {
                 break;
 
             default:
-                console.log('Unknown action:', action);
         }
     }, [allUsers, isAdmin, currentVoiceRoom, fetchWithAuth, API_BASE_URL, handleDMClick, friendsList, setUpdateStatusText]);
 
@@ -6990,7 +6643,6 @@ const AppContent = () => {
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('🎛️ [VoiceIsland] Hiding panel');
                                                         setShowVoiceIsland(false);
                                                     }}
                                                     style={{
@@ -7018,7 +6670,6 @@ const AppContent = () => {
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('🎤 [VoiceIsland] Mute toggle clicked');
                                                         toggleMute();
                                                     }}
                                                     style={{
@@ -7044,7 +6695,6 @@ const AppContent = () => {
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('🎧 [VoiceIsland] Deafen toggle clicked');
                                                         toggleDeafened();
                                                     }}
                                                     style={{
@@ -7070,7 +6720,6 @@ const AppContent = () => {
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('📹 [VoiceIsland] Video toggle clicked');
                                                         toggleVideo();
                                                     }}
                                                     style={{
@@ -7096,7 +6745,6 @@ const AppContent = () => {
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        console.log('🖥️ [VoiceIsland] Screen share toggle clicked');
                                                         toggleScreenShare();
                                                     }}
                                                     style={{
@@ -7645,240 +7293,7 @@ const AppContent = () => {
 
 
 
-
-
-// --- STİLLER ---
-const styles = {
-    // ✨ GLASSMORPHISM - ANA PENCERE
-    mainContainer: {
-        display: 'flex',
-        width: '100%',
-        height: '100dvh',
-        backgroundColor: '#1E1F22', // Deep dark base
-        backgroundImage: 'radial-gradient(circle at 50% 10%, rgba(88, 101, 242, 0.05) 0%, transparent 40%)', // Subtle glow
-        color: 'white',
-        overflow: 'hidden',
-        fontFamily: "'Inter', sans-serif"
-    },
-
-    // 2. YERLEŞİM DÜZENİ
-    chatLayout: {
-        display: 'flex',
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden'
-    },
-
-    // 3. SOL MENÜ (Sidebar)
-    sidebarWrapper: {
-        width: '312px',
-        backgroundColor: 'rgba(30, 31, 34, 0.6)',
-        backdropFilter: 'blur(10px)',
-        display: 'flex',
-        flexDirection: 'row',
-        flexShrink: 0,
-        height: '100%',
-        borderRight: '1px solid rgba(255,255,255,0.05)'
-    },
-
-    // 4. SAĞ TARAFTAKİ ANA İÇERİK
-    mainContent: {
-        flex: 1,
-        display: 'flex',
-        minWidth: 0,
-        position: 'relative',
-        height: '100%',
-        overflow: 'hidden'
-    },
-
-    // 5. CHAT ALANI (Başlık + Mesajlar + Input)
-    chatArea: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'transparent',
-        minWidth: 0,
-        height: '100%',
-        overflow: 'hidden',
-        position: 'relative'
-    },
-
-    chatHeader: {
-        height: '54px',
-        minHeight: '54px',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 20px',
-        flexShrink: 0,
-        backgroundColor: 'rgba(20, 21, 24, 0.7)',
-        backdropFilter: 'blur(15px)',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-        zIndex: 10
-    },
-
-    // 🔥 DÜZELTİLEN MESAJ KUTUSU
-    messageBox: {
-        flex: 1,
-        overflowY: 'auto',
-        padding: '20px 0',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        scrollBehavior: 'smooth',
-        minHeight: 0
-    },
-
-    // 7. INPUT ALANI (En altta sabit)
-    inputContainer: {
-        padding: '0 20px 24px 20px',
-        backgroundColor: 'transparent',
-        position: 'relative',
-        flexShrink: 0,
-        minHeight: 'auto',
-        zIndex: 20
-    },
-
-    inputForm: {
-        display: 'flex',
-        backgroundColor: 'rgba(56, 58, 64, 0.5)',
-        borderRadius: '12px', // Yuvarlatılmış köşeler
-        padding: '12px',
-        alignItems: 'flex-end',
-        gap: '12px',
-        maxHeight: '400px',
-        overflowY: 'auto',
-        border: '1px solid rgba(255,255,255,0.1)',
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-    },
-
-    // ... Diğer stiller (Modernize)
-    chatUserListPanel: {
-        width: '240px',
-        backgroundColor: 'rgba(30, 31, 34, 0.6)',
-        borderLeft: '1px solid rgba(255,255,255,0.08)',
-        flexShrink: 0,
-        height: '100%',
-        backdropFilter: 'blur(10px)'
-    },
-    mobileSidebar: { position: 'fixed', zIndex: 100, top: 0, bottom: 0, left: 0, width: '85vw', maxWidth: '350px', boxShadow: '5px 0 15px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column' },
-    mobileRightSidebar: { position: 'fixed', zIndex: 100, top: 0, bottom: 0, right: 0, width: '85vw', maxWidth: '300px', boxShadow: '-5px 0 15px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column' },
-
-    // 🔥 MOBİL OVERLAY - Sidebar açıldığında arka planı karartır ve tıklanabilir yapar
-    mobileOverlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        zIndex: 99, // Sidebar'ın altında
-        backdropFilter: 'blur(3px)'
-    },
-
-    mobileMenuButton: { background: 'none', border: 'none', color: 'white', fontSize: '1.5em', marginRight: '10px', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center', transition: 'all 0.2s' },
-
-    iconButton: {
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
-        fontSize: '1.3em',
-        cursor: 'pointer',
-        padding: '6px',
-        display: 'flex',
-        alignItems: 'center',
-        borderRadius: '50%',
-        transition: 'all 0.2s',
-        ':hover': { backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff' }
-    },
-    micButton: { background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.3em', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center', transition: 'color 0.2s' },
-    sendButton: {
-        backgroundColor: '#5865f2',
-        border: 'none',
-        color: '#ffffff',
-        fontSize: '1.3em',
-        cursor: 'pointer',
-        padding: '8px 12px',
-        display: 'flex',
-        alignItems: 'center',
-        borderRadius: '8px',
-        transition: 'all 0.2s',
-        boxShadow: '0 2px 5px rgba(88, 101, 242, 0.4)'
-    },
-
-    videoGrid: { display: 'flex', flexWrap: 'wrap', gap: '5px', padding: '5px', alignContent: 'center', justifyContent: 'center', alignItems: 'center' },
-    systemMessage: { color: '#949ba4', textAlign: 'center', fontSize: '0.85em', margin: '10px 0', fontStyle: 'italic' },
-
-    searchForm: {
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.2)',
-        borderRadius: '4px',
-        padding: '0 8px',
-        height: '32px',
-        marginRight: '8px',
-        border: '1px solid rgba(255,255,255,0.05)'
-    },
-    searchInput: { backgroundColor: 'transparent', border: 'none', color: '#dcddde', fontSize: '0.9em', width: '140px', outline: 'none' },
-    searchIcon: { color: '#949ba4', fontSize: '0.8em', cursor: 'pointer' },
-    typingIndicator: { color: '#dbdee1', fontSize: '0.85em', maxWidth: '180px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 'bold' },
-
-    connectionPillOnline: { marginLeft: '10px', padding: '4px 8px', borderRadius: '999px', backgroundColor: 'rgba(59, 165, 93, 0.2)', border: '1px solid #3ba55d', color: '#3ba55d', fontSize: '0.75em', fontWeight: 700 },
-    connectionPillOffline: { marginLeft: '10px', padding: '4px 8px', borderRadius: '999px', backgroundColor: 'rgba(218, 55, 60, 0.2)', border: '1px solid #da373c', color: '#da373c', fontSize: '0.75em', fontWeight: 700 },
-
-    scrollToBottomButton: { position: 'absolute', right: '16px', bottom: '110px', backgroundColor: '#5865f2', color: '#fff', border: 'none', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.35)', cursor: 'pointer', fontWeight: 600 },
-    quickEmojiRow: { display: 'flex', gap: '6px', marginTop: '8px', paddingLeft: '4px' },
-    quickEmojiButton: { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '6px', padding: '4px 8px', cursor: 'pointer', color: '#fff', fontSize: '14px', transition: 'background 0.2s' },
-
-    // 🔥 MOBİL KENAR ÇUBUĞU HEADER STİLİ
-    mobileSidebarHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '10px 15px',
-        backgroundColor: '#202225',
-        borderBottom: '1px solid #111214',
-        minHeight: '54px',
-        flexShrink: 0
-    },
-    closeSidebarButton: {
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
-        fontSize: '22px',
-        cursor: 'pointer',
-        padding: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '50%',
-        transition: 'background 0.2s, color 0.2s'
-    },
-
-    // 🔥 AÇILIR MENÜ ITEM STİLİ
-    menuItem: {
-        width: '100%',
-        padding: '10px 16px',
-        background: 'transparent',
-        border: 'none',
-        color: '#dcddde',
-        textAlign: 'left',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        fontSize: '14px',
-        fontWeight: '500',
-        transition: 'all 0.15s ease',
-        borderRadius: '0',
-    },
-    menuItemHover: {
-        backgroundColor: '#5865f2',
-        color: '#ffffff'
-    }
-};
+// Styles extracted to ./styles/appStyles.js (imported at top)
 
 function App() {
     return (

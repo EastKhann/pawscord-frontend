@@ -77,7 +77,6 @@ class RequestBatcher {
         const requests = [...queue];
         this.queues.set(endpoint, []);
 
-        console.log(`🔄 [Batcher] Flushing ${requests.length} requests to ${endpoint}`);
 
         try {
             // Batch request gönder
@@ -268,7 +267,6 @@ export class RequestQueue {
                 // Retry
                 if (item.retries < this.maxRetries) {
                     item.retries++;
-                    console.log(`🔄 [Queue] Retrying (${item.retries}/${this.maxRetries})...`);
 
                     await new Promise(resolve =>
                         setTimeout(resolve, this.retryDelay * item.retries)

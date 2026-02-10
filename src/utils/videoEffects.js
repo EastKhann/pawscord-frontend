@@ -205,7 +205,6 @@ export const startScreenShare = async (quality = '1080p') => {
 
         // Handle user stopping share via browser UI
         stream.getVideoTracks()[0].onended = () => {
-            console.log('Screen sharing stopped by user');
         };
 
         return stream;

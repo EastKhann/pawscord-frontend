@@ -88,7 +88,6 @@ class NotificationManager {
         }
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🔔 [Notification] ${type}: ${message}`);
         }
 
         return id;
@@ -316,7 +315,6 @@ class NotificationManager {
         };
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`📬 [Push Notification] ${title}`);
         }
 
         return notification;

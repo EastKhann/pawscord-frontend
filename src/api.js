@@ -13,7 +13,6 @@ const api = {
             ...config.headers
         };
 
-        console.log('📡 [API] POST request:', url);
 
         try {
             // 🔥 authFetch ile otomatik token refresh
@@ -60,7 +59,6 @@ const api = {
             ...config.headers
         };
 
-        console.log('📡 [API] GET request:', url);
 
         try {
             // 🔥 authFetch ile otomatik token refresh

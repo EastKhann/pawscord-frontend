@@ -16,7 +16,6 @@ export const initializeDeepLinkHandler = (navigate) => {
         handleDeepLink(data.url, navigate);
     });
 
-    console.log('✅ Deep link handler initialized');
 };
 
 /**
@@ -24,7 +23,6 @@ export const initializeDeepLinkHandler = (navigate) => {
  */
 export const handleDeepLink = (url, navigate) => {
     try {
-        console.log('Deep link received:', url);
 
         // Example: pawscord://chat/123
         const urlObj = new URL(url);
@@ -47,7 +45,6 @@ export const handleDeepLink = (url, navigate) => {
             navigate(path || '/');
         }
 
-        console.log('✅ Deep link handled:', path);
     } catch (error) {
         console.error('❌ Deep link error:', error);
     }
@@ -172,7 +169,6 @@ export const promptPWAInstall = () => {
         window.deferredPrompt.prompt();
         window.deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === 'accepted') {
-                console.log('PWA installed');
             }
             window.deferredPrompt = null;
         });
@@ -184,7 +180,6 @@ if (typeof window !== 'undefined') {
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         window.deferredPrompt = e;
-        console.log('PWA install prompt available');
     });
 }
 

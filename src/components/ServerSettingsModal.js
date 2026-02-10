@@ -276,9 +276,6 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
     // Bir rolü düzenlemeye başla
     const startEditRole = (role) => {
-        console.log("Düzenlenen Rol Verisi:", role); // Hata ayıklama için konsola yazdır
-
-        setEditingRole(role);
         setRoleName(role.name);
         setRoleColor(role.color);
 
@@ -323,18 +320,18 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
             can_ban_members: permissions.can_ban_members
         };
 
-        console.log("Sunucuya Gönderilen Payload:", payload); // Kontrol için log ekledik
-
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/roles/create/`, {
-                method: 'POST',
+            const url = editingRole
+                ? `${apiBaseUrl}/roles/${editingRole.id}/update/`
+                : `${apiBaseUrl}/servers/${server.id}/roles/create/`;
+            const res = await fetchWithAuth(url, {
+                method: editingRole ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
 
             if (res.ok) {
                 const savedRole = await res.json();
-                console.log("Sunucudan Gelen Kayıtlı Rol:", savedRole); // Dönüşü kontrol et
-
                 setRoles(prev => {
                     if (editingRole) {
                         return prev.map(r => r.id === savedRole.id ? savedRole : r);

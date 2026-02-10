@@ -18,7 +18,6 @@ const getApiBaseUrl = () => {
         window.location.protocol === 'ionic:';
 
     if (isCapacitor) {
-        console.log('📱 Capacitor detected - using production API');
         return 'https://api.pawscord.com';
     }
 

@@ -98,7 +98,6 @@ const ServerBoost = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Server boosted!');
         setShowBoostModal(false);
         fetchBoostData();
         fetchBoostHistory();
@@ -122,7 +121,6 @@ const ServerBoost = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Boost removed');
         fetchBoostData();
         fetchBoostHistory();
       } else {

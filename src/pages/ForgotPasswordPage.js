@@ -19,7 +19,6 @@ const ForgotPasswordPage = ({ apiBaseUrl }) => {
         try {
             // 🤖 reCAPTCHA token al
             const recaptchaToken = await getRecaptchaToken('password_reset');
-            console.log('✅ [reCAPTCHA] Token alındı:', recaptchaToken ? 'OK' : 'FAIL');
 
             const response = await fetch(`${apiBaseUrl}/auth/request-password-reset/`, {
                 method: 'POST',

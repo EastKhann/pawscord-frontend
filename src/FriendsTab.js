@@ -39,11 +39,8 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
     // ✨ YENİ: WebSocket Bağlantısı
     const { globalData } = useGlobalWebSocket();
 
-    console.log('👥 [FriendsTab] onlineUsers prop:', onlineUsers); // Debug
-
     const fetchFriendData = useCallback(async () => {
         try {
-            // setLoading(true); // Yükleniyor simgesi titremesin diye bunu kapattık
             const response = await fetchWithAuth(`${apiBaseUrl}/friends/list/`);
             if (response.ok) {
                 const data = await response.json();
@@ -71,7 +68,6 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
     // ✨ WebSocket'ten sinyal gelince listeyi yenile ve Bildirim Göster
     useEffect(() => {
         if (globalData?.type === 'friend_list_update') {
-            console.log("🔔 CANLI BİLDİRİM: Yeni arkadaş isteği/yanıtı geldi!");
             fetchFriendData();
 
             // Kullanıcıya görsel bildirim ver
@@ -216,7 +212,6 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
                             <div style={localStyles.emptyState}><div style={{ fontSize: '3em', marginBottom: '10px' }}>🥺</div><p style={localStyles.emptyText}>Henüz kimseyle arkadaş değilsin.</p><button onClick={() => setActiveTab('add')} style={localStyles.emptyBtn}>Arkadaş Ekle</button></div>
                         ) : (
                             friends.map(friend => {
-                                console.log('🔥 [FriendsTab] RAW friend data:', friend);
                                 // 🔥 FIX: Backend FLAT structure gönderiyor (sender_username, receiver_username, ...)
                                 const myUsername = localStorage.getItem('chat_username') || '';
 
@@ -232,15 +227,6 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
                                 const isReallyOnline = Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
                                 const friendStatus = isReallyOnline ? 'online' : 'offline';
 
-                                console.log('🔥 [FriendsTab] Processed friend:', {
-                                    friendId: friend.id,
-                                    myUsername,
-                                    iAmSender,
-                                    friendUsername,
-                                    displayAvatar,
-                                    isReallyOnline,
-                                    onlineUsersArray: onlineUsers
-                                });
 
                                 // Status display
                                 const statusText = {

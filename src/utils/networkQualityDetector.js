@@ -107,7 +107,6 @@ class NetworkQualityDetector {
         }
 
         if (import.meta.env.MODE === 'development') {
-            console.log(`🌐 [NetworkQuality] Detected: ${this.quality}`, this.metrics);
         }
 
         this.onQualityChange(this.quality, this.metrics);
@@ -288,7 +287,6 @@ export const networkQuality = new NetworkQualityDetector({
     checkInterval: 30000,
     onQualityChange: (quality, metrics) => {
         if (import.meta.env.MODE === 'development') {
-            console.log(`🌐 [NetworkQuality] Changed to: ${quality}`, metrics);
         }
     }
 });

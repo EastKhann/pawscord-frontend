@@ -39,12 +39,10 @@ const InvitePage = () => {
     const API_BASE_URL = `${API_URL_BASE_STRING}/api`;
 
     useEffect(() => {
-        console.log('🎫 [Invite Page] Loaded with code:', code);
         fetchInviteInfo();
     }, [code]);
 
     const fetchInviteInfo = async () => {
-        console.log('🔍 [Invite Page] Fetching invite info...');
         setLoading(true);
         setError('');
 
@@ -62,11 +60,9 @@ const InvitePage = () => {
 
             const data = await res.json();
 
-            console.log('📦 [Invite Page] Response:', { status: res.status, data });
 
             if (res.ok) {
                 setInviteInfo(data);
-                console.log('✅ [Invite Page] Invite info loaded, type:', data.type || 'invite');
             } else {
                 setError(data.error || 'Davet bulunamadı');
                 console.error('❌ [Invite Page] Error:', data.error);
@@ -80,7 +76,6 @@ const InvitePage = () => {
 
     const handleAccept = async () => {
         if (!isAuthenticated) {
-            console.log('⚠️ [Invite Page] User not authenticated, redirecting to login');
             toast.error('❌ Lütfen önce giriş yapın!');
             sessionStorage.setItem('pending_invite', code);
             navigate('/');
@@ -94,12 +89,6 @@ const InvitePage = () => {
             return;
         }
 
-        console.log('🎫 [Invite Page] Accepting invite...', {
-            code,
-            type: inviteInfo?.type || 'invite',
-            apiUrl: `${API_BASE_URL}/invites/${code}/accept/`,
-            hasToken: !!token
-        });
         setJoining(true);
         setError('');
 
@@ -109,7 +98,6 @@ const InvitePage = () => {
             const url = isVanity
                 ? `${API_BASE_URL}/servers/${inviteInfo.server.id}/join/`
                 : `${API_BASE_URL}/invites/${code}/accept/`;
-            console.log('📡 [Invite Page] POST to:', url, isVanity ? '(vanity)' : '(invite)');
 
             const res = await fetch(url, {
                 method: 'POST',
@@ -119,18 +107,14 @@ const InvitePage = () => {
                 }
             });
 
-            console.log('📦 [Invite Page] Response status:', res.status);
             const data = await res.json();
-            console.log('📦 [Invite Page] Response data:', data);
 
             if (res.ok) {
-                console.log('✅ [Invite Page] Successfully joined server!');
                 toast.success(`✅ Başarılı! ${data.server_name || 'Sunucu'}ya katıldınız!`);
                 setJoined(true);
 
                 // Backend'den redirect URL geliyorsa ona, yoksa ana sayfaya yönlendir
                 const redirectUrl = data.redirect || '/';
-                console.log('🔗 [Invite Page] Redirecting to:', redirectUrl);
 
                 setTimeout(() => {
                     if (redirectUrl.startsWith('http')) {

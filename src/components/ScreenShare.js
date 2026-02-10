@@ -79,7 +79,6 @@ const ScreenShare = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Screen share started');
         setSharing(true);
       } else {
         console.error('❌ Failed to start screen share');
@@ -98,7 +97,6 @@ const ScreenShare = ({ serverId, onClose }) => {
       });
 
       if (response.ok) {
-        console.log('✅ Screen share stopped');
         setSharing(false);
         setSelectedSource(null);
       }

@@ -390,10 +390,8 @@ const VoiceChatPanel = ({
             // Auto-adjust video quality if enabled
             if (autoQualityEnabled && updateScreenQuality) {
                 if (quality === 'poor' && screenShareQuality !== '720p') {
-                    console.log('📶 [Network] Poor connection detected, downgrading to 720p');
                     updateScreenQuality('720p');
                 } else if (quality === 'excellent' && screenShareQuality === '720p') {
-                    console.log('📶 [Network] Excellent connection, upgrading to 1080p');
                     updateScreenQuality('1080p');
                 }
             }
@@ -739,7 +737,6 @@ const VoiceChatPanel = ({
         const audioElements = document.querySelectorAll(`audio[data-username="${targetUser.username}"]`);
         audioElements.forEach(audio => {
             audio.volume = volume / 100;
-            console.log(`🔊 [Volume] Set ${targetUser.username} to ${volume}%`);
         });
     }, []);
 

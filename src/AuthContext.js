@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            console.log('🔄 [Auth] Refreshing access token...');
             const response = await fetch(`${API_URL_BASE}/api/auth/token/refresh/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -56,7 +55,6 @@ export const AuthProvider = ({ children }) => {
                 setUser({ username: decoded.username });
                 setIsAuthenticated(true);
 
-                console.log('✅ [Auth] Token refreshed successfully');
                 scheduleTokenRefresh(data.access);
                 return true;
             } else {
@@ -85,7 +83,6 @@ export const AuthProvider = ({ children }) => {
             // Token süresi dolmadan 5 dakika önce yenile
             const refreshTime = Math.max((expiresIn - 300) * 1000, 60000); // En az 1 dakika
 
-            console.log(`⏰ [Auth] Token will refresh in ${Math.round(refreshTime / 1000 / 60)} minutes`);
 
             refreshTimerRef.current = setTimeout(() => {
                 refreshAccessToken();
@@ -107,14 +104,6 @@ export const AuthProvider = ({ children }) => {
                     const isTokenActuallyValid = decoded.exp > currentTime;
                     const isWithinGrace = decoded.exp > (currentTime - gracePeriod);
 
-                    console.log('🔐 [Auth] Token check:', {
-                        exp: decoded.exp,
-                        currentTime,
-                        gracePeriod,
-                        isValid: isTokenActuallyValid,
-                        isWithinGrace,
-                        username: decoded.username
-                    });
 
                     if (isTokenActuallyValid) {
                         // Token hala geçerli — direkt kullan
@@ -126,7 +115,6 @@ export const AuthProvider = ({ children }) => {
                         // Auto-refresh schedule
                         scheduleTokenRefresh(storedToken);
 
-                        console.log('✅ [Auth] User authenticated:', decoded.username);
                     } else if (isWithinGrace) {
                         // Token expired ama grace period içinde — önce refresh et
                         console.warn('⚠️ [Auth] Token expired but within grace, refreshing first...');
@@ -143,7 +131,6 @@ export const AuthProvider = ({ children }) => {
                     logout();
                 }
             } else {
-                console.log('ℹ️ [Auth] No token found');
             }
         };
         checkToken();
@@ -157,7 +144,6 @@ export const AuthProvider = ({ children }) => {
     }, [scheduleTokenRefresh, refreshAccessToken]);
 
     const login = (accessToken, refreshToken) => {
-        console.log('🔓 [Auth] Login called');
         try {
             localStorage.setItem('access_token', accessToken);
             localStorage.setItem('refresh_token', refreshToken);
@@ -165,7 +151,6 @@ export const AuthProvider = ({ children }) => {
 
             localStorage.setItem('chat_username', decoded.username);
 
-            console.log('✅ [Auth] Login successful, user:', decoded.username);
             setToken(accessToken);
             setUser({ username: decoded.username });
             setIsAuthenticated(true);

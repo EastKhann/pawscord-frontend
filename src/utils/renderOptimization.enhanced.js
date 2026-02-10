@@ -72,7 +72,6 @@ export const useWhyDidYouUpdate = (name, props) => {
         });
 
         if (Object.keys(changedProps).length > 0) {
-          console.log('[why-did-you-update]', name, changedProps);
         }
       }
 
@@ -188,7 +187,6 @@ export const useRenderCount = (componentName) => {
   });
 
   if (import.meta.env.MODE === 'development') {
-    console.log(`[${componentName}] Render count:`, renders.current);
   }
 
   return renders.current;

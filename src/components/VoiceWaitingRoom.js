@@ -63,7 +63,7 @@ const VoiceWaitingRoom = ({ channelName, maxUsers, currentUsers, position, onLea
                             <div style={styles.loader}></div>
                             <p style={styles.waitingText}>
                                 {position === 1 ? 'Bir kişi çıkınca katılabilirsin' :
-                                 `${position} kişi önünde var`}
+                                    `${position} kişi önünde var`}
                             </p>
                         </div>
                     )}
@@ -210,7 +210,7 @@ try {
             100% { transform: rotate(360deg); }
         }
     `, styleSheet.cssRules.length);
-} catch (e) {}
+} catch (_) { /* CSS rule injection may fail in some browsers */ }
 
 export default VoiceWaitingRoom;
 

@@ -426,7 +426,6 @@ export async function storePrivateKeys(username, identityPrivateKey, signedPreKe
         localStorage.setItem(`e2ee_identity_private_${username}`, identityPrivateKey);
         localStorage.setItem(`e2ee_signed_pre_key_private_${username}`, signedPreKeyPrivateKey);
         localStorage.setItem(`e2ee_keys_timestamp_${username}`, Date.now().toString());
-        console.log('✅ Private keys stored locally');
         return true;
     } catch (err) {
         console.error('❌ Failed to store private keys:', err);
@@ -479,7 +478,6 @@ export async function fetchUserPublicKeys(apiBaseUrl, targetUser, fetchWithAuth)
     }
 }
 
-console.log('✅ E2EE Crypto Utils loaded');
 
 
 
