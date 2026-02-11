@@ -16,6 +16,8 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [preview, setPreview] = useState('');
+    const [welcomeChannelId, setWelcomeChannelId] = useState('');
+    const [channels, setChannels] = useState([]);
 
     useEffect(() => {
         const loadTemplate = async () => {
@@ -27,6 +29,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     if (data.config) {
                         setTemplate(data.config.welcome_message || data.template || '');
                         setEnabled(data.config.welcome_enabled ?? data.enabled ?? false);
+                        setWelcomeChannelId(data.config.welcome_channel_id || '');
                     } else {
                         setTemplate(data.template || '');
                         setEnabled(data.enabled || false);
@@ -38,7 +41,19 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 setLoading(false);
             }
         };
+        const loadChannels = async () => {
+            try {
+                const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/channels/`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setChannels(data.channels || []);
+                }
+            } catch (e) {
+                console.error('Channels load error:', e);
+            }
+        };
         loadTemplate();
+        loadChannels();
     }, [serverId, fetchWithAuth, apiBaseUrl]);
 
     // Live preview
@@ -69,7 +84,8 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     template,
                     welcome_message: template,
                     enabled,
-                    welcome_enabled: enabled
+                    welcome_enabled: enabled,
+                    welcome_channel_id: welcomeChannelId || null
                 })
             });
             if (res.ok) {
@@ -121,6 +137,36 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     <div style={{ color: '#72767d', fontSize: '12px', marginTop: '2px' }}>
                         Yeni üyeler katıldığında otomatik mesaj gönderilir
                     </div>
+                </div>
+            </div>
+
+            {/* Channel Selector */}
+            <div>
+                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    Hoş Geldin Kanalı
+                </label>
+                <select
+                    value={welcomeChannelId}
+                    onChange={(e) => setWelcomeChannelId(e.target.value)}
+                    style={{
+                        width: '100%', padding: '10px 14px',
+                        backgroundColor: '#1e1f22', border: '1px solid #40444b',
+                        borderRadius: '8px', color: '#dcddde', fontSize: '14px',
+                        outline: 'none', cursor: 'pointer',
+                        transition: 'border-color 0.2s'
+                    }}
+                    onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                >
+                    <option value="">Otomatik (Varsayılan kanal)</option>
+                    {channels.map(ch => (
+                        <option key={ch.id} value={ch.id}>
+                            #{ch.name} {ch.category ? `(${ch.category})` : ''}
+                        </option>
+                    ))}
+                </select>
+                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px' }}>
+                    Hoş geldin mesajlarının gönderileceği kanalı seçin
                 </div>
             </div>
 
