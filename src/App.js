@@ -5890,7 +5890,7 @@ const AppContent = () => {
                                         {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `# ${String(chatTitle)}`}
                                     </h2>
                                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>
-                                        {isConnected ? 'Bagli' : 'Kopuk'}
+                                        {isConnected ? '✓' : '✗'}
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: isMobile ? '5px' : '10px', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', position: 'relative' }}>

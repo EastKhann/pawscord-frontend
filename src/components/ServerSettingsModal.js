@@ -18,6 +18,9 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const [preview, setPreview] = useState('');
     const [welcomeChannelId, setWelcomeChannelId] = useState('');
     const [channels, setChannels] = useState([]);
+    const [botAvatar, setBotAvatar] = useState(null); // URL from backend
+    const [botAvatarFile, setBotAvatarFile] = useState(null); // File to upload
+    const [botAvatarPreview, setBotAvatarPreview] = useState(null); // Local preview
 
     useEffect(() => {
         const loadTemplate = async () => {
@@ -30,6 +33,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                         setTemplate(data.config.welcome_message || data.template || '');
                         setEnabled(data.config.welcome_enabled ?? data.enabled ?? false);
                         setWelcomeChannelId(data.config.welcome_channel_id || '');
+                        setBotAvatar(data.config.welcome_bot_avatar || null);
                     } else {
                         setTemplate(data.template || '');
                         setEnabled(data.enabled || false);
@@ -76,19 +80,42 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/servers/welcome/set/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    server_id: serverId,
-                    template,
-                    welcome_message: template,
-                    enabled,
-                    welcome_enabled: enabled,
-                    welcome_channel_id: welcomeChannelId || null
-                })
-            });
+            let res;
+            if (botAvatarFile) {
+                // FormData ile gönder (avatar dosyası var)
+                const formData = new FormData();
+                formData.append('server_id', serverId);
+                formData.append('template', template);
+                formData.append('welcome_message', template);
+                formData.append('enabled', enabled);
+                formData.append('welcome_enabled', enabled);
+                if (welcomeChannelId) formData.append('welcome_channel_id', welcomeChannelId);
+                formData.append('welcome_bot_avatar', botAvatarFile);
+
+                res = await fetchWithAuth(`${apiBaseUrl}/servers/welcome/set/`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } else {
+                // JSON ile gönder (avatar değişikliği yok)
+                res = await fetchWithAuth(`${apiBaseUrl}/servers/welcome/set/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        server_id: serverId,
+                        template,
+                        welcome_message: template,
+                        enabled,
+                        welcome_enabled: enabled,
+                        welcome_channel_id: welcomeChannelId || null
+                    })
+                });
+            }
             if (res.ok) {
+                const data = await res.json().catch(() => ({}));
+                if (data.welcome_bot_avatar) setBotAvatar(data.welcome_bot_avatar);
+                setBotAvatarFile(null);
+                setBotAvatarPreview(null);
                 toast.success('Hoş geldin mesajı kaydedildi!');
             } else {
                 const data = await res.json().catch(() => ({}));
@@ -132,10 +159,88 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 </div>
                 <div>
                     <div style={{ color: '#dcddde', fontWeight: '600' }}>
-                        {enabled ? '✅ Hoş Geldin Mesajları Aktif' : '❌ Hoş Geldin Mesajları Kapalı'}
+                        {enabled ? '✓ Hoş Geldin Mesajları Aktif' : '✗ Hoş Geldin Mesajları Kapalı'}
                     </div>
                     <div style={{ color: '#72767d', fontSize: '12px', marginTop: '2px' }}>
                         Yeni üyeler katıldığında otomatik mesaj gönderilir
+                    </div>
+                </div>
+            </div>
+
+            {/* Bot Avatar Ayarı */}
+            <div>
+                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    Bot Profil Fotoğrafı
+                </label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px', backgroundColor: '#2b2d31', borderRadius: '8px' }}>
+                    <div style={{
+                        width: '64px', height: '64px', borderRadius: '50%',
+                        overflow: 'hidden', border: '3px solid #5865f2',
+                        cursor: 'pointer', position: 'relative',
+                        backgroundColor: '#1e1f22',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        flexShrink: 0,
+                        transition: 'border-color 0.2s'
+                    }}
+                        onClick={() => {
+                            const input = document.createElement('input');
+                            input.type = 'file';
+                            input.accept = 'image/*';
+                            input.onchange = (e) => {
+                                const file = e.target.files[0];
+                                if (!file) return;
+                                if (file.size > 5 * 1024 * 1024) {
+                                    toast.warning('Dosya boyutu çok büyük! Maksimum 5MB.');
+                                    return;
+                                }
+                                setBotAvatarFile(file);
+                                setBotAvatarPreview(URL.createObjectURL(file));
+                            };
+                            input.click();
+                        }}
+                    >
+                        {(botAvatarPreview || botAvatar) ? (
+                            <img
+                                src={botAvatarPreview || botAvatar}
+                                alt="Bot Avatar"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                        ) : (
+                            <span style={{ fontSize: '24px' }}>🤖</span>
+                        )}
+                        <div style={{
+                            position: 'absolute', bottom: 0, left: 0, right: 0,
+                            backgroundColor: 'rgba(0,0,0,0.7)', padding: '2px 0',
+                            fontSize: '9px', color: '#fff', textAlign: 'center'
+                        }}>
+                            Değiştir
+                        </div>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <div style={{ color: '#dcddde', fontSize: '14px', fontWeight: '600' }}>
+                            Hoş Geldin Botu Avatarı
+                        </div>
+                        <div style={{ color: '#72767d', fontSize: '12px', marginTop: '4px' }}>
+                            {botAvatarPreview ? '📷 Yeni fotoğraf seçildi (kaydettiğinizde uygulanır)' :
+                                botAvatar ? 'Özel avatar ayarlanmış' : 'Ayarlanmamış — sunucu ikonu kullanılır'}
+                        </div>
+                        {(botAvatar || botAvatarPreview) && (
+                            <button
+                                onClick={() => {
+                                    setBotAvatar(null);
+                                    setBotAvatarFile(null);
+                                    setBotAvatarPreview(null);
+                                }}
+                                style={{
+                                    marginTop: '6px', padding: '4px 10px',
+                                    backgroundColor: 'transparent', border: '1px solid #da373c',
+                                    borderRadius: '4px', color: '#da373c', cursor: 'pointer',
+                                    fontSize: '11px'
+                                }}
+                            >
+                                ✗ Avatarı Kaldır
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -161,7 +266,7 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     <option value="">Otomatik (Varsayılan kanal)</option>
                     {channels.map(ch => (
                         <option key={ch.id} value={ch.id}>
-                            #{ch.name} {ch.category ? `(${ch.category})` : ''}
+                            {ch.name} {ch.category ? `(${ch.category})` : ''}
                         </option>
                     ))}
                 </select>
@@ -1011,7 +1116,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                                             cat.rooms?.filter(r => r.room_type !== 'voice' && r.channel_type !== 'voice')
                                                                 .map(room => (
                                                                     <option key={room.slug} value={room.slug}>
-                                                                        # {room.name}
+                                                                        {room.name}
                                                                     </option>
                                                                 ))
                                                         )}

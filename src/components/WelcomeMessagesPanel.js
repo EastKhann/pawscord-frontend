@@ -222,7 +222,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                   onChange={(e) => setWelcomeConfig({ ...welcomeConfig, welcome_enabled: e.target.checked })}
                 />
                 <span className="slider"></span>
-                <span className="toggle-label">{welcomeConfig.welcome_enabled ? 'Aktif' : 'Pasif'}</span>
+                <span className="toggle-label">{welcomeConfig.welcome_enabled ? '✓ Aktif' : '✗ Pasif'}</span>
               </label>
             </div>
 
@@ -237,7 +237,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                   <option value="">Kanal seçin</option>
                   {channels.map((channel) => (
                     <option key={channel.id} value={channel.id}>
-                      #{channel.name}
+                      {channel.name}
                     </option>
                   ))}
                 </select>
@@ -353,7 +353,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                   onChange={(e) => setWelcomeConfig({ ...welcomeConfig, goodbye_enabled: e.target.checked })}
                 />
                 <span className="slider"></span>
-                <span className="toggle-label">{welcomeConfig.goodbye_enabled ? 'Aktif' : 'Pasif'}</span>
+                <span className="toggle-label">{welcomeConfig.goodbye_enabled ? '✓ Aktif' : '✗ Pasif'}</span>
               </label>
             </div>
 
@@ -368,7 +368,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                   <option value="">Kanal seçin</option>
                   {channels.map((channel) => (
                     <option key={channel.id} value={channel.id}>
-                      #{channel.name}
+                      {channel.name}
                     </option>
                   ))}
                 </select>
@@ -434,7 +434,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
                   onChange={(e) => setWelcomeConfig({ ...welcomeConfig, auto_role_enabled: e.target.checked })}
                 />
                 <span className="slider"></span>
-                <span className="toggle-label">{welcomeConfig.auto_role_enabled ? 'Aktif' : 'Pasif'}</span>
+                <span className="toggle-label">{welcomeConfig.auto_role_enabled ? '✓ Aktif' : '✗ Pasif'}</span>
               </label>
             </div>
 
