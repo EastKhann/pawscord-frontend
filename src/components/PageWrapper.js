@@ -1,5 +1,4 @@
 // frontend/src/components/PageWrapper.js
-import React from 'react';
 import { Capacitor } from '@capacitor/core';
 
 const PageWrapper = ({ children }) => {

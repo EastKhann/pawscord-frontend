@@ -1,5 +1,5 @@
 // frontend/src/components/RaidProtectionPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaShieldAlt, FaExclamationCircle, FaUserSlash, FaBolt, FaChartBar, FaCog, FaTimes } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';

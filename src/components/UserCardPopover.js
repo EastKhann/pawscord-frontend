@@ -2,7 +2,7 @@
 // 👤 FEATURE 7: User Card Popover
 // Hover on username/avatar to see mini profile card
 
-import React, { useState, useRef, useCallback, useEffect, memo } from 'react';
+import { useState, useRef, useCallback, useEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
 
 const UserCardPopover = ({

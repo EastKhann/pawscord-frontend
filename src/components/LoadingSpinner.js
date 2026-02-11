@@ -1,5 +1,4 @@
 // frontend/src/components/LoadingSpinner.js
-import React from 'react';
 
 /**
  * 🌀 Modern Loading Spinner Component

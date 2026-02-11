@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './VoiceSettings.css';
 import { FaMicrophone, FaTimes, FaHeadphones, FaVolumeUp, FaVideo, FaCog, FaExclamationTriangle } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';

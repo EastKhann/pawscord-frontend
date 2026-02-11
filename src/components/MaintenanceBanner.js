@@ -1,7 +1,7 @@
 // components/MaintenanceBanner.js
 // 🔧 Maintenance Mode Banner
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaTools } from 'react-icons/fa';
 
 const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {

@@ -1,5 +1,5 @@
 // frontend/src/components/Spoiler.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Spoiler = ({ children }) => {
     const [revealed, setRevealed] = useState(false);

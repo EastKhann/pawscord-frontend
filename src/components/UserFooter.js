@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaCog, FaDownload } from 'react-icons/fa';
 import { styles } from '../SidebarStyles';
 

@@ -2,7 +2,7 @@
 // 🆕 FEATURE 12: New Messages Divider
 // Shows "X yeni mesaj" separator between old and new messages
 
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 const NewMessagesDivider = ({ count }) => {
     return (

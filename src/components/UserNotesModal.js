@@ -1,5 +1,5 @@
 // frontend/src/components/UserNotesModal.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaStickyNote, FaSave, FaTimes } from 'react-icons/fa';
 
 const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline = false }) => {

@@ -1,5 +1,5 @@
 // frontend/src/components/ScheduledAnnouncementsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaBullhorn, FaClock, FaCalendar, FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';

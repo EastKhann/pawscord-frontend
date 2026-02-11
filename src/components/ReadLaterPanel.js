@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ReadLaterPanel.css';
 import { FaBookmark, FaTag, FaSearch, FaTrash, FaPlus, FaTimes, FaFilter } from 'react-icons/fa';
 

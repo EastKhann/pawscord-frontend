@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaMicrophone, FaTimes, FaPlus, FaPlay, FaStop, FaHandPaper,
     FaUserPlus, FaUserMinus, FaVolumeMute, FaVolumeUp, FaUsers,

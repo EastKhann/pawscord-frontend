@@ -2,7 +2,7 @@
 // 🌐 FEATURE 5: Connection Status Indicator
 // Shows online/offline/reconnecting status
 
-import React, { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { FaWifi, FaExclamationTriangle, FaSync } from 'react-icons/fa';
 
 const ConnectionStatusBar = () => {

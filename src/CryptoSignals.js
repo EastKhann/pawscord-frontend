@@ -2,7 +2,7 @@
 // 🔥 v4.0 — Tamamen yeniden tasarlandı — JSON v3.0 yapısına uyumlu
 // ÖNCEKİ SORUN: data.tabs arıyordu, ama JSON: data.balance_mode.tabs / data.winrate_mode.tabs
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { FaArrowLeft, FaSync, FaBitcoin, FaClock, FaChartLine, FaTrophy, FaFilter, FaTimes, FaExternalLinkAlt, FaSortAmountDown, FaSortAmountUp, FaWallet } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { getApiBase } from './utils/apiEndpoints';

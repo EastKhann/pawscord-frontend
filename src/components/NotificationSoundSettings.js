@@ -2,7 +2,7 @@
 // 🔥 FEATURE 50: Notification sound settings UI
 // Configure notification sounds per event type
 
-import React, { useState, memo, useCallback, useRef } from 'react';
+import { useState, memo, useCallback, useRef } from 'react';
 import { FaVolumeUp, FaVolumeMute, FaBell, FaComment, FaAt, FaUserPlus, FaPhoneAlt, FaPlay, FaPause, FaToggleOn, FaToggleOff, FaSave } from 'react-icons/fa';
 
 const SOUND_EVENTS = [

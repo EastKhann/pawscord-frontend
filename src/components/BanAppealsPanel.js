@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './BanAppealsPanel.css';
 import { FaGavel, FaPaperPlane, FaHistory, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 

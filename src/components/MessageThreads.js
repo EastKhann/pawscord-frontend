@@ -1,5 +1,5 @@
 // frontend/src/components/MessageThreads.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaTimes, FaComments, FaBell, FaBellSlash } from 'react-icons/fa';
 import toast from '../utils/toast';
 

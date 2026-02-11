@@ -1,6 +1,6 @@
 // frontend/src/components/CreateGroupModal.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaUserPlus, FaCheck } from 'react-icons/fa';
 import toast from '../utils/toast';
 

@@ -1,5 +1,5 @@
 // frontend/src/components/StoreModal.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaShoppingCart, FaCoins, FaStar, FaFire, FaCrown, FaPalette, FaMedal, FaGift } from 'react-icons/fa';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';

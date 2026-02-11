@@ -1,5 +1,5 @@
 // frontend/src/components/ForumPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import './ForumPanel.css';
 

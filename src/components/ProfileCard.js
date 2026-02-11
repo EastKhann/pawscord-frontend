@@ -1,7 +1,7 @@
 // 🎨 PROFILE CARD CUSTOMIZATION
 // Banner, tema, badge, bağlantı özelleştirme
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 import './ProfileCard.css';
 

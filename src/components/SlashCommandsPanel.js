@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './SlashCommandsPanel.css';
 import { FaTerminal, FaCode, FaPlay, FaHistory } from 'react-icons/fa';
 

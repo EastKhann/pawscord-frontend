@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaCopy, FaTimes, FaServer, FaCheck, FaHashtag, FaVolumeUp,
     FaShieldAlt, FaSmile, FaImage, FaCog, FaUsers, FaFolder,

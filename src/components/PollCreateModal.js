@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
 
 const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug }) => {

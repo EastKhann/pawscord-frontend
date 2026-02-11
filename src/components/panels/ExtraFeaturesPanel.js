@@ -1,7 +1,7 @@
 // frontend/src/components/panels/ExtraFeaturesPanel.js
 // 🚀 20 EK YENİ ÖZELLİK PANELİ - 26 Ocak 2026 (PART 2)
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../AuthContext';
 import toast from '../../utils/toast';
 import { getApiBase } from '../../utils/apiEndpoints';

@@ -1,5 +1,4 @@
 // frontend/src/pages/PrivacyPolicyPage.jsx
-import React from 'react';
 
 const PrivacyPolicyPage = () => {
     return (

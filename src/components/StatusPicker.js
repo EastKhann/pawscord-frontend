@@ -2,7 +2,7 @@
 // 🔥 FEATURE 35: Status picker with presets
 // Quick status picker: online, idle, dnd, invisible + custom status
 
-import React, { useState, memo, useCallback } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { FaCircle, FaMoon, FaMinusCircle, FaEyeSlash, FaSmile, FaTimes, FaClock } from 'react-icons/fa';
 
 const STATUSES = [

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaCalendarAlt, FaTag, FaCheckSquare, FaUser, FaTrash, FaAlignLeft } from 'react-icons/fa';
 
 const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {

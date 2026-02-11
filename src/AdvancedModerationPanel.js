@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './AdvancedModerationPanel.css';
 import confirmDialog from './utils/confirmDialog';
 

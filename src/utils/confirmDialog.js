@@ -4,7 +4,6 @@
 // Kullanım: const ok = await confirmDialog('Emin misiniz?');
 //           const ok = await confirmDialog({ title: '...', message: '...', type: 'danger' });
 
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { FaExclamationTriangle, FaTimes, FaTrash, FaCheck, FaSignOutAlt, FaQuestionCircle } from 'react-icons/fa';
 

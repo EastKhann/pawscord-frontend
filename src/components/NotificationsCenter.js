@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './NotificationsCenter.css';
 import { FaBell, FaTimes, FaCog, FaCheck, FaEnvelope, FaMobileAlt, FaBellSlash, FaFilter } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';

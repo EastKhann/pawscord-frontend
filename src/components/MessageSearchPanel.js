@@ -1,5 +1,5 @@
 // frontend/src/components/MessageSearchPanel.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaSearch, FaTimes, FaFilter, FaCalendar, FaUser } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './MessageSearchPanel.css';

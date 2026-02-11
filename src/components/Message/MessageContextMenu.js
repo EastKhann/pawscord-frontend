@@ -1,7 +1,7 @@
 // frontend/src/components/Message/MessageContextMenu.js
 // 📋 MESSAGE CONTEXT MENU - Right-click menu
 
-import React, { memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import {
     FaReply, FaEdit, FaTrash, FaSmile, FaShareSquare,
     FaFileAlt, FaThumbtack, FaBell, FaComments, FaExclamationTriangle

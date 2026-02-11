@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaCar, FaAppleAlt, FaRunning, FaClock, FaCrown, FaDragon } from 'react-icons/fa';
 
 // frontend/src/data/grammarQuestions.js

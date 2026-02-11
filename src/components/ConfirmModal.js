@@ -1,7 +1,7 @@
 // components/ConfirmModal.js
 // 🎯 Modern Confirmation Dialog - alert() ve confirm() yerine kullanılır
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FaExclamationTriangle, FaTimes, FaTrash, FaCheck } from 'react-icons/fa';
 

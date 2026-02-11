@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaLock, FaEye, FaEyeSlash, FaSpinner, FaCheckCircle, FaGoogle } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './PasswordSetupModal.css';

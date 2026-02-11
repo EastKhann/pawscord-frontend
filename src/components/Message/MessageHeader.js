@@ -1,7 +1,7 @@
 // frontend/src/components/Message/MessageHeader.js
 // 📋 MESSAGE HEADER - Username, timestamp, badges
 
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { FaLock, FaThumbtack } from 'react-icons/fa';
 import { EditHistory } from './EditHistory';
 

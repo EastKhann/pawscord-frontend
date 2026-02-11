@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './TwoFactorLogin.css';
 
 const TwoFactorLogin = ({ onVerify, onCancel, username }) => {

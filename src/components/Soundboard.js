@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Soundboard.css';
 import confirmDialog from '../utils/confirmDialog';
 

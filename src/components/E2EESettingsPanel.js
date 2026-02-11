@@ -1,5 +1,5 @@
 // frontend/src/components/E2EESettingsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaLock, FaKey, FaSync, FaTrash, FaShieldAlt, FaCheckCircle, FaClock, FaExclamationTriangle } from 'react-icons/fa';
 import SafetyNumberModal from './SafetyNumberModal';

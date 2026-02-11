@@ -1,6 +1,6 @@
 // frontend/src/components/SoundboardModal.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaMusic, FaVolumeUp } from 'react-icons/fa';
 
 const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absoluteHostUrl }) => {

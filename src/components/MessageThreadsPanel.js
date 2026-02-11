@@ -1,5 +1,5 @@
 // frontend/src/components/MessageThreadsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaComments, FaThumbtack, FaBell, FaBellSlash, FaReply } from 'react-icons/fa';
 import toast from '../utils/toast';
 

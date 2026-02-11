@@ -2,7 +2,7 @@
 // 🔥 FEATURE 42: Invite link manager
 // View, create, revoke server invites
 
-import React, { useState, memo, useCallback } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { FaLink, FaCopy, FaTrash, FaPlus, FaClock, FaUsers, FaCheck, FaInfinity } from 'react-icons/fa';
 
 const EXPIRE_OPTIONS = [

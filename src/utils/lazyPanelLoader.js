@@ -1,7 +1,7 @@
 // ⚡ LAZY PANEL LOADER: Optimized Panel Loading System
 // Reduces initial bundle size by lazy loading all panels
 
-import React, { Suspense, lazy, useState, useCallback } from 'react';
+import { Suspense, lazy, useState, useCallback } from 'react';
 
 // Loading fallback component
 const PanelLoadingFallback = ({ name }) => (
@@ -67,83 +67,83 @@ const PanelErrorFallback = ({ error, resetError }) => (
 // ⚡ PANEL REGISTRY: All panels are lazy loaded
 const panelRegistry = {
     // ====== MODERATION PANELS ======
-    AutoModerationDashboard: lazy(() => import(/* webpackChunkName: "panel-moderation" */ '../components/AutoModerationDashboard')),
-    AutoModerationPanel: lazy(() => import(/* webpackChunkName: "panel-moderation" */ '../components/AutoModerationPanel')),
-    RaidProtectionPanel: lazy(() => import(/* webpackChunkName: "panel-moderation" */ '../components/RaidProtectionPanel')),
-    ReportSystemPanel: lazy(() => import(/* webpackChunkName: "panel-moderation" */ '../components/ReportSystemPanel')),
-    AuditLogPanel: lazy(() => import(/* webpackChunkName: "panel-moderation" */ '../components/AuditLogPanel')),
-    UserWarningsPanel: lazy(() => import(/* webpackChunkName: "panel-moderation" */ '../components/UserWarningsPanel')),
+    AutoModerationDashboard: lazy(() => import('../components/AutoModerationDashboard')),
+    AutoModerationPanel: lazy(() => import('../components/AutoModerationPanel')),
+    RaidProtectionPanel: lazy(() => import('../components/RaidProtectionPanel')),
+    ReportSystemPanel: lazy(() => import('../components/ReportSystemPanel')),
+    AuditLogPanel: lazy(() => import('../components/AuditLogPanel')),
+    UserWarningsPanel: lazy(() => import('../components/UserWarningsPanel')),
 
     // ====== SETTINGS PANELS ======
-    ServerSettingsModal: lazy(() => import(/* webpackChunkName: "panel-settings" */ '../components/ServerSettingsModal')),
-    PollSettingsPanel: lazy(() => import(/* webpackChunkName: "panel-settings" */ '../components/panels/PollSettingsPanel')),
+    ServerSettingsModal: lazy(() => import('../components/ServerSettingsModal')),
+    PollSettingsPanel: lazy(() => import('../components/panels/PollSettingsPanel')),
 
     // ====== FEATURE PANELS ======
-    BookmarkPanel: lazy(() => import(/* webpackChunkName: "panel-features" */ '../components/BookmarkPanel')),
-    ReactionAggregatePanel: lazy(() => import(/* webpackChunkName: "panel-features" */ '../components/panels/ReactionAggregatePanel')),
-    MessageSummaryPanel: lazy(() => import(/* webpackChunkName: "panel-features" */ '../components/panels/MessageSummaryPanel')),
-    InviteAuditPanel: lazy(() => import(/* webpackChunkName: "panel-features" */ '../components/panels/InviteAuditPanel')),
-    VirtualTransactionHistoryPanel: lazy(() => import(/* webpackChunkName: "panel-features" */ '../components/panels/VirtualTransactionHistoryPanel')),
-    StageChannelManagementPanel: lazy(() => import(/* webpackChunkName: "panel-features" */ '../components/panels/StageChannelManagementPanel')),
+    BookmarkPanel: lazy(() => import('../components/BookmarkPanel')),
+    ReactionAggregatePanel: lazy(() => import('../components/panels/ReactionAggregatePanel')),
+    MessageSummaryPanel: lazy(() => import('../components/panels/MessageSummaryPanel')),
+    InviteAuditPanel: lazy(() => import('../components/panels/InviteAuditPanel')),
+    VirtualTransactionHistoryPanel: lazy(() => import('../components/panels/VirtualTransactionHistoryPanel')),
+    StageChannelManagementPanel: lazy(() => import('../components/panels/StageChannelManagementPanel')),
 
     // ====== 🚀 NEW FEATURES - 26 Ocak 2026 ======
-    NewFeaturesPanel: lazy(() => import(/* webpackChunkName: "panel-new-features" */ '../components/panels/NewFeaturesPanel')),
+    NewFeaturesPanel: lazy(() => import('../components/panels/NewFeaturesPanel')),
 
     // ====== 🚀 EXTRA FEATURES - 26 Ocak 2026 (PART 2) ======
-    ExtraFeaturesPanel: lazy(() => import(/* webpackChunkName: "panel-extra-features" */ '../components/panels/ExtraFeaturesPanel')),
+    ExtraFeaturesPanel: lazy(() => import('../components/panels/ExtraFeaturesPanel')),
 
     // ====== ADMIN PANELS ======
-    AdminAnalyticsPanel: lazy(() => import(/* webpackChunkName: "panel-admin" */ '../components/AdminAnalyticsPanel')),
-    AdminPanelModal: lazy(() => import(/* webpackChunkName: "panel-admin" */ '../components/AdminPanelModal')),
+    AdminAnalyticsPanel: lazy(() => import('../components/AdminAnalyticsPanel')),
+    AdminPanelModal: lazy(() => import('../components/AdminPanelModal')),
 
     // ====== MEDIA PANELS ======
-    WhiteboardModal: lazy(() => import(/* webpackChunkName: "panel-media" */ '../components/WhiteboardModal')),
-    SoundboardModal: lazy(() => import(/* webpackChunkName: "panel-media" */ '../components/SoundboardModal')),
-    DJModal: lazy(() => import(/* webpackChunkName: "panel-media" */ '../components/DJModal')),
-    CinemaModal: lazy(() => import(/* webpackChunkName: "panel-media" */ '../CinemaModal')),
+    WhiteboardModal: lazy(() => import('../components/WhiteboardModal')),
+    SoundboardModal: lazy(() => import('../components/SoundboardModal')),
+    DJModal: lazy(() => import('../components/DJModal')),
+    CinemaModal: lazy(() => import('../CinemaModal')),
 
     // ====== STORE PANELS ======
-    CryptoStoreModal: lazy(() => import(/* webpackChunkName: "panel-store" */ '../components/CryptoStoreModal')),
-    PremiumStoreModal: lazy(() => import(/* webpackChunkName: "panel-store" */ '../components/PremiumStoreModal')),
-    ThemeStoreModal: lazy(() => import(/* webpackChunkName: "panel-store" */ '../components/ThemeStoreModal')),
+    CryptoStoreModal: lazy(() => import('../components/CryptoStoreModal')),
+    PremiumStoreModal: lazy(() => import('../components/PremiumStoreModal')),
+    ThemeStoreModal: lazy(() => import('../components/ThemeStoreModal')),
 
     // ====== INTEGRATION PANELS ======
-    WebhooksPanel: lazy(() => import(/* webpackChunkName: "panel-integrations" */ '../components/WebhooksPanel')),
-    KanbanBoard: lazy(() => import(/* webpackChunkName: "panel-integrations" */ '../components/KanbanBoard')),
+    WebhooksPanel: lazy(() => import('../components/WebhooksPanel')),
+    KanbanBoard: lazy(() => import('../components/KanbanBoard')),
 
     // ====== 🎮 GAMING & ENTERTAINMENT ======
-    TournamentSystem: lazy(() => import(/* webpackChunkName: "panel-gaming" */ '../components/TournamentSystem')),
-    GiveawayPanel: lazy(() => import(/* webpackChunkName: "panel-gaming" */ '../components/GiveawayPanel')),
-    ClipsSystem: lazy(() => import(/* webpackChunkName: "panel-gaming" */ '../components/ClipsSystem')),
+    TournamentSystem: lazy(() => import('../components/TournamentSystem')),
+    GiveawayPanel: lazy(() => import('../components/GiveawayPanel')),
+    ClipsSystem: lazy(() => import('../components/ClipsSystem')),
 
     // ====== 🔐 SECURITY PANELS ======
-    E2EEPanel: lazy(() => import(/* webpackChunkName: "panel-security" */ '../components/E2EEPanel')),
-    WebAuthnPanel: lazy(() => import(/* webpackChunkName: "panel-security" */ '../components/WebAuthnPanel')),
-    TwoFactorPanel: lazy(() => import(/* webpackChunkName: "panel-security" */ '../components/TwoFactorPanel')),
+    E2EEPanel: lazy(() => import('../components/E2EEPanel')),
+    WebAuthnPanel: lazy(() => import('../components/WebAuthnPanel')),
+    TwoFactorPanel: lazy(() => import('../components/TwoFactorPanel')),
 
     // ====== 🎙️ VOICE & STREAMING ======
-    StageChannelPanel: lazy(() => import(/* webpackChunkName: "panel-voice" */ '../components/StageChannelPanel')),
-    LiveStreamPanel: lazy(() => import(/* webpackChunkName: "panel-voice" */ '../components/LiveStreamPanel')),
-    VoiceRecordingPanel: lazy(() => import(/* webpackChunkName: "panel-voice" */ '../components/VoiceRecordingPanel')),
+    StageChannelPanel: lazy(() => import('../components/StageChannelPanel')),
+    LiveStreamPanel: lazy(() => import('../components/LiveStreamPanel')),
+    VoiceRecordingPanel: lazy(() => import('../components/VoiceRecordingPanel')),
 
     // ====== 💬 FORUM & COMMUNITY ======
-    ForumPanel: lazy(() => import(/* webpackChunkName: "panel-forum" */ '../components/ForumPanel')),
-    TicketSystemPanel: lazy(() => import(/* webpackChunkName: "panel-forum" */ '../components/TicketSystemPanel')),
-    SuggestionsPanel: lazy(() => import(/* webpackChunkName: "panel-forum" */ '../components/SuggestionsPanel')),
+    ForumPanel: lazy(() => import('../components/ForumPanel')),
+    TicketSystemPanel: lazy(() => import('../components/TicketSystemPanel')),
+    SuggestionsPanel: lazy(() => import('../components/SuggestionsPanel')),
 
     // ====== 🎨 ECONOMY ======
-    EconomySystemPanel: lazy(() => import(/* webpackChunkName: "panel-economy" */ '../components/EconomySystemPanel')),
-    InventoryPanel: lazy(() => import(/* webpackChunkName: "panel-economy" */ '../components/InventoryPanel')),
+    EconomySystemPanel: lazy(() => import('../components/EconomySystemPanel')),
+    InventoryPanel: lazy(() => import('../components/InventoryPanel')),
 
     // ====== 📊 ANALYTICS ======
-    ServerAnalyticsDashboard: lazy(() => import(/* webpackChunkName: "panel-analytics" */ '../components/ServerAnalyticsDashboard')),
-    GrowthDashboard: lazy(() => import(/* webpackChunkName: "panel-analytics" */ '../components/GrowthDashboard')),
-    MemberActivityDashboard: lazy(() => import(/* webpackChunkName: "panel-analytics" */ '../components/MemberActivityDashboard')),
+    ServerAnalyticsDashboard: lazy(() => import('../components/ServerAnalyticsDashboard')),
+    GrowthDashboard: lazy(() => import('../components/GrowthDashboard')),
+    MemberActivityDashboard: lazy(() => import('../components/MemberActivityDashboard')),
 
     // ====== 🤖 BOT & AUTOMATION ======
-    BotDeveloperPanel: lazy(() => import(/* webpackChunkName: "panel-bot" */ '../components/BotDeveloperPanel')),
-    AutoRespondersPanel: lazy(() => import(/* webpackChunkName: "panel-bot" */ '../components/AutoRespondersPanel')),
-    CustomCommandsPanel: lazy(() => import(/* webpackChunkName: "panel-bot" */ '../components/CustomCommandsPanel')),
+    BotDeveloperPanel: lazy(() => import('../components/BotDeveloperPanel')),
+    AutoRespondersPanel: lazy(() => import('../components/AutoRespondersPanel')),
+    CustomCommandsPanel: lazy(() => import('../components/CustomCommandsPanel')),
 };
 
 // ⚡ LAZY PANEL WRAPPER

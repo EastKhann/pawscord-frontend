@@ -1,5 +1,5 @@
 // frontend/src/components/CommunitySettingsPanel.js - Community Server Management
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaUsers, FaTimes, FaCog, FaShieldAlt, FaClipboardList,
     FaSave, FaToggleOn, FaToggleOff, FaExclamationTriangle,

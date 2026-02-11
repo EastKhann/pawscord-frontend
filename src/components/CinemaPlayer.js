@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaPlay, FaPause, FaLink, FaExclamationCircle } from 'react-icons/fa';
 import { useVoice } from '../VoiceContext';

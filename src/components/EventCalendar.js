@@ -1,5 +1,5 @@
 // frontend/src/components/EventCalendar.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCalendarAlt, FaUsers, FaClock, FaMapMarkerAlt, FaPlus } from 'react-icons/fa';
 
 const EventCalendar = ({ serverId, apiBaseUrl, fetchWithAuth }) => {

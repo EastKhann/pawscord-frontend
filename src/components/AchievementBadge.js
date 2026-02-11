@@ -1,5 +1,5 @@
 // frontend/src/components/AchievementBadge.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTrophy, FaMedal, FaStar, FaCrown } from 'react-icons/fa';
 
 const AchievementBadge = ({ achievement, size = 'medium' }) => {

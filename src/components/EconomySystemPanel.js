@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './EconomySystemPanel.css';
 import { FaCoins, FaPaperPlane, FaHistory, FaWallet, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 

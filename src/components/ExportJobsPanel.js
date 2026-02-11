@@ -1,5 +1,5 @@
 // frontend/src/components/ExportJobsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaDownload, FaFile, FaClock, FaCheckCircle, FaSpinner, FaExclamationCircle } from 'react-icons/fa';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';

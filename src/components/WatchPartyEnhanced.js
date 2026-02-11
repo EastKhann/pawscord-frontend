@@ -1,5 +1,5 @@
 // 🎬 Watch Party Enhanced - Gelişmiş izleme partisi özelliği
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FaPlay, FaPause, FaExpand, FaCompress, FaVolumeUp, FaVolumeMute, FaUsers, FaSync, FaCog, FaTimes, FaForward, FaBackward } from 'react-icons/fa';
 
 const WatchPartyEnhanced = ({

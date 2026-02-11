@@ -1,5 +1,5 @@
 // 🔍 Server Discovery Page - Find & Join Public Servers
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ServerDiscoveryPage.css';
 import toast from '../utils/toast';
 

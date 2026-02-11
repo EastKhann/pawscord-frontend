@@ -1,7 +1,7 @@
 // 🎮 LEVELING SYSTEM - XP Bar, Level Badge, Leaderboard
 // Discord benzeri seviye sistemi UI
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 import './LevelingSystem.css';
 

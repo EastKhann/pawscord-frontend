@@ -1,7 +1,7 @@
 // frontend/src/components/ThemeMarketplace.js
 // 🎨 Theme Marketplace - User-created theme store
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import axios from 'axios';
 import './ThemeMarketplace.css';

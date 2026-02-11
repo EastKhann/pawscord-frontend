@@ -1,7 +1,7 @@
 // frontend/src/components/VideoStreaming/DashPlayer.js
 // 🎬 DASH Player - Lazy loaded (saves 988KB on initial load)
 
-import React, { useEffect, useRef, memo, useCallback } from 'react';
+import { useEffect, useRef, memo, useCallback } from 'react';
 
 const DashPlayer = memo(({
     src,

@@ -1,5 +1,5 @@
 // frontend/src/components/AIChatbotPanel.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import toast from '../utils/toast';
 import { FaRobot, FaPaperPlane, FaLightbulb, FaFileCode, FaShieldAlt, FaChartBar, FaMagic } from 'react-icons/fa';
 import './AIChatbotPanel.css';

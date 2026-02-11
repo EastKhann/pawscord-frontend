@@ -2,7 +2,7 @@
 // 🔥 FEATURE 40: Welcome screen editor
 // Admin can configure what new members see when joining
 
-import React, { useState, memo, useCallback } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { FaEdit, FaPlus, FaTrash, FaHashtag, FaGripVertical, FaSave, FaEye } from 'react-icons/fa';
 
 const EMOJI_PRESETS = ['👋', '📢', '📖', '🎮', '💬', '🎵', '🎨', '📌', '🔧', '⭐', '🚀', '❤️'];

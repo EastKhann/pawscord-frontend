@@ -1,5 +1,5 @@
 // frontend/src/components/RaidProtectionDashboard.js - Complete Raid Protection UI
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     FaShieldAlt, FaLock, FaUnlock, FaExclamationTriangle, FaUserShield,
     FaHistory, FaCog, FaBan, FaCheck, FaTimes, FaUsers, FaRobot,

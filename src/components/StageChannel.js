@@ -1,5 +1,5 @@
 // frontend/src/components/StageChannel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaMicrophone, FaMicrophoneSlash, FaHandPaper, FaUserShield, FaUserPlus, FaUserMinus } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './StageChannel.css';

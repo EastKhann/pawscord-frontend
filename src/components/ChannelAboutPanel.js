@@ -2,7 +2,7 @@
 // ℹ️ FEATURE 10: Channel About / Info Panel
 // Shows channel details, topic, creation date, member count, pinned msgs
 
-import React, { useState, memo } from 'react';
+import { useState, memo } from 'react';
 import { FaTimes, FaThumbtack, FaUsers, FaCalendar, FaClock, FaHashtag, FaLock, FaVolumeUp, FaBell, FaBellSlash } from 'react-icons/fa';
 
 const ChannelAboutPanel = ({

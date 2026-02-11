@@ -1,7 +1,7 @@
 // frontend/src/CryptoDashboard.js
 // 🔥 v3.0 — Balance/Winrate Mode + 5 Sekme Desteği
 
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft, FaBitcoin, FaSync, FaWallet, FaExchangeAlt, FaTimes, FaBug, FaChartLine, FaTrophy, FaFilter } from 'react-icons/fa';
 import { useAuth } from './AuthContext';

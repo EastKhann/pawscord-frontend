@@ -1,5 +1,5 @@
 // frontend/src/components/ReminderModal.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaBell } from 'react-icons/fa';
 

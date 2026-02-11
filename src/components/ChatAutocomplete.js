@@ -2,7 +2,7 @@
 // 🔥 FEATURES 1-3: @Mention, #Channel, :Emoji autocomplete popup
 // Shows popup above textarea when user types @, #, or :
 
-import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { FaUser, FaHashtag, FaVolumeUp, FaSmile, FaAt, FaGlobe, FaBullhorn } from 'react-icons/fa';
 
 // Common emoji list for :emoji autocomplete

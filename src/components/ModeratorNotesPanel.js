@@ -1,5 +1,5 @@
 // frontend/src/components/ModeratorNotesPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaStickyNote, FaPlus, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 

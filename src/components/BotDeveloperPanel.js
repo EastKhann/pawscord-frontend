@@ -1,5 +1,5 @@
 // frontend/src/components/BotDeveloperPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import './BotDeveloperPanel.css';
 

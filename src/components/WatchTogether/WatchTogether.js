@@ -6,7 +6,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FaPlay, FaPause, FaExpand, FaCompress, FaUsers, FaPlus, FaTimes, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
 import { API_BASE_URL, WS_PROTOCOL, API_HOST } from '../../utils/constants';
 import toast from '../../utils/toast';

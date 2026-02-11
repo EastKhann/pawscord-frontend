@@ -1,7 +1,7 @@
 // frontend/src/components/panels/ServerHealthPanel.js
 // 🏥 Server Health Dashboard - Monitor server performance and status
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     FaTimes, FaHeartbeat, FaServer, FaUsers, FaDatabase,
     FaMemory, FaMicrochip, FaNetworkWired, FaCheckCircle,

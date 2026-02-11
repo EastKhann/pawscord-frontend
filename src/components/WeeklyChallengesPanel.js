@@ -1,7 +1,7 @@
 // frontend/src/components/WeeklyChallengesPanel.js
 // 🏆 Weekly Challenges System - Gamification Component
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     FaTrophy, FaStar, FaFire, FaGem, FaMedal, FaGift,
     FaClock, FaCheck, FaLock, FaArrowRight, FaCoins,

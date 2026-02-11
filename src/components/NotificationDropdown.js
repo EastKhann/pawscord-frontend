@@ -1,5 +1,5 @@
 // frontend/src/components/NotificationDropdown.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaBell, FaTimes, FaCheck, FaCheckDouble, FaTrash } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
 

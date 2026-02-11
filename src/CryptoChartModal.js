@@ -1,6 +1,6 @@
 // frontend/src/CryptoChartModal.js
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
 const CryptoChartModal = ({ symbol, onClose }) => {

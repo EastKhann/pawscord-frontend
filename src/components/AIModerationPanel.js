@@ -1,5 +1,5 @@
 // frontend/src/components/AIModerationPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaShieldAlt, FaExclamationTriangle, FaBan, FaCheckCircle, FaEye } from 'react-icons/fa';
 import toast from '../utils/toast';

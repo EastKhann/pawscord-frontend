@@ -2,7 +2,7 @@
 // 🔥 Discord-style file preview for code/text files
 // Shows first 7 lines of content with syntax highlighting
 
-import React, { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { FaDownload, FaCopy, FaCheck, FaExpand, FaFileCode, FaFileAlt } from 'react-icons/fa';
 
 // Extension → language mapping for syntax highlighting label

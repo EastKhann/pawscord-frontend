@@ -1,7 +1,7 @@
 // components/JoinLeaveLogs.js
 // 📊 Server Join/Leave Activity Logs
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaUserPlus, FaUserMinus, FaClock } from 'react-icons/fa';
 
 const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {

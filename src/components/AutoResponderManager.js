@@ -1,5 +1,5 @@
 // frontend/src/components/AutoResponderManager.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaPlus, FaRobot, FaTrash } from 'react-icons/fa';
 

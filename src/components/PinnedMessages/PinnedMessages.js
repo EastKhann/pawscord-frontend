@@ -1,6 +1,6 @@
 // frontend/src/components/PinnedMessages/PinnedMessages.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './PinnedMessages.css';
 import { getApiBase } from '../../utils/apiEndpoints';
 

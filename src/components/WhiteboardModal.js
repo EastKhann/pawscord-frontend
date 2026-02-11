@@ -1,6 +1,6 @@
 // frontend/src/components/WhiteboardModal.js
 
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { FaTimes, FaEraser, FaPen, FaTrash } from 'react-icons/fa';
 
 const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {

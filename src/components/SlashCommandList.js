@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaUserShield, FaVolumeMute, FaBan, FaBroom, FaUserEdit, FaRegSmile, FaTable, FaUndo, FaFont, FaTerminal, FaCode, FaStickyNote } from 'react-icons/fa';
 
 export const COMMANDS = [

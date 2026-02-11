@@ -1,6 +1,6 @@
 // frontend/src/components/ServerSettingsModal.js
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaTimes, FaPlus, FaCheck, FaPalette, FaUsers, FaShieldAlt, FaEdit, FaTrash, FaCog, FaVolumeUp, FaVolumeMute, FaRobot, FaLink, FaHandPaper, FaImage, FaLock, FaGlobe, FaChartBar, FaHistory, FaExclamationTriangle, FaBan, FaClock, FaUserSlash, FaFileAlt, FaUserShield, FaComments, FaBell, FaEye, FaStar, FaCrown, FaGavel } from 'react-icons/fa';
 import { ChromePicker } from 'react-color';
 import toast from '../utils/toast';

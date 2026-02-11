@@ -1,4 +1,3 @@
-import React from 'react';
 import { THEMES, applyTheme } from '../utils/ThemeManager';
 import { FaPalette, FaCheck } from 'react-icons/fa';
 

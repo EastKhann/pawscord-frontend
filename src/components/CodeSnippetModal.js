@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCode, FaTimes, FaPaperPlane } from 'react-icons/fa';
 
 const LANGUAGES = ['javascript', 'python', 'html', 'css', 'java', 'cpp', 'csharp', 'sql', 'json', 'typescript', 'go', 'rust', 'php'];

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaBan, FaTimes, FaSearch, FaFilter, FaUser, FaCalendar,
     FaHistory, FaExclamationTriangle, FaUndo, FaCheck, FaClock,

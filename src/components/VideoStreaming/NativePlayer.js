@@ -1,7 +1,7 @@
 // frontend/src/components/VideoStreaming/NativePlayer.js
 // 🎥 Native HTML5 Video Player - Minimal overhead
 
-import React, { useRef, memo, useCallback, useEffect } from 'react';
+import { useRef, memo, useCallback, useEffect } from 'react';
 
 const NativePlayer = memo(({
     src,

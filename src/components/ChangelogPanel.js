@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './ChangelogPanel.css';
 import { FaNewspaper, FaFilter, FaBug, FaStar, FaWrench, FaCalendar } from 'react-icons/fa';
 

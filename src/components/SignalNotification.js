@@ -1,6 +1,6 @@
 // frontend/src/components/SignalNotification.js
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGlobalWebSocket } from '../GlobalWebSocketContext'; // Context'i içe aktar
 import { FaTimes, FaBitcoin, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';

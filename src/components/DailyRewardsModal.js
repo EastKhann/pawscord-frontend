@@ -1,5 +1,5 @@
 // frontend/src/components/DailyRewardsModal.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaGift, FaFire, FaCoins, FaCrown, FaCheckCircle } from 'react-icons/fa';
 import toast from '../utils/toast';
 

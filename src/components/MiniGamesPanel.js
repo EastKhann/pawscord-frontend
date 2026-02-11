@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaTimes, FaGamepad, FaPlay, FaTrophy, FaUsers, FaCoins, FaDice, FaBrain } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 

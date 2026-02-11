@@ -1,7 +1,7 @@
 // frontend/src/components/VideoStreaming/HLSPlayer.js
 // 📺 HLS Player - Lazy loaded (saves 520KB on initial load)
 
-import React, { useEffect, useRef, memo, useCallback } from 'react';
+import { useEffect, useRef, memo, useCallback } from 'react';
 
 const HLSPlayer = memo(({
     src,

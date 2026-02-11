@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FaSpotify, FaSteam, FaPlaystation, FaXbox, FaTwitch, FaDiscord, FaGamepad, FaLink, FaUnlink, FaCheckCircle, FaExclamationCircle, FaSpinner, FaMusic, FaYoutube, FaGithub, FaTwitter, FaTimes } from 'react-icons/fa';
 import { SiEpicgames, SiBattledotnet, SiRiotgames, SiOrigin } from 'react-icons/si';
 import { useAuth } from '../AuthContext';

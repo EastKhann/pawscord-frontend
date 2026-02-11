@@ -7,8 +7,8 @@ import remarkGfm from 'remark-gfm';
 import { FaLock } from 'react-icons/fa';
 
 // Lazy load heavy components
-const CodeBlock = lazy(() => import(/* webpackChunkName: "message-ui" */ '../CodeBlock'));
-const Spoiler = lazy(() => import(/* webpackChunkName: "message-ui" */ '../Spoiler'));
+const CodeBlock = lazy(() => import('../CodeBlock'));
+const Spoiler = lazy(() => import('../Spoiler'));
 
 export const MessageContent = memo(({
     displayContent,

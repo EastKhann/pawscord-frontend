@@ -1,5 +1,5 @@
 // frontend/src/components/BookmarksPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaBookmark, FaStar, FaTimes, FaFolder } from 'react-icons/fa';
 
 const BookmarksPanel = ({ apiBaseUrl, fetchWithAuth, username }) => {

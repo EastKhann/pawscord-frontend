@@ -2,37 +2,21 @@
 // ==============================================
 // 📡 API Configuration & URL Constants
 // ==============================================
-// Extracted from App.js for cleaner architecture.
-// All API URLs are dynamically resolved based on platform.
+// Single source of truth: utils/apiEndpoints.js provides the base URL.
+// This file re-exports it and adds App.js-specific constants.
 // ==============================================
 
-const DJANGO_PORT = "8888";
+// Import base URL from the single source of truth
+import { getApiBase, getMediaBase, API_BASE_URL as _API_BASE_URL } from '../utils/apiEndpoints';
+
+const API_URL_BASE = getApiBase();
 
 export const isElectron = typeof window !== 'undefined' && typeof window.require === 'function';
 export const isNative = typeof window !== 'undefined' && window.Capacitor && window.Capacitor.isNativePlatform();
 export const isProductionBuild = import.meta.env.PROD || process.env.NODE_ENV === 'production';
 
-export const API_URL_BASE_STRING = (() => {
-    if (typeof window === 'undefined') return `http://127.0.0.1:${DJANGO_PORT}`;
-
-    // 1. Mobil Uygulama → production
-    if (isNative) return "https://api.pawscord.com";
-
-    // 2. Electron Masaüstü
-    if (isElectron) {
-        return isProductionBuild ? "https://api.pawscord.com" : `http://127.0.0.1:${DJANGO_PORT}`;
-    }
-
-    // 3. Web Tarayıcısı → adres çubuğundaki IP
-    const protocol = window.location.protocol;
-    const hostname = window.location.hostname;
-
-    if (hostname.includes('pawscord.com')) {
-        return "https://api.pawscord.com";
-    }
-
-    return `${protocol}//${hostname}:${DJANGO_PORT}`;
-})();
+// Re-export the centralized base URL (single source of truth)
+export const API_URL_BASE_STRING = API_URL_BASE;
 
 // Media dosyaları için ayrı URL (EXE/APK'da production URL kullan)
 export const MEDIA_BASE_URL = (() => {

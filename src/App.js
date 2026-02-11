@@ -41,25 +41,25 @@ import { VoiceProvider, useVoice } from './VoiceContext';
 import { useGlobalWebSocket } from './GlobalWebSocketContext';
 
 // --- CRITICAL COMPONENTS ONLY (Initial load) ---
-const Message = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './Message')); // ⚡ LAZY: Mesaj görüntüleme
-const VirtualMessageList = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './components/VirtualMessageList')); // ⚡ LAZY: Virtual scrolling
-const MessageInput = React.lazy(() => import(/* webpackChunkName: "message-ui" */ './components/MessageInput')); // ⚡ LAZY: Mesaj input
+const Message = React.lazy(() => import('./Message')); // ⚡ LAZY: Mesaj görüntüleme
+const VirtualMessageList = React.lazy(() => import('./components/VirtualMessageList')); // ⚡ LAZY: Virtual scrolling
+const MessageInput = React.lazy(() => import('./components/MessageInput')); // ⚡ LAZY: Mesaj input
 import MaintenanceBanner from './components/MaintenanceBanner';
 import LoadingSpinner from './components/LoadingSpinner'; // 🌀 Loading indicator
 
 // ⚡ LAZY LOAD: Voice/Video components (not needed until voice chat)
-const UserVideoContainer = React.lazy(() => import(/* webpackChunkName: "voice" */ './UserVideoContainer'));
-const VoiceAudioController = React.lazy(() => import(/* webpackChunkName: "voice" */ './VoiceAudioController'));
-const RichTextEditor = React.lazy(() => import(/* webpackChunkName: "editor" */ './components/RichTextEditor'));
-const StickyMessageBanner = React.lazy(() => import(/* webpackChunkName: "features" */ './components/StickyMessageBanner'));
+const UserVideoContainer = React.lazy(() => import('./UserVideoContainer'));
+const VoiceAudioController = React.lazy(() => import('./VoiceAudioController'));
+const RichTextEditor = React.lazy(() => import('./components/RichTextEditor'));
+const StickyMessageBanner = React.lazy(() => import('./components/StickyMessageBanner'));
 
 // ⚡ LAZY LOAD: Auth screens (non-critical, load on demand)
 import SplashScreen from './SplashScreen'; // 🔥 DIRECT IMPORT: Splash screen must load instantly
-const LoginPage = React.lazy(() => import(/* webpackChunkName: "auth", webpackMode: "lazy" */ './LoginPage'));
-const WelcomeScreen = React.lazy(() => import(/* webpackChunkName: "auth", webpackMode: "lazy" */ './WelcomeScreen'));
+const LoginPage = React.lazy(() => import('./LoginPage'));
+const WelcomeScreen = React.lazy(() => import('./WelcomeScreen'));
 
 // ⚡ OPTIMIZATION: Lazy load modal components (on-demand loading)
-const ImageModal = React.lazy(() => import(/* webpackMode: "lazy" */ './ImageModal'));
+const ImageModal = React.lazy(() => import('./ImageModal'));
 const UserProfileModal = React.lazy(() => import(/* webpackMode: "lazy" */ './UserProfileModal'));
 const PollCreateModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/PollCreateModal'));
 const CodeSnippetModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/CodeSnippetModal'));
@@ -91,87 +91,87 @@ const WebhooksPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './compo
 const VanityURLManager = React.lazy(() => import(/* webpackMode: "lazy" */ './components/VanityURLManager')); // 🔥 Vanity URL Manager
 
 // �️ MODERATION: Moderation Tools (2026-01-15)
-const AutoModerationDashboard = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AutoModerationDashboard'));
-const AutoModerationPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AutoModerationPanel')); // 🔥 YENİ
-const RaidProtectionPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/RaidProtectionPanel'));
-const ReportSystemPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/ReportSystemPanel'));
-const AuditLogPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AuditLogPanel'));
-const UserWarningsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/UserWarningsPanel'));
+const AutoModerationDashboard = React.lazy(() => import('./components/AutoModerationDashboard'));
+const AutoModerationPanel = React.lazy(() => import('./components/AutoModerationPanel')); // 🔥 YENİ
+const RaidProtectionPanel = React.lazy(() => import('./components/RaidProtectionPanel'));
+const ReportSystemPanel = React.lazy(() => import('./components/ReportSystemPanel'));
+const AuditLogPanel = React.lazy(() => import('./components/AuditLogPanel'));
+const UserWarningsPanel = React.lazy(() => import('./components/UserWarningsPanel'));
 
 // 📚 FEATURE: New Feature Panels (2026-01-19)
-const BookmarkPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/BookmarkPanel')); // 📚 Bookmark Organization
-const ReadLaterPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReadLaterPanel')); // 📖 Read Later
-const ChannelPermissionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ChannelPermissionsPanel')); // 🔐 Channel Permissions
-const MessageThreadsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageThreadsPanel')); // 💬 Message Threads
-const ModeratorNotesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ModeratorNotesPanel')); // 📝 Moderator Notes
-const ServerRolesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerRolesPanel')); // 👑 Server Roles
-const NotificationPreferencesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/NotificationPreferencesPanel')); // 🔔 Notifications
-const MessageOCRPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageOCRPanel')); // 🔍 OCR Text Extraction
-const MassActionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MassActionsPanel')); // ⚡ Mass Moderation
-const TimeoutMutePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TimeoutMutePanel')); // ⏰ Timeout/Mute
-const ServerThemesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerThemesPanel')); // 🎨 Server Themes
-const KeywordMutesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/KeywordMutesPanel')); // 🚫 Keyword Filters
-const WelcomeTemplatesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/WelcomeTemplatesPanel')); // 👋 Welcome Messages
-const StickyMessagesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/StickyMessagesPanel')); // 📌 Sticky Messages
-const MessageTemplatesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageTemplatesPanel')); // 📄 Message Templates
-const MessageExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MessageExportPanel')); // 💾 Export History
-const ArchivedRoomsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ArchivedRoomsPanel')); // 📦 Archived Channels
-const SlowModePanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/SlowModePanel')); // 🐢 Slow Mode
-const EmojiManagementPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EmojiManagementPanel')); // 😀 Emoji Management
-const MentionsInboxPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MentionsInboxPanel')); // 📬 Mentions Inbox
-const CustomStatusModal = React.lazy(() => import(/* webpackChunkName: "features" */ './components/CustomStatusModal')); // 🎭 Custom Status
+const BookmarkPanel = React.lazy(() => import('./components/BookmarkPanel')); // 📚 Bookmark Organization
+const ReadLaterPanel = React.lazy(() => import('./components/ReadLaterPanel')); // 📖 Read Later
+const ChannelPermissionsPanel = React.lazy(() => import('./components/ChannelPermissionsPanel')); // 🔐 Channel Permissions
+const MessageThreadsPanel = React.lazy(() => import('./components/MessageThreadsPanel')); // 💬 Message Threads
+const ModeratorNotesPanel = React.lazy(() => import('./components/ModeratorNotesPanel')); // 📝 Moderator Notes
+const ServerRolesPanel = React.lazy(() => import('./components/ServerRolesPanel')); // 👑 Server Roles
+const NotificationPreferencesPanel = React.lazy(() => import('./components/NotificationPreferencesPanel')); // 🔔 Notifications
+const MessageOCRPanel = React.lazy(() => import('./components/MessageOCRPanel')); // 🔍 OCR Text Extraction
+const MassActionsPanel = React.lazy(() => import('./components/MassActionsPanel')); // ⚡ Mass Moderation
+const TimeoutMutePanel = React.lazy(() => import('./components/TimeoutMutePanel')); // ⏰ Timeout/Mute
+const ServerThemesPanel = React.lazy(() => import('./components/ServerThemesPanel')); // 🎨 Server Themes
+const KeywordMutesPanel = React.lazy(() => import('./components/KeywordMutesPanel')); // 🚫 Keyword Filters
+const WelcomeTemplatesPanel = React.lazy(() => import('./components/WelcomeTemplatesPanel')); // 👋 Welcome Messages
+const StickyMessagesPanel = React.lazy(() => import('./components/StickyMessagesPanel')); // 📌 Sticky Messages
+const MessageTemplatesPanel = React.lazy(() => import('./components/MessageTemplatesPanel')); // 📄 Message Templates
+const MessageExportPanel = React.lazy(() => import('./components/MessageExportPanel')); // 💾 Export History
+const ArchivedRoomsPanel = React.lazy(() => import('./components/ArchivedRoomsPanel')); // 📦 Archived Channels
+const SlowModePanel = React.lazy(() => import('./components/SlowModePanel')); // 🐢 Slow Mode
+const EmojiManagementPanel = React.lazy(() => import('./components/EmojiManagementPanel')); // 😀 Emoji Management
+const MentionsInboxPanel = React.lazy(() => import('./components/MentionsInboxPanel')); // 📬 Mentions Inbox
+const CustomStatusModal = React.lazy(() => import('./components/CustomStatusModal')); // 🎭 Custom Status
 
 // 🚀 BATCH 1: Analytics & Tracking (2026-01-19)
-const ReactionAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReactionAnalyticsPanel'));
-const LinkClickTrackingPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/LinkClickTrackingPanel'));
-const JoinLeaveLogsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/JoinLeaveLogsPanel'));
-const UserActivityPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/UserActivityPanel'));
-const NicknameHistoryPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/NicknameHistoryPanel'));
-const FieldChangeTrackingPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/FieldChangeTrackingPanel'));
-const InviteAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InviteAnalyticsPanel'));
+const ReactionAnalyticsPanel = React.lazy(() => import('./components/ReactionAnalyticsPanel'));
+const LinkClickTrackingPanel = React.lazy(() => import('./components/LinkClickTrackingPanel'));
+const JoinLeaveLogsPanel = React.lazy(() => import('./components/JoinLeaveLogsPanel'));
+const UserActivityPanel = React.lazy(() => import('./components/UserActivityPanel'));
+const NicknameHistoryPanel = React.lazy(() => import('./components/NicknameHistoryPanel'));
+const FieldChangeTrackingPanel = React.lazy(() => import('./components/FieldChangeTrackingPanel'));
+const InviteAnalyticsPanel = React.lazy(() => import('./components/InviteAnalyticsPanel'));
 
 // 🚀 BATCH 2: Content & Moderation (2026-01-19)
-const ContentScannerPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ContentScannerPanel'));
-const EphemeralMessagesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EphemeralMessagesPanel'));
-const TopicHistoryPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TopicHistoryPanel'));
-const DraftsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/DraftsPanel'));
-const ServerNicknamesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerNicknamesPanel'));
+const ContentScannerPanel = React.lazy(() => import('./components/ContentScannerPanel'));
+const EphemeralMessagesPanel = React.lazy(() => import('./components/EphemeralMessagesPanel'));
+const TopicHistoryPanel = React.lazy(() => import('./components/TopicHistoryPanel'));
+const DraftsPanel = React.lazy(() => import('./components/DraftsPanel'));
+const ServerNicknamesPanel = React.lazy(() => import('./components/ServerNicknamesPanel'));
 
 // 🚀 BATCH 3: Server Features (2026-01-19)
-const ServerBoostPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ServerBoostPanel'));
-const RoomWebhooksPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/RoomWebhooksPanel'));
-const OAuthAppsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/OAuthAppsPanel'));
-const VanityURLPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VanityURLPanel'));
-const AutoRespondersPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AutoRespondersPanel'));
+const ServerBoostPanel = React.lazy(() => import('./components/ServerBoostPanel'));
+const RoomWebhooksPanel = React.lazy(() => import('./components/RoomWebhooksPanel'));
+const OAuthAppsPanel = React.lazy(() => import('./components/OAuthAppsPanel'));
+const VanityURLPanel = React.lazy(() => import('./components/VanityURLPanel'));
+const AutoRespondersPanel = React.lazy(() => import('./components/AutoRespondersPanel'));
 
 // 🚀 BATCH 4: Security & Privacy (2026-01-19)
-const SessionManagementPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/SessionManagementPanel'));
-const GDPRExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/GDPRExportPanel'));
-const DataRetentionPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/DataRetentionPanel'));
-const TwoFactorSetupWizard = React.lazy(() => import(/* webpackChunkName: "features" */ './components/TwoFactorSetupWizard'));
+const SessionManagementPanel = React.lazy(() => import('./components/SessionManagementPanel'));
+const GDPRExportPanel = React.lazy(() => import('./components/GDPRExportPanel'));
+const DataRetentionPanel = React.lazy(() => import('./components/DataRetentionPanel'));
+const TwoFactorSetupWizard = React.lazy(() => import('./components/TwoFactorSetupWizard'));
 
 // 🚀 BATCH 5: Communication (2026-01-19)
-const EnhancedPollsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/EnhancedPollsPanel'));
-const VoiceTranscriptsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VoiceTranscriptsPanel'));
+const EnhancedPollsPanel = React.lazy(() => import('./components/EnhancedPollsPanel'));
+const VoiceTranscriptsPanel = React.lazy(() => import('./components/VoiceTranscriptsPanel'));
 
 // 💰 CRITICAL & HIGH PRIORITY: Payment & Engagement (2026-01-19)
-const PaymentPanel = React.lazy(() => import(/* webpackChunkName: "critical" */ './components/PaymentPanel')); // 💰 Payment System
-const StoreModal = React.lazy(() => import(/* webpackChunkName: "critical" */ './components/StoreModal')); // 🛒 Store
-const DailyRewardsModal = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/DailyRewardsModal')); // 🎁 Daily Rewards
-const APIUsagePanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/APIUsagePanel')); // 📊 API Analytics
-const ExportJobsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ExportJobsPanel')); // 📥 Export Jobs
-const ScheduledAnnouncementsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ScheduledAnnouncementsPanel')); // 📢 Scheduled Announcements
-const InviteExportPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InviteExportPanel'));
+const PaymentPanel = React.lazy(() => import('./components/PaymentPanel')); // 💰 Payment System
+const StoreModal = React.lazy(() => import('./components/StoreModal')); // 🛒 Store
+const DailyRewardsModal = React.lazy(() => import('./components/DailyRewardsModal')); // 🎁 Daily Rewards
+const APIUsagePanel = React.lazy(() => import('./components/APIUsagePanel')); // 📊 API Analytics
+const ExportJobsPanel = React.lazy(() => import('./components/ExportJobsPanel')); // 📥 Export Jobs
+const ScheduledAnnouncementsPanel = React.lazy(() => import('./components/ScheduledAnnouncementsPanel')); // 📢 Scheduled Announcements
+const InviteExportPanel = React.lazy(() => import('./components/InviteExportPanel'));
 
 // 🚀 BATCH 6: Advanced Search & Analytics (2026-01-19)
-const AdvancedSearchPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AdvancedSearchPanel'));
-const GrowthMetricsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/GrowthMetricsPanel'));
-const LinkPreviewRenderer = React.lazy(() => import(/* webpackChunkName: "features" */ './components/LinkPreviewRenderer'));
+const AdvancedSearchPanel = React.lazy(() => import('./components/AdvancedSearchPanel'));
+const GrowthMetricsPanel = React.lazy(() => import('./components/GrowthMetricsPanel'));
+const LinkPreviewRenderer = React.lazy(() => import('./components/LinkPreviewRenderer'));
 
 // 🚀 BATCH 7: Store & Gamification (2026-01-19)
-const InventoryPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InventoryPanel'));
-const WaitlistPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/WaitlistPanel'));
-const ReferralRewardsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ReferralRewardsPanel'));
+const InventoryPanel = React.lazy(() => import('./components/InventoryPanel'));
+const WaitlistPanel = React.lazy(() => import('./components/WaitlistPanel'));
+const ReferralRewardsPanel = React.lazy(() => import('./components/ReferralRewardsPanel'));
 
 // �🔐 ROADMAP: Auth & Security Pages
 const VerifyEmailPage = React.lazy(() => import('./pages/VerifyEmailPage'));
@@ -180,52 +180,52 @@ const ResetPasswordPage = React.lazy(() => import('./pages/ResetPasswordPage'));
 const TwoFactorLoginPage = React.lazy(() => import('./pages/TwoFactorLoginPage'));
 
 // 🔐 NEW: 2FA & Email Components
-const TwoFactorSetup = React.lazy(() => import(/* webpackChunkName: "security" */ './components/TwoFactorSetup'));
-const TwoFactorLogin = React.lazy(() => import(/* webpackChunkName: "security" */ './components/TwoFactorLogin'));
+const TwoFactorSetup = React.lazy(() => import('./components/TwoFactorSetup'));
+const TwoFactorLogin = React.lazy(() => import('./components/TwoFactorLogin'));
 
 // 🔗 Vanity URL Invite Screen
-const VanityInviteScreen = React.lazy(() => import(/* webpackChunkName: "features" */ './components/VanityInviteScreen'));
-const InviteCodeScreen = React.lazy(() => import(/* webpackChunkName: "features" */ './components/InviteCodeScreen'));
-const EmailVerification = React.lazy(() => import(/* webpackChunkName: "security" */ './components/EmailVerification'));
+const VanityInviteScreen = React.lazy(() => import('./components/VanityInviteScreen'));
+const InviteCodeScreen = React.lazy(() => import('./components/InviteCodeScreen'));
+const EmailVerification = React.lazy(() => import('./components/EmailVerification'));
 
 // 📱 NEW: Mobile Components
-const MobileNav = React.lazy(() => import(/* webpackChunkName: "mobile" */ './components/MobileNav'));
-const SwipeActions = React.lazy(() => import(/* webpackChunkName: "mobile" */ './components/SwipeActions'));
-const VoiceMessage = React.lazy(() => import(/* webpackChunkName: "mobile" */ './components/VoiceMessage'));
+const MobileNav = React.lazy(() => import('./components/MobileNav'));
+const SwipeActions = React.lazy(() => import('./components/SwipeActions'));
+const VoiceMessage = React.lazy(() => import('./components/VoiceMessage'));
 
 // ⚡ YENİ: Additional lazy loading
-const FriendsTab = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './FriendsTab'));
-const RoomList = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './RoomList'));
-const UserProfilePanel = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './UserProfilePanel'));
-const VoiceChatPanel = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './VoiceChatPanel'));
-const ChatUserList = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './ChatUserList'));
-const PinnedMessages = React.lazy(() => import(/* webpackChunkName: "features" */ './PinnedMessages'));
-const FloatingVoiceIsland = React.lazy(() => import(/* webpackChunkName: "features" */ './FloatingVoiceIsland'));
-const CinemaPlayer = React.lazy(() => import(/* webpackChunkName: "features" */ './components/CinemaPlayer'));
-const ConnectionsPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ConnectionsPanel')); // 🔗 Platform Connections
-const PasswordSetupModal = React.lazy(() => import(/* webpackChunkName: "auth" */ './components/PasswordSetupModal')); // 🔑 Google Password Setup
-const NotificationDropdown = React.lazy(() => import(/* webpackChunkName: "features" */ './components/NotificationDropdown'));
+const FriendsTab = React.lazy(() => import('./FriendsTab'));
+const RoomList = React.lazy(() => import('./RoomList'));
+const UserProfilePanel = React.lazy(() => import('./UserProfilePanel'));
+const VoiceChatPanel = React.lazy(() => import('./VoiceChatPanel'));
+const ChatUserList = React.lazy(() => import('./ChatUserList'));
+const PinnedMessages = React.lazy(() => import('./PinnedMessages'));
+const FloatingVoiceIsland = React.lazy(() => import('./FloatingVoiceIsland'));
+const CinemaPlayer = React.lazy(() => import('./components/CinemaPlayer'));
+const ConnectionsPanel = React.lazy(() => import('./components/ConnectionsPanel')); // 🔗 Platform Connections
+const PasswordSetupModal = React.lazy(() => import('./components/PasswordSetupModal')); // 🔑 Google Password Setup
+const NotificationDropdown = React.lazy(() => import('./components/NotificationDropdown'));
 
 // 📊 NEW: Nice-to-Have Analytics Panels (2026-01-30)
-const ReactionStatsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ReactionStatsPanel')); // 📊 Reaction Statistics
-const ServerHealthPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ServerHealthPanel')); // 🏥 Server Health
-const ChannelAnalyticsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/ChannelAnalyticsPanel')); // 📈 Channel Analytics
-const SmartSuggestionsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/SmartSuggestionsPanel')); // 🤖 AI Suggestions
-const UserPresenceInsightsPanel = React.lazy(() => import(/* webpackChunkName: "analytics" */ './components/panels/UserPresenceInsightsPanel')); // 👤 User Insights
+const ReactionStatsPanel = React.lazy(() => import('./components/panels/ReactionStatsPanel')); // 📊 Reaction Statistics
+const ServerHealthPanel = React.lazy(() => import('./components/panels/ServerHealthPanel')); // 🏥 Server Health
+const ChannelAnalyticsPanel = React.lazy(() => import('./components/panels/ChannelAnalyticsPanel')); // 📈 Channel Analytics
+const SmartSuggestionsPanel = React.lazy(() => import('./components/panels/SmartSuggestionsPanel')); // 🤖 AI Suggestions
+const UserPresenceInsightsPanel = React.lazy(() => import('./components/panels/UserPresenceInsightsPanel')); // 👤 User Insights
 
 // --- YENİ EKLEMELER: Eksik componentler - LAZY LOAD OPTIMIZATION ---
-const UserFooter = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserFooter')); // 👤 Kullanıcı footer
-const UserContextMenu = React.lazy(() => import(/* webpackChunkName: "main-ui" */ './components/UserContextMenu')); // 🖱️ Kullanıcı sağ tık menüsü
+const UserFooter = React.lazy(() => import('./components/UserFooter')); // 👤 Kullanıcı footer
+const UserContextMenu = React.lazy(() => import('./components/UserContextMenu')); // 🖱️ Kullanıcı sağ tık menüsü
 
 //  BATCH 8: New Features (2026-01-28) - Missing Imports Fixed
-const MiniGamesPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/MiniGamesPanel')); //  Mini Games
-const ProjectCollaborationPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/ProjectCollaborationPanel')); //  Project Collaboration
-const AvatarStudioPanel = React.lazy(() => import(/* webpackChunkName: "features" */ './components/AvatarStudioPanel')); //  Avatar Studio
+const MiniGamesPanel = React.lazy(() => import('./components/MiniGamesPanel')); //  Mini Games
+const ProjectCollaborationPanel = React.lazy(() => import('./components/ProjectCollaborationPanel')); //  Project Collaboration
+const AvatarStudioPanel = React.lazy(() => import('./components/AvatarStudioPanel')); //  Avatar Studio
 
 // 🔥 BATCH 9: Essential UX Features (2026-02-01)
-const ImageLightbox = React.lazy(() => import(/* webpackChunkName: "essential-ux" */ './components/ImageLightbox')); // 🔍 Enhanced Image Viewer
-const ChannelAboutPanel = React.lazy(() => import(/* webpackChunkName: "essential-ux" */ './components/ChannelAboutPanel')); // ℹ️ Channel Info Panel
-const MessageSchedulePicker = React.lazy(() => import(/* webpackChunkName: "essential-ux" */ './components/MessageSchedulePicker')); // 📅 Message Scheduler
+const ImageLightbox = React.lazy(() => import('./components/ImageLightbox')); // 🔍 Enhanced Image Viewer
+const ChannelAboutPanel = React.lazy(() => import('./components/ChannelAboutPanel')); // ℹ️ Channel Info Panel
+const MessageSchedulePicker = React.lazy(() => import('./components/MessageSchedulePicker')); // 📅 Message Scheduler
 import ConnectionStatusBar from './components/ConnectionStatusBar'; // 🌐 Connection Status (direct - always needed)
 import ScrollToBottomButton from './components/ScrollToBottomButton'; // ⬇️ Scroll FAB (direct - always visible)
 import MessageDateDivider from './components/MessageDateDivider'; // 📅 Date Dividers (direct - always shown)
@@ -234,131 +234,131 @@ import NewMessagesDivider from './components/NewMessagesDivider'; // 🔴 New Me
 
 // 🔥 BATCH 10: 50 Essential Features Integration (2026-02-01)
 // -- Core UX --
-const UserSettingsModal = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/UserSettingsModal')); // ⚙️ Unified User Settings
-const KeyboardShortcutsModal = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/KeyboardShortcutsModal')); // ⌨️ Keyboard Shortcuts
-const CommandPalette = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/CommandPalette')); // 🔍 Quick Switcher
-const ServerDiscoveryPage = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/ServerDiscoveryPage')); // 🌍 Server Discovery
-const AppearanceSettingsPanel = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/AppearanceSettingsPanel')); // 🎨 Appearance Settings
-const LanguageSelector = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/LanguageSelector')); // 🌐 Language Selector
-const ChangelogPanel = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/ChangelogPanel')); // 📋 Changelog
-const LogoutModal = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/LogoutModal')); // 🚪 Logout Confirm
-const NotificationSoundSettings = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/NotificationSoundSettings')); // 🔊 Notification Sounds
-const QuickSwitcher = React.lazy(() => import(/* webpackChunkName: "settings" */ './components/QuickSwitcher')); // ⚡ Quick Switcher
+const UserSettingsModal = React.lazy(() => import('./components/UserSettingsModal')); // ⚙️ Unified User Settings
+const KeyboardShortcutsModal = React.lazy(() => import('./components/KeyboardShortcutsModal')); // ⌨️ Keyboard Shortcuts
+const CommandPalette = React.lazy(() => import('./components/CommandPalette')); // 🔍 Quick Switcher
+const ServerDiscoveryPage = React.lazy(() => import('./components/ServerDiscoveryPage')); // 🌍 Server Discovery
+const AppearanceSettingsPanel = React.lazy(() => import('./components/AppearanceSettingsPanel')); // 🎨 Appearance Settings
+const LanguageSelector = React.lazy(() => import('./components/LanguageSelector')); // 🌐 Language Selector
+const ChangelogPanel = React.lazy(() => import('./components/ChangelogPanel')); // 📋 Changelog
+const LogoutModal = React.lazy(() => import('./components/LogoutModal')); // 🚪 Logout Confirm
+const NotificationSoundSettings = React.lazy(() => import('./components/NotificationSoundSettings')); // 🔊 Notification Sounds
+const QuickSwitcher = React.lazy(() => import('./components/QuickSwitcher')); // ⚡ Quick Switcher
 
 // -- Security & Account --
-const LoginHistory = React.lazy(() => import(/* webpackChunkName: "security" */ './components/LoginHistory')); // 🔐 Login History
-const SecuritySettingsPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/SecuritySettingsPanel')); // 🛡️ Security Settings
-const PrivacySettingsPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/PrivacySettingsPanel')); // 🔒 Privacy Settings
-const AccountDeletionModal = React.lazy(() => import(/* webpackChunkName: "security" */ './components/AccountDeletionModal')); // ❌ Account Deletion
-const BlockListPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/BlockListPanel')); // 🚫 Block List
-const E2EESettingsPanel = React.lazy(() => import(/* webpackChunkName: "security" */ './components/E2EESettingsPanel')); // 🔐 E2EE Settings
+const LoginHistory = React.lazy(() => import('./components/LoginHistory')); // 🔐 Login History
+const SecuritySettingsPanel = React.lazy(() => import('./components/SecuritySettingsPanel')); // 🛡️ Security Settings
+const PrivacySettingsPanel = React.lazy(() => import('./components/PrivacySettingsPanel')); // 🔒 Privacy Settings
+const AccountDeletionModal = React.lazy(() => import('./components/AccountDeletionModal')); // ❌ Account Deletion
+const BlockListPanel = React.lazy(() => import('./components/BlockListPanel')); // 🚫 Block List
+const E2EESettingsPanel = React.lazy(() => import('./components/E2EESettingsPanel')); // 🔐 E2EE Settings
 
 // -- Communication --
-const ThreadView = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ThreadView')); // 💬 Thread Conversations
-const ScheduledMessagesPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ScheduledMessagesPanel')); // ⏰ Scheduled Messages
-const ReminderPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ReminderPanel')); // ⏰ Reminders
-const ForumPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/ForumPanel')); // 📋 Forum Channels
-const StageChannelPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/StageChannelPanel')); // 🎤 Stage Channels
-const VideoCallModal = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/VideoCallModal')); // 📹 Video Calls
-const VoiceSettingsPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/VoiceSettingsPanel')); // 🎙️ Voice Settings
-const MessageSearchPanel = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/MessageSearchPanel')); // 🔍 Message Search
-const WatchTogether = React.lazy(() => import(/* webpackChunkName: "communication" */ './components/WatchTogether')); // 🎬 Watch Together
+const ThreadView = React.lazy(() => import('./components/ThreadView')); // 💬 Thread Conversations
+const ScheduledMessagesPanel = React.lazy(() => import('./components/ScheduledMessagesPanel')); // ⏰ Scheduled Messages
+const ReminderPanel = React.lazy(() => import('./components/ReminderPanel')); // ⏰ Reminders
+const ForumPanel = React.lazy(() => import('./components/ForumPanel')); // 📋 Forum Channels
+const StageChannelPanel = React.lazy(() => import('./components/StageChannelPanel')); // 🎤 Stage Channels
+const VideoCallModal = React.lazy(() => import('./components/VideoCallModal')); // 📹 Video Calls
+const VoiceSettingsPanel = React.lazy(() => import('./components/VoiceSettingsPanel')); // 🎙️ Voice Settings
+const MessageSearchPanel = React.lazy(() => import('./components/MessageSearchPanel')); // 🔍 Message Search
+const WatchTogether = React.lazy(() => import('./components/WatchTogether')); // 🎬 Watch Together
 
 // -- Server Management --
-const AutoRolesPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/AutoRolesPanel')); // 🤖 Auto Roles
-const ReactionRolesPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/ReactionRolesPanel')); // 🎭 Reaction Roles
-const WelcomeMessagesPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/WelcomeMessagesPanel')); // 👋 Welcome Messages
-const EventCalendar = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/EventCalendar')); // 📅 Event Calendar
-const GiveawayPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/GiveawayPanel')); // 🎉 Giveaways
-const TicketSystemPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/TicketSystemPanel')); // 🎫 Ticket System
-const StarboardPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/StarboardPanel')); // ⭐ Starboard
-const ServerBackupPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/ServerBackupPanel')); // 💾 Server Backup
-const BanAppealsPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/BanAppealsPanel')); // ⚖️ Ban Appeals
-const CustomCommandsPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/CustomCommandsPanel')); // 🤖 Custom Commands
-const LevelingSystemPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/LevelingSystemPanel')); // 📊 Leveling System
-const LiveStreamPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt" */ './components/LiveStreamPanel')); // 📺 Live Streaming
+const AutoRolesPanel = React.lazy(() => import('./components/AutoRolesPanel')); // 🤖 Auto Roles
+const ReactionRolesPanel = React.lazy(() => import('./components/ReactionRolesPanel')); // 🎭 Reaction Roles
+const WelcomeMessagesPanel = React.lazy(() => import('./components/WelcomeMessagesPanel')); // 👋 Welcome Messages
+const EventCalendar = React.lazy(() => import('./components/EventCalendar')); // 📅 Event Calendar
+const GiveawayPanel = React.lazy(() => import('./components/GiveawayPanel')); // 🎉 Giveaways
+const TicketSystemPanel = React.lazy(() => import('./components/TicketSystemPanel')); // 🎫 Ticket System
+const StarboardPanel = React.lazy(() => import('./components/StarboardPanel')); // ⭐ Starboard
+const ServerBackupPanel = React.lazy(() => import('./components/ServerBackupPanel')); // 💾 Server Backup
+const BanAppealsPanel = React.lazy(() => import('./components/BanAppealsPanel')); // ⚖️ Ban Appeals
+const CustomCommandsPanel = React.lazy(() => import('./components/CustomCommandsPanel')); // 🤖 Custom Commands
+const LevelingSystemPanel = React.lazy(() => import('./components/LevelingSystemPanel')); // 📊 Leveling System
+const LiveStreamPanel = React.lazy(() => import('./components/LiveStreamPanel')); // 📺 Live Streaming
 
 // -- Engagement & Social --
-const AchievementsPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/AchievementsPanel')); // 🏆 Achievements
-const BirthdaySystemPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/BirthdaySystemPanel')); // 🎂 Birthday System
-const PremiumModal = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/PremiumModal')); // 💎 Premium
-const MusicPlayer = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/MusicPlayer')); // 🎵 Music Player
-const BotMarketplace = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/BotMarketplace')); // 🤖 Bot Marketplace
-const ProfileCustomization = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/ProfileCustomization')); // 👤 Profile Customization
-const IntegrationHubPanel = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/IntegrationHubPanel')); // 🔗 Integration Hub
-const TournamentSystem = React.lazy(() => import(/* webpackChunkName: "engagement" */ './components/TournamentSystem')); // 🏆 Tournaments
+const AchievementsPanel = React.lazy(() => import('./components/AchievementsPanel')); // 🏆 Achievements
+const BirthdaySystemPanel = React.lazy(() => import('./components/BirthdaySystemPanel')); // 🎂 Birthday System
+const PremiumModal = React.lazy(() => import('./components/PremiumModal')); // 💎 Premium
+const MusicPlayer = React.lazy(() => import('./components/MusicPlayer')); // 🎵 Music Player
+const BotMarketplace = React.lazy(() => import('./components/BotMarketplace')); // 🤖 Bot Marketplace
+const ProfileCustomization = React.lazy(() => import('./components/ProfileCustomization')); // 👤 Profile Customization
+const IntegrationHubPanel = React.lazy(() => import('./components/IntegrationHubPanel')); // 🔗 Integration Hub
+const TournamentSystem = React.lazy(() => import('./components/TournamentSystem')); // 🏆 Tournaments
 
 // -- Advanced Features --
-const HighlightsPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/HighlightsPanel')); // 💡 Keyword Highlights
-const CustomEmbedPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/CustomEmbedPanel')); // 📦 Custom Embeds
-const SpotifyIntegrationPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/SpotifyIntegrationPanel')); // 🎵 Spotify
-const ServerClonePanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/ServerClonePanel')); // 📋 Server Clone
-const WeeklyChallengesPanel = React.lazy(() => import(/* webpackChunkName: "advanced" */ './components/WeeklyChallengesPanel')); // 🎯 Weekly Challenges
+const HighlightsPanel = React.lazy(() => import('./components/HighlightsPanel')); // 💡 Keyword Highlights
+const CustomEmbedPanel = React.lazy(() => import('./components/CustomEmbedPanel')); // 📦 Custom Embeds
+const SpotifyIntegrationPanel = React.lazy(() => import('./components/SpotifyIntegrationPanel')); // 🎵 Spotify
+const ServerClonePanel = React.lazy(() => import('./components/ServerClonePanel')); // 📋 Server Clone
+const WeeklyChallengesPanel = React.lazy(() => import('./components/WeeklyChallengesPanel')); // 🎯 Weekly Challenges
 
 // 🔥 BATCH 11: 50 More Essential Features (2026-02-02)
 // -- 🔰 Moderation & Admin --
-const ModeratorTools = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/ModeratorTools')); // 🛡️ Moderator Tools
-const AIModerationPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AIModerationPanel')); // 🤖 AI Moderation
-const SpamDetectionPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/SpamDetectionPanel')); // 🚫 Spam Detection
-const AuditLogsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/AuditLogsPanel')); // 📋 Audit Logs
-const BanHistoryPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/BanHistoryPanel')); // ⛔ Ban History
-const ModerationLogsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/ModerationLogsPanel')); // 📜 Moderation Logs
-const RaidProtectionDashboard = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/RaidProtectionDashboard')); // 🛡️ Raid Protection
-const SecurityAlertsPanel = React.lazy(() => import(/* webpackChunkName: "moderation" */ './components/SecurityAlertsPanel')); // 🚨 Security Alerts
+const ModeratorTools = React.lazy(() => import('./components/ModeratorTools')); // 🛡️ Moderator Tools
+const AIModerationPanel = React.lazy(() => import('./components/AIModerationPanel')); // 🤖 AI Moderation
+const SpamDetectionPanel = React.lazy(() => import('./components/SpamDetectionPanel')); // 🚫 Spam Detection
+const AuditLogsPanel = React.lazy(() => import('./components/AuditLogsPanel')); // 📋 Audit Logs
+const BanHistoryPanel = React.lazy(() => import('./components/BanHistoryPanel')); // ⛔ Ban History
+const ModerationLogsPanel = React.lazy(() => import('./components/ModerationLogsPanel')); // 📜 Moderation Logs
+const RaidProtectionDashboard = React.lazy(() => import('./components/RaidProtectionDashboard')); // 🛡️ Raid Protection
+const SecurityAlertsPanel = React.lazy(() => import('./components/SecurityAlertsPanel')); // 🚨 Security Alerts
 
 // -- 💬 Communication & Messages --
-const BookmarksPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/BookmarksPanel')); // 🔖 Bookmarks
-const GIFPickerPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/GIFPickerPanel')); // 🎞️ GIF Picker
-const PollCreator = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/PollCreator')); // 📊 Poll Creator
-const StickersPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/StickersPanel')); // 🎨 Stickers
-const SavedMessagesModal = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/SavedMessagesModal')); // 💾 Saved Messages
-const NotificationsCenter = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/NotificationsCenter')); // 🔔 Notifications Center
-const MessageSummaryPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/MessageSummaryPanel')); // 📝 Message Summary
-const TranslationPanel = React.lazy(() => import(/* webpackChunkName: "messaging" */ './components/TranslationPanel')); // 🌍 Translation
+const BookmarksPanel = React.lazy(() => import('./components/BookmarksPanel')); // 🔖 Bookmarks
+const GIFPickerPanel = React.lazy(() => import('./components/GIFPickerPanel')); // 🎞️ GIF Picker
+const PollCreator = React.lazy(() => import('./components/PollCreator')); // 📊 Poll Creator
+const StickersPanel = React.lazy(() => import('./components/StickersPanel')); // 🎨 Stickers
+const SavedMessagesModal = React.lazy(() => import('./components/SavedMessagesModal')); // 💾 Saved Messages
+const NotificationsCenter = React.lazy(() => import('./components/NotificationsCenter')); // 🔔 Notifications Center
+const MessageSummaryPanel = React.lazy(() => import('./components/MessageSummaryPanel')); // 📝 Message Summary
+const TranslationPanel = React.lazy(() => import('./components/TranslationPanel')); // 🌍 Translation
 
 // -- 🏠 Server Management --
-const ChannelSettingsModal = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/ChannelSettingsModal')); // ⚙️ Channel Settings
-const InviteModal = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/InviteModal')); // 📨 Invite Manager
-const ServerTemplates = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/ServerTemplates')); // 📋 Server Templates
-const ServerAnalyticsDashboard = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/ServerAnalyticsDashboard')); // 📊 Server Analytics
-const RolesManager = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/RolesManager')); // 👑 Roles Manager
-const WelcomeScreenEditor = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/WelcomeScreenEditor')); // 👋 Welcome Screen Editor
-const CommunitySettingsPanel = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/CommunitySettingsPanel')); // 🏘️ Community Settings
-const InviteLinkManager = React.lazy(() => import(/* webpackChunkName: "server-mgmt2" */ './components/InviteLinkManager')); // 🔗 Invite Links
+const ChannelSettingsModal = React.lazy(() => import('./components/ChannelSettingsModal')); // ⚙️ Channel Settings
+const InviteModal = React.lazy(() => import('./components/InviteModal')); // 📨 Invite Manager
+const ServerTemplates = React.lazy(() => import('./components/ServerTemplates')); // 📋 Server Templates
+const ServerAnalyticsDashboard = React.lazy(() => import('./components/ServerAnalyticsDashboard')); // 📊 Server Analytics
+const RolesManager = React.lazy(() => import('./components/RolesManager')); // 👑 Roles Manager
+const WelcomeScreenEditor = React.lazy(() => import('./components/WelcomeScreenEditor')); // 👋 Welcome Screen Editor
+const CommunitySettingsPanel = React.lazy(() => import('./components/CommunitySettingsPanel')); // 🏘️ Community Settings
+const InviteLinkManager = React.lazy(() => import('./components/InviteLinkManager')); // 🔗 Invite Links
 
 // -- 🤖 Bot & Developer --
-const BotBuilder = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/BotBuilder')); // 🤖 Bot Builder
-const BotDeveloperPortal = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/BotDeveloperPortal')); // 🧑‍💻 Bot Developer Portal
-const WebhookManager = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/WebhookManager')); // 🔗 Webhook Manager
-const APIKeysPanel = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/APIKeysPanel')); // 🔑 API Keys
-const SlashCommandsPanel = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/SlashCommandsPanel')); // ⚡ Slash Commands
-const CodeRunnerPanel = React.lazy(() => import(/* webpackChunkName: "developer" */ './components/CodeRunnerPanel')); // 💻 Code Runner
+const BotBuilder = React.lazy(() => import('./components/BotBuilder')); // 🤖 Bot Builder
+const BotDeveloperPortal = React.lazy(() => import('./components/BotDeveloperPortal')); // 🧑‍💻 Bot Developer Portal
+const WebhookManager = React.lazy(() => import('./components/WebhookManager')); // 🔗 Webhook Manager
+const APIKeysPanel = React.lazy(() => import('./components/APIKeysPanel')); // 🔑 API Keys
+const SlashCommandsPanel = React.lazy(() => import('./components/SlashCommandsPanel')); // ⚡ Slash Commands
+const CodeRunnerPanel = React.lazy(() => import('./components/CodeRunnerPanel')); // 💻 Code Runner
 
 // -- 👤 Profile & Social --
-const ProfileCard = React.lazy(() => import(/* webpackChunkName: "social" */ './components/ProfileCard')); // 👤 Profile Card
-const UserNotesModal = React.lazy(() => import(/* webpackChunkName: "social" */ './components/UserNotesModal')); // 📝 User Notes
-const StatusPicker = React.lazy(() => import(/* webpackChunkName: "social" */ './components/StatusPicker')); // 🟢 Status Picker
-const MutualsPanel = React.lazy(() => import(/* webpackChunkName: "social" */ './components/MutualsPanel')); // 👥 Mutual Friends/Servers
-const ProfileShowcasePanel = React.lazy(() => import(/* webpackChunkName: "social" */ './components/ProfileShowcasePanel')); // 🏅 Profile Showcase
-const SessionManagerModal = React.lazy(() => import(/* webpackChunkName: "social" */ './components/SessionManagerModal')); // 📱 Session Manager
+const ProfileCard = React.lazy(() => import('./components/ProfileCard')); // 👤 Profile Card
+const UserNotesModal = React.lazy(() => import('./components/UserNotesModal')); // 📝 User Notes
+const StatusPicker = React.lazy(() => import('./components/StatusPicker')); // 🟢 Status Picker
+const MutualsPanel = React.lazy(() => import('./components/MutualsPanel')); // 👥 Mutual Friends/Servers
+const ProfileShowcasePanel = React.lazy(() => import('./components/ProfileShowcasePanel')); // 🏅 Profile Showcase
+const SessionManagerModal = React.lazy(() => import('./components/SessionManagerModal')); // 📱 Session Manager
 
 // -- 💎 Premium & Economy --
-const CoinStoreModal = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/CoinStoreModal')); // 🪙 Coin Store
-const PremiumManagementPanel = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/PremiumManagementPanel')); // 💎 Premium Management
-const SubscriptionManager = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/SubscriptionManager')); // 📋 Subscription Manager
-const GiftPremiumPanel = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/GiftPremiumPanel')); // 🎁 Gift Premium
-const PremiumMarketplace = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/PremiumMarketplace')); // 🛒 Premium Marketplace
-const ThemeMarketplace = React.lazy(() => import(/* webpackChunkName: "premium" */ './components/ThemeMarketplace')); // 🎨 Theme Marketplace
+const CoinStoreModal = React.lazy(() => import('./components/CoinStoreModal')); // 🪙 Coin Store
+const PremiumManagementPanel = React.lazy(() => import('./components/PremiumManagementPanel')); // 💎 Premium Management
+const SubscriptionManager = React.lazy(() => import('./components/SubscriptionManager')); // 📋 Subscription Manager
+const GiftPremiumPanel = React.lazy(() => import('./components/GiftPremiumPanel')); // 🎁 Gift Premium
+const PremiumMarketplace = React.lazy(() => import('./components/PremiumMarketplace')); // 🛒 Premium Marketplace
+const ThemeMarketplace = React.lazy(() => import('./components/ThemeMarketplace')); // 🎨 Theme Marketplace
 
 // -- 🔧 Advanced --
-const AIChatbotPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/AIChatbotPanel')); // 🤖 AI Chatbot
-const CollaborativeCodeEditor = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/CollaborativeCodeEditor')); // 👨‍💻 Collaborative Code Editor
-const ScreenShareModal = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ScreenShareModal')); // 🖥️ Screen Share
-const LiveStreamModal = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/LiveStreamModal')); // 📺 Live Stream Modal
-const AdvancedAnalyticsDashboard = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/AdvancedAnalyticsDashboard')); // 📈 Advanced Analytics
-const FileManagerPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/FileManagerPanel')); // 📁 File Manager
-const ReportsPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ReportsPanel')); // 📊 Reports
-const ErrorReportingPanel = React.lazy(() => import(/* webpackChunkName: "advanced2" */ './components/ErrorReportingPanel')); // 🐛 Error Reporting
+const AIChatbotPanel = React.lazy(() => import('./components/AIChatbotPanel')); // 🤖 AI Chatbot
+const CollaborativeCodeEditor = React.lazy(() => import('./components/CollaborativeCodeEditor')); // 👨‍💻 Collaborative Code Editor
+const ScreenShareModal = React.lazy(() => import('./components/ScreenShareModal')); // 🖥️ Screen Share
+const LiveStreamModal = React.lazy(() => import('./components/LiveStreamModal')); // 📺 Live Stream Modal
+const AdvancedAnalyticsDashboard = React.lazy(() => import('./components/AdvancedAnalyticsDashboard')); // 📈 Advanced Analytics
+const FileManagerPanel = React.lazy(() => import('./components/FileManagerPanel')); // 📁 File Manager
+const ReportsPanel = React.lazy(() => import('./components/ReportsPanel')); // 📊 Reports
+const ErrorReportingPanel = React.lazy(() => import('./components/ErrorReportingPanel')); // 🐛 Error Reporting
 
 // --- AYARLAR ---
 // 🔥 Extracted to config/api.js for cleaner architecture

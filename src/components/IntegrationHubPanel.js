@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaPlug, FaTimes, FaGithub, FaSpotify, FaTwitch, FaYoutube,
     FaDiscord, FaSlack, FaGoogle, FaTwitter, FaLink, FaUnlink,

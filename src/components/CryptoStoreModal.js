@@ -1,6 +1,6 @@
 // frontend/src/components/CryptoStoreModal.js (DİNAMİK VERSİYON)
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaCoins, FaShoppingBag, FaTshirt, FaCheck, FaLock, FaBitcoin } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';

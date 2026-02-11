@@ -1,5 +1,5 @@
 // frontend/src/components/PremiumStoreModal.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaCrown, FaShoppingCart, FaRocket, FaCheck, FaStar } from 'react-icons/fa';
 import { useAuth } from '../AuthContext';

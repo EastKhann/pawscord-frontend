@@ -1,5 +1,4 @@
 // frontend/src/components/ReadReceipt.js
-import React from 'react';
 import { FaCheck, FaCheckDouble } from 'react-icons/fa';
 
 const ReadReceipt = ({ status, readBy = [] }) => {

@@ -3,7 +3,7 @@
  * Profil fotoğrafı yüklerken tam kare kırpma
  */
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import './AvatarCropper.css';

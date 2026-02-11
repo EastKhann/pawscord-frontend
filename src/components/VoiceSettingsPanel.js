@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './VoiceSettingsPanel.css';
 import { toast } from 'react-toastify';
 import { useVoice } from '../VoiceContext'; // 🔥 VoiceContext entegrasyonu

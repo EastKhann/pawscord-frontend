@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './E2EEPanel.css';
 import { FaLock, FaKey, FaShieldAlt, FaSync, FaCheckCircle } from 'react-icons/fa';
 

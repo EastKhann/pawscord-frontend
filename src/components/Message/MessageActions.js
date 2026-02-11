@@ -1,7 +1,7 @@
 // frontend/src/components/Message/MessageActions.js
 // 🎯 MESSAGE ACTIONS - Hover action buttons
 
-import React, { memo, lazy, Suspense, useCallback } from 'react';
+import { memo, lazy, Suspense, useCallback } from 'react';
 import {
     FaReply, FaEdit, FaTrash, FaSmile, FaShareSquare,
     FaThumbtack, FaCheck, FaBell, FaComments, FaExclamationTriangle, FaQuoteLeft
@@ -9,10 +9,10 @@ import {
 import toast from '../../utils/toast';
 
 // Lazy load heavy components
-const ReactionPicker = lazy(() => import(/* webpackChunkName: "message-ui" */ '../../ReactionPicker'));
-const BookmarkButton = lazy(() => import(/* webpackChunkName: "message-ui" */ '../BookmarkButton').then(m => ({ default: m.BookmarkButton })));
-const StarButton = lazy(() => import(/* webpackChunkName: "message-ui" */ '../BookmarkButton').then(m => ({ default: m.StarButton })));
-const ReadLaterButton = lazy(() => import(/* webpackChunkName: "message-ui" */ '../BookmarkButton').then(m => ({ default: m.ReadLaterButton })));
+const ReactionPicker = lazy(() => import('../../ReactionPicker'));
+const BookmarkButton = lazy(() => import('../BookmarkButton').then(m => ({ default: m.BookmarkButton })));
+const StarButton = lazy(() => import('../BookmarkButton').then(m => ({ default: m.StarButton })));
+const ReadLaterButton = lazy(() => import('../BookmarkButton').then(m => ({ default: m.ReadLaterButton })));
 
 export const MessageActions = memo(({
     msg,

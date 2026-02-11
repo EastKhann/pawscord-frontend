@@ -1,7 +1,7 @@
 // 🤖 BOT MARKETPLACE - Bot Keşfi, Yükleme, Review
 // Discord App Directory benzeri
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 import './BotMarketplace.css';
 import toast from '../utils/toast';

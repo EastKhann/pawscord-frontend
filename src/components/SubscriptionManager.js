@@ -1,5 +1,5 @@
 // frontend/src/components/SubscriptionManager.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaCrown, FaCreditCard, FaCheck, FaHistory, FaBan, FaGift, FaArrowRight } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
 

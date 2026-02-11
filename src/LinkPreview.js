@@ -1,6 +1,6 @@
 // frontend/src/LinkPreview.js (DISCORD-STYLE ÖNİZLEME - V2.0)
 
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 // YouTube linkinden video ID'sini çıkaran fonksiyon
 const getYouTubeVideoId = (url) => {

@@ -1,5 +1,5 @@
 // Landing Page for Pre-Launch Waitlist
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import toast from '../utils/toast';
 import './LandingPage.css';

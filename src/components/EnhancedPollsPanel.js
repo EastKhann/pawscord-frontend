@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaTimes, FaPoll, FaPlus, FaTrash, FaClock, FaDownload, FaCalendar } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 

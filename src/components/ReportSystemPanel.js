@@ -1,5 +1,5 @@
 // frontend/src/components/ReportSystemPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaFlag, FaCheck, FaTimes, FaEye, FaBan, FaTrash, FaFilter, FaUser, FaComment } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';

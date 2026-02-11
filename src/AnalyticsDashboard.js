@@ -1,7 +1,7 @@
 // frontend/src/AnalyticsDashboard.js
 // (MOBİL VE PC İÇİN AYRI AYRI OPTİMİZE EDİLMİŞ NİHAİ VERSİYON)
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 // ⚡ OPTIMIZATION: Selective import (was importing entire chart.js library)
 import {

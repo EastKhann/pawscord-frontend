@@ -1,7 +1,7 @@
 // frontend/src/components/ChannelSettingsModal.js
 // 🔥 FULL DISCORD-STYLE CHANNEL SETTINGS WITH ADVANCED PERMISSIONS
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { FaTimes, FaTrash, FaSave, FaLock, FaGlobe, FaExclamationTriangle, FaUserFriends, FaBroadcastTower, FaClock, FaShieldAlt, FaCog, FaUserShield, FaPlus, FaChartLine, FaHistory, FaBell, FaEye, FaRobot, FaLink, FaCopy, FaCheck } from 'react-icons/fa';
 import toast from '../utils/toast';

@@ -3,7 +3,7 @@
 // Original ~1270 lines → ~300 lines (75% reduction)
 // Bundle size: ~208KB → ~50KB
 
-import React, { useState, useMemo, useEffect, useRef, memo, useCallback, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, useRef, memo, useCallback, lazy, Suspense } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 import LazyImage from '../LazyImage';
 import { useCachedImage } from '../../utils/imageCaching';
@@ -23,10 +23,10 @@ import ReadReceipt from '../ReadReceipt';
 import UserCardPopover from '../UserCardPopover';
 
 // Lazy load heavy components
-const LinkPreview = lazy(() => import(/* webpackChunkName: "message-ui" */ '../../LinkPreview'));
-const TicTacToe = lazy(() => import(/* webpackChunkName: "games" */ '../TicTacToe'));
-const ReminderModal = lazy(() => import(/* webpackChunkName: "modals" */ '../ReminderModal'));
-const MessageThreads = lazy(() => import(/* webpackChunkName: "message-ui" */ '../MessageThreads'));
+const LinkPreview = lazy(() => import('../../LinkPreview'));
+const TicTacToe = lazy(() => import('../TicTacToe'));
+const ReminderModal = lazy(() => import('../ReminderModal'));
+const MessageThreads = lazy(() => import('../MessageThreads'));
 
 // --- ANA BİLEŞEN ---
 const Message = ({

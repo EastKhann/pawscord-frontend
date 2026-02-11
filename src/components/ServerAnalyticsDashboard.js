@@ -6,7 +6,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import {
     FaTimes, FaChartLine, FaUsers, FaComments, FaHashtag,

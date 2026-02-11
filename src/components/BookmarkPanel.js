@@ -1,5 +1,5 @@
 // frontend/src/components/BookmarkPanel.js
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaTimes, FaTags, FaTrash, FaSearch, FaPlus, FaBookmark, FaFolder } from 'react-icons/fa';
 import toast from '../utils/toast';
 

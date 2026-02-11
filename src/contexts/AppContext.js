@@ -2,7 +2,7 @@
 // 🌍 GLOBAL APPLICATION CONTEXT
 // Centralized state management with performance optimizations
 
-import React, { createContext, useContext, useReducer, useCallback, useMemo, useEffect } from 'react';
+import { createContext, useContext, useReducer, useCallback, useMemo, useEffect } from 'react';
 import { api } from '../services/ApiService';
 import { wsService } from '../services/WebSocketService';
 

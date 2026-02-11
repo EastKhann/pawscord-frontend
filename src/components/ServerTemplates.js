@@ -1,5 +1,5 @@
 // frontend/src/components/ServerTemplates.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaGamepad, FaGraduationCap, FaUsers, FaMusic, FaCode, FaRocket, FaCheck, FaStar } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './ServerTemplates.css';

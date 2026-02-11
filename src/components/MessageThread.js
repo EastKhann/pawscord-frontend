@@ -1,9 +1,9 @@
 // components/MessageThreads.js
 // 💬 Message Threads - Discord-style conversation threads
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaComments, FaTimes, FaReply, FaPaperPlane } from 'react-icons/fa';
-import './MessageThreads.css';
+import './MessageThread.css';
 
 const MessageThread = ({
   parentMessage,

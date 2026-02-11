@@ -1,5 +1,5 @@
 // frontend/src/components/BookmarkButton.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaBookmark, FaRegBookmark, FaStar, FaRegStar, FaClock } from 'react-icons/fa';
 
 export const BookmarkButton = ({ messageId, isBookmarked, fetchWithAuth, apiBaseUrl, onUpdate }) => {

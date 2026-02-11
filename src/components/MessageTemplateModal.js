@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaPlus, FaTrash, FaCheck, FaStickyNote } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
 

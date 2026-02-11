@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaBullhorn, FaTimes } from 'react-icons/fa';
 
 const StickyMessageBanner = ({ message, type = 'info', onDismiss }) => {

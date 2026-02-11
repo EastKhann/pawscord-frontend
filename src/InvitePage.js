@@ -1,6 +1,6 @@
 // frontend/src/InvitePage.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from './utils/toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';

@@ -1,7 +1,7 @@
 // components/MediaRecorder.js
 // 🎤🎥 Voice & Video Recorder - WhatsApp-style
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaMicrophone, FaVideo, FaStop, FaTrash, FaPaperPlane, FaDesktop } from 'react-icons/fa';
 import './MediaRecorder.css';

@@ -1,6 +1,6 @@
 // frontend/src/components/DownloadModal.js
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FaWindows, FaAndroid, FaApple, FaTimes, FaDownload, FaInfoCircle } from 'react-icons/fa';
 import { Capacitor } from '@capacitor/core';
 

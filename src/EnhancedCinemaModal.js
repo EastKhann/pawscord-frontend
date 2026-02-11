@@ -1,5 +1,5 @@
 // frontend/src/EnhancedCinemaModal.js
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaTimes, FaLink, FaPlay, FaPause, FaStepForward, FaStepBackward, FaListUl, FaHeart, FaFire, FaLaugh, FaSadTear, FaVolumeUp, FaExpand } from 'react-icons/fa';
 

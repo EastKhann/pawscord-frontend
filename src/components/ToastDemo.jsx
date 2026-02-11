@@ -1,7 +1,6 @@
 // frontend/src/components/ToastDemo.jsx
 // Toast Notification Demo Sayfası - Test için
 
-import React from 'react';
 import toast from '../utils/toast';
 import './ToastDemo.css';
 

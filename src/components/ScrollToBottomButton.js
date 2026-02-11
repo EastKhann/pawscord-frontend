@@ -2,7 +2,7 @@
 // ⬇️ FEATURE 4: Scroll to Bottom FAB with Unread Count
 // Mesaj listesinde aşağı kaydırmak için floating buton
 
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
 const ScrollToBottomButton = ({ onClick, unreadCount = 0, visible = true }) => {

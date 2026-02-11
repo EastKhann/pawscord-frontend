@@ -1,11 +1,12 @@
 // frontend/src/components/MusicPlayer.js
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-    FaPlay, FaPause, FaStepForward, FaStepBackward, 
+import { useState, useEffect, useRef } from 'react';
+import {
+    FaPlay, FaPause, FaStepForward, FaStepBackward,
     FaVolumeUp, FaVolumeMute, FaRandom, FaRedo,
     FaListUl, FaYoutube, FaSpotify, FaTimes, FaPlus
 } from 'react-icons/fa';
 import toast from '../utils/toast';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 import './MusicPlayer.css';
 
 const MusicPlayer = ({ channelId }) => {
@@ -26,7 +27,7 @@ const MusicPlayer = ({ channelId }) => {
     useEffect(() => {
         // Fetch current playback status
         fetchPlayerStatus();
-        
+
         // Update progress every second
         const interval = setInterval(() => {
             if (isPlaying && audioRef.current) {
@@ -34,18 +35,18 @@ const MusicPlayer = ({ channelId }) => {
                 setDuration(audioRef.current.duration);
             }
         }, 1000);
-        
+
         return () => clearInterval(interval);
     }, [isPlaying]);
 
     const fetchPlayerStatus = async () => {
         try {
-            const response = await fetch(`/api/music/status/${channelId}/`, {
+            const response = await fetch(`${API_BASE_URL}/music/${channelId}/status/`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setCurrentTrack(data.current_track);
@@ -61,13 +62,13 @@ const MusicPlayer = ({ channelId }) => {
     const handlePlayPause = async () => {
         try {
             const endpoint = isPlaying ? 'pause' : 'play';
-            const response = await fetch(`/api/music/${endpoint}/${channelId}/`, {
+            const response = await fetch(`${API_BASE_URL}/music/${channelId}/${endpoint}/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
-            
+
             if (response.ok) {
                 setIsPlaying(!isPlaying);
                 toast.success(isPlaying ? '⏸️ Durakladı' : '▶️ Çalıyor');
@@ -79,13 +80,13 @@ const MusicPlayer = ({ channelId }) => {
 
     const handleNext = async () => {
         try {
-            const response = await fetch(`/api/music/skip/${channelId}/`, {
+            const response = await fetch(`${API_BASE_URL}/music/${channelId}/skip/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setCurrentTrack(data.current_track);
@@ -98,13 +99,13 @@ const MusicPlayer = ({ channelId }) => {
 
     const handlePrevious = async () => {
         try {
-            const response = await fetch(`/api/music/previous/${channelId}/`, {
+            const response = await fetch(`${API_BASE_URL}/music/${channelId}/previous/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setCurrentTrack(data.current_track);
@@ -118,7 +119,7 @@ const MusicPlayer = ({ channelId }) => {
     const handleVolumeChange = async (newVolume) => {
         setVolume(newVolume);
         try {
-            await fetch(`/api/music/volume/${channelId}/`, {
+            await fetch(`${API_BASE_URL}/music/${channelId}/volume/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
@@ -138,7 +139,7 @@ const MusicPlayer = ({ channelId }) => {
         }
 
         try {
-            const response = await fetch(`/api/music/add/${channelId}/`, {
+            const response = await fetch(`${API_BASE_URL}/music/${channelId}/add/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
@@ -163,7 +164,7 @@ const MusicPlayer = ({ channelId }) => {
 
     const removeFromQueue = async (trackId) => {
         try {
-            const response = await fetch(`/api/music/remove/${channelId}/${trackId}/`, {
+            const response = await fetch(`${API_BASE_URL}/music/${channelId}/remove/${trackId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
@@ -197,13 +198,13 @@ const MusicPlayer = ({ channelId }) => {
     return (
         <div className="music-player">
             <audio ref={audioRef} src={currentTrack?.audio_url} />
-            
+
             <div className="player-main">
                 <div className="track-info">
                     {currentTrack ? (
                         <>
-                            <img 
-                                src={currentTrack.thumbnail || '/default-music.png'} 
+                            <img
+                                src={currentTrack.thumbnail || '/default-music.png'}
                                 alt={currentTrack.title}
                                 className="track-thumbnail"
                             />
@@ -225,7 +226,7 @@ const MusicPlayer = ({ channelId }) => {
 
                 <div className="player-controls">
                     <div className="control-buttons">
-                        <button 
+                        <button
                             className={`control-btn ${shuffle ? 'active' : ''}`}
                             onClick={() => setShuffle(!shuffle)}
                             title="Karıştır"
@@ -241,7 +242,7 @@ const MusicPlayer = ({ channelId }) => {
                         <button className="control-btn" onClick={handleNext} title="Sonraki">
                             <FaStepForward />
                         </button>
-                        <button 
+                        <button
                             className={`control-btn ${repeat ? 'active' : ''}`}
                             onClick={() => setRepeat(!repeat)}
                             title="Tekrarla"
@@ -265,7 +266,7 @@ const MusicPlayer = ({ channelId }) => {
                 </div>
 
                 <div className="player-extras">
-                    <button 
+                    <button
                         className="extra-btn"
                         onClick={() => setShowQueue(!showQueue)}
                         title="Sıra"
@@ -273,7 +274,7 @@ const MusicPlayer = ({ channelId }) => {
                         <FaListUl />
                         {queue.length > 0 && <span className="queue-count">{queue.length}</span>}
                     </button>
-                    <button 
+                    <button
                         className="extra-btn"
                         onClick={() => setShowAddTrack(!showAddTrack)}
                         title="Şarkı Ekle"
@@ -281,7 +282,7 @@ const MusicPlayer = ({ channelId }) => {
                         <FaPlus />
                     </button>
                     <div className="volume-control">
-                        <button 
+                        <button
                             className="extra-btn"
                             onClick={() => setIsMuted(!isMuted)}
                         >
@@ -320,7 +321,7 @@ const MusicPlayer = ({ channelId }) => {
                                         <div className="queue-track-title">{track.title}</div>
                                         <div className="queue-track-artist">{track.artist || 'Bilinmeyen'}</div>
                                     </div>
-                                    <button 
+                                    <button
                                         className="remove-btn"
                                         onClick={() => removeFromQueue(track.id)}
                                         title="Sıradan Çıkar"

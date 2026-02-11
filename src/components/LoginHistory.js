@@ -2,7 +2,7 @@
 // 🔥 FEATURE 48: Login history page
 // Shows recent login attempts with device, location, time
 
-import React, { useState, memo, useCallback } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { FaDesktop, FaMobile, FaTablet, FaGlobe, FaShieldAlt, FaExclamationTriangle, FaCheck, FaTimes, FaChrome, FaFirefox, FaEdge, FaSafari } from 'react-icons/fa';
 
 const DEVICE_ICONS = {

@@ -1,5 +1,5 @@
 // frontend/src/components/UserWarningsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaExclamationTriangle, FaTimes, FaPlus, FaUser, FaBan, FaHistory, FaSearch, FaTrash } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';

@@ -1,6 +1,6 @@
 // frontend/src/components/RichTextEditor.js
 
-import React, { useEffect, useImperativeHandle, forwardRef, useCallback, useRef, useState } from 'react';
+import { useEffect, useImperativeHandle, forwardRef, useCallback, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';

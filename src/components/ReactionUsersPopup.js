@@ -2,7 +2,7 @@
 // 👥 FEATURE 3: Reaction Users Popup
 // Hover on a reaction to see who reacted
 
-import React, { useState, useRef, useCallback, memo } from 'react';
+import { useState, useRef, useCallback, memo } from 'react';
 import ReactDOM from 'react-dom';
 
 const ReactionUsersPopup = ({ emoji, users = [], count, hasCurrentUser, onToggle, currentUsername }) => {

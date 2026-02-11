@@ -1,5 +1,5 @@
 // frontend/src/components/PollCreator.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import toast from '../utils/toast';
 import axios from 'axios';
 import { getApiBase } from '../utils/apiEndpoints';

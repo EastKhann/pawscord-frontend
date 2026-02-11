@@ -1,6 +1,6 @@
 // frontend/src/components/AdminPanelModal.js
 // 🔥 KAPSAMLI ADMİN PANELİ V2.0 - Full Featured
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
     FaTimes, FaCog, FaChartLine, FaUserShield, FaBook, FaRobot,
     FaUsers, FaServer, FaDatabase, FaMemory, FaBan, FaTrash,

@@ -1,5 +1,5 @@
 // frontend/src/components/VoiceWaitingRoom.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaUsers, FaClock, FaPhoneSlash } from 'react-icons/fa';
 
 const VoiceWaitingRoom = ({ channelName, maxUsers, currentUsers, position, onLeave }) => {

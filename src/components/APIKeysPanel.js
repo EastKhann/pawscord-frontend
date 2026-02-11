@@ -1,7 +1,7 @@
 // components/APIKeysPanel.js
 // 🔑 API Keys Management Panel
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaKey, FaTrash, FaCopy, FaPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
 

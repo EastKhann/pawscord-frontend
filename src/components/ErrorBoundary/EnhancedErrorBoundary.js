@@ -1,7 +1,7 @@
 // frontend/src/components/ErrorBoundary/EnhancedErrorBoundary.js
 // 🛡️ ENHANCED ERROR BOUNDARY with Recovery & Reporting
 
-import React, { Component, createContext, useContext } from 'react';
+import { Component, createContext, useContext } from 'react';
 import { FaExclamationTriangle, FaRedo, FaHome, FaBug, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 // Error Context for child components

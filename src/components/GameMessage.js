@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaHandRock, FaHandPaper, FaHandScissors } from 'react-icons/fa';
 
 const GameMessage = ({ gameId, state, currentUser, onMove }) => {

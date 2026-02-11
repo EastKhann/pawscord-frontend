@@ -1,6 +1,6 @@
 // frontend/src/EnglishVoicePractice.js
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaMicrophone, FaArrowLeft, FaRobot, FaUser, FaStop } from 'react-icons/fa';
 import { useAuth } from './AuthContext';

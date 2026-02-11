@@ -2,7 +2,7 @@
 // 🔥 FEATURE 10: Unified User Settings Modal
 // Discord-style settings with sidebar navigation - Account, Privacy, Appearance, Voice, Notifications, Keybinds
 
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { FaUser, FaShieldAlt, FaPalette, FaMicrophone, FaBell, FaKeyboard, FaGlobe, FaSignOutAlt, FaTimes, FaLock, FaDesktop, FaCog, FaVolumeUp, FaGamepad, FaLink, FaHistory, FaTrash, FaToggleOn, FaToggleOff, FaChevronRight, FaCheck, FaCamera, FaSteam, FaSpotify, FaInstagram, FaTwitter, FaXbox, FaPlaystation, FaGithub } from 'react-icons/fa';
 import toast from '../utils/toast';
 

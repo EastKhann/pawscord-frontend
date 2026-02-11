@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaExternalLinkAlt, FaImage, FaVideo, FaPlay, FaTimes } from 'react-icons/fa';
 
 const LinkPreviewRenderer = ({ url, onRemove }) => {

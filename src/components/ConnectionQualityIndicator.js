@@ -1,7 +1,6 @@
 // frontend/src/components/ConnectionQualityIndicator.js
 // 📶 WebRTC Bağlantı Kalitesi Göstergesi
 
-import React from 'react';
 import { FaWifi, FaExclamationTriangle, FaCheck, FaTimes } from 'react-icons/fa';
 
 /**

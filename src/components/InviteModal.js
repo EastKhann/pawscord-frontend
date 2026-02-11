@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { FaCopy, FaTimes, FaCheck, FaSearch, FaLink, FaUserFriends, FaHashtag, FaSync } from 'react-icons/fa';
 import toast from '../utils/toast';

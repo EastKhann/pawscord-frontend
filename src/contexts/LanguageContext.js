@@ -1,7 +1,7 @@
 // frontend/src/contexts/LanguageContext.js
 // 🌐 INTERNATIONALIZATION CONTEXT (Enhanced with i18next)
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import i18n from '../i18n';
 import api from '../api';
 

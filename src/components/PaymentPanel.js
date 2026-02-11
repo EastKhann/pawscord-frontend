@@ -1,5 +1,5 @@
 // frontend/src/components/PaymentPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaCoins, FaCreditCard, FaHistory, FaWallet, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import toast from '../utils/toast';
 

@@ -1,5 +1,5 @@
 // frontend/src/pages/TwoFactorLoginPage.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FaShieldAlt, FaArrowLeft, FaKey } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';

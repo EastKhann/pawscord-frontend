@@ -1,5 +1,5 @@
 // frontend/src/components/WebhookManager.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaPlus, FaTrash, FaCopy } from 'react-icons/fa';
 import toast from '../utils/toast';
 

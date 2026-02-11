@@ -1,5 +1,5 @@
 // frontend/src/components/TimeoutMutePanel.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaTimes, FaClock, FaVolumeUp } from 'react-icons/fa';
 import toast from '../utils/toast';
 

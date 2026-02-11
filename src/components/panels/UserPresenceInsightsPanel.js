@@ -1,7 +1,7 @@
 // frontend/src/components/panels/UserPresenceInsightsPanel.js
 // 👤 User Presence Insights - Activity patterns and engagement analytics
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     FaTimes, FaUserClock, FaChartLine, FaMoon, FaSun,
     FaCalendarAlt, FaClock, FaUsers, FaCommentAlt,

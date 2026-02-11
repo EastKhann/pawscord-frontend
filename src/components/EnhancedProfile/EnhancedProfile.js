@@ -6,7 +6,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaTwitter, FaGithub, FaInstagram, FaYoutube, FaTwitch, FaSpotify, FaSteam,
     FaGlobe, FaDiscord, FaEdit, FaSave, FaTimes, FaPlus, FaTrash, FaClock,

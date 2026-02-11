@@ -1,5 +1,5 @@
 // frontend/src/components/SecurityAlertsPanel.js - Security Alerts Dashboard
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaExclamationTriangle, FaTimes, FaShieldAlt, FaCheckCircle,
     FaBan, FaEye, FaFilter, FaClock, FaUser, FaGlobe, FaBell,

@@ -6,7 +6,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FaGamepad, FaMusic, FaTwitch, FaYoutube, FaSpotify, FaClock, FaUsers, FaExternalLinkAlt, FaEdit } from 'react-icons/fa';
 import { API_BASE_URL } from '../../utils/constants';
 import './GamePresence.css';

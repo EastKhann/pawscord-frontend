@@ -1,7 +1,7 @@
 // frontend/src/components/PremiumMarketplace.js
 // 💎 Premium Marketplace - Strategic Pricing & Discounts
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import axios from 'axios';
 import './PremiumMarketplace.css';

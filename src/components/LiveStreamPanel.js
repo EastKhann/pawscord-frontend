@@ -1,5 +1,5 @@
 // frontend/src/components/LiveStreamPanel.js
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaVideo, FaTimes, FaMicrophone, FaDesktop, FaUsers, FaComments } from 'react-icons/fa';
 
 const LiveStreamPanel = ({ onClose, currentUser, ws, channelId, fetchWithAuth, apiBaseUrl, roomSlug }) => {

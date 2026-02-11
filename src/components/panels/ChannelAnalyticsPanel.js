@@ -1,7 +1,7 @@
 // frontend/src/components/panels/ChannelAnalyticsPanel.js
 // 📈 Channel Analytics - Detailed channel statistics and activity insights
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     FaTimes, FaChartBar, FaHashtag, FaVolumeUp, FaUsers,
     FaComment, FaClock, FaFire, FaTrophy, FaArrowUp,

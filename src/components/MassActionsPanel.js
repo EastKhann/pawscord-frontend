@@ -1,5 +1,5 @@
 // frontend/src/components/MassActionsPanel.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaTimes, FaUsers, FaBan, FaVolumeUp, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 

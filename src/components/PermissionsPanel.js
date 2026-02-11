@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './PermissionsPanel.css';
 import { FaShieldAlt, FaTimes, FaPlus, FaEdit, FaTrash, FaUsers, FaCrown, FaLock } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';

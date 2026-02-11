@@ -1,5 +1,5 @@
 // frontend/src/components/ErrorReportingPanel.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import toast from '../utils/toast';
 import './ErrorReportingPanel.css';
 

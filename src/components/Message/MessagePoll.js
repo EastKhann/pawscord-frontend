@@ -1,7 +1,7 @@
 // frontend/src/components/Message/MessagePoll.js
 // 📊 MESSAGE POLL - Poll display and voting
 
-import React, { memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 export const MessagePoll = memo(({
     poll,

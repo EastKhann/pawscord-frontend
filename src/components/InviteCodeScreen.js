@@ -1,7 +1,7 @@
 // frontend/src/components/InviteCodeScreen.js
 // 🔥 Invite code kabul ekranı - /#/invite/CODE formatı için
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 
 function InviteCodeScreen({ inviteCode, fetchWithAuth, onClose, apiBaseUrl }) {

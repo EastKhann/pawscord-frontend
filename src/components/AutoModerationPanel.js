@@ -1,5 +1,5 @@
 // frontend/src/components/AutoModerationPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
     FaShieldAlt, FaBan, FaExclamationTriangle, FaRobot,
     FaPlus, FaEdit, FaTrash, FaToggleOn, FaToggleOff

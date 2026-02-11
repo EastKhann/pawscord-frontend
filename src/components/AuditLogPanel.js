@@ -1,5 +1,5 @@
 // frontend/src/components/AuditLogPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaHistory, FaTimes, FaFilter, FaDownload, FaSearch } from 'react-icons/fa';
 
 const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {

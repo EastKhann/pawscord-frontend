@@ -1,7 +1,7 @@
 // components/AdvancedSearch.js
 // 🔍 Advanced Search Panel - Power User Feature
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FaSearch, FaTimes, FaFilter, FaCalendar, FaUser, FaFile, FaHeart } from 'react-icons/fa';
 import './AdvancedSearch.css';
 

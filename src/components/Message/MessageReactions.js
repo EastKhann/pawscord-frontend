@@ -1,7 +1,7 @@
 // frontend/src/components/Message/MessageReactions.js
 // ❤️ MESSAGE REACTIONS - Emoji reactions display with hover user popup
 
-import React, { memo, useCallback, useState, useRef } from 'react';
+import { memo, useCallback, useState, useRef } from 'react';
 import ReactionUsersPopup from '../ReactionUsersPopup';
 
 export const MessageReactions = memo(({

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './OCRPanel.css';
 import { FaImage, FaCopy, FaUpload, FaLanguage, FaCheckCircle } from 'react-icons/fa';
 

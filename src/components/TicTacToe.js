@@ -1,6 +1,5 @@
 // frontend/src/components/TicTacToe.js
 
-import React from 'react';
 
 const TicTacToe = ({ gameData, onMove, currentUser }) => {
     const { board, turn, player_x, player_o, winner, game_id } = gameData;

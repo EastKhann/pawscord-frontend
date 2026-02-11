@@ -1,5 +1,5 @@
 // frontend/src/components/AdminAnalyticsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaUsers, FaServer, FaComments, FaChartLine,
     FaCrown, FaShoppingCart, FaTimes, FaDownload,

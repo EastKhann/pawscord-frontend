@@ -1,5 +1,5 @@
 // frontend/src/components/ReportsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import './ReportsPanel.css';
 

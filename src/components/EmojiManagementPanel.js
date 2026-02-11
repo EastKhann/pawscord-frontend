@@ -1,5 +1,5 @@
 // frontend/src/components/EmojiManagementPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaSmile, FaPlus, FaTrash, FaStar, FaUpload } from 'react-icons/fa';
 import toast from '../utils/toast';
 

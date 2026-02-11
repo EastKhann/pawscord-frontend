@@ -1,7 +1,7 @@
 // frontend/src/components/CodeBlock.js
 // ⚡ OPTIMIZED: PrismLight kullanarak sadece gerekli dilleri yükler (~100KB vs 1.79MB)
 
-import React, { useState, Suspense, lazy, memo } from 'react';
+import { useState, Suspense, lazy, memo } from 'react';
 import { FaCopy, FaCheck, FaChevronDown, FaChevronUp, FaPlay, FaSpinner } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';
 

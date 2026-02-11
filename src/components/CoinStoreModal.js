@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaCoins, FaStar, FaCrown, FaCheck } from 'react-icons/fa';
 import { GiSparkles } from 'react-icons/gi';
 import toast from '../utils/toast';

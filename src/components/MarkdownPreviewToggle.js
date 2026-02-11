@@ -2,7 +2,7 @@
 // 📝 FEATURE 8: Markdown Preview Toggle
 // Live preview of markdown before sending
 
-import React, { useState, memo, useMemo } from 'react';
+import { useState, memo, useMemo } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import DOMPurify from 'dompurify';
 

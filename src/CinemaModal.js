@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaTimes, FaLink, FaExclamationCircle, FaPlay, FaPause } from 'react-icons/fa';
 

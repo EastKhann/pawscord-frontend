@@ -1,6 +1,6 @@
 // frontend/src/LoginPage.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaUser, FaLock, FaEnvelope, FaPaw } from 'react-icons/fa';
 import { Capacitor } from '@capacitor/core';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';

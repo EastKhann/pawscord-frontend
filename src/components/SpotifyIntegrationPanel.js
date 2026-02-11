@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './SpotifyIntegrationPanel.css';
 import { FaSpotify, FaPlay, FaPause, FaMusic, FaUnlink, FaCheck, FaTimes } from 'react-icons/fa';
 

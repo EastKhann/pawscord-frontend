@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './GIFPickerPanel.css';
 import { FaImage, FaSearch, FaTh, FaList, FaHeart } from 'react-icons/fa';
 

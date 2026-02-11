@@ -1,7 +1,7 @@
 // frontend/src/components/panels/ReactionStatsPanel.js
 // 📊 Reaction Statistics Dashboard - Most used reactions, trends, user favorites
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaTimes, FaSmile, FaHeart, FaThumbsUp, FaFire, FaChartBar, FaTrophy, FaUser, FaClock, FaSync } from 'react-icons/fa';
 import { getApiBase } from '../../utils/apiEndpoints';
 import './ReactionStatsPanel.css';

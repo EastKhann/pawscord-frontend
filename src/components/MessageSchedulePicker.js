@@ -2,7 +2,7 @@
 // 📅 FEATURE — Message Schedule UI Picker
 // Calendar + time picker for scheduling messages
 
-import React, { useState, memo, useCallback } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { FaClock, FaCalendar, FaTimes, FaPaperPlane } from 'react-icons/fa';
 
 const pad = (n) => String(n).padStart(2, '0');

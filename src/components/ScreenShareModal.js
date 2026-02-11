@@ -5,7 +5,7 @@
  * Share screen, application window, or browser tab
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaDesktop, FaStop, FaCog, FaTimes, FaExpand, FaCompress } from 'react-icons/fa';
 
 const ScreenShareModal = ({

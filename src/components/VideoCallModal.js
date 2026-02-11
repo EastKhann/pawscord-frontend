@@ -5,7 +5,7 @@
  * Direct video call between two users
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaVideo, FaVideoSlash, FaMicrophone, FaMicrophoneSlash, FaPhone, FaExpand, FaCompress, FaCog, FaTimes } from 'react-icons/fa';
 
 const VideoCallModal = ({

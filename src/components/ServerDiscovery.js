@@ -3,7 +3,7 @@
  * 🔍 SERVER DISCOVERY - Public server discovery system
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaSearch, FaStar, FaCheckCircle, FaUsers, FaGlobe, FaFire } from 'react-icons/fa';
 

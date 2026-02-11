@@ -1,5 +1,5 @@
 // frontend/src/components/SessionManagerModal.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaDesktop, FaMobile, FaTablet, FaTrash, FaCircle } from 'react-icons/fa';
 

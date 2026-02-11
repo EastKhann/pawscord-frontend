@@ -2,12 +2,12 @@
 // 🎬 VIDEO STREAMING - Lazy loaded video components
 // dash.all.min.js (988KB) + hls.js (520KB) sadece video oynatılırken yüklenir
 
-import React, { lazy, Suspense, useState, useCallback, memo } from 'react';
+import { lazy, Suspense, useState, useCallback, memo } from 'react';
 
 // ⚡ ULTRA LAZY: Video player'lar sadece kullanıcı tıkladığında yüklenir
-const DashPlayer = lazy(() => import(/* webpackChunkName: "video-dash" */ './DashPlayer'));
-const HLSPlayer = lazy(() => import(/* webpackChunkName: "video-hls" */ './HLSPlayer'));
-const NativePlayer = lazy(() => import(/* webpackChunkName: "video-native" */ './NativePlayer'));
+const DashPlayer = lazy(() => import('./DashPlayer'));
+const HLSPlayer = lazy(() => import('./HLSPlayer'));
+const NativePlayer = lazy(() => import('./NativePlayer'));
 
 // Video Loading Placeholder
 const VideoPlaceholder = memo(({ onClick, thumbnail, duration }) => (

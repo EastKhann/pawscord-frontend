@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaStar, FaTimes, FaPlus, FaEdit, FaTrash, FaGripVertical,
     FaGamepad, FaTrophy, FaPalette, FaLink, FaMusic, FaImage,

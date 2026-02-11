@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './GiftPremiumPanel.css';
 import { FaGift, FaCrown, FaUser } from 'react-icons/fa';
 

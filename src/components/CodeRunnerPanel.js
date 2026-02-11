@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaCode, FaTimes, FaPlay, FaStop, FaCopy, FaTrash, FaDownload,
     FaHistory, FaSave, FaFolder, FaPlus, FaTerminal, FaClock,

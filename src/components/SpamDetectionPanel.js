@@ -1,7 +1,7 @@
 // frontend/src/components/SpamDetectionPanel.js
 // 🛡️ ML-Based Spam Detection System - Full Implementation
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     FaShieldAlt, FaRobot, FaBan, FaExclamationTriangle,
     FaCheck, FaTimes, FaCog, FaChartBar, FaHistory,

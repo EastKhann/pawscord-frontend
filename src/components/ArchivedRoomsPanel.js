@@ -1,5 +1,5 @@
 // frontend/src/components/ArchivedRoomsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaArchive, FaUndo, FaTrash, FaClock } from 'react-icons/fa';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';

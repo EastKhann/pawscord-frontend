@@ -1,7 +1,7 @@
 // frontend/src/components/AccountDeletionModal.js
 // 🗑️ Account Deletion Confirmation Modal - Full Implementation
 
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { FaExclamationTriangle, FaTimes, FaTrash, FaLock, FaSpinner } from 'react-icons/fa';
 import toast from '../utils/toast';
 

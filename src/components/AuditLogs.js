@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './AuditLogs.css';
 import { FaHistory, FaTimes, FaFilter, FaSearch, FaUserShield, FaTrash, FaEdit, FaPlus, FaBan } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';

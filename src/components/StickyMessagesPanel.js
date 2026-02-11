@@ -1,5 +1,5 @@
 // frontend/src/components/StickyMessagesPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaThumbtack, FaPlus, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 

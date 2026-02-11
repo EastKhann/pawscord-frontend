@@ -5,7 +5,7 @@
  * Monaco Editor + WebSocket real-time collaboration
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaCode, FaPlay, FaSave, FaUsers, FaCopy, FaDownload } from 'react-icons/fa';
 import toast from '../utils/toast';
 

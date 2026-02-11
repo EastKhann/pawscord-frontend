@@ -1,5 +1,5 @@
 // frontend/src/components/AuditLogViewer.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaHistory, FaFilter } from 'react-icons/fa';
 
 const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {

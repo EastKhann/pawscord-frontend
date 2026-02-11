@@ -1,5 +1,5 @@
 // frontend/src/components/BotDeveloperPortal.js - Complete Bot Development Portal
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
     FaRobot, FaPlus, FaCog, FaTrash, FaEdit, FaKey, FaCopy,
     FaChartLine, FaCode, FaLink, FaServer, FaCheck, FaTimes,

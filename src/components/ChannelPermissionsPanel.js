@@ -1,5 +1,5 @@
 // frontend/src/components/ChannelPermissionsPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaLock, FaUnlock, FaSave, FaTrash, FaUserShield } from 'react-icons/fa';
 import toast from '../utils/toast';
 

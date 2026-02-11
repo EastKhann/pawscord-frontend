@@ -1,6 +1,6 @@
 // frontend/src/UserProfileModal.js
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import toast from './utils/toast';
 import { FaUserPlus, FaCheck, FaCoins, FaDesktop, FaClock, FaStickyNote } from 'react-icons/fa';

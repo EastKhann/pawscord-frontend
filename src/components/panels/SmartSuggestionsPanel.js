@@ -1,7 +1,7 @@
 // frontend/src/components/panels/SmartSuggestionsPanel.js
 // 🤖 Smart Suggestions - AI-powered message and action suggestions
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     FaTimes, FaRobot, FaLightbulb, FaReply, FaSmile,
     FaHashtag, FaUserPlus, FaCopy, FaMagic, FaHistory,

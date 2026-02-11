@@ -1,6 +1,6 @@
 // frontend/src/EnglishLearningPage.js (GENEL TOPLAM İLERLEME EKLENDİ)
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaTrophy, FaRedo, FaCheckDouble } from 'react-icons/fa';
 import { QUESTIONS_DB, LEVELS } from './data/grammarQuestions';

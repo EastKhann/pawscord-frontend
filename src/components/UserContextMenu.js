@@ -1,5 +1,5 @@
 // frontend/src/components/UserContextMenu.js
-import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import ReactDOM from 'react-dom'; // 🔥 Portal için
 import { FaUser, FaComments, FaVolumeUp, FaArrowRight, FaBan, FaUserShield, FaVolumeMute, FaEyeSlash, FaTrash, FaThumbtack } from 'react-icons/fa';
 

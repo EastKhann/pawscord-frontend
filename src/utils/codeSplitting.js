@@ -1,7 +1,7 @@
 // frontend/src/utils/codeSplitting.js
 // 📦 CODE SPLITTING & LAZY LOADING UTILITY
 
-import React, { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 
 /**
  * 🎯 Lazy Load Component Wrapper

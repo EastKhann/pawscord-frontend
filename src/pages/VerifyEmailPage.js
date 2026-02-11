@@ -1,5 +1,5 @@
 // frontend/src/pages/VerifyEmailPage.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
 

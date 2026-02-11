@@ -1,11 +1,11 @@
 // frontend/src/components/Message/MessageMedia.js
 // 🎬 MESSAGE MEDIA - Images, Videos, Files, Voice messages
 
-import React, { memo, lazy, Suspense, useState, useEffect, useRef } from 'react';
+import { memo, lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { FaDownload } from 'react-icons/fa';
 
 // Lazy load heavy components
-const VoiceMessagePlayer = lazy(() => import(/* webpackChunkName: "media" */ '../VoiceMessagePlayer'));
+const VoiceMessagePlayer = lazy(() => import('../VoiceMessagePlayer'));
 
 // Lazy Video Component
 export const LazyVideo = memo(({ src, style }) => {

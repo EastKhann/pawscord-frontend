@@ -2,7 +2,7 @@
 // 📅 FEATURE 6: Message Date Divider
 // Groups messages by date with visual separator
 
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 const formatDateLabel = (dateStr) => {
     const date = new Date(dateStr);

@@ -9,30 +9,30 @@
 // Route chunks
 export const RouteChunks = {
   // Auth pages (bunlar pages/ altında)
-  verifyEmail: () => import(/* webpackChunkName: "auth" */ '../pages/VerifyEmailPage'),
-  forgotPassword: () => import(/* webpackChunkName: "auth" */ '../pages/ForgotPasswordPage'),
-  resetPassword: () => import(/* webpackChunkName: "auth" */ '../pages/ResetPasswordPage'),
-  twoFactor: () => import(/* webpackChunkName: "auth" */ '../pages/TwoFactorLoginPage'),
+  verifyEmail: () => import('../pages/VerifyEmailPage'),
+  forgotPassword: () => import('../pages/ForgotPasswordPage'),
+  resetPassword: () => import('../pages/ResetPasswordPage'),
+  twoFactor: () => import('../pages/TwoFactorLoginPage'),
 
   // Main pages (bunlar src/ altında direkt)
-  login: () => import(/* webpackChunkName: "auth" */ '../LoginPage'),
-  welcome: () => import(/* webpackChunkName: "home" */ '../WelcomeScreen'),
+  login: () => import('../LoginPage'),
+  welcome: () => import('../WelcomeScreen'),
 
   // Admin
-  analytics: () => import(/* webpackChunkName: "admin" */ '../components/AdminAnalyticsPanel'),
-  analyticsMain: () => import(/* webpackChunkName: "admin" */ '../AnalyticsDashboard'),
+  analytics: () => import('../components/AdminAnalyticsPanel'),
+  analyticsMain: () => import('../AnalyticsDashboard'),
 
   // Special features
-  crypto: () => import(/* webpackChunkName: "features" */ '../CryptoChartModal'),
-  cryptoDashboard: () => import(/* webpackChunkName: "features" */ '../CryptoDashboard'),
-  englishLearn: () => import(/* webpackChunkName: "features" */ '../EnglishLearningPage'),
-  englishHub: () => import(/* webpackChunkName: "features" */ '../EnglishHub'),
-  kanban: () => import(/* webpackChunkName: "features" */ '../components/KanbanBoard'),
+  crypto: () => import('../CryptoChartModal'),
+  cryptoDashboard: () => import('../CryptoDashboard'),
+  englishLearn: () => import('../EnglishLearningPage'),
+  englishHub: () => import('../EnglishHub'),
+  kanban: () => import('../components/KanbanBoard'),
 
   // Premium
-  premiumStore: () => import(/* webpackChunkName: "premium" */ '../components/PremiumStoreModal'),
-  themeStore: () => import(/* webpackChunkName: "premium" */ '../components/ThemeStoreModal'),
-  cryptoStore: () => import(/* webpackChunkName: "premium" */ '../components/CryptoStoreModal'),
+  premiumStore: () => import('../components/PremiumStoreModal'),
+  themeStore: () => import('../components/ThemeStoreModal'),
+  cryptoStore: () => import('../components/CryptoStoreModal'),
 };
 
 /**
@@ -41,24 +41,24 @@ export const RouteChunks = {
  */
 export const ComponentChunks = {
   // Modals (heavy)
-  serverSettings: () => import(/* webpackChunkName: "modals" */ '../components/ServerSettingsModal'),
-  userProfile: () => import(/* webpackChunkName: "modals" */ '../UserProfileModal'),
-  imageModal: () => import(/* webpackChunkName: "modals" */ '../ImageModal'),
+  serverSettings: () => import('../components/ServerSettingsModal'),
+  userProfile: () => import('../UserProfileModal'),
+  imageModal: () => import('../ImageModal'),
 
   // Media
-  gifPicker: () => import(/* webpackChunkName: "media" */ '../GifPicker'),
-  stickerPicker: () => import(/* webpackChunkName: "media" */ '../StickerPicker'),
-  soundboard: () => import(/* webpackChunkName: "media" */ '../components/SoundboardModal'),
+  gifPicker: () => import('../GifPicker'),
+  stickerPicker: () => import('../StickerPicker'),
+  soundboard: () => import('../components/SoundboardModal'),
 
   // Communication
-  watchParty: () => import(/* webpackChunkName: "communication" */ '../components/WatchPartyEnhanced'),
-  cinema: () => import(/* webpackChunkName: "communication" */ '../CinemaModal'),
-  whiteboard: () => import(/* webpackChunkName: "communication" */ '../components/WhiteboardModal'),
+  watchParty: () => import('../components/WatchPartyEnhanced'),
+  cinema: () => import('../CinemaModal'),
+  whiteboard: () => import('../components/WhiteboardModal'),
 
   // Tools
-  poll: () => import(/* webpackChunkName: "tools" */ '../components/PollCreateModal'),
-  codeSnippet: () => import(/* webpackChunkName: "tools" */ '../components/CodeSnippetModal'),
-  messageTemplate: () => import(/* webpackChunkName: "tools" */ '../components/MessageTemplateModal'),
+  poll: () => import('../components/PollCreateModal'),
+  codeSnippet: () => import('../components/CodeSnippetModal'),
+  messageTemplate: () => import('../components/MessageTemplateModal'),
 };
 
 /**

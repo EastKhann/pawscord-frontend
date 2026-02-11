@@ -1,5 +1,5 @@
 // frontend/src/components/TwoFactorPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaShieldAlt, FaKey, FaCopy, FaCheck, FaQrcode, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './TwoFactorPanel.css';

@@ -1,5 +1,5 @@
 // frontend/src/components/BotBuilder.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import toast from '../utils/toast';
 import axios from 'axios';
 import { FaRobot, FaPlus, FaTrash, FaCode, FaSave, FaPlay } from 'react-icons/fa';

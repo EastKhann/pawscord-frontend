@@ -1,5 +1,5 @@
 // frontend/src/components/NotificationPreferencesPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaBell, FaToggleOn, FaToggleOff, FaClock } from 'react-icons/fa';
 import toast from '../utils/toast';
 

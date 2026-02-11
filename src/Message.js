@@ -12,19 +12,19 @@ import LazyImage from './components/LazyImage'; // 🚀 PERFORMANS: Lazy loading
 import { useCachedImage } from './utils/imageCaching'; // ⚡ OPTIMIZATION: Image caching
 
 // ⚡ OPTIMIZATION: Lazy load heavy components (not needed immediately)
-const ReactionPicker = lazy(() => import(/* webpackChunkName: "message-ui" */ './ReactionPicker'));
-const LinkPreview = lazy(() => import(/* webpackChunkName: "message-ui" */ './LinkPreview'));
-const CodeBlock = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/CodeBlock'));
-const Spoiler = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/Spoiler'));
-const VoiceMessagePlayer = lazy(() => import(/* webpackChunkName: "media" */ './components/VoiceMessagePlayer'));
-const TicTacToe = lazy(() => import(/* webpackChunkName: "games" */ './components/TicTacToe'));
-const FileCodePreview = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/FileCodePreview'));
-const BookmarkButton = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/BookmarkButton').then(m => ({ default: m.BookmarkButton })));
-const StarButton = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/BookmarkButton').then(m => ({ default: m.StarButton })));
-const ReadLaterButton = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/BookmarkButton').then(m => ({ default: m.ReadLaterButton })));
-const ReminderModal = lazy(() => import(/* webpackChunkName: "modals" */ './components/ReminderModal'));
-const MessageThreads = lazy(() => import(/* webpackChunkName: "message-ui" */ './components/MessageThreads'));
-const GameMessage = lazy(() => import(/* webpackChunkName: "games" */ './components/GameMessage'));
+const ReactionPicker = lazy(() => import('./ReactionPicker'));
+const LinkPreview = lazy(() => import('./LinkPreview'));
+const CodeBlock = lazy(() => import('./components/CodeBlock'));
+const Spoiler = lazy(() => import('./components/Spoiler'));
+const VoiceMessagePlayer = lazy(() => import('./components/VoiceMessagePlayer'));
+const TicTacToe = lazy(() => import('./components/TicTacToe'));
+const FileCodePreview = lazy(() => import('./components/FileCodePreview'));
+const BookmarkButton = lazy(() => import('./components/BookmarkButton').then(m => ({ default: m.BookmarkButton })));
+const StarButton = lazy(() => import('./components/BookmarkButton').then(m => ({ default: m.StarButton })));
+const ReadLaterButton = lazy(() => import('./components/BookmarkButton').then(m => ({ default: m.ReadLaterButton })));
+const ReminderModal = lazy(() => import('./components/ReminderModal'));
+const MessageThreads = lazy(() => import('./components/MessageThreads'));
+const GameMessage = lazy(() => import('./components/GameMessage'));
 
 // 🔥 File Code Preview utility
 import { isCodeFile } from './components/FileCodePreview';

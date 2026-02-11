@@ -1,5 +1,5 @@
 // frontend/src/components/WelcomeTemplatesPanel.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaEnvelope, FaSave, FaEye } from 'react-icons/fa';
 import toast from '../utils/toast';
 

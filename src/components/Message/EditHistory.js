@@ -1,7 +1,7 @@
 // frontend/src/components/Message/EditHistory.js
 // 📜 EDIT HISTORY - Shows message edit history dropdown
 
-import React, { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 
 export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAuth }) => {
     const [history, setHistory] = useState([]);

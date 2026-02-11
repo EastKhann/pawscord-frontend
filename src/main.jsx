@@ -1,5 +1,8 @@
 // frontend/src/index.js
 
+// 🔇 Console cleanup — silences noisy logs in production, filters spam in dev
+import './utils/consoleCleanup';
+
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';

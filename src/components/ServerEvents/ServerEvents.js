@@ -6,7 +6,7 @@
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
     FaCalendarAlt, FaPlus, FaClock, FaMapMarkerAlt, FaUsers,
     FaCheck, FaStar, FaTimes, FaChevronLeft, FaChevronRight,

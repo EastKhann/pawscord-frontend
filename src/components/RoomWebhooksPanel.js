@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes, FaLink, FaPlus, FaTrash, FaHistory, FaRedo, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 

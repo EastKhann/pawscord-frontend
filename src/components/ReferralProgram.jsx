@@ -1,5 +1,5 @@
 // Referral Program Component
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from '../utils/toast';
 import './ReferralProgram.css';
