@@ -23,8 +23,14 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/welcome/`);
                 if (res.ok) {
                     const data = await res.json();
-                    setTemplate(data.template || '');
-                    setEnabled(data.enabled || false);
+                    // Yeni config formatını destekle + eski format uyumu
+                    if (data.config) {
+                        setTemplate(data.config.welcome_message || data.template || '');
+                        setEnabled(data.config.welcome_enabled ?? data.enabled ?? false);
+                    } else {
+                        setTemplate(data.template || '');
+                        setEnabled(data.enabled || false);
+                    }
                 }
             } catch (e) {
                 console.error('Welcome template load error:', e);
@@ -39,11 +45,15 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     useEffect(() => {
         if (!template) { setPreview(''); return; }
         let p = template
+            .replace(/\{user\}/g, 'Kullanıcı')
+            .replace(/\{user_mention\}/g, '@Kullanıcı')
+            .replace(/\{server\}/g, 'Sunucu')
+            .replace(/\{member_count\}/g, '42')
+            .replace(/\{user_id\}/g, '1')
+            // Eski format uyumluluğu
             .replace(/\{username\}/g, 'Kullanıcı')
             .replace(/\{mention\}/g, '@Kullanıcı')
-            .replace(/\{server\}/g, 'Sunucu')
             .replace(/\{memberCount\}/g, '42')
-            .replace(/\{inviter\}/g, 'Davetçi')
             .replace(/\{date\}/g, new Date().toLocaleDateString('tr-TR'));
         setPreview(p);
     }, [template]);
@@ -57,7 +67,9 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 body: JSON.stringify({
                     server_id: serverId,
                     template,
-                    enabled
+                    welcome_message: template,
+                    enabled,
+                    welcome_enabled: enabled
                 })
             });
             if (res.ok) {
@@ -75,12 +87,10 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     };
 
     const variables = [
-        { key: '{username}', label: 'Kullanıcı Adı' },
-        { key: '{mention}', label: '@Etiket' },
+        { key: '{user}', label: 'Kullanıcı Adı' },
+        { key: '{user_mention}', label: '@Etiket' },
         { key: '{server}', label: 'Sunucu Adı' },
-        { key: '{memberCount}', label: 'Üye Sayısı' },
-        { key: '{inviter}', label: 'Davet Eden' },
-        { key: '{date}', label: 'Tarih' }
+        { key: '{member_count}', label: 'Üye Sayısı' },
     ];
 
     if (loading) return <div style={{ padding: '20px', color: '#b9bbbe', textAlign: 'center' }}>Yükleniyor...</div>;
@@ -217,6 +227,8 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
     const [isRenamingServer, setIsRenamingServer] = useState(false);
     const [serverDescription, setServerDescription] = useState(server.description || '');
     const [isSavingDescription, setIsSavingDescription] = useState(false);
+    const [defaultChannelSlug, setDefaultChannelSlug] = useState(server.metadata?.default_channel_slug || '');
+    const [isSavingDefaultChannel, setIsSavingDefaultChannel] = useState(false);
 
     // 🔇 Mute durumunu backend'den yükle
     useEffect(() => {
@@ -431,6 +443,30 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
             toast.error('Açıklama kaydedilirken bir hata oluştu.');
         } finally {
             setIsSavingDescription(false);
+        }
+    };
+
+    // 🆕 Varsayılan kanal kaydetme
+    const handleSaveDefaultChannel = async () => {
+        setIsSavingDefaultChannel(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/default-channel/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ channel_slug: defaultChannelSlug })
+            });
+            if (res.ok) {
+                toast.success('Varsayılan kanal güncellendi!');
+                if (onRefreshServers) onRefreshServers();
+            } else {
+                const data = await res.json().catch(() => ({}));
+                toast.error(data.error || 'Varsayılan kanal kaydedilemedi.');
+            }
+        } catch (e) {
+            console.error('Default channel hatası:', e);
+            toast.error('Varsayılan kanal kaydedilirken bir hata oluştu.');
+        } finally {
+            setIsSavingDefaultChannel(false);
         }
     };
 
@@ -895,6 +931,58 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                                     {server.is_public ? <FaLock /> : <FaGlobe />}
                                                     {server.is_public ? ' Özel Yap' : ' Herkese Açık Yap'}
                                                 </button>
+                                            </div>
+
+                                            {/* 🆕 Varsayılan Kanal Seçimi */}
+                                            <div style={styles.settingBox}>
+                                                <div style={styles.settingInfo}>
+                                                    <div style={styles.settingLabel}>
+                                                        <FaComments style={{ marginRight: '8px' }} />
+                                                        Varsayılan Kanal
+                                                    </div>
+                                                    <div style={styles.settingDesc}>
+                                                        Kullanıcılar sunucuya girdiğinde ilk gösterilecek kanal
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                    <select
+                                                        value={defaultChannelSlug}
+                                                        onChange={(e) => setDefaultChannelSlug(e.target.value)}
+                                                        style={{
+                                                            padding: '10px 14px',
+                                                            backgroundColor: '#1e1f22',
+                                                            border: '1px solid #40444b',
+                                                            borderRadius: '8px',
+                                                            color: '#dcddde',
+                                                            fontSize: '14px',
+                                                            outline: 'none',
+                                                            width: '220px',
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        <option value="">Otomatik (İlk metin kanalı)</option>
+                                                        {server.categories?.map(cat =>
+                                                            cat.rooms?.filter(r => r.room_type !== 'voice' && r.channel_type !== 'voice')
+                                                                .map(room => (
+                                                                    <option key={room.slug} value={room.slug}>
+                                                                        # {room.name}
+                                                                    </option>
+                                                                ))
+                                                        )}
+                                                    </select>
+                                                    <button
+                                                        onClick={handleSaveDefaultChannel}
+                                                        disabled={isSavingDefaultChannel || defaultChannelSlug === (server.metadata?.default_channel_slug || '')}
+                                                        style={{
+                                                            ...styles.actionBtn,
+                                                            backgroundColor: defaultChannelSlug !== (server.metadata?.default_channel_slug || '') ? '#5865f2' : '#4e5058',
+                                                            opacity: isSavingDefaultChannel || defaultChannelSlug === (server.metadata?.default_channel_slug || '') ? 0.5 : 1,
+                                                            cursor: isSavingDefaultChannel || defaultChannelSlug === (server.metadata?.default_channel_slug || '') ? 'not-allowed' : 'pointer'
+                                                        }}
+                                                    >
+                                                        {isSavingDefaultChannel ? '...' : 'Kaydet'}
+                                                    </button>
+                                                </div>
                                             </div>
 
                                             <div style={styles.divider}></div>
