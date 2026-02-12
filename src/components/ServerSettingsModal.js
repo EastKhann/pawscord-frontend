@@ -1,7 +1,7 @@
 // frontend/src/components/ServerSettingsModal.js
 
 import { useState, useEffect, useCallback } from 'react';
-import { FaTimes, FaPlus, FaCheck, FaPalette, FaUsers, FaShieldAlt, FaEdit, FaTrash, FaCog, FaVolumeUp, FaVolumeMute, FaRobot, FaLink, FaHandPaper, FaImage, FaLock, FaGlobe, FaChartBar, FaHistory, FaExclamationTriangle, FaBan, FaClock, FaUserSlash, FaFileAlt, FaUserShield, FaComments, FaBell, FaEye, FaStar, FaCrown, FaGavel } from 'react-icons/fa';
+import { FaTimes, FaPlus, FaCheck, FaPalette, FaUsers, FaShieldAlt, FaEdit, FaTrash, FaCog, FaVolumeUp, FaVolumeMute, FaRobot, FaLink, FaHandPaper, FaImage, FaLock, FaGlobe, FaChartBar, FaHistory, FaExclamationTriangle, FaBan, FaClock, FaUserSlash, FaFileAlt, FaUserShield, FaComments, FaBell, FaEye, FaStar, FaCrown, FaGavel, FaSearch, FaUndo, FaChartLine, FaChartPie, FaUserClock, FaHashtag, FaCalendarAlt } from 'react-icons/fa';
 import { ChromePicker } from 'react-color';
 import toast from '../utils/toast';
 import ServerMembers from './ServerMembers';
@@ -381,6 +381,98 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
     const [defaultChannelSlug, setDefaultChannelSlug] = useState(server.metadata?.default_channel_slug || '');
     const [isSavingDefaultChannel, setIsSavingDefaultChannel] = useState(false);
 
+    // Audit Log state
+    const [auditLogs, setAuditLogs] = useState([]);
+    const [auditLoading, setAuditLoading] = useState(false);
+    const [auditFilter, setAuditFilter] = useState('');
+
+    // Ban Management state
+    const [bans, setBans] = useState([]);
+    const [bansLoading, setBansLoading] = useState(false);
+
+    // Server Stats state
+    const [serverStats, setServerStats] = useState(null);
+    const [statsLoading, setStatsLoading] = useState(false);
+
+    // Load audit logs
+    const loadAuditLogs = useCallback(async (filter = '') => {
+        setAuditLoading(true);
+        try {
+            const url = filter
+                ? `${apiBaseUrl}/audit-logs/?action_type=${filter}&limit=100`
+                : `${apiBaseUrl}/audit-logs/?limit=100`;
+            const res = await fetchWithAuth(url);
+            if (res.ok) {
+                const data = await res.json();
+                setAuditLogs(Array.isArray(data) ? data : []);
+            }
+        } catch (e) {
+            console.error('Audit log load error:', e);
+        } finally {
+            setAuditLoading(false);
+        }
+    }, [fetchWithAuth, apiBaseUrl]);
+
+    // Load bans
+    const loadBans = useCallback(async () => {
+        setBansLoading(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/bans/`);
+            if (res.ok) {
+                const data = await res.json();
+                setBans(data.bans || []);
+            }
+        } catch (e) {
+            console.error('Ban list load error:', e);
+        } finally {
+            setBansLoading(false);
+        }
+    }, [fetchWithAuth, apiBaseUrl, server.id]);
+
+    // Load server stats
+    const loadServerStats = useCallback(async () => {
+        setStatsLoading(true);
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/stats/overview/`);
+            if (res.ok) {
+                const data = await res.json();
+                setServerStats(data);
+            }
+        } catch (e) {
+            console.error('Stats load error:', e);
+        } finally {
+            setStatsLoading(false);
+        }
+    }, [fetchWithAuth, apiBaseUrl, server.id]);
+
+    // Auto-load data when tab changes
+    useEffect(() => {
+        if (activeTab === 'auditlog') loadAuditLogs(auditFilter);
+        if (activeTab === 'bans') loadBans();
+        if (activeTab === 'stats') loadServerStats();
+    }, [activeTab]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Unban handler
+    const handleUnban = async (username) => {
+        if (!await confirmDialog(`${username} kullanıcısının yasağını kaldırmak istediğinize emin misiniz?`)) return;
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/moderation/unban/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, server_id: server.id })
+            });
+            if (res.ok) {
+                toast.success(`${username} yasağı kaldırıldı!`);
+                loadBans();
+            } else {
+                const data = await res.json().catch(() => ({}));
+                toast.error(data.error || 'İşlem başarısız');
+            }
+        } catch (e) {
+            toast.error('Yasak kaldırılırken bir hata oluştu');
+        }
+    };
+
     // 🔇 Mute durumunu backend'den yükle
     useEffect(() => {
         const loadMuteStatus = async () => {
@@ -714,6 +806,22 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                 <button className={`ss-nav-item${activeTab === 'moderation' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'moderation' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('moderation')}>
                                     <FaGavel style={styles.navIcon} /> Moderasyon
                                 </button>
+                                <button className={`ss-nav-item${activeTab === 'bans' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'bans' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('bans')}>
+                                    <FaBan style={styles.navIcon} /> Ban Yönetimi
+                                </button>
+                                <button className={`ss-nav-item${activeTab === 'auditlog' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'auditlog' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('auditlog')}>
+                                    <FaHistory style={styles.navIcon} /> Audit Log
+                                </button>
+                            </div>
+
+                            <div style={styles.navDivider} />
+
+                            {/* Analitik Section */}
+                            <div style={styles.navSection}>
+                                <span style={styles.navSectionLabel}>ANALİTİK</span>
+                                <button className={`ss-nav-item${activeTab === 'stats' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'stats' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('stats')}>
+                                    <FaChartBar style={styles.navIcon} /> İstatistikler
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -730,6 +838,9 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                 {activeTab === 'vanity' && '🔗 Özel Davet URL'}
                                 {activeTab === 'welcome' && '👋 Hoş Geldin Mesajı'}
                                 {activeTab === 'moderation' && '🛡️ Moderasyon'}
+                                {activeTab === 'bans' && '🚫 Ban Yönetimi'}
+                                {activeTab === 'auditlog' && '📜 Audit Log'}
+                                {activeTab === 'stats' && '📊 Sunucu İstatistikleri'}
                             </h2>
                             <button className="ss-close-btn" onClick={onClose} style={styles.closeBtn}><FaTimes size={20} /></button>
                         </div>
@@ -816,6 +927,10 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                             <label style={styles.permLabel}>
                                                 <input type="checkbox" checked={permissions.can_delete_messages || false} onChange={e => setPermissions({ ...permissions, can_delete_messages: e.target.checked })} />
                                                 Mesajları Sil
+                                            </label>
+                                            <label style={styles.permLabel}>
+                                                <input type="checkbox" checked={permissions.can_manage_roles || false} onChange={e => setPermissions({ ...permissions, can_manage_roles: e.target.checked })} />
+                                                Rolleri Yönet (Oluştur/Düzenle/Sil)
                                             </label>
                                             <label style={styles.permLabel}>
                                                 <input type="checkbox" checked={permissions.can_ban_members || false} onChange={e => setPermissions({ ...permissions, can_ban_members: e.target.checked })} />
@@ -1518,6 +1633,344 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                             </button>
                                         </div>
                                     </div>
+                                </div>
+                            )}
+
+                            {/* 🚫 BAN YÖNETİMİ TAB */}
+                            {activeTab === 'bans' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', backgroundColor: '#1e1f22', borderRadius: '12px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <FaBan style={{ fontSize: '24px', color: '#ed4245' }} />
+                                            <div>
+                                                <h3 style={{ margin: 0, color: '#fff', fontSize: '16px' }}>Yasaklı Kullanıcılar</h3>
+                                                <p style={{ margin: '2px 0 0', color: '#b9bbbe', fontSize: '12px' }}>
+                                                    {bans.length} yasaklı kullanıcı
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <button onClick={loadBans} style={{ ...styles.actionBtn, backgroundColor: '#5865f2', padding: '8px 16px', fontSize: '13px' }}>
+                                            <FaUndo /> Yenile
+                                        </button>
+                                    </div>
+
+                                    {bansLoading ? (
+                                        <div style={{ textAlign: 'center', color: '#b9bbbe', padding: '40px' }}>Yükleniyor...</div>
+                                    ) : bans.length === 0 ? (
+                                        <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#2b2d31', borderRadius: '12px' }}>
+                                            <FaCheck style={{ fontSize: '48px', color: '#43b581', marginBottom: '16px' }} />
+                                            <h4 style={{ color: '#fff', margin: '0 0 8px' }}>Temiz!</h4>
+                                            <p style={{ color: '#b9bbbe', fontSize: '14px' }}>Henüz yasaklanmış kullanıcı yok.</p>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            {bans.map(ban => (
+                                                <div key={ban.id} style={{
+                                                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                                    padding: '14px 18px', backgroundColor: '#2b2d31', borderRadius: '8px',
+                                                    border: '1px solid #1e1f22', transition: 'background-color 0.15s'
+                                                }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                        <div style={{
+                                                            width: '36px', height: '36px', borderRadius: '50%',
+                                                            backgroundColor: '#ed4245', display: 'flex', alignItems: 'center',
+                                                            justifyContent: 'center', color: '#fff', fontWeight: '700', fontSize: '14px'
+                                                        }}>
+                                                            {ban.username?.[0]?.toUpperCase() || '?'}
+                                                        </div>
+                                                        <div>
+                                                            <div style={{ color: '#fff', fontWeight: '600', fontSize: '14px' }}>{ban.username}</div>
+                                                            <div style={{ color: '#72767d', fontSize: '12px', marginTop: '2px' }}>
+                                                                {ban.reason || 'Sebep belirtilmemiş'} • Yasaklayan: {ban.banned_by || 'Sistem'}
+                                                            </div>
+                                                            <div style={{ color: '#4e5058', fontSize: '11px', marginTop: '2px' }}>
+                                                                <FaCalendarAlt style={{ marginRight: '4px', fontSize: '10px' }} />
+                                                                {ban.created_at ? new Date(ban.created_at).toLocaleDateString('tr-TR', {
+                                                                    year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                                                                }) : 'Tarih yok'}
+                                                                {ban.expires_at && !ban.is_permanent && (
+                                                                    <span style={{ marginLeft: '8px', color: '#faa61a' }}>
+                                                                        ⏰ Bitiş: {new Date(ban.expires_at).toLocaleDateString('tr-TR')}
+                                                                    </span>
+                                                                )}
+                                                                {ban.is_permanent && (
+                                                                    <span style={{ marginLeft: '8px', color: '#ed4245' }}>♾️ Kalıcı</span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => handleUnban(ban.username)}
+                                                        style={{
+                                                            padding: '8px 14px', backgroundColor: 'transparent',
+                                                            border: '1px solid #43b581', borderRadius: '6px',
+                                                            color: '#43b581', cursor: 'pointer', fontWeight: '600',
+                                                            fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px',
+                                                            transition: 'all 0.15s'
+                                                        }}
+                                                        onMouseEnter={(e) => { e.target.style.backgroundColor = '#43b581'; e.target.style.color = '#fff'; }}
+                                                        onMouseLeave={(e) => { e.target.style.backgroundColor = 'transparent'; e.target.style.color = '#43b581'; }}
+                                                    >
+                                                        <FaUndo /> Yasağı Kaldır
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* 📜 AUDIT LOG TAB */}
+                            {activeTab === 'auditlog' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', backgroundColor: '#1e1f22', borderRadius: '12px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <FaHistory style={{ fontSize: '24px', color: '#7289da' }} />
+                                            <div>
+                                                <h3 style={{ margin: 0, color: '#fff', fontSize: '16px' }}>Aksiyon Geçmişi</h3>
+                                                <p style={{ margin: '2px 0 0', color: '#b9bbbe', fontSize: '12px' }}>
+                                                    Tüm moderatör ve admin aksiyonları
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <select
+                                                value={auditFilter}
+                                                onChange={(e) => { setAuditFilter(e.target.value); loadAuditLogs(e.target.value); }}
+                                                style={{
+                                                    padding: '8px 12px', backgroundColor: '#2b2d31', border: '1px solid #40444b',
+                                                    borderRadius: '6px', color: '#dcddde', fontSize: '12px', outline: 'none', cursor: 'pointer'
+                                                }}
+                                            >
+                                                <option value="">Tüm Aksiyonlar</option>
+                                                <option value="BAN">Yasaklama</option>
+                                                <option value="UNBAN">Yasak Kaldırma</option>
+                                                <option value="KICK">Atma</option>
+                                                <option value="ROLE_CHANGE">Rol Değişikliği</option>
+                                                <option value="CHANNEL_CREATE">Kanal Oluşturma</option>
+                                                <option value="CHANNEL_DELETE">Kanal Silme</option>
+                                                <option value="MESSAGE_DELETE">Mesaj Silme</option>
+                                                <option value="SERVER_UPDATE">Sunucu Güncelleme</option>
+                                                <option value="EMAIL_VERIFIED">E-posta Doğrulama</option>
+                                            </select>
+                                            <button onClick={() => loadAuditLogs(auditFilter)} style={{ ...styles.actionBtn, backgroundColor: '#5865f2', padding: '8px 14px', fontSize: '12px' }}>
+                                                <FaUndo />
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {auditLoading ? (
+                                        <div style={{ textAlign: 'center', color: '#b9bbbe', padding: '40px' }}>Yükleniyor...</div>
+                                    ) : auditLogs.length === 0 ? (
+                                        <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#2b2d31', borderRadius: '12px' }}>
+                                            <FaHistory style={{ fontSize: '48px', color: '#4e5058', marginBottom: '16px' }} />
+                                            <h4 style={{ color: '#fff', margin: '0 0 8px' }}>Kayıt Yok</h4>
+                                            <p style={{ color: '#b9bbbe', fontSize: '14px' }}>Henüz kayıtlı aksiyon bulunamadı.</p>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                            {auditLogs.map((log, idx) => {
+                                                const actionColors = {
+                                                    'BAN': '#ed4245', 'UNBAN': '#43b581', 'KICK': '#faa61a',
+                                                    'MESSAGE_DELETE': '#f47b67', 'ROLE_CHANGE': '#5865f2',
+                                                    'CHANNEL_CREATE': '#43b581', 'CHANNEL_DELETE': '#ed4245',
+                                                    'SERVER_UPDATE': '#7289da', 'EMAIL_VERIFIED': '#43b581'
+                                                };
+                                                const actionColor = actionColors[log.action_type] || '#b9bbbe';
+                                                return (
+                                                    <div key={log.id || idx} style={{
+                                                        display: 'flex', alignItems: 'center', gap: '12px',
+                                                        padding: '12px 16px', backgroundColor: '#2b2d31',
+                                                        borderRadius: '6px', borderLeft: `3px solid ${actionColor}`,
+                                                    }}>
+                                                        <div style={{
+                                                            width: '8px', height: '8px', borderRadius: '50%',
+                                                            backgroundColor: actionColor, flexShrink: 0
+                                                        }} />
+                                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                                                <span style={{ color: '#fff', fontWeight: '600', fontSize: '13px' }}>
+                                                                    {log.actor_username || log.actor || 'Sistem'}
+                                                                </span>
+                                                                <span style={{
+                                                                    backgroundColor: `${actionColor}22`, color: actionColor,
+                                                                    padding: '2px 8px', borderRadius: '10px', fontSize: '11px', fontWeight: '600'
+                                                                }}>
+                                                                    {log.action_type}
+                                                                </span>
+                                                            </div>
+                                                            {log.details && (
+                                                                <div style={{ color: '#72767d', fontSize: '12px', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                                    {typeof log.details === 'object' ? JSON.stringify(log.details).substring(0, 120) : String(log.details).substring(0, 120)}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div style={{ color: '#4e5058', fontSize: '11px', flexShrink: 0, whiteSpace: 'nowrap' }}>
+                                                            {log.timestamp ? new Date(log.timestamp).toLocaleString('tr-TR', {
+                                                                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                                                            }) : ''}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* 📊 SUNUCU İSTATİSTİKLERİ TAB */}
+                            {activeTab === 'stats' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', backgroundColor: '#1e1f22', borderRadius: '12px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <FaChartBar style={{ fontSize: '24px', color: '#5865f2' }} />
+                                            <div>
+                                                <h3 style={{ margin: 0, color: '#fff', fontSize: '16px' }}>Sunucu İstatistikleri</h3>
+                                                <p style={{ margin: '2px 0 0', color: '#b9bbbe', fontSize: '12px' }}>
+                                                    Sunucunuzun performans özeti
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <button onClick={loadServerStats} style={{ ...styles.actionBtn, backgroundColor: '#5865f2', padding: '8px 16px', fontSize: '13px' }}>
+                                            <FaUndo /> Yenile
+                                        </button>
+                                    </div>
+
+                                    {statsLoading ? (
+                                        <div style={{ textAlign: 'center', color: '#b9bbbe', padding: '40px' }}>Yükleniyor...</div>
+                                    ) : !serverStats ? (
+                                        <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#2b2d31', borderRadius: '12px' }}>
+                                            <FaChartBar style={{ fontSize: '48px', color: '#4e5058', marginBottom: '16px' }} />
+                                            <h4 style={{ color: '#fff', margin: '0 0 8px' }}>İstatistikler yüklenemedi</h4>
+                                            <p style={{ color: '#b9bbbe', fontSize: '14px' }}>Yenile butonuna basarak tekrar deneyin.</p>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {/* Ana Metrikler */}
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                                                <div style={{ backgroundColor: '#2b2d31', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #5865f2' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                                                        <FaUsers style={{ color: '#5865f2', fontSize: '18px' }} />
+                                                        <span style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase' }}>Toplam Üye</span>
+                                                    </div>
+                                                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#fff' }}>{serverStats.total_members ?? serverStats.members ?? 0}</div>
+                                                    {serverStats.online_members !== undefined && (
+                                                        <div style={{ fontSize: '12px', color: '#43b581', marginTop: '4px' }}>
+                                                            🟢 {serverStats.online_members} çevrimiçi
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div style={{ backgroundColor: '#2b2d31', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #43b581' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                                                        <FaComments style={{ color: '#43b581', fontSize: '18px' }} />
+                                                        <span style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase' }}>Toplam Mesaj</span>
+                                                    </div>
+                                                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#fff' }}>{(serverStats.total_messages ?? 0).toLocaleString('tr-TR')}</div>
+                                                    {serverStats.messages_last_7_days !== undefined && (
+                                                        <div style={{ fontSize: '12px', color: '#faa61a', marginTop: '4px' }}>
+                                                            📈 Son 7 gün: {serverStats.messages_last_7_days}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div style={{ backgroundColor: '#2b2d31', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #faa61a' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                                                        <FaHashtag style={{ color: '#faa61a', fontSize: '18px' }} />
+                                                        <span style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase' }}>Kanal Sayısı</span>
+                                                    </div>
+                                                    <div style={{ fontSize: '32px', fontWeight: '800', color: '#fff' }}>{serverStats.total_channels ?? serverStats.rooms ?? 0}</div>
+                                                </div>
+                                            </div>
+
+                                            {/* Detay Bilgileri */}
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                                                <div style={{ backgroundColor: '#2b2d31', padding: '18px', borderRadius: '10px' }}>
+                                                    <h4 style={{ margin: '0 0 14px', color: '#fff', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <FaShieldAlt style={{ color: '#5865f2' }} /> Sunucu Bilgileri
+                                                    </h4>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Sunucu Adı</span>
+                                                            <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600' }}>{serverStats.server_name || server.name}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Oluşturulma</span>
+                                                            <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600' }}>
+                                                                {serverStats.created_at ? new Date(serverStats.created_at).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }) : (server.created_at ? new Date(server.created_at).toLocaleDateString('tr-TR') : 'Bilinmiyor')}
+                                                            </span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Gizlilik</span>
+                                                            <span style={{ color: server.is_public ? '#43b581' : '#faa61a', fontSize: '13px', fontWeight: '600' }}>
+                                                                {server.is_public ? '🌐 Herkese Açık' : '🔒 Özel'}
+                                                            </span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Rol Sayısı</span>
+                                                            <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600' }}>{roles.length}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ backgroundColor: '#2b2d31', padding: '18px', borderRadius: '10px' }}>
+                                                    <h4 style={{ margin: '0 0 14px', color: '#fff', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <FaChartLine style={{ color: '#43b581' }} /> Aktivite Özeti
+                                                    </h4>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Kategori Sayısı</span>
+                                                            <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600' }}>{server.categories?.length || 0}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Yasaklı Üye</span>
+                                                            <span style={{ color: bans.length > 0 ? '#ed4245' : '#43b581', fontSize: '13px', fontWeight: '600' }}>{bans.length}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Çevrimiçi Üye</span>
+                                                            <span style={{ color: '#43b581', fontSize: '13px', fontWeight: '600' }}>{serverStats.online_members ?? '—'}</span>
+                                                        </div>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', backgroundColor: '#1e1f22', borderRadius: '6px' }}>
+                                                            <span style={{ color: '#b9bbbe', fontSize: '13px' }}>Haftalık Mesaj</span>
+                                                            <span style={{ color: '#fff', fontSize: '13px', fontWeight: '600' }}>{serverStats.messages_last_7_days ?? '—'}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Sunucu Sağlık Göstergeleri */}
+                                            <div style={{ backgroundColor: '#2b2d31', padding: '18px', borderRadius: '10px' }}>
+                                                <h4 style={{ margin: '0 0 14px', color: '#fff', fontSize: '14px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    <FaChartPie style={{ color: '#faa61a' }} /> Sağlık Göstergeleri
+                                                </h4>
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+                                                    {[
+                                                        {
+                                                            label: 'Üye Aktivitesi',
+                                                            value: serverStats.online_members && serverStats.total_members
+                                                                ? Math.round((serverStats.online_members / serverStats.total_members) * 100) : null,
+                                                            color: '#43b581', suffix: '%'
+                                                        },
+                                                        {
+                                                            label: 'Günlük Ort. Mesaj',
+                                                            value: serverStats.messages_last_7_days ? Math.round(serverStats.messages_last_7_days / 7) : null,
+                                                            color: '#5865f2', suffix: ''
+                                                        },
+                                                        {
+                                                            label: 'Üye/Kanal Oranı',
+                                                            value: serverStats.total_channels ? Math.round((serverStats.total_members || 0) / serverStats.total_channels) : null,
+                                                            color: '#faa61a', suffix: ':1'
+                                                        }
+                                                    ].map((metric, i) => (
+                                                        <div key={i} style={{ padding: '14px', backgroundColor: '#1e1f22', borderRadius: '8px', textAlign: 'center' }}>
+                                                            <div style={{ fontSize: '24px', fontWeight: '800', color: metric.color }}>{metric.value ?? '—'}{metric.value !== null ? metric.suffix : ''}</div>
+                                                            <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px' }}>{metric.label}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
