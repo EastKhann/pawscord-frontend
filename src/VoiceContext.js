@@ -305,7 +305,7 @@ export const VoiceProvider = ({ children }) => {
     const setRemoteVolume = useCallback((targetUsername, volume) => {
         setRemoteVolumes(prev => ({
             ...prev,
-            [targetUsername]: Math.max(0, Math.min(100, volume))
+            [targetUsername]: Math.max(0, Math.min(200, volume))
         }));
     }, []);
 
@@ -1149,11 +1149,23 @@ export const VoiceProvider = ({ children }) => {
     }, [sendSignal, handleRemoteStream]);
 
     const handleSignalMessage = useCallback(async (data) => {
-        // 🧹 KICKED (Inactivity cleanup)
+        // 🧹 KICKED (Inactivity cleanup or mod action)
         if (data.type === 'kicked') {
             console.warn('🔴 [Voice] Kicked from channel:', data.reason, data.message);
-            toast.warning(`Sesli Kanaldan Çıkarıldınız\n\nNeden: ${data.message}`, 5000);
-            leaveVoiceRoom();
+
+            // 🔥 FIX: If moved to another channel, auto-rejoin instead of just leaving
+            if (data.reason === 'moved' && data.target_channel) {
+                toast.info(`🔀 ${data.message || 'Başka kanala taşındınız'}`, 3000);
+                // Leave current channel first, then join the target channel
+                leaveVoiceRoom();
+                // Small delay to let cleanup finish before rejoining
+                setTimeout(() => {
+                    joinVoiceRoom(data.target_channel);
+                }, 500);
+            } else {
+                toast.warning(`Sesli Kanaldan Çıkarıldınız\n\nNeden: ${data.message}`, 5000);
+                leaveVoiceRoom();
+            }
             return;
         }
 

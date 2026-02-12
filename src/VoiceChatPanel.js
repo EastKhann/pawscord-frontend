@@ -723,7 +723,7 @@ const VoiceChatPanel = ({
     }, []);
 
     const handleAdjustVolume = useCallback((targetUser, newVolume) => {
-        const volume = Math.max(0, Math.min(150, newVolume)); // 0-150% range
+        const volume = Math.max(0, Math.min(200, newVolume)); // 0-200% range
 
         setVolumeSettings(prev => ({
             ...prev,
@@ -733,10 +733,32 @@ const VoiceChatPanel = ({
             }
         }));
 
-        // 🔥 İYİLEŞTİRME: Audio element'e anında uygula
+        // 🔥 İYİLEŞTİRME: Audio element'e anında uygula (GainNode ile >100% destek)
         const audioElements = document.querySelectorAll(`audio[data-username="${targetUser.username}"]`);
         audioElements.forEach(audio => {
-            audio.volume = volume / 100;
+            if (volume <= 100) {
+                // Normal range — use native volume
+                audio.volume = volume / 100;
+                // Disconnect any existing GainNode
+                if (audio._gainNode) {
+                    try { audio._gainNode.gain.value = 1; } catch (e) { /* */ }
+                }
+            } else {
+                // >100% — use Web Audio API GainNode for amplification
+                audio.volume = 1.0; // Max native volume
+                try {
+                    if (!audio._audioContext) {
+                        audio._audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        audio._sourceNode = audio._audioContext.createMediaElementSource(audio);
+                        audio._gainNode = audio._audioContext.createGain();
+                        audio._sourceNode.connect(audio._gainNode);
+                        audio._gainNode.connect(audio._audioContext.destination);
+                    }
+                    audio._gainNode.gain.value = volume / 100; // e.g., 1.5 for 150%, 2.0 for 200%
+                } catch (e) {
+                    console.warn('[Volume] GainNode amplification failed:', e);
+                }
+            }
         });
     }, []);
 
@@ -1698,8 +1720,26 @@ const UserVideoCard = React.memo(({
             const audioTracks = stream.getAudioTracks();
             if (audioTracks.length > 0) {
                 audioRef.current.srcObject = new MediaStream(audioTracks);
-                const volume = (user.volume || 100) / 100;
-                audioRef.current.volume = Math.min(2.0, Math.max(0, volume));
+                const volumePercent = user.volume || 100;
+                if (volumePercent <= 100) {
+                    audioRef.current.volume = Math.max(0, volumePercent / 100);
+                } else {
+                    // >100% — use Web Audio API GainNode for amplification
+                    audioRef.current.volume = 1.0;
+                    try {
+                        const audio = audioRef.current;
+                        if (!audio._audioContext) {
+                            audio._audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            audio._sourceNode = audio._audioContext.createMediaElementSource(audio);
+                            audio._gainNode = audio._audioContext.createGain();
+                            audio._sourceNode.connect(audio._gainNode);
+                            audio._gainNode.connect(audio._audioContext.destination);
+                        }
+                        audio._gainNode.gain.value = volumePercent / 100;
+                    } catch (e) {
+                        console.warn('[Volume] GainNode amplification failed:', e);
+                    }
+                }
             }
         }
     }, [stream, user.isLocal, user.username, user.volume]);
