@@ -48,6 +48,7 @@ const VirtualMessageList = React.lazy(() => import('./components/VirtualMessageL
 const MessageInput = React.lazy(() => import('./components/MessageInput')); // ⚡ LAZY: Mesaj input
 import MaintenanceBanner from './components/MaintenanceBanner';
 import LoadingSpinner from './components/LoadingSpinner'; // 🌀 Loading indicator
+import AppModals from './components/AppModals'; // 🎭 All modal renders extracted
 
 // ⚡ LAZY LOAD: Voice/Video components (not needed until voice chat)
 const UserVideoContainer = React.lazy(() => import('./UserVideoContainer'));
