@@ -3242,7 +3242,6 @@ const AppContent = () => {
                 sendSignal={sendSignal}
                 ws={ws}
                 currentUserProfile={currentUserProfile} setCurrentUserProfile={setCurrentUserProfile}
-                currentUser={currentUser} setCurrentUser={setCurrentUser}
                 currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}
                 soundSettings={soundSettings} setSoundSettings={setSoundSettings}
                 encryptionKeys={encryptionKeys} currentKeyId={currentKeyId} setEncryptionKey={setEncryptionKey}

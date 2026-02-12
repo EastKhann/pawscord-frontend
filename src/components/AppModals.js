@@ -189,7 +189,6 @@ const AppModals = ({
     sendSignal,
     ws,
     currentUserProfile, setCurrentUserProfile,
-    currentUser, setCurrentUser,
     currentTheme, setCurrentTheme,
     soundSettings, setSoundSettings,
     encryptionKeys, currentKeyId, setEncryptionKey,
@@ -407,7 +406,7 @@ const AppModals = ({
                     <MentionsInboxPanel
                         isOpen={modals.mentionsInbox}
                         onClose={() => closeModal('mentionsInbox')}
-                        currentUsername={currentUser?.username}
+                        currentUsername={currentUserProfile?.username || username}
                         onNavigateToMessage={(msg) => {
                             if (msg.room_id) {
                                 // Navigate to the room where the mention happened
@@ -426,8 +425,8 @@ const AppModals = ({
                         onClose={() => closeModal('customStatus')}
                         onStatusChange={(status) => {
                             // Update local user status display
-                            if (currentUser) {
-                                setCurrentUser(prev => ({ ...prev, customStatus: status }));
+                            if (currentUserProfile) {
+                                setCurrentUserProfile(prev => ({ ...prev, customStatus: status }));
                             }
                         }}
                     />
