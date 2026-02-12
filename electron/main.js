@@ -1,8 +1,19 @@
 // ⚡ ELECTRON MAIN PROCESS - Production Ready
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { exec } = require('child_process');
 const isDev = process.env.NODE_ENV === 'development';
+
+// 🔄 AUTO-UPDATE SYSTEM
+let autoUpdater = null;
+try {
+    const { autoUpdater: updater } = require('electron-updater');
+    autoUpdater = updater;
+    autoUpdater.autoDownload = false; // Ask user before downloading
+    autoUpdater.autoInstallOnAppQuit = true;
+} catch (e) {
+    console.log('ℹ️ electron-updater not available (dev mode)');
+}
 
 let mainWindow;
 let gameDetectionInterval = null;
@@ -112,7 +123,16 @@ function createWindow() {
     });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    createWindow();
+
+    // 🔄 AUTO-UPDATE: Check for updates after window loads
+    if (autoUpdater && !isDev) {
+        setupAutoUpdater();
+        // Check for updates 5 seconds after launch
+        setTimeout(() => autoUpdater.checkForUpdates(), 5000);
+    }
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -358,4 +378,98 @@ if (process.platform === 'win32') {
         });
     }
 }
+
+// ═══════════════════════════════════════════
+// 🔄 AUTO-UPDATE SYSTEM
+// ═══════════════════════════════════════════
+function setupAutoUpdater() {
+    if (!autoUpdater) return;
+
+    autoUpdater.on('checking-for-update', () => {
+        console.log('🔄 Checking for updates...');
+        if (mainWindow) {
+            mainWindow.webContents.send('update-status', { status: 'checking' });
+        }
+    });
+
+    autoUpdater.on('update-available', (info) => {
+        console.log('✅ Update available:', info.version);
+        if (mainWindow) {
+            mainWindow.webContents.send('update-status', {
+                status: 'available',
+                version: info.version,
+                releaseNotes: info.releaseNotes
+            });
+        }
+        // Ask user if they want to download
+        dialog.showMessageBox(mainWindow, {
+            type: 'info',
+            title: 'Update Available',
+            message: `Pawscord v${info.version} is available. Download now?`,
+            buttons: ['Download', 'Later'],
+            defaultId: 0
+        }).then(({ response }) => {
+            if (response === 0) {
+                autoUpdater.downloadUpdate();
+            }
+        });
+    });
+
+    autoUpdater.on('update-not-available', () => {
+        console.log('ℹ️ No updates available');
+        if (mainWindow) {
+            mainWindow.webContents.send('update-status', { status: 'up-to-date' });
+        }
+    });
+
+    autoUpdater.on('download-progress', (progress) => {
+        console.log(`⬇️ Download progress: ${Math.round(progress.percent)}%`);
+        if (mainWindow) {
+            mainWindow.webContents.send('update-status', {
+                status: 'downloading',
+                percent: Math.round(progress.percent)
+            });
+        }
+    });
+
+    autoUpdater.on('update-downloaded', (info) => {
+        console.log('✅ Update downloaded:', info.version);
+        if (mainWindow) {
+            mainWindow.webContents.send('update-status', {
+                status: 'ready',
+                version: info.version
+            });
+        }
+        dialog.showMessageBox(mainWindow, {
+            type: 'info',
+            title: 'Update Ready',
+            message: `Pawscord v${info.version} has been downloaded. Restart now to install?`,
+            buttons: ['Restart', 'Later'],
+            defaultId: 0
+        }).then(({ response }) => {
+            if (response === 0) {
+                autoUpdater.quitAndInstall();
+            }
+        });
+    });
+
+    autoUpdater.on('error', (error) => {
+        console.error('❌ Auto-update error:', error);
+        if (mainWindow) {
+            mainWindow.webContents.send('update-status', {
+                status: 'error',
+                message: error.message
+            });
+        }
+    });
+}
+
+// IPC: Manual update check
+ipcMain.handle('check-for-updates', () => {
+    if (autoUpdater && !isDev) {
+        autoUpdater.checkForUpdates();
+        return { status: 'checking' };
+    }
+    return { status: 'dev-mode' };
+});
 

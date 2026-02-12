@@ -3,6 +3,12 @@
 
 let toastContainer = null;
 
+// Escape HTML to prevent XSS
+function escapeHTML(str) {
+    if (typeof str !== 'string') return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 // Toast container'ı initialize et
 function initToastContainer() {
     if (!toastContainer) {
@@ -78,7 +84,7 @@ export function showToast(message, type = 'info', duration = 3000) {
 
     toast.innerHTML = `
         <span style="font-size: 20px;">${icon}</span>
-        <span style="flex: 1;">${message}</span>
+        <span style="flex: 1;">${escapeHTML(message)}</span>
         <button onclick="this.parentElement.remove()" style="
             background: rgba(255,255,255,0.2);
             border: none;

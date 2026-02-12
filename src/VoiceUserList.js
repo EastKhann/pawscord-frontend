@@ -119,7 +119,7 @@ const VoiceUserList = ({
         // Drag görselini ayarla
         const dragGhost = document.createElement('div');
         dragGhost.style.cssText = 'position:fixed;top:-1000px;background:linear-gradient(135deg,#5865f2,#7289da);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(88,101,242,0.6);display:flex;align-items:center;gap:8px;z-index:99999;';
-        dragGhost.innerHTML = '🔀 ' + userObj.username;
+        dragGhost.textContent = '🔀 ' + userObj.username;
         document.body.appendChild(dragGhost);
         e.dataTransfer.setDragImage(dragGhost, 60, 20);
         setTimeout(() => document.body.removeChild(dragGhost), 0);

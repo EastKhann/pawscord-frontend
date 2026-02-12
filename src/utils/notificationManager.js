@@ -1,5 +1,11 @@
 // frontend/src/utils/notificationManager.js
 
+// Escape HTML to prevent XSS in notifications
+function escapeHTML(str) {
+    if (typeof str !== 'string') return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 /**
  * 🔔 Advanced Notification Manager
  * Toast notifications, Push notifications, Permission handling
@@ -142,15 +148,15 @@ class NotificationManager {
 
         // Build HTML
         element.innerHTML = `
-      <div class="notification__icon">${iconElement}</div>
+      <div class="notification__icon">${escapeHTML(iconElement)}</div>
       <div class="notification__content">
-        ${notification.title ? `<div class="notification__title">${notification.title}</div>` : ''}
-        <div class="notification__message">${notification.message}</div>
+        ${notification.title ? `<div class="notification__title">${escapeHTML(notification.title)}</div>` : ''}
+        <div class="notification__message">${escapeHTML(notification.message)}</div>
         ${notification.actions.length > 0 ? `
           <div class="notification__actions">
             ${notification.actions.map((action, i) => `
               <button class="notification__action" data-action-index="${i}">
-                ${action.label}
+                ${escapeHTML(action.label)}
               </button>
             `).join('')}
           </div>
