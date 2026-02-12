@@ -14,6 +14,7 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'; // 🛡️
 import { registerServiceWorker, setupInstallPrompt, setupNetworkMonitor } from './utils/pwaHelper';
 import { initializeCSSOptimization } from './utils/criticalCSS';
 import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config'; // 🚀 CODE SPLITTING
+import { lazyWithRetry } from './utils/lazyWithRetry'; // 🔄 CHUNK ERROR RECOVERY
 
 // --- İKONLAR (OPTIMIZED) ---
 import {
@@ -85,10 +86,10 @@ const EncryptionKeyModal = React.lazy(() => import(/* webpackMode: "lazy" */ './
 const DownloadModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/DownloadModal'));
 const ServerSettingsModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/ServerSettingsModal'));
 const CreateGroupModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/CreateGroupModal'));
-const AdminAnalyticsPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminAnalyticsPanel')); // 🔥 YENİ: Admin Analytics
-const AdminPanelModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminPanelModal')); // 🔥 Admin Panel Modal
-const WebhooksPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/WebhooksPanel')); // 🔥 Webhooks Panel
-const VanityURLManager = React.lazy(() => import(/* webpackMode: "lazy" */ './components/VanityURLManager')); // 🔥 Vanity URL Manager
+const AdminAnalyticsPanel = lazyWithRetry(() => import('./components/AdminAnalyticsPanel')); // 🔥 Admin Analytics (chunk-safe)
+const AdminPanelModal = lazyWithRetry(() => import('./components/AdminPanelModal')); // 🔥 Admin Panel Modal (chunk-safe)
+const WebhooksPanel = lazyWithRetry(() => import('./components/WebhooksPanel')); // 🔥 Webhooks Panel (chunk-safe)
+const VanityURLManager = lazyWithRetry(() => import('./components/VanityURLManager')); // 🔥 Vanity URL Manager (chunk-safe)
 
 // �️ MODERATION: Moderation Tools (2026-01-15)
 const AutoModerationDashboard = React.lazy(() => import('./components/AutoModerationDashboard'));
@@ -2483,6 +2484,11 @@ const AppContent = () => {
     // Global Status WebSocket
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
+
+        // 🛡️ Prevent rapid reconnection during app remounts (ErrorBoundary resets, etc.)
+        if (statusWsRef.current && statusWsRef.current.readyState === WebSocket.OPEN) {
+            return; // Already connected, skip
+        }
 
         // Load Theme on Startup
         const saved = loadSavedTheme();

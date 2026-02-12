@@ -175,13 +175,7 @@ export const promptPWAInstall = () => {
     }
 };
 
-// Listen for PWA install prompt
-if (typeof window !== 'undefined') {
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        window.deferredPrompt = e;
-    });
-}
+// PWA install prompt managed by pwaHelper.js — no duplicate listener needed
 
 export default {
     initializeDeepLinkHandler,

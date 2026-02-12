@@ -21,12 +21,18 @@ const usePageTracking = () => {
         const trackPageView = async () => {
             try {
                 const sessionId = getOrCreateSessionId();
+                const token = localStorage.getItem('access_token');
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
 
                 await fetch(`${API_BASE_URL}/analytics/track/`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers,
                     body: JSON.stringify({
                         path: location.pathname,
                         session_id: sessionId,
@@ -36,7 +42,7 @@ const usePageTracking = () => {
                 });
 
             } catch (error) {
-                console.error('Analytics tracking error:', error);
+                // Silently fail — analytics should never break the app
             }
         };
 

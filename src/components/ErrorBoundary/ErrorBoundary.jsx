@@ -45,9 +45,16 @@ class ErrorBoundary extends React.Component {
 
     reportError = async (error, errorInfo) => {
         try {
-            await fetch('/api/errors/report/', {
+            const apiBase = (typeof window !== 'undefined' && window.__PAWSCORD_API_BASE__)
+                || import.meta.env?.VITE_API_BASE_URL
+                || 'https://api.pawscord.com/api';
+            const token = localStorage.getItem('access_token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            await fetch(`${apiBase}/errors/report/`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers,
                 body: JSON.stringify({
                     error: error.toString(),
                     stack: errorInfo.componentStack,
@@ -57,7 +64,7 @@ class ErrorBoundary extends React.Component {
                 })
             });
         } catch (err) {
-            console.error('Failed to report error:', err);
+            // Silently fail — error reporting should never cause more errors
         }
     };
 
