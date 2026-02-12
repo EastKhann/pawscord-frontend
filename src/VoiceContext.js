@@ -290,6 +290,7 @@ export const VoiceProvider = ({ children }) => {
     const recordingIntervalRef = useRef(null);
     const isLeavingRef = useRef(false); // 🔥 Prevent recursive leave calls
     const isSwitchingRef = useRef(false); // 🔥 Prevent infinite switch loop
+    const joinVoiceRoomRef = useRef(null); // 🔥 Ref for joinVoiceRoom (used in handleSignalMessage before definition)
     const micHealthIntervalRef = useRef(null); // 🔥 Mic watchdog
 
     // 🎵 Voice Effect Refs
@@ -1159,9 +1160,12 @@ export const VoiceProvider = ({ children }) => {
                 // Leave current channel first, then join the target channel
                 leaveVoiceRoom();
                 // Small delay to let cleanup finish before rejoining
+                const targetChannel = data.target_channel;
                 setTimeout(() => {
-                    joinVoiceRoom(data.target_channel);
-                }, 500);
+                    if (joinVoiceRoomRef.current) {
+                        joinVoiceRoomRef.current(targetChannel);
+                    }
+                }, 800);
             } else {
                 toast.warning(`Sesli Kanaldan Çıkarıldınız\n\nNeden: ${data.message}`, 5000);
                 leaveVoiceRoom();
@@ -1951,6 +1955,11 @@ export const VoiceProvider = ({ children }) => {
             }
         }
     }, [isInVoice, currentRoom, token, handleSignalMessage, initializeAudio, leaveVoiceRoom]);
+
+    // 🔥 Keep joinVoiceRoomRef in sync (for use in handleSignalMessage before definition)
+    useEffect(() => {
+        joinVoiceRoomRef.current = joinVoiceRoom;
+    }, [joinVoiceRoom]);
 
     // --- TOGGLE FUNCTIONS ---
     const toggleMute = useCallback(() => {
