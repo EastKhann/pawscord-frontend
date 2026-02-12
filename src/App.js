@@ -1064,6 +1064,38 @@ const AppContent = () => {
         return '';
     }, [activeChat, categories]);
 
+    // --- VOICE ROOM DISPLAY NAME (slug → human-readable name) ---
+    const voiceRoomDisplayName = useMemo(() => {
+        if (!currentVoiceRoom) return '';
+        if (categories) {
+            for (const server of categories) {
+                if (server.categories) {
+                    for (const cat of server.categories) {
+                        const foundRoom = cat.rooms?.find(r => r.slug === currentVoiceRoom);
+                        if (foundRoom) return String(foundRoom.name);
+                    }
+                }
+            }
+        }
+        return String(currentVoiceRoom);
+    }, [currentVoiceRoom, categories]);
+
+    // --- SLUG → DISPLAY NAME RESOLVER (generic helper for any slug) ---
+    const resolveRoomName = useCallback((slug) => {
+        if (!slug) return '';
+        if (categories) {
+            for (const server of categories) {
+                if (server.categories) {
+                    for (const cat of server.categories) {
+                        const foundRoom = cat.rooms?.find(r => r.slug === slug);
+                        if (foundRoom) return String(foundRoom.name);
+                    }
+                }
+            }
+        }
+        return String(slug);
+    }, [categories]);
+
     // --- DRAFT SYSTEM ---
     const chatDraftKey = useMemo(() => {
         if (!activeChat || !activeChat.id) return '';
@@ -5801,7 +5833,7 @@ const AppContent = () => {
                         </div>
                     ) : activeRoomType === 'kanban' ? (
                         <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-                            <div style={styles.chatHeader}><h2># {chatTitle} (Pano)</h2></div>
+                            <div style={styles.chatHeader}><h2>📋 {chatTitle} (Pano)</h2></div>
                             <Suspense fallback={<LoadingSpinner size="medium" text="Pano yükleniyor..." />}>
                                 <KanbanBoard roomSlug={activeChat.id} apiBaseUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />
                             </Suspense>
@@ -5820,7 +5852,7 @@ const AppContent = () => {
                                         </button>
                                     )}
                                     <h2 style={{ margin: 0, fontSize: '1.2em' }}>
-                                        🔊 {currentVoiceRoom}
+                                        🔊 {voiceRoomDisplayName}
                                     </h2>
                                 </div>
                                 <button
@@ -5842,7 +5874,7 @@ const AppContent = () => {
                                 </button>
                             </div>
                             <VoiceChatPanel
-                                roomName={currentVoiceRoom}
+                                roomName={voiceRoomDisplayName}
                                 onClose={() => {
                                     leaveChannel();
                                     setActiveChat('welcome', 'welcome');
@@ -5887,7 +5919,7 @@ const AppContent = () => {
                                     )}
 
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: isMobile ? '1em' : '1.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `# ${String(chatTitle)}`}
+                                        {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `💬 ${String(chatTitle)}`}
                                     </h2>
                                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>
                                         {isConnected ? '✓' : '✗'}
@@ -6513,7 +6545,7 @@ const AppContent = () => {
                                         onFileUpload={uploadFile}
                                         onShowCodeSnippet={() => setShowSnippetModal(true)}
                                         placeholder={chatTitle
-                                            ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalına mesaj gönder`
+                                            ? `${activeChat.type === 'dm' ? chatTitle : chatTitle} kanalına mesaj gönder`
                                             : 'Mesaj yaz...'}
                                         disabled={isUploading}
                                         fetchWithAuth={fetchWithAuth}
@@ -6634,7 +6666,7 @@ const AppContent = () => {
                             {useNewVoicePanel ? (
                                 /* 🆕 YENİ PROFESYONEL PANEL */
                                 <VoiceChatPanel
-                                    roomName={currentVoiceRoom}
+                                    roomName={voiceRoomDisplayName}
                                     onClose={() => {
                                         setShowVoiceIsland(false);
                                     }}

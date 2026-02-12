@@ -88,6 +88,20 @@ const RoomList = ({
     // 🔥 currentRoom değerini hesapla (activeChat'ten veya prop'tan)
     const actualCurrentRoom = currentRoom || (activeChat?.type === 'room' ? activeChat.id : null);
 
+    // 🔥 Voice room slug → display name resolver
+    const voiceRoomDisplayName = useMemo(() => {
+        if (!currentVoiceRoom) return '';
+        for (const server of servers) {
+            if (server.categories) {
+                for (const cat of server.categories) {
+                    const foundRoom = cat.rooms?.find(r => r.slug === currentVoiceRoom);
+                    if (foundRoom) return String(foundRoom.name);
+                }
+            }
+        }
+        return String(currentVoiceRoom);
+    }, [currentVoiceRoom, servers]);
+
     const [inviteCodeInput, setInviteCodeInput] = useState('');
     const [selectedServerId, setSelectedServerId] = useState('home');
     const [collapsedCategories, setCollapsedCategories] = useState({});
@@ -1920,7 +1934,7 @@ const RoomList = ({
                                         {isConnecting ? 'Bağlanılıyor...' : 'Ses Bağlandı'}
                                     </div>
                                     <div style={{ fontSize: '0.7em', color: '#b9bbbe', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {currentVoiceRoom} / Genel
+                                        {voiceRoomDisplayName} / Genel
                                     </div>
                                 </div>
                             </div>
