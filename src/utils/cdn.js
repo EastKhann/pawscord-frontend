@@ -1,9 +1,10 @@
 import { getApiBase } from '../utils/apiEndpoints';
+import { MEDIA_BASE_URL } from './constants';
 // frontend/src/utils/cdn.js
 // 🌐 CDN (Content Delivery Network) Integration - ENHANCED VERSION
 
 // ✅ Cloudflare R2 CDN Base URL
-export const R2_CDN_URL = 'https://media.pawscord.com';
+export const R2_CDN_URL = MEDIA_BASE_URL;
 export const R2_ASSETS_URL = `${R2_CDN_URL}/assets`;
 export const R2_AVATARS_URL = `${R2_CDN_URL}/avatars`;
 export const R2_UPLOADS_URL = `${R2_CDN_URL}/uploads`;

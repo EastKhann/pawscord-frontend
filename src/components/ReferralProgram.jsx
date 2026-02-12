@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from '../utils/toast';
+import { PRODUCTION_URL } from '../utils/constants';
 import './ReferralProgram.css';
 
 export default function ReferralProgram({ user }) {
@@ -31,7 +32,7 @@ export default function ReferralProgram({ user }) {
     };
 
     const copyReferralLink = () => {
-        const link = `https://www.pawscord.com/join/${referralCode}`;
+        const link = `${PRODUCTION_URL}/join/${referralCode}`;
         navigator.clipboard.writeText(link);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
@@ -39,7 +40,7 @@ export default function ReferralProgram({ user }) {
 
     const shareOnTwitter = () => {
         const text = `Join me on Pawscord - a privacy-first Discord alternative! 🐾\n\nNo tracking. No ads. 100% open source.\n\nSign up with my link for 3 months free premium:`;
-        const url = `https://www.pawscord.com/join/${referralCode}`;
+        const url = `${PRODUCTION_URL}/join/${referralCode}`;
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
     };
 
@@ -75,7 +76,7 @@ export default function ReferralProgram({ user }) {
                 <div className="link-container">
                     <input
                         type="text"
-                        value={`https://www.pawscord.com/join/${referralCode}`}
+                        value={`${PRODUCTION_URL}/join/${referralCode}`}
                         readOnly
                         className="referral-input"
                     />
@@ -182,25 +183,25 @@ export default function ReferralProgram({ user }) {
                 <h3>Share on:</h3>
                 <div className="share-buttons">
                     <button
-                        onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=https://www.pawscord.com/join/${referralCode}`, '_blank')}
+                        onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${PRODUCTION_URL}/join/${referralCode}`, '_blank')}
                         className="share-btn facebook"
                     >
                         📘 Facebook
                     </button>
                     <button
-                        onClick={() => window.open(`https://www.reddit.com/submit?url=https://www.pawscord.com/join/${referralCode}&title=Check out Pawscord!`, '_blank')}
+                        onClick={() => window.open(`https://www.reddit.com/submit?url=${PRODUCTION_URL}/join/${referralCode}&title=Check out Pawscord!`, '_blank')}
                         className="share-btn reddit"
                     >
                         🤖 Reddit
                     </button>
                     <button
-                        onClick={() => window.open(`https://wa.me/?text=Join me on Pawscord! https://www.pawscord.com/join/${referralCode}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/?text=Join me on Pawscord! ${PRODUCTION_URL}/join/${referralCode}`, '_blank')}
                         className="share-btn whatsapp"
                     >
                         💬 WhatsApp
                     </button>
                     <button
-                        onClick={() => window.open(`https://t.me/share/url?url=https://www.pawscord.com/join/${referralCode}&text=Check out Pawscord!`, '_blank')}
+                        onClick={() => window.open(`https://t.me/share/url?url=${PRODUCTION_URL}/join/${referralCode}&text=Check out Pawscord!`, '_blank')}
                         className="share-btn telegram"
                     >
                         ✈️ Telegram

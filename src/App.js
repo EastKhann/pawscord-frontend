@@ -14,7 +14,6 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'; // 🛡️
 import { registerServiceWorker, setupInstallPrompt, setupNetworkMonitor } from './utils/pwaHelper';
 import { initializeCSSOptimization } from './utils/criticalCSS';
 import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config'; // 🚀 CODE SPLITTING
-import { lazyWithRetry } from './utils/lazyWithRetry'; // 🔄 CHUNK ERROR RECOVERY
 
 // --- İKONLAR (OPTIMIZED) ---
 import {
@@ -30,9 +29,11 @@ import { loadSavedTheme } from './utils/ThemeManager';
 import { useChatStore } from './stores/useChatStore';
 import { encryptMessage } from './utils/encryption';
 import toast from './utils/toast';
+import { useUIStore } from './stores/useUIStore';
 import useResponsive from './hooks/useResponsive'; // 🔥 RESPONSIVE HOOK
 import { useOptimizedMessages, useOnlineUsers } from './hooks/useOptimizedMessages'; // 🚀 PERFORMANS HOOK
 import usePageTracking from './hooks/usePageTracking'; // 📊 PAGE VIEW TRACKING
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'; // ⌨️ KEYBOARD SHORTCUTS
 import { useThrottle } from './utils/performanceOptimization'; // ⚡ THROTTLE HOOK (callback API)
 import { useDebounce } from './hooks/usePerformanceHooks'; // ⚡ DEBOUNCE HOOK (value API)
 
@@ -86,10 +87,10 @@ const EncryptionKeyModal = React.lazy(() => import(/* webpackMode: "lazy" */ './
 const DownloadModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/DownloadModal'));
 const ServerSettingsModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/ServerSettingsModal'));
 const CreateGroupModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/CreateGroupModal'));
-const AdminAnalyticsPanel = lazyWithRetry(() => import('./components/AdminAnalyticsPanel')); // 🔥 Admin Analytics (chunk-safe)
-const AdminPanelModal = lazyWithRetry(() => import('./components/AdminPanelModal')); // 🔥 Admin Panel Modal (chunk-safe)
-const WebhooksPanel = lazyWithRetry(() => import('./components/WebhooksPanel')); // 🔥 Webhooks Panel (chunk-safe)
-const VanityURLManager = lazyWithRetry(() => import('./components/VanityURLManager')); // 🔥 Vanity URL Manager (chunk-safe)
+const AdminAnalyticsPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminAnalyticsPanel')); // 🔥 YENİ: Admin Analytics
+const AdminPanelModal = React.lazy(() => import(/* webpackMode: "lazy" */ './components/AdminPanelModal')); // 🔥 Admin Panel Modal
+const WebhooksPanel = React.lazy(() => import(/* webpackMode: "lazy" */ './components/WebhooksPanel')); // 🔥 Webhooks Panel
+const VanityURLManager = React.lazy(() => import(/* webpackMode: "lazy" */ './components/VanityURLManager')); // 🔥 Vanity URL Manager
 
 // �️ MODERATION: Moderation Tools (2026-01-15)
 const AutoModerationDashboard = React.lazy(() => import('./components/AutoModerationDashboard'));
@@ -416,19 +417,14 @@ const AppContent = () => {
     const incrementUnread = useChatStore(state => state.incrementUnread);
     const setEncryptionKey = useChatStore(state => state.setEncryptionKey);
 
+    const { modals, openModal, closeModal, toggleModal } = useUIStore();
+
     // Local State
-    const [showGroupModal, setShowGroupModal] = useState(false);
-    const [showSoundboard, setShowSoundboard] = useState(false);
-    const [showWhiteboard, setShowWhiteboard] = useState(false);
-    const [showEncModal, setShowEncModal] = useState(false);
-    const [showTemplateModal, setShowTemplateModal] = useState(false); // ✨ New State
     const [chartSymbol, setChartSymbol] = useState(null);
     const [isDownloading, setIsDownloading] = useState(false);
     const [downloadProgress, setDownloadProgress] = useState(0);
     const [updateStatusText, setUpdateStatusText] = useState('');
     const username = user?.username || '';
-    const [showSnippetModal, setShowSnippetModal] = useState(false);
-    const [showPollModal, setShowPollModal] = useState(false); // 🔥 NEW STATE
     const [focusedStream, setFocusedStream] = useState(null); // { id, user, track, streamType, avatarUrl, isLocal }
 
     // 🔥 RESPONSIVE HOOK (replaces old isMobile state)
@@ -456,226 +452,55 @@ const AppContent = () => {
     const [isConnected, setIsConnected] = useState(false);
     const [isLeftSidebarVisible, setIsLeftSidebarVisible] = useState(false);
     const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(false);
-    const [showProfilePanel, setShowProfilePanel] = useState(false);
-    const [showPinned, setShowPinned] = useState(false);
-    const [showGifPicker, setShowGifPicker] = useState(false);
     const [authError, setAuthError] = useState('');
-    const [showCinema, setShowCinema] = useState(false);
-    const [showStickerPicker, setShowStickerPicker] = useState(false);
     const [selectedMessages, setSelectedMessages] = useState(new Set());
     const [zoomedImage, setZoomedImage] = useState(null);
     const [galleryData, setGalleryData] = useState(null); // {images: [], startIndex: 0} for gallery viewer
     const [viewingProfile, setViewingProfile] = useState(null);
     const [dropTarget, setDropTarget] = useState(null);
-    const [showStore, setShowStore] = useState(false);
-    const [showThemeStore, setShowThemeStore] = useState(false);
-    const [showAnalytics, setShowAnalytics] = useState(false); // 🔥 YENİ: Admin Analytics
-    const [showAdminPanel, setShowAdminPanel] = useState(false); // 🔥 Admin Panel Modal
-    const [showWebhooks, setShowWebhooks] = useState(false); // 🔥 Webhooks Panel
-    const [showModTools, setShowModTools] = useState(false); // 🔥 Moderation Tools
-    const [showVanityURL, setShowVanityURL] = useState(false); // 🔥 Vanity URL Manager
 
     // 🛡️ MODERATION: Moderation Panels (2026-01-15)
-    const [showAutoModeration, setShowAutoModeration] = useState(false);
-    const [showRaidProtection, setShowRaidProtection] = useState(false);
-    const [showReportSystem, setShowReportSystem] = useState(false);
-    const [showAuditLog, setShowAuditLog] = useState(false);
-    const [showUserWarnings, setShowUserWarnings] = useState(false);
-    const [showAutoResponder, setShowAutoResponder] = useState(false); // 🔥 Auto Responder
 
     // 📚 NEW FEATURES: Feature Panels (2026-01-19)
-    const [showBookmarks, setShowBookmarks] = useState(false); // 📚 Bookmark Panel
-    const [showReadLater, setShowReadLater] = useState(false); // 📖 Read Later
-    const [showMentionsInbox, setShowMentionsInbox] = useState(false); // 📬 Mentions Inbox
-    const [showCustomStatus, setShowCustomStatus] = useState(false); // 🎭 Custom Status
-    const [showChannelPermissions, setShowChannelPermissions] = useState(false); // 🔐 Channel Permissions
-    const [showMessageThreads, setShowMessageThreads] = useState(false); // 💬 Message Threads
-    const [showModeratorNotes, setShowModeratorNotes] = useState(false); // 📝 Moderator Notes
-    const [showServerRoles, setShowServerRoles] = useState(false); // 👥 Server Roles
-    const [showNotificationPrefs, setShowNotificationPrefs] = useState(false); // 🔔 Notifications
-    const [showMessageOCR, setShowMessageOCR] = useState(false); // 🔍 OCR
-    const [showMassActions, setShowMassActions] = useState(false); // ⚡ Mass Actions
 
     // 🚀 BATCH 1: Analytics & Tracking (2026-01-19)
-    const [showReactionAnalytics, setShowReactionAnalytics] = useState(false); // 📊 Reaction Analytics
-    const [showLinkClickTracking, setShowLinkClickTracking] = useState(false); // 🔗 Link Click Tracking
-    const [showJoinLeaveLogs, setShowJoinLeaveLogs] = useState(false); // 🚪 Join/Leave Logs
-    const [showUserActivity, setShowUserActivity] = useState(false); // 📈 User Activity
-    const [showNicknameHistory, setShowNicknameHistory] = useState(false); // 👤 Nickname History
-    const [showFieldChangeTracking, setShowFieldChangeTracking] = useState(false); // 📋 Field Change Tracking
-    const [showInviteAnalytics, setShowInviteAnalytics] = useState(false); // 📧 Invite Analytics
 
     // 🚀 BATCH 2: Content & Moderation (2026-01-19)
-    const [showContentScanner, setShowContentScanner] = useState(false); // 🔍 Content Scanner
-    const [showEphemeralMessages, setShowEphemeralMessages] = useState(false); // ⏱️ Ephemeral Messages
-    const [showTopicHistory, setShowTopicHistory] = useState(false); // 📜 Topic History
-    const [showDrafts, setShowDrafts] = useState(false); // 💾 Drafts
-    const [showServerNicknames, setShowServerNicknames] = useState(false); // 🏷️ Server Nicknames
 
     // 🚀 BATCH 3: Server Features (2026-01-19)
-    const [showServerBoost, setShowServerBoost] = useState(false); // 🚀 Server Boost
-    const [showRoomWebhooks, setShowRoomWebhooks] = useState(false); // 🪝 Room Webhooks
-    const [showOAuthApps, setShowOAuthApps] = useState(false); // 🔐 OAuth Apps
-    // Note: showVanityURL already exists above
-    const [showAutoResponders, setShowAutoResponders] = useState(false); // 🤖 Auto Responders
+    // Note: modals.vanityURL already exists above
 
     // 🚀 BATCH 4: Security & Privacy (2026-01-19)
-    const [showSessionManagement, setShowSessionManagement] = useState(false); // 🔒 Session Management
-    const [showGDPRExport, setShowGDPRExport] = useState(false); // 📦 GDPR Export
-    const [showDataRetention, setShowDataRetention] = useState(false); // 🗄️ Data Retention
-    const [showTwoFactorSetup, setShowTwoFactorSetup] = useState(false); // 🔐 Two-Factor Auth
 
     // 🚀 BATCH 5: Communication (2026-01-19)
-    const [showEnhancedPolls, setShowEnhancedPolls] = useState(false); // 📊 Enhanced Polls
-    const [showVoiceTranscripts, setShowVoiceTranscripts] = useState(false); // 🎤 Voice Transcripts
-    const [showInviteExport, setShowInviteExport] = useState(false); // 📤 Invite Export
 
     // 🚀 BATCH 6: Advanced Search & Analytics (2026-01-19)
-    const [showAdvancedSearch, setShowAdvancedSearch] = useState(false); // 🔍 Advanced Search
-    const [showGrowthMetrics, setShowGrowthMetrics] = useState(false); // 📈 Growth Metrics
-    const [showLinkPreview, setShowLinkPreview] = useState(false); // 🔗 Link Preview
 
     // 🚀 BATCH 7: Store & Gamification (2026-01-19)
-    const [showInventory, setShowInventory] = useState(false); // 🎒 Inventory
-    const [showWaitlist, setShowWaitlist] = useState(false); // 📋 Waitlist
-    const [showReferralRewards, setShowReferralRewards] = useState(false); // 🎁 Referral Rewards
 
     // 🎮 BATCH 8: New Features (2026-01-28)
-    const [showMiniGames, setShowMiniGames] = useState(false); // 🎮 Mini Games Hub
-    const [showProjectCollaboration, setShowProjectCollaboration] = useState(false); // 📂 Project Collaboration
-    const [showAvatarStudio, setShowAvatarStudio] = useState(false); // 🎨 Avatar Customization Studio
 
-    const [showTimeoutMute, setShowTimeoutMute] = useState(false); // ⏰ Timeout/Mute
-    const [showServerThemes, setShowServerThemes] = useState(false); // 🎨 Server Themes
-    const [showKeywordMutes, setShowKeywordMutes] = useState(false); // 🔇 Keyword Mutes
-    const [showWelcomeTemplates, setShowWelcomeTemplates] = useState(false); // 👋 Welcome Templates
-    const [showStickyMessages, setShowStickyMessages] = useState(false); // 📌 Sticky Messages
-    const [showMessageTemplates, setShowMessageTemplates] = useState(false); // 📝 Message Templates
-    const [showMessageExport, setShowMessageExport] = useState(false); // 📦 Message Export
-    const [showArchivedRooms, setShowArchivedRooms] = useState(false); // 📦 Archived Rooms
-    const [showSlowMode, setShowSlowMode] = useState(false); // ⏱️ Slow Mode
-    const [showEmojiManagement, setShowEmojiManagement] = useState(false); // 😀 Emoji Management
 
     // 🔥 BATCH 10: 50 Essential Features States (2026-02-01)
     // -- Core UX --
-    const [showUserSettings, setShowUserSettings] = useState(false); // ⚙️ User Settings
-    const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false); // ⌨️ Keyboard Shortcuts
-    const [showCommandPalette, setShowCommandPalette] = useState(false); // 🔍 Command Palette
-    const [showServerDiscovery, setShowServerDiscovery] = useState(false); // 🌍 Server Discovery
-    const [showAppearanceSettings, setShowAppearanceSettings] = useState(false); // 🎨 Appearance
-    const [showLanguageSelector, setShowLanguageSelector] = useState(false); // 🌐 Language
-    const [showChangelog, setShowChangelog] = useState(false); // 📋 Changelog
-    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // 🚪 Logout
-    const [showNotificationSounds, setShowNotificationSounds] = useState(false); // 🔊 Sounds
-    const [showQuickSwitcher, setShowQuickSwitcher] = useState(false); // ⚡ Quick Switcher
     // -- Security --
-    const [showLoginHistory, setShowLoginHistory] = useState(false); // 🔐 Login History
-    const [showSecuritySettings, setShowSecuritySettings] = useState(false); // 🛡️ Security
-    const [showPrivacySettings, setShowPrivacySettings] = useState(false); // 🔒 Privacy
-    const [showAccountDeletion, setShowAccountDeletion] = useState(false); // ❌ Delete Account
-    const [showBlockList, setShowBlockList] = useState(false); // 🚫 Block List
-    const [showE2EESettings, setShowE2EESettings] = useState(false); // 🔐 E2EE
     // -- Communication --
-    const [showThreadView, setShowThreadView] = useState(false); // 💬 Threads
-    const [showScheduledMessages, setShowScheduledMessages] = useState(false); // ⏰ Scheduled
-    const [showReminders, setShowReminders] = useState(false); // ⏰ Reminders
-    const [showForum, setShowForum] = useState(false); // 📋 Forum
-    const [showStageChannel, setShowStageChannel] = useState(false); // 🎤 Stage
-    const [showVideoCall, setShowVideoCall] = useState(false); // 📹 Video Call
-    const [showVoiceSettings, setShowVoiceSettings] = useState(false); // 🎙️ Voice Settings
-    const [showMessageSearch, setShowMessageSearch] = useState(false); // 🔍 Search
-    const [showWatchTogether, setShowWatchTogether] = useState(false); // 🎬 Watch Together
     // -- Server Management --
-    const [showAutoRoles, setShowAutoRoles] = useState(false); // 🤖 Auto Roles
-    const [showReactionRoles, setShowReactionRoles] = useState(false); // 🎭 Reaction Roles
-    const [showWelcomeMessages, setShowWelcomeMessages] = useState(false); // 👋 Welcome
-    const [showEventCalendar, setShowEventCalendar] = useState(false); // 📅 Events
-    const [showGiveaway, setShowGiveaway] = useState(false); // 🎉 Giveaway
-    const [showTicketSystem, setShowTicketSystem] = useState(false); // 🎫 Tickets
-    const [showStarboard, setShowStarboard] = useState(false); // ⭐ Starboard
-    const [showServerBackup, setShowServerBackup] = useState(false); // 💾 Backup
-    const [showBanAppeals, setShowBanAppeals] = useState(false); // ⚖️ Appeals
-    const [showCustomCommands, setShowCustomCommands] = useState(false); // 🤖 Commands
-    const [showLevelingSystem, setShowLevelingSystem] = useState(false); // 📊 Levels
-    const [showLiveStream, setShowLiveStream] = useState(false); // 📺 Live Stream
     // -- Engagement --
-    const [showAchievements, setShowAchievements] = useState(false); // 🏆 Achievements
-    const [showBirthdaySystem, setShowBirthdaySystem] = useState(false); // 🎂 Birthdays
-    const [showPremium, setShowPremium] = useState(false); // 💎 Premium
-    const [showMusicPlayer, setShowMusicPlayer] = useState(false); // 🎵 Music
-    const [showBotMarketplace, setShowBotMarketplace] = useState(false); // 🤖 Bot Store
-    const [showProfileCustomization, setShowProfileCustomization] = useState(false); // 👤 Profile
-    const [showIntegrationHub, setShowIntegrationHub] = useState(false); // 🔗 Integrations
-    const [showTournaments, setShowTournaments] = useState(false); // 🏆 Tournaments
     // -- Advanced --
-    const [showHighlights, setShowHighlights] = useState(false); // 💡 Highlights
-    const [showCustomEmbed, setShowCustomEmbed] = useState(false); // 📦 Embeds
-    const [showSpotifyIntegration, setShowSpotifyIntegration] = useState(false); // 🎵 Spotify
-    const [showServerClone, setShowServerClone] = useState(false); // 📋 Clone
-    const [showWeeklyChallenges, setShowWeeklyChallenges] = useState(false); // 🎯 Challenges
     // -- Feature Hub --
-    const [showFeatureHub, setShowFeatureHub] = useState(false); // 🚀 Feature Hub Mega Menu
 
     // 🔥 BATCH 11: 50 More Essential Features States (2026-02-02)
     // -- 🔰 Moderation --
-    const [showModeratorTools, setShowModeratorTools] = useState(false); // 🛡️ Moderator Tools
-    const [showAIModeration, setShowAIModeration] = useState(false); // 🤖 AI Moderation
-    const [showSpamDetection, setShowSpamDetection] = useState(false); // 🚫 Spam Detection
-    const [showAuditLogs, setShowAuditLogs] = useState(false); // 📋 Audit Logs
-    const [showBanHistory, setShowBanHistory] = useState(false); // ⛔ Ban History
-    const [showModerationLogs, setShowModerationLogs] = useState(false); // 📜 Mod Logs
-    const [showSecurityAlerts, setShowSecurityAlerts] = useState(false); // 🚨 Security Alerts
     // -- 💬 Communication --
-    const [showGIFPicker, setShowGIFPicker] = useState(false); // 🎞️ GIF Picker
-    const [showPollCreator, setShowPollCreator] = useState(false); // 📊 Poll Creator
-    const [showStickers, setShowStickers] = useState(false); // 🎨 Stickers
-    const [showSavedMessages, setShowSavedMessages] = useState(false); // 💾 Saved Messages
-    const [showNotificationsCenter, setShowNotificationsCenter] = useState(false); // 🔔 Notifications
-    const [showMessageSummary, setShowMessageSummary] = useState(false); // 📝 Summary
-    const [showTranslation, setShowTranslation] = useState(false); // 🌍 Translation
     // -- 🏠 Server Management --
-    const [showChannelSettings, setShowChannelSettings] = useState(false); // ⚙️ Channel Settings
-    const [showInviteModal, setShowInviteModal] = useState(false); // 📨 Invite
-    const [showServerTemplates, setShowServerTemplates] = useState(false); // 📋 Templates
-    const [showServerAnalytics, setShowServerAnalytics] = useState(false); // 📊 Analytics
-    const [showRolesManager, setShowRolesManager] = useState(false); // 👑 Roles
-    const [showWelcomeScreenEditor, setShowWelcomeScreenEditor] = useState(false); // 👋 Welcome Editor
-    const [showCommunitySettings, setShowCommunitySettings] = useState(false); // 🏘️ Community
-    const [showInviteLinkManager, setShowInviteLinkManager] = useState(false); // 🔗 Invite Links
     // -- 🤖 Bot/Dev --
-    const [showBotBuilder, setShowBotBuilder] = useState(false); // 🤖 Bot Builder
-    const [showBotDevPortal, setShowBotDevPortal] = useState(false); // 🧑‍💻 Dev Portal
-    const [showWebhookManager, setShowWebhookManager] = useState(false); // 🔗 Webhooks
-    const [showAPIKeys, setShowAPIKeys] = useState(false); // 🔑 API Keys
-    const [showSlashCommands, setShowSlashCommands] = useState(false); // ⚡ Slash Commands
-    const [showCodeRunner, setShowCodeRunner] = useState(false); // 💻 Code Runner
     // -- 👤 Profile & Social --
-    const [showProfileCard, setShowProfileCard] = useState(false); // 👤 Profile Card
-    const [showUserNotes, setShowUserNotes] = useState(false); // 📝 User Notes
-    const [showStatusPicker, setShowStatusPicker] = useState(false); // 🟢 Status Picker
-    const [showMutuals, setShowMutuals] = useState(false); // 👥 Mutuals
-    const [showProfileShowcase, setShowProfileShowcase] = useState(false); // 🏅 Showcase
-    const [showSessionManager, setShowSessionManager] = useState(false); // 📱 Sessions
     // -- 💎 Premium --
-    const [showCoinStore, setShowCoinStore] = useState(false); // 🪙 Coins
-    const [showPremiumManagement, setShowPremiumManagement] = useState(false); // 💎 Premium Mgmt
-    const [showSubscriptionManager, setShowSubscriptionManager] = useState(false); // 📋 Subscriptions
-    const [showGiftPremium, setShowGiftPremium] = useState(false); // 🎁 Gift Premium
-    const [showPremiumMarketplace, setShowPremiumMarketplace] = useState(false); // 🛒 Premium Shop
-    const [showThemeMarketplace, setShowThemeMarketplace] = useState(false); // 🎨 Theme Shop
     // -- 🔧 Advanced --
-    const [showAIChatbot, setShowAIChatbot] = useState(false); // 🤖 AI Chatbot
-    const [showCodeEditor, setShowCodeEditor] = useState(false); // 👨‍💻 Code Editor
-    const [showScreenShare, setShowScreenShare] = useState(false); // 🖥️ Screen Share
-    const [showLiveStreamModal, setShowLiveStreamModal] = useState(false); // 📺 Live Stream Modal
-    const [showAdvancedAnalytics, setShowAdvancedAnalytics] = useState(false); // 📈 Analytics
-    const [showFileManager, setShowFileManager] = useState(false); // 📁 Files
-    const [showReports, setShowReports] = useState(false); // 📊 Reports
-    const [showErrorReporting, setShowErrorReporting] = useState(false); // 🐛 Error Reports
 
     const [currentTheme, setCurrentTheme] = useState('default');
     const [stickyMessage, setStickyMessage] = useState(null);
-    const [showAvatarCropper, setShowAvatarCropper] = useState(false); // 📸 AVATAR CROPPER
     const [messageHistoryLoading, setMessageHistoryLoading] = useState(false);
     const [hasMoreMessages, setHasMoreMessages] = useState(true);
     const [messageHistoryOffset, setMessageHistoryOffset] = useState(0);
@@ -687,14 +512,11 @@ const AppContent = () => {
     const [selectedServer, setSelectedServer] = useState(null); // 🔥 YENİ: Seçili sunucu (üye listesi için)
     const [currentUserProfile, setCurrentUserProfile] = useState(null); // 🔥 YENİ: Kullanıcının profil verisi
     const [updateAvailable, setUpdateAvailable] = useState(false);
-    const [showDownloadModal, setShowDownloadModal] = useState(false);
     const [serverToEdit, setServerToEdit] = useState(null);
-    const [showSummary, setShowSummary] = useState(false);
     const [isSummaryLoading, setIsSummaryLoading] = useState(false);
     const [summaryResult, setSummaryResult] = useState("");
     const [soundSettings, setSoundSettings] = useState(() => JSON.parse(localStorage.getItem('chat_sound_settings')) || { notifications: true, mentions: true, userJoinLeave: true });
     const [maintenanceMode, setMaintenanceMode] = useState(null); // 🆕 Maintenance mode
-    const [showDJ, setShowDJ] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0); // 📊 Upload progress %
@@ -709,30 +531,20 @@ const AppContent = () => {
     const [isSelectionMode, setIsSelectionMode] = useState(false); // 🔥 EKLENDİ: Mesaj seçme modu
 
     // 🔔 YENİ: Bildirim ve context menu state'leri
-    const [showNotifications, setShowNotifications] = useState(false);
-    const [showToolbarMenu, setShowToolbarMenu] = useState(false); // 🔥 Toolbar açılır menü
     const [userContextMenu, setUserContextMenu] = useState(null); // { x, y, user, permissions }
 
     // 🎫 YENİ: Sunucuya davet modal state
     const [inviteToServerUser, setInviteToServerUser] = useState(null); // { username } or null
 
     // 💰 YENİ: Payment & Store state'leri (2026-01-19)
-    const [showPaymentPanel, setShowPaymentPanel] = useState(false);
-    const [showStoreModal, setShowStoreModal] = useState(false);
-    const [showDailyRewards, setShowDailyRewards] = useState(false);
-    const [showAPIUsagePanel, setShowAPIUsagePanel] = useState(false);
-    const [showExportJobsPanel, setShowExportJobsPanel] = useState(false);
-    const [showScheduledAnnouncements, setShowScheduledAnnouncements] = useState(false);
 
     // 🔗 YENİ: Vanity URL Invite Screen (2026-01-23)
     const [showVanityInvite, setShowVanityInvite] = useState(null); // vanity path veya null
     const [showInviteCode, setShowInviteCode] = useState(null); // 🔥 FIX: invite code veya null
 
     // 🔗 YENİ: Platform Connections Panel
-    const [showConnectionsPanel, setShowConnectionsPanel] = useState(false);
 
     // 🔑 YENİ: Google ile giriş yapanlar için şifre belirleme modal
-    const [showPasswordSetupModal, setShowPasswordSetupModal] = useState(false);
 
     const typingUsers = useChatStore(state => state.typingUsers);
 
@@ -870,7 +682,7 @@ const AppContent = () => {
 
         // 🔑 Google ile giriş yapan kullanıcılar için şifre belirleme kontrolü
         if (needsPassword === 'true') {
-            setShowPasswordSetupModal(true);
+            openModal('passwordSetupModal');
             // Clear URL parameters
             window.history.replaceState({}, document.title, window.location.pathname);
         }
@@ -965,11 +777,11 @@ const AppContent = () => {
 
     // �️ MODERATION: Global functions for ServerSettingsModal to trigger panels
     useEffect(() => {
-        window.showAutoModeration = () => setShowAutoModeration(true);
-        window.showRaidProtection = () => setShowRaidProtection(true);
-        window.showReportSystem = () => setShowReportSystem(true);
-        window.showAuditLog = () => setShowAuditLog(true);
-        window.showUserWarnings = () => setShowUserWarnings(true);
+        window.showAutoModeration = () => openModal('autoModeration');
+        window.showRaidProtection = () => openModal('raidProtection');
+        window.showReportSystem = () => openModal('reportSystem');
+        window.showAuditLog = () => openModal('auditLog');
+        window.showUserWarnings = () => openModal('userWarnings');
 
         return () => {
             delete window.showAutoModeration;
@@ -983,18 +795,18 @@ const AppContent = () => {
     // �🔥 Close toolbar menu on click outside
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (showToolbarMenu && !e.target.closest('.toolbar-menu-container')) {
-                setShowToolbarMenu(false);
+            if (modals.toolbarMenu && !e.target.closest('.toolbar-menu-container')) {
+                closeModal('toolbarMenu');
             }
         };
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
-    }, [showToolbarMenu]);
+    }, [modals.toolbarMenu]);
 
     // 🔗 CONNECTIONS PANEL EVENT LISTENER
     useEffect(() => {
         const handleOpenConnectionsPanel = () => {
-            setShowConnectionsPanel(true);
+            openModal('connectionsPanel');
         };
         window.addEventListener('openConnectionsPanel', handleOpenConnectionsPanel);
         return () => window.removeEventListener('openConnectionsPanel', handleOpenConnectionsPanel);
@@ -1044,7 +856,6 @@ const AppContent = () => {
     }, [isAuthenticated]);
 
 
-
     // --- CHAT TITLE ---
     const chatTitle = useMemo(() => {
         if (activeChat.type === 'room') {
@@ -1064,38 +875,6 @@ const AppContent = () => {
         }
         return '';
     }, [activeChat, categories]);
-
-    // --- VOICE ROOM DISPLAY NAME (slug → human-readable name) ---
-    const voiceRoomDisplayName = useMemo(() => {
-        if (!currentVoiceRoom) return '';
-        if (categories) {
-            for (const server of categories) {
-                if (server.categories) {
-                    for (const cat of server.categories) {
-                        const foundRoom = cat.rooms?.find(r => r.slug === currentVoiceRoom);
-                        if (foundRoom) return String(foundRoom.name);
-                    }
-                }
-            }
-        }
-        return String(currentVoiceRoom);
-    }, [currentVoiceRoom, categories]);
-
-    // --- SLUG → DISPLAY NAME RESOLVER (generic helper for any slug) ---
-    const resolveRoomName = useCallback((slug) => {
-        if (!slug) return '';
-        if (categories) {
-            for (const server of categories) {
-                if (server.categories) {
-                    for (const cat of server.categories) {
-                        const foundRoom = cat.rooms?.find(r => r.slug === slug);
-                        if (foundRoom) return String(foundRoom.name);
-                    }
-                }
-            }
-        }
-        return String(slug);
-    }, [categories]);
 
     // --- DRAFT SYSTEM ---
     const chatDraftKey = useMemo(() => {
@@ -1488,7 +1267,7 @@ const AppContent = () => {
     };
 
     const handleSummarize = async () => {
-        setShowSummary(true);
+        openModal('summary');
         setIsSummaryLoading(true);
         setSummaryResult("");
         try {
@@ -1514,7 +1293,7 @@ const AppContent = () => {
 
         // ✨ Check for /tema command
         if (trimmed === '/tema') {
-            setShowThemeStore(true);
+            openModal('themeStore');
             setEditingMessage(null);
             setHasDraftMessage(false);
             setDraftText('');
@@ -1524,7 +1303,7 @@ const AppContent = () => {
 
         // ✨ Check for /sablon command
         if (trimmed === '/sablon') {
-            setShowTemplateModal(true);
+            openModal('templateModal');
             setEditingMessage(null);
             setHasDraftMessage(false);
             setDraftText('');
@@ -1676,7 +1455,7 @@ const AppContent = () => {
             id: payload.temp_id,
             avatar: currentUserProfile?.avatar || getDeterministicAvatar(username) // 🔥 Avatar eklendi
         }]);
-        setShowSnippetModal(false);
+        closeModal('snippetModal');
     };
 
     const startVoiceRecording = async () => {
@@ -2450,45 +2229,18 @@ const AppContent = () => {
         handleMessageScroll();
     }, [activeChat, handleMessageScroll]);
 
-    useEffect(() => {
-        const handler = (e) => {
-            // Ctrl+K: Quick Switcher / Command Palette
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                setShowQuickSwitcher(prev => !prev);
-            }
-            // Ctrl+/: Keyboard Shortcuts
-            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
-                e.preventDefault();
-                setShowKeyboardShortcuts(prev => !prev);
-            }
-            // Ctrl+Shift+P: Command Palette
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
-                e.preventDefault();
-                setShowCommandPalette(prev => !prev);
-            }
-            // Ctrl+,: User Settings
-            if ((e.ctrlKey || e.metaKey) && e.key === ',') {
-                e.preventDefault();
-                setShowUserSettings(prev => !prev);
-            }
-            // Escape: Close all feature hub
-            if (e.key === 'Escape' && showFeatureHub) {
-                setShowFeatureHub(false);
-            }
-        };
-        window.addEventListener('keydown', handler);
-        return () => window.removeEventListener('keydown', handler);
-    }, [showFeatureHub]);
+    // ⌨️ Keyboard Shortcuts — delegated to useKeyboardShortcuts hook
+    useKeyboardShortcuts({
+        onQuickSwitcher: () => toggleModal('quickSwitcher'),
+        onCommandList: () => toggleModal('keyboardShortcuts'),
+        onCommandPalette: () => toggleModal('commandPalette'),
+        onSettings: () => toggleModal('userSettings'),
+        onEscape: () => { if (modals.featureHub) closeModal('featureHub'); },
+    });
 
     // Global Status WebSocket
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
-
-        // 🛡️ Prevent rapid reconnection during app remounts (ErrorBoundary resets, etc.)
-        if (statusWsRef.current && statusWsRef.current.readyState === WebSocket.OPEN) {
-            return; // Already connected, skip
-        }
 
         // Load Theme on Startup
         const saved = loadSavedTheme();
@@ -3480,2200 +3232,40 @@ const AppContent = () => {
                 />
             )}
 
-            {/* --- LAZY MODALS --- */}
-            <Suspense fallback={<LoadingSpinner size="medium" text="Modal yükleniyor..." />}>
-                {showProfilePanel && <UserProfilePanel user={currentUserProfile} onClose={() => setShowProfilePanel(false)} onProfileUpdate={(updatedUser) => setCurrentUserProfile(updatedUser)} onLogout={logout} fetchWithAuth={fetchWithAuth} getDeterministicAvatar={getDeterministicAvatar} updateProfileUrl={UPDATE_PROFILE_URL} changeUsernameUrl={CHANGE_USERNAME_URL} soundSettings={soundSettings} onUpdateSoundSettings={setSoundSettings} onImageClick={setZoomedImage} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {showStore && <PremiumStoreModal onClose={() => setShowStore(false)} />}
-                {showAnalytics && <AdminAnalyticsPanel onClose={() => setShowAnalytics(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {showAdminPanel && (
-                    <AdminPanelModal
-                        onClose={() => setShowAdminPanel(false)}
-                        onOpenAnalytics={() => setShowAnalytics(true)}
-                        onOpenWebhooks={() => setShowWebhooks(true)}
-                        onOpenModTools={() => setShowModTools(true)}
-                        onOpenAuditLogs={() => setShowAuditLog(true)}
-                        onOpenReports={() => setShowReportSystem(true)}
-                        onOpenVanityURL={() => setShowVanityURL(true)}
-                        onOpenAutoResponder={() => setShowAutoResponder(true)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                    />
-                )}
-
-                {/* � CRITICAL & HIGH PRIORITY PANELS (2026-01-19) */}
-                {showPaymentPanel && (
-                    <PaymentPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowPaymentPanel(false)}
-                        username={username}
-                    />
-                )}
-                {showStoreModal && (
-                    <StoreModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowStoreModal(false)}
-                        username={username}
-                    />
-                )}
-                {showDailyRewards && (
-                    <DailyRewardsModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowDailyRewards(false)}
-                        username={username}
-                    />
-                )}
-                {showAPIUsagePanel && (
-                    <APIUsagePanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowAPIUsagePanel(false)}
-                        username={username}
-                    />
-                )}
-                {showExportJobsPanel && (
-                    <ExportJobsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowExportJobsPanel(false)}
-                        username={username}
-                    />
-                )}
-                {showScheduledAnnouncements && (
-                    <ScheduledAnnouncementsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowScheduledAnnouncements(false)}
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                    />
-                )}
-
-                {/* 🔗 PLATFORM CONNECTIONS PANEL */}
-                {showConnectionsPanel && (
-                    <ConnectionsPanel
-                        onClose={() => setShowConnectionsPanel(false)}
-                    />
-                )}
-
-                {/* 🔑 PASSWORD SETUP MODAL (Google Users) */}
-                {showPasswordSetupModal && (
-                    <PasswordSetupModal
-                        onClose={() => setShowPasswordSetupModal(false)}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                    />
-                )}
-
-                {/* 🛡️ MODERATION PANELS */}
-                {showAutoModeration && (
-                    <AutoModerationDashboard
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowAutoModeration(false)}
-                    />
-                )}
-                {showRaidProtection && (
-                    <RaidProtectionPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowRaidProtection(false)}
-                    />
-                )}
-                {showReportSystem && (
-                    <ReportSystemPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowReportSystem(false)}
-                    />
-                )}
-                {showAuditLog && (
-                    <AuditLogPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowAuditLog(false)}
-                    />
-                )}
-                {showUserWarnings && (
-                    <UserWarningsPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowUserWarnings(false)}
-                    />
-                )}
-
-                {/* 🔥 WEBHOOKS & VANITY URL */}
-                {showWebhooks && (
-                    <WebhooksPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowWebhooks(false)}
-                    />
-                )}
-                {showVanityURL && (
-                    <VanityURLManager
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={API_BASE_URL}
-                        onClose={() => setShowVanityURL(false)}
-                    />
-                )}
-                {showAutoResponder && activeChat?.type === 'room' && activeChat.server_id && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <AutoRespondersPanel
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            serverId={activeChat.server_id}
-                            onClose={() => setShowAutoResponder(false)}
-                        />
-                    </Suspense>
-                )}
-
-                {/* 📚 NEW FEATURES: Feature Panels (2026-01-19) */}
-                {showBookmarks && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <BookmarkPanel
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            onClose={() => setShowBookmarks(false)}
-                            onMessageClick={(msg) => {
-                                // Mesaja git
-                                if (msg.room) {
-                                    setActiveChat({ type: 'room', slug: msg.room });
-                                } else if (msg.conversation) {
-                                    setActiveChat({ type: 'dm', slug: msg.conversation });
-                                }
-                                setShowBookmarks(false);
-                            }}
-                        />
-                    </Suspense>
-                )}
-
-                {showReadLater && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <ReadLaterPanel
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            onClose={() => setShowReadLater(false)}
-                            onMessageClick={(msg) => {
-                                if (msg.room) {
-                                    setActiveChat({ type: 'room', slug: msg.room });
-                                } else if (msg.conversation) {
-                                    setActiveChat({ type: 'dm', slug: msg.conversation });
-                                }
-                                setShowReadLater(false);
-                            }}
-                        />
-                    </Suspense>
-                )}
-
-                {/* 📬 Mentions Inbox Panel */}
-                {showMentionsInbox && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <MentionsInboxPanel
-                            isOpen={showMentionsInbox}
-                            onClose={() => setShowMentionsInbox(false)}
-                            currentUsername={currentUser?.username}
-                            onNavigateToMessage={(msg) => {
-                                if (msg.room_id) {
-                                    // Navigate to the room where the mention happened
-                                    setActiveChat({ type: 'room', id: msg.room_id });
-                                }
-                                setShowMentionsInbox(false);
-                            }}
-                        />
-                    </Suspense>
-                )}
-
-                {/* 🎭 Custom Status Modal */}
-                {showCustomStatus && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <CustomStatusModal
-                            isOpen={showCustomStatus}
-                            onClose={() => setShowCustomStatus(false)}
-                            onStatusChange={(status) => {
-                                // Update local user status display
-                                if (currentUser) {
-                                    setCurrentUser(prev => ({ ...prev, customStatus: status }));
-                                }
-                            }}
-                        />
-                    </Suspense>
-                )}
-
-                {showChannelPermissions && activeChat?.type === 'room' && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <ChannelPermissionsPanel
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            channelSlug={activeChat.slug}
-                            onClose={() => setShowChannelPermissions(false)}
-                        />
-                    </Suspense>
-                )}
-
-                {showAutoModeration && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
-                        <AutoModerationPanel
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                            onClose={() => setShowAutoModeration(false)}
-                        />
-                    </Suspense>
-                )}
-
-                {chartSymbol && <CryptoChartModal symbol={chartSymbol} onClose={() => setChartSymbol(null)} />}
-                {showCinema && <CinemaModal onClose={() => setShowCinema(false)} ws={ws} username={username} />}
-                {showSnippetModal && <CodeSnippetModal onClose={() => setShowSnippetModal(false)} onSend={handleSendSnippet} />}
-                {serverToEdit && <ServerSettingsModal onClose={() => setServerToEdit(null)} server={serverToEdit} currentUsername={username} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} serverMembers={serverMembers} />}
-                {showEncModal && <EncryptionKeyModal onClose={() => setShowEncModal(false)} onSetKey={(key) => setEncryptionKey(currentKeyId, key)} existingKey={encryptionKeys[currentKeyId]} />}
-                {showDownloadModal && <DownloadModal onClose={() => setShowDownloadModal(false)} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {showSummary && <SummaryModal isLoading={isSummaryLoading} summaryText={summaryResult} onClose={() => setShowSummary(false)} />}
-                {showGroupModal && <CreateGroupModal onClose={() => setShowGroupModal(false)} friendsList={friendsList} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} onGroupCreated={(newConv) => { setConversations(prev => [newConv, ...prev]); setActiveChat('dm', newConv.id, 'Grup Sohbeti'); }} />}
-                {showWhiteboard && (activeChat.type === 'room' || activeChat.type === 'dm') && (
-                    <WhiteboardModal roomSlug={activeChat.type === 'room' ? activeChat.id : `dm_${activeChat.id}`} onClose={() => setShowWhiteboard(false)} wsProtocol={WS_PROTOCOL} apiHost={API_HOST} />
-                )}
-                {showSoundboard && <SoundboardModal onClose={() => setShowSoundboard(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} sendSignal={sendSignal} absoluteHostUrl={ABSOLUTE_HOST_URL} />}
-                {showDJ && <DJModal onClose={() => setShowDJ(false)} ws={ws} roomSlug={activeChat.id} />}
-                {showGifPicker && <GifPicker onSelect={(url) => { const full = url.startsWith('http') ? url : ABSOLUTE_HOST_URL + url; sendMessage(full); setShowGifPicker(false); }} onClose={() => setShowGifPicker(false)} localGifListUrl={LOCAL_GIF_LIST_URL} absoluteHostUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />}
-                {showStickerPicker && <StickerPicker onClose={() => setShowStickerPicker(false)} onSelect={(url) => { sendMessage(url); setShowStickerPicker(false); }} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {showPollModal && <PollCreateModal onClose={() => setShowPollModal(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} activeRoomSlug={activeChat.id} />}
-            </Suspense>
-
-            {/* 🚀 BATCH 1: Analytics & Tracking (2026-01-19) */}
-            {showReactionAnalytics && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ReactionAnalyticsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        onClose={() => setShowReactionAnalytics(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showLinkClickTracking && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <LinkClickTrackingPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        onClose={() => setShowLinkClickTracking(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showJoinLeaveLogs && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <JoinLeaveLogsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowJoinLeaveLogs(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showUserActivity && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <UserActivityPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowUserActivity(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showNicknameHistory && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <NicknameHistoryPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowNicknameHistory(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showFieldChangeTracking && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <FieldChangeTrackingPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowFieldChangeTracking(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showInviteAnalytics && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <InviteAnalyticsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowInviteAnalytics(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 BATCH 2: Content & Moderation (2026-01-19) */}
-            {showContentScanner && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ContentScannerPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowContentScanner(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showEphemeralMessages && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <EphemeralMessagesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        onClose={() => setShowEphemeralMessages(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showTopicHistory && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <TopicHistoryPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        onClose={() => setShowTopicHistory(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showDrafts && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <DraftsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowDrafts(false)}
-                        onLoadDraft={(draft) => {
-                            // Draft'ı mesaj composer'a yükle
-                            if (draft.room) {
-                                setActiveChat({ type: 'room', slug: draft.room });
-                            }
-                            setShowDrafts(false);
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {showServerNicknames && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ServerNicknamesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowServerNicknames(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 BATCH 3: Server Features (2026-01-19) */}
-            {showServerBoost && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ServerBoostPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        currentUsername={username}
-                        onClose={() => setShowServerBoost(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showRoomWebhooks && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <RoomWebhooksPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        onClose={() => setShowRoomWebhooks(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showOAuthApps && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <OAuthAppsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowOAuthApps(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showAutoResponders && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <AutoRespondersPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowAutoResponders(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 BATCH 4: Security & Privacy (2026-01-19) */}
-            {showSessionManagement && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <SessionManagementPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowSessionManagement(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showGDPRExport && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <GDPRExportPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowGDPRExport(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showDataRetention && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <DataRetentionPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowDataRetention(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showTwoFactorSetup && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <TwoFactorSetupWizard
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowTwoFactorSetup(false)}
-                        onSuccess={() => {
-                            toast.success('2FA başarıyla etkinleştirildi!');
-                            setShowTwoFactorSetup(false);
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 BATCH 5: Communication (2026-01-19) */}
-            {showEnhancedPolls && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <EnhancedPollsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        onClose={() => setShowEnhancedPolls(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showVoiceTranscripts && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <VoiceTranscriptsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowVoiceTranscripts(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showInviteExport && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <InviteExportPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowInviteExport(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 BATCH 6: Advanced Search & Analytics (2026-01-19) */}
-            {showAdvancedSearch && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <AdvancedSearchPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowAdvancedSearch(false)}
-                        onMessageClick={(msg) => {
-                            if (msg.room) {
-                                setActiveChat({ type: 'room', slug: msg.room });
-                            }
-                            setShowAdvancedSearch(false);
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {showGrowthMetrics && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <GrowthMetricsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowGrowthMetrics(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showLinkPreview && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <LinkPreviewRenderer
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        url={null}
-                        onClose={() => setShowLinkPreview(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 BATCH 7: Store & Gamification (2026-01-19) */}
-            {showInventory && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <InventoryPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowInventory(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showWaitlist && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <WaitlistPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowWaitlist(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showReferralRewards && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ReferralRewardsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowReferralRewards(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎮 BATCH 8: New Features (2026-01-28) */}
-            {showMiniGames && (
-                <Suspense fallback={<div>🎮 Oyunlar Yükleniyor...</div>}>
-                    <MiniGamesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        currentUser={username}
-                        onClose={() => setShowMiniGames(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showProjectCollaboration && (
-                <Suspense fallback={<div>📂 Projeler Yükleniyor...</div>}>
-                    <ProjectCollaborationPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        currentUser={username}
-                        onClose={() => setShowProjectCollaboration(false)}
-                    />
-                </Suspense>
-            )}
-
-            {showAvatarStudio && (
-                <Suspense fallback={<div>🎨 Avatar Studio Yükleniyor...</div>}>
-                    <AvatarStudioPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        currentUser={username}
-                        onClose={() => setShowAvatarStudio(false)}
-                        onAvatarChange={(newAvatarUrl) => {
-                            // Update user profile with new avatar
-                            if (currentUserProfile) {
-                                setCurrentUserProfile({ ...currentUserProfile, avatar_url: newAvatarUrl });
-                            }
-                            toast.success('🎨 Avatar güncellendi!');
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔥 BATCH 10: 50 Essential Features (2026-02-01) */}
-
-            {/* ⚙️ 1. User Settings Modal */}
-            {showUserSettings && (
-                <Suspense fallback={<div>⚙️ Ayarlar Yükleniyor...</div>}>
-                    <UserSettingsModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        currentUser={currentUserProfile}
-                        username={username}
-                        onClose={() => setShowUserSettings(false)}
-                        onOpenAppearance={() => setShowAppearanceSettings(true)}
-                        onOpenPrivacy={() => setShowPrivacySettings(true)}
-                        onOpenSecurity={() => setShowSecuritySettings(true)}
-                        onOpenNotifications={() => setShowNotificationSounds(true)}
-                        onOpenConnections={() => setShowConnectionsPanel(true)}
-                        onOpenLanguage={() => setShowLanguageSelector(true)}
-                        onLogout={() => setShowLogoutConfirm(true)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⌨️ 2. Keyboard Shortcuts */}
-            {showKeyboardShortcuts && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <KeyboardShortcutsModal onClose={() => setShowKeyboardShortcuts(false)} />
-                </Suspense>
-            )}
-
-            {/* 🔍 3. Command Palette */}
-            {showCommandPalette && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <CommandPalette
-                        onClose={() => setShowCommandPalette(false)}
-                        onNavigate={(target) => {
-                            if (target.type === 'room') setActiveChat({ type: 'room', slug: target.slug });
-                            else if (target.type === 'dm') setActiveChat({ type: 'dm', id: target.id });
-                            setShowCommandPalette(false);
-                        }}
-                        categories={categories}
-                        conversations={conversations}
-                        allUsers={allUsers}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🌍 4. Server Discovery */}
-            {showServerDiscovery && (
-                <Suspense fallback={<div>🌍 Sunucu Keşfet Yükleniyor...</div>}>
-                    <ServerDiscoveryPage
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        currentUsername={username}
-                        onClose={() => setShowServerDiscovery(false)}
-                        onJoinServer={(server) => {
-                            toast.success(`${server.name} sunucusuna katıldın!`);
-                            setShowServerDiscovery(false);
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎨 5. Appearance Settings */}
-            {showAppearanceSettings && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <AppearanceSettingsPanel
-                        onClose={() => setShowAppearanceSettings(false)}
-                        currentTheme={currentTheme}
-                        onThemeChange={setCurrentTheme}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🌐 6. Language Selector */}
-            {showLanguageSelector && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <LanguageSelector onClose={() => setShowLanguageSelector(false)} />
-                </Suspense>
-            )}
-
-            {/* 📋 7. Changelog */}
-            {showChangelog && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ChangelogPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowChangelog(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚪 8. Logout Confirm */}
-            {showLogoutConfirm && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <LogoutModal
-                        onConfirm={() => { logout(); setShowLogoutConfirm(false); }}
-                        onClose={() => setShowLogoutConfirm(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔊 9. Notification Sound Settings */}
-            {showNotificationSounds && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <NotificationSoundSettings
-                        soundSettings={soundSettings}
-                        onUpdateSettings={setSoundSettings}
-                        onClose={() => setShowNotificationSounds(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⚡ 10. Quick Switcher */}
-            {showQuickSwitcher && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <QuickSwitcher
-                        onClose={() => setShowQuickSwitcher(false)}
-                        categories={categories}
-                        conversations={conversations}
-                        onSelect={(item) => {
-                            if (item.type === 'room') setActiveChat({ type: 'room', slug: item.slug });
-                            else if (item.type === 'dm') setActiveChat({ type: 'dm', id: item.id });
-                            setShowQuickSwitcher(false);
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔐 11. Login History */}
-            {showLoginHistory && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <LoginHistory
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowLoginHistory(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🛡️ 12. Security Settings */}
-            {showSecuritySettings && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <SecuritySettingsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowSecuritySettings(false)}
-                        onOpen2FA={() => setShowTwoFactorSetup(true)}
-                        onOpenLoginHistory={() => setShowLoginHistory(true)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔒 13. Privacy Settings */}
-            {showPrivacySettings && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <PrivacySettingsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowPrivacySettings(false)}
-                        onOpenBlockList={() => setShowBlockList(true)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ❌ 14. Account Deletion */}
-            {showAccountDeletion && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <AccountDeletionModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowAccountDeletion(false)}
-                        onConfirm={() => { logout(); setShowAccountDeletion(false); }}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚫 15. Block List */}
-            {showBlockList && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <BlockListPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowBlockList(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔐 16. E2EE Settings */}
-            {showE2EESettings && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <E2EESettingsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        encryptionKeys={encryptionKeys}
-                        onClose={() => setShowE2EESettings(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💬 17. Thread View */}
-            {showThreadView && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ThreadView
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowThreadView(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⏰ 18. Scheduled Messages */}
-            {showScheduledMessages && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ScheduledMessagesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowScheduledMessages(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⏰ 19. Reminders */}
-            {showReminders && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ReminderPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowReminders(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📋 20. Forum Panel */}
-            {showForum && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>📋 Forum Yükleniyor...</div>}>
-                    <ForumPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        serverId={activeChat.server_id}
-                        currentUser={username}
-                        onClose={() => setShowForum(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎤 21. Stage Channel */}
-            {showStageChannel && (
-                <Suspense fallback={<div>🎤 Sahne Yükleniyor...</div>}>
-                    <StageChannelPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        currentUser={username}
-                        onClose={() => setShowStageChannel(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📹 22. Video Call */}
-            {showVideoCall && (
-                <Suspense fallback={<div>📹 Video Arama Yükleniyor...</div>}>
-                    <VideoCallModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        currentUser={username}
-                        targetUser={activeChat?.type === 'dm' ? activeChat.name : null}
-                        onClose={() => setShowVideoCall(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎙️ 23. Voice Settings */}
-            {showVoiceSettings && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <VoiceSettingsPanel
-                        onClose={() => setShowVoiceSettings(false)}
-                        isMuted={isMuted}
-                        isDeafened={isDeafened}
-                        onToggleMute={toggleMute}
-                        onToggleDeafened={toggleDeafened}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔍 24. Message Search */}
-            {showMessageSearch && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <MessageSearchPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowMessageSearch(false)}
-                        onMessageClick={(msg) => {
-                            if (msg.room) setActiveChat({ type: 'room', slug: msg.room });
-                            setShowMessageSearch(false);
-                        }}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎬 25. Watch Together */}
-            {showWatchTogether && (
-                <Suspense fallback={<div>🎬 Birlikte İzle Yükleniyor...</div>}>
-                    <WatchTogether
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        currentUser={username}
-                        onClose={() => setShowWatchTogether(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🤖 26. Auto Roles */}
-            {showAutoRoles && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <AutoRolesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowAutoRoles(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎭 27. Reaction Roles */}
-            {showReactionRoles && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ReactionRolesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowReactionRoles(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👋 28. Welcome Messages */}
-            {showWelcomeMessages && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <WelcomeMessagesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowWelcomeMessages(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📅 29. Event Calendar */}
-            {showEventCalendar && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>📅 Etkinlikler Yükleniyor...</div>}>
-                    <EventCalendar
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        currentUser={username}
-                        onClose={() => setShowEventCalendar(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎉 30. Giveaway */}
-            {showGiveaway && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>🎉 Çekiliş Yükleniyor...</div>}>
-                    <GiveawayPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        currentUser={username}
-                        onClose={() => setShowGiveaway(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎫 31. Ticket System */}
-            {showTicketSystem && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>🎫 Destek Sistemi Yükleniyor...</div>}>
-                    <TicketSystemPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        currentUser={username}
-                        onClose={() => setShowTicketSystem(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⭐ 32. Starboard */}
-            {showStarboard && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <StarboardPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowStarboard(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💾 33. Server Backup */}
-            {showServerBackup && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ServerBackupPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowServerBackup(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⚖️ 34. Ban Appeals */}
-            {showBanAppeals && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <BanAppealsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowBanAppeals(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🤖 35. Custom Commands */}
-            {showCustomCommands && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <CustomCommandsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowCustomCommands(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📊 36. Leveling System */}
-            {showLevelingSystem && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>📊 Seviye Sistemi Yükleniyor...</div>}>
-                    <LevelingSystemPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        currentUser={username}
-                        onClose={() => setShowLevelingSystem(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📺 37. Live Stream */}
-            {showLiveStream && (
-                <Suspense fallback={<div>📺 Canlı Yayın Yükleniyor...</div>}>
-                    <LiveStreamPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        currentUser={username}
-                        onClose={() => setShowLiveStream(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🏆 38. Achievements */}
-            {showAchievements && (
-                <Suspense fallback={<div>🏆 Başarımlar Yükleniyor...</div>}>
-                    <AchievementsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowAchievements(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎂 39. Birthday System */}
-            {showBirthdaySystem && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <BirthdaySystemPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowBirthdaySystem(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💎 40. Premium */}
-            {showPremium && (
-                <Suspense fallback={<div>💎 Premium Yükleniyor...</div>}>
-                    <PremiumModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowPremium(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎵 41. Music Player */}
-            {showMusicPlayer && (
-                <Suspense fallback={<div>🎵 Müzik Yükleniyor...</div>}>
-                    <MusicPlayer
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowMusicPlayer(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🤖 42. Bot Marketplace */}
-            {showBotMarketplace && (
-                <Suspense fallback={<div>🤖 Bot Mağazası Yükleniyor...</div>}>
-                    <BotMarketplace
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowBotMarketplace(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👤 43. Profile Customization */}
-            {showProfileCustomization && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ProfileCustomization
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        currentUser={currentUserProfile}
-                        onClose={() => setShowProfileCustomization(false)}
-                        onProfileUpdate={(updated) => setCurrentUserProfile(updated)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔗 44. Integration Hub */}
-            {showIntegrationHub && (
-                <Suspense fallback={<div>🔗 Entegrasyonlar Yükleniyor...</div>}>
-                    <IntegrationHubPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowIntegrationHub(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🏆 45. Tournaments */}
-            {showTournaments && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>🏆 Turnuvalar Yükleniyor...</div>}>
-                    <TournamentSystem
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        currentUser={username}
-                        onClose={() => setShowTournaments(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💡 46. Highlights */}
-            {showHighlights && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <HighlightsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowHighlights(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📦 47. Custom Embed */}
-            {showCustomEmbed && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <CustomEmbedPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowCustomEmbed(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎵 48. Spotify Integration */}
-            {showSpotifyIntegration && (
-                <Suspense fallback={<div>🎵 Spotify Yükleniyor...</div>}>
-                    <SpotifyIntegrationPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowSpotifyIntegration(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📋 49. Server Clone */}
-            {showServerClone && activeChat?.type === 'room' && activeChat.server_id && (
-                <Suspense fallback={<div>Yükleniyor...</div>}>
-                    <ServerClonePanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowServerClone(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎯 50. Weekly Challenges */}
-            {showWeeklyChallenges && (
-                <Suspense fallback={<div>🎯 Haftalık Görevler Yükleniyor...</div>}>
-                    <WeeklyChallengesPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowWeeklyChallenges(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ═══════════════════════════════════════════════════════════════ */}
-            {/* 🔥 BATCH 11: 50 More Essential Features (2026-02-02)          */}
-            {/* ═══════════════════════════════════════════════════════════════ */}
-
-            {/* 🛡️ 1. Moderator Tools */}
-            {showModeratorTools && (
-                <Suspense fallback={<div>🛡️ Moderasyon Araçları Yükleniyor...</div>}>
-                    <ModeratorTools
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowModeratorTools(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🤖 2. AI Moderation */}
-            {showAIModeration && (
-                <Suspense fallback={<div>🤖 AI Moderasyon Yükleniyor...</div>}>
-                    <AIModerationPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowAIModeration(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚫 3. Spam Detection */}
-            {showSpamDetection && (
-                <Suspense fallback={<div>🚫 Spam Koruması Yükleniyor...</div>}>
-                    <SpamDetectionPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowSpamDetection(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📋 4. Audit Logs */}
-            {showAuditLogs && (
-                <Suspense fallback={<div>📋 Denetim Kayıtları Yükleniyor...</div>}>
-                    <AuditLogsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowAuditLogs(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⛔ 5. Ban History */}
-            {showBanHistory && (
-                <Suspense fallback={<div>⛔ Ban Geçmişi Yükleniyor...</div>}>
-                    <BanHistoryPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowBanHistory(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📜 6. Moderation Logs */}
-            {showModerationLogs && (
-                <Suspense fallback={<div>📜 Moderasyon Logları Yükleniyor...</div>}>
-                    <ModerationLogsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowModerationLogs(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/*  8. Security Alerts */}
-            {showSecurityAlerts && (
-                <Suspense fallback={<div>🚨 Güvenlik Uyarıları Yükleniyor...</div>}>
-                    <SecurityAlertsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowSecurityAlerts(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎞️ 10. GIF Picker */}
-            {showGIFPicker && (
-                <Suspense fallback={<div>🎞️ GIF Seçici Yükleniyor...</div>}>
-                    <GIFPickerPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onSelect={(gif) => { /* handle gif insert */ setShowGIFPicker(false); }}
-                        onClose={() => setShowGIFPicker(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📊 11. Poll Creator */}
-            {showPollCreator && (
-                <Suspense fallback={<div>📊 Anket Oluşturucu Yükleniyor...</div>}>
-                    <PollCreator
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowPollCreator(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎨 12. Stickers */}
-            {showStickers && (
-                <Suspense fallback={<div>🎨 Çıkartmalar Yükleniyor...</div>}>
-                    <StickersPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onSelect={(sticker) => { /* handle sticker insert */ setShowStickers(false); }}
-                        onClose={() => setShowStickers(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💾 13. Saved Messages */}
-            {showSavedMessages && (
-                <Suspense fallback={<div>💾 Kayıtlı Mesajlar Yükleniyor...</div>}>
-                    <SavedMessagesModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowSavedMessages(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔔 14. Notifications Center */}
-            {showNotificationsCenter && (
-                <Suspense fallback={<div>🔔 Bildirimler Yükleniyor...</div>}>
-                    <NotificationsCenter
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowNotificationsCenter(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📝 15. Message Summary */}
-            {showMessageSummary && (
-                <Suspense fallback={<div>📝 Özet Yükleniyor...</div>}>
-                    <MessageSummaryPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowMessageSummary(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🌍 16. Translation */}
-            {showTranslation && (
-                <Suspense fallback={<div>🌍 Çeviri Yükleniyor...</div>}>
-                    <TranslationPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowTranslation(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⚙️ 17. Channel Settings */}
-            {showChannelSettings && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>⚙️ Kanal Ayarları Yükleniyor...</div>}>
-                    <ChannelSettingsModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat.slug}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowChannelSettings(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📨 18. Invite Modal */}
-            {showInviteModal && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>📨 Davet Yükleniyor...</div>}>
-                    <InviteModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={API_BASE_URL}
-                        server={(() => {
-                            for (const srv of (categories || [])) {
-                                for (const cat of (srv.categories || [])) {
-                                    if (cat.rooms?.some(r => r.slug === activeChat.id)) {
-                                        return { id: srv.id, name: srv.name, avatar: srv.avatar };
-                                    }
-                                }
-                            }
-                            return { id: activeChat.server_id, name: 'Sunucu' };
-                        })()}
-                        currentUser={username}
-                        onClose={() => setShowInviteModal(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📋 19. Server Templates */}
-            {showServerTemplates && (
-                <Suspense fallback={<div>📋 Şablonlar Yükleniyor...</div>}>
-                    <ServerTemplates
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowServerTemplates(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📊 20. Server Analytics */}
-            {showServerAnalytics && (
-                <Suspense fallback={<div>📊 Analitik Yükleniyor...</div>}>
-                    <ServerAnalyticsDashboard
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowServerAnalytics(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👑 21. Roles Manager */}
-            {showRolesManager && activeChat?.type === 'room' && (
-                <Suspense fallback={<div>👑 Rol Yöneticisi Yükleniyor...</div>}>
-                    <RolesManager
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => setShowRolesManager(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👋 22. Welcome Screen Editor */}
-            {showWelcomeScreenEditor && (
-                <Suspense fallback={<div>👋 Karşılama Ekranı Yükleniyor...</div>}>
-                    <WelcomeScreenEditor
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowWelcomeScreenEditor(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🏘️ 23. Community Settings */}
-            {showCommunitySettings && (
-                <Suspense fallback={<div>🏘️ Topluluk Ayarları Yükleniyor...</div>}>
-                    <CommunitySettingsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowCommunitySettings(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔗 24. Invite Link Manager */}
-            {showInviteLinkManager && (
-                <Suspense fallback={<div>🔗 Davet Linkleri Yükleniyor...</div>}>
-                    <InviteLinkManager
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowInviteLinkManager(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🤖 25. Bot Builder */}
-            {showBotBuilder && (
-                <Suspense fallback={<div>🤖 Bot Oluşturucu Yükleniyor...</div>}>
-                    <BotBuilder
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowBotBuilder(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🧑‍💻 26. Bot Developer Portal */}
-            {showBotDevPortal && (
-                <Suspense fallback={<div>🧑‍💻 Geliştirici Portalı Yükleniyor...</div>}>
-                    <BotDeveloperPortal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowBotDevPortal(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔗 27. Webhook Manager */}
-            {showWebhookManager && (
-                <Suspense fallback={<div>🔗 Webhook Yöneticisi Yükleniyor...</div>}>
-                    <WebhookManager
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowWebhookManager(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🔑 28. API Keys */}
-            {showAPIKeys && (
-                <Suspense fallback={<div>🔑 API Anahtarları Yükleniyor...</div>}>
-                    <APIKeysPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowAPIKeys(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* ⚡ 29. Slash Commands */}
-            {showSlashCommands && (
-                <Suspense fallback={<div>⚡ Komut Yöneticisi Yükleniyor...</div>}>
-                    <SlashCommandsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowSlashCommands(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💻 30. Code Runner */}
-            {showCodeRunner && (
-                <Suspense fallback={<div>💻 Kod Çalıştırıcı Yükleniyor...</div>}>
-                    <CodeRunnerPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowCodeRunner(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👤 31. Profile Card */}
-            {showProfileCard && (
-                <Suspense fallback={<div>👤 Profil Kartı Yükleniyor...</div>}>
-                    <ProfileCard
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        currentUser={currentUserProfile}
-                        onClose={() => setShowProfileCard(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📝 32. User Notes */}
-            {showUserNotes && (
-                <Suspense fallback={<div>📝 Notlar Yükleniyor...</div>}>
-                    <UserNotesModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowUserNotes(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🟢 33. Status Picker */}
-            {showStatusPicker && (
-                <Suspense fallback={<div>🟢 Durum Seçici Yükleniyor...</div>}>
-                    <StatusPicker
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        currentUser={currentUserProfile}
-                        onClose={() => setShowStatusPicker(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👥 34. Mutuals Panel */}
-            {showMutuals && (
-                <Suspense fallback={<div>👥 Ortak Arkadaşlar Yükleniyor...</div>}>
-                    <MutualsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowMutuals(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🏅 35. Profile Showcase */}
-            {showProfileShowcase && (
-                <Suspense fallback={<div>🏅 Profil Vitrini Yükleniyor...</div>}>
-                    <ProfileShowcasePanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        currentUser={currentUserProfile}
-                        onClose={() => setShowProfileShowcase(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📱 36. Session Manager */}
-            {showSessionManager && (
-                <Suspense fallback={<div>📱 Oturum Yöneticisi Yükleniyor...</div>}>
-                    <SessionManagerModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowSessionManager(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🪙 37. Coin Store */}
-            {showCoinStore && (
-                <Suspense fallback={<div>🪙 Mağaza Yükleniyor...</div>}>
-                    <CoinStoreModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowCoinStore(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 💎 38. Premium Management */}
-            {showPremiumManagement && (
-                <Suspense fallback={<div>💎 Premium Yönetimi Yükleniyor...</div>}>
-                    <PremiumManagementPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowPremiumManagement(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📋 39. Subscription Manager */}
-            {showSubscriptionManager && (
-                <Suspense fallback={<div>📋 Abonelikler Yükleniyor...</div>}>
-                    <SubscriptionManager
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowSubscriptionManager(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎁 40. Gift Premium */}
-            {showGiftPremium && (
-                <Suspense fallback={<div>🎁 Hediye Premium Yükleniyor...</div>}>
-                    <GiftPremiumPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowGiftPremium(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🛒 41. Premium Marketplace */}
-            {showPremiumMarketplace && (
-                <Suspense fallback={<div>🛒 Premium Mağaza Yükleniyor...</div>}>
-                    <PremiumMarketplace
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowPremiumMarketplace(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🎨 42. Theme Marketplace */}
-            {showThemeMarketplace && (
-                <Suspense fallback={<div>🎨 Tema Mağazası Yükleniyor...</div>}>
-                    <ThemeMarketplace
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowThemeMarketplace(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🤖 43. AI Chatbot */}
-            {showAIChatbot && (
-                <Suspense fallback={<div>🤖 AI Chatbot Yükleniyor...</div>}>
-                    <AIChatbotPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        username={username}
-                        onClose={() => setShowAIChatbot(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 👨‍💻 44. Collaborative Code Editor */}
-            {showCodeEditor && (
-                <Suspense fallback={<div>👨‍💻 Kod Editörü Yükleniyor...</div>}>
-                    <CollaborativeCodeEditor
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        username={username}
-                        onClose={() => setShowCodeEditor(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🖥️ 45. Screen Share */}
-            {showScreenShare && (
-                <Suspense fallback={<div>🖥️ Ekran Paylaşımı Yükleniyor...</div>}>
-                    <ScreenShareModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowScreenShare(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📺 46. Live Stream Modal */}
-            {showLiveStreamModal && (
-                <Suspense fallback={<div>📺 Canlı Yayın Yükleniyor...</div>}>
-                    <LiveStreamModal
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        username={username}
-                        onClose={() => setShowLiveStreamModal(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📈 47. Advanced Analytics */}
-            {showAdvancedAnalytics && (
-                <Suspense fallback={<div>📈 Gelişmiş Analitik Yükleniyor...</div>}>
-                    <AdvancedAnalyticsDashboard
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowAdvancedAnalytics(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📁 48. File Manager */}
-            {showFileManager && (
-                <Suspense fallback={<div>📁 Dosya Yöneticisi Yükleniyor...</div>}>
-                    <FileManagerPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        roomSlug={activeChat?.slug}
-                        onClose={() => setShowFileManager(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 📊 49. Reports */}
-            {showReports && (
-                <Suspense fallback={<div>📊 Raporlar Yükleniyor...</div>}>
-                    <ReportsPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
-                        onClose={() => setShowReports(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🐛 50. Error Reporting */}
-            {showErrorReporting && (
-                <Suspense fallback={<div>🐛 Hata Raporlama Yükleniyor...</div>}>
-                    <ErrorReportingPanel
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => setShowErrorReporting(false)}
-                    />
-                </Suspense>
-            )}
-
-            {/* 🚀 FEATURE HUB - Mega Menu (All Features Access Point) */}
-            {showFeatureHub && (
-                <div style={{
-                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 9999,
-                    display: 'flex', justifyContent: 'center', alignItems: 'center',
-                    backdropFilter: 'blur(8px)'
-                }} onClick={(e) => { if (e.target === e.currentTarget) setShowFeatureHub(false); }}>
-                    <div style={{
-                        backgroundColor: '#2f3136', borderRadius: '16px', width: '90%', maxWidth: '900px',
-                        maxHeight: '85vh', overflow: 'auto', padding: '32px',
-                        boxShadow: '0 20px 60px rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.1)'
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                            <h2 style={{ margin: 0, fontSize: '1.5em', color: '#fff' }}>🚀 Tüm Özellikler</h2>
-                            <button onClick={() => setShowFeatureHub(false)} style={{ background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.5em', cursor: 'pointer' }}>✕</button>
-                        </div>
-
-                        {/* ⚙️ CORE UX */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#7289da', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>⚙️ Genel Ayarlar</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '⚙️', label: 'Kullanıcı Ayarları', action: () => setShowUserSettings(true) },
-                                    { icon: '⌨️', label: 'Kısayol Tuşları', action: () => setShowKeyboardShortcuts(true) },
-                                    { icon: '🔍', label: 'Komut Paleti', action: () => setShowCommandPalette(true) },
-                                    { icon: '🌍', label: 'Sunucu Keşfet', action: () => setShowServerDiscovery(true) },
-                                    { icon: '🎨', label: 'Görünüm', action: () => setShowAppearanceSettings(true) },
-                                    { icon: '🌐', label: 'Dil Seçimi', action: () => setShowLanguageSelector(true) },
-                                    { icon: '📋', label: 'Değişiklik Günlüğü', action: () => setShowChangelog(true) },
-                                    { icon: '🔊', label: 'Bildirim Sesleri', action: () => setShowNotificationSounds(true) },
-                                    { icon: '⚡', label: 'Hızlı Geçiş', action: () => setShowQuickSwitcher(true) },
-                                    { icon: '🚪', label: 'Çıkış Yap', action: () => setShowLogoutConfirm(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(88,101,242,0.2)'; e.currentTarget.style.borderColor = '#5865f2'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🔐 SECURITY */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#ed4245', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🔐 Güvenlik & Gizlilik</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🔐', label: 'Giriş Geçmişi', action: () => setShowLoginHistory(true) },
-                                    { icon: '🛡️', label: 'Güvenlik Ayarları', action: () => setShowSecuritySettings(true) },
-                                    { icon: '🔒', label: 'Gizlilik Ayarları', action: () => setShowPrivacySettings(true) },
-                                    { icon: '🚫', label: 'Engel Listesi', action: () => setShowBlockList(true) },
-                                    { icon: '🔐', label: 'E2E Şifreleme', action: () => setShowE2EESettings(true) },
-                                    { icon: '❌', label: 'Hesap Silme', action: () => setShowAccountDeletion(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(237,66,69,0.2)'; e.currentTarget.style.borderColor = '#ed4245'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 💬 COMMUNICATION */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#3ba55d', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>💬 İletişim</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '💬', label: 'Mesaj Konuları', action: () => setShowThreadView(true) },
-                                    { icon: '⏰', label: 'Zamanlanmış Mesajlar', action: () => setShowScheduledMessages(true) },
-                                    { icon: '⏰', label: 'Hatırlatıcılar', action: () => setShowReminders(true) },
-                                    { icon: '📋', label: 'Forum', action: () => setShowForum(true) },
-                                    { icon: '🎤', label: 'Sahne Kanalı', action: () => setShowStageChannel(true) },
-                                    { icon: '📹', label: 'Görüntülü Arama', action: () => setShowVideoCall(true) },
-                                    { icon: '🎙️', label: 'Ses Ayarları', action: () => setShowVoiceSettings(true) },
-                                    { icon: '🔍', label: 'Mesaj Arama', action: () => setShowMessageSearch(true) },
-                                    { icon: '🎬', label: 'Birlikte İzle', action: () => setShowWatchTogether(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(59,165,93,0.2)'; e.currentTarget.style.borderColor = '#3ba55d'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🏠 SERVER MANAGEMENT */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#faa61a', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🏠 Sunucu Yönetimi</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🤖', label: 'Otomatik Roller', action: () => setShowAutoRoles(true) },
-                                    { icon: '🎭', label: 'Tepki Rolleri', action: () => setShowReactionRoles(true) },
-                                    { icon: '👋', label: 'Hoş Geldin Mesajları', action: () => setShowWelcomeMessages(true) },
-                                    { icon: '📅', label: 'Etkinlik Takvimi', action: () => setShowEventCalendar(true) },
-                                    { icon: '🎉', label: 'Çekiliş', action: () => setShowGiveaway(true) },
-                                    { icon: '🎫', label: 'Destek Sistemi', action: () => setShowTicketSystem(true) },
-                                    { icon: '⭐', label: 'Yıldız Panosu', action: () => setShowStarboard(true) },
-                                    { icon: '💾', label: 'Sunucu Yedekleme', action: () => setShowServerBackup(true) },
-                                    { icon: '⚖️', label: 'Ban İtirazları', action: () => setShowBanAppeals(true) },
-                                    { icon: '🤖', label: 'Özel Komutlar', action: () => setShowCustomCommands(true) },
-                                    { icon: '📊', label: 'Seviye Sistemi', action: () => setShowLevelingSystem(true) },
-                                    { icon: '📺', label: 'Canlı Yayın', action: () => setShowLiveStream(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(250,166,26,0.2)'; e.currentTarget.style.borderColor = '#faa61a'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🎮 ENGAGEMENT */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#9b59b6', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🎮 Eğlence & Sosyal</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🏆', label: 'Başarımlar', action: () => setShowAchievements(true) },
-                                    { icon: '🎂', label: 'Doğum Günleri', action: () => setShowBirthdaySystem(true) },
-                                    { icon: '💎', label: 'Premium', action: () => setShowPremium(true) },
-                                    { icon: '🎵', label: 'Müzik Çalar', action: () => setShowMusicPlayer(true) },
-                                    { icon: '🤖', label: 'Bot Mağazası', action: () => setShowBotMarketplace(true) },
-                                    { icon: '👤', label: 'Profil Özelleştir', action: () => setShowProfileCustomization(true) },
-                                    { icon: '🔗', label: 'Entegrasyonlar', action: () => setShowIntegrationHub(true) },
-                                    { icon: '🏆', label: 'Turnuvalar', action: () => setShowTournaments(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(155,89,182,0.2)'; e.currentTarget.style.borderColor = '#9b59b6'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🔧 ADVANCED */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#e67e22', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🔧 Gelişmiş</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '💡', label: 'Öne Çıkanlar', action: () => setShowHighlights(true) },
-                                    { icon: '📦', label: 'Özel Embed', action: () => setShowCustomEmbed(true) },
-                                    { icon: '🎵', label: 'Spotify Bağlantısı', action: () => setShowSpotifyIntegration(true) },
-                                    { icon: '📋', label: 'Sunucu Klonla', action: () => setShowServerClone(true) },
-                                    { icon: '🎯', label: 'Haftalık Görevler', action: () => setShowWeeklyChallenges(true) },
-                                    { icon: '🤖', label: 'AI Chatbot', action: () => setShowAIChatbot(true) },
-                                    { icon: '👨‍💻', label: 'Kod Editörü', action: () => setShowCodeEditor(true) },
-                                    { icon: '🖥️', label: 'Ekran Paylaşımı', action: () => setShowScreenShare(true) },
-                                    { icon: '📺', label: 'Canlı Yayın', action: () => setShowLiveStreamModal(true) },
-                                    { icon: '📈', label: 'Gelişmiş Analitik', action: () => setShowAdvancedAnalytics(true) },
-                                    { icon: '📁', label: 'Dosya Yöneticisi', action: () => setShowFileManager(true) },
-                                    { icon: '📊', label: 'Raporlar', action: () => setShowReports(true) },
-                                    { icon: '🐛', label: 'Hata Raporlama', action: () => setShowErrorReporting(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(230,126,34,0.2)'; e.currentTarget.style.borderColor = '#e67e22'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🔰 MODERATION - BATCH 11 */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#e74c3c', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🔰 Moderasyon & Yönetim</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🛡️', label: 'Moderasyon Araçları', action: () => setShowModeratorTools(true) },
-                                    { icon: '🤖', label: 'AI Moderasyon', action: () => setShowAIModeration(true) },
-                                    { icon: '🚫', label: 'Spam Koruması', action: () => setShowSpamDetection(true) },
-                                    { icon: '📋', label: 'Denetim Kayıtları', action: () => setShowAuditLogs(true) },
-                                    { icon: '⛔', label: 'Ban Geçmişi', action: () => setShowBanHistory(true) },
-                                    { icon: '📜', label: 'Moderasyon Logları', action: () => setShowModerationLogs(true) },
-                                    { icon: '🛡️', label: 'Baskın Koruması', action: () => setShowRaidProtection(true) },
-                                    { icon: '🚨', label: 'Güvenlik Uyarıları', action: () => setShowSecurityAlerts(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(231,76,60,0.2)'; e.currentTarget.style.borderColor = '#e74c3c'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 💬 MESSAGING - BATCH 11 */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#1abc9c', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>💬 Mesajlaşma & Medya</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🔖', label: 'Yer İmleri', action: () => setShowBookmarks(true) },
-                                    { icon: '🎞️', label: 'GIF Seçici', action: () => setShowGIFPicker(true) },
-                                    { icon: '📊', label: 'Anket Oluştur', action: () => setShowPollCreator(true) },
-                                    { icon: '🎨', label: 'Çıkartmalar', action: () => setShowStickers(true) },
-                                    { icon: '💾', label: 'Kayıtlı Mesajlar', action: () => setShowSavedMessages(true) },
-                                    { icon: '🔔', label: 'Bildirim Merkezi', action: () => setShowNotificationsCenter(true) },
-                                    { icon: '📝', label: 'Mesaj Özeti', action: () => setShowMessageSummary(true) },
-                                    { icon: '🌍', label: 'Çeviri Paneli', action: () => setShowTranslation(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(26,188,156,0.2)'; e.currentTarget.style.borderColor = '#1abc9c'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🏠 SERVER EXTENDED - BATCH 11 */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#2ecc71', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🏠 Sunucu Yönetimi (Genişletilmiş)</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '⚙️', label: 'Kanal Ayarları', action: () => setShowChannelSettings(true) },
-                                    { icon: '📨', label: 'Davet Yönetimi', action: () => setShowInviteModal(true) },
-                                    { icon: '📋', label: 'Sunucu Şablonları', action: () => setShowServerTemplates(true) },
-                                    { icon: '📊', label: 'Sunucu Analitiği', action: () => setShowServerAnalytics(true) },
-                                    { icon: '👑', label: 'Rol Yöneticisi', action: () => setShowRolesManager(true) },
-                                    { icon: '👋', label: 'Karşılama Ekranı', action: () => setShowWelcomeScreenEditor(true) },
-                                    { icon: '🏘️', label: 'Topluluk Ayarları', action: () => setShowCommunitySettings(true) },
-                                    { icon: '🔗', label: 'Davet Linkleri', action: () => setShowInviteLinkManager(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(46,204,113,0.2)'; e.currentTarget.style.borderColor = '#2ecc71'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🤖 BOT & DEVELOPER - BATCH 11 */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#3498db', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>🤖 Bot & Geliştirici</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🤖', label: 'Bot Oluşturucu', action: () => setShowBotBuilder(true) },
-                                    { icon: '🧑‍💻', label: 'Geliştirici Portalı', action: () => setShowBotDevPortal(true) },
-                                    { icon: '🔗', label: 'Webhook Yöneticisi', action: () => setShowWebhookManager(true) },
-                                    { icon: '🔑', label: 'API Anahtarları', action: () => setShowAPIKeys(true) },
-                                    { icon: '⚡', label: 'Slash Komutları', action: () => setShowSlashCommands(true) },
-                                    { icon: '💻', label: 'Kod Çalıştırıcı', action: () => setShowCodeRunner(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(52,152,219,0.2)'; e.currentTarget.style.borderColor = '#3498db'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 👤 PROFILE & SOCIAL - BATCH 11 */}
-                        <div style={{ marginBottom: '20px' }}>
-                            <h3 style={{ color: '#e91e63', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>👤 Profil & Sosyal</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '👤', label: 'Profil Kartı', action: () => setShowProfileCard(true) },
-                                    { icon: '📝', label: 'Kullanıcı Notları', action: () => setShowUserNotes(true) },
-                                    { icon: '🟢', label: 'Durum Seçici', action: () => setShowStatusPicker(true) },
-                                    { icon: '👥', label: 'Ortak Arkadaşlar', action: () => setShowMutuals(true) },
-                                    { icon: '🏅', label: 'Profil Vitrini', action: () => setShowProfileShowcase(true) },
-                                    { icon: '📱', label: 'Oturum Yöneticisi', action: () => setShowSessionManager(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(233,30,99,0.2)'; e.currentTarget.style.borderColor = '#e91e63'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 💎 PREMIUM & ECONOMY - BATCH 11 */}
-                        <div>
-                            <h3 style={{ color: '#f1c40f', fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>💎 Premium & Ekonomi</h3>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '8px' }}>
-                                {[
-                                    { icon: '🪙', label: 'Coin Mağazası', action: () => setShowCoinStore(true) },
-                                    { icon: '💎', label: 'Premium Yönetimi', action: () => setShowPremiumManagement(true) },
-                                    { icon: '📋', label: 'Abonelik Yönetimi', action: () => setShowSubscriptionManager(true) },
-                                    { icon: '🎁', label: 'Premium Hediye Et', action: () => setShowGiftPremium(true) },
-                                    { icon: '🛒', label: 'Premium Mağaza', action: () => setShowPremiumMarketplace(true) },
-                                    { icon: '🎨', label: 'Tema Mağazası', action: () => setShowThemeMarketplace(true) },
-                                ].map((item, i) => (
-                                    <button key={i} onClick={() => { item.action(); setShowFeatureHub(false); }}
-                                        style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', color: '#dcddde', cursor: 'pointer', fontSize: '13px', transition: 'all 0.2s', textAlign: 'left' }}
-                                        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(241,196,15,0.2)'; e.currentTarget.style.borderColor = '#f1c40f'; }}
-                                        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
-                                    >
-                                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                                        <span>{item.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* --- STANDART MODALLAR --- */}
-            {zoomedImage && <Suspense fallback={null}><ImageLightbox imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} /></Suspense>}
-            {galleryData && <Suspense fallback={null}><ImageLightbox images={galleryData.images} startIndex={galleryData.startIndex} onClose={() => setGalleryData(null)} /></Suspense>}
-            {showPinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => setShowPinned(false)} /></Suspense>}
-            {viewingProfile && <Suspense fallback={null}><UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} /></Suspense>}
+            {/* All modal renders are in AppModals */}
+            <AppModals
+                fetchWithAuth={fetchWithAuth}
+                activeChat={activeChat}
+                username={username}
+                sendMessage={sendMessage}
+                sendSignal={sendSignal}
+                ws={ws}
+                currentUserProfile={currentUserProfile} setCurrentUserProfile={setCurrentUserProfile}
+                currentUser={currentUser} setCurrentUser={setCurrentUser}
+                currentTheme={currentTheme} setCurrentTheme={setCurrentTheme}
+                soundSettings={soundSettings} setSoundSettings={setSoundSettings}
+                encryptionKeys={encryptionKeys} currentKeyId={currentKeyId} setEncryptionKey={setEncryptionKey}
+                chartSymbol={chartSymbol} setChartSymbol={setChartSymbol}
+                serverToEdit={serverToEdit} setServerToEdit={setServerToEdit}
+                serverMembers={serverMembers}
+                friendsList={friendsList}
+                conversations={conversations} categories={categories} allUsers={allUsers}
+                pinnedMessages={pinnedMessages}
+                isSummaryLoading={isSummaryLoading} summaryResult={summaryResult}
+                zoomedImage={zoomedImage} setZoomedImage={setZoomedImage}
+                galleryData={galleryData} setGalleryData={setGalleryData}
+                viewingProfile={viewingProfile} setViewingProfile={setViewingProfile}
+                isAdmin={isAdmin}
+                richTextRef={richTextRef}
+                logout={logout}
+                getDeterministicAvatar={getDeterministicAvatar}
+                handleSendSnippet={handleSendSnippet}
+                handleDMClick={handleDMClick}
+                setActiveChat={setActiveChat}
+                setConversations={setConversations}
+                isMuted={isMuted} isDeafened={isDeafened}
+                toggleMute={toggleMute} toggleDeafened={toggleDeafened}
+            />
 
             {/* Mobile overlay for left sidebar */}
             {isMobile && isLeftSidebarVisible && (
@@ -5709,12 +3301,12 @@ const AppContent = () => {
                                 onDMSelect={(id, targetUsername) => setActiveChat('dm', id, targetUsername)}
                                 onWelcomeClick={handleWelcomeClick}
                                 setIsLeftSidebarVisible={setIsLeftSidebarVisible}
-                                onProfileClick={() => setShowProfilePanel(true)}
+                                onProfileClick={() => openModal('profilePanel')}
                                 onViewUserProfile={(username) => {
                                     const user = allUsers.find(u => u.username === username);
                                     if (user) setViewingProfile(user);
                                 }}
-                                onOpenStore={() => setShowStore(true)}
+                                onOpenStore={() => openModal('store')}
                                 onOpenServerSettings={(server) => setServerToEdit(server)}
                                 categories={sortedServers}
                                 onServerDragStart={handleServerDragStart}
@@ -5751,7 +3343,7 @@ const AppContent = () => {
                                 dropTarget={dropTarget}
                                 setDropTarget={setDropTarget}
                                 isDragging={isDragging}
-                                onOpenCreateGroup={() => setShowGroupModal(true)}
+                                onOpenCreateGroup={() => openModal('groupModal')}
                                 // Voice Controls
                                 toggleMute={toggleMute}
                                 toggleDeafened={toggleDeafened}
@@ -5764,21 +3356,21 @@ const AppContent = () => {
                                 isScreenSharing={isScreenSharing}
                                 // 🔥 Update System
                                 updateAvailable={updateAvailable}
-                                onUpdateClick={() => setShowDownloadModal(true)}
+                                onUpdateClick={() => openModal('downloadModal')}
                                 // 🔥 Analytics System
-                                onOpenAnalytics={() => setShowAnalytics(true)}
-                                onOpenAdminPanel={() => setShowAdminPanel(true)}
+                                onOpenAnalytics={() => openModal('analytics')}
+                                onOpenAdminPanel={() => openModal('adminPanel')}
                                 // 💰 Payment & Engagement System (2026-01-19)
-                                onOpenPaymentPanel={() => setShowPaymentPanel(true)}
-                                onOpenStoreModal={() => setShowStoreModal(true)}
-                                onOpenDailyRewards={() => setShowDailyRewards(true)}
-                                onOpenAPIUsage={() => setShowAPIUsagePanel(true)}
-                                onOpenExportJobs={() => setShowExportJobsPanel(true)}
-                                onOpenScheduledAnnouncements={() => setShowScheduledAnnouncements(true)}
+                                onOpenPaymentPanel={() => openModal('paymentPanel')}
+                                onOpenStoreModal={() => openModal('storeModal')}
+                                onOpenDailyRewards={() => openModal('dailyRewards')}
+                                onOpenAPIUsage={() => openModal('aPIUsagePanel')}
+                                onOpenExportJobs={() => openModal('exportJobsPanel')}
+                                onOpenScheduledAnnouncements={() => openModal('scheduledAnnouncements')}
                                 // 🎮 New Features (2026-01-28)
-                                onOpenMiniGames={() => setShowMiniGames(true)}
-                                onOpenProjectCollaboration={() => setShowProjectCollaboration(true)}
-                                onOpenAvatarStudio={() => setShowAvatarStudio(true)}
+                                onOpenMiniGames={() => openModal('miniGames')}
+                                onOpenProjectCollaboration={() => openModal('projectCollaboration')}
+                                onOpenAvatarStudio={() => openModal('avatarStudio')}
                                 // 🔥 YENİ: Sunucu seçildiğinde sağ panelde üyeleri göster
                                 onServerSelect={handleServerSelect}
                             />
@@ -5831,7 +3423,7 @@ const AppContent = () => {
                                         handleRoomChange('ai');
                                     }}
                                     onSwitchToCinema={() => {
-                                        setShowCinema(true);
+                                        openModal('cinema');
                                         if (isMobile) setIsLeftSidebarVisible(false);
                                     }}
                                 />
@@ -5839,7 +3431,7 @@ const AppContent = () => {
                         </div>
                     ) : activeRoomType === 'kanban' ? (
                         <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-                            <div style={styles.chatHeader}><h2>📋 {chatTitle} (Pano)</h2></div>
+                            <div style={styles.chatHeader}><h2># {chatTitle} (Pano)</h2></div>
                             <Suspense fallback={<LoadingSpinner size="medium" text="Pano yükleniyor..." />}>
                                 <KanbanBoard roomSlug={activeChat.id} apiBaseUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />
                             </Suspense>
@@ -5858,7 +3450,7 @@ const AppContent = () => {
                                         </button>
                                     )}
                                     <h2 style={{ margin: 0, fontSize: '1.2em' }}>
-                                        🔊 {voiceRoomDisplayName}
+                                        🔊 {currentVoiceRoom}
                                     </h2>
                                 </div>
                                 <button
@@ -5880,7 +3472,7 @@ const AppContent = () => {
                                 </button>
                             </div>
                             <VoiceChatPanel
-                                roomName={voiceRoomDisplayName}
+                                roomName={currentVoiceRoom}
                                 onClose={() => {
                                     leaveChannel();
                                     setActiveChat('welcome', 'welcome');
@@ -5925,7 +3517,7 @@ const AppContent = () => {
                                     )}
 
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: isMobile ? '1em' : '1.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `💬 ${String(chatTitle)}`}
+                                        {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `# ${String(chatTitle)}`}
                                     </h2>
                                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>
                                         {isConnected ? '✓' : '✗'}
@@ -5945,17 +3537,17 @@ const AppContent = () => {
 
                                     {/* 🔔 Bildirimler (Her zaman görünür) */}
                                     <button
-                                        onClick={() => setShowNotifications(!showNotifications)}
+                                        onClick={() => toggleModal('notifications')}
                                         style={{
                                             ...styles.iconButton,
-                                            color: showNotifications ? '#5865f2' : '#b9bbbe',
+                                            color: modals.notifications ? '#5865f2' : '#b9bbbe',
                                             position: 'relative'
                                         }}
                                         title="Bildirimler"
                                     >
                                         <FaBell />
                                     </button>
-                                    {showNotifications && (
+                                    {modals.notifications && (
                                         <div style={{
                                             position: 'absolute',
                                             top: '54px',
@@ -5965,7 +3557,7 @@ const AppContent = () => {
                                             <Suspense fallback={<LoadingSpinner size="small" text="" />}>
                                                 <NotificationDropdown
                                                     currentUser={username}
-                                                    onClose={() => setShowNotifications(false)}
+                                                    onClose={() => closeModal('notifications')}
                                                     fetchWithAuth={fetchWithAuth}
                                                     apiBaseUrl={ABSOLUTE_HOST_URL}
                                                 />
@@ -5976,10 +3568,10 @@ const AppContent = () => {
                                     {/* 🔥 AÇILIR MENÜ BUTONU */}
                                     <div className="toolbar-menu-container" style={{ position: 'relative' }}>
                                         <button
-                                            onClick={() => setShowToolbarMenu(!showToolbarMenu)}
+                                            onClick={() => toggleModal('toolbarMenu')}
                                             style={{
                                                 ...styles.iconButton,
-                                                color: showToolbarMenu ? '#5865f2' : '#b9bbbe',
+                                                color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe',
                                                 fontSize: '1.2em',
                                                 fontWeight: 'bold'
                                             }}
@@ -5989,7 +3581,7 @@ const AppContent = () => {
                                         </button>
 
                                         {/* 🔥 AÇILIR MENÜ - TOOLBAR ÖZELLİKLERİ */}
-                                        {showToolbarMenu && (
+                                        {modals.toolbarMenu && (
                                             <div style={{
                                                 position: 'absolute',
                                                 top: '50px',
@@ -6006,8 +3598,8 @@ const AppContent = () => {
                                                 {activeChat.type === 'dm' && (
                                                     <button
                                                         onClick={() => {
-                                                            setShowEncModal(true);
-                                                            setShowToolbarMenu(false);
+                                                            openModal('encModal');
+                                                            closeModal('toolbarMenu');
                                                         }}
                                                         style={{
                                                             ...styles.menuItem,
@@ -6030,12 +3622,12 @@ const AppContent = () => {
                                                 {/* 📌 Sabitli Mesajlar */}
                                                 <button
                                                     onClick={() => {
-                                                        setShowPinned(!showPinned);
-                                                        setShowToolbarMenu(false);
+                                                        toggleModal('pinned');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={{
                                                         ...styles.menuItem,
-                                                        color: showPinned ? '#f5a524' : '#dcddde'
+                                                        color: modals.pinned ? '#f5a524' : '#dcddde'
                                                     }}
                                                     onMouseEnter={(e) => {
                                                         e.currentTarget.style.backgroundColor = '#5865f2';
@@ -6043,7 +3635,7 @@ const AppContent = () => {
                                                     }}
                                                     onMouseLeave={(e) => {
                                                         e.currentTarget.style.backgroundColor = 'transparent';
-                                                        e.currentTarget.style.color = showPinned ? '#f5a524' : '#dcddde';
+                                                        e.currentTarget.style.color = modals.pinned ? '#f5a524' : '#dcddde';
                                                     }}
                                                 >
                                                     <FaThumbtack />
@@ -6054,7 +3646,7 @@ const AppContent = () => {
                                                 <button
                                                     onClick={() => {
                                                         handleCopyLink();
-                                                        setShowToolbarMenu(false);
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={styles.menuItem}
                                                     onMouseEnter={(e) => {
@@ -6074,7 +3666,7 @@ const AppContent = () => {
                                                 <button
                                                     onClick={() => {
                                                         toggleNotifications();
-                                                        setShowToolbarMenu(false);
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={{
                                                         ...styles.menuItem,
@@ -6098,8 +3690,8 @@ const AppContent = () => {
                                                 {/* 📬 Bahsedilmeler (Mentions Inbox) */}
                                                 <button
                                                     onClick={() => {
-                                                        setShowMentionsInbox(true);
-                                                        setShowToolbarMenu(false);
+                                                        openModal('mentionsInbox');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={styles.menuItem}
                                                     onMouseEnter={(e) => {
@@ -6118,8 +3710,8 @@ const AppContent = () => {
                                                 {/* 🎭 Durumunu Ayarla */}
                                                 <button
                                                     onClick={() => {
-                                                        setShowCustomStatus(true);
-                                                        setShowToolbarMenu(false);
+                                                        openModal('customStatus');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={styles.menuItem}
                                                     onMouseEnter={(e) => {
@@ -6140,8 +3732,8 @@ const AppContent = () => {
                                                 {/* 🎬 Sinema */}
                                                 <button
                                                     onClick={() => {
-                                                        setShowCinema(true);
-                                                        setShowToolbarMenu(false);
+                                                        openModal('cinema');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={styles.menuItem}
                                                     onMouseEnter={(e) => {
@@ -6160,8 +3752,8 @@ const AppContent = () => {
                                                 {/* 🎵 DJ Modu */}
                                                 <button
                                                     onClick={() => {
-                                                        setShowDJ(true);
-                                                        setShowToolbarMenu(false);
+                                                        openModal('dJ');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={styles.menuItem}
                                                     onMouseEnter={(e) => {
@@ -6180,8 +3772,8 @@ const AppContent = () => {
                                                 {/* 🖍️ Beyaz Tahta */}
                                                 <button
                                                     onClick={() => {
-                                                        setShowWhiteboard(true);
-                                                        setShowToolbarMenu(false);
+                                                        openModal('whiteboard');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={styles.menuItem}
                                                     onMouseEnter={(e) => {
@@ -6201,8 +3793,8 @@ const AppContent = () => {
                                                 {isInVoice && (
                                                     <button
                                                         onClick={() => {
-                                                            setShowSoundboard(true);
-                                                            setShowToolbarMenu(false);
+                                                            openModal('soundboard');
+                                                            closeModal('toolbarMenu');
                                                         }}
                                                         style={styles.menuItem}
                                                         onMouseEnter={(e) => {
@@ -6226,7 +3818,7 @@ const AppContent = () => {
                                                         <button
                                                             onClick={() => {
                                                                 handleSummarize();
-                                                                setShowToolbarMenu(false);
+                                                                closeModal('toolbarMenu');
                                                             }}
                                                             style={styles.menuItem}
                                                             onMouseEnter={(e) => {
@@ -6246,7 +3838,7 @@ const AppContent = () => {
                                                         <button
                                                             onClick={() => {
                                                                 handleClearChat();
-                                                                setShowToolbarMenu(false);
+                                                                closeModal('toolbarMenu');
                                                             }}
                                                             style={{
                                                                 ...styles.menuItem,
@@ -6272,7 +3864,7 @@ const AppContent = () => {
                                                                 <button
                                                                     onClick={() => {
                                                                         handleAdminDeleteConversation(activeChat.id);
-                                                                        setShowToolbarMenu(false);
+                                                                        closeModal('toolbarMenu');
                                                                     }}
                                                                     style={{
                                                                         ...styles.menuItem,
@@ -6301,8 +3893,8 @@ const AppContent = () => {
                                                 <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
                                                 <button
                                                     onClick={() => {
-                                                        setShowFeatureHub(true);
-                                                        setShowToolbarMenu(false);
+                                                        openModal('featureHub');
+                                                        closeModal('toolbarMenu');
                                                     }}
                                                     style={{
                                                         ...styles.menuItem,
@@ -6549,9 +4141,9 @@ const AppContent = () => {
                                     <MessageInput
                                         onSendMessage={sendMessage}
                                         onFileUpload={uploadFile}
-                                        onShowCodeSnippet={() => setShowSnippetModal(true)}
+                                        onShowCodeSnippet={() => openModal('snippetModal')}
                                         placeholder={chatTitle
-                                            ? `${activeChat.type === 'dm' ? chatTitle : chatTitle} kanalına mesaj gönder`
+                                            ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalına mesaj gönder`
                                             : 'Mesaj yaz...'}
                                         disabled={isUploading}
                                         fetchWithAuth={fetchWithAuth}
@@ -6672,7 +4264,7 @@ const AppContent = () => {
                             {useNewVoicePanel ? (
                                 /* 🆕 YENİ PROFESYONEL PANEL */
                                 <VoiceChatPanel
-                                    roomName={voiceRoomDisplayName}
+                                    roomName={currentVoiceRoom}
                                     onClose={() => {
                                         setShowVoiceIsland(false);
                                     }}
@@ -7120,42 +4712,6 @@ const AppContent = () => {
                             )}
                         </>
                     )}
-                {/* ✨ THEME STORE MODAL */}
-                {showThemeStore && (
-                    <Suspense fallback={<LoadingSpinner size="medium" text="Temalar yükleniyor..." />}>
-                        <ThemeStoreModal
-                            onClose={() => setShowThemeStore(false)}
-                            currentTheme={currentTheme}
-                            onThemeChange={setCurrentTheme}
-                        />
-                    </Suspense>
-                )}
-
-                {showSummary && (
-                    <Suspense fallback={<LoadingSpinner size="medium" text="Özet hazırlanıyor..." />}>
-                        <SummaryModal
-                            roomSlug={activeChat.id}
-                            onClose={() => setShowSummary(false)}
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                        />
-                    </Suspense>
-                )}
-
-                {showTemplateModal && (
-                    <Suspense fallback={<LoadingSpinner size="small" text="Şablonlar yükleniyor..." />}>
-                        <MessageTemplateModal
-                            onClose={() => setShowTemplateModal(false)}
-                            onSelect={(content) => {
-                                richTextRef.current?.appendText?.(content);
-                                setShowTemplateModal(false);
-                            }}
-                            fetchWithAuth={fetchWithAuth}
-                            apiBaseUrl={ABSOLUTE_HOST_URL}
-                            isAdmin={isAdmin}
-                        />
-                    </Suspense>
-                )}
             </div >
 
             {/* 🔥 USER CONTEXT MENU */}
@@ -7344,11 +4900,6 @@ const AppContent = () => {
 };
 
 
-
-
-
-
-
 // Styles extracted to ./styles/appStyles.js (imported at top)
 
 function App() {
@@ -7362,6 +4913,5 @@ function App() {
 }
 
 export default App;
-
 
 

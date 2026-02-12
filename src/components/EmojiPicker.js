@@ -1,5 +1,6 @@
 // frontend/src/components/EmojiPicker.js
 import React, { useState, useEffect, useCallback } from 'react';
+import styles from './EmojiPicker/styles';
 
 // ─── localStorage helpers for Recents & Favorites ───
 const RECENTS_KEY = 'pawscord_recent_emojis';
@@ -171,110 +172,6 @@ const EmojiPicker = ({ onSelect }) => {
             )}
         </div>
     );
-};
-
-const styles = {
-    container: {
-        width: '350px',
-        height: '400px',
-        backgroundColor: '#2f3136',
-        borderRadius: '8px',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    searchBar: {
-        padding: '12px',
-        borderBottom: '1px solid #202225',
-    },
-    searchInput: {
-        width: '100%',
-        padding: '8px 12px',
-        backgroundColor: '#202225',
-        border: 'none',
-        borderRadius: '4px',
-        color: '#dcddde',
-        fontSize: '14px',
-        outline: 'none',
-    },
-    categories: {
-        display: 'flex',
-        gap: '4px',
-        padding: '8px',
-        borderBottom: '1px solid #202225',
-        overflowX: 'auto',
-        scrollbarWidth: 'thin',
-    },
-    categoryButton: {
-        padding: '6px 12px',
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
-        fontSize: '13px',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        whiteSpace: 'nowrap',
-        transition: 'background 0.2s',
-    },
-    activeCategoryButton: {
-        backgroundColor: '#404249',
-        color: '#fff',
-    },
-    emojiGrid: {
-        flex: 1,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(8, 1fr)',
-        gap: '4px',
-        padding: '12px',
-        overflowY: 'auto',
-        alignContent: 'start',
-    },
-    emojiButton: {
-        background: 'none',
-        border: 'none',
-        fontSize: '28px',
-        cursor: 'pointer',
-        padding: '8px',
-        borderRadius: '4px',
-        transition: 'background 0.2s, transform 0.1s',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        aspectRatio: '1',
-    },
-    favHighlight: {
-        background: 'rgba(250, 176, 5, 0.08)',
-        boxShadow: 'inset 0 0 0 1px rgba(250, 176, 5, 0.25)',
-    },
-    emptyState: {
-        gridColumn: '1 / -1',
-        textAlign: 'center',
-        color: '#72767d',
-        fontSize: '14px',
-        padding: '24px 0',
-    },
-    contextMenu: {
-        position: 'fixed',
-        zIndex: 9999,
-        backgroundColor: '#18191c',
-        border: '1px solid #2f3136',
-        borderRadius: '6px',
-        padding: '4px',
-        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-    },
-    contextMenuItem: {
-        display: 'block',
-        width: '100%',
-        padding: '8px 16px',
-        background: 'none',
-        border: 'none',
-        color: '#dcddde',
-        fontSize: '13px',
-        cursor: 'pointer',
-        borderRadius: '4px',
-        whiteSpace: 'nowrap',
-        textAlign: 'left',
-    },
 };
 
 export default React.memo(EmojiPicker);

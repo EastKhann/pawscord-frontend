@@ -1,5 +1,6 @@
 import { FaCog, FaDownload } from 'react-icons/fa';
 import { styles } from '../SidebarStyles';
+import { PRODUCTION_URL } from '../utils/constants';
 
 const UserFooter = ({
     currentUserProfile,
@@ -16,7 +17,7 @@ const UserFooter = ({
     if (avatarUrl && typeof avatarUrl === 'string' && !avatarUrl.startsWith('http') && !avatarUrl.startsWith('blob') && !avatarUrl.includes('ui-avatars.com')) {
         // Başında slash yoksa ekle
         const path = avatarUrl.startsWith('/') ? avatarUrl : `/${avatarUrl}`;
-        avatarUrl = `https://www.pawscord.com${path}`;
+        avatarUrl = `${PRODUCTION_URL}${path}`;
     } else if (!avatarUrl || typeof avatarUrl !== 'string') {
         avatarUrl = getDeterministicAvatar(currentUsername);
     }

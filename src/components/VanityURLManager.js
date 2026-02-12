@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { FaTimes, FaLink, FaCopy, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';
+import { PRODUCTION_URL } from '../utils/constants';
 
 const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedded = false }) => {
     const [vanityPath, setVanityPath] = useState('');
@@ -107,7 +108,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
     };
 
     const copyUrl = () => {
-        const fullUrl = `https://www.pawscord.com/join/${existingVanity.path}`;
+        const fullUrl = `${PRODUCTION_URL}/join/${existingVanity.path}`;
         navigator.clipboard.writeText(fullUrl);
         toast.success('URL kopyalandı!');
     };

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { FaCopy, FaTimes, FaCheck, FaSearch, FaLink, FaUserFriends, FaHashtag, FaSync } from 'react-icons/fa';
 import toast from '../utils/toast';
+import { PRODUCTION_URL } from '../utils/constants';
 
 const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }) => {
     const [friends, setFriends] = useState([]);
@@ -37,7 +38,7 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
             });
             if (res.ok) {
                 const data = await res.json();
-                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
+                const link = data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`;
                 setInviteLink(link);
             } else {
                 const err = await res.json().catch(() => ({}));
@@ -66,7 +67,7 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
             });
             if (res.ok) {
                 const data = await res.json();
-                const link = data.url || data.invite_link || `https://www.pawscord.com/#/invite/${data.code}`;
+                const link = data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`;
                 setInviteLink(link);
                 toast.success('🔗 Yeni davet linki oluşturuldu!');
             } else {

@@ -1,16 +1,17 @@
 // frontend/src/utils/notificationSounds.js
 // 🔔 FEATURE 1: Notification Sound Manager
 // Farklı event'ler için farklı sesler çalar
+import { CDN_BASE_URL } from './constants';
 
 const SOUND_URLS = {
-    message: 'https://cdn.pawscord.com/sounds/message.mp3',
-    mention: 'https://cdn.pawscord.com/sounds/mention.mp3',
-    dm: 'https://cdn.pawscord.com/sounds/dm.mp3',
-    join: 'https://cdn.pawscord.com/sounds/join.mp3',
-    leave: 'https://cdn.pawscord.com/sounds/leave.mp3',
-    call: 'https://cdn.pawscord.com/sounds/call.mp3',
-    deafen: 'https://cdn.pawscord.com/sounds/deafen.mp3',
-    mute: 'https://cdn.pawscord.com/sounds/mute.mp3',
+    message: `${CDN_BASE_URL}/sounds/message.mp3`,
+    mention: `${CDN_BASE_URL}/sounds/mention.mp3`,
+    dm: `${CDN_BASE_URL}/sounds/dm.mp3`,
+    join: `${CDN_BASE_URL}/sounds/join.mp3`,
+    leave: `${CDN_BASE_URL}/sounds/leave.mp3`,
+    call: `${CDN_BASE_URL}/sounds/call.mp3`,
+    deafen: `${CDN_BASE_URL}/sounds/deafen.mp3`,
+    mute: `${CDN_BASE_URL}/sounds/mute.mp3`,
 };
 
 // Web Audio API based oscillator fallbacks (no external files needed)

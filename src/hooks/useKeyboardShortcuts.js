@@ -33,6 +33,18 @@ export const useKeyboardShortcuts = (handlers = {}) => {
       handlers.onToggleMute?.();
     }
 
+    // Ctrl/Cmd + Shift + P: Command Palette
+    if (cmdOrCtrl && shiftKey && key.toLowerCase() === 'p') {
+      event.preventDefault();
+      handlers.onCommandPalette?.();
+    }
+
+    // Ctrl/Cmd + ,: User Settings
+    if (cmdOrCtrl && key === ',') {
+      event.preventDefault();
+      handlers.onSettings?.();
+    }
+
     // Ctrl/Cmd + Shift + D: Deafen/Undeafen
     if (cmdOrCtrl && shiftKey && key === 'D') {
       event.preventDefault();

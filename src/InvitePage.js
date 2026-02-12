@@ -5,6 +5,7 @@ import toast from './utils/toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { FaServer, FaUsers, FaClock, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { API_BASE_URL, PRODUCTION_URL } from './utils/constants';
 
 const InvitePage = () => {
     const { code } = useParams();
@@ -17,26 +18,8 @@ const InvitePage = () => {
     const [joining, setJoining] = useState(false);
     const [joined, setJoined] = useState(false);
 
-    // API URL logic (same as LoginPage.js)
-    const DJANGO_PORT = "8888";
-    const isNative = window.Capacitor && window.Capacitor.isNativePlatform();
-    const isElectron = typeof window !== 'undefined' && typeof window.require === 'function';
-
-    const API_URL_BASE_STRING = (() => {
-        if (isNative) return "https://www.pawscord.com";
-        if (isElectron) return `http://127.0.0.1:${DJANGO_PORT}`;
-
-        const protocol = window.location.protocol;
-        const hostname = window.location.hostname;
-
-        if (hostname.includes('pawscord.com')) {
-            return "https://www.pawscord.com";
-        }
-
-        return `${protocol}//${hostname}:${DJANGO_PORT}`;
-    })();
-
-    const API_BASE_URL = `${API_URL_BASE_STRING}/api`;
+    // API URL logic - use centralized constants
+    // (PRODUCTION_URL used for display/share links, API_BASE_URL for API calls)
 
     useEffect(() => {
         fetchInviteInfo();

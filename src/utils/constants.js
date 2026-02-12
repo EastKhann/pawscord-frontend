@@ -37,9 +37,13 @@ if (typeof window !== 'undefined') {
 }
 
 // 🔥 NEW: Media files için ayrı URL (her zaman production)
-export const MEDIA_BASE_URL = (isNative || isElectron || !window.location.hostname.includes('localhost'))
-    ? "https://media.pawscord.com"
-    : API_URL_BASE_STRING;
+export const MEDIA_BASE_URL = import.meta.env.VITE_MEDIA_URL || (
+    (isNative || isElectron || !window.location.hostname.includes('localhost'))
+        ? "https://media.pawscord.com"
+        : API_URL_BASE_STRING
+);
+export const CDN_BASE_URL = import.meta.env.VITE_CDN_URL || "https://cdn.pawscord.com";
+export const PRODUCTION_URL = import.meta.env.VITE_PRODUCTION_URL || "https://www.pawscord.com";
 export const WS_PROTOCOL = API_URL_BASE_STRING.startsWith('https') ? 'wss' : 'ws';
 export const API_HOST = API_URL_BASE_STRING.replace(/^https?:\/\//, '');
 
