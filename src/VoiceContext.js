@@ -1,64 +1,19 @@
-import { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
+﻿import { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 import logger from './utils/logger';
 import toast from './utils/toast';
-import { spatialAudio } from './SpatialAudioEngine'; // 🔥 YENİ: Spatial Audio import
+import { spatialAudio } from './SpatialAudioEngine';
 import { API_URL_BASE_STRING, WS_PROTOCOL, API_HOST, isElectron } from './utils/constants';
-import { authFetch } from './utils/authFetch'; // 🔥 Token auto-refresh
+import { authFetch } from './utils/authFetch';
+import { DEFAULT_ICE_SERVERS, RTC_CONFIGURATION, setRtcIceServers } from './VoiceContext/constants';
+import { applyProfessionalAudioFilters } from './VoiceContext/audioProcessing';
+import { createVoiceEffect } from './VoiceContext/voiceEffects';
+import { useVoiceSettings } from './VoiceContext/useVoiceSettings';
+import { useRecording } from './VoiceContext/useRecording';
+import { useStatsMonitoring } from './VoiceContext/useStatsMonitoring';
+import { useAudioVisualizer } from './VoiceContext/useAudioVisualizer';
 
 const VoiceContext = createContext(null);
-
-// --- SENİN AYARLARIN ---
-// frontend/src/VoiceContext.js
-
-// 🔥 YENİ: ICE servers backend'den alınacak (TURN credentials güvenliği için)
-// Sadece STUN servers burada tanımlı (public ve güvenli)
-const DEFAULT_ICE_SERVERS = [
-    // Google STUN (Reliable, public, free)
-    { urls: "stun:stun.l.google.com:19302" },
-    { urls: "stun:stun1.l.google.com:19302" },
-    { urls: "stun:stun2.l.google.com:19302" },
-    { urls: "stun:stun3.l.google.com:19302" },
-    { urls: "stun:stun4.l.google.com:19302" },
-    // 🔥 YENİ: Ek STUN sunucuları (redundancy)
-    { urls: "stun:stun.cloudflare.com:3478" },
-    { urls: "stun:stun.services.mozilla.com:3478" },
-    { urls: "stun:stun.stunprotocol.org:3478" },
-    // 🔥 FALLBACK TURN: Sunucu TURN'a erişilemezse kullanılacak (OpenRelay - ücretsiz)
-    {
-        urls: "turn:openrelay.metered.ca:80",
-        username: "openrelayproject",
-        credential: "openrelayproject"
-    },
-    {
-        urls: "turn:openrelay.metered.ca:443",
-        username: "openrelayproject",
-        credential: "openrelayproject"
-    },
-    {
-        urls: "turn:openrelay.metered.ca:443?transport=tcp",
-        username: "openrelayproject",
-        credential: "openrelayproject"
-    }
-];
-// ⚠️ TURN servers Backend'den alınacak (güvenlik) - Fallback olarak yukarıdakiler kullanılır
-// 🔥 REDUNDANT TURN: Birden fazla TURN server destegi icin backend API'den liste geliyor
-
-// WebRTC Configuration (başlangıçta sadece STUN ile)
-let RTC_CONFIGURATION = {
-    iceServers: DEFAULT_ICE_SERVERS,
-    iceCandidatePoolSize: 10,
-    iceTransportPolicy: 'all',
-    bundlePolicy: 'max-bundle',
-    rtcpMuxPolicy: 'require'
-};
-// Tek kaynaklı TURN yönetimi: join sırasında tekrar fetch etme, state’ten kullan
-const setRtcIceServers = (servers) => {
-    RTC_CONFIGURATION = { ...RTC_CONFIGURATION, iceServers: servers };
-};
-
-// 🔥 Platform detection now imported from constants.js
-// isElectron, API_URL_BASE_STRING, WS_PROTOCOL, API_HOST - all from constants.js
 
 
 export const VoiceProvider = ({ children }) => {
@@ -74,8 +29,6 @@ export const VoiceProvider = ({ children }) => {
     const [isVideoEnabled, setIsVideoEnabled] = useState(false);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
     const [isTalking, setIsTalking] = useState(false);
-    const [isRecording, setIsRecording] = useState(false); // 🔥 Kayıt durumu
-    const [recordingDuration, setRecordingDuration] = useState(0);
 
     // 🎵 Voice Effects State
     const [activeVoiceEffect, setActiveVoiceEffect] = useState(null);
@@ -104,120 +57,23 @@ export const VoiceProvider = ({ children }) => {
         currentTurn: null
     });
 
-    // 📊 WebRTC Stats
-    const [connectionStats, setConnectionStats] = useState({});
 
-    // 🎚️ YENİ: Noise Gate State
-    const [noiseGateThreshold, setNoiseGateThreshold] = useState(() => {
-        try {
-            return parseInt(localStorage.getItem('pawscord_noise_gate')) || -50;
-        } catch { return -50; }
-    });
-    const [isNoiseGateEnabled, setIsNoiseGateEnabled] = useState(() => {
-        try {
-            return localStorage.getItem('pawscord_noise_gate_enabled') !== 'false';
-        } catch { return true; }
-    });
-
-    // 📊 YENİ: Audio Visualizer State
-    const [audioVisualizerData, setAudioVisualizerData] = useState({
-        local: new Uint8Array(128),
-        remote: {}
-    });
-    const [isVisualizerEnabled, setIsVisualizerEnabled] = useState(() => {
-        try {
-            return localStorage.getItem('pawscord_visualizer') === 'true';
-        } catch { return false; }
-    });
-
-    // Ses Seviyeleri & Mute
-    const [remoteVolumes, setRemoteVolumes] = useState(() => {
-        try { return JSON.parse(localStorage.getItem('pawscord_user_volumes')) || {}; } catch { return {}; }
-    });
-    const [mutedUsers, setMutedUsers] = useState(new Set());
-    const [isSpatialAudioEnabled, setIsSpatialAudioEnabled] = useState(() => {
-        // 🔥 YENİ: Spatial audio ayarını localStorage'dan yükle
-        try {
-            return localStorage.getItem('pawscord_spatial_audio') === 'true';
-        } catch {
-            return false; // Varsayılan kapalı (yeni kullanıcılar için)
-        }
-    });
-
-    // 🔥 YENİ: VAD Sensitivity ve Noise Suppression ayarları
-    const [vadSensitivity, setVadSensitivity] = useState(() => {
-        try {
-            return parseInt(localStorage.getItem('pawscord_vad_sensitivity')) || 45;
-        } catch {
-            return 45; // Varsayılan threshold
-        }
-    });
-
-    const [isNoiseSuppressionEnabled, setIsNoiseSuppressionEnabled] = useState(() => {
-        try {
-            const saved = localStorage.getItem('pawscord_noise_suppression');
-            // 🔥 FIX: Varsayılan AÇIK - gürültü engelleme aktif olsun
-            return saved === null ? true : saved === 'true';
-        } catch {
-            return true; // 🔥 FIX: Varsayılan AÇIK
-        }
-    });
-
-    // 🔥 YENİ: Gürültü Engelleme Seviyesi - Varsayılan 'medium' (ses kısılmasın)
-    const [noiseSuppressionLevel, setNoiseSuppressionLevel] = useState(() => {
-        try {
-            const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
-            return voiceSettings.audio?.noiseSuppressionLevel || 'medium';  // 🔥 Varsayılan ORTA
-        } catch {
-            return 'medium';  // 🔥 Varsayılan ORTA
-        }
-    });
-
-    // 🔥 YENİ: Screen Share Quality
-    const [screenShareQuality, setScreenShareQuality] = useState(() => {
-        try {
-            return localStorage.getItem('pawscord_screen_quality') || '1080p';
-        } catch {
-            return '1080p';
-        }
-    });
-
-    const [screenShareFPS, setScreenShareFPS] = useState(() => {
-        try {
-            return parseInt(localStorage.getItem('pawscord_screen_fps')) || 30;
-        } catch {
-            return 30;
-        }
-    });
-
-    // 🔥 YENİ: System Audio (Ekran paylaşımında sistem sesi)
-    const [includeSystemAudio, setIncludeSystemAudio] = useState(() => {
-        try {
-            return localStorage.getItem('pawscord_system_audio') !== 'false';
-        } catch {
-            return false;
-        }
-    });
-
-    // 🔥 YENİ: Push-to-Talk
-    const [isPTTMode, setIsPTTMode] = useState(() => {
-        try {
-            return localStorage.getItem('pawscord_ptt_mode') === 'true';
-        } catch {
-            return false;
-        }
-    });
-
-    const [pttKey, setPTTKey] = useState(() => {
-        try {
-            return localStorage.getItem('pawscord_ptt_key') || 'Space';
-        } catch {
-            return 'Space';
-        }
-    });
-
-    const [isPTTActive, setIsPTTActive] = useState(false);
-
+    // Voice Settings (localStorage-backed state)
+    const {
+        noiseGateThreshold, isNoiseGateEnabled,
+        isVisualizerEnabled,
+        remoteVolumes, setRemoteVolumes, mutedUsers, setMutedUsers,
+        isSpatialAudioEnabled, setIsSpatialAudioEnabled,
+        vadSensitivity, isNoiseSuppressionEnabled, setIsNoiseSuppressionEnabled,
+        noiseSuppressionLevel, screenShareQuality, screenShareFPS,
+        includeSystemAudio, isPTTMode, setIsPTTMode,
+        pttKey, isPTTActive, setIsPTTActive,
+        setRemoteVolume,
+        updateVadSensitivity, updateNoiseSuppressionLevel,
+        updateScreenQuality, updateScreenFPS, toggleSystemAudio,
+        toggleNoiseGate, updateNoiseGateThreshold, toggleVisualizer,
+        updatePTTKey,
+    } = useVoiceSettings();
 
     // 🔧 TURN / ICE sunucularını backend'den çek ve güncelle
     const [iceServers, setIceServers] = useState(DEFAULT_ICE_SERVERS);
@@ -285,9 +141,6 @@ export const VoiceProvider = ({ children }) => {
     const localStreamRef = useRef(null);
     const localCameraStreamRef = useRef(null); // 🔥 Camera stream ref
     const localScreenStreamRef = useRef(null); // 🔥 Screen stream ref
-    const recordingChunksRef = useRef([]); // 🔥 Kayıt buffer
-    const mediaRecorderRef = useRef(null);
-    const recordingIntervalRef = useRef(null);
     const isLeavingRef = useRef(false); // 🔥 Prevent recursive leave calls
     const isSwitchingRef = useRef(false); // 🔥 Prevent infinite switch loop
     const joinVoiceRoomRef = useRef(null); // 🔥 Ref for joinVoiceRoom (used in handleSignalMessage before definition)
@@ -296,19 +149,20 @@ export const VoiceProvider = ({ children }) => {
     // 🎵 Voice Effect Refs
     const voiceEffectNodesRef = useRef(null);
     const processedStreamRef = useRef(null);
-    const statsIntervalRef = useRef(null); // WebRTC stats polling
 
-    // Ses Ayarlarını Kaydet
-    useEffect(() => {
-        localStorage.setItem('pawscord_user_volumes', JSON.stringify(remoteVolumes));
-    }, [remoteVolumes]);
+    // 🎙️ Recording Hook
+    const {
+        isRecording, recordingDuration,
+        startRecording, stopRecording, downloadRecording,
+    } = useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom });
 
-    const setRemoteVolume = useCallback((targetUsername, volume) => {
-        setRemoteVolumes(prev => ({
-            ...prev,
-            [targetUsername]: Math.max(0, Math.min(200, volume))
-        }));
-    }, []);
+    // 📊 Stats Monitoring Hook
+    const { connectionStats, startStatsMonitoring, stopStatsMonitoring } = useStatsMonitoring();
+
+    // 📊 Audio Visualizer Hook
+    const { audioVisualizerData, startVisualizer, stopVisualizer } = useAudioVisualizer({
+        isVisualizerEnabled, localAudioStream, remoteStreams, isInVoice, globalAudioContextRef
+    });
 
     useEffect(() => {
         localStreamRef.current = localAudioStream;
@@ -426,13 +280,6 @@ export const VoiceProvider = ({ children }) => {
         localStorage.setItem('pawscord_spatial_audio', newState.toString());
     }, [isSpatialAudioEnabled, remoteStreams]);
 
-    // 🔥 YENİ: VAD Sensitivity Güncelleme
-    const updateVadSensitivity = useCallback((newSensitivity) => {
-        const clamped = Math.max(20, Math.min(80, newSensitivity)); // 20-80 arası
-        setVadSensitivity(clamped);
-        localStorage.setItem('pawscord_vad_sensitivity', clamped.toString());
-    }, []);
-
     // 🔥 YENİ: Noise Suppression Toggle (fallback ile)
     // 🔥 GELİŞMİŞ GÜRÜLTÜ ENGELLEMESİ - Noise Gate ile birlikte
     const toggleNoiseSuppression = useCallback(async () => {
@@ -482,29 +329,6 @@ export const VoiceProvider = ({ children }) => {
         }
     }, [isNoiseSuppressionEnabled, localAudioStream]);
 
-    // 🔥 YENİ: Gürültü Engelleme Seviyesini Güncelle
-    const updateNoiseSuppressionLevel = useCallback((level) => {
-        const validLevels = ['low', 'medium', 'high', 'aggressive'];
-        const newLevel = validLevels.includes(level) ? level : 'high';
-        setNoiseSuppressionLevel(newLevel);
-
-        // LocalStorage'a kaydet
-        try {
-            const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
-            voiceSettings.audio = { ...voiceSettings.audio, noiseSuppressionLevel: newLevel };
-            localStorage.setItem('voice_settings', JSON.stringify(voiceSettings));
-        } catch (e) {
-            console.error('[Noise Level] Storage error:', e);
-        }
-
-    }, []);
-
-    // 🔥 YENİ: System Audio Toggle (Ekran paylaşımında)
-    const toggleSystemAudio = useCallback((enabled) => {
-        setIncludeSystemAudio(enabled);
-        localStorage.setItem('pawscord_system_audio', enabled.toString());
-    }, []);
-
     // 🔥 YENİ: PTT Mode Toggle
     const togglePTTMode = useCallback(() => {
         const newMode = !isPTTMode;
@@ -529,12 +353,6 @@ export const VoiceProvider = ({ children }) => {
             setIsMuted(false);
         }
     }, [isPTTMode]);
-
-    // 🔥 YENİ: PTT Key Update
-    const updatePTTKey = useCallback((key) => {
-        setPTTKey(key);
-        localStorage.setItem('pawscord_ptt_key', key);
-    }, []);
 
     // 🔥 YENİ: PTT Keyboard Listener
     useEffect(() => {
@@ -579,19 +397,6 @@ export const VoiceProvider = ({ children }) => {
         };
     }, [isPTTMode, isInVoice, pttKey]);
 
-    // 🔥 YENİ: Screen Quality Update
-    const updateScreenQuality = useCallback((quality) => {
-        setScreenShareQuality(quality);
-        localStorage.setItem('pawscord_screen_quality', quality);
-    }, []);
-
-    // 🔥 YENİ: Screen FPS Update
-    const updateScreenFPS = useCallback((fps) => {
-        const fpsInt = parseInt(fps);
-        setScreenShareFPS(fpsInt);
-        localStorage.setItem('pawscord_screen_fps', fpsInt.toString());
-    }, []);
-
     // 🔥 YENİ: Spatial audio state değişince remote stream'leri güncelle
     useEffect(() => {
         if (!isSpatialAudioEnabled) return;
@@ -617,272 +422,6 @@ export const VoiceProvider = ({ children }) => {
             }
         });
     }, [remoteStreams, isSpatialAudioEnabled]);
-
-    // 🎙️ NOISE SUPPRESSION - Gürültü Engelleme (ADVANCED)
-    const applyNoiseSuppression = useCallback(async (stream) => {
-        try {
-            const audioTracks = stream.getAudioTracks();
-            if (audioTracks.length === 0) return stream;
-
-            const audioTrack = audioTracks[0];
-
-            // 🔥 AGRESIF Noise Suppression Ayarları
-            const advancedConstraints = {
-                // Standard WebRTC
-                echoCancellation: { exact: true },
-                noiseSuppression: { exact: true },
-                autoGainControl: { exact: true },
-
-                // Google Chrome Advanced
-                googEchoCancellation: { exact: true },
-                googAutoGainControl: { exact: true },
-                googNoiseSuppression: { exact: true },
-                googHighpassFilter: { exact: true },  // 🔥 Düşük frekans filtresi
-                googTypingNoiseDetection: { exact: true },  // 🔥 Klavye sesi
-                googAudioMirroring: false,
-
-                // Gain Control (Ses seviyesi dengesi)
-                googAutoGainControl2: { exact: true },
-
-                // Echo Cancellation Level
-                echoCancellationType: 'system'  // System-level echo cancellation
-            };
-
-            // Mevcut constraints'i güncelle
-            if (audioTrack.applyConstraints) {
-                try {
-                    await audioTrack.applyConstraints(advancedConstraints);
-                    logger.audio('🎯 ADVANCED noise suppression enabled');
-                } catch (err) {
-                    // Bazı tarayıcılar advanced constraints'i desteklemeyebilir
-                    // Fallback to basic
-                    await audioTrack.applyConstraints({
-                        echoCancellation: true,
-                        noiseSuppression: true,
-                        autoGainControl: true
-                    });
-                    logger.audio('✅ Basic noise suppression enabled (fallback)');
-                }
-            }
-
-            return stream;
-        } catch (error) {
-            logger.warn('Could not apply noise suppression:', error);
-            return stream;
-        }
-    }, []);
-
-    // 🎚️ PROFESYONEL SES FİLTRELEME - Noise Gate + Compressor + Adaptive Filter
-    const applyProfessionalAudioFilters = useCallback((stream) => {
-        try {
-            // 🔥 GÜRÜLTÜ ENGELLEMİE SEVİYESİNE GÖRE AYARLAR
-            const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
-            const level = voiceSettings.audio?.noiseSuppressionLevel || 'high';
-
-            // Seviyeye göre parametreler - 🔥 AGRESİF GÜRÜLTÜ ENGELLEMİE
-            const levelSettings = {
-                low: {
-                    gateThreshold: -70,      // dB eşiği
-                    compressorThreshold: -15,
-                    compressorRatio: 2,
-                    highPassFreq: 50,        // 50Hz altı kes (fan, AC sesi)
-                    lowPassFreq: 14000,      // 14kHz üstü kes
-                    gateRelease: 0.3,
-                    speechThreshold: 20      // Konuşma algılama eşiği
-                },
-                medium: {
-                    gateThreshold: -60,
-                    compressorThreshold: -20,
-                    compressorRatio: 3,
-                    highPassFreq: 80,        // 80Hz altı kes
-                    lowPassFreq: 12000,
-                    gateRelease: 0.25,
-                    speechThreshold: 25
-                },
-                high: {
-                    gateThreshold: -50,      // 🔥 Daha agresif
-                    compressorThreshold: -25,
-                    compressorRatio: 4,
-                    highPassFreq: 100,       // 🔥 100Hz altı kes (daha agresif)
-                    lowPassFreq: 10000,      // 🔥 10kHz üstü kes
-                    gateRelease: 0.2,
-                    speechThreshold: 30      // 🔥 Daha yüksek eşik
-                },
-                aggressive: {
-                    gateThreshold: -45,      // 🔥 ÇOK agresif
-                    compressorThreshold: -30,
-                    compressorRatio: 6,
-                    highPassFreq: 120,       // 🔥 120Hz altı kes
-                    lowPassFreq: 8000,       // 🔥 8kHz üstü kes (tiz gürültüler)
-                    gateRelease: 0.15,
-                    speechThreshold: 35      // 🔥 Yüksek eşik
-                }
-            };
-
-            const settings = levelSettings[level] || levelSettings.high;
-
-            // 🔥 PERFORMANS: Global AudioContext kullan (10 kullanıcı = 10 context yerine 1 context!)
-            if (!globalAudioContextRef.current) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                // 🔥 CIZIRTIYI ÖNLE: Sample rate eşleştir + latency hint
-                globalAudioContextRef.current = new AudioContext({
-                    sampleRate: 48000,  // WebRTC standart sample rate
-                    latencyHint: 'interactive'  // Düşük gecikme modu
-                });
-            }
-
-            const audioContext = globalAudioContextRef.current;
-
-            // 🔥 CIZIRTIYI ÖNLE: Suspended context'i resume et
-            if (audioContext.state === 'suspended') {
-                audioContext.resume().then(() => {
-                });
-            }
-
-            // Source stream
-            const source = audioContext.createMediaStreamSource(stream);
-
-            // 1️⃣ NOISE GATE (Gürültü Kapısı) - SEVİYEYE GÖRE
-            // Belli desibelin altındaki sesleri tamamen kes
-            const noiseGateNode = audioContext.createGain();
-            let isGateOpen = true; // 🔥 Başlangıçta açık
-            const GATE_THRESHOLD = settings.gateThreshold; // dB (seviyeye göre)
-            const GATE_ATTACK = 0.005;  // Daha hızlı açılma
-            const GATE_RELEASE = settings.gateRelease;  // Seviyeye göre
-
-            // 2️⃣ COMPRESSOR (Dinamik Sıkıştırma) - SEVİYEYE GÖRE
-            // 🔥 CIZIRTIYI ÖNLE: Daha yumuşak sıkıştırma
-            const compressor = audioContext.createDynamicsCompressor();
-            compressor.threshold.value = settings.compressorThreshold;      // dB threshold (seviyeye göre)
-            compressor.knee.value = 30;            // 🔥 40'tan 30'a - daha yumuşak geçiş
-            compressor.ratio.value = Math.min(settings.compressorRatio, 4);  // 🔥 Max 4:1 ratio (cızırtı önler)
-            compressor.attack.value = 0.003;       // 🔥 3ms - daha hızlı (click önler)
-            compressor.release.value = 0.15;       // 🔥 150ms - daha kısa (pumping önler)
-
-            // 3️⃣ HIGH-PASS FILTER (Düşük Frekans Kesici) - SEVİYEYE GÖRE
-            // Fan, AC, trafik seslerini filtrele
-            const highPassFilter = audioContext.createBiquadFilter();
-            highPassFilter.type = 'highpass';
-            highPassFilter.frequency.value = settings.highPassFreq;   // Seviyeye göre frekans
-            highPassFilter.Q.value = 0.707;        // 🔥 Butterworth Q değeri (düz frekans yanıtı - cızırtı önler)
-
-            // 4️⃣ LOW-PASS FILTER (Yüksek Frekans Kesici) - SEVİYEYE GÖRE
-            // Elektronik gürültü, hiss seslerini filtrele
-            const lowPassFilter = audioContext.createBiquadFilter();
-            lowPassFilter.type = 'lowpass';
-            lowPassFilter.frequency.value = settings.lowPassFreq;  // Seviyeye göre frekans
-            lowPassFilter.Q.value = 0.707;         // 🔥 Butterworth Q değeri (düz frekans yanıtı)
-
-            // 🔥 5️⃣ NOTCH FILTER - 50Hz/60Hz hum (elektrik gürültüsü) engelleme
-            const notchFilter = audioContext.createBiquadFilter();
-            notchFilter.type = 'notch';
-            notchFilter.frequency.value = 50;      // 50Hz (TR elektrik şebekesi)
-            notchFilter.Q.value = 10;              // Dar bant (sadece 50Hz civarı)
-
-            // 6️⃣ DE-ESSER (Tıslama/Cızırtı azaltıcı) - 4-8kHz bandını yumuşat
-            const deEsser = audioContext.createBiquadFilter();
-            deEsser.type = 'peaking';
-            deEsser.frequency.value = 6000;        // 6kHz (sibilant bölgesi)
-            deEsser.Q.value = 1;                   // Geniş bant
-            deEsser.gain.value = -3;               // 🔥 -3dB azaltma (cızırtı için)
-
-            // 7️⃣ ADAPTIVE NOISE REDUCTION (Dinamik Gürültü Azaltma)
-            // Sessiz anlarda gürültü profilini öğren ve çıkar
-            const analyser = audioContext.createAnalyser();
-            analyser.fftSize = 2048;
-            analyser.smoothingTimeConstant = 0.85; // 🔥 Daha yumuşak geçiş
-
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            let noiseProfile = new Float32Array(analyser.frequencyBinCount);
-            let learningPhase = true;
-            let silentFrames = 0;
-
-            // Gürültü profili öğrenme
-            const learnNoiseProfile = () => {
-                analyser.getByteFrequencyData(dataArray);
-                const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-
-                if (average < 20) { // Sessiz an
-                    silentFrames++;
-                    if (silentFrames > 10) { // 10 frame sessizlik
-                        // Gürültü profilini güncelle
-                        for (let i = 0; i < dataArray.length; i++) {
-                            noiseProfile[i] = Math.max(noiseProfile[i], dataArray[i]);
-                        }
-                    }
-                } else {
-                    silentFrames = 0;
-                }
-
-                if (learningPhase && silentFrames > 50) {
-                    learningPhase = false;
-                }
-            };
-
-            // Noise Gate kontrolü (VAD tabanlı)
-            const speechThreshold = settings.speechThreshold || 25; // 🔥 Seviyeye göre eşik
-            const updateNoiseGate = () => {
-                analyser.getByteFrequencyData(dataArray);
-
-                // Konuşma frekansları (300Hz - 3kHz) - daha geniş aralık
-                const speechRange = dataArray.slice(8, 120);  // 🔥 Daha geniş frekans aralığı
-                const speechLevel = speechRange.reduce((a, b) => a + b) / speechRange.length;
-
-                // Gürültü profili çıkarılmış sinyal
-                const cleanSignal = speechLevel - (noiseProfile[50] || 0);
-
-                // Noise Gate mantığı - SEVİYEYE GÖRE AGRESİF
-                const currentTime = audioContext.currentTime;
-                if (cleanSignal > speechThreshold) { // 🔥 Konuşma algılandı (seviyeye göre eşik)
-                    if (!isGateOpen) {
-                        noiseGateNode.gain.setTargetAtTime(1.0, currentTime, GATE_ATTACK);
-                        isGateOpen = true;
-                    }
-                } else { // Sessizlik - 🔥 HIZLI KAPANIŞ
-                    if (isGateOpen) {
-                        noiseGateNode.gain.setTargetAtTime(0.0, currentTime, GATE_RELEASE);
-                        isGateOpen = false;
-                    }
-                }
-
-                // Gürültü profili öğrenmeye devam et
-                if (learningPhase || Math.random() < 0.01) {
-                    learnNoiseProfile();
-                }
-
-                // 🔥 FIX: requestAnimationFrame yerine setInterval kullan (daha stabil)
-                // requestAnimationFrame(updateNoiseGate); // ESKİ - CPU yoğun
-            };
-
-            // 🔥 FIX: Noise gate güncelleme interval'ı (30ms = ~33Hz - daha hızlı tepki)
-            const noiseGateInterval = setInterval(updateNoiseGate, 30);
-
-            // 8️⃣ SİNYAL ZİNCİRİ (Signal Chain) - GÜNCELLENDİ
-            // source → highpass → notch(50Hz) → lowpass → deEsser → compressor → noise gate → destination
-            source.connect(highPassFilter);
-            highPassFilter.connect(notchFilter);
-            notchFilter.connect(lowPassFilter);
-            lowPassFilter.connect(deEsser);
-            deEsser.connect(compressor);
-            compressor.connect(noiseGateNode);
-            noiseGateNode.connect(analyser);
-
-            // Yeni stream oluştur
-            const destination = audioContext.createMediaStreamDestination();
-            noiseGateNode.connect(destination);
-
-            // 🔥 CLEANUP: Stream temizlendiğinde interval'ı durdur
-            destination.stream.addEventListener('inactive', () => {
-                clearInterval(noiseGateInterval);
-            });
-
-
-            return destination.stream;
-        } catch (error) {
-            console.error('❌ [Audio] Could not apply professional filters:', error);
-            return stream; // Fallback to original
-        }
-    }, []);
 
     const sendSignal = useCallback((signal) => {
         if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
@@ -1623,17 +1162,7 @@ export const VoiceProvider = ({ children }) => {
         setIsDeafened(false);
 
         // 🔥 YENİ: Recording cleanup
-        if (isRecording) {
-            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-                mediaRecorderRef.current.stop();
-            }
-            if (recordingIntervalRef.current) {
-                clearInterval(recordingIntervalRef.current);
-                recordingIntervalRef.current = null;
-            }
-            setIsRecording(false);
-            setRecordingDuration(0);
-        }
+        stopRecording();
 
         // 🔥 Watchdog temizliği
         if (micHealthIntervalRef.current) {
@@ -1662,7 +1191,7 @@ export const VoiceProvider = ({ children }) => {
         setTimeout(() => {
             isLeavingRef.current = false;
         }, 100);
-    }, [username, localCameraStream, localScreenStream, isRecording]);
+    }, [username, localCameraStream, localScreenStream, stopRecording]);
 
     // --- SESLİ SOHBETE KATILMA ---
     const joinVoiceRoom = useCallback(async (roomSlug) => {
@@ -1754,7 +1283,7 @@ export const VoiceProvider = ({ children }) => {
                 processedStream = stream;
                 if (isNoiseSuppressionEnabled) {
                     try {
-                        processedStream = applyProfessionalAudioFilters(stream);
+                        processedStream = applyProfessionalAudioFilters(stream, globalAudioContextRef);
                     } catch (filterError) {
                         console.warn('⚠️ [Voice] Professional filters failed:', filterError);
                         processedStream = stream;
@@ -2391,112 +1920,6 @@ export const VoiceProvider = ({ children }) => {
         }
     }, [sendSignal, screenShareQuality, screenShareFPS, includeSystemAudio]);
 
-    // 🔥 YENİ: Start Recording
-    const startRecording = useCallback(() => {
-        if (!isInVoice || isRecording) {
-            console.warn('[Recording] Cannot start - not in voice or already recording');
-            return;
-        }
-
-        try {
-            // Combine local and remote streams for recording
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const destination = audioContext.createMediaStreamDestination();
-
-            // Add local audio
-            if (localAudioStream) {
-                const localSource = audioContext.createMediaStreamSource(localAudioStream);
-                localSource.connect(destination);
-            }
-
-            // Add all remote audio streams
-            Object.entries(remoteStreams).forEach(([key, stream]) => {
-                if (!key.includes('_camera') && !key.includes('_screen')) {
-                    const audioTracks = stream.getAudioTracks();
-                    if (audioTracks.length > 0) {
-                        const remoteSource = audioContext.createMediaStreamSource(stream);
-                        remoteSource.connect(destination);
-                    }
-                }
-            });
-
-            // Create MediaRecorder
-            const mediaRecorder = new MediaRecorder(destination.stream, {
-                mimeType: 'audio/webm;codecs=opus',
-                audioBitsPerSecond: 128000
-            });
-
-            recordingChunksRef.current = [];
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordingChunksRef.current.push(event.data);
-                }
-            };
-
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(recordingChunksRef.current, { type: 'audio/webm' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `pawscord-voice-${currentRoom}-${Date.now()}.webm`;
-                a.click();
-                URL.revokeObjectURL(url);
-            };
-
-            mediaRecorder.start(1000); // Collect data every second
-            mediaRecorderRef.current = mediaRecorder;
-            setIsRecording(true);
-            setRecordingDuration(0);
-
-            // Start duration counter
-            recordingIntervalRef.current = setInterval(() => {
-                setRecordingDuration(prev => prev + 1);
-            }, 1000);
-
-        } catch (error) {
-            console.error('[Recording] Start error:', error);
-            toast.error('Kayıt başlatılamadı: ' + error.message);
-        }
-    }, [isInVoice, isRecording, localAudioStream, remoteStreams, currentRoom]);
-
-    // 🔥 YENİ: Stop Recording
-    const stopRecording = useCallback(() => {
-        if (!isRecording) {
-            return;
-        }
-
-        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-            mediaRecorderRef.current.stop();
-        }
-
-        if (recordingIntervalRef.current) {
-            clearInterval(recordingIntervalRef.current);
-            recordingIntervalRef.current = null;
-        }
-
-        mediaRecorderRef.current = null;
-        setIsRecording(false);
-        setRecordingDuration(0);
-    }, [isRecording]);
-
-    // 🔥 YENİ: Download Recording Manually
-    const downloadRecording = useCallback(() => {
-        if (recordingChunksRef.current.length === 0) {
-            toast.warning('Henüz kayıt yok!');
-            return;
-        }
-
-        const blob = new Blob(recordingChunksRef.current, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `pawscord-voice-${currentRoom || 'recording'}-${Date.now()}.webm`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }, [currentRoom]);
 
     // 🎵 VOICE EFFECTS IMPLEMENTATION
     const applyVoiceEffect = useCallback(async (effectType, intensity = 50) => {
@@ -2523,170 +1946,10 @@ export const VoiceProvider = ({ children }) => {
             const audioContext = globalAudioContextRef.current || new AudioContext();
             if (!globalAudioContextRef.current) globalAudioContextRef.current = audioContext;
 
-            const source = audioContext.createMediaStreamSource(localAudioStream);
-            const destination = audioContext.createMediaStreamDestination();
-            const nodes = [];
-
-            // Normalize intensity to 0-1 range
-            const normalizedIntensity = intensity / 100;
-
-            switch (effectType) {
-                case 'robot': {
-                    // Robot voice: Ring modulator + waveshaper
-                    const oscillator = audioContext.createOscillator();
-                    const gainOsc = audioContext.createGain();
-                    const waveshaper = audioContext.createWaveShaper();
-
-                    oscillator.type = 'sawtooth';
-                    oscillator.frequency.value = 50 + (normalizedIntensity * 100); // 50-150 Hz
-                    gainOsc.gain.value = 0.3 + (normalizedIntensity * 0.4);
-
-                    // Waveshaper curve for distortion
-                    const curve = new Float32Array(256);
-                    for (let i = 0; i < 256; i++) {
-                        const x = (i / 128) - 1;
-                        curve[i] = Math.tanh(x * (1 + normalizedIntensity * 3));
-                    }
-                    waveshaper.curve = curve;
-
-                    oscillator.connect(gainOsc);
-                    source.connect(waveshaper);
-                    waveshaper.connect(destination);
-                    oscillator.start();
-
-                    nodes.push(oscillator, gainOsc, waveshaper);
-                    break;
-                }
-
-                case 'echo': {
-                    // Echo/Delay effect
-                    const delay = audioContext.createDelay(1.0);
-                    const feedback = audioContext.createGain();
-                    const wetGain = audioContext.createGain();
-                    const dryGain = audioContext.createGain();
-
-                    delay.delayTime.value = 0.1 + (normalizedIntensity * 0.4); // 100-500ms
-                    feedback.gain.value = 0.2 + (normalizedIntensity * 0.5); // 20-70% feedback
-                    wetGain.gain.value = 0.3 + (normalizedIntensity * 0.4);
-                    dryGain.gain.value = 1 - (normalizedIntensity * 0.3);
-
-                    source.connect(dryGain);
-                    source.connect(delay);
-                    delay.connect(feedback);
-                    feedback.connect(delay);
-                    delay.connect(wetGain);
-                    dryGain.connect(destination);
-                    wetGain.connect(destination);
-
-                    nodes.push(delay, feedback, wetGain, dryGain);
-                    break;
-                }
-
-                case 'deep': {
-                    // Deep voice: Pitch shift down (using playbackRate trick)
-                    const biquadFilter = audioContext.createBiquadFilter();
-                    const gainNode = audioContext.createGain();
-
-                    biquadFilter.type = 'lowshelf';
-                    biquadFilter.frequency.value = 500;
-                    biquadFilter.gain.value = 10 + (normalizedIntensity * 15); // Boost low frequencies
-
-                    gainNode.gain.value = 1.2;
-
-                    source.connect(biquadFilter);
-                    biquadFilter.connect(gainNode);
-                    gainNode.connect(destination);
-
-                    nodes.push(biquadFilter, gainNode);
-                    break;
-                }
-
-                case 'high': {
-                    // High/Chipmunk voice: Pitch shift up
-                    const highFilter = audioContext.createBiquadFilter();
-                    const gainNode = audioContext.createGain();
-
-                    highFilter.type = 'highshelf';
-                    highFilter.frequency.value = 1000;
-                    highFilter.gain.value = 8 + (normalizedIntensity * 12);
-
-                    gainNode.gain.value = 0.9;
-
-                    source.connect(highFilter);
-                    highFilter.connect(gainNode);
-                    gainNode.connect(destination);
-
-                    nodes.push(highFilter, gainNode);
-                    break;
-                }
-
-                case 'radio': {
-                    // Radio/Telephone effect: Bandpass filter
-                    const lowpass = audioContext.createBiquadFilter();
-                    const highpass = audioContext.createBiquadFilter();
-                    const distortion = audioContext.createWaveShaper();
-
-                    lowpass.type = 'lowpass';
-                    lowpass.frequency.value = 3000 - (normalizedIntensity * 1000);
-
-                    highpass.type = 'highpass';
-                    highpass.frequency.value = 300 + (normalizedIntensity * 200);
-
-                    // Slight distortion for radio crackle
-                    const curve = new Float32Array(256);
-                    for (let i = 0; i < 256; i++) {
-                        const x = (i / 128) - 1;
-                        curve[i] = Math.sign(x) * Math.pow(Math.abs(x), 0.8);
-                    }
-                    distortion.curve = curve;
-
-                    source.connect(highpass);
-                    highpass.connect(lowpass);
-                    lowpass.connect(distortion);
-                    distortion.connect(destination);
-
-                    nodes.push(lowpass, highpass, distortion);
-                    break;
-                }
-
-                case 'reverb': {
-                    // Reverb/Hall effect
-                    const convolver = audioContext.createConvolver();
-                    const wetGain = audioContext.createGain();
-                    const dryGain = audioContext.createGain();
-
-                    // Create impulse response for reverb
-                    const sampleRate = audioContext.sampleRate;
-                    const length = sampleRate * (0.5 + normalizedIntensity * 2); // 0.5-2.5 seconds
-                    const impulse = audioContext.createBuffer(2, length, sampleRate);
-
-                    for (let channel = 0; channel < 2; channel++) {
-                        const channelData = impulse.getChannelData(channel);
-                        for (let i = 0; i < length; i++) {
-                            channelData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
-                        }
-                    }
-                    convolver.buffer = impulse;
-
-                    wetGain.gain.value = 0.3 + (normalizedIntensity * 0.5);
-                    dryGain.gain.value = 1 - (normalizedIntensity * 0.2);
-
-                    source.connect(dryGain);
-                    source.connect(convolver);
-                    convolver.connect(wetGain);
-                    dryGain.connect(destination);
-                    wetGain.connect(destination);
-
-                    nodes.push(convolver, wetGain, dryGain);
-                    break;
-                }
-
-                default:
-                    source.connect(destination);
-            }
+            const { nodes, outputStream } = createVoiceEffect(effectType, intensity, audioContext, localAudioStream);
 
             voiceEffectNodesRef.current = nodes;
-            processedStreamRef.current = destination.stream;
+            processedStreamRef.current = outputStream;
             setActiveVoiceEffect(effectType);
             setVoiceEffectIntensity(intensity);
 
@@ -2744,184 +2007,24 @@ export const VoiceProvider = ({ children }) => {
 
     }, []);
 
-    // 📊 WEBRTC STATS MONITORING
-    const startStatsMonitoring = useCallback(() => {
-        if (statsIntervalRef.current) return;
 
-        statsIntervalRef.current = setInterval(async () => {
-            const stats = {};
 
-            for (const [username, pc] of Object.entries(peerConnectionsRef.current)) {
-                try {
-                    const report = await pc.getStats();
-                    let audioStats = null;
-                    let videoStats = null;
 
-                    report.forEach((stat) => {
-                        if (stat.type === 'inbound-rtp' && stat.kind === 'audio') {
-                            audioStats = {
-                                packetsReceived: stat.packetsReceived,
-                                packetsLost: stat.packetsLost,
-                                jitter: stat.jitter,
-                                bytesReceived: stat.bytesReceived
-                            };
-                        }
-                        if (stat.type === 'inbound-rtp' && stat.kind === 'video') {
-                            videoStats = {
-                                packetsReceived: stat.packetsReceived,
-                                packetsLost: stat.packetsLost,
-                                framesDecoded: stat.framesDecoded,
-                                frameWidth: stat.frameWidth,
-                                frameHeight: stat.frameHeight
-                            };
-                        }
-                        if (stat.type === 'candidate-pair' && stat.state === 'succeeded') {
-                            stats[username] = {
-                                ...stats[username],
-                                rtt: stat.currentRoundTripTime * 1000,
-                                connectionType: stat.localCandidateId?.includes('relay') ? 'TURN' : 'STUN/Direct'
-                            };
-                        }
-                    });
 
-                    stats[username] = {
-                        ...stats[username],
-                        audio: audioStats,
-                        video: videoStats,
-                        connectionState: pc.connectionState,
-                        iceConnectionState: pc.iceConnectionState
-                    };
-                } catch (e) {
-                    console.warn(`[Stats] Failed to get stats for ${username}:`, e);
-                }
-            }
 
-            setConnectionStats(stats);
-        }, 2000); // Every 2 seconds
 
-    }, []);
 
-    const stopStatsMonitoring = useCallback(() => {
-        if (statsIntervalRef.current) {
-            clearInterval(statsIntervalRef.current);
-            statsIntervalRef.current = null;
-            setConnectionStats({});
-        }
-    }, []);
-
-    // 🎚️ YENİ: Noise Gate Toggle
-    const toggleNoiseGate = useCallback((enabled) => {
-        setIsNoiseGateEnabled(enabled);
-        localStorage.setItem('pawscord_noise_gate_enabled', enabled.toString());
-    }, []);
-
-    // 🎚️ YENİ: Noise Gate Threshold Güncelleme
-    const updateNoiseGateThreshold = useCallback((threshold) => {
-        const clamped = Math.max(-80, Math.min(-20, threshold));
-        setNoiseGateThreshold(clamped);
-        localStorage.setItem('pawscord_noise_gate', clamped.toString());
-    }, []);
-
-    // 📊 YENİ: Audio Visualizer Toggle
-    const toggleVisualizer = useCallback((enabled) => {
-        setIsVisualizerEnabled(enabled);
-        localStorage.setItem('pawscord_visualizer', enabled.toString());
-    }, []);
-
-    // 📊 YENİ: Audio Visualizer Ref
-    const visualizerIntervalRef = useRef(null);
-    const visualizerAnalyserRef = useRef(null);
-
-    // 📊 YENİ: Start Audio Visualizer
-    const startVisualizer = useCallback(() => {
-        if (!isVisualizerEnabled || !localAudioStream) return;
-        if (visualizerIntervalRef.current) return; // Already running
-
-        try {
-            if (!globalAudioContextRef.current) {
-                globalAudioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const audioContext = globalAudioContextRef.current;
-
-            // Local audio analyser
-            const localAnalyser = audioContext.createAnalyser();
-            localAnalyser.fftSize = 256;
-            const localSource = audioContext.createMediaStreamSource(localAudioStream);
-            localSource.connect(localAnalyser);
-            visualizerAnalyserRef.current = { local: localAnalyser, localSource, remote: {} };
-
-            // Remote audio analysers
-            Object.entries(remoteStreams).forEach(([key, stream]) => {
-                if (!key.includes('_camera') && !key.includes('_screen')) {
-                    const remoteAnalyser = audioContext.createAnalyser();
-                    remoteAnalyser.fftSize = 256;
-                    const remoteSource = audioContext.createMediaStreamSource(stream);
-                    remoteSource.connect(remoteAnalyser);
-                    visualizerAnalyserRef.current.remote[key] = { analyser: remoteAnalyser, source: remoteSource };
-                }
-            });
-
-            // Update interval (60fps = 16.67ms)
-            visualizerIntervalRef.current = setInterval(() => {
-                const localData = new Uint8Array(128);
-                visualizerAnalyserRef.current.local.getByteFrequencyData(localData);
-
-                const remoteData = {};
-                Object.entries(visualizerAnalyserRef.current.remote).forEach(([key, { analyser }]) => {
-                    const data = new Uint8Array(128);
-                    analyser.getByteFrequencyData(data);
-                    remoteData[key] = data;
-                });
-
-                setAudioVisualizerData({ local: localData, remote: remoteData });
-            }, 33); // ~30fps for performance
-
-        } catch (err) {
-            console.error('[Visualizer] Failed to start:', err);
-        }
-    }, [isVisualizerEnabled, localAudioStream, remoteStreams]);
-
-    // 📊 YENİ: Stop Audio Visualizer
-    const stopVisualizer = useCallback(() => {
-        if (visualizerIntervalRef.current) {
-            clearInterval(visualizerIntervalRef.current);
-            visualizerIntervalRef.current = null;
-        }
-        if (visualizerAnalyserRef.current) {
-            try {
-                visualizerAnalyserRef.current.localSource?.disconnect();
-                Object.values(visualizerAnalyserRef.current.remote).forEach(({ source }) => {
-                    source?.disconnect();
-                });
-            } catch (_) { /* AudioNode cleanup - safe to ignore */ }
-            visualizerAnalyserRef.current = null;
-        }
-        setAudioVisualizerData({ local: new Uint8Array(128), remote: {} });
-    }, []);
-
-    // 📊 Auto-start/stop visualizer based on voice state
-    useEffect(() => {
-        if (isInVoice && isVisualizerEnabled) {
-            startVisualizer();
-        } else {
-            stopVisualizer();
-        }
-        return () => stopVisualizer();
-    }, [isInVoice, isVisualizerEnabled, startVisualizer, stopVisualizer]);
-
-    // Cleanup recording on unmount or leave
+    // Cleanup on unmount or leave
     useEffect(() => {
         return () => {
-            if (isRecording) {
-                stopRecording();
-            }
+            stopRecording();
             if (micHealthIntervalRef.current) {
                 clearInterval(micHealthIntervalRef.current);
                 micHealthIntervalRef.current = null;
             }
             stopStatsMonitoring();
         };
-    }, [isRecording, stopRecording, stopStatsMonitoring]);
+    }, [stopRecording, stopStatsMonitoring]);
 
     return (
         <VoiceContext.Provider value={{

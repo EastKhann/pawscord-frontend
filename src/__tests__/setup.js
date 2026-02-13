@@ -100,23 +100,56 @@ class MockWebSocket {
 }
 window.WebSocket = MockWebSocket;
 
-// Mock AudioContext
+// Mock AudioContext (enhanced for VoiceContext tests)
+const createMockAudioNode = () => ({
+    connect: vi.fn().mockReturnThis(),
+    disconnect: vi.fn(),
+});
 window.AudioContext = vi.fn().mockImplementation(() => ({
     createGain: () => ({
-        connect: vi.fn(),
-        gain: { value: 1 }
+        ...createMockAudioNode(),
+        gain: { value: 1, setTargetAtTime: vi.fn() }
     }),
     createAnalyser: () => ({
-        connect: vi.fn(),
+        ...createMockAudioNode(),
         fftSize: 256,
+        frequencyBinCount: 128,
+        smoothingTimeConstant: 0.8,
         getByteFrequencyData: vi.fn()
     }),
-    createMediaStreamSource: vi.fn(),
+    createMediaStreamSource: vi.fn().mockReturnValue(createMockAudioNode()),
+    createMediaStreamDestination: vi.fn().mockReturnValue({
+        stream: new MediaStream(),
+        ...createMockAudioNode()
+    }),
+    createBiquadFilter: () => ({
+        ...createMockAudioNode(),
+        type: '', frequency: { value: 0 }, Q: { value: 0 }, gain: { value: 0 }
+    }),
+    createDynamicsCompressor: () => ({
+        ...createMockAudioNode(),
+        threshold: { value: 0 }, knee: { value: 0 }, ratio: { value: 0 },
+        attack: { value: 0 }, release: { value: 0 }
+    }),
+    createOscillator: () => ({
+        ...createMockAudioNode(),
+        type: '', frequency: { value: 0 }, start: vi.fn()
+    }),
+    createDelay: () => ({ ...createMockAudioNode(), delayTime: { value: 0 } }),
+    createConvolver: () => ({ ...createMockAudioNode(), buffer: null }),
+    createWaveShaper: () => ({ ...createMockAudioNode(), curve: null }),
+    createBuffer: vi.fn().mockReturnValue({
+        getChannelData: vi.fn().mockReturnValue(new Float32Array(48000))
+    }),
     destination: {},
-    suspend: vi.fn(),
-    resume: vi.fn(),
-    close: vi.fn()
+    sampleRate: 48000,
+    currentTime: 0,
+    state: 'running',
+    suspend: vi.fn().mockResolvedValue(undefined),
+    resume: vi.fn().mockResolvedValue(undefined),
+    close: vi.fn().mockResolvedValue(undefined)
 }));
+window.webkitAudioContext = window.AudioContext;
 
 // Mock navigator.mediaDevices
 Object.defineProperty(navigator, 'mediaDevices', {

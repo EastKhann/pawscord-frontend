@@ -21,9 +21,6 @@
         "@react-oauth/google": "^0.12.2",
         "@sentry/react": "^10.38.0",
         "@testing-library/dom": "^10.4.1",
-        "@testing-library/jest-dom": "^6.9.1",
-        "@testing-library/react": "^16.3.0",
-        "@testing-library/user-event": "^13.5.0",
         "@tiptap/extension-placeholder": "^3.12.1",
         "@tiptap/pm": "^3.12.1",
         "@tiptap/react": "^3.12.1",
@@ -64,6 +61,9 @@
     },
     "devDependencies": {
         "@fullhuman/postcss-purgecss": "^7.0.2",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.2",
+        "@testing-library/user-event": "^14.6.1",
         "@vitejs/plugin-react": "^5.1.2",
         "concurrently": "^8.2.2",
         "cross-env": "^7.0.3",
@@ -72,12 +72,14 @@
         "eslint": "^8.57.1",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^7.0.1",
+        "jsdom": "^28.0.0",
         "rollup-plugin-visualizer": "^6.0.5",
         "sharp": "^0.34.5",
         "source-map-explorer": "^2.5.3",
         "typescript": "^5.9.3",
         "vite": "^7.3.1",
         "vite-plugin-pwa": "^1.2.0",
+        "vitest": "^4.0.18",
         "wait-on": "^7.2.0"
     },
     "scripts": {
@@ -99,7 +101,11 @@
         "logs": "electron view-logs.js",
         "audit:security": "npm audit --audit-level=high",
         "upload:r2": "node scripts/upload-builds-to-r2.js",
-        "release": "npm run electron:build && node scripts/upload-builds-to-r2.js"
+        "release": "npm run electron:build && node scripts/upload-builds-to-r2.js",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "test:ui": "vitest --ui"
     },
     "build": {
         "appId": "com.dogukan.pawscord",

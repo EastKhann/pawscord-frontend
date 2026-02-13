@@ -15,6 +15,19 @@ const APP_VERSION = packageJson.version
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // 🧪 Test Configuration (Vitest)
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/__tests__/setup.js',
+    include: ['src/**/*.{test,spec}.{js,jsx}'],
+    css: false,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      exclude: ['node_modules/', 'src/__tests__/setup.js']
+    }
+  },
   // 🔥 FIX: Electron için relative path, web için CDN/absolute path
   // VITE_ELECTRON=true ise './' kullan (file:// protokolü için)
   // Değilse CDN URL veya '/' kullan (web deployment için)

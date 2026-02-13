@@ -1,27 +1,26 @@
 // frontend/src/components/ServerSettingsModal.js
+// Refactored: All tabs extracted as self-contained components
 
-import { useState, useEffect, useCallback } from 'react';
-import { FaTimes, FaPlus, FaCheck, FaPalette, FaUsers, FaShieldAlt, FaEdit, FaTrash, FaCog, FaVolumeUp, FaVolumeMute, FaRobot, FaLink, FaHandPaper, FaImage, FaLock, FaGlobe, FaChartBar, FaHistory, FaExclamationTriangle, FaBan, FaClock, FaUserSlash, FaFileAlt, FaUserShield, FaComments, FaBell, FaEye, FaStar, FaCrown, FaGavel, FaSearch, FaUndo, FaChartLine, FaChartPie, FaUserClock, FaHashtag, FaCalendarAlt } from 'react-icons/fa';
-import { ChromePicker } from 'react-color';
-import toast from '../utils/toast';
+import { useState, useEffect } from 'react';
+import { FaTimes, FaUsers, FaShieldAlt, FaCog, FaRobot, FaLink, FaHandPaper, FaChartBar, FaHistory, FaBan, FaGavel } from 'react-icons/fa';
 import ServerMembers from './ServerMembers';
 import AutoResponderManager from './AutoResponderManager';
 import VanityURLManager from './VanityURLManager';
-import confirmDialog from '../utils/confirmDialog';
 import styles from './ServerSettingsModal/styles';
 
-// Extracted Sub-Components
+// Extracted Tab Components
 import WelcomeTemplateEditor from './ServerSettingsModal/WelcomeTemplateEditor';
 import SystemBotEditor from './ServerSettingsModal/SystemBotEditor';
-
-// 🆕 Welcome Templates component (creating inline for now)
-
-// 🤖 Sistem Botu Ayarları Component
+import RolesTab from './ServerSettingsModal/RolesTab';
+import ManagementTab from './ServerSettingsModal/ManagementTab';
+import ModerationTab from './ServerSettingsModal/ModerationTab';
+import BansTab from './ServerSettingsModal/BansTab';
+import AuditLogTab from './ServerSettingsModal/AuditLogTab';
+import StatsTab from './ServerSettingsModal/StatsTab';
 
 const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, apiBaseUrl, serverMembers, onRefreshServers }) => {
 
-    const [activeTab, setActiveTab] = useState('roles'); // 'roles', 'members', 'management'
-    const [roles, setRoles] = useState(server.roles || []);
+    const [activeTab, setActiveTab] = useState('roles');
     // İsim değişikliği olmuşsa bile backend'den gelen my_permissions bilgisini veya isme dayalı kontrolü kullan
     const isOwner = server.my_permissions?.is_owner || server.owner_username === currentUsername;
 
