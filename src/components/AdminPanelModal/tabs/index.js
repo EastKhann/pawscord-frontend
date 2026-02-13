@@ -1,0 +1,11 @@
+export { default as DashboardTab } from './DashboardTab';
+export { default as UsersTab } from './UsersTab';
+export { default as ServersTab } from './ServersTab';
+export { default as LogsTab } from './LogsTab';
+export { default as ModerationTab } from './ModerationTab';
+export { default as DatabaseTab } from './DatabaseTab';
+export { default as SystemHealthTab } from './SystemHealthTab';
+export { default as SecurityTab } from './SecurityTab';
+export { default as BroadcastTab } from './BroadcastTab';
+export { default as ToolsTab } from './ToolsTab';
+export { default as QuickActionsTab } from './QuickActionsTab';

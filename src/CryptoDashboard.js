@@ -7,17 +7,7 @@ import { FaArrowLeft, FaBitcoin, FaSync, FaWallet, FaExchangeAlt, FaTimes, FaBug
 import { useAuth } from './AuthContext';
 import toast from './utils/toast';
 import { getApiBase, getMediaBase } from './utils/apiEndpoints';
-
-// --- EKRAN GENİŞLİĞİ KONTROLÜ ---
-const useWindowWidth = () => {
-    const [width, setWidth] = useState(window.innerWidth);
-    useEffect(() => {
-        const handleResize = () => setWidth(window.innerWidth);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-    return { isMobile: width <= 768, width };
-};
+import useWindowWidth from './hooks/useWindowWidth';
 
 // Güvenli veri yazdırma
 const safeRender = (value) => {
