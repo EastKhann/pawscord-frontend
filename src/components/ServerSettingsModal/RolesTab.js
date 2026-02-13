@@ -5,8 +5,15 @@ import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
 import styles from './styles';
 
-const RolesTab = ({ server, fetchWithAuth, apiBaseUrl }) => {
-    const [roles, setRoles] = useState(server.roles || []);
+const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
+    const [roles, setRolesLocal] = useState(server.roles || []);
+    const setRoles = (updater) => {
+        setRolesLocal(prev => {
+            const next = typeof updater === 'function' ? updater(prev) : updater;
+            if (onRolesChange) onRolesChange(next);
+            return next;
+        });
+    };
     const [editingRole, setEditingRole] = useState(null);
     const [roleName, setRoleName] = useState('');
     const [roleColor, setRoleColor] = useState('#99aab5');
