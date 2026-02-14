@@ -102,7 +102,13 @@ const AppContent = () => {
     } = useVoice();
 
     // ─── GLOBAL WS ───
-    const { forwardToGlobalContext, setGlobalWsConnected, defaultAvatars, setViewingProfile, viewingProfile, zoomedImage, setZoomedImage, galleryData, setGalleryData } = useGlobalWebSocket();
+    const { setGlobalData: forwardToGlobalContext, setIsConnected: setGlobalWsConnected } = useGlobalWebSocket();
+
+    // ─── UI STATE (previously missing — these were local state in App.js.backup) ───
+    const [defaultAvatars, setDefaultAvatars] = useState([]);
+    const [viewingProfile, setViewingProfile] = useState(null);
+    const [zoomedImage, setZoomedImage] = useState(null);
+    const [galleryData, setGalleryData] = useState(null);
 
     // ─── STORES ───
     const { activeChat, setActiveChat, messages, setMessages, encryptionKeys, setEncryptionKey, voiceUsers, setVoiceUsersState, unreadCounts, selectedMessages, setSelectedMessages } = useChatStore();
