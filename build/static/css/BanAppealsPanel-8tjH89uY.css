@@ -1,0 +1,310 @@
+.ban-appeals-panel {
+    background: #2f3136;
+    border-radius: 8px;
+    padding: 20px;
+    color: #dcddde;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.appeals-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #40444b;
+}
+
+.appeals-header h2 {
+    color: #ffffff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.appeal-message {
+    background: #40444b;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.ban-info-card {
+    margin-bottom: 25px;
+}
+
+.ban-warning {
+    background: linear-gradient(135deg, #f04747, #d84040);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    box-shadow: 0 4px 15px rgba(240, 71, 71, 0.3);
+}
+
+.warning-icon {
+    font-size: 48px;
+    color: rgba(255, 255, 255, 0.9);
+    flex-shrink: 0;
+}
+
+.warning-text h3 {
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.warning-text p {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+.ban-meta {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.submit-appeal-section,
+.appeals-history {
+    background: #40444b;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.submit-appeal-section h3,
+.appeals-history h3 {
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.appeal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+}
+
+.form-group label {
+    color: #b9bbbe;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-input {
+    background: #2f3136;
+    border: 2px solid #202225;
+    color: #dcddde;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #5865f2;
+}
+
+.form-textarea {
+    background: #2f3136;
+    border: 2px solid #202225;
+    color: #dcddde;
+    padding: 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #5865f2;
+}
+
+.char-count {
+    color: #72767d;
+    font-size: 12px;
+    text-align: right;
+}
+
+.submit-btn {
+    background: #5865f2;
+    color: #ffffff;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #4752c4;
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.appeal-guidelines {
+    background: #2f3136;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #5865f2;
+}
+
+.appeal-guidelines h4 {
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+.appeal-guidelines ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #b9bbbe;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.loading {
+    text-align: center;
+    color: #72767d;
+    padding: 40px;
+}
+
+.empty-appeals {
+    text-align: center;
+    color: #72767d;
+    padding: 60px 20px;
+}
+
+.empty-icon {
+    font-size: 64px;
+    color: #40444b;
+    margin-bottom: 15px;
+}
+
+.appeals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.appeal-item {
+    background: #2f3136;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    transition: all 0.2s;
+}
+
+.appeal-item:hover {
+    background: #36393f;
+}
+
+.appeal-item.status-pending {
+    border-left-color: #faa61a;
+}
+
+.appeal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.appeal-date {
+    color: #72767d;
+    font-size: 13px;
+}
+
+.appeal-status {
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.appeal-content {
+    margin-bottom: 12px;
+}
+
+.appeal-reason,
+.appeal-details {
+    color: #dcddde;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.appeal-reason strong,
+.appeal-details strong {
+    color: #ffffff;
+}
+
+.admin-response {
+    background: #40444b;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 3px solid #5865f2;
+    font-size: 14px;
+    color: #dcddde;
+    line-height: 1.6;
+}
+
+.admin-response strong {
+    color: #ffffff;
+}
+
+.response-date {
+    color: #72767d;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.appeals-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.appeals-list::-webkit-scrollbar-track {
+    background: #2f3136;
+}
+
+.appeals-list::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 4px;
+}

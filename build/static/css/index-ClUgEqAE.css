@@ -1,0 +1,1710 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* frontend/src/index.css (MODERN ELEGANT TEMA) */
+/* 🔒 OPTIMIZED: Font import - gg sans equivalent + Inter fallback */
+/* gg sans is Discord's font; Noto Sans is the closest public equivalent */
+/* 🎯 gg sans → Noto Sans alias (Discord'un fontu public değil, Noto Sans en yakın alternatif) */
+@font-face {
+    font-family: 'gg sans';
+    src: local('Noto Sans'), local('NotoSans');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'gg sans';
+    src: local('Noto Sans Medium'), local('NotoSans-Medium');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'gg sans';
+    src: local('Noto Sans SemiBold'), local('NotoSans-SemiBold');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'gg sans';
+    src: local('Noto Sans Bold'), local('NotoSans-Bold');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+/* 📱 MOBILE RESPONSIVE STYLES */
+/* ================================================ */
+/* 🎨 PAWSCORD MODERN COLOR SYSTEM */
+/* ================================================ */
+:root {
+    /* Premium Brand Colors - Elegant Purple Gradient */
+    --brand-primary: #8b5cf6;
+    --brand-secondary: #6366f1;
+    --brand-accent: #a78bfa;
+
+    /* Gradients - Premium Look */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --gradient-danger: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
+
+    /* Dark Theme - Sophisticated */
+    --bg-app: #0a0a0f;
+    --bg-primary: #0f0f1e;
+    --bg-secondary: #1a1a2e;
+    --bg-tertiary: #16213e;
+    --bg-elevated: #21273d;
+    --bg-hover: rgba(139, 92, 246, 0.1);
+    --bg-active: rgba(139, 92, 246, 0.2);
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-border-hover: rgba(255, 255, 255, 0.15);
+
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #e2e3ee;
+    --text-tertiary: #b8b9c7;
+    --text-muted: #6c6d7d;
+
+    /* Shadows - Layered depth */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
+    --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.3);
+
+    /* Glow Effects */
+    --glow-primary: 0 0 20px rgba(139, 92, 246, 0.3);
+    --glow-secondary: 0 0 20px rgba(99, 102, 241, 0.3);
+    --glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
+    --glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+
+    /* Border Radius - Smooth curves */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+
+    /* Transitions - Smooth interactions */
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* ================================================ */
+/* 🎬 ANIMATIONS */
+/* ================================================ */
+html,
+body,
+#root {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    /* Modern Background */
+    background: var(--bg-app);
+}
+/* Animated Background Gradient */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(ellipse at top left, rgba(139, 92, 246, 0.1), transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.1), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: backgroundPulse 15s ease-in-out infinite;
+}
+@keyframes backgroundPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+/* ================================================ */
+/* 🎨 MODERN GLASSMORPHISM COMPONENTS */
+/* ================================================ */
+/* ================================================ */
+/* 🔘 MODERN BUTTON SYSTEM */
+/* ================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+.btn:hover::before {
+    left: 100%;
+}
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    transform: translateY(-1px);
+}
+/* ================================================ */
+/* 📝 MODERN INPUT SYSTEM */
+/* ================================================ */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    font-size: 14px;
+    transition: var(--transition-fast);
+}
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    background: var(--glass-bg-hover);
+}
+/* ================================================ */
+/* 🎯 MODERN SCROLLBAR */
+/* ================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--brand-primary), var(--brand-secondary));
+    border-radius: 10px;
+    transition: var(--transition-fast);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--brand-accent), var(--brand-primary));
+}
+/* ================================================ */
+/* ✨ UTILITY ANIMATIONS */
+/* ================================================ */
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+/* ================================================ */
+/* ORIGINAL INDEX.CSS STYLES */
+/* ================================================ */
+body {
+    margin: 0;
+    font-family: 'gg sans', 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+    background-color: var(--background-primary);
+    font-size: 16px;
+    line-height: 1.375;
+    /* 🔥 PREVENT BOUNCE SCROLLING ON iOS */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+    /* 🔥 PREVENT TEXT SIZE ADJUSTMENT ON ORIENTATION CHANGE */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+/* ======================================== */
+/* === YENİ RENK PALETİ (SOFT DARK) === */
+/* ======================================== */
+:root {
+    color-scheme: dark;
+    /* Discord'un Yeni "Midnight" Tonları */
+    --background-primary: #313338;
+    /* Ana Sohbet Alanı */
+    --background-secondary: #2b2d31;
+    /* Yan Menü */
+    --background-tertiary: #1e1f22;
+    /* Input ve Paneller */
+    --background-accent: #404249;
+    /* Hover (Üzerine gelince) */
+
+    --background-modifier-hover: rgba(79, 84, 92, 0.3);
+    --background-modifier-active: rgba(79, 84, 92, 0.5);
+    --background-mentioned: rgba(88, 101, 242, 0.1);
+
+    --text-primary: #dbdee1;
+    /* Ana Metin */
+    --text-secondary: #949ba4;
+    /* Yan Metin */
+    --text-muted: #787f89;
+    /* Sönük Metin */
+    --text-link: #00a8fc;
+    /* Linkler */
+
+    --text-positive: #23a559;
+    /* Yeşil (Başarılı) */
+    --text-warning: #f0b232;
+    /* Sarı (Uyarı) */
+    --text-danger: #da373c;
+    /* Kırmızı (Hata) */
+
+    --input-background: #383a40;
+    --input-border: #1e1f22;
+
+    --button-primary: #5865f2;
+    /* Ana Buton (Mor/Mavi) */
+    --button-secondary: #4e5058;
+    --button-danger: #da373c;
+
+    --border-primary: #1f2023;
+    --border-mentioned: #5865f2;
+
+    --scrollbar-thumb: #1a1b1e;
+    --scrollbar-track: #2b2d31;
+}
+select option {
+    background-color: #2b2d31;
+    color: #dbdee1;
+}
+/* Kaydırma Çubuğu (Scrollbar) - Ultra İnce */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(26, 27, 30, 0.6);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(17, 18, 20, 0.8);
+}
+/* Mobil Düzenlemeleri */
+@media (max-width: 768px) {
+    /* 🔥 MOBILE-FIRST OPTIMIZATIONS */
+
+    /* Prevent horizontal scroll */
+    html,
+    body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    /* Touch target sizes - minimum 44x44px */
+    button,
+    a,
+    [role="button"],
+    input[type="checkbox"],
+    input[type="radio"] {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 12px;
+    }
+
+    /* Optimize font sizes for mobile */
+    body {
+        font-size: 16px;
+        /* Prevents zoom on iOS input focus */
+    }
+
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+        /* Prevents iOS zoom */
+    }
+
+    /* Sidebar animations */
+
+    /* 🔥 MOBILE GESTURES - Improve scroll performance */
+    * {
+        -webkit-tap-highlight-color: rgba(88, 101, 242, 0.2);
+        touch-action: manipulation;
+    }
+
+    /* Optimize animations for mobile */
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+/* Genel Animasyonlar */
+button,
+a,
+input,
+[role="button"] {
+    transition: all 0.2s ease-in-out;
+}
+button:active {
+    transform: scale(0.96);
+}
+/* Tıklama efekti */
+/* İngilizce Link Butonu */
+/* Markdown (Mesaj İçeriği) Stilleri */
+.messageContent code {
+    background-color: #2b2d31;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Andale Mono', 'Monaco', 'Courier New', monospace;
+    font-size: 0.875em;
+    color: #e3e5e8;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.messageContent pre {
+    background-color: #2b2d31;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    margin: 6px 0;
+    max-width: 90%;
+    overflow-x: auto;
+}
+.messageContent pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+}
+.messageContent blockquote {
+    border-left: 4px solid #5865f2;
+    padding-left: 12px;
+    margin: 4px 0;
+    color: var(--text-secondary);
+}
+.messageContent a {
+    color: #00a8fc;
+    text-decoration: none;
+}
+.messageContent a:hover {
+    text-decoration: underline;
+}
+.messageContent strong {
+    font-weight: 700;
+    color: #fff;
+}
+.messageContent em {
+    font-style: italic;
+}
+.messageContent ul,
+.messageContent ol {
+    margin: 4px 0;
+    padding-left: 24px;
+}
+.messageContent li {
+    margin: 2px 0;
+}
+/* Animasyonlar */
+/* Login Ekranı */
+/* --- CANLI LOGIN SAYFASI STİLLERİ --- */
+/* Hareketli Arka Plan */
+.login-container {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #1e1f22;
+    padding: 0;
+    /* Tüm padding'i kaldır */
+}
+/* Mobil cihazlar için */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 0;
+        height: 100dvh;
+        /* dvh viewport height kullan */
+    }
+
+    .login-card {
+        margin: 0;
+        padding: 30px 20px;
+        /* Card içi padding'i azalt */
+        max-width: 90%;
+        /* Ekranın %90'ını kullan */
+    }
+}
+.background-animate {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    filter: blur(50px);
+    z-index: 0;
+    opacity: 0.6;
+}
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+/* Glassmorphism Kart */
+.login-card {
+    position: relative;
+    z-index: 1;
+    background: rgba(30, 31, 34, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Logo ve Başlık */
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #5865f2, #9b59b6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+}
+.logo-header h1 {
+    color: white;
+    margin: 0;
+    font-size: 2em;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.logo-header p {
+    color: #b9bbbe;
+    margin-top: 5px;
+    font-size: 0.95em;
+}
+/* Input Alanları */
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b9bbbe;
+    z-index: 2;
+}
+.input-group input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+.input-group input:focus {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: #5865f2;
+    outline: none;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+}
+/* Butonlar */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #5865f2, #4752c4);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+}
+.submit-btn:active {
+    transform: scale(0.98);
+}
+/* Ayırıcı */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #72767d;
+    font-size: 0.85em;
+}
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.divider span {
+    padding: 0 10px;
+}
+/* Toggle Mode Link */
+.toggle-mode {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #b9bbbe;
+}
+.toggle-mode span {
+    color: #00a8fc;
+    cursor: pointer;
+    font-weight: bold;
+}
+.toggle-mode span:hover {
+    text-decoration: underline;
+}
+/* Hata Mesajı */
+.error-message {
+    background: rgba(242, 63, 66, 0.2);
+    border: 1px solid #f23f42;
+    color: #f23f42;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+/* Google Butonunu Düzenleyen CSS */
+.google-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    /* Üst boşluğu azalttık */
+
+    /* Butonu ortalayıp %85 oranında küçültüyoruz */
+    transform: scale(0.95);
+    transform-origin: center;
+
+    /* Beyazlıkları gizlemek için */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+
+    /* Köşeleri daha yumuşak kırp */
+    border-radius: 50px;
+    overflow: hidden;
+
+    /* Arka planı şeffaf yapıyoruz ki beyaz kutu çıkmasın */
+    background-color: transparent !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    /* Hafif gölge ekledik */
+}
+/* Eğer Google'ın kendi iframe'ine etki edebilirsek (Bazen çalışır) */
+.google-btn-wrapper iframe {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 24px !important;
+}
+/* --- YAZIYOR ANİMASYONU --- */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    font-weight: bold;
+    height: 20px;
+}
+/* --- MESAJ VURGULAMA (SCROLL SONRASI) --- */
+/* ================================================ */
+/* 🔥 CONTEXT MENU - ABSOLUTE MAXIMUM Z-INDEX */
+/* ================================================ */
+/* 🔥 PORTAL ROOT - MUST BE ABSOLUTE TOP LAYER */
+#portal-root {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    pointer-events: none !important;
+    z-index: 2147483647 !important;
+    /* MAX SAFE INTEGER */
+    overflow: visible !important;
+}
+/* Portal children must be clickable */
+#portal-root>* {
+    pointer-events: auto !important;
+    position: fixed !important;
+}
+/* Context menu backdrop - tüm varyasyonlar */
+#portal-root>div[style*="background: transparent"] {
+    z-index: 2147483646 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    inset: 0 !important;
+    /* modern shorthand for top/left/right/bottom */
+}
+/* Context menu itself - ABSOLUTE TOP - tüm selector varyasyonları */
+#portal-root [role="menu"],
+#portal-root div[role="menu"],
+#portal-root>div>div[role="menu"] {
+    z-index: 2147483647 !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    overflow: visible !important;
+}
+/* Context menu items must be clickable */
+#portal-root [role="menuitem"],
+#portal-root [role="menuitem"] * {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+/* 🔥 OVERRIDE: Voice Island should be BELOW context menu */
+
+[class*="floating"],
+[class*="FloatingVoiceIsland"] {
+    z-index: 9998 !important;
+    /* Below portal */
+}
+/* 🔥 OVERRIDE: Sidebars should be BELOW context menu */
+
+[class*="sidebar"] {
+    z-index: 100 !important;
+    /* Way below portal */
+}
+/* 🔥 OVERRIDE: Modals should be BELOW context menu */
+[class*="modal"],
+[role="dialog"] {
+    z-index: 1000 !important;
+    /* Below portal */
+}
+/* 🔥 OVERRIDE: Voice Chat Panel should be BELOW context menu */
+[class*="VoiceChat"],
+[class*="voicePanel"] {
+    z-index: 9999 !important;
+    /* Below portal */
+}/* ================================================ */
+/* 🎨 PAWSCORD MODERN ELEGANT THEME */
+/* ================================================ */
+
+/* 🔒 OPTIMIZED: Font import index.css'te - tekrar import etmeye gerek yok */
+/* Noto Sans font is loaded in index.css, gg sans alias is also defined there */
+
+/* ================================================ */
+/* 🎯 MODERN COLOR SYSTEM */
+/* ================================================ */
+
+:root {
+  /* Primary Brand Colors - Elegant Purple Gradient */
+  --brand-primary: #8b5cf6;
+  --brand-secondary: #6366f1;
+  --brand-accent: #a78bfa;
+
+  /* Gradients - Premium Look */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-danger: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
+  --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 90%);
+
+  /* Dark Theme - Sophisticated */
+  --bg-app: #0a0a0f;
+  --bg-primary: #0f0f1e;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #16213e;
+  --bg-elevated: #21273d;
+  --bg-hover: rgba(139, 92, 246, 0.1);
+  --bg-active: rgba(139, 92, 246, 0.2);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.15);
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #e2e3ee;
+  --text-tertiary: #b8b9c7;
+  --text-muted: #6c6d7d;
+  --text-disabled: #4a4b58;
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+
+  /* Shadows - Layered depth */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
+  --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.3);
+
+  /* Glow Effects */
+  --glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
+  --glow-blue: 0 0 20px rgba(59, 130, 246, 0.3);
+  --glow-pink: 0 0 20px rgba(236, 72, 153, 0.3);
+
+  /* Border Radius - Smooth curves */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Spacing System */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+
+  /* Transitions - Smooth interactions */
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+  /* Z-Index Layers */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-tooltip: 1070;
+  --z-notification: 1080;
+}
+
+/* ================================================ */
+/* 🎨 GLASSMORPHISM COMPONENTS */
+/* ================================================ */
+
+/* ================================================ */
+/* 🔘 MODERN BUTTON SYSTEM */
+/* ================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 24px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--glass-border-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.btn-icon {
+  padding: 10px;
+  border-radius: var(--radius-full);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+/* ================================================ */
+/* 📝 MODERN INPUT SYSTEM */
+/* ================================================ */
+
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: var(--transition-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  background: var(--glass-bg-hover);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ================================================ */
+/* 🎯 MODERN CARD SYSTEM */
+/* ================================================ */
+
+.card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-normal);
+}
+
+.card-header {
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.card-description {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  margin-top: var(--space-xs);
+}
+
+/* ================================================ */
+/* ✨ MODERN ANIMATIONS */
+/* ================================================ */
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+
+  0%,
+  100% {
+    box-shadow: var(--glow-purple);
+  }
+
+  50% {
+    box-shadow: var(--glow-blue);
+  }
+}
+
+/* Animation Classes */
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* ================================================ */
+/* 🎨 UTILITY CLASSES */
+/* ================================================ */
+
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-secondary {
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--glass-border);
+  border-top-color: var(--brand-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Skeleton Loader */
+.skeleton {
+  background: linear-gradient(90deg,
+      var(--bg-tertiary) 0%,
+      var(--bg-elevated) 50%,
+      var(--bg-tertiary) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ================================================ */
+/* 📱 RESPONSIVE DESIGN */
+/* ================================================ */
+
+@media (max-width: 768px) {
+  :root {
+    --space-xl: 20px;
+    --space-2xl: 28px;
+    --space-3xl: 40px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .btn-lg {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+
+  .card {
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+  }
+}
+
+/* ================================================ */
+/* 🎯 MODERN SCROLLBAR */
+/* ================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--brand-primary), var(--brand-secondary));
+  border-radius: 10px;
+  transition: var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--brand-accent), var(--brand-primary));
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brand-primary) var(--bg-secondary);
+}.error-boundary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e1f22 0%, #2b2d31 100%);
+    padding: 20px;
+}
+
+.error-boundary.critical {
+    background: linear-gradient(135deg, #2d1414 0%, #3d1f1f 100%);
+}
+
+.error-content {
+    text-align: center;
+    max-width: 600px;
+    background: #313338;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.error-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.error-boundary h1 {
+    color: #f23f42;
+    font-size: 28px;
+    margin-bottom: 16px;
+}
+
+.error-message {
+    color: #b5bac1;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.error-details {
+    background: #1e1f22;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.error-details summary {
+    cursor: pointer;
+    color: #00a8fc;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.error-stack {
+    color: #dbdee1;
+    font-size: 13px;
+}
+
+.error-stack pre {
+    background: #0d0d0e;
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-top: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.error-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.error-actions button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-retry {
+    background: #5865f2;
+    color: white;
+}
+
+.btn-retry:hover {
+    background: #4752c4;
+    transform: translateY(-2px);
+}
+
+.btn-home {
+    background: #4e5058;
+    color: white;
+}
+
+.btn-home:hover {
+    background: #6d6f78;
+    transform: translateY(-2px);
+}
+
+.btn-reload {
+    background: #f23f42;
+    color: white;
+    padding: 12px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-reload:hover {
+    background: #d83437;
+    transform: scale(1.05);
+}/* frontend/src/SplashScreen.css - Modern Animated Splash */
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    overflow: hidden;
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out, visibility 0s 0.2s;
+}
+
+.splash-screen.finished {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.splash-screen.finished .particles,
+.splash-screen.finished .rings-container,
+.splash-screen.finished .logo-glow {
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+}
+
+/* Floating Particles */
+.particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    bottom: -20px;
+    left: var(--x);
+    width: var(--size);
+    height: var(--size);
+    background: rgba(114, 137, 218, 0.6);
+    border-radius: 50%;
+    animation: float-up var(--duration) ease-in-out infinite;
+    animation-delay: var(--delay);
+    filter: blur(1px);
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Animated Rings */
+.rings-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    pointer-events: none;
+}
+
+.ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid rgba(114, 137, 218, 0.3);
+    border-radius: 50%;
+    animation: ring-pulse 2s ease-out infinite;
+}
+
+.ring-1 {
+    width: 200px;
+    height: 200px;
+    animation-delay: 0s;
+}
+
+.ring-2 {
+    width: 260px;
+    height: 260px;
+    animation-delay: 0.3s;
+}
+
+.ring-3 {
+    width: 320px;
+    height: 320px;
+    animation-delay: 0.6s;
+}
+
+@keyframes ring-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Logo Container - Tam ortada, rings ile aynı pozisyonda */
+.logo-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(114, 137, 218, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.8;
+    }
+}
+
+/* Logo */
+.splash-logo {
+    position: relative;
+    z-index: 11;
+    width: 180px;
+    height: 180px;
+    opacity: 0;
+    animation: logo-entrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.3s;
+    filter: drop-shadow(0 0 30px rgba(114, 137, 218, 0.6));
+}
+
+@keyframes logo-entrance {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* Brand Text */
+.brand-text {
+    position: absolute;
+    top: calc(50% + 120px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+}
+
+.letter {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(114, 137, 218, 0.5);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: letter-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: calc(0.4s + var(--i) * 0.05s);
+}
+
+@keyframes letter-pop {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Loading Bar */
+.loading-bar {
+    position: absolute;
+    top: calc(50% + 170px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.loading-progress {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #7289da, #5865f2, #7289da);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: loading-slide 1.2s ease-in-out infinite, loading-fill 1.5s ease-out forwards;
+}
+
+@keyframes loading-slide {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes loading-fill {
+    0% {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+
+    100% {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+/* Pre-transition state - everything fades nicely */
+.splash-screen.pre-transition .logo-container {
+    animation: logo-exit 0.5s ease-in forwards;
+}
+
+.splash-screen.pre-transition .brand-text {
+    animation: fade-up 0.4s ease-out forwards;
+}
+
+.splash-screen.pre-transition .loading-bar {
+    animation: fade-up 0.3s ease-out forwards;
+}
+
+@keyframes logo-exit {
+    to {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes fade-up {
+    to {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+}.auth-callback-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+.auth-callback-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    color: white;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-callback-card h2 {
+    margin: 20px 0 10px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.auth-callback-card p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.auth-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.auth-success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00c853, #00e676);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto;
+    animation: scaleIn 0.3s ease-out;
+}
+
+.auth-error-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff5252, #ff1744);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto;
+    animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.auth-redirect-text {
+    margin-top: 16px !important;
+    font-size: 14px !important;
+    opacity: 0.7 !important;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .auth-callback-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    .auth-callback-card {
+        background: rgba(30, 30, 50, 0.8);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+}

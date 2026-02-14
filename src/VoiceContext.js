@@ -57,6 +57,12 @@ export const VoiceProvider = ({ children }) => {
         currentTurn: null
     });
 
+    // Voice Panel UI State (used by App.js)
+    const [useNewVoicePanel] = useState(true);
+    const [showVoiceIsland, setShowVoiceIsland] = useState(false);
+    const [isVoicePanelMinimized, setIsVoicePanelMinimized] = useState(false);
+    const [focusedStream, setFocusedStream] = useState(null);
+    const [islandState, setIslandState] = useState('collapsed');
 
     // Voice Settings (localStorage-backed state)
     const {
@@ -2088,6 +2094,7 @@ export const VoiceProvider = ({ children }) => {
             // 🎵 Voice Effects
             applyVoiceEffect,
             activeVoiceEffect,
+            activeEffect: activeVoiceEffect, // Alias used by App.js
             voiceEffectIntensity,
             setVoiceEffectIntensity,
             // 🎬 Cinema Mode
@@ -2118,7 +2125,13 @@ export const VoiceProvider = ({ children }) => {
             isVisualizerEnabled,
             toggleVisualizer,
             startVisualizer,
-            stopVisualizer
+            stopVisualizer,
+            // 🖥️ Voice Panel UI
+            useNewVoicePanel,
+            showVoiceIsland, setShowVoiceIsland,
+            isVoicePanelMinimized, setIsVoicePanelMinimized,
+            focusedStream, setFocusedStream,
+            islandState, setIslandState,
         }}>
             {children}
         </VoiceContext.Provider>

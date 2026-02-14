@@ -122,6 +122,12 @@ export const useChatStore = create((set, get) => ({
 
     // Sesli Sohbet Kullanıcıları
     setVoiceUsers: (usersMap) => set({ voiceUsers: usersMap }),
+    setVoiceUsersState: (usersMap) => set({ voiceUsers: usersMap }), // Alias used by App.js
+
+    // Selection mode
+    selectedMessages: new Set(),
+    setSelectedMessages: (val) => set({ selectedMessages: typeof val === 'function' ? val(get().selectedMessages) : val }),
+
     setEncryptionKey: (chatId, key) => set((state) => ({
         encryptionKeys: {
             ...state.encryptionKeys,

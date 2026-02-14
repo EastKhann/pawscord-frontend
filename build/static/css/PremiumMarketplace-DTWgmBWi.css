@@ -1,0 +1,294 @@
+/* frontend/src/components/PremiumMarketplace.css */
+/* 💎 Premium Marketplace Styles */
+
+.premium-marketplace {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Promotion Banner */
+.promotion-banner {
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 12px 48px rgba(255, 107, 107, 0.5);
+    }
+}
+
+.promotion-banner h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.promotion-ends {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-top: 10px;
+}
+
+/* Billing Toggle */
+.billing-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.billing-toggle button {
+    padding: 12px 30px;
+    border: 2px solid var(--primary-color);
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+    position: relative;
+}
+
+.billing-toggle button.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.save-badge {
+    background: #00D26A;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+}
+
+/* Plans Grid */
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+/* Premium Plan Card */
+.premium-plan-card {
+    background: var(--background-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.premium-plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+}
+
+.premium-plan-card.featured {
+    border-color: #FFD700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(88, 101, 242, 0.1) 100%);
+    transform: scale(1.05);
+}
+
+.featured-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1A1A1A;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
+}
+
+.plan-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.plan-header h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.plan-price {
+    margin-bottom: 15px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.current-price {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    display: block;
+}
+
+.billing-period {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: normal;
+}
+
+.savings-badge {
+    background: #00D26A;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* Features List */
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+}
+
+.plan-features li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.plan-features li:last-child {
+    border-bottom: none;
+}
+
+.check {
+    color: #00D26A;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Purchase Button */
+.purchase-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #7C3AED 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(88, 101, 242, 0.3);
+}
+
+.purchase-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.5);
+}
+
+.featured .purchase-btn {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1A1A1A;
+}
+
+.monthly-equivalent {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* FAQ Section */
+.premium-faq {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 40px;
+    border-top: 2px solid var(--border-color);
+}
+
+.premium-faq h3 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.faq-item {
+    background: var(--background-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.faq-item h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.faq-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 60px;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .plans-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .premium-plan-card.featured {
+        transform: scale(1);
+    }
+
+    .current-price {
+        font-size: 2.5rem;
+    }
+
+    .promotion-banner h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Dark Mode Enhancement */
+.dark-theme .premium-plan-card {
+    background: #2A2D31;
+}
+
+.dark-theme .premium-plan-card.featured {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(88, 101, 242, 0.15) 100%);
+}

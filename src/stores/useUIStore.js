@@ -236,6 +236,22 @@ export const useUIStore = create(
                 passwordSetupModal: false,
             },
 
+            // --- APP STATE (migrated from App.js local state) ---
+            animationState: 'start',
+            setAnimationState: (val) => set({ animationState: typeof val === 'function' ? val(get().animationState) : val }),
+            isConnected: false,
+            setIsConnected: (val) => set({ isConnected: typeof val === 'function' ? val(get().isConnected) : val }),
+            updateStatusText: '',
+            setUpdateStatusText: (val) => set({ updateStatusText: typeof val === 'function' ? val(get().updateStatusText) : val }),
+            downloadProgress: 0,
+            setDownloadProgress: (val) => set({ downloadProgress: typeof val === 'function' ? val(get().downloadProgress) : val }),
+            isDownloading: false,
+            setIsDownloading: (val) => set({ isDownloading: typeof val === 'function' ? val(get().isDownloading) : val }),
+            searchQuery: '',
+            setSearchQuery: (val) => set({ searchQuery: typeof val === 'function' ? val(get().searchQuery) : val }),
+            dropTarget: null,
+            setDropTarget: (val) => set({ dropTarget: typeof val === 'function' ? val(get().dropTarget) : val }),
+
             // --- MODAL DATA ---
             // Stores data associated with open modals (e.g., which user profile to show)
             modalData: {},

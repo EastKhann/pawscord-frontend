@@ -1,1 +1,0 @@
-import{r as i}from"./react-core-D6cE4lil.js";const s=()=>{const[e,n]=i.useState(window.innerWidth);return i.useEffect(()=>{const t=()=>n(window.innerWidth);return window.addEventListener("resize",t),()=>window.removeEventListener("resize",t)},[]),{isMobile:e<=768,isTablet:e<=1024,width:e}};export{s as u};

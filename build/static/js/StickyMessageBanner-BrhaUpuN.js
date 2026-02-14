@@ -1,0 +1,65 @@
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+import { j as jsxRuntimeExports } from "./react-core-BiY6fgAJ.js";
+import { b4 as FaBullhorn, a as FaTimes } from "./icons-vendor-2VDeY8fW.js";
+const StickyMessageBanner = /* @__PURE__ */ __name(({ message, type = "info", onDismiss }) => {
+  if (!message) return null;
+  const bgColors = {
+    info: "linear-gradient(90deg, #5865F2 0%, #4752C4 100%)",
+    warning: "linear-gradient(90deg, #FAA61A 0%, #F57C00 100%)",
+    error: "linear-gradient(90deg, #ED4245 0%, #C62828 100%)",
+    success: "linear-gradient(90deg, #3BA55C 0%, #2D7D46 100%)"
+  };
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+    background: bgColors[type] || bgColors.info,
+    color: "white",
+    padding: "10px 16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+    animation: "slideDown 0.3s ease-out",
+    position: "relative",
+    zIndex: 99
+  }, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("style", { children: `
+                    @keyframes slideDown {
+                        from { transform: translateY(-100%); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                ` }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", alignItems: "center", gap: "12px", flex: 1 }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(FaBullhorn, { size: 20, style: { opacity: 0.9 } }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { display: "flex", flexDirection: "column" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontWeight: "bold", fontSize: "12px", opacity: 0.8, textTransform: "uppercase", letterSpacing: "0.5px" }, children: type === "info" ? "Duyuru" : type.toUpperCase() }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { fontSize: "14px", fontWeight: 500 }, children: message })
+      ] })
+    ] }),
+    onDismiss && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "button",
+      {
+        onClick: onDismiss,
+        style: {
+          background: "rgba(255,255,255,0.2)",
+          border: "none",
+          borderRadius: "50%",
+          width: "28px",
+          height: "28px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          color: "white",
+          transition: "background 0.2s",
+          marginLeft: "10px"
+        },
+        onMouseEnter: /* @__PURE__ */ __name((e) => e.currentTarget.style.background = "rgba(255,255,255,0.3)", "onMouseEnter"),
+        onMouseLeave: /* @__PURE__ */ __name((e) => e.currentTarget.style.background = "rgba(255,255,255,0.2)", "onMouseLeave"),
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(FaTimes, { size: 14 })
+      }
+    )
+  ] });
+}, "StickyMessageBanner");
+export {
+  StickyMessageBanner as default
+};

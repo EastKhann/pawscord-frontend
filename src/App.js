@@ -115,7 +115,10 @@ const AppContent = () => {
     const { modals, openModal, closeModal, toggleModal, animationState, setAnimationState, isConnected, setIsConnected, updateStatusText, setUpdateStatusText, downloadProgress, setDownloadProgress, isDownloading, setIsDownloading, searchQuery, setSearchQuery, dropTarget, setDropTarget } = useUIStore();
 
     // ─── RESPONSIVE ───
-    const { isMobile, isLeftSidebarVisible, setIsLeftSidebarVisible, isRightSidebarVisible, setIsRightSidebarVisible, safeAreaBottom } = useResponsive();
+    const { isMobile } = useResponsive();
+    const [isLeftSidebarVisible, setIsLeftSidebarVisible] = useState(false);
+    const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(false);
+    const safeAreaBottom = isNative ? 'max(20px, env(safe-area-inset-bottom))' : '0px';
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
     // ─── LOCAL STATE ───
