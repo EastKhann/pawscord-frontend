@@ -170,7 +170,7 @@ export default defineConfig({
     include: /src\/.*\.jsx?$/,
     exclude: [],
     keepNames: true,
-    drop: process.env.NODE_ENV === 'production' ? ['debugger'] : [],
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
   },
 
   optimizeDeps: {
@@ -188,7 +188,7 @@ export default defineConfig({
     outDir: 'build',
 
     // Sourcemap (production'da false)
-    sourcemap: 'hidden',
+    sourcemap: false,
 
     // Chunk size warnings
     chunkSizeWarningLimit: 1500,
@@ -301,7 +301,7 @@ export default defineConfig({
     },
 
     // ⚡ OPTIMIZATION: esbuild minification (faster than terser)
-    minify: false, // TEMP: debug 't is not a function' error
+    minify: 'esbuild',
 
     // ⚡ console.log drop artık top-level esbuild config'de (build.esbuildOptions geçersizdi)
 

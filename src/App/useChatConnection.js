@@ -37,7 +37,11 @@ export default function useChatConnection({
             if (currentWsUrl.includes(expectedPath)) return;
         }
 
-        if (ws.current) ws.current.close(1000, 'change_room');
+        // Close any existing socket (may be in CONNECTING or OPEN state)
+        if (ws.current) {
+            try { ws.current.close(1000, 'change_room'); } catch (e) { /* ignore */ }
+            ws.current = null;
+        }
 
         let wsUrl = '';
         const params = `?username=${encodeURIComponent(username)}&token=${token}`;
@@ -240,7 +244,14 @@ export default function useChatConnection({
             setTimeout(() => { if (!isCancelled) fetchMessageHistory(true, 0); }, 50);
         }
 
-        return () => { isCancelled = true; };
+        return () => {
+            isCancelled = true;
+            // Close WebSocket on chat switch to prevent "closed before established" errors
+            if (ws.current) {
+                try { ws.current.close(1000, 'chat_switch'); } catch (e) { /* ignore */ }
+                ws.current = null;
+            }
+        };
     }, [activeChat.id, activeChat.type, isInitialDataLoaded, connectWebSocket]);
 
     return { ws, connectWebSocket };
