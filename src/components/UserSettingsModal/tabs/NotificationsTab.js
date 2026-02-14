@@ -11,8 +11,8 @@ const NotificationsTab = () => {
 
     return (
         <div>
-            <SettingSection title="Bildirim Ayarlar\u0131">
-                <ToggleSwitch label="Masa\u00FCst\u00FC Bildirimleri" value={desktop} onChange={setDesktop} />
+            <SettingSection title="Bildirim Ayarları">
+                <ToggleSwitch label="Masaüstü Bildirimleri" value={desktop} onChange={setDesktop} />
                 <ToggleSwitch label="Bildirim Sesleri" value={sound} onChange={setSound} />
                 <ToggleSwitch label="Mention Bildirimleri" value={mentions} onChange={setMentions} />
                 <ToggleSwitch label="DM Bildirimleri" value={dms} onChange={setDms} />

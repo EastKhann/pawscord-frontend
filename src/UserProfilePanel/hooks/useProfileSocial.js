@@ -19,9 +19,9 @@ const useProfileSocial = () => {
     const unblockUser = async (userId) => {
         try {
             await authPost('/blocks/unblock/', { user_id: userId });
-            toast.success('\u2705 Kullan\u0131c\u0131 engeli kald\u0131r\u0131ld\u0131!');
+            toast.success('✅ Kullanıcı engeli kaldırıldı!');
             fetchBlockedUsers();
-        } catch (err) { toast.error('Engel kald\u0131r\u0131lamad\u0131.'); }
+        } catch (err) { toast.error('Engel kaldırılamadı.'); }
     };
 
     const fetchFriendRequests = async () => {
@@ -35,18 +35,18 @@ const useProfileSocial = () => {
     const respondToFriendRequest = async (requestId, action) => {
         try {
             await authPost(`/friends/respond/${requestId}/`, { action });
-            toast.success(action === 'accept' ? '\u2705 Arkada\u015F eklendi!' : '\u274C \u0130stek reddedildi.');
+            toast.success(action === 'accept' ? '✅ Arkadaş eklendi!' : '❌ İstek reddedildi.');
             fetchFriendRequests();
-        } catch (err) { toast.error('\u0130\u015Flem ba\u015Far\u0131s\u0131z.'); }
+        } catch (err) { toast.error('İşlem başarısız.'); }
     };
 
     const removeFriend = async (friendshipId) => {
-        if (!await confirmDialog('Arkada\u015F\u0131 kald\u0131rmak istedi\u011Finize emin misiniz?')) return;
+        if (!await confirmDialog('Arkadaşı kaldırmak istediğinize emin misiniz?')) return;
         try {
             await authDelete(`/friends/remove/${friendshipId}/`);
-            toast.success('Arkada\u015F kald\u0131r\u0131ld\u0131.');
+            toast.success('Arkadaş kaldırıldı.');
             fetchFriendRequests();
-        } catch (err) { toast.error('Arkada\u015F kald\u0131r\u0131lamad\u0131.'); }
+        } catch (err) { toast.error('Arkadaş kaldırılamadı.'); }
     };
 
     return {

@@ -5,7 +5,7 @@ import { getApiBase } from '../../utils/apiEndpoints';
 
 const useBotBuilder = (serverSlug, token, onClose) => {
   const [botName, setBotName] = useState('');
-  const [botAvatar, setBotAvatar] = useState('\uD83E\uDD16');
+  const [botAvatar, setBotAvatar] = useState('🤖');
   const [commands, setCommands] = useState([
     { id: 1, trigger: '!hello', response: 'Hello! How can I help you?', enabled: true }
   ]);
@@ -35,13 +35,13 @@ const useBotBuilder = (serverSlug, token, onClose) => {
   };
 
   const testCommand = (cmd) => {
-    toast.info(`\uD83D\uDCCB Test Output:\n\n${cmd.response}`);
+    toast.info(`📋 Test Output:\n\n${cmd.response}`);
   };
 
   const handleSave = async () => {
-    if (!botName.trim()) { toast.error('\u274C Please enter a bot name'); return; }
+    if (!botName.trim()) { toast.error('❌ Please enter a bot name'); return; }
     const validCommands = commands.filter(cmd => cmd.trigger && cmd.response);
-    if (validCommands.length === 0) { toast.error('\u274C Please add at least one valid command'); return; }
+    if (validCommands.length === 0) { toast.error('❌ Please add at least one valid command'); return; }
 
     setIsSaving(true);
     try {
@@ -49,11 +49,11 @@ const useBotBuilder = (serverSlug, token, onClose) => {
         server_slug: serverSlug, name: botName, avatar: botAvatar,
         commands: validCommands, events, auto_moderation: autoModeration,
       }, { headers: { Authorization: `Bearer ${token}` } });
-      toast.success('\u2705 Bot created successfully!');
+      toast.success('✅ Bot created successfully!');
       onClose();
     } catch (error) {
       console.error('Failed to create bot:', error);
-      toast.error('\u274C Failed to create bot. Please try again.');
+      toast.error('❌ Failed to create bot. Please try again.');
     } finally {
       setIsSaving(false);
     }

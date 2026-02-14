@@ -9,10 +9,10 @@ const WatchTogether = ({ roomId, onClose }) => {
     return (
       <div className="watch-together-container">
         <div className="watch-together-empty">
-          <h2>{'\uD83D\uDCFA'} Watch Together</h2>
-          <p>Arkada\u015flar\u0131nla birlikte video izle!</p>
+          <h2>{'📺'} Watch Together</h2>
+          <p>Arkadaşlarınla birlikte video izle!</p>
           <button className="create-party-btn" onClick={() => w.setShowCreateModal(true)}>
-            <FaPlus /> Yeni Watch Party Olu\u015ftur
+            <FaPlus /> Yeni Watch Party Oluştur
           </button>
           <div className="supported-platforms">
             <span>Desteklenen platformlar:</span>
@@ -22,11 +22,11 @@ const WatchTogether = ({ roomId, onClose }) => {
         {w.showCreateModal && (
           <div className="watch-modal-overlay" onClick={() => w.setShowCreateModal(false)}>
             <div className="watch-modal" onClick={e => e.stopPropagation()}>
-              <h3>{'\uD83C\uDFAC'} Watch Party Olu\u015ftur</h3>
-              <input type="url" placeholder="Video URL'sini yap\u0131\u015ft\u0131r..." value={w.videoUrl} onChange={e => w.setVideoUrl(e.target.value)} autoFocus />
+              <h3>{'🎬'} Watch Party Oluştur</h3>
+              <input type="url" placeholder="Video URL'sini yapıştır..." value={w.videoUrl} onChange={e => w.setVideoUrl(e.target.value)} autoFocus />
               <div className="modal-actions">
-                <button className="cancel-btn" onClick={() => w.setShowCreateModal(false)}>\u0130ptal</button>
-                <button className="create-btn" onClick={w.createWatchParty} disabled={w.isLoading}>{w.isLoading ? 'Olu\u015fturuluyor...' : 'Olu\u015ftur'}</button>
+                <button className="cancel-btn" onClick={() => w.setShowCreateModal(false)}>İptal</button>
+                <button className="create-btn" onClick={w.createWatchParty} disabled={w.isLoading}>{w.isLoading ? 'Oluşturuluyor...' : 'Oluştur'}</button>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ const WatchTogether = ({ roomId, onClose }) => {
           {REACTION_EMOJIS.map(emoji => <button key={emoji} className="reaction-btn" onClick={() => w.sendReaction(emoji)}>{emoji}</button>)}
         </div>
         <div className="control-right">
-          <button onClick={() => w.setShowChat(!w.showChat)}>{'\uD83D\uDCAC'}</button>
+          <button onClick={() => w.setShowChat(!w.showChat)}>{'💬'}</button>
           <button onClick={w.toggleFullscreen}>{w.isFullscreen ? <FaCompress /> : <FaExpand />}</button>
           {w.isHost && <button className="end-btn" onClick={w.endParty}>Bitir</button>}
         </div>
@@ -90,7 +90,7 @@ const WatchTogether = ({ roomId, onClose }) => {
           </div>
           <div className="chat-input">
             <input type="text" placeholder="Mesaj yaz..." value={w.newMessage} onChange={e => w.setNewMessage(e.target.value)} onKeyPress={e => e.key === 'Enter' && w.sendMessage()} />
-            <button onClick={w.sendMessage}>G\u00f6nder</button>
+            <button onClick={w.sendMessage}>Gönder</button>
           </div>
         </div>
       )}

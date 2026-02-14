@@ -226,7 +226,7 @@ styleSheet.textContent = `
     }
     
     .voice-channel-drop-target::after {
-        content: '\uD83D\uDD00 Buraya b\u0131rak';
+        content: '🔀 Buraya bırak';
         position: absolute;
         right: 8px;
         top: 50%;

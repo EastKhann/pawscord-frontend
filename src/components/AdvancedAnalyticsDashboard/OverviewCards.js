@@ -2,8 +2,8 @@ import { FaUsers, FaEye, FaComments, FaClock } from 'react-icons/fa';
 import { formatNumber, getGrowthIndicator } from './useAdvancedAnalytics';
 
 const CARDS = [
-  { key: 'total_members', icon: FaUsers, label: 'Toplam \u00DCye', cls: 'members', growth: 'member' },
-  { key: 'active_members', icon: FaEye, label: 'Aktif \u00DCye', cls: 'active' },
+  { key: 'total_members', icon: FaUsers, label: 'Toplam Üye', cls: 'members', growth: 'member' },
+  { key: 'active_members', icon: FaEye, label: 'Aktif Üye', cls: 'active' },
   { key: 'messages_count', icon: FaComments, label: 'Mesaj', cls: 'messages', growth: 'message' },
   { key: 'voice_minutes', icon: FaClock, label: 'Sesli Dakika', cls: 'voice' },
 ];

@@ -30,14 +30,14 @@ const CryptoSignals = () => {
 
     if (loading && !data) {
         return (<div style={S.page}><div style={S.loadingBox}>
-            <div className="crypto-spin" style={{ fontSize: 48 }}>{'\u20BF'}</div>
+            <div className="crypto-spin" style={{ fontSize: 48 }}>{'₿'}</div>
             <p style={{ color: '#f0b232', fontSize: '1.1em', marginTop: 16 }}>Kripto Verileri Yükleniyor...</p>
         </div></div>);
     }
 
     if (error && !data) {
         return (<div style={S.page}><div style={{ textAlign: 'center', marginTop: 80 }}>
-            <div style={{ fontSize: 60, marginBottom: 16 }}>{'\u26A0\uFE0F'}</div>
+            <div style={{ fontSize: 60, marginBottom: 16 }}>{'⚠️'}</div>
             <h3 style={{ color: '#da373c', marginBottom: 8 }}>{error}</h3>
             <button onClick={() => fetchData(activeFileKey)} style={S.primaryBtn}>Tekrar Dene</button>
         </div></div>);
@@ -68,16 +68,16 @@ const CryptoSignals = () => {
                     {availableFiles.map(f => (
                         <button key={f.key} onClick={() => { if (activeFileKey !== f.key) setActiveFileKey(f.key); }}
                             style={{ ...S.fileTabBtn, ...(activeFileKey === f.key ? S.fileTabBtnActive : {}) }}>
-                            {'\uD83D\uDCCA'} {f.label}
-                            {activeFileKey === f.key && loading && <span className="crypto-spin" style={{ marginLeft: 6, fontSize: '0.85em' }}>{'\u23F3'}</span>}
+                            {'📊'} {f.label}
+                            {activeFileKey === f.key && loading && <span className="crypto-spin" style={{ marginLeft: 6, fontSize: '0.85em' }}>{'⏳'}</span>}
                         </button>
                     ))}
                 </div>
             )}
 
             <div style={S.modeToggle}>
-                {[{ key: 'balance_mode', icon: <FaChartLine />, label: isMobile ? 'Balance' : '\uD83D\uDCB0 Balance Sıralama', color: '#f0b232' },
-                  { key: 'winrate_mode', icon: <FaTrophy />, label: isMobile ? 'Winrate' : '\uD83C\uDFC6 Winrate Sıralama', color: '#23a559' }
+                {[{ key: 'balance_mode', icon: <FaChartLine />, label: isMobile ? 'Balance' : '💰 Balance Sıralama', color: '#f0b232' },
+                  { key: 'winrate_mode', icon: <FaTrophy />, label: isMobile ? 'Winrate' : '🏆 Winrate Sıralama', color: '#23a559' }
                 ].map(m => (
                     <button key={m.key} onClick={() => setActiveMode(m.key)}
                         style={{ ...S.modeBtn, ...(activeMode === m.key ? S.modeBtnActive : {}), borderColor: activeMode === m.key ? m.color : '#40444b' }}>
@@ -91,8 +91,8 @@ const CryptoSignals = () => {
                     {[
                         { num: stats.total, label: 'Strateji' },
                         { num: stats.uniqueCoins, label: 'Coin' },
-                        { num: isPositionsTab ? stats.uyumluSinyal : stats.profits, label: isPositionsTab ? '\u2705 Uyumlu' : 'Kârda', color: '#23a559' },
-                        { num: isPositionsTab ? stats.tersSinyal : stats.losses, label: isPositionsTab ? '\u26A0\uFE0F Ters Sinyal' : 'Zararda', color: '#da373c' },
+                        { num: isPositionsTab ? stats.uyumluSinyal : stats.profits, label: isPositionsTab ? '✅ Uyumlu' : 'Kârda', color: '#23a559' },
+                        { num: isPositionsTab ? stats.tersSinyal : stats.losses, label: isPositionsTab ? '⚠️ Ters Sinyal' : 'Zararda', color: '#da373c' },
                         { num: `${stats.avgPnl >= 0 ? '+' : ''}${stats.avgPnl.toFixed(2)}%`, label: 'Ort. PNL', color: stats.avgPnl >= 0 ? '#23a559' : '#da373c' },
                         { num: `${stats.avgWr.toFixed(1)}%`, label: 'Ort. WR', color: stats.avgWr >= 50 ? '#23a559' : '#f0b232' },
                     ].map(({ num, label, color }) => (
@@ -133,7 +133,7 @@ const CryptoSignals = () => {
                     <span style={{ color: '#949ba4', fontSize: '0.85em' }}>{processedData.length} sonuç</span>
                     <button onClick={() => setViewMode(v => v === 'table' ? 'cards' : 'table')} style={S.viewToggle}
                         title={viewMode === 'table' ? 'Kart görünümü' : 'Tablo görünümü'}>
-                        {viewMode === 'table' ? '\uD83C\uDCCF ' : '\uD83D\uDCCB '}
+                        {viewMode === 'table' ? '🃏 ' : '📋 '}
                     </button>
                 </div>
             </div>
@@ -150,7 +150,7 @@ const CryptoSignals = () => {
                                 color: isTers ? '#da373c' : '#23a559',
                                 border: `1px solid ${isTers ? 'rgba(218,55,60,0.4)' : 'rgba(35,165,89,0.4)'}`,
                             }}>
-                                {i + 1}. {isTers ? '\u26A0\uFE0F ' : '\u2705 '} {c.replace('USDT', '')}
+                                {i + 1}. {isTers ? '⚠️ ' : '✅ '} {c.replace('USDT', '')}
                             </span>
                         );
                     })}
@@ -158,7 +158,7 @@ const CryptoSignals = () => {
             )}
 
             {!currentTab ? (
-                <div style={S.emptyState}><div style={{ fontSize: 48, marginBottom: 12 }}>{'\uD83D\uDCED'}</div><p>Bu modda veri bulunamadı</p></div>
+                <div style={S.emptyState}><div style={{ fontSize: 48, marginBottom: 12 }}>{'📭'}</div><p>Bu modda veri bulunamadı</p></div>
             ) : viewMode === 'cards' ? (
                 <div style={S.cardGrid}>
                     {Object.entries(coinGroups).map(([coin, rows]) => {
@@ -187,8 +187,8 @@ const CryptoSignals = () => {
                                 <div style={S.cardFooter}>
                                     <div style={S.miniBarBg}><div style={{ ...S.miniBar, width: `${(goodRows.length / Math.max(rows.length, 1)) * 100}%` }} /></div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75em', marginTop: 4 }}>
-                                        <span style={{ color: '#23a559' }}>{isPositionsTab ? '\u2705 ' : '\u2713 '} {goodRows.length}</span>
-                                        <span style={{ color: '#da373c' }}>{isPositionsTab ? '\u26A0\uFE0F ' : '\u2717 '} {badRows.length}</span>
+                                        <span style={{ color: '#23a559' }}>{isPositionsTab ? '✅ ' : '✓ '} {goodRows.length}</span>
+                                        <span style={{ color: '#da373c' }}>{isPositionsTab ? '⚠️ ' : '✗ '} {badRows.length}</span>
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +232,7 @@ const CryptoSignals = () => {
                                             <td style={S.td}><span style={S.tfBadge}>{item.timeframe}</span></td>
                                             <td style={S.td}><SignalBadge value={item.signal || item.sinyal_yonu || '-'} /></td>
                                             {isPositionsTab && <td style={S.td}><SignalBadge value={item.pozisyon_yonu || '-'} /></td>}
-                                            {isPositionsTab && <td style={S.td}><span style={{ fontSize: '0.8em', fontWeight: 600, color: item.ters_sinyal ? '#da373c' : '#23a559' }}>{item.ters_sinyal ? '\u26A0\uFE0F Ters' : '\u2705 Uyumlu'}</span></td>}
+                                            {isPositionsTab && <td style={S.td}><span style={{ fontSize: '0.8em', fontWeight: 600, color: item.ters_sinyal ? '#da373c' : '#23a559' }}>{item.ters_sinyal ? '⚠️ Ters' : '✅ Uyumlu'}</span></td>}
                                             <td style={{ ...S.td, color: '#b9bbbe', fontSize: '0.85em' }}>${formatPrice(item.entry_price)}</td>
                                             <td style={{ ...S.td, color: '#dbdee1', fontSize: '0.85em' }}>${formatPrice(item.current_price)}</td>
                                             <td style={{ ...S.td, color: pnlColor(item.pnl_percent), fontWeight: 700 }}>{item.pnl_percent || '-'}</td>
@@ -250,12 +250,12 @@ const CryptoSignals = () => {
                     </div>
                     {totalPages > 1 && (
                         <div style={S.pagination}>
-                            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ ...S.pageBtn, opacity: page === 1 ? 0.4 : 1 }}>{'\u25C4'}</button>
+                            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ ...S.pageBtn, opacity: page === 1 ? 0.4 : 1 }}>{'◄'}</button>
                             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
                                 let num; if (totalPages <= 7) num = i + 1; else if (page <= 4) num = i + 1; else if (page >= totalPages - 3) num = totalPages - 6 + i; else num = page - 3 + i;
                                 return (<button key={num} onClick={() => setPage(num)} style={{ ...S.pageNumBtn, ...(page === num ? S.pageNumActive : {}) }}>{num}</button>);
                             })}
-                            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ ...S.pageBtn, opacity: page === totalPages ? 0.4 : 1 }}>{'\u25BA'}</button>
+                            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ ...S.pageBtn, opacity: page === totalPages ? 0.4 : 1 }}>{'►'}</button>
                         </div>
                     )}
                 </>

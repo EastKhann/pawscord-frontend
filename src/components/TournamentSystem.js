@@ -45,7 +45,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                                 backgroundColor: filter === f ? '#5865f2' : '#2f3136'
                             }}
                         >
-                            {f === 'all' ? 'T\u00FCm\u00FC' : f === 'active' ? 'Aktif' : f === 'upcoming' ? 'Yakla\u015Fan' : 'Tamamlanan'}
+                            {f === 'all' ? 'Tümü' : f === 'active' ? 'Aktif' : f === 'upcoming' ? 'Yaklaşan' : 'Tamamlanan'}
                         </button>
                     ))}
                 </div>
@@ -54,7 +54,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                     {tournaments.length === 0 ? (
                         <div style={styles.empty}>
                             <FaTrophy size={48} color="#4e5058" />
-                            <p>Hen\u00FCz turnuva yok</p>
+                            <p>Henüz turnuva yok</p>
                         </div>
                     ) : (
                         <div style={styles.tournamentGrid}>

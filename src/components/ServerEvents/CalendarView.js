@@ -7,9 +7,9 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
 
-    const monthNames = ['Ocak', '\u015Eubat', 'Mart', 'Nisan', 'May\u0131s', 'Haziran',
-        'Temmuz', 'A\u011Fustos', 'Eyl\u00FCl', 'Ekim', 'Kas\u0131m', 'Aral\u0131k'];
-    const dayNames = ['Pzt', 'Sal', '\u00C7ar', 'Per', 'Cum', 'Cmt', 'Paz'];
+    const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+        'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+    const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
 
     const getDaysInMonth = (year, month) => {
         return new Date(year, month + 1, 0).getDate();

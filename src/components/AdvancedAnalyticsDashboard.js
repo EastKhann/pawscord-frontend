@@ -5,8 +5,8 @@ import OverviewCards from './AdvancedAnalyticsDashboard/OverviewCards';
 import { ChartsSection, ListsSection, LinkClicksSection } from './AdvancedAnalyticsDashboard/AnalyticsSections';
 
 const TIME_RANGES = [
-  { value: '24h', label: '24 Saat' }, { value: '7d', label: '7 G\u00FCn' },
-  { value: '30d', label: '30 G\u00FCn' }, { value: '90d', label: '90 G\u00FCn' },
+  { value: '24h', label: '24 Saat' }, { value: '7d', label: '7 Gün' },
+  { value: '30d', label: '30 Gün' }, { value: '90d', label: '90 Gün' },
 ];
 
 const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
@@ -21,7 +21,7 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
     return (
       <div className="analytics-overlay" onClick={onClose}>
         <div className="analytics-panel" onClick={e => e.stopPropagation()}>
-          <div className="loading-state"><div className="spinner" /><p>Analitik verileri y{'\u00FC'}kleniyor...</p></div>
+          <div className="loading-state"><div className="spinner" /><p>Analitik verileri y{'ü'}kleniyor...</p></div>
         </div>
       </div>
     );
@@ -31,7 +31,7 @@ const AdvancedAnalyticsDashboard = ({ serverId, apiBaseUrl, onClose }) => {
     <div className="analytics-overlay" onClick={onClose}>
       <div className="analytics-panel" onClick={e => e.stopPropagation()}>
         <div className="analytics-header">
-          <h2><FaChartLine /> Geli{'\u015F'}mi{'\u015F'} Analitik</h2>
+          <h2><FaChartLine /> Geli{'ş'}mi{'ş'} Analitik</h2>
           <div className="header-controls">
             <div className="time-range-selector">
               {TIME_RANGES.map(r => (

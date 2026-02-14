@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { BATCH10_MODALS } from './batch10Config';
 
 /**
- * AppModalsBatch10 \u2014 BATCH 10: 50 Essential Features
+ * AppModalsBatch10 — BATCH 10: 50 Essential Features
  * Data-driven modal renderer using batch10Config.
  */
 const AppModalsBatch10 = (props) => {
@@ -14,7 +14,7 @@ const AppModalsBatch10 = (props) => {
                 if (!modals[key]) return null;
                 if (cond && !cond(props)) return null;
                 return (
-                    <Suspense key={key} fallback={<div>{fb || 'Y\u00FCkleniyor...'}</div>}>
+                    <Suspense key={key} fallback={<div>{fb || 'Yükleniyor...'}</div>}>
                         <C
                             onClose={() => closeModal(key)}
                             {...(getProps ? getProps(props) : {})}

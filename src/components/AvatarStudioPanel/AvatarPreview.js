@@ -27,10 +27,10 @@ const AvatarPreview = ({ avatar, parts, mini = false }) => {
         <div style={{ position: 'absolute', top: '32%', left: '50%', transform: 'translateX(-50%)', width: size * 0.5, height: size * 0.12, border: '2px solid #333', borderRadius: '4px', background: 'transparent' }} />
       )}
       {avatar.accessory === 'crown' && (
-        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', fontSize: size * 0.2 }}>{'\uD83D\uDC51'}</div>
+        <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', fontSize: size * 0.2 }}>{'👑'}</div>
       )}
       {avatar.accessory === 'cat_ears' && (
-        <div style={{ position: 'absolute', top: size * 0.05, left: '50%', transform: 'translateX(-50%)', fontSize: size * 0.15 }}>{'\uD83D\uDC31'}</div>
+        <div style={{ position: 'absolute', top: size * 0.05, left: '50%', transform: 'translateX(-50%)', fontSize: size * 0.15 }}>{'🐱'}</div>
       )}
     </div>
   );

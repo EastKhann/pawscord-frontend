@@ -15,7 +15,7 @@ const AppModalsBatch11 = (props) => {
                 const modalProps = getProps ? { ...getProps({ ...props, closeModal }), onClose: () => closeModal(key) } : {};
                 if (noSuspense) return <C key={key} {...modalProps} />;
                 return (
-                    <Suspense key={key} fallback={<div>{fb || 'Y\u00FCkleniyor...'}</div>}>
+                    <Suspense key={key} fallback={<div>{fb || 'Yükleniyor...'}</div>}>
                         <C {...modalProps} />
                     </Suspense>
                 );

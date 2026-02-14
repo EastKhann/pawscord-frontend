@@ -18,7 +18,7 @@ const VoiceRecordingUI = ({
                 onTouchStart={handleMicTouchStart}
                 style={styles.micButton}
                 className="mic-button action-button"
-                title="Bas\u0131l\u0131 tut \u2014 yukar\u0131 kayd\u0131r kilitle"
+                title="Basılı tut — yukarı kaydır kilitle"
                 disabled={disabled}
             >
                 <FaMicrophone />
@@ -52,7 +52,7 @@ const VoiceRecordingUI = ({
                             transform: `scale(${1 + slideProgress * 0.3}) translateY(${-slideProgress * 20}px)`,
                             boxShadow: slideProgress > 0.5 ? '0 0 12px rgba(67,181,129,0.5)' : '0 0 8px rgba(237,66,69,0.3)',
                         }}>
-                            {slideProgress > 0.7 ? '\uD83D\uDD12' : <FaMicrophone style={{ color: 'white', fontSize: '14px' }} />}
+                            {slideProgress > 0.7 ? '🔒' : <FaMicrophone style={{ color: 'white', fontSize: '14px' }} />}
                         </div>
                         <div style={styles.slideTrack}>
                             <div style={{
@@ -65,17 +65,17 @@ const VoiceRecordingUI = ({
                             ...styles.slideLabel,
                             color: slideProgress > 0.7 ? '#43b581' : '#72767d',
                         }}>
-                            {slideProgress > 0.7 ? 'B\u0131rak \u2192 Kilitle' : '\u2191 Kilitle'}
+                            {slideProgress > 0.7 ? 'Bırak → Kilitle' : '↑ Kilitle'}
                         </span>
                     </div>
                 ) : (
                     <div style={styles.lockedActions}>
-                        <span style={styles.lockedBadge}>{'\uD83D\uDD12'} Kilitlendi</span>
-                        <button onClick={cancelRecording} style={styles.cancelRecButton} title="\u0130ptal">
-                            <FaTimes /> {'\u0130'}ptal
+                        <span style={styles.lockedBadge}>{'🔒'} Kilitlendi</span>
+                        <button onClick={cancelRecording} style={styles.cancelRecButton} title="İptal">
+                            <FaTimes /> {'İ'}ptal
                         </button>
-                        <button onClick={stopRecording} style={styles.sendVoiceButton} title="G\u00F6nder">
-                            <FaPaperPlane /> G{'\u00F6'}nder
+                        <button onClick={stopRecording} style={styles.sendVoiceButton} title="Gönder">
+                            <FaPaperPlane /> G{'ö'}nder
                         </button>
                     </div>
                 )}
@@ -88,7 +88,7 @@ const VoiceRecordingUI = ({
         <button
             onClick={handleSubmit}
             style={styles.sendButton}
-            title="G\u00F6nder (Enter)"
+            title="Gönder (Enter)"
             disabled={disabled}
         >
             <FaPaperPlane />

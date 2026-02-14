@@ -1,12 +1,12 @@
 const SettingsView = ({ settings, setSettings }) => (
   <div className="settings-view">
     <div className="setting-group">
-      <label>Kay\u0131t Kalitesi</label>
+      <label>Kayıt Kalitesi</label>
       <select value={settings.quality} onChange={(e) => setSettings({ ...settings, quality: e.target.value })}>
-        <option value="low">D\u00fc\u015f\u00fck (64 kbps)</option>
+        <option value="low">Düşük (64 kbps)</option>
         <option value="medium">Orta (128 kbps)</option>
-        <option value="high">Y\u00fcksek (256 kbps)</option>
-        <option value="lossless">Kay\u0131ps\u0131z (FLAC)</option>
+        <option value="high">Yüksek (256 kbps)</option>
+        <option value="lossless">Kayıpsız (FLAC)</option>
       </select>
     </div>
 
@@ -21,9 +21,9 @@ const SettingsView = ({ settings, setSettings }) => (
     </div>
 
     {[
-      { key: 'auto_transcribe', label: 'Otomatik Transkript', desc: 'Kayd\u0131 metne d\u00f6n\u00fc\u015ft\u00fcr' },
-      { key: 'save_to_cloud', label: 'Buluta Kaydet', desc: 'Kay\u0131tlar\u0131 sunucuya y\u00fckle' },
-      { key: 'noise_suppression', label: 'G\u00fcr\u00fclt\u00fc Bast\u0131rma', desc: 'Arka plan g\u00fcr\u00fclt\u00fcs\u00fcn\u00fc azalt' },
+      { key: 'auto_transcribe', label: 'Otomatik Transkript', desc: 'Kaydı metne dönüştür' },
+      { key: 'save_to_cloud', label: 'Buluta Kaydet', desc: 'Kayıtları sunucuya yükle' },
+      { key: 'noise_suppression', label: 'Gürültü Bastırma', desc: 'Arka plan gürültüsünü azalt' },
     ].map(toggle => (
       <div key={toggle.key} className="setting-group toggle">
         <div className="toggle-info">

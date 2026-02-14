@@ -94,7 +94,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                             <span style={{ ...styles.badge, backgroundColor: isAtRisk ? '#ed4245' : '#f0b132' }}>
                                                 {activeWarnings.length} Active Warning{activeWarnings.length !== 1 ? 's' : ''}
                                             </span>
-                                            {isAtRisk && <span style={styles.riskBadge}>{'\u26A0\uFE0F'} AT RISK</span>}
+                                            {isAtRisk && <span style={styles.riskBadge}>{'⚠️'} AT RISK</span>}
                                         </div>
                                         {activeWarnings.length >= 3 && (
                                             <button onClick={() => banUser(user_id, 'Auto-ban: 3 warnings')} style={styles.banBtn}>
@@ -110,11 +110,11 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                                     <div style={styles.warningContent}>
                                                         <div style={styles.warningReason}>{warning.reason}</div>
                                                         <div style={styles.warningMeta}>
-                                                            <span>{warning.is_auto ? '\uD83E\uDD16 Auto' : '\uD83D\uDC64 Manual'}</span>
-                                                            <span>{'\u2022'}</span>
+                                                            <span>{warning.is_auto ? '🤖 Auto' : '👤 Manual'}</span>
+                                                            <span>{'•'}</span>
                                                             <span>{new Date(warning.created_at).toLocaleString()}</span>
-                                                            {warning.expires_at && (<><span>{'\u2022'}</span><span>Expires: {new Date(warning.expires_at).toLocaleDateString()}</span></>)}
-                                                            {!warning.is_active && (<><span>{'\u2022'}</span><span style={{ color: '#72767d' }}>EXPIRED</span></>)}
+                                                            {warning.expires_at && (<><span>{'•'}</span><span>Expires: {new Date(warning.expires_at).toLocaleDateString()}</span></>)}
+                                                            {!warning.is_active && (<><span>{'•'}</span><span style={{ color: '#72767d' }}>EXPIRED</span></>)}
                                                         </div>
                                                     </div>
                                                 </div>

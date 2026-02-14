@@ -26,7 +26,7 @@ const SettingsModal = ({
       <div style={styles.panel}>
         {/* Header */}
         <div style={styles.header}>
-          <h2 style={styles.headerTitle}>\u2699\ufe0f Ses Ayarlar\u0131</h2>
+          <h2 style={styles.headerTitle}>⚙️ Ses Ayarları</h2>
         </div>
 
         {/* Content */}
@@ -34,11 +34,11 @@ const SettingsModal = ({
           {/* Mic Test */}
           <div style={{ ...styles.section, border: isTesting ? '2px solid #43b581' : '1px solid rgba(255,255,255,0.1)' }}>
             <div style={styles.sectionHeader}>
-              <div style={styles.sectionTitleRow}>\ud83c\udfa4 Mikrofon Testi</div>
-              <div style={styles.descNoMargin}>Mikrofonunuzun \u00e7al\u0131\u015f\u0131p \u00e7al\u0131\u015fmad\u0131\u011f\u0131n\u0131 test edin</div>
+              <div style={styles.sectionTitleRow}>🎤 Mikrofon Testi</div>
+              <div style={styles.descNoMargin}>Mikrofonunuzun çalışıp çalışmadığını test edin</div>
             </div>
             <button onClick={() => setIsTesting(!isTesting)} style={styles.testBtn(isTesting)}>
-              {isTesting ? '\u23f9\ufe0f Testi Durdur' : '\u25b6\ufe0f Testi Ba\u015flat'}
+              {isTesting ? '⏹️ Testi Durdur' : '▶️ Testi Başlat'}
             </button>
             {isTesting && (
               <div>
@@ -50,7 +50,7 @@ const SettingsModal = ({
                   }} />
                 </div>
                 <div style={{ fontSize: '12px', color: micLevel > 10 ? '#43b581' : '#ed4245', textAlign: 'center', fontWeight: 600 }}>
-                  {micLevel > 10 ? '\u2705 Mikrofonunuz \u00e7al\u0131\u015f\u0131yor!' : '\u26a0\ufe0f Konu\u015fun veya ses yap\u0131n'}
+                  {micLevel > 10 ? '✅ Mikrofonunuz çalışıyor!' : '⚠️ Konuşun veya ses yapın'}
                 </div>
               </div>
             )}
@@ -63,8 +63,8 @@ const SettingsModal = ({
                 onChange={(e) => setSettings({ ...settings, echoCancellation: e.target.checked })}
                 style={styles.checkbox} />
               <div>
-                <div style={styles.title}>\ud83d\udd0a Yank\u0131 Engelleme</div>
-                <div style={styles.desc}>Hoparl\u00f6rden gelen sesi mikrofona almaz</div>
+                <div style={styles.title}>🔊 Yankı Engelleme</div>
+                <div style={styles.desc}>Hoparlörden gelen sesi mikrofona almaz</div>
               </div>
             </label>
           </div>
@@ -76,12 +76,12 @@ const SettingsModal = ({
                 onChange={() => onNoiseToggle && onNoiseToggle()}
                 style={styles.checkbox} />
               <div>
-                <div style={styles.title}>\ud83c\udfa4\ufe0f G\u00fcr\u00fclt\u00fc Engelleme</div>
+                <div style={styles.title}>🎤️ Gürültü Engelleme</div>
                 <div style={styles.desc}>
-                  Arka plan g\u00fcr\u00fclt\u00fcs\u00fcn\u00fc azalt\u0131r (Klavye, fan vb.)
+                  Arka plan gürültüsünü azaltır (Klavye, fan vb.)
                   <br />
                   <span style={{ color: '#ff9800', fontWeight: 600 }}>
-                    \u26a0\ufe0f M\u00fczik payla\u015f\u0131rken kapat\u0131n!
+                    ⚠️ Müzik paylaşırken kapatın!
                   </span>
                 </div>
               </div>
@@ -91,7 +91,7 @@ const SettingsModal = ({
           {/* PTT Mode */}
           <div style={styles.section}>
             <div style={styles.sectionHeader}>
-              <div style={styles.sectionTitleRow}>\ud83c\udfa4\ufe0f Ses Modu</div>
+              <div style={styles.sectionTitleRow}>🎤️ Ses Modu</div>
               <div style={styles.descNoMargin}>Voice Activity veya Push-to-Talk</div>
             </div>
             <div style={{ marginBottom: '12px' }}>
@@ -102,14 +102,14 @@ const SettingsModal = ({
                   typeof togglePTTMode !== 'undefined' && togglePTTMode && togglePTTMode();
                 }}
                 style={styles.select}>
-                <option value="voice">\ud83c\udfa4 Voice Activity (Otomatik)</option>
-                <option value="ptt">\u2328\ufe0f Push-to-Talk (Tu\u015fa bas\u0131nca)</option>
+                <option value="voice">🎤 Voice Activity (Otomatik)</option>
+                <option value="ptt">⌨️ Push-to-Talk (Tuşa basınca)</option>
               </select>
             </div>
             {audioSettings?.pttMode && (
               <div style={{ marginTop: '12px' }}>
                 <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
-                  \u2328\ufe0f PTT Tu\u015fu:
+                  ⌨️ PTT Tuşu:
                 </div>
                 <select value={audioSettings?.pttKey || 'Space'}
                   onChange={(e) => {
@@ -117,16 +117,16 @@ const SettingsModal = ({
                     typeof updatePTTKey !== 'undefined' && updatePTTKey && updatePTTKey(e.target.value);
                   }}
                   style={{ ...styles.select, padding: '8px', fontSize: '13px' }}>
-                  <option value="Space">Space (Bo\u015fluk)</option>
+                  <option value="Space">Space (Boşluk)</option>
                   <option value="ControlLeft">Ctrl (Sol)</option>
-                  <option value="ControlRight">Ctrl (Sa\u011f)</option>
+                  <option value="ControlRight">Ctrl (Sağ)</option>
                   <option value="ShiftLeft">Shift (Sol)</option>
                   <option value="AltLeft">Alt (Sol)</option>
                   <option value="KeyV">V</option>
                   <option value="KeyC">C</option>
                 </select>
                 <div style={{ fontSize: '11px', color: '#43b581', marginTop: '6px', textAlign: 'center' }}>
-                  \u2139\ufe0f Tu\u015fa bas\u0131l\u0131 tutunca konu\u015fursunuz
+                  ℹ️ Tuşa basılı tutunca konuşursunuz
                 </div>
               </div>
             )}
@@ -135,8 +135,8 @@ const SettingsModal = ({
           {/* VAD Sensitivity */}
           <div style={styles.section}>
             <div style={styles.sectionHeader}>
-              <div style={styles.sectionTitleRow}>\ud83c\udf9a\ufe0f Mikrofon Hassasiyeti</div>
-              <div style={styles.descNoMargin}>Konu\u015fma alg\u0131lama e\u015fi\u011fi (D\u00fc\u015f\u00fck = Hassas, Y\u00fcksek = Az Hassas)</div>
+              <div style={styles.sectionTitleRow}>🎚️ Mikrofon Hassasiyeti</div>
+              <div style={styles.descNoMargin}>Konuşma algılama eşiği (Düşük = Hassas, Yüksek = Az Hassas)</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ color: '#fff', fontSize: '14px' }}>20</span>
@@ -156,42 +156,42 @@ const SettingsModal = ({
               marginTop: '8px', fontSize: '12px', textAlign: 'center',
               color: tempVadSensitivity < 35 ? '#ff9800' : tempVadSensitivity > 60 ? '#ff9800' : '#43b581',
             }}>
-              {tempVadSensitivity < 35 ? '\u26a0\ufe0f \u00c7ok hassas - False positive olabilir'
-                : tempVadSensitivity > 60 ? '\u26a0\ufe0f Az hassas - Konu\u015fma alg\u0131lanmayabilir'
-                : '\u2705 Optimal hassasiyet'}
+              {tempVadSensitivity < 35 ? '⚠️ Çok hassas - False positive olabilir'
+                : tempVadSensitivity > 60 ? '⚠️ Az hassas - Konuşma algılanmayabilir'
+                : '✅ Optimal hassasiyet'}
             </div>
           </div>
 
           {/* Screen Share Quality */}
           <div style={styles.section}>
             <div style={styles.sectionHeader}>
-              <div style={styles.sectionTitleRow}>\ud83d\udcfa Ekran Payla\u015f\u0131m\u0131 Kalitesi</div>
-              <div style={styles.descNoMargin}>Y\u00fcksek kalite = Daha fazla bandwidth</div>
+              <div style={styles.sectionTitleRow}>📺 Ekran Paylaşımı Kalitesi</div>
+              <div style={styles.descNoMargin}>Yüksek kalite = Daha fazla bandwidth</div>
             </div>
             <div style={{ marginBottom: '12px' }}>
               <select value={tempScreenQuality}
                 onChange={(e) => { setTempScreenQuality(e.target.value); onScreenQualityChange && onScreenQualityChange(e.target.value); }}
                 style={styles.select}>
                 <option value="720p">720p (HD) - Az bandwidth</option>
-                <option value="1080p">1080p (Full HD) - \u00d6nerilen \u2705</option>
-                <option value="4K">4K (Ultra HD) - \u00c7ok bandwidth</option>
+                <option value="1080p">1080p (Full HD) - Önerilen ✅</option>
+                <option value="4K">4K (Ultra HD) - Çok bandwidth</option>
               </select>
             </div>
             <div style={{ marginBottom: '8px', color: '#fff' }}>
-              <div style={styles.titleSmall}>\ud83c\udfac FPS: {tempScreenFPS}</div>
+              <div style={styles.titleSmall}>🎬 FPS: {tempScreenFPS}</div>
               <input type="range" min="15" max="60" step="15" value={tempScreenFPS}
                 onChange={(e) => { const v = parseInt(e.target.value); setTempScreenFPS(v); onScreenFPSChange && onScreenFPSChange(v); }}
                 style={{ width: '100%', cursor: 'pointer' }} />
             </div>
             <div style={{ fontSize: '12px', textAlign: 'center', color: tempScreenFPS === 30 ? '#43b581' : '#faa61a' }}>
-              {tempScreenFPS === 30 ? '\u2705 Optimal (\u00d6nerilen)' : tempScreenFPS < 30 ? '\u26a0\ufe0f D\u00fc\u015f\u00fck FPS' : '\u26a0\ufe0f Y\u00fcksek bandwidth'}
+              {tempScreenFPS === 30 ? '✅ Optimal (Önerilen)' : tempScreenFPS < 30 ? '⚠️ Düşük FPS' : '⚠️ Yüksek bandwidth'}
             </div>
             <div style={{ marginTop: '12px' }}>
               <label style={{ ...styles.checkLabel, fontSize: '14px' }}>
                 <input type="checkbox" checked={audioSettings?.includeSystemAudio || false}
                   onChange={(e) => { setSettings({ ...settings, includeSystemAudio: e.target.checked }); typeof toggleSystemAudio !== 'undefined' && toggleSystemAudio && toggleSystemAudio(e.target.checked); }}
                   style={{ cursor: 'pointer' }} />
-                <span>\ud83d\udd0a Sistem sesini dahil et (Oyun/Video sesi)</span>
+                <span>🔊 Sistem sesini dahil et (Oyun/Video sesi)</span>
               </label>
             </div>
           </div>
@@ -203,7 +203,7 @@ const SettingsModal = ({
                 onChange={(e) => setSettings({ ...settings, autoGainControl: e.target.checked })}
                 style={styles.checkbox} />
               <div>
-                <div style={styles.title}>\ud83d\udcca Otomatik Ses Seviyesi</div>
+                <div style={styles.title}>📊 Otomatik Ses Seviyesi</div>
                 <div style={styles.desc}>Ses seviyesini otomatik ayarlar</div>
               </div>
             </label>
@@ -212,7 +212,7 @@ const SettingsModal = ({
 
         {/* Footer */}
         <div style={styles.footer}>
-          <button onClick={onClose} style={styles.cancelBtn}>\u0130ptal</button>
+          <button onClick={onClose} style={styles.cancelBtn}>İptal</button>
           <button onClick={() => onSave(settings)} style={styles.saveBtn}>Kaydet</button>
         </div>
       </div>

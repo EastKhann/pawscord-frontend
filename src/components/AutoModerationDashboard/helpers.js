@@ -1,11 +1,11 @@
 export const getRuleIcon = (type) => {
     switch (type) {
-        case 'toxic': return '\u2620\uFE0F';
-        case 'spam': return '\uD83D\uDEAB';
-        case 'keyword': return '\uD83D\uDD24';
-        case 'link': return '\uD83D\uDD17';
-        case 'caps': return '\uD83D\uDCE2';
-        default: return '\u2699\uFE0F';
+        case 'toxic': return '☠️';
+        case 'spam': return '🚫';
+        case 'keyword': return '🔤';
+        case 'link': return '🔗';
+        case 'caps': return '📢';
+        default: return '⚙️';
     }
 };
 
@@ -22,22 +22,22 @@ export const getRuleLabel = (type) => {
 
 export const getActionLabel = (action) => {
     switch (action) {
-        case 'warn': return '\u26A0\uFE0F Warn';
-        case 'delete': return '\uD83D\uDDD1\uFE0F Delete';
-        case 'timeout': return '\u23F1\uFE0F Timeout';
-        case 'kick': return '\uD83D\uDC62 Kick';
-        case 'ban': return '\uD83D\uDD28 Ban';
+        case 'warn': return '⚠️ Warn';
+        case 'delete': return '🗑️ Delete';
+        case 'timeout': return '⏱️ Timeout';
+        case 'kick': return '👢 Kick';
+        case 'ban': return '🔨 Ban';
         default: return action;
     }
 };
 
 export const getActionIcon = (action) => {
     switch (action) {
-        case 'warn': return '\u26A0\uFE0F';
-        case 'delete': return '\uD83D\uDDD1\uFE0F';
-        case 'timeout': return '\u23F1\uFE0F';
-        case 'ban': return '\uD83D\uDD28';
-        default: return '\u2753';
+        case 'warn': return '⚠️';
+        case 'delete': return '🗑️';
+        case 'timeout': return '⏱️';
+        case 'ban': return '🔨';
+        default: return '❓';
     }
 };
 

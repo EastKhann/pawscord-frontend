@@ -16,9 +16,9 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         if (date.toDateString() === today.toDateString()) {
-            return 'Bug\u00FCn';
+            return 'Bugün';
         } else if (date.toDateString() === tomorrow.toDateString()) {
-            return 'Yar\u0131n';
+            return 'Yarın';
         }
         return date.toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short' });
     };
@@ -86,8 +86,8 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                     <div className="ec-attendees">
                         <FaUsers />
                         <span>
-                            {event.going_count} kat{'\u0131'}l{'\u0131'}yor
-                            {event.interested_count > 0 && ` \u2022 ${event.interested_count} ilgileniyor`}
+                            {event.going_count} kat{'ı'}l{'ı'}yor
+                            {event.interested_count > 0 && ` • ${event.interested_count} ilgileniyor`}
                         </span>
                     </div>
 
@@ -97,13 +97,13 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                                 className={`rsvp-btn ${event.user_status === 'interested' ? 'active' : ''}`}
                                 onClick={() => onRSVP?.(event.id, 'interested')}
                             >
-                                <FaStar /> {'\u0130'}lgileniyorum
+                                <FaStar /> {'İ'}lgileniyorum
                             </button>
                             <button
                                 className={`rsvp-btn primary ${event.user_status === 'going' ? 'active' : ''}`}
                                 onClick={() => onRSVP?.(event.id, 'going')}
                             >
-                                <FaCheck /> Kat{'\u0131'}laca\u011F{'\u0131'}m
+                                <FaCheck /> Kat{'ı'}lacağ{'ı'}m
                             </button>
                         </div>
                     )}

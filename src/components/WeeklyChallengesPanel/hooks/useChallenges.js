@@ -4,27 +4,27 @@ import { FaComments, FaMicrophone, FaUsers, FaGamepad, FaHeart, FaShare, FaMusic
 
 const DEMO_CHALLENGES = {
     weekly: [
-        { id: 1, title: 'Sosyal Kelebek', description: '50 mesaj g\u00F6nder', icon: 'comments', type: 'messages', target: 50, current: 32, points: 100, reward: { type: 'badge', name: 'Konu\u015Fkan' }, difficulty: 'easy', status: 'in_progress' },
-        { id: 2, title: 'Ses Ustas\u0131', description: '2 saat sesli sohbette kal', icon: 'microphone', type: 'voice_time', target: 120, current: 85, points: 200, reward: { type: 'coins', amount: 500 }, difficulty: 'medium', status: 'in_progress' },
-        { id: 3, title: 'Topluluk Y\u0131ld\u0131z\u0131', description: '10 farkl\u0131 sunucuda aktif ol', icon: 'users', type: 'servers_active', target: 10, current: 10, points: 300, reward: { type: 'badge', name: 'Y\u0131ld\u0131z' }, difficulty: 'hard', status: 'completed' },
-        { id: 4, title: 'Oyun Maratonu', description: '5 oyun aktivitesi ba\u015Flat', icon: 'gamepad', type: 'games_played', target: 5, current: 2, points: 150, reward: { type: 'xp', amount: 1000 }, difficulty: 'medium', status: 'in_progress' },
-        { id: 5, title: 'Kalp Da\u011F\u0131t\u0131c\u0131', description: '25 mesaja tepki ver', icon: 'heart', type: 'reactions', target: 25, current: 0, points: 75, reward: { type: 'emoji', name: '\u2764\uFE0F\u200D\uD83D\uDD25' }, difficulty: 'easy', status: 'not_started' }
+        { id: 1, title: 'Sosyal Kelebek', description: '50 mesaj gönder', icon: 'comments', type: 'messages', target: 50, current: 32, points: 100, reward: { type: 'badge', name: 'Konuşkan' }, difficulty: 'easy', status: 'in_progress' },
+        { id: 2, title: 'Ses Ustası', description: '2 saat sesli sohbette kal', icon: 'microphone', type: 'voice_time', target: 120, current: 85, points: 200, reward: { type: 'coins', amount: 500 }, difficulty: 'medium', status: 'in_progress' },
+        { id: 3, title: 'Topluluk Yıldızı', description: '10 farklı sunucuda aktif ol', icon: 'users', type: 'servers_active', target: 10, current: 10, points: 300, reward: { type: 'badge', name: 'Yıldız' }, difficulty: 'hard', status: 'completed' },
+        { id: 4, title: 'Oyun Maratonu', description: '5 oyun aktivitesi başlat', icon: 'gamepad', type: 'games_played', target: 5, current: 2, points: 150, reward: { type: 'xp', amount: 1000 }, difficulty: 'medium', status: 'in_progress' },
+        { id: 5, title: 'Kalp Dağıtıcı', description: '25 mesaja tepki ver', icon: 'heart', type: 'reactions', target: 25, current: 0, points: 75, reward: { type: 'emoji', name: '❤️‍🔥' }, difficulty: 'easy', status: 'not_started' }
     ],
     daily: [
-        { id: 101, title: 'G\u00FCnl\u00FCk Selamlama', description: '\u0130lk mesaj\u0131n\u0131 g\u00F6nder', icon: 'comments', target: 1, current: 1, points: 25, status: 'completed' },
-        { id: 102, title: 'Sesli Kat\u0131l\u0131m', description: 'Bir sesli kanala kat\u0131l', icon: 'microphone', target: 1, current: 0, points: 25, status: 'not_started' },
+        { id: 101, title: 'Günlük Selamlama', description: 'İlk mesajını gönder', icon: 'comments', target: 1, current: 1, points: 25, status: 'completed' },
+        { id: 102, title: 'Sesli Katılım', description: 'Bir sesli kanala katıl', icon: 'microphone', target: 1, current: 0, points: 25, status: 'not_started' },
         { id: 103, title: 'Tepki Ver', description: '5 mesaja emoji tepkisi ver', icon: 'heart', target: 5, current: 3, points: 25, status: 'in_progress' }
     ],
     special: [
-        { id: 201, title: 'Yeni Y\u0131l \u00D6zel', description: 'Yeni y\u0131l kutlamas\u0131na kat\u0131l', icon: 'gift', target: 1, current: 0, points: 500, reward: { type: 'special_badge', name: '2026 Y\u0131ld\u0131z\u0131' }, endsAt: '2026-01-31T23:59:59', status: 'locked' }
+        { id: 201, title: 'Yeni Yıl Özel', description: 'Yeni yıl kutlamasına katıl', icon: 'gift', target: 1, current: 0, points: 500, reward: { type: 'special_badge', name: '2026 Yıldızı' }, endsAt: '2026-01-31T23:59:59', status: 'locked' }
     ]
 };
 
 const DEMO_PROGRESS = {
     totalPoints: 2450, weeklyPoints: 625, streak: 7, completedChallenges: 23, rank: 156,
     rewards: [
-        { type: 'badge', name: 'Konu\u015Fkan', earnedAt: '2026-01-20' },
-        { type: 'badge', name: 'Yeni Ba\u015Flayan', earnedAt: '2026-01-15' }
+        { type: 'badge', name: 'Konuşkan', earnedAt: '2026-01-20' },
+        { type: 'badge', name: 'Yeni Başlayan', earnedAt: '2026-01-15' }
     ]
 };
 
@@ -54,8 +54,8 @@ export const getRewardIcon = (reward) => {
 
 export const getRewardText = (reward) => {
     if (!reward) return '';
-    const map = { badge: reward.name, coins: `${reward.amount} Coin`, xp: `${reward.amount} XP`, emoji: '\u00D6zel Emoji', special_badge: reward.name };
-    return map[reward.type] || '\u00D6d\u00FCl';
+    const map = { badge: reward.name, coins: `${reward.amount} Coin`, xp: `${reward.amount} XP`, emoji: 'Özel Emoji', special_badge: reward.name };
+    return map[reward.type] || 'Ödül';
 };
 
 const useChallenges = (fetchWithAuth, apiBaseUrl) => {

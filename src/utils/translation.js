@@ -158,25 +158,25 @@ export function detectLanguageClient(text) {
     if (/[а-яА-ЯёЁ]/.test(text)) return 'ru';
 
     // Arabic
-    if (/[\u0600-\u06FF]/.test(text)) return 'ar';
+    if (/[؀-ۿ]/.test(text)) return 'ar';
 
     // Hebrew
-    if (/[\u0590-\u05FF]/.test(text)) return 'he';
+    if (/[֐-׿]/.test(text)) return 'he';
 
     // Chinese
-    if (/[\u4e00-\u9fa5]/.test(text)) return 'zh-cn';
+    if (/[一-龥]/.test(text)) return 'zh-cn';
 
     // Japanese (Hiragana/Katakana)
-    if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) return 'ja';
+    if (/[぀-ゟ゠-ヿ]/.test(text)) return 'ja';
 
     // Korean (Hangul)
-    if (/[\uAC00-\uD7AF]/.test(text)) return 'ko';
+    if (/[가-힯]/.test(text)) return 'ko';
 
     // Thai
-    if (/[\u0E00-\u0E7F]/.test(text)) return 'th';
+    if (/[฀-๿]/.test(text)) return 'th';
 
     // Greek
-    if (/[\u0370-\u03FF]/.test(text)) return 'el';
+    if (/[Ͱ-Ͽ]/.test(text)) return 'el';
 
     // Default to English
     return 'en';

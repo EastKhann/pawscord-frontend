@@ -17,8 +17,8 @@ export default function useAccountDeletion({ onClose, onConfirmDelete, username,
     const handleProceedToConfirm = () => { setStep(2); setError(''); };
 
     const handleDelete = async () => {
-        if (confirmText !== CONFIRM_PHRASE) { setError(`L\u00FCtfen tam olarak "${CONFIRM_PHRASE}" yaz\u0131n`); return; }
-        if (!password) { setError('\u015Eifrenizi girmeniz gerekiyor'); return; }
+        if (confirmText !== CONFIRM_PHRASE) { setError(`Lütfen tam olarak "${CONFIRM_PHRASE}" yazın`); return; }
+        if (!password) { setError('Şifrenizi girmeniz gerekiyor'); return; }
         setIsDeleting(true); setError('');
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/user/delete-account/`, {
@@ -26,14 +26,14 @@ export default function useAccountDeletion({ onClose, onConfirmDelete, username,
                 body: JSON.stringify({ password, confirm_text: confirmText })
             });
             if (response.ok) {
-                toast.success('Hesab\u0131n\u0131z ba\u015Far\u0131yla silindi. Ho\u015F\u00E7a kal\u0131n! \uD83D\uDC4B');
+                toast.success('Hesabınız başarıyla silindi. Hoşça kalın! 👋');
                 if (onConfirmDelete) onConfirmDelete();
                 localStorage.clear(); sessionStorage.clear(); window.location.href = '/';
             } else {
                 const data = await response.json();
-                setError(data.error || 'Hesap silinemedi. \u015Eifrenizi kontrol edin.');
+                setError(data.error || 'Hesap silinemedi. Şifrenizi kontrol edin.');
             }
-        } catch (err) { console.error('Account deletion error:', err); setError('Bir hata olu\u015Ftu. L\u00FCtfen tekrar deneyin.'); }
+        } catch (err) { console.error('Account deletion error:', err); setError('Bir hata oluştu. Lütfen tekrar deneyin.'); }
         finally { setIsDeleting(false); }
     };
 

@@ -13,7 +13,7 @@ const RecordView = ({
   const [showSaveModal, setShowSaveModal] = useState(false);
 
   const handleSave = () => {
-    if (!saveName.trim()) { toast.error('Kay\u0131t ad\u0131 gerekli'); return; }
+    if (!saveName.trim()) { toast.error('Kayıt adı gerekli'); return; }
     onSave(saveName);
     setShowSaveModal(false);
     setSaveName('');
@@ -40,7 +40,7 @@ const RecordView = ({
           <div className="recording-controls">
             {!isRecording ? (
               <button className="record-btn" onClick={onStart}>
-                <FaMicrophone /><span>Kayda Ba\u015fla</span>
+                <FaMicrophone /><span>Kayda Başla</span>
               </button>
             ) : (
               <>
@@ -54,19 +54,19 @@ const RecordView = ({
 
           {isRecording && (
             <div className="recording-tips">
-              <p>\ud83c\udfa4 Kay\u0131t devam ediyor...</p>
-              <p>Durdurmak i\u00e7in STOP butonuna bas\u0131n</p>
+              <p>🎤 Kayıt devam ediyor...</p>
+              <p>Durdurmak için STOP butonuna basın</p>
             </div>
           )}
         </>
       ) : (
         <div className="recording-preview">
           <div className="preview-icon"><FaFileAudio /></div>
-          <h3>Kay\u0131t Tamamland\u0131</h3>
-          <p>S\u00fcre: {formatTime(currentRecording.duration)}</p>
+          <h3>Kayıt Tamamlandı</h3>
+          <p>Süre: {formatTime(currentRecording.duration)}</p>
           <audio src={currentRecording.url} controls className="audio-preview" />
           <div className="preview-actions">
-            <button className="discard-btn" onClick={onDiscard}><FaTrash /> \u0130ptal</button>
+            <button className="discard-btn" onClick={onDiscard}><FaTrash /> İptal</button>
             <button className="save-btn" onClick={() => setShowSaveModal(true)}><FaSave /> Kaydet</button>
           </div>
         </div>
@@ -75,11 +75,11 @@ const RecordView = ({
       {showSaveModal && (
         <div className="save-modal-overlay" onClick={(e) => e.target.className === 'save-modal-overlay' && setShowSaveModal(false)}>
           <div className="save-modal">
-            <h3>Kayd\u0131 Kaydet</h3>
-            <input type="text" placeholder="Kay\u0131t ad\u0131..." value={saveName}
+            <h3>Kaydı Kaydet</h3>
+            <input type="text" placeholder="Kayıt adı..." value={saveName}
               onChange={(e) => setSaveName(e.target.value)} autoFocus />
             <div className="modal-actions">
-              <button onClick={() => setShowSaveModal(false)}>\u0130ptal</button>
+              <button onClick={() => setShowSaveModal(false)}>İptal</button>
               <button className="primary" onClick={handleSave}>Kaydet</button>
             </div>
           </div>

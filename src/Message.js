@@ -41,7 +41,7 @@ const Message = ({
     const [showReactionPicker, setShowReactionPicker] = useState(false);
 
     const isMyMessage = msg.username === currentUser;
-    const isAIMessage = ['Pawscord AI', 'PawPaw AI', '\u26A1 Signal Bot'].includes(msg.username);
+    const isAIMessage = ['Pawscord AI', 'PawPaw AI', '⚡ Signal Bot'].includes(msg.username);
     const messageRef = useRef(null);
 
     const handleQuoteMessage = useCallback(async () => {
@@ -85,7 +85,7 @@ const Message = ({
         if (isEncrypted(msg.content)) {
             const chatId = msg.room ? `room-${msg.room}` : (msg.conversation ? `dm-${msg.conversation}` : null);
             const secretKey = encryptionKeys[chatId];
-            return secretKey ? decryptMessage(msg.content, secretKey) : "\uD83D\uDD12 Bu mesaj \u015Fifreli. Okumak i\u00E7in anahtar\u0131 girin.";
+            return secretKey ? decryptMessage(msg.content, secretKey) : "🔒 Bu mesaj şifreli. Okumak için anahtarı girin.";
         }
         return msg.content;
     }, [msg.content, msg.room, msg.conversation, encryptionKeys]);
@@ -128,7 +128,7 @@ const Message = ({
     const finalFileUrl = isImageFile ? null : fullFileUrl;
 
     const signalCoin = useMemo(() => {
-        if (msg.username === '\u26A1 Signal Bot' && displayContent) {
+        if (msg.username === '⚡ Signal Bot' && displayContent) {
             const match = displayContent.match(/\*\*(.*?)\*\*/);
             if (match && match[1]) return match[1];
         }
@@ -147,7 +147,7 @@ const Message = ({
     const handleVote = useCallback(async (optionId) => {
         if (!msg.poll) return;
         try { await fetchWithAuth(`${absoluteHostUrl}/api/polls/${msg.poll.id}/vote/`, { method: 'POST', body: JSON.stringify({ option_id: optionId }) }); }
-        catch (error) { console.error("Oy hatas\u0131:", error); }
+        catch (error) { console.error("Oy hatası:", error); }
     }, [msg.poll, fetchWithAuth, absoluteHostUrl]);
 
     const handleTranscribe = useCallback(async () => {
@@ -158,9 +158,9 @@ const Message = ({
             if (response.ok) {
                 const data = await response.json();
                 if (data.transcription) setLocalTranscription(data.transcription);
-                else toast.error('\u274C \u00C7eviri bo\u015F d\u00F6nd\u00FC.');
-            } else { const ed = await response.json(); toast.error(`\u274C \u00C7eviri hatas\u0131: ${ed.error || 'Bilinmeyen hata'}`); }
-        } catch (error) { toast.error('\u274C Ses metne \u00E7evrilemedi.'); }
+                else toast.error('❌ Çeviri boş döndü.');
+            } else { const ed = await response.json(); toast.error(`❌ Çeviri hatası: ${ed.error || 'Bilinmeyen hata'}`); }
+        } catch (error) { toast.error('❌ Ses metne çevrilemedi.'); }
         finally { setLocalIsTranscribing(false); }
     }, [localIsTranscribing, localTranscription, fetchWithAuth, absoluteHostUrl, msg.id]);
 
@@ -190,9 +190,9 @@ const Message = ({
                 )}
 
                 <div style={styles.messageHeader}>
-                    <strong style={{ cursor: 'pointer', color: msg.username === '\u26A1 Signal Bot' ? '#5865f2' : (isAdmin ? '#f0b232' : '#fff') }}
+                    <strong style={{ cursor: 'pointer', color: msg.username === '⚡ Signal Bot' ? '#5865f2' : (isAdmin ? '#f0b232' : '#fff') }}
                         onClick={() => onViewProfile(msg.username)}>
-                        {isAIMessage && '\uD83E\uDD16 '} {msg.username}
+                        {isAIMessage && '🤖 '} {msg.username}
                     </strong>
                     {msg.is_locked && <FaLock style={{ marginLeft: 8, color: '#f0b232', fontSize: '0.9em' }} title="Locked" />}
                     <span style={styles.timestamp}>
@@ -240,14 +240,14 @@ const Message = ({
                 />
 
                 {msg.snippet_data && msg.snippet_data.type === 'game_xox' ? (
-                    <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe', fontSize: '0.9em' }}>{'\uD83C\uDFAE'} Oyun y{'\u00FC'}kleniyor...</div>}>
+                    <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe', fontSize: '0.9em' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
                         <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
                             onMove={(gid, idx) => { fetchWithAuth(`${absoluteHostUrl}/api/games/xox/move/`, { method: 'POST', body: JSON.stringify({ game_id: gid, index: idx }) }); }} />
                     </Suspense>
                 ) : msg.snippet_data ? (
                     <div style={styles.snippetContainer}>
                         <div style={styles.snippetHeader}>
-                            <span>{'\uD83D\uDCBB'} {msg.snippet_data.title || 'Kod Par\u00E7as\u0131'}</span>
+                            <span>{'💻'} {msg.snippet_data.title || 'Kod Parçası'}</span>
                             <span style={styles.langBadge}>{msg.snippet_data.language}</span>
                         </div>
                         <Suspense fallback={null}><CodeBlock language={msg.snippet_data.language}>{msg.snippet_data.code}</CodeBlock></Suspense>
@@ -301,7 +301,7 @@ const Message = ({
                             ))}
                         </div>
                     )}
-                    {isMyMessage && !msg.temp_id && <span style={styles.readReceipt} title="Iletildi">{'\u2713'}</span>}
+                    {isMyMessage && !msg.temp_id && <span style={styles.readReceipt} title="Iletildi">{'✓'}</span>}
                 </div>
             </div>
         </div>

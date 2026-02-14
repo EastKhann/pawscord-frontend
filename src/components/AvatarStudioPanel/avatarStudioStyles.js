@@ -1,14 +1,14 @@
 export const CATEGORIES = [
-  { id: 'face_shapes', name: 'Face', icon: '\uD83D\uDC64' },
-  { id: 'skin_tones', name: 'Skin', icon: '\uD83C\uDFA8' },
-  { id: 'eyes', name: 'Eyes', icon: '\uD83D\uDC41\uFE0F' },
-  { id: 'eye_colors', name: 'Eye Color', icon: '\uD83D\uDD35' },
-  { id: 'hairstyles', name: 'Hair', icon: '\uD83D\uDC87' },
-  { id: 'hair_colors', name: 'Hair Color', icon: '\uD83C\uDF08' },
-  { id: 'mouths', name: 'Mouth', icon: '\uD83D\uDC44' },
-  { id: 'accessories', name: 'Accessories', icon: '\uD83D\uDC53' },
-  { id: 'backgrounds', name: 'Background', icon: '\uD83D\uDDBC\uFE0F' },
-  { id: 'expressions', name: 'Expression', icon: '\uD83D\uDE0A' }
+  { id: 'face_shapes', name: 'Face', icon: '👤' },
+  { id: 'skin_tones', name: 'Skin', icon: '🎨' },
+  { id: 'eyes', name: 'Eyes', icon: '👁️' },
+  { id: 'eye_colors', name: 'Eye Color', icon: '🔵' },
+  { id: 'hairstyles', name: 'Hair', icon: '💇' },
+  { id: 'hair_colors', name: 'Hair Color', icon: '🌈' },
+  { id: 'mouths', name: 'Mouth', icon: '👄' },
+  { id: 'accessories', name: 'Accessories', icon: '👓' },
+  { id: 'backgrounds', name: 'Background', icon: '🖼️' },
+  { id: 'expressions', name: 'Expression', icon: '😊' }
 ];
 
 const CATEGORY_KEY_MAP = {

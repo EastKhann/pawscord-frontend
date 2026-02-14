@@ -46,10 +46,10 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
                                         <div style={styles.announcementMeta}>
                                             <span><FaCalendar /> {new Date(ann.scheduled_at).toLocaleString()}</span>
                                             {ann.recurring && (
-                                                <><span style={{ margin: '0 8px' }}>{'\u2022'}</span><span>{'\ud83d\udd01'} {ann.recurring_type}</span></>
+                                                <><span style={{ margin: '0 8px' }}>{'•'}</span><span>{'🔁'} {ann.recurring_type}</span></>
                                             )}
                                             {ann.channel_id && (
-                                                <><span style={{ margin: '0 8px' }}>{'\u2022'}</span><span>{'\ud83d\udcfa'} Channel: {ann.channel_id}</span></>
+                                                <><span style={{ margin: '0 8px' }}>{'•'}</span><span>{'📺'} Channel: {ann.channel_id}</span></>
                                             )}
                                         </div>
                                     </div>

@@ -5,9 +5,9 @@ import ScanResultCard from './ContentScannerPanel/ScanResultCard';
 
 const FILTERS = [
   { key: 'all', label: 'All', icon: '' },
-  { key: 'safe', label: 'Safe', icon: '\u2705 ' },
-  { key: 'flagged', label: 'Flagged', icon: '\u26A0\uFE0F ' },
-  { key: 'blocked', label: 'Blocked', icon: '\uD83D\uDEAB ' },
+  { key: 'safe', label: 'Safe', icon: '✅ ' },
+  { key: 'flagged', label: 'Flagged', icon: '⚠️ ' },
+  { key: 'blocked', label: 'Blocked', icon: '🚫 ' },
 ];
 
 const ContentScannerPanel = ({ fetchWithAuth, apiBaseUrl, onClose, messageId }) => {

@@ -39,17 +39,17 @@ const useProfileAdvanced = ({ user }) => {
     const equipItem = async (inventoryId) => {
         try {
             await authPost(`/api/store/equip/${inventoryId}/`);
-            toast.success('\u2705 Item equipped!');
+            toast.success('✅ Item equipped!');
             fetchInventory();
-        } catch (err) { toast.error('\u274C Failed to equip item'); }
+        } catch (err) { toast.error('❌ Failed to equip item'); }
     };
 
     const unequipItem = async (inventoryId) => {
         try {
             await authPost(`/api/store/unequip/${inventoryId}/`);
-            toast.success('\u2705 Item unequipped!');
+            toast.success('✅ Item unequipped!');
             fetchInventory();
-        } catch (err) { toast.error('\u274C Failed to unequip item'); }
+        } catch (err) { toast.error('❌ Failed to unequip item'); }
     };
 
     const fetchNicknameHistory = async () => {

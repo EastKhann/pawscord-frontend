@@ -3,7 +3,7 @@ import { FaShieldAlt, FaExclamationTriangle } from 'react-icons/fa';
 const SafetySettings = ({ settings, setSettings, verificationLevels, contentFilters }) => (
   <div className="settings-tab">
     <div className="form-group">
-      <label><FaShieldAlt /> Do{'\u011F'}rulama Seviyesi</label>
+      <label><FaShieldAlt /> Do{'ğ'}rulama Seviyesi</label>
       <div className="level-options">
         {verificationLevels.map(level => (
           <label key={level.value} className={`level-option ${settings.verification_level === level.value ? 'selected' : ''}`}>
@@ -18,7 +18,7 @@ const SafetySettings = ({ settings, setSettings, verificationLevels, contentFilt
     </div>
 
     <div className="form-group">
-      <label><FaExclamationTriangle /> {'\u0130\u00E7'}erik Filtresi</label>
+      <label><FaExclamationTriangle /> {'İç'}erik Filtresi</label>
       <div className="level-options">
         {contentFilters.map(filter => (
           <label key={filter.value} className={`level-option ${settings.explicit_content_filter === filter.value ? 'selected' : ''}`}>

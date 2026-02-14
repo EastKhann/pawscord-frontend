@@ -72,7 +72,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           onClose={() => setContextMenu(null)} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
 
         {msg.snippet_data?.type === 'game_xox' ? (
-          <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe' }}>{'\uD83C\uDFAE'} Oyun y{'\u00FC'}kleniyor...</div>}>
+          <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
             <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
               onMove={(gid, idx) => { fetchWithAuth(`${absoluteHostUrl}/api/games/xox/move/`, { method: 'POST', body: JSON.stringify({ game_id: gid, index: idx }) }); }} />
           </Suspense>
@@ -80,7 +80,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           <MessageContent displayContent={displayContent} isMessageEncrypted={isMessageEncrypted} snippetData={msg.snippet_data} />
         )}
 
-        {signalCoin && <button onClick={() => onShowChart(signalCoin)} style={styles.chartBtn}><FaChartLine /> {signalCoin} Grafi{'\u011F'}i</button>}
+        {signalCoin && <button onClick={() => onShowChart(signalCoin)} style={styles.chartBtn}><FaChartLine /> {signalCoin} Grafi{'ğ'}i</button>}
         {msg.link_preview_data && <LazyMount minHeight={80}><Suspense fallback={null}><LinkPreview data={msg.link_preview_data} /></Suspense></LazyMount>}
         <MessagePoll poll={msg.poll} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
         <MessageMedia msg={msg} finalImageUrl={finalImageUrl} finalFileUrl={finalFileUrl} onImageClick={onImageClick} onContentLoad={onContentLoad}

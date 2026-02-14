@@ -13,27 +13,27 @@ const GiveawayPanel = ({ serverId, onClose }) => {
     <div className="giveaway-panel-overlay" onClick={onClose}>
       <div className="giveaway-panel" onClick={(e) => e.stopPropagation()}>
         <div className="giveaway-header">
-          <h2>{'\uD83C\uDF89'} {'\u00C7'}ekili{'\u015F'}ler</h2>
-          <button className="close-btn" onClick={onClose}>{'\u00D7'}</button>
+          <h2>{'🎉'} {'Ç'}ekili{'ş'}ler</h2>
+          <button className="close-btn" onClick={onClose}>{'×'}</button>
         </div>
 
         <div className="giveaway-content">
           <div className="giveaway-actions">
             <button className="create-giveaway-btn" onClick={() => setShowCreateModal(true)}>
-              + Yeni {'\u00C7'}ekili{'\u015F'} Olu{'\u015F'}tur
+              + Yeni {'Ç'}ekili{'ş'} Olu{'ş'}tur
             </button>
           </div>
 
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>{'\u00C7'}ekili{'\u015F'}ler y{'\u00FC'}kleniyor...</p>
+              <p>{'Ç'}ekili{'ş'}ler y{'ü'}kleniyor...</p>
             </div>
           ) : giveaways.length === 0 ? (
             <div className="empty-state">
-              <span className="empty-icon">{'\uD83C\uDF81'}</span>
-              <p>Hen{'\u00FC'}z {'\u00E7'}ekili{'\u015F'} yok</p>
-              <span className="empty-hint">Yeni bir {'\u00E7'}ekili{'\u015F'} olu{'\u015F'}turun!</span>
+              <span className="empty-icon">{'🎁'}</span>
+              <p>Hen{'ü'}z {'ç'}ekili{'ş'} yok</p>
+              <span className="empty-hint">Yeni bir {'ç'}ekili{'ş'} olu{'ş'}turun!</span>
             </div>
           ) : (
             <div className="giveaways-list">

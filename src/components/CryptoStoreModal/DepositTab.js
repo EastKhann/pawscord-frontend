@@ -4,8 +4,8 @@ import { PACKAGES, DEPOSIT_ADDRESSES } from './useCryptoStore';
 
 const DepositTab = ({ selectedPack, setSelectedPack, txid, setTxid, txidResult, loading, handleVerifyTxid, handleCopyAddress, handlePasteTxid }) => (
     <div style={{ padding: '10px', color: 'white' }}>
-        <h3 style={{ marginTop: 0, color: '#f0b232' }}>{'\uD83D\uDCB0'} PawsCoin Sat\u0131n Al</h3>
-        <p style={{ color: '#b9bbbe', fontSize: '0.9em' }}>Kripto para ile PawsCoin sat\u0131n al\u0131n. \u00D6demenizi yapt\u0131ktan sonra i\u015Flem ID'sini (TXID) a\u015Fa\u011F\u0131ya girin.</p>
+        <h3 style={{ marginTop: 0, color: '#f0b232' }}>{'💰'} PawsCoin Satın Al</h3>
+        <p style={{ color: '#b9bbbe', fontSize: '0.9em' }}>Kripto para ile PawsCoin satın alın. Ödemenizi yaptıktan sonra işlem ID'sini (TXID) aşağıya girin.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, margin: '16px 0' }}>
             {PACKAGES.map(pkg => {
@@ -32,13 +32,13 @@ const DepositTab = ({ selectedPack, setSelectedPack, txid, setTxid, txidResult, 
 
         {selectedPack && (
             <div style={{ marginBottom: 14, padding: 12, backgroundColor: '#202225', borderRadius: 8, border: '1px solid #1e1f22', color: '#b9bbbe', fontSize: '0.9em' }}>
-                Se\u00E7ilen paket: <strong style={{ color: 'white' }}>{selectedPack.coins.toLocaleString()} Coin</strong> {'\u2013'}
+                Seçilen paket: <strong style={{ color: 'white' }}>{selectedPack.coins.toLocaleString()} Coin</strong> {'–'}
                 <span style={{ color: '#f0b232', fontWeight: 600 }}> {selectedPack.price}</span>
             </div>
         )}
 
         <div style={{ marginTop: 20, marginBottom: 20, padding: 15, backgroundColor: '#202225', borderRadius: 8, border: '1px solid #1e1f22' }}>
-            <h4 style={{ margin: '0 0 10px 0', color: '#5865f2' }}>{'\uD83D\uDCCB'} \u00D6deme Bilgileri</h4>
+            <h4 style={{ margin: '0 0 10px 0', color: '#5865f2' }}>{'📋'} Ödeme Bilgileri</h4>
             <div style={{ fontSize: '0.85em', color: '#b9bbbe', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {DEPOSIT_ADDRESSES.map((addr) => (
                     <div key={addr.label} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -54,33 +54,33 @@ const DepositTab = ({ selectedPack, setSelectedPack, txid, setTxid, txidResult, 
                 ))}
             </div>
             <p style={{ fontSize: '0.75em', color: '#999', marginTop: 10 }}>
-                \u00D6deme sonras\u0131 i\u015Flem ID'sini (TXID) a\u015Fa\u011F\u0131ya girin. Not: \u015Eu an se\u00E7ilen paket bilgisi bilgilendirme ama\u00E7l\u0131, TXID do\u011Frulamas\u0131 i\u015Flem miktar\u0131n\u0131 otomatik alg\u0131lamaz.
+                Ödeme sonrası işlem ID'sini (TXID) aşağıya girin. Not: Şu an seçilen paket bilgisi bilgilendirme amaçlı, TXID doğrulaması işlem miktarını otomatik algılamaz.
             </p>
         </div>
 
         <div style={{ marginBottom: 15 }}>
-            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.9em', color: '#b9bbbe' }}>{'\u0130'}\u015Flem ID (TXID):</label>
+            <label style={{ display: 'block', marginBottom: 8, fontSize: '0.9em', color: '#b9bbbe' }}>{'İ'}şlem ID (TXID):</label>
             <div style={{ display: 'flex', gap: 8 }}>
                 <input type="text" value={txid} onChange={(e) => setTxid(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleVerifyTxid(); } }}
-                    placeholder="\u0130\u015Flem ID'sini buraya yap\u0131\u015Ft\u0131r\u0131n"
+                    placeholder="İşlem ID'sini buraya yapıştırın"
                     style={{ width: '100%', padding: '10px', backgroundColor: '#2b2d31', border: '1px solid #1e1f22', borderRadius: '4px', color: 'white', fontSize: '0.9em' }}
                     disabled={loading} />
                 <button onClick={handlePasteTxid}
                     style={{ padding: '0 12px', backgroundColor: '#5865f2', color: 'white', border: 'none', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1 }}
-                    disabled={loading}>Yap\u0131\u015Ft\u0131r</button>
+                    disabled={loading}>Yapıştır</button>
             </div>
         </div>
 
         <button onClick={handleVerifyTxid}
             style={{ width: '100%', padding: '12px', backgroundColor: '#5865f2', color: 'white', border: 'none', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer', fontSize: '1em', fontWeight: '600', opacity: loading ? 0.6 : 1 }}
             disabled={loading}>
-            {loading ? 'Do\u011Frulan\u0131yor...' : 'Do\u011Frula ve Coin Al'}
+            {loading ? 'Doğrulanıyor...' : 'Doğrula ve Coin Al'}
         </button>
 
         {txidResult && (
             <div style={{ marginTop: 15, padding: 12, backgroundColor: txidResult.success ? '#23a55933' : '#ff5d5d33', border: `1px solid ${txidResult.success ? '#23a559' : '#ff5d5d'}`, borderRadius: 6, color: txidResult.success ? '#23a559' : '#ff5d5d' }}>
-                {txidResult.success ? '\u2705' : '\u274C'} {txidResult.message}
+                {txidResult.success ? '✅' : '❌'} {txidResult.message}
                 {txidResult.added_coins && <strong> (+{txidResult.added_coins} coin)</strong>}
             </div>
         )}

@@ -8,7 +8,6 @@ import useResponsive from './hooks/useResponsive'; // ðŸ”¥ RESPONSIVE
 import UserContextMenu from './components/UserContextMenu';
 import VoiceSettingsPanel from './components/VoiceSettingsPanel'; // ðŸ”¥ YENÄ°: GeliÅŸmiÅŸ Ses AyarlarÄ±
 import toast from './utils/toast';
-import SparkMD5 from 'spark-md5'; // ðŸ”¥ Avatar iÃ§in
 import { PRODUCTION_URL } from './utils/constants';
 
 // Extracted Sub-Components
@@ -18,14 +17,7 @@ import VideoFeed from './VoiceChatPanel/VideoFeed';
 import MinimizedView from './VoiceChatPanel/MinimizedView';
 import useVoiceMonitoring from './VoiceChatPanel/useVoiceMonitoring';
 import './VoiceChatPanel/voicePanelStyles';
-
-// ðŸ”¥ Avatar helper fonksiyonu - Fallback olarak kalÄ±yor
-const getDeterministicAvatarFallback = (username, size = 256) => {
-    if (!username) return `https://ui-avatars.com/api/?name=User&background=5865f2&color=fff&bold=true&size=${size}`;
-    const hash = SparkMD5.hash(username);
-    const hue = parseInt(hash.substring(0, 8), 16) % 360;
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=${hue.toString(16).padStart(2, '0')}${((hue + 60) % 360).toString(16).padStart(2, '0')}${((hue + 120) % 360).toString(16).padStart(2, '0')}&color=fff&bold=true&size=${size}`;
-};
+import { getDeterministicAvatarFallback } from './VoiceChatPanel/avatarUtils';
 
 // ðŸ”¥ YENÄ°: Avatar URL'sinden _100x100 thumbnail suffix'ini kaldÄ±r
 const getFullResolutionAvatar = (avatarUrl) => {

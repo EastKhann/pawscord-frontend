@@ -45,7 +45,7 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
             });
 
             if (res.ok) {
-                toast.success('\u2705 Turnuvaya kat\u0131ld\u0131n\u0131z!');
+                toast.success('✅ Turnuvaya katıldınız!');
                 loadTournaments();
             }
         } catch (error) {
@@ -54,7 +54,7 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
     };
 
     const leaveTournament = async (tournamentId) => {
-        if (!confirm('Turnuvadan ayr\u0131lmak istedi\u011Finize emin misiniz?')) return;
+        if (!confirm('Turnuvadan ayrılmak istediğinize emin misiniz?')) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournamentId}/leave/`, {

@@ -19,11 +19,11 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
     return (
         <div style={styles.modalOverlay}>
             <div style={styles.modal}>
-                <h3 style={styles.modalTitle}>Yeni Turnuva Olu{'\u015F'}tur</h3>
+                <h3 style={styles.modalTitle}>Yeni Turnuva Olu{'ş'}tur</h3>
                 <form onSubmit={handleSubmit} style={styles.form}>
                     <input
                         type="text"
-                        placeholder="Turnuva Ad{'\u0131'}"
+                        placeholder="Turnuva Ad{'ı'}"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         style={styles.input}
@@ -42,10 +42,10 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                         onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) })}
                         style={styles.input}
                     >
-                        <option value={4}>4 Ki{'\u015F'}i</option>
-                        <option value={8}>8 Ki{'\u015F'}i</option>
-                        <option value={16}>16 Ki{'\u015F'}i</option>
-                        <option value={32}>32 Ki{'\u015F'}i</option>
+                        <option value={4}>4 Ki{'ş'}i</option>
+                        <option value={8}>8 Ki{'ş'}i</option>
+                        <option value={16}>16 Ki{'ş'}i</option>
+                        <option value={32}>32 Ki{'ş'}i</option>
                     </select>
                     <input
                         type="datetime-local"
@@ -56,7 +56,7 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                     />
                     <input
                         type="text"
-                        placeholder={'\u00D6d\u00FCl (opsiyonel)'}
+                        placeholder={'Ödül (opsiyonel)'}
                         value={formData.prize}
                         onChange={(e) => setFormData({ ...formData, prize: e.target.value })}
                         style={styles.input}
@@ -69,10 +69,10 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
                     />
                     <div style={styles.modalButtons}>
                         <button type="button" onClick={onClose} style={styles.cancelButton}>
-                            {'\u0130'}ptal
+                            {'İ'}ptal
                         </button>
                         <button type="submit" style={styles.submitButton}>
-                            Olu{'\u015F'}tur
+                            Olu{'ş'}tur
                         </button>
                     </div>
                 </form>

@@ -9,7 +9,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
   if (loading) {
     return (
       <div className="leveling-overlay">
-        <div className="leveling-panel"><div className="loading-state"><div className="spinner" /><p>Seviye sistemi y{'\u00FC'}kleniyor...</p></div></div>
+        <div className="leveling-panel"><div className="loading-state"><div className="spinner" /><p>Seviye sistemi y{'ü'}kleniyor...</p></div></div>
       </div>
     );
   }
@@ -18,14 +18,14 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
     <div className="leveling-overlay" onClick={onClose}>
       <div className="leveling-panel" onClick={e => e.stopPropagation()}>
         <div className="leveling-header">
-          <h2>{'\u2B50'} Seviye Sistemi</h2>
-          <button className="close-btn" onClick={onClose}>{'\u00D7'}</button>
+          <h2>{'⭐'} Seviye Sistemi</h2>
+          <button className="close-btn" onClick={onClose}>{'×'}</button>
         </div>
 
         <div className="leveling-content">
           <div className="config-section">
             <div className="section-header">
-              <h3>{'\u2699\uFE0F'} Genel Ayarlar</h3>
+              <h3>{'⚙️'} Genel Ayarlar</h3>
               <label className="toggle-switch">
                 <input type="checkbox" checked={config.enabled} onChange={e => updateConfig('enabled', e.target.checked)} />
                 <span className="slider"></span>
@@ -35,7 +35,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
 
             <div className="form-grid">
               <div className="form-group">
-                <label>Mesaj Ba{'\u015F\u0131'}na XP</label>
+                <label>Mesaj Ba{'şı'}na XP</label>
                 <input type="number" min="1" max="100" value={config.xp_per_message} onChange={e => updateConfig('xp_per_message', parseInt(e.target.value))} disabled={!config.enabled} />
               </div>
               <div className="form-group">
@@ -43,31 +43,31 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
                 <input type="number" min="0" max="300" value={config.xp_cooldown} onChange={e => updateConfig('xp_cooldown', parseInt(e.target.value))} disabled={!config.enabled} />
               </div>
               <div className="form-group full-width">
-                <label>Duyuru Kanal{'\u0131'}</label>
+                <label>Duyuru Kanal{'ı'}</label>
                 <select value={config.announce_channel_id} onChange={e => updateConfig('announce_channel_id', e.target.value)} disabled={!config.enabled}>
-                  <option value="">Se{'\u00E7'}iniz (opsiyonel)</option>
+                  <option value="">Se{'ç'}iniz (opsiyonel)</option>
                   {channels.map(ch => <option key={ch.id} value={ch.id}>#{ch.name}</option>)}
                 </select>
               </div>
               <div className="form-group full-width">
-                <label>Seviye Atlama Mesaj{'\u0131'}</label>
+                <label>Seviye Atlama Mesaj{'ı'}</label>
                 <textarea value={config.level_up_message} onChange={e => updateConfig('level_up_message', e.target.value)} disabled={!config.enabled} rows="2" />
-                <span className="hint">Kullan{'\u0131'}labilir: {'{user}'}, {'{level}'}</span>
+                <span className="hint">Kullan{'ı'}labilir: {'{user}'}, {'{level}'}</span>
               </div>
               <div className="form-group">
                 <label className="checkbox-label">
                   <input type="checkbox" checked={config.stack_roles} onChange={e => updateConfig('stack_roles', e.target.checked)} disabled={!config.enabled} />
-                  <span>Rolleri biriktir ({'\u00F6'}nceki seviye rollerini kald{'\u0131'}rma)</span>
+                  <span>Rolleri biriktir ({'ö'}nceki seviye rollerini kald{'ı'}rma)</span>
                 </label>
               </div>
               <div className="form-group">
                 <label className="checkbox-label">
                   <input type="checkbox" checked={config.reset_on_leave} onChange={e => updateConfig('reset_on_leave', e.target.checked)} disabled={!config.enabled} />
-                  <span>Sunucudan ayr{'\u0131'}l{'\u0131'}nca XP'yi s{'\u0131'}f{'\u0131'}rla</span>
+                  <span>Sunucudan ayr{'ı'}l{'ı'}nca XP'yi s{'ı'}f{'ı'}rla</span>
                 </label>
               </div>
             </div>
-            <button className="save-btn" onClick={saveConfig}>{'\uD83D\uDCBE'} Ayarlar{'\u0131'} Kaydet</button>
+            <button className="save-btn" onClick={saveConfig}>{'💾'} Ayarlar{'ı'} Kaydet</button>
           </div>
 
           <LevelRolesSection levelRoles={levelRoles} newRole={newRole} setNewRole={setNewRole} roles={roles} addLevelRole={addLevelRole} removeLevelRole={removeLevelRole} />

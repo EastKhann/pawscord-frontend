@@ -66,7 +66,7 @@ const useAdvancedAnalytics = (serverId, apiBaseUrl) => {
       if (pRes.ok) setPeakHours((await pRes.json()).hours || []);
     } catch (error) {
       console.error('Fetch analytics error:', error);
-      toast.error('\u274C Analitik verileri y\u00FCklenemedi');
+      toast.error('❌ Analitik verileri yüklenemedi');
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ const useAdvancedAnalytics = (serverId, apiBaseUrl) => {
     setRefreshing(true);
     await fetchAllAnalytics();
     setRefreshing(false);
-    toast.success('\uD83D\uDD04 Veriler g\u00FCncellendi');
+    toast.success('🔄 Veriler güncellendi');
   };
 
   const handleExport = () => {
@@ -91,7 +91,7 @@ const useAdvancedAnalytics = (serverId, apiBaseUrl) => {
     const a = document.createElement('a');
     a.href = url; a.download = `analytics_${serverId}_${timeRange}.json`; a.click();
     URL.revokeObjectURL(url);
-    toast.success('\uD83D\uDCE5 Analitik verileri indirildi');
+    toast.success('📥 Analitik verileri indirildi');
   };
 
   return {

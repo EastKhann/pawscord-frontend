@@ -9,17 +9,17 @@ const DEFAULT_SETTINGS = {
 };
 
 export const VERIFICATION_LEVELS = [
-    { value: 'none', label: 'Yok', description: 'Herkes mesaj g\u00F6nderebilir' },
-    { value: 'low', label: 'D\u00FC\u015F\u00FCk', description: 'E-posta do\u011Frulamas\u0131 gerekli' },
-    { value: 'medium', label: 'Orta', description: '5 dakika kay\u0131tl\u0131 olmal\u0131' },
-    { value: 'high', label: 'Y\u00FCksek', description: '10 dakika sunucuda olmal\u0131' },
-    { value: 'highest', label: 'En Y\u00FCksek', description: 'Telefon do\u011Frulamas\u0131 gerekli' }
+    { value: 'none', label: 'Yok', description: 'Herkes mesaj gönderebilir' },
+    { value: 'low', label: 'Düşük', description: 'E-posta doğrulaması gerekli' },
+    { value: 'medium', label: 'Orta', description: '5 dakika kayıtlı olmalı' },
+    { value: 'high', label: 'Yüksek', description: '10 dakika sunucuda olmalı' },
+    { value: 'highest', label: 'En Yüksek', description: 'Telefon doğrulaması gerekli' }
 ];
 
 export const CONTENT_FILTERS = [
-    { value: 'disabled', label: 'Kapal\u0131', description: '\u0130\u00E7erik filtresi yok' },
-    { value: 'medium', label: 'Orta', description: 'Rols\u00FCz \u00FCyeler i\u00E7in filtrele' },
-    { value: 'high', label: 'Y\u00FCksek', description: 'T\u00FCm mesajlar\u0131 filtrele' }
+    { value: 'disabled', label: 'Kapalı', description: 'İçerik filtresi yok' },
+    { value: 'medium', label: 'Orta', description: 'Rolsüz üyeler için filtrele' },
+    { value: 'high', label: 'Yüksek', description: 'Tüm mesajları filtrele' }
 ];
 
 const useCommunitySettings = (apiBaseUrl, serverId) => {
@@ -62,8 +62,8 @@ const useCommunitySettings = (apiBaseUrl, serverId) => {
                 method: 'PUT', headers: { ...authHeaders(), 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...settings, rules, screening_questions: screeningQuestions })
             });
-            if (r.ok) toast.success('\u2705 Topluluk ayarlar\u0131 kaydedildi');
-        } catch (e) { console.error('Save error:', e); toast.error('Kaydetme ba\u015Far\u0131s\u0131z'); }
+            if (r.ok) toast.success('✅ Topluluk ayarları kaydedildi');
+        } catch (e) { console.error('Save error:', e); toast.error('Kaydetme başarısız'); }
         finally { setSaving(false); }
     };
 

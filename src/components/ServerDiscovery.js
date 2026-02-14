@@ -11,8 +11,8 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>\uD83D\uDD0D Sunucu Ke\u015Ffi</h1>
-        <p style={styles.subtitle}>\u0130lginizi \u00E7ekebilecek topluluklar\u0131 ke\u015Ffedin</p>
+        <h1 style={styles.title}>🔍 Sunucu Keşfi</h1>
+        <p style={styles.subtitle}>İlginizi çekebilecek toplulukları keşfedin</p>
       </div>
 
       <div style={styles.searchContainer}>
@@ -31,19 +31,19 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
       </div>
 
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}><FaStar style={{ color: '#faa61a' }} /> \u00D6ne \u00C7\u0131kan Sunucular</h2>
+        <h2 style={styles.sectionTitle}><FaStar style={{ color: '#faa61a' }} /> Öne Çıkan Sunucular</h2>
         <div style={styles.serverGrid}>
-          {loading ? <div style={styles.loading}>Y\u00FCkleniyor...</div> : featuredServers.length === 0 ? <div style={styles.empty}>\u00D6ne \u00E7\u0131kan sunucu bulunamad\u0131</div> : (
+          {loading ? <div style={styles.loading}>Yükleniyor...</div> : featuredServers.length === 0 ? <div style={styles.empty}>Öne çıkan sunucu bulunamadı</div> : (
             featuredServers.map(server => <ServerCard key={server.id} server={server} onJoin={joinServer} featured />)
           )}
         </div>
       </div>
 
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}><FaFire style={{ color: '#ed4245' }} /> Pop\u00FCler Sunucular</h2>
+        <h2 style={styles.sectionTitle}><FaFire style={{ color: '#ed4245' }} /> Popüler Sunucular</h2>
         <div style={styles.serverGrid}>
-          {loading ? <div style={styles.loading}>Y\u00FCkleniyor...</div> : servers.length === 0 ? (
-            <div style={styles.empty}><FaSearch style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.3 }} /><p>Sunucu bulunamad\u0131</p></div>
+          {loading ? <div style={styles.loading}>Yükleniyor...</div> : servers.length === 0 ? (
+            <div style={styles.empty}><FaSearch style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.3 }} /><p>Sunucu bulunamadı</p></div>
           ) : servers.map(server => <ServerCard key={server.id} server={server} onJoin={joinServer} />)}
         </div>
       </div>

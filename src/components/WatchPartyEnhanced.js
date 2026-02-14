@@ -3,7 +3,7 @@ import { FaPlay, FaPause, FaExpand, FaCompress, FaVolumeUp, FaVolumeMute, FaUser
 import styles from './WatchPartyEnhanced/styles';
 import useWatchParty from './WatchPartyEnhanced/hooks/useWatchParty';
 
-const QUICK_EMOJIS = ['\uD83D\uDE02', '\u2764\uFE0F', '\uD83D\uDC4D', '\uD83D\uDD25', '\uD83D\uDE2E', '\uD83D\uDE22'];
+const QUICK_EMOJIS = ['😂', '❤️', '👍', '🔥', '😮', '😢'];
 
 const WatchPartyEnhanced = ({ roomId, currentUser, websocket, onClose, initialVideoUrl = '', participants = [] }) => {
     const {

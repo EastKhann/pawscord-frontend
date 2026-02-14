@@ -74,9 +74,9 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
                     <div style={styles.detailSection}>
                         <h4>Bilgiler</h4>
                         <p><strong>Oyun:</strong> {tournament.game}</p>
-                        <p><strong>Kat{'\u0131'}l{'\u0131'}mc{'\u0131'}:</strong> {tournament.participants?.length}/{tournament.max_participants}</p>
-                        <p><strong>Ba{'\u015F'}lang{'\u0131\u00E7'}:</strong> {new Date(tournament.start_date).toLocaleString('tr-TR')}</p>
-                        {tournament.prize && <p><strong>{'\u00D6'}d{'\u00FC'}l:</strong> {tournament.prize}</p>}
+                        <p><strong>Kat{'ı'}l{'ı'}mc{'ı'}:</strong> {tournament.participants?.length}/{tournament.max_participants}</p>
+                        <p><strong>Ba{'ş'}lang{'ıç'}:</strong> {new Date(tournament.start_date).toLocaleString('tr-TR')}</p>
+                        {tournament.prize && <p><strong>{'Ö'}d{'ü'}l:</strong> {tournament.prize}</p>}
                     </div>
 
                     {tournament.rules && (
@@ -88,13 +88,13 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
 
                     {bracket && (
                         <div style={styles.detailSection}>
-                            <h4>E{'\u015F'}le{'\u015F'}meler</h4>
+                            <h4>E{'ş'}le{'ş'}meler</h4>
                             {renderBracket()}
                         </div>
                     )}
 
                     <div style={styles.detailSection}>
-                        <h4>Kat{'\u0131'}l{'\u0131'}mc{'\u0131'}lar</h4>
+                        <h4>Kat{'ı'}l{'ı'}mc{'ı'}lar</h4>
                         <div style={styles.participantList}>
                             {tournament.participants?.map(p => (
                                 <div key={p.id} style={styles.participant}>

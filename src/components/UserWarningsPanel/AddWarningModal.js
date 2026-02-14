@@ -47,9 +47,9 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
                         <select value={newWarning.severity}
                             onChange={(e) => setNewWarning({ ...newWarning, severity: e.target.value })}
                             style={styles.select}>
-                            <option value="low">{'\uD83D\uDFE2'} Low</option>
-                            <option value="medium">{'\uD83D\uDFE1'} Medium</option>
-                            <option value="high">{'\uD83D\uDD34'} High</option>
+                            <option value="low">{'🟢'} Low</option>
+                            <option value="medium">{'🟡'} Medium</option>
+                            <option value="high">{'🔴'} High</option>
                         </select>
                     </div>
                     <div style={styles.formGroup}>

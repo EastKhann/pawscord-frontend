@@ -19,7 +19,7 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
                             <FaHashtag style={{ color: '#b5bac1', fontSize: '14px' }} />
                             <span style={st.serverLabel}>{server?.name || 'Sunucu'}</span>
                         </div>
-                        <h2 style={st.title}>Arkada{'\u015F'}lar{'\u0131'}n{'\u0131'} Davet Et</h2>
+                        <h2 style={st.title}>Arkada{'ş'}lar{'ı'}n{'ı'} Davet Et</h2>
                     </div>
                     <button onClick={onClose} style={st.closeBtn}><FaTimes /></button>
                 </div>

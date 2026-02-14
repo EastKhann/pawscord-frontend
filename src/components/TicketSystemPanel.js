@@ -10,8 +10,8 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
     <div className="ticket-panel-overlay" onClick={onClose}>
       <div className="ticket-panel" onClick={(e) => e.stopPropagation()}>
         <div className="ticket-header">
-          <h2>{'\ud83c\udfab'} Destek Sistemi</h2>
-          <button className="close-btn" onClick={onClose}>{'\u00d7'}</button>
+          <h2>{'🎫'} Destek Sistemi</h2>
+          <button className="close-btn" onClick={onClose}>{'×'}</button>
         </div>
 
         <div className="ticket-content">
@@ -25,18 +25,18 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
           />
 
           <div className="tickets-section">
-            <h3>{'\ud83d\udccb'} Aktif Ticket{'\u2019'}lar</h3>
+            <h3>{'📋'} Aktif Ticket{'’'}lar</h3>
 
             {t.loading ? (
               <div className="loading-state">
                 <div className="spinner"></div>
-                <p>Ticket{'\u2019'}lar y\u00fckleniyor...</p>
+                <p>Ticket{'’'}lar yükleniyor...</p>
               </div>
             ) : t.tickets.length === 0 ? (
               <div className="empty-state">
-                <span className="empty-icon">{'\ud83c\udfab'}</span>
-                <p>Hen\u00fcz ticket yok</p>
-                <span className="empty-hint">Kullan\u0131c\u0131lar ticket olu\u015fturdu\u011funda burada g\u00f6r\u00fcnecek</span>
+                <span className="empty-icon">{'🎫'}</span>
+                <p>Henüz ticket yok</p>
+                <span className="empty-hint">Kullanıcılar ticket oluşturduğunda burada görünecek</span>
               </div>
             ) : (
               <div className="tickets-grid">
@@ -59,7 +59,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
 
                     <div className="ticket-meta">
                       <div className="meta-item">
-                        <span className="meta-label">Olu\u015fturan:</span>
+                        <span className="meta-label">Oluşturan:</span>
                         <span className="meta-value">{ticket.creator_username}</span>
                       </div>
                       {ticket.assigned_to && (
@@ -69,7 +69,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
                         </div>
                       )}
                       <div className="meta-item">
-                        <span className="meta-label">Olu\u015fturulma:</span>
+                        <span className="meta-label">Oluşturulma:</span>
                         <span className="meta-value">{t.formatDate(ticket.created_at)}</span>
                       </div>
                     </div>
@@ -81,13 +81,13 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
                         const currentIndex = priorities.indexOf(ticket.priority);
                         t.setPriority(ticket.id, priorities[(currentIndex + 1) % priorities.length]);
                       }}>
-                        {'\ud83c\udff7\ufe0f'} \u00d6ncelik
+                        {'🏷️'} Öncelik
                       </button>
                       <button className="close-ticket-btn" onClick={(e) => {
                         e.stopPropagation();
                         t.closeTicket(ticket.id);
                       }}>
-                        {'\u2713'} Kapat
+                        {'✓'} Kapat
                       </button>
                     </div>
                   </div>

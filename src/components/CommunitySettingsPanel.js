@@ -9,8 +9,8 @@ import './CommunitySettingsPanel.css';
 const TABS = [
   { key: 'general', label: 'Genel', Icon: FaCog },
   { key: 'rules', label: 'Kurallar', Icon: FaGavel },
-  { key: 'screening', label: '\u00DCye Tarama', Icon: FaUserCheck },
-  { key: 'safety', label: 'G\u00FCvenlik', Icon: FaShieldAlt }
+  { key: 'screening', label: 'Üye Tarama', Icon: FaUserCheck },
+  { key: 'safety', label: 'Güvenlik', Icon: FaShieldAlt }
 ];
 
 const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
@@ -20,7 +20,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
     return (
       <div className="community-settings-overlay" onClick={onClose}>
         <div className="community-settings-panel" onClick={e => e.stopPropagation()}>
-          <div className="loading">Y{'\u00FC'}kleniyor...</div>
+          <div className="loading">Y{'ü'}kleniyor...</div>
         </div>
       </div>
     );
@@ -30,14 +30,14 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
     <div className="community-settings-overlay" onClick={onClose}>
       <div className="community-settings-panel" onClick={e => e.stopPropagation()}>
         <div className="panel-header">
-          <h2><FaUsers /> Topluluk Ayarlar{'\u0131'}</h2>
+          <h2><FaUsers /> Topluluk Ayarlar{'ı'}</h2>
           <button className="close-btn" onClick={onClose}><FaTimes /></button>
         </div>
 
         <div className="community-toggle">
           <div className="toggle-info">
             <span className="toggle-label">Topluluk Sunucusu</span>
-            <span className="toggle-description">Topluluk {'\u00F6'}zelliklerini aktifle{'\u015F'}tir (ke{'\u015F'}fet, kar{'\u015F\u0131'}lama ekran{'\u0131'} vb.)</span>
+            <span className="toggle-description">Topluluk {'ö'}zelliklerini aktifle{'ş'}tir (ke{'ş'}fet, kar{'şı'}lama ekran{'ı'} vb.)</span>
           </div>
           <button className={`toggle-btn ${state.settings.is_community ? 'active' : ''}`} onClick={() => state.setSettings(prev => ({ ...prev, is_community: !prev.is_community }))}>
             {state.settings.is_community ? <FaToggleOn /> : <FaToggleOff />}
@@ -60,7 +60,7 @@ const CommunitySettingsPanel = ({ apiBaseUrl, serverId, onClose }) => {
         </div>
 
         <div className="panel-footer">
-          <button className="cancel-btn" onClick={onClose}>{'\u0130'}ptal</button>
+          <button className="cancel-btn" onClick={onClose}>{'İ'}ptal</button>
           <button className="save-btn" onClick={state.saveSettings} disabled={state.saving}>
             <FaSave /> {state.saving ? 'Kaydediliyor...' : 'Kaydet'}
           </button>

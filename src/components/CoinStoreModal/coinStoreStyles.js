@@ -86,8 +86,8 @@ export const ANIMATIONS_CSS = `
 `;
 
 export const INFO_ITEMS = [
-  { icon: '✓', color: '#57f287', text: "Coin'ler hesab\u0131n\u0131za an\u0131nda eklenir" },
-  { icon: '✓', color: '#57f287', text: 'G\u00fcvenli \u00f6deme Stripe ile korunuyor' },
+  { icon: '✓', color: '#57f287', text: "Coin'ler hesabınıza anında eklenir" },
+  { icon: '✓', color: '#57f287', text: 'Güvenli ödeme Stripe ile korunuyor' },
   { icon: '✓', color: '#57f287', text: "Bonus coin'ler belirli paketlere dahildir" },
-  { icon: '⚠', color: '#faa61a', text: 'Test modunda \u00e7al\u0131\u015f\u0131yor - ger\u00e7ek \u00f6deme al\u0131nm\u0131yor', small: true }
+  { icon: '⚠', color: '#faa61a', text: 'Test modunda çalışıyor - gerçek ödeme alınmıyor', small: true }
 ];

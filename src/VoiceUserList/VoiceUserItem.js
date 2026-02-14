@@ -3,10 +3,10 @@ import React from 'react';
 import styles from './styles';
 
 const getStatusInfo = (userObj) => {
-    if (userObj.is_deafened) return { icon: '\uD83D\uDD15', style: styles.deafenedUser };
-    if (userObj.is_talking) return { icon: '\uD83D\uDDE3\uFE0F', style: styles.talkingUser };
-    if (userObj.is_mic_off) return { icon: '\uD83D\uDD07', style: styles.mutedUser };
-    return { icon: '\uD83C\uDFA4', style: styles.activeUser };
+    if (userObj.is_deafened) return { icon: '🔕', style: styles.deafenedUser };
+    if (userObj.is_talking) return { icon: '🗣️', style: styles.talkingUser };
+    if (userObj.is_mic_off) return { icon: '🔇', style: styles.mutedUser };
+    return { icon: '🎤', style: styles.activeUser };
 };
 
 const VoiceUserItem = ({
@@ -46,7 +46,7 @@ const VoiceUserItem = ({
                         style={{ ...styles.username, ...userStyle, fontWeight: 'bold' }}>
                         {user} <span style={{ fontSize: '0.85em', color: '#99aab5' }}>(Sen)</span>
                     </span>
-                    {userObj.is_sharing && <div style={styles.sharingIndicator}>{'\uD83D\uDDA5\uFE0F'} Ekran Payla{'\u015F\u0131'}yor</div>}
+                    {userObj.is_sharing && <div style={styles.sharingIndicator}>{'🖥️'} Ekran Payla{'şı'}yor</div>}
                 </div>
             </div>
         );
@@ -71,7 +71,7 @@ const VoiceUserItem = ({
                 <div style={styles.userInfo}>
                     <span className={userObj.is_talking ? 'voice-user-item is-talking' : ''}
                         style={{ ...styles.username, ...userStyle }}>{user}</span>
-                    {userObj.is_sharing && <div style={styles.sharingIndicator}>{'\uD83D\uDDA5\uFE0F'} Ekran Payla{'\u015F\u0131'}yor</div>}
+                    {userObj.is_sharing && <div style={styles.sharingIndicator}>{'🖥️'} Ekran Payla{'şı'}yor</div>}
                 </div>
             </div>
         </div>

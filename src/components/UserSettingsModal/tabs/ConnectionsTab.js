@@ -27,9 +27,9 @@ const ConnectionsTab = () => {
 
     return (
         <div>
-            <SettingSection title="Ba\u011Fl\u0131 Hesaplar">
+            <SettingSection title="Bağlı Hesaplar">
                 <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 16 }}>
-                    Profilinde g\u00F6sterilecek ba\u011Fl\u0131 hesaplar\u0131n\u0131 y\u00F6net.
+                    Profilinde gösterilecek bağlı hesaplarını yönet.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {CONNECTIONS.map(c => {
@@ -46,7 +46,7 @@ const ConnectionsTab = () => {
                                     <div>
                                         <div style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>{c.name}</div>
                                         <div style={{ color: isConnected ? '#3ba55c' : '#949ba4', fontSize: 12 }}>
-                                            {isConnected ? '\u2713 Ba\u011Fl\u0131' : 'Ba\u011Fl\u0131 de\u011Fil'}
+                                            {isConnected ? '✓ Bağlı' : 'Bağlı değil'}
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@ const ConnectionsTab = () => {
                                     backgroundColor: isConnected ? 'rgba(218,55,60,0.15)' : 'rgba(88,101,242,0.15)',
                                     color: isConnected ? '#da373c' : '#5865f2',
                                 }}>
-                                    {isConnected ? 'Kald\u0131r' : 'Ba\u011Fla'}
+                                    {isConnected ? 'Kaldır' : 'Bağla'}
                                 </button>
                             </div>
                         );

@@ -12,23 +12,23 @@ const VoiceTab = () => {
 
     return (
         <div>
-            <SettingSection title="Ses Giri\u015F">
+            <SettingSection title="Ses Giriş">
                 <div style={S.volumeRow}>
                     <FaMicrophone style={{ color: '#949ba4' }} />
                     <input type="range" min={0} max={200} value={inputVolume} onChange={e => setInputVolume(+e.target.value)} style={{ flex: 1, accentColor: '#5865f2' }} />
                     <span style={{ color: '#fff', minWidth: 40, textAlign: 'right' }}>{inputVolume}%</span>
                 </div>
             </SettingSection>
-            <SettingSection title="Ses \u00C7\u0131k\u0131\u015F">
+            <SettingSection title="Ses Çıkış">
                 <div style={S.volumeRow}>
                     <FaVolumeUp style={{ color: '#949ba4' }} />
                     <input type="range" min={0} max={200} value={outputVolume} onChange={e => setOutputVolume(+e.target.value)} style={{ flex: 1, accentColor: '#5865f2' }} />
                     <span style={{ color: '#fff', minWidth: 40, textAlign: 'right' }}>{outputVolume}%</span>
                 </div>
             </SettingSection>
-            <SettingSection title="Geli\u015Fmi\u015F">
-                <ToggleSwitch label="G\u00FCr\u00FClt\u00FC Bast\u0131rma" value={noiseSuppression} onChange={setNoiseSuppression} />
-                <ToggleSwitch label="Yank\u0131 \u00D6nleme" value={echoCancellation} onChange={setEchoCancellation} />
+            <SettingSection title="Gelişmiş">
+                <ToggleSwitch label="Gürültü Bastırma" value={noiseSuppression} onChange={setNoiseSuppression} />
+                <ToggleSwitch label="Yankı Önleme" value={echoCancellation} onChange={setEchoCancellation} />
             </SettingSection>
         </div>
     );

@@ -15,8 +15,8 @@ const FeatureHubModal = () => {
         <div style={styles.overlay} onClick={(e) => { if (e.target === e.currentTarget) closeModal('featureHub'); }}>
             <div style={styles.container}>
                 <div style={styles.header}>
-                    <h2 style={styles.title}>{'\uD83D\uDE80'} T\u00FCm \u00D6zellikler</h2>
-                    <button onClick={() => closeModal('featureHub')} style={styles.closeBtn}>{'\u2715'}</button>
+                    <h2 style={styles.title}>{'🚀'} Tüm Özellikler</h2>
+                    <button onClick={() => closeModal('featureHub')} style={styles.closeBtn}>{'✕'}</button>
                 </div>
 
                 {FEATURE_SECTIONS.map((section, sIdx) => (

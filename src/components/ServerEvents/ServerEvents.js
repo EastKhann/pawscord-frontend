@@ -1,6 +1,6 @@
 // frontend/src/components/ServerEvents/ServerEvents.js
 /**
- * \uD83D\uDCC5 PAWSCORD - Server Events & Calendar Component
+ * 📅 PAWSCORD - Server Events & Calendar Component
  */
 
 import { FaCalendarAlt, FaPlus } from 'react-icons/fa';
@@ -18,7 +18,7 @@ const ServerEvents = ({ serverId }) => {
     } = useServerEvents(serverId);
 
     if (isLoading) {
-        return <div className="events-loading">Etkinlikler y\u00FCkleniyor...</div>;
+        return <div className="events-loading">Etkinlikler yükleniyor...</div>;
     }
 
     return (
@@ -50,7 +50,7 @@ const ServerEvents = ({ serverId }) => {
                         className="se-create-btn"
                         onClick={() => setShowCreateModal(true)}
                     >
-                        <FaPlus /> Etkinlik Olu\u015Ftur
+                        <FaPlus /> Etkinlik Oluştur
                     </button>
                 </div>
             </div>
@@ -70,9 +70,9 @@ const ServerEvents = ({ serverId }) => {
                     ) : (
                         <div className="se-empty">
                             <FaCalendarAlt />
-                            <p>Hen\u00FCz etkinlik yok</p>
+                            <p>Henüz etkinlik yok</p>
                             <button onClick={() => setShowCreateModal(true)}>
-                                {'\u0130'}lk etkinli\u011Fi olu\u015Ftur
+                                {'İ'}lk etkinliği oluştur
                             </button>
                         </div>
                     )}

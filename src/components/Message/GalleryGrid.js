@@ -64,7 +64,7 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
       )}
       {imageItems.length > 0 && (
         <div style={{ color: '#b9bbbe', fontSize: '12px', marginTop: '4px', opacity: 0.7 }}>
-          {'\uD83D\uDCCE'} {count} medya
+          {'📎'} {count} medya
         </div>
       )}
       {fileItems.map((item, idx) => (

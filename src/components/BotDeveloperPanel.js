@@ -15,7 +15,7 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
     return (
       <div className="bot-panel-overlay" onClick={onClose}>
         <div className="bot-panel" onClick={e => e.stopPropagation()}>
-          <div className="bot-loading"><div className="spinner" /><p>Y{'\u00FC'}kleniyor...</p></div>
+          <div className="bot-loading"><div className="spinner" /><p>Y{'ü'}kleniyor...</p></div>
         </div>
       </div>
     );
@@ -25,19 +25,19 @@ const BotDeveloperPanel = ({ apiBaseUrl, onClose }) => {
     <div className="bot-panel-overlay" onClick={onClose}>
       <div className="bot-panel" onClick={e => e.stopPropagation()}>
         <div className="bot-header">
-          <h2>{'\uD83E\uDD16'} Bot Developer Panel</h2>
+          <h2>{'🤖'} Bot Developer Panel</h2>
           <div className="header-actions">
             {view !== 'list' && (
               <button className="back-to-list-btn" onClick={() => { setView('list'); setSelectedBot(null); }}>
-                {'\u2190'} Botlar{'\u0131'}m
+                {'←'} Botlar{'ı'}m
               </button>
             )}
             {view === 'list' && (
               <button className="create-bot-btn" onClick={() => setView('create')}>
-                {'\u2795'} Yeni Bot
+                {'➕'} Yeni Bot
               </button>
             )}
-            <button className="close-btn" onClick={onClose}>{'\u2715'}</button>
+            <button className="close-btn" onClick={onClose}>{'✕'}</button>
           </div>
         </div>
 

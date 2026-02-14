@@ -56,7 +56,7 @@ const PackageCard = ({ pkg, loading, selectedPackage, onPurchase }) => {
 
             {isPopular && (
                 <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)', color: 'white', fontSize: '12px', fontWeight: 'bold', padding: '6px 16px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 12px rgba(88, 101, 242, 0.4)', border: '1px solid rgba(255, 255, 255, 0.2)', animation: 'pulse 2s ease-in-out infinite' }}>
-                    <FaStar style={{ fontSize: '12px' }} /> EN POP\u00dcLER
+                    <FaStar style={{ fontSize: '12px' }} /> EN POPÜLER
                 </div>
             )}
 
@@ -106,9 +106,9 @@ const PackageCard = ({ pkg, loading, selectedPackage, onPurchase }) => {
                 onMouseLeave={(e) => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = btnShadow(isPopular, false); }}
             >
                 {isLoading ? (
-                    <><div style={{ width: '20px', height: '20px', border: '3px solid rgba(255, 255, 255, 0.3)', borderTop: '3px solid white', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> \u0130\u015fleniyor...</>
+                    <><div style={{ width: '20px', height: '20px', border: '3px solid rgba(255, 255, 255, 0.3)', borderTop: '3px solid white', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> İşleniyor...</>
                 ) : (
-                    <><FaCheck style={{ fontSize: '18px' }} /> Sat\u0131n Al</>
+                    <><FaCheck style={{ fontSize: '18px' }} /> Satın Al</>
                 )}
             </button>
         </div>

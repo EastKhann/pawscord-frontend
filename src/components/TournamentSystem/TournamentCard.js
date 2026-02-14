@@ -37,7 +37,7 @@ const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) =>
                 {!isCompleted && (
                     isParticipant ? (
                         <button onClick={onLeave} style={styles.leaveButton}>
-                            Ayr{'\u0131'}l
+                            Ayr{'ı'}l
                         </button>
                     ) : (
                         <button
@@ -49,7 +49,7 @@ const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) =>
                                 cursor: isFull ? 'not-allowed' : 'pointer'
                             }}
                         >
-                            {isFull ? 'Dolu' : 'Kat\u0131l'}
+                            {isFull ? 'Dolu' : 'Katıl'}
                         </button>
                     )
                 )}

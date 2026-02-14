@@ -90,7 +90,7 @@ const useEnhancedProfile = (userId, isOwn) => {
             }
         } catch (error) {
             console.error('Profile fetch error:', error);
-            toast.error('Profil y\u00FCklenemedi');
+            toast.error('Profil yüklenemedi');
         } finally {
             setIsLoading(false);
         }
@@ -111,13 +111,13 @@ const useEnhancedProfile = (userId, isOwn) => {
                 const data = await res.json();
                 setExtendedProfile(data.profile);
                 setIsEditing(false);
-                toast.success('Profil g\u00FCncellendi!');
+                toast.success('Profil güncellendi!');
             } else {
-                toast.error('Profil g\u00FCncellenemedi');
+                toast.error('Profil güncellenemedi');
             }
         } catch (error) {
             console.error('Save error:', error);
-            toast.error('Bir hata olu\u015Ftu');
+            toast.error('Bir hata oluştu');
         }
     };
 

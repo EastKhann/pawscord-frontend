@@ -84,7 +84,7 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                         <div style={styles.reportTitle}>{report.reason || `${report.report_type} Report`}</div>
                                         <div style={styles.reportMeta}>
                                             <span>By: {report.reporter_username || 'Unknown'}</span>
-                                            <span>{'\u2022'}</span>
+                                            <span>{'•'}</span>
                                             <span>{new Date(report.created_at).toLocaleString()}</span>
                                         </div>
                                     </div>

@@ -75,11 +75,11 @@ export const useServerEvents = (serverId) => {
                 setEvents(prev => prev.map(e =>
                     e.id === eventId ? { ...e, ...data.event, user_status: status } : e
                 ));
-                toast.success(status === 'going' ? 'Kat\u0131l\u0131yorsun! \uD83C\uDF89' : '\u0130lgi g\u00F6sterildi \u2B50');
+                toast.success(status === 'going' ? 'Katılıyorsun! 🎉' : 'İlgi gösterildi ⭐');
             }
         } catch (error) {
             console.error('RSVP error:', error);
-            toast.error('\u0130\u015Flem ba\u015Far\u0131s\u0131z');
+            toast.error('İşlem başarısız');
         }
     };
 

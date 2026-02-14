@@ -38,7 +38,7 @@ export default function useDailyRewards({ fetchWithAuth, apiBaseUrl }) {
         try {
             const r = await fetchWithAuth(`${apiBaseUrl}/rewards/claim/`, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
             const data = await r.json();
-            if (data.success) { toast.success(`Claimed ${data.reward.amount} ${data.reward.type}! \uD83C\uDF81`); loadDailyRewards(); }
+            if (data.success) { toast.success(`Claimed ${data.reward.amount} ${data.reward.type}! 🎁`); loadDailyRewards(); }
             else toast.error(data.error || 'Failed to claim reward');
         } catch (e) { console.error('Claim error:', e); toast.error('Failed to claim reward'); }
         finally { setClaiming(false); }

@@ -3,9 +3,9 @@ import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
 
 export const PACKAGES = [
-    { id: 'p1', coins: 1000, price: '15 USDT', note: 'Ba\u015Flang\u0131\u00E7 paketi' },
-    { id: 'p2', coins: 2500, price: '35 USDT', note: 'Pop\u00FCler se\u00E7im' },
-    { id: 'p3', coins: 6000, price: '75 USDT', note: 'En iyi de\u011Fer' },
+    { id: 'p1', coins: 1000, price: '15 USDT', note: 'Başlangıç paketi' },
+    { id: 'p2', coins: 2500, price: '35 USDT', note: 'Popüler seçim' },
+    { id: 'p3', coins: 6000, price: '75 USDT', note: 'En iyi değer' },
     { id: 'p4', coins: 15000, price: '180 USDT', note: 'Topluluk paketi' }
 ];
 
@@ -60,7 +60,7 @@ const useCryptoStore = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                 if (safe.claimed && typeof safe.new_balance === 'number') setBalance(safe.new_balance);
                 refreshData();
             } else {
-                const msg = (data && (data.error || data.message || data.detail)) || '\u0130stek ba\u015Far\u0131s\u0131z';
+                const msg = (data && (data.error || data.message || data.detail)) || 'İstek başarısız';
                 setDailyInfo({ claimed: false, error: msg });
             }
         } catch (e) {
@@ -71,14 +71,14 @@ const useCryptoStore = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     };
 
     const handleBuy = async (itemId) => {
-        if (!await confirmDialog("Bu \u00FCr\u00FCn\u00FC sat\u0131n almak istiyor musunuz?")) return;
+        if (!await confirmDialog("Bu ürünü satın almak istiyor musunuz?")) return;
         setLoading(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/store/buy/`, { method: 'POST', body: JSON.stringify({ item_id: itemId }) });
             const data = await res.json();
             if (res.ok) { toast.success(data.message); refreshData(); }
             else { toast.error(data.error); }
-        } catch (e) { toast.error("\u274C Hata olu\u015Ftu."); }
+        } catch (e) { toast.error("❌ Hata oluştu."); }
         setLoading(false);
     };
 
@@ -93,23 +93,23 @@ const useCryptoStore = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
     const handleVerifyTxid = async () => {
         const trimmed = txid.trim();
-        if (!trimmed) { toast.error('\u274C L\u00FCtfen i\u015Flem ID girin'); return; }
-        if (trimmed.length < 6) { setTxidResult({ success: false, message: '\u0130\u015Flem ID \u00E7ok k\u0131sa g\u00F6r\u00FCn\u00FCyor' }); return; }
+        if (!trimmed) { toast.error('❌ Lütfen işlem ID girin'); return; }
+        if (trimmed.length < 6) { setTxidResult({ success: false, message: 'İşlem ID çok kısa görünüyor' }); return; }
         setLoading(true); setTxidResult(null);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/store/verify-txid/`, { method: 'POST', body: JSON.stringify({ txid: trimmed }) });
             const data = await res.json();
             if (res.ok) {
-                setTxidResult({ success: true, message: data.message || '\u00D6deme do\u011Fruland\u0131!', added_coins: data.added_coins });
+                setTxidResult({ success: true, message: data.message || 'Ödeme doğrulandı!', added_coins: data.added_coins });
                 refreshData(); setTxid('');
-            } else { setTxidResult({ success: false, message: data.error || data.detail || 'Do\u011Frulama ba\u015Far\u0131s\u0131z' }); }
+            } else { setTxidResult({ success: false, message: data.error || data.detail || 'Doğrulama başarısız' }); }
         } catch (e) { console.error('[VerifyTXID] exception', e); setTxidResult({ success: false, message: 'Beklenmeyen hata' }); }
         setLoading(false);
     };
 
     const handleCopyAddress = async (value) => {
-        try { await navigator.clipboard.writeText(value); toast.success('\u2705 Adres kopyaland\u0131: ' + value); }
-        catch (err) { toast.error('\u274C Kopyalama ba\u015Far\u0131s\u0131z oldu'); }
+        try { await navigator.clipboard.writeText(value); toast.success('✅ Adres kopyalandı: ' + value); }
+        catch (err) { toast.error('❌ Kopyalama başarısız oldu'); }
     };
 
     const handlePasteTxid = async () => {

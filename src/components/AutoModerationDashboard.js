@@ -6,7 +6,7 @@ import { getRuleIcon, getRuleLabel, getActionLabel, getActionIcon, getActionStyl
 import CreateRuleModal from './AutoModerationDashboard/CreateRuleModal';
 
 /**
- * \uD83D\uDEE1\uFE0F Auto-Moderation Dashboard
+ * 🛡️ Auto-Moderation Dashboard
  * Spam, toxic content, keyword filtering
  */
 const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => {
@@ -131,7 +131,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                                         <strong>{log.user || 'Unknown'}</strong> - {log.violation_type}
                                     </div>
                                     <div style={styles.logMeta}>
-                                        {log.content?.substring(0, 50)}... {'\u2022'} {new Date(log.created_at).toLocaleString()}
+                                        {log.content?.substring(0, 50)}... {'•'} {new Date(log.created_at).toLocaleString()}
                                     </div>
                                 </div>
                                 <div style={styles.logAction}>

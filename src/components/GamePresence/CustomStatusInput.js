@@ -11,7 +11,7 @@ const DURATION_OPTIONS = [
   { value: '604800', label: 'This week' },
 ];
 
-const EMOJI_SUGGESTIONS = ['\uD83D\uDE00', '\uD83D\uDE0E', '\uD83C\uDFAE', '\uD83D\uDCBB', '\uD83D\uDCDA', '\uD83C\uDFB5', '\u2615', '\uD83C\uDF19', '\u2764\uFE0F', '\uD83D\uDD25'];
+const EMOJI_SUGGESTIONS = ['😀', '😎', '🎮', '💻', '📚', '🎵', '☕', '🌙', '❤️', '🔥'];
 
 export const CustomStatusInput = ({ onSave, currentStatus }) => {
   const [emoji, setEmoji] = useState(currentStatus?.emoji || '');
@@ -42,7 +42,7 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
       <div className="csi-header"><FaEdit /><span>Set a custom status</span></div>
       <div className="csi-content">
         <div className="csi-emoji-row">
-          <input type="text" value={emoji} onChange={e => setEmoji(e.target.value)} placeholder={'\uD83D\uDE00'} className="csi-emoji-input" maxLength={2} />
+          <input type="text" value={emoji} onChange={e => setEmoji(e.target.value)} placeholder={'😀'} className="csi-emoji-input" maxLength={2} />
           <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder="What's on your mind?" className="csi-text-input" maxLength={128} />
         </div>
         <div className="csi-emoji-suggestions">

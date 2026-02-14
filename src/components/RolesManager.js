@@ -19,43 +19,43 @@ const RolesManager = ({ serverId, onClose }) => {
     <div className="roles-manager-overlay" onClick={onClose}>
       <div className="roles-manager-modal" onClick={e => e.stopPropagation()}>
         <div className="roles-manager-header">
-          <h2>{'\uD83C\uDFAD'} Server Roles</h2>
-          <button className="close-btn" onClick={onClose}>{'\u2715'}</button>
+          <h2>{'🎭'} Server Roles</h2>
+          <button className="close-btn" onClick={onClose}>{'✕'}</button>
         </div>
 
         <div className="roles-manager-content">
           <div className="roles-actions">
-            <button className="create-role-btn" onClick={() => s.setShowCreateModal(true)}>{'\u2795'} Create Role</button>
+            <button className="create-role-btn" onClick={() => s.setShowCreateModal(true)}>{'➕'} Create Role</button>
             <div className="roles-info">
               <span>{s.roles.length} roles</span>
-              <span className="info-tip">{'\uD83D\uDCA1'} Drag to reorder hierarchy</span>
+              <span className="info-tip">{'💡'} Drag to reorder hierarchy</span>
             </div>
           </div>
 
           <div className="roles-list">
             {s.roles.length === 0 ? (
               <div className="empty-state">
-                <div className="empty-icon">{'\uD83C\uDFAD'}</div>
+                <div className="empty-icon">{'🎭'}</div>
                 <h3>No Roles Yet</h3>
                 <p>Create roles to organize your server members</p>
               </div>
             ) : s.roles.map(role => (
               <div key={role.id} className={`role-card ${s.draggedRole?.id === role.id ? 'dragging' : ''}`}
                 draggable onDragStart={(e) => s.handleDragStart(e, role)} onDragOver={s.handleDragOver} onDrop={(e) => s.handleDrop(e, role)}>
-                <div className="role-drag-handle">{'\u2630'}</div>
+                <div className="role-drag-handle">{'☰'}</div>
                 <div className="role-color-badge" style={{ backgroundColor: role.color }} />
                 <div className="role-info">
                   <div className="role-name" style={{ color: role.color }}>{role.name}</div>
                   <div className="role-meta">
-                    <span className="role-members">{'\uD83D\uDC65'} {role.member_count || 0} members</span>
-                    {role.hoist && <span className="role-badge">{'\uD83D\uDCCC'} Hoisted</span>}
+                    <span className="role-members">{'👥'} {role.member_count || 0} members</span>
+                    {role.hoist && <span className="role-badge">{'📌'} Hoisted</span>}
                     {role.mentionable && <span className="role-badge">@ Mentionable</span>}
                   </div>
                 </div>
                 <div className="role-actions">
-                  <button className="role-action-btn edit" onClick={() => s.setEditingRole(role)} title="Edit">{'\u270F\uFE0F'}</button>
-                  <button className="role-action-btn copy" onClick={() => s.copyRole(role.id)} title="Copy">{'\uD83D\uDCCB'}</button>
-                  <button className="role-action-btn delete" onClick={() => s.deleteRole(role.id)} title="Delete">{'\uD83D\uDDD1\uFE0F'}</button>
+                  <button className="role-action-btn edit" onClick={() => s.setEditingRole(role)} title="Edit">{'✏️'}</button>
+                  <button className="role-action-btn copy" onClick={() => s.copyRole(role.id)} title="Copy">{'📋'}</button>
+                  <button className="role-action-btn delete" onClick={() => s.deleteRole(role.id)} title="Delete">{'🗑️'}</button>
                 </div>
               </div>
             ))}

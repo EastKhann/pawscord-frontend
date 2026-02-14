@@ -48,7 +48,7 @@ export const ComparisonCard = ({ label, thisWeek, lastWeek, change }) => (
                 <span style={styles.comparisonNumber}>{thisWeek?.toLocaleString() || 0}</span>
             </div>
             <div style={styles.comparisonValue}>
-                <span style={styles.comparisonPeriod}>Ge{'\u00E7'}en Hafta</span>
+                <span style={styles.comparisonPeriod}>Ge{'ç'}en Hafta</span>
                 <span style={styles.comparisonNumber}>{lastWeek?.toLocaleString() || 0}</span>
             </div>
         </div>
@@ -57,7 +57,7 @@ export const ComparisonCard = ({ label, thisWeek, lastWeek, change }) => (
                 ...styles.comparisonChange,
                 color: change >= 0 ? '#43b581' : '#f04747'
             }}>
-                {change >= 0 ? '\uD83D\uDCC8' : '\uD83D\uDCC9'} {change >= 0 ? '+' : ''}{change}%
+                {change >= 0 ? '📈' : '📉'} {change >= 0 ? '+' : ''}{change}%
             </span>
         )}
     </div>

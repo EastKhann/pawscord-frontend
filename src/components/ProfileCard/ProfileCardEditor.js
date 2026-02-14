@@ -14,15 +14,15 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
       <div className="profile-editor-modal">
         {/* Header */}
         <div className="editor-header">
-          <h2>{'\uD83C\uDFA8'} Profil Kart\u0131 D\u00fczenle</h2>
-          <button className="close-btn" onClick={onClose}>\u00d7</button>
+          <h2>{'🎨'} Profil Kartı Düzenle</h2>
+          <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         {/* Tabs */}
         <div className="editor-tabs">
-          <button className={e.activeTab === 'appearance' ? 'active' : ''} onClick={() => e.setActiveTab('appearance')}>{'\uD83C\uDFA8'} G\u00f6r\u00fcn\u00fcm</button>
-          <button className={e.activeTab === 'badges' ? 'active' : ''} onClick={() => e.setActiveTab('badges')}>{'\uD83C\uDFC5'} Rozetler</button>
-          <button className={e.activeTab === 'links' ? 'active' : ''} onClick={() => e.setActiveTab('links')}>{'\uD83D\uDD17'} Ba\u011flant\u0131lar</button>
+          <button className={e.activeTab === 'appearance' ? 'active' : ''} onClick={() => e.setActiveTab('appearance')}>{'🎨'} Görünüm</button>
+          <button className={e.activeTab === 'badges' ? 'active' : ''} onClick={() => e.setActiveTab('badges')}>{'🏅'} Rozetler</button>
+          <button className={e.activeTab === 'links' ? 'active' : ''} onClick={() => e.setActiveTab('links')}>{'🔗'} Bağlantılar</button>
         </div>
 
         {/* Content */}
@@ -53,7 +53,7 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
               </div>
               <div className="form-group">
                 <label>Biyografi</label>
-                <textarea placeholder="Kendiniz hakk\u0131nda bir \u015feyler yaz\u0131n..." value={e.formData.bio} onChange={(ev) => e.setFormData(prev => ({ ...prev, bio: ev.target.value.slice(0, 500) }))} rows={4} maxLength={500} />
+                <textarea placeholder="Kendiniz hakkında bir şeyler yazın..." value={e.formData.bio} onChange={(ev) => e.setFormData(prev => ({ ...prev, bio: ev.target.value.slice(0, 500) }))} rows={4} maxLength={500} />
                 <span className="char-count">{e.formData.bio.length}/500</span>
               </div>
             </div>
@@ -61,13 +61,13 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
 
           {e.activeTab === 'badges' && (
             <div className="badges-tab">
-              <p className="badges-hint">Profilinizde g\u00f6r\u00fcnt\u00fclenecek en fazla 3 rozet se\u00e7in</p>
+              <p className="badges-hint">Profilinizde görüntülenecek en fazla 3 rozet seçin</p>
               <div className="badges-grid">
                 {e.badges.map((badge) => (
                   <div key={badge.id} className={`badge-option ${!badge.owned ? 'locked' : ''} ${e.selectedBadges.includes(badge.id) ? 'selected' : ''}`} onClick={() => badge.owned && e.toggleBadge(badge.id)}>
                     <span className="badge-icon" style={{ backgroundColor: badge.color }}>{badge.icon}</span>
                     <span className="badge-name">{badge.name}</span>
-                    {!badge.owned && <span className="lock-icon">{'\uD83D\uDD12'}</span>}
+                    {!badge.owned && <span className="lock-icon">{'🔒'}</span>}
                   </div>
                 ))}
               </div>
@@ -76,20 +76,20 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
 
           {e.activeTab === 'links' && (
             <div className="links-tab">
-              <p className="links-hint">En fazla 5 ba\u011flant\u0131 ekleyebilirsiniz</p>
+              <p className="links-hint">En fazla 5 bağlantı ekleyebilirsiniz</p>
               <div className="current-links">
                 {e.formData.links.map((link, idx) => (
                   <div key={idx} className="link-row">
                     <span className="link-icon">{link.icon}</span>
                     <span className="link-name">{link.name}</span>
                     <a href={link.url} target="_blank" rel="noopener noreferrer" className="link-url">{link.url.slice(0, 40)}...</a>
-                    <button className="remove-link" onClick={() => e.handleRemoveLink(idx)}>\u00d7</button>
+                    <button className="remove-link" onClick={() => e.handleRemoveLink(idx)}>×</button>
                   </div>
                 ))}
               </div>
               {e.formData.links.length < 5 && (
                 <div className="add-link-form">
-                  <input type="text" placeholder="\u0130sim (opsiyonel)" value={e.newLink.name} onChange={(ev) => e.setNewLink(prev => ({ ...prev, name: ev.target.value }))} />
+                  <input type="text" placeholder="İsim (opsiyonel)" value={e.newLink.name} onChange={(ev) => e.setNewLink(prev => ({ ...prev, name: ev.target.value }))} />
                   <input type="url" placeholder="URL" value={e.newLink.url} onChange={(ev) => e.setNewLink(prev => ({ ...prev, url: ev.target.value }))} />
                   <button onClick={e.handleAddLink}>Ekle</button>
                 </div>
@@ -100,13 +100,13 @@ export const ProfileCardEditor = ({ onClose, onSave }) => {
 
         {/* Preview */}
         <div className="editor-preview">
-          <h4>\u00d6nizleme</h4>
+          <h4>Önizleme</h4>
           <ProfileCard username={e.profile?.username} compact />
         </div>
 
         {/* Footer */}
         <div className="editor-footer">
-          <button className="cancel-btn" onClick={onClose}>\u0130ptal</button>
+          <button className="cancel-btn" onClick={onClose}>İptal</button>
           <button className="save-btn" onClick={e.handleSave} disabled={e.saving}>{e.saving ? 'Kaydediliyor...' : 'Kaydet'}</button>
         </div>
       </div>

@@ -26,7 +26,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
         e.preventDefault();
 
         if (!formData.name || !formData.start_date || !formData.start_time) {
-            toast.error('L\u00FCtfen gerekli alanlar\u0131 doldurun');
+            toast.error('Lütfen gerekli alanları doldurun');
             return;
         }
 
@@ -55,16 +55,16 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
 
             if (response.ok) {
                 const data = await response.json();
-                toast.success('Etkinlik olu\u015Fturuldu! \uD83C\uDF89');
+                toast.success('Etkinlik oluşturuldu! 🎉');
                 onCreated?.(data.event);
                 onClose();
             } else {
                 const error = await response.json();
-                toast.error(error.error || 'Etkinlik olu\u015Fturulamad\u0131');
+                toast.error(error.error || 'Etkinlik oluşturulamadı');
             }
         } catch (error) {
             console.error('Create event error:', error);
-            toast.error('Ba\u011Flant\u0131 hatas\u0131');
+            toast.error('Bağlantı hatası');
         } finally {
             setIsLoading(false);
         }
@@ -74,13 +74,13 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
         <div className="event-modal-overlay" onClick={onClose}>
             <div className="event-modal" onClick={e => e.stopPropagation()}>
                 <div className="em-header">
-                    <h2>{'\uD83D\uDCC5'} Etkinlik Olu\u015Ftur</h2>
+                    <h2>{'📅'} Etkinlik Oluştur</h2>
                     <button className="em-close" onClick={onClose}><FaTimes /></button>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <div className="em-field">
-                        <label>Etkinlik Ad\u0131 *</label>
+                        <label>Etkinlik Adı *</label>
                         <input
                             type="text"
                             value={formData.name}
@@ -92,7 +92,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                     </div>
 
                     <div className="em-field">
-                        <label>Etkinlik T\u00FCr\u00FC</label>
+                        <label>Etkinlik Türü</label>
                         <select
                             value={formData.event_type}
                             onChange={e => handleChange('event_type', e.target.value)}
@@ -104,11 +104,11 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                     </div>
 
                     <div className="em-field">
-                        <label>A\u00E7\u0131klama</label>
+                        <label>Açıklama</label>
                         <textarea
                             value={formData.description}
                             onChange={e => handleChange('description', e.target.value)}
-                            placeholder="Etkinlik hakk\u0131nda detaylar..."
+                            placeholder="Etkinlik hakkında detaylar..."
                             rows={3}
                         />
                     </div>
@@ -124,7 +124,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                             />
                         </div>
                         <div className="em-field">
-                            <label>Ba\u015Flang\u0131\u00E7 *</label>
+                            <label>Başlangıç *</label>
                             <input
                                 type="time"
                                 value={formData.start_time}
@@ -133,7 +133,7 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                             />
                         </div>
                         <div className="em-field">
-                            <label>Biti\u015F</label>
+                            <label>Bitiş</label>
                             <input
                                 type="time"
                                 value={formData.end_time}
@@ -154,12 +154,12 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
 
                     <div className="em-row">
                         <div className="em-field">
-                            <label>Maks. Kat\u0131l\u0131mc\u0131</label>
+                            <label>Maks. Katılımcı</label>
                             <input
                                 type="number"
                                 value={formData.max_attendees}
                                 onChange={e => handleChange('max_attendees', e.target.value)}
-                                placeholder="S\u0131n\u0131rs\u0131z"
+                                placeholder="Sınırsız"
                                 min={1}
                             />
                         </div>
@@ -170,9 +170,9 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
                                 onChange={e => handleChange('recurrence', e.target.value)}
                             >
                                 <option value="none">Tekrarlamaz</option>
-                                <option value="daily">Her g\u00FCn</option>
+                                <option value="daily">Her gün</option>
                                 <option value="weekly">Her hafta</option>
-                                <option value="biweekly">{'\u0130'}ki haftada bir</option>
+                                <option value="biweekly">{'İ'}ki haftada bir</option>
                                 <option value="monthly">Her ay</option>
                             </select>
                         </div>
@@ -180,10 +180,10 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
 
                     <div className="em-actions">
                         <button type="button" className="em-cancel" onClick={onClose}>
-                            {'\u0130'}ptal
+                            {'İ'}ptal
                         </button>
                         <button type="submit" className="em-submit" disabled={isLoading}>
-                            {isLoading ? 'Olu\u015Fturuluyor...' : 'Etkinlik Olu\u015Ftur'}
+                            {isLoading ? 'Oluşturuluyor...' : 'Etkinlik Oluştur'}
                         </button>
                     </div>
                 </form>

@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import toast from '../../utils/toast';
 
 export const CATEGORIES = [
-  { id: 'all', name: 'T\u00FCm\u00FC', icon: '\uD83C\uDF10' },
-  { id: 'gaming', name: 'Oyun', icon: '\uD83C\uDFAE' },
-  { id: 'music', name: 'M\u00FCzik', icon: '\uD83C\uDFB5' },
-  { id: 'anime', name: 'Anime', icon: '\uD83C\uDFCC' },
-  { id: 'tech', name: 'Teknoloji', icon: '\uD83D\uDCBB' },
-  { id: 'study', name: 'E\u011Fitim', icon: '\uD83D\uDCDA' },
-  { id: 'creative', name: 'Yarat\u0131c\u0131', icon: '\uD83C\uDFA8' },
-  { id: 'community', name: 'Topluluk', icon: '\uD83C\uDF1F' },
+  { id: 'all', name: 'Tümü', icon: '🌐' },
+  { id: 'gaming', name: 'Oyun', icon: '🎮' },
+  { id: 'music', name: 'Müzik', icon: '🎵' },
+  { id: 'anime', name: 'Anime', icon: '🏌' },
+  { id: 'tech', name: 'Teknoloji', icon: '💻' },
+  { id: 'study', name: 'Eğitim', icon: '📚' },
+  { id: 'creative', name: 'Yaratıcı', icon: '🎨' },
+  { id: 'community', name: 'Topluluk', icon: '🌟' },
 ];
 
 export default function useServerDiscovery({ fetchWithAuth, apiBaseUrl, onJoinServer }) {
@@ -36,7 +36,7 @@ export default function useServerDiscovery({ fetchWithAuth, apiBaseUrl, onJoinSe
   const joinServer = async (serverId) => {
     try {
       const r = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/join/`, { method: 'POST' });
-      if (r.ok) { toast.success('\u2705 Sunucuya kat\u0131ld\u0131n\u0131z! \uD83C\uDF89'); if (onJoinServer) onJoinServer(serverId); }
+      if (r.ok) { toast.success('✅ Sunucuya katıldınız! 🎉'); if (onJoinServer) onJoinServer(serverId); }
     } catch (e) { console.error('Failed to join server:', e); }
   };
 

@@ -12,16 +12,16 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
         <div style={styles.container}>
             <div style={styles.topBar}>
                 <div style={styles.headerLeft}>
-                    <div style={styles.title}><FaUserFriends style={{ marginRight: '10px' }} />Arkada{'\u015F'}lar</div>
+                    <div style={styles.title}><FaUserFriends style={{ marginRight: '10px' }} />Arkada{'ş'}lar</div>
                     <div style={styles.tabButtons}>
                         <button style={{ ...styles.tabBtn, ...(api.activeTab === 'all' ? styles.activeTabBtn : {}) }}
-                            onClick={() => { api.setActiveTab('all'); api.setStatusMsg(null); }}>T{'\u00FC'}m{'\u00FC'} ({api.friends.length})</button>
+                            onClick={() => { api.setActiveTab('all'); api.setStatusMsg(null); }}>T{'ü'}m{'ü'} ({api.friends.length})</button>
                         <button style={{ ...styles.tabBtn, ...(api.activeTab === 'pending' ? styles.activeTabBtn : {}) }}
                             onClick={() => { api.setActiveTab('pending'); api.setStatusMsg(null); }}>
                             Bekleyenler{api.requests.length > 0 && <span style={styles.badgePulse}>{api.requests.length}</span>}
                         </button>
                         <button style={{ ...styles.addFriendBtn, ...(api.activeTab === 'add' ? styles.activeAddFriendBtn : {}) }}
-                            onClick={() => { api.setActiveTab('add'); api.setStatusMsg(null); }}>Arkada{'\u015F'} Ekle</button>
+                            onClick={() => { api.setActiveTab('add'); api.setStatusMsg(null); }}>Arkada{'ş'} Ekle</button>
                     </div>
                 </div>
                 <button onClick={onClose} style={styles.closeHeaderBtn} title="Kapat"><FaTimes /></button>
@@ -42,19 +42,19 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
 
                 {api.activeTab === 'add' && (
                     <div style={styles.addSection}>
-                        <h3 style={{ color: '#fff', marginBottom: '10px' }}>ARKADA{'\u015E'} EKLE</h3>
-                        <p style={{ color: '#b9bbbe', fontSize: '0.9em', marginBottom: '20px' }}>Kullan{'\u0131'}c{'\u0131'} ad{'\u0131'}n{'\u0131'} girerek arkada{'\u015F'} ekleyebilirsin.</p>
+                        <h3 style={{ color: '#fff', marginBottom: '10px' }}>ARKADA{'Ş'} EKLE</h3>
+                        <p style={{ color: '#b9bbbe', fontSize: '0.9em', marginBottom: '20px' }}>Kullan{'ı'}c{'ı'} ad{'ı'}n{'ı'} girerek arkada{'ş'} ekleyebilirsin.</p>
                         <form onSubmit={api.handleSendRequest} style={styles.addForm}>
                             <input type="text" value={api.addUsername} onChange={(e) => api.setAddUsername(e.target.value)}
-                                placeholder="Kullan\u0131c\u0131 Ad\u0131 veya Arkada\u015F Kodu (\u00D6rn: 8392014)" style={styles.input} autoFocus />
-                            <button type="submit" style={styles.sendRequestBtn}><FaPaperPlane style={{ marginRight: '5px' }} /> G{'\u00F6'}nder</button>
+                                placeholder="Kullanıcı Adı veya Arkadaş Kodu (Örn: 8392014)" style={styles.input} autoFocus />
+                            <button type="submit" style={styles.sendRequestBtn}><FaPaperPlane style={{ marginRight: '5px' }} /> G{'ö'}nder</button>
                         </form>
                     </div>
                 )}
 
                 {api.activeTab === 'all' && (
                     <div style={styles.listContainer}>
-                        <h4 style={styles.listHeader}>ARKADA{'\u015E'}LAR {'\u2014'} {api.friends.length}</h4>
+                        <h4 style={styles.listHeader}>ARKADA{'Ş'}LAR {'—'} {api.friends.length}</h4>
                         <FriendsList friends={api.friends} onlineUsers={onlineUsers} getDeterministicAvatar={getDeterministicAvatar}
                             onStartDM={onStartDM} handleRemoveFriend={api.handleRemoveFriend} setActiveTab={api.setActiveTab} />
                     </div>

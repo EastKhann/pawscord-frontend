@@ -35,16 +35,16 @@ const useBotDeveloper = (apiBaseUrl) => {
   useEffect(() => { if (selectedBot && view === 'details') { fetchBotAnalytics(selectedBot.id); fetchBotWebhooks(selectedBot.id); } }, [selectedBot, view]);
 
   const handleCreateBot = async () => {
-    if (!newBot.name.trim()) { toast.error('\u26A0\uFE0F Bot ad\u0131 gerekli'); return; }
+    if (!newBot.name.trim()) { toast.error('⚠️ Bot adı gerekli'); return; }
     try {
       const res = await fetch(`${apiBaseUrl}/bots/create/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify(newBot) });
       if (res.ok) {
         const data = await res.json();
         setBots([...bots, data]); setSelectedBot(data); setShowCredentials(true); setView('details');
-        toast.success('\u2705 Bot olu\u015Fturuldu!');
+        toast.success('✅ Bot oluşturuldu!');
         setNewBot({ name: '', description: '', avatar_url: '' });
-      } else { const err = await res.json(); toast.error(err.error || '\u274C Bot olu\u015Fturulamad\u0131'); }
-    } catch (e) { console.error('Bot creation error:', e); toast.error('\u274C Hata olu\u015Ftu'); }
+      } else { const err = await res.json(); toast.error(err.error || '❌ Bot oluşturulamadı'); }
+    } catch (e) { console.error('Bot creation error:', e); toast.error('❌ Hata oluştu'); }
   };
 
   const handleCreateWebhook = async (botId) => {
@@ -52,20 +52,20 @@ const useBotDeveloper = (apiBaseUrl) => {
     if (!url) return;
     try {
       const res = await fetch(`${apiBaseUrl}/bots/${botId}/webhook/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ url }) });
-      if (res.ok) { const data = await res.json(); setWebhooks([...webhooks, data.webhook]); toast.success('\u2705 Webhook olu\u015Fturuldu!'); }
-      else toast.error('\u274C Webhook olu\u015Fturulamad\u0131');
+      if (res.ok) { const data = await res.json(); setWebhooks([...webhooks, data.webhook]); toast.success('✅ Webhook oluşturuldu!'); }
+      else toast.error('❌ Webhook oluşturulamadı');
     } catch (e) { console.error('Webhook creation error:', e); }
   };
 
   const handleDeleteBot = async (botId) => {
-    if (!confirm('Bu botu silmek istedi\u011Finize emin misiniz?')) return;
+    if (!confirm('Bu botu silmek istediğinize emin misiniz?')) return;
     try {
       const res = await fetch(`${apiBaseUrl}/bots/${botId}/delete/`, { method: 'DELETE', headers: headers() });
-      if (res.ok) { setBots(bots.filter(b => b.id !== botId)); setSelectedBot(null); setView('list'); toast.success('\u2705 Bot silindi'); }
+      if (res.ok) { setBots(bots.filter(b => b.id !== botId)); setSelectedBot(null); setView('list'); toast.success('✅ Bot silindi'); }
     } catch (e) { console.error('Delete error:', e); }
   };
 
-  const copyToClipboard = (text, label) => { navigator.clipboard.writeText(text); toast.success(`\u2705 ${label} kopyaland\u0131!`); };
+  const copyToClipboard = (text, label) => { navigator.clipboard.writeText(text); toast.success(`✅ ${label} kopyalandı!`); };
 
   const formatNumber = (num) => {
     if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;

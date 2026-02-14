@@ -63,7 +63,7 @@ export const useReportSystem = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 loadStats();
                 setSelectedReport(null);
             } else {
-                toast.error('\u274C Failed to handle report');
+                toast.error('❌ Failed to handle report');
             }
         } catch (error) {
             console.error('Failed to handle report:', error);

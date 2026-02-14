@@ -17,9 +17,9 @@ const VideoCallModal = ({ isOpen, onClose, targetUser, currentUser, localStream,
             <div style={styles.userInfo}>
               <span style={styles.username}>{targetUser?.username || 'Unknown'}</span>
               <span style={styles.status}>
-                {callStatus === 'connecting' && '\uD83D\uDD04 Ba\u011flan\u0131yor...'}
-                {callStatus === 'active' && `\u23F1\uFE0F ${formatDuration(callDuration)}`}
-                {callStatus === 'ended' && '\uD83D\uDCDE Arama sona erdi'}
+                {callStatus === 'connecting' && '🔄 Bağlanıyor...'}
+                {callStatus === 'active' && `⏱️ ${formatDuration(callDuration)}`}
+                {callStatus === 'ended' && '📞 Arama sona erdi'}
               </span>
             </div>
           </div>
@@ -33,7 +33,7 @@ const VideoCallModal = ({ isOpen, onClose, targetUser, currentUser, localStream,
         {/* Settings Panel */}
         {v.showSettings && (
           <div style={styles.settingsPanel}>
-            <h4 style={styles.settingsTitle}>Video Ayarlar\u0131</h4>
+            <h4 style={styles.settingsTitle}>Video Ayarları</h4>
             <div style={styles.settingGroup}>
               <label style={styles.settingLabel}>Kamera</label>
               <select value={v.selectedCamera} onChange={(e) => v.setSelectedCamera(e.target.value)} style={styles.settingSelect}>
@@ -49,9 +49,9 @@ const VideoCallModal = ({ isOpen, onClose, targetUser, currentUser, localStream,
             <div style={styles.settingGroup}>
               <label style={styles.settingLabel}>Kalite</label>
               <select value={v.videoQuality} onChange={(e) => v.setVideoQuality(e.target.value)} style={styles.settingSelect}>
-                <option value="480p">480p (D\u00fc\u015f\u00fck)</option>
+                <option value="480p">480p (Düşük)</option>
                 <option value="720p">720p (Orta)</option>
-                <option value="1080p">1080p (Y\u00fcksek)</option>
+                <option value="1080p">1080p (Yüksek)</option>
               </select>
             </div>
           </div>
@@ -63,7 +63,7 @@ const VideoCallModal = ({ isOpen, onClose, targetUser, currentUser, localStream,
             {remoteStream ? <video ref={v.remoteVideoRef} autoPlay playsInline style={styles.remoteVideo} /> : (
               <div style={styles.videoPlaceholder}>
                 <div style={styles.placeholderAvatar}>{targetUser?.username?.[0]?.toUpperCase() || 'U'}</div>
-                <p>Kamera a\u00e7\u0131lmad\u0131</p>
+                <p>Kamera açılmadı</p>
               </div>
             )}
           </div>
@@ -78,13 +78,13 @@ const VideoCallModal = ({ isOpen, onClose, targetUser, currentUser, localStream,
 
         {/* Controls */}
         <div style={styles.controls}>
-          <button onClick={onToggleMute} style={{ ...styles.controlButton, ...(isMuted && styles.controlButtonActive) }} title={isMuted ? 'Mikrofonu a\u00e7' : 'Mikrofonu kapat'}>
+          <button onClick={onToggleMute} style={{ ...styles.controlButton, ...(isMuted && styles.controlButtonActive) }} title={isMuted ? 'Mikrofonu aç' : 'Mikrofonu kapat'}>
             {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
           </button>
-          <button onClick={onToggleVideo} style={{ ...styles.controlButton, ...(!isVideoEnabled && styles.controlButtonActive) }} title={isVideoEnabled ? 'Kameray\u0131 kapat' : 'Kameray\u0131 a\u00e7'}>
+          <button onClick={onToggleVideo} style={{ ...styles.controlButton, ...(!isVideoEnabled && styles.controlButtonActive) }} title={isVideoEnabled ? 'Kamerayı kapat' : 'Kamerayı aç'}>
             {isVideoEnabled ? <FaVideo /> : <FaVideoSlash />}
           </button>
-          <button onClick={onClose} style={styles.hangupButton} title="Aramay\u0131 sonland\u0131r">
+          <button onClick={onClose} style={styles.hangupButton} title="Aramayı sonlandır">
             <FaPhone style={{ transform: 'rotate(135deg)' }} />
           </button>
         </div>

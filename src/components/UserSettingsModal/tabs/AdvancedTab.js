@@ -13,30 +13,30 @@ const AdvancedTab = () => {
 
     return (
         <div>
-            <SettingSection title="Geli\u015Ftirici Modu">
+            <SettingSection title="Geliştirici Modu">
                 <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 8 }}>
-                    ID'leri kopyalama ve hata ay\u0131klama ara\u00E7lar\u0131na eri\u015Fim sa\u011Flar.
+                    ID'leri kopyalama ve hata ayıklama araçlarına erişim sağlar.
                 </p>
-                <ToggleSwitch label="Geli\u015Ftirici modunu etkinle\u015Ftir" value={devMode} onChange={createToggle('pawscord_dev_mode', setDevMode)} />
+                <ToggleSwitch label="Geliştirici modunu etkinleştir" value={devMode} onChange={createToggle('pawscord_dev_mode', setDevMode)} />
             </SettingSection>
             <SettingSection title="Performans">
-                <ToggleSwitch label="Donan\u0131m h\u0131zland\u0131rma" value={hwAccel} onChange={createToggle('pawscord_hw_accel', setHwAccel)} />
-                <ToggleSwitch label="Azalt\u0131lm\u0131\u015F hareket (animasyonlar\u0131 kapat)" value={reducedMotion} onChange={createToggle('pawscord_reduced_motion', setReducedMotion)} />
+                <ToggleSwitch label="Donanım hızlandırma" value={hwAccel} onChange={createToggle('pawscord_hw_accel', setHwAccel)} />
+                <ToggleSwitch label="Azaltılmış hareket (animasyonları kapat)" value={reducedMotion} onChange={createToggle('pawscord_reduced_motion', setReducedMotion)} />
             </SettingSection>
-            <SettingSection title="\u00D6nbellek">
+            <SettingSection title="Önbellek">
                 <div style={{ display: 'flex', gap: 8 }}>
                     <button type="button" onClick={() => {
                         if (window.caches) {
                             window.caches.keys().then(names => names.forEach(n => window.caches.delete(n)));
                         }
                         localStorage.removeItem('pawscord_msg_cache');
-                        toast.info('\u00D6nbellek temizlendi!');
+                        toast.info('Önbellek temizlendi!');
                     }} style={S.actionBtn}>
-                        <FaTrash style={{ fontSize: 12 }} /> \u00D6nbelle\u011Fi Temizle
+                        <FaTrash style={{ fontSize: 12 }} /> Önbelleği Temizle
                     </button>
                 </div>
             </SettingSection>
-            <SettingSection title="Hata Ay\u0131klama">
+            <SettingSection title="Hata Ayıklama">
                 <div style={{ padding: 12, backgroundColor: '#1e1f22', borderRadius: 8, fontFamily: 'monospace', fontSize: 12, color: '#949ba4' }}>
                     <div>App Version: {window.__PAWSCORD_VERSION__ || '2.0.0'}</div>
                     <div>Build: {document.querySelector('script[src*="index-"]')?.src?.match(/index-(\w+)/)?.[1] || 'dev'}</div>

@@ -4,12 +4,7 @@
 import React, { useRef } from 'react';
 import Draggable from 'react-draggable';
 import MiniButton from './MiniButton';
-
-// 🔥 Avatar helper fonksiyonu - Fallback
-const getDeterministicAvatarFallback = (username, size = 256) => {
-    if (!username) return `https://ui-avatars.com/api/?name=User&background=5865f2&color=fff&bold=true&size=${size}`;
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=5865f2&color=fff&bold=true&size=${size}`;
-};
+import { getDeterministicAvatarFallback } from './avatarUtils';
 
 const MinimizedView = React.memo(({
     roomName,

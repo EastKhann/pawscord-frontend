@@ -107,10 +107,10 @@ const useVoiceRecording = (serverId, channelId) => {
       setRecordingTime(0);
       timerRef.current = setInterval(() => setRecordingTime(prev => prev + 1), 1000);
       checkLevel();
-      toast.success('Kay\u0131t ba\u015flad\u0131');
+      toast.success('Kayıt başladı');
     } catch (error) {
       console.error('Recording error:', error);
-      toast.error('Mikrofon eri\u015fimi reddedildi');
+      toast.error('Mikrofon erişimi reddedildi');
     }
   };
 
@@ -122,7 +122,7 @@ const useVoiceRecording = (serverId, channelId) => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (audioContextRef.current) audioContextRef.current.close();
       setAudioLevel(0);
-      toast.info('Kay\u0131t durduruldu');
+      toast.info('Kayıt durduruldu');
     }
   };
 
@@ -150,21 +150,21 @@ const useVoiceRecording = (serverId, channelId) => {
       const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/`, {
         method: 'POST', headers: { 'Authorization': `Bearer ${token}` }, body: formData
       });
-      if (response.ok) { toast.success('Kay\u0131t kaydedildi'); fetchRecordings(); }
-      else { toast.error('Kay\u0131t kaydedilemedi'); }
-    } catch (error) { console.error('Error saving recording:', error); toast.error('Kay\u0131t kaydedilemedi'); }
+      if (response.ok) { toast.success('Kayıt kaydedildi'); fetchRecordings(); }
+      else { toast.error('Kayıt kaydedilemedi'); }
+    } catch (error) { console.error('Error saving recording:', error); toast.error('Kayıt kaydedilemedi'); }
     setCurrentRecording(null);
   };
 
   const deleteRecording = async (recordingId) => {
-    if (!await confirmDialog('Bu kayd\u0131 silmek istedi\u011finizden emin misiniz?')) return;
+    if (!await confirmDialog('Bu kaydı silmek istediğinizden emin misiniz?')) return;
     try {
       const response = await fetch(`${getApiBase()}/api/channels/${channelId}/recordings/${recordingId}/`, {
         method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (response.ok) { setRecordings(recordings.filter(r => r.id !== recordingId)); toast.success('Kay\u0131t silindi'); }
-      else { toast.error('Kay\u0131t silinemedi'); }
-    } catch (error) { console.error('Error deleting recording:', error); toast.error('Kay\u0131t silinemedi'); }
+      if (response.ok) { setRecordings(recordings.filter(r => r.id !== recordingId)); toast.success('Kayıt silindi'); }
+      else { toast.error('Kayıt silinemedi'); }
+    } catch (error) { console.error('Error deleting recording:', error); toast.error('Kayıt silinemedi'); }
   };
 
   const downloadRecording = async (recording) => {
@@ -179,8 +179,8 @@ const useVoiceRecording = (serverId, channelId) => {
         a.href = url;
         a.download = `${recording.name}.${settings.format}`;
         a.click();
-      } else { toast.error('\u0130ndirme ba\u015far\u0131s\u0131z'); }
-    } catch (error) { console.error('Error downloading recording:', error); toast.error('\u0130ndirme ba\u015far\u0131s\u0131z'); }
+      } else { toast.error('İndirme başarısız'); }
+    } catch (error) { console.error('Error downloading recording:', error); toast.error('İndirme başarısız'); }
   };
 
   return {

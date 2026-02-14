@@ -40,7 +40,7 @@ export default function useCustomCommands(serverId) {
   };
 
   const createCommand = async () => {
-    if (!newCommand.name || !newCommand.response) { toast.error('\u274C Komut ad\u0131 ve yan\u0131t zorunludur'); return; }
+    if (!newCommand.name || !newCommand.response) { toast.error('❌ Komut adı ve yanıt zorunludur'); return; }
     try {
       const r = await fetch(`${apiBaseUrl}/commands/create/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ server_id: serverId, ...newCommand }) });
       if (r.ok) {
@@ -48,10 +48,10 @@ export default function useCustomCommands(serverId) {
         setCommands(prev => [...prev, d.command]);
         setNewCommand(DEFAULT_COMMAND);
         setCreating(false);
-        toast.success('\u2705 Komut olu\u015Fturuldu');
+        toast.success('✅ Komut oluşturuldu');
         fetchStats();
-      } else toast.error('\u274C Komut olu\u015Fturulamad\u0131');
-    } catch (e) { console.error('Error creating command:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      } else toast.error('❌ Komut oluşturulamadı');
+    } catch (e) { console.error('Error creating command:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const updateCommand = async (commandId, updates) => {
@@ -61,32 +61,32 @@ export default function useCustomCommands(serverId) {
         const d = await r.json();
         setCommands(prev => prev.map(c => c.id === commandId ? d.command : c));
         setEditingCommand(null);
-        toast.success('\u2705 Komut g\u00FCncellendi');
-      } else toast.error('\u274C Komut g\u00FCncellenemedi');
-    } catch (e) { console.error('Error updating command:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+        toast.success('✅ Komut güncellendi');
+      } else toast.error('❌ Komut güncellenemedi');
+    } catch (e) { console.error('Error updating command:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const deleteCommand = async (commandId) => {
-    if (!await confirmDialog('Bu komutu silmek istedi\u011Finizden emin misiniz?')) return;
+    if (!await confirmDialog('Bu komutu silmek istediğinizden emin misiniz?')) return;
     try {
       const r = await fetch(`${apiBaseUrl}/commands/${commandId}/delete/`, { method: 'DELETE', headers: authHeaders() });
-      if (r.ok) { setCommands(prev => prev.filter(c => c.id !== commandId)); toast.success('\u2705 Komut silindi'); fetchStats(); }
-      else toast.error('\u274C Komut silinemedi');
-    } catch (e) { console.error('Error deleting command:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { setCommands(prev => prev.filter(c => c.id !== commandId)); toast.success('✅ Komut silindi'); fetchStats(); }
+      else toast.error('❌ Komut silinemedi');
+    } catch (e) { console.error('Error deleting command:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const toggleCommand = async (commandId, enabled) => {
     try {
       const r = await fetch(`${apiBaseUrl}/commands/${commandId}/toggle/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify({ enabled }) });
-      if (r.ok) { setCommands(prev => prev.map(c => c.id === commandId ? { ...c, enabled } : c)); toast.success(`\u2705 Komut ${enabled ? 'etkinle\u015Ftirildi' : 'devre d\u0131\u015F\u0131 b\u0131rak\u0131ld\u0131'}`); }
-    } catch (e) { console.error('Error toggling command:', e); toast.error('\u274C \u0130\u015Flem ba\u015Far\u0131s\u0131z'); }
+      if (r.ok) { setCommands(prev => prev.map(c => c.id === commandId ? { ...c, enabled } : c)); toast.success(`✅ Komut ${enabled ? 'etkinleştirildi' : 'devre dışı bırakıldı'}`); }
+    } catch (e) { console.error('Error toggling command:', e); toast.error('❌ İşlem başarısız'); }
   };
 
   const exportCommands = async () => {
     try {
       const r = await fetch(`${apiBaseUrl}/commands/server/${serverId}/export/`, { headers: authHeaders() });
-      if (r.ok) { const blob = await r.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `commands_${serverId}.json`; a.click(); toast.success('\u2705 Komutlar d\u0131\u015Fa aktar\u0131ld\u0131'); }
-    } catch (e) { console.error('Error exporting commands:', e); toast.error('\u274C D\u0131\u015Fa aktarma ba\u015Far\u0131s\u0131z'); }
+      if (r.ok) { const blob = await r.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `commands_${serverId}.json`; a.click(); toast.success('✅ Komutlar dışa aktarıldı'); }
+    } catch (e) { console.error('Error exporting commands:', e); toast.error('❌ Dışa aktarma başarısız'); }
   };
 
   const importCommands = async (file) => {
@@ -95,9 +95,9 @@ export default function useCustomCommands(serverId) {
     formData.append('server_id', serverId);
     try {
       const r = await fetch(`${apiBaseUrl}/commands/import/`, { method: 'POST', headers: authHeaders(), body: formData });
-      if (r.ok) { fetchCommands(); toast.success('\u2705 Komutlar i\u00E7e aktar\u0131ld\u0131'); }
-      else toast.error('\u274C \u0130\u00E7e aktarma ba\u015Far\u0131s\u0131z');
-    } catch (e) { console.error('Error importing commands:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { fetchCommands(); toast.success('✅ Komutlar içe aktarıldı'); }
+      else toast.error('❌ İçe aktarma başarısız');
+    } catch (e) { console.error('Error importing commands:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   return { commands, creating, setCreating, editingCommand, setEditingCommand, newCommand, setNewCommand, loading, stats, createCommand, updateCommand, deleteCommand, toggleCommand, exportCommands, importCommands };

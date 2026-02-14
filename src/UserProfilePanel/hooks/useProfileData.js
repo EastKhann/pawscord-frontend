@@ -75,10 +75,10 @@ const useProfileData = ({ user }) => {
         try {
             setExportRequested(true);
             const response = await authPost('/gdpr/request/');
-            toast.success('\u2705 GDPR d\u0131\u015Fa aktarma talebi olu\u015Fturuldu!');
+            toast.success('✅ GDPR dışa aktarma talebi oluşturuldu!');
             setGdprExports(prev => [response.data, ...prev]);
         } catch (err) {
-            toast.error('GDPR talebi olu\u015Fturulamad\u0131: ' + (err.response?.data?.error || 'Hata'));
+            toast.error('GDPR talebi oluşturulamadı: ' + (err.response?.data?.error || 'Hata'));
         } finally { setExportRequested(false); }
     };
 

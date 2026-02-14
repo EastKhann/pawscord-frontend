@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { API_BASE_URL, WS_PROTOCOL, API_HOST } from '../../utils/constants';
 import toast from '../../utils/toast';
 
-export const REACTION_EMOJIS = ['\uD83D\uDC4D', '\u2764\uFE0F', '\uD83D\uDE02', '\uD83D\uDE2E', '\uD83D\uDE22', '\uD83D\uDD25', '\uD83D\uDC4F', '\uD83C\uDF89'];
+export const REACTION_EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🔥', '👏', '🎉'];
 
 export const extractYouTubeId = (url) => {
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -57,7 +57,7 @@ export default function useWatchParty(roomId, onClose) {
   }, []);
 
   const handleViewerJoined = useCallback((data) => {
-    toast.success(`${data.username} kat\u0131ld\u0131!`);
+    toast.success(`${data.username} katıldı!`);
     setViewers(prev => prev.find(v => v.username === data.username) ? prev : [...prev, { username: data.username, id: data.user_id }]);
   }, []);
 
@@ -94,7 +94,7 @@ export default function useWatchParty(roomId, onClose) {
       };
       handlers[d.type]?.(d);
     };
-    ws.onerror = (err) => console.error('\uD83D\uDCFA Watch Party WebSocket error:', err);
+    ws.onerror = (err) => console.error('📺 Watch Party WebSocket error:', err);
 
     wsRef.current = ws;
     heartbeatRef.current = setInterval(() => {
@@ -118,12 +118,12 @@ export default function useWatchParty(roomId, onClose) {
         const data = await res.json();
         setParty(data); setIsHost(true); setShowCreateModal(false);
         connectWebSocket(data.id);
-        toast.success('Watch Party olu\u015fturuldu! \uD83C\uDF89');
+        toast.success('Watch Party oluşturuldu! 🎉');
       } else {
         const err = await res.json();
-        toast.error(err.error || 'Watch Party olu\u015fturulamad\u0131');
+        toast.error(err.error || 'Watch Party oluşturulamadı');
       }
-    } catch { toast.error('Ba\u011flant\u0131 hatas\u0131'); }
+    } catch { toast.error('Bağlantı hatası'); }
     finally { setIsLoading(false); }
   };
 
@@ -140,12 +140,12 @@ export default function useWatchParty(roomId, onClose) {
         setViewers(partyData.viewers || []); setCurrentTime(partyData.current_time);
         setIsPlaying(partyData.status === 'playing');
         connectWebSocket(partyId);
-        toast.success('Watch Party\'ye kat\u0131ld\u0131n! \uD83C\uDFAC');
+        toast.success('Watch Party\'ye katıldın! 🎬');
       } else {
         const err = await res.json();
-        toast.error(err.error || 'Kat\u0131l\u0131namad\u0131');
+        toast.error(err.error || 'Katılınamadı');
       }
-    } catch { toast.error('Ba\u011flant\u0131 hatas\u0131'); }
+    } catch { toast.error('Bağlantı hatası'); }
     finally { setIsLoading(false); }
   };
 

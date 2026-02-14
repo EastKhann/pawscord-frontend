@@ -82,7 +82,7 @@ const InputMenu = ({
                         )}
                         <button onClick={() => menuAction(() => setShowTemplates(true))}
                             style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled}>
-                            <FaFileAlt /><span>{'\u015E'}ablon (Ctrl+T)</span>
+                            <FaFileAlt /><span>{'Ş'}ablon (Ctrl+T)</span>
                         </button>
                         <button onClick={() => menuAction(() => setShowScheduled(true))}
                             style={styles.mobileMenuItem} className="mobile-menu-item"

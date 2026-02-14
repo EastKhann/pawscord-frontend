@@ -17,7 +17,7 @@ const useMessage = ({ msg, currentUser, absoluteHostUrl, fetchWithAuth, onSetRep
   const [showReactionPicker, setShowReactionPicker] = useState(false);
 
   const isMyMessage = msg.username === currentUser;
-  const isAIMessage = ['Pawscord AI', 'PawPaw AI', '\u26A1 Signal Bot'].includes(msg.username);
+  const isAIMessage = ['Pawscord AI', 'PawPaw AI', '⚡ Signal Bot'].includes(msg.username);
   const messageRef = useRef(null);
 
   const handleQuoteMessage = useCallback(async () => {
@@ -51,7 +51,7 @@ const useMessage = ({ msg, currentUser, absoluteHostUrl, fetchWithAuth, onSetRep
     if (isEncrypted(msg.content)) {
       const chatId = msg.room ? `room-${msg.room}` : (msg.conversation ? `dm-${msg.conversation}` : null);
       const secretKey = encryptionKeys[chatId];
-      return secretKey ? decryptMessage(msg.content, secretKey) : '\uD83D\uDD12 Bu mesaj \u015Fifreli.';
+      return secretKey ? decryptMessage(msg.content, secretKey) : '🔒 Bu mesaj şifreli.';
     }
     return msg.content;
   }, [msg.content, msg.room, msg.conversation, encryptionKeys]);
@@ -90,7 +90,7 @@ const useMessage = ({ msg, currentUser, absoluteHostUrl, fetchWithAuth, onSetRep
   const finalFileUrl = isImageFile ? null : fullFileUrl;
 
   const signalCoin = useMemo(() => {
-    if (msg.username === '\u26A1 Signal Bot' && displayContent) { const m = displayContent.match(/\*\*(.*?)\*\*/); if (m && m[1]) return m[1]; }
+    if (msg.username === '⚡ Signal Bot' && displayContent) { const m = displayContent.match(/\*\*(.*?)\*\*/); if (m && m[1]) return m[1]; }
     return null;
   }, [msg.username, displayContent]);
 
@@ -99,8 +99,8 @@ const useMessage = ({ msg, currentUser, absoluteHostUrl, fetchWithAuth, onSetRep
     setLocalIsTranscribing(true);
     try {
       const res = await fetchWithAuth(`${absoluteHostUrl}/api/messages/${msg.id}/transcribe/`, { method: 'POST' });
-      if (res.ok) { const d = await res.json(); if (d.transcription) setLocalTranscription(d.transcription); else toast.error('\u274C \u00C7eviri bo\u015F d\u00F6nd\u00FC.'); }
-    } catch (e) { toast.error('\u274C Ses metne \u00E7evrilemedi.'); }
+      if (res.ok) { const d = await res.json(); if (d.transcription) setLocalTranscription(d.transcription); else toast.error('❌ Çeviri boş döndü.'); }
+    } catch (e) { toast.error('❌ Ses metne çevrilemedi.'); }
     finally { setLocalIsTranscribing(false); }
   }, [localIsTranscribing, localTranscription, fetchWithAuth, absoluteHostUrl, msg.id]);
 

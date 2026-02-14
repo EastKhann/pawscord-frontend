@@ -11,16 +11,16 @@ const PrivacyTab = () => {
 
     return (
         <div>
-            <SettingSection title="DM & Arkada\u015F">
-                <ToggleSwitch label="Sunucu \u00FCyelerinden DM al" value={dmFromServer} onChange={setDmFromServer} />
-                <ToggleSwitch label="Herkesten arkada\u015Fl\u0131k iste\u011Fi al" value={friendRequests} onChange={setFriendRequests} />
+            <SettingSection title="DM & Arkadaş">
+                <ToggleSwitch label="Sunucu üyelerinden DM al" value={dmFromServer} onChange={setDmFromServer} />
+                <ToggleSwitch label="Herkesten arkadaşlık isteği al" value={friendRequests} onChange={setFriendRequests} />
             </SettingSection>
             <SettingSection title="Gizlilik">
-                <ToggleSwitch label="Aktivite durumunu g\u00F6ster" value={showActivity} onChange={setShowActivity} />
-                <ToggleSwitch label="Okundu bilgisi g\u00F6nder" value={readReceipts} onChange={setReadReceipts} />
+                <ToggleSwitch label="Aktivite durumunu göster" value={showActivity} onChange={setShowActivity} />
+                <ToggleSwitch label="Okundu bilgisi gönder" value={readReceipts} onChange={setReadReceipts} />
             </SettingSection>
             <SettingSection title="Veri">
-                <button type="button" style={S.actionBtn}>Verilerimi \u0130ndir (GDPR)</button>
+                <button type="button" style={S.actionBtn}>Verilerimi İndir (GDPR)</button>
             </SettingSection>
         </div>
     );

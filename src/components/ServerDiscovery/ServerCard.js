@@ -10,18 +10,18 @@ const ServerCard = ({ server, onJoin, featured }) => (
         </div>
         <div style={styles.serverInfo}>
             <div style={styles.serverHeader}>
-                <h3 style={styles.serverName}>{server.name}{server.is_verified && <FaCheckCircle style={styles.verifiedBadge} title="Do\u011Frulanm\u0131\u015F" />}</h3>
+                <h3 style={styles.serverName}>{server.name}{server.is_verified && <FaCheckCircle style={styles.verifiedBadge} title="Doğrulanmış" />}</h3>
             </div>
             <p style={styles.serverDescription}>{server.short_description}</p>
             {server.keywords && server.keywords.length > 0 && (
                 <div style={styles.tags}>{server.keywords.slice(0, 3).map((tag, idx) => <span key={idx} style={styles.tag}>{tag}</span>)}</div>
             )}
             <div style={styles.serverStats}>
-                <div style={styles.stat}><FaUsers style={{ color: '#3ba55d' }} /><span>{server.member_count?.toLocaleString() || 0} \u00FCye</span></div>
-                <div style={styles.stat}><div style={styles.onlineDot}></div><span>{server.online_count?.toLocaleString() || 0} \u00E7evrimi\u00E7i</span></div>
+                <div style={styles.stat}><FaUsers style={{ color: '#3ba55d' }} /><span>{server.member_count?.toLocaleString() || 0} üye</span></div>
+                <div style={styles.stat}><div style={styles.onlineDot}></div><span>{server.online_count?.toLocaleString() || 0} çevrimiçi</span></div>
             </div>
         </div>
-        <button onClick={() => onJoin(server.id)} style={styles.joinButton}>Kat\u0131l</button>
+        <button onClick={() => onJoin(server.id)} style={styles.joinButton}>Katıl</button>
     </div>
 );
 

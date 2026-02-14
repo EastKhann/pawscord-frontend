@@ -3,16 +3,16 @@ import { FaCheck } from 'react-icons/fa';
 import SettingSection from '../components/SettingSection';
 
 const LANGUAGES = [
-    { code: 'tr', label: 'T\u00FCrk\u00E7e', flag: '\uD83C\uDDF9\uD83C\uDDF7' },
-    { code: 'en', label: 'English', flag: '\uD83C\uDDEC\uD83C\uDDE7' },
-    { code: 'de', label: 'Deutsch', flag: '\uD83C\uDDE9\uD83C\uDDEA' },
-    { code: 'fr', label: 'Fran\u00E7ais', flag: '\uD83C\uDDEB\uD83C\uDDF7' },
-    { code: 'es', label: 'Espa\u00F1ol', flag: '\uD83C\uDDEA\uD83C\uDDF8' },
-    { code: 'ja', label: '\u65E5\u672C\u8A9E', flag: '\uD83C\uDDEF\uD83C\uDDF5' },
-    { code: 'ko', label: '\uD55C\uAD6D\uC5B4', flag: '\uD83C\uDDF0\uD83C\uDDF7' },
-    { code: 'ru', label: '\u0420\u0443\u0441\u0441\u043A\u0438\u0439', flag: '\uD83C\uDDF7\uD83C\uDDFA' },
-    { code: 'ar', label: '\u0627\u0644\u0639\u0631\u0628\u064A\u0629', flag: '\uD83C\uDDF8\uD83C\uDDE6' },
-    { code: 'zh', label: '\u4E2D\u6587', flag: '\uD83C\uDDE8\uD83C\uDDF3' },
+    { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    { code: 'fr', label: 'Français', flag: '🇫🇷' },
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'ja', label: '日本語', flag: '🇯🇵' },
+    { code: 'ko', label: '한국어', flag: '🇰🇷' },
+    { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+    { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+    { code: 'zh', label: '中文', flag: '🇨🇳' },
 ];
 
 const LanguageTab = () => {
@@ -27,7 +27,7 @@ const LanguageTab = () => {
         <div>
             <SettingSection title="Uygulama Dili">
                 <p style={{ color: '#949ba4', fontSize: 13, marginBottom: 16 }}>
-                    Pawscord aray\u00FCz\u00FCn\u00FCn dilini se\u00E7.
+                    Pawscord arayüzünün dilini seç.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {LANGUAGES.map(lang => (

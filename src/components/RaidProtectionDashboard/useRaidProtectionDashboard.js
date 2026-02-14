@@ -148,7 +148,7 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
 
             if (response.ok) {
                 setProtectionStatus({ ...protectionStatus, enabled: !protectionStatus.enabled });
-                toast.success(protectionStatus.enabled ? '\u26A0\uFE0F Koruma kapat\u0131ld\u0131' : '\uD83D\uDEE1\uFE0F Koruma aktif!');
+                toast.success(protectionStatus.enabled ? '⚠️ Koruma kapatıldı' : '🛡️ Koruma aktif!');
             }
         } catch (error) {
             console.error('Toggle protection error:', error);
@@ -170,7 +170,7 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
 
             if (response.ok) {
                 setProtectionStatus({ ...protectionStatus, lockdown_active: !protectionStatus.lockdown_active });
-                toast.success(protectionStatus.lockdown_active ? '\uD83D\uDD13 Sunucu kilidi a\u00E7\u0131ld\u0131' : '\uD83D\uDD12 Sunucu kilitlendi!');
+                toast.success(protectionStatus.lockdown_active ? '🔓 Sunucu kilidi açıldı' : '🔒 Sunucu kilitlendi!');
             }
         } catch (error) {
             console.error('Lockdown error:', error);
@@ -195,7 +195,7 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
 
             if (response.ok) {
                 setPendingVerifications(pendingVerifications.filter(u => u.id !== userId));
-                toast.success(action === 'approve' ? '\u2705 Kullan\u0131c\u0131 onayland\u0131' : '\u274C Kullan\u0131c\u0131 reddedildi');
+                toast.success(action === 'approve' ? '✅ Kullanıcı onaylandı' : '❌ Kullanıcı reddedildi');
             }
         } catch (error) {
             console.error('Verify user error:', error);
@@ -215,7 +215,7 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
             });
 
             if (response.ok) {
-                toast.success('\u2705 Ayarlar kaydedildi!');
+                toast.success('✅ Ayarlar kaydedildi!');
             }
         } catch (error) {
             console.error('Save settings error:', error);

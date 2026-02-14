@@ -17,7 +17,7 @@ const useProfileSettings = () => {
     });
     const [language, setLanguage] = useState('tr');
     const [availableLanguages, setAvailableLanguages] = useState([
-        { code: 'tr', name: 'T\u00FCrk\u00E7e' }, { code: 'en', name: 'English' },
+        { code: 'tr', name: 'Türkçe' }, { code: 'en', name: 'English' },
     ]);
     const [customStatus, setCustomStatus] = useState({
         status: 'online', emoji: '', text: '', expires_at: null,
@@ -37,8 +37,8 @@ const useProfileSettings = () => {
         try {
             await authPost('/api/users/update_profile/', { theme: themeName });
             setCurrentTheme(themeName);
-            toast.success(`\uD83C\uDFA8 Tema "${themeName}" uyguland\u0131!`);
-        } catch (err) { toast.error('Tema uygulanamad\u0131.'); }
+            toast.success(`🎨 Tema "${themeName}" uygulandı!`);
+        } catch (err) { toast.error('Tema uygulanamadı.'); }
     };
 
     const handleNotificationSettingsUpdate = async (setting, value) => {
@@ -46,8 +46,8 @@ const useProfileSettings = () => {
             const newSettings = { ...notificationSettings, [setting]: value };
             setNotificationSettings(newSettings);
             await authPost('/api/users/update_profile/', { notification_settings: newSettings });
-            toast.success('\u2705 Bildirim ayarlar\u0131 g\u00FCncellendi!');
-        } catch (err) { toast.error('Bildirim ayarlar\u0131 g\u00FCncellenemedi.'); }
+            toast.success('✅ Bildirim ayarları güncellendi!');
+        } catch (err) { toast.error('Bildirim ayarları güncellenemedi.'); }
     };
 
     const handleSoundSettingsUpdate = async (setting, value) => {
@@ -55,19 +55,19 @@ const useProfileSettings = () => {
             const newSettings = { ...soundSettings, [setting]: value };
             setSoundSettings(newSettings);
             await authPost('/api/users/update_profile/', { sound_settings: newSettings });
-            toast.success('\u2705 Ses ayarlar\u0131 g\u00FCncellendi!');
-        } catch (err) { toast.error('Ses ayarlar\u0131 g\u00FCncellenemedi.'); }
+            toast.success('✅ Ses ayarları güncellendi!');
+        } catch (err) { toast.error('Ses ayarları güncellenemedi.'); }
     };
 
     const fetchLanguages = async () => {
         try {
             const response = await authGet('/translation/languages/');
             setAvailableLanguages(Array.isArray(response.data) ? response.data : [
-                { code: 'tr', name: 'T\u00FCrk\u00E7e' }, { code: 'en', name: 'English' },
+                { code: 'tr', name: 'Türkçe' }, { code: 'en', name: 'English' },
             ]);
         } catch (err) {
             console.error('Languages fetch failed:', err);
-            setAvailableLanguages([{ code: 'tr', name: 'T\u00FCrk\u00E7e' }, { code: 'en', name: 'English' }]);
+            setAvailableLanguages([{ code: 'tr', name: 'Türkçe' }, { code: 'en', name: 'English' }]);
         }
     };
 
@@ -75,16 +75,16 @@ const useProfileSettings = () => {
         try {
             await authPost('/api/users/update_profile/', { language: newLanguage });
             setLanguage(newLanguage);
-            toast.success('\uD83C\uDF0D Dil de\u011Fi\u015Ftirildi!');
-        } catch (err) { toast.error('Dil de\u011Fi\u015Ftirilemedi.'); }
+            toast.success('🌍 Dil değiştirildi!');
+        } catch (err) { toast.error('Dil değiştirilemedi.'); }
     };
 
     const updateCustomStatus = async () => {
         try {
             await authPost('/api/users/update_status/', customStatus);
-            toast.success('\u2705 Durum g\u00FCncellendi!');
+            toast.success('✅ Durum güncellendi!');
         } catch (err) {
-            toast.error('Durum g\u00FCncellenemedi: ' + (err.response?.data?.error || 'Hata'));
+            toast.error('Durum güncellenemedi: ' + (err.response?.data?.error || 'Hata'));
         }
     };
 

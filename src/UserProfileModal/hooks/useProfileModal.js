@@ -20,7 +20,7 @@ export const formatUrl = (url, key) => {
 export const linkDisplayNames = {
     steam_trade: 'Steam Trade URL',
     steam_profile: 'Steam Profili',
-    steam_friend_code: 'Steam Arkada\u015F Kodu',
+    steam_friend_code: 'Steam Arkadaş Kodu',
     x: 'X (Twitter)',
     instagram: 'Instagram'
 };
@@ -63,23 +63,23 @@ export const useProfileModal = ({ user, fetchWithAuth, apiBaseUrl, currentUser, 
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, { method: 'POST', body: JSON.stringify({ username: user.username }) });
             if (response.ok) { setRequestStatus('success'); }
-            else { toast.error('\u274C \u0130stek g\u00F6nderilemedi. Zaten ekli veya bekliyor olabilir.'); setRequestStatus('idle'); }
-        } catch (error) { console.error('Arkada\u015F ekleme hatas\u0131:', error); setRequestStatus('idle'); }
+            else { toast.error('❌ İstek gönderilemedi. Zaten ekli veya bekliyor olabilir.'); setRequestStatus('idle'); }
+        } catch (error) { console.error('Arkadaş ekleme hatası:', error); setRequestStatus('idle'); }
     };
 
     const copyToClipboard = (text, key) => {
-        try { navigator.clipboard.writeText(text); toast.success(`\u2705 '${key}' panoya kopyaland\u0131`); }
-        catch (err) { toast.error('\u274C Kopyalama hatas\u0131.'); }
+        try { navigator.clipboard.writeText(text); toast.success(`✅ '${key}' panoya kopyalandı`); }
+        catch (err) { toast.error('❌ Kopyalama hatası.'); }
     };
 
     const handleSendMoney = async () => {
-        const amount = prompt(`Ne kadar Coin g\u00F6ndermek istiyorsun? (${user.username} ki\u015Fisine)`);
+        const amount = prompt(`Ne kadar Coin göndermek istiyorsun? (${user.username} kişisine)`);
         if (!amount) return;
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/store/transfer/`, { method: 'POST', body: JSON.stringify({ target_username: user.username, amount }) });
             const data = await res.json();
             if (res.ok) { toast.success(data.message); } else { toast.error(data.error); }
-        } catch (e) { toast.error('\u274C Hata.'); }
+        } catch (e) { toast.error('❌ Hata.'); }
     };
 
     const socialLinks = user?.social_links || {};

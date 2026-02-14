@@ -60,9 +60,9 @@ const useSecurityAPI = () => {
             if (res.ok) {
                 setQrCode(data.qr_code || '');
                 setBackupCodes(data.backup_codes || []);
-                toast.info('\u2139\uFE0F QR kodu taray\u0131n ve do\u011Frulama kodunu girin');
-            } else { toast.error(`\u274C ${data.error || '2FA etkinle\u015Ftirilemedi'}`); }
-        } catch (error) { console.error('Error enabling 2FA:', error); toast.error('\u274C 2FA etkinle\u015Ftirme hatas\u0131'); }
+                toast.info('ℹ️ QR kodu tarayın ve doğrulama kodunu girin');
+            } else { toast.error(`❌ ${data.error || '2FA etkinleştirilemedi'}`); }
+        } catch (error) { console.error('Error enabling 2FA:', error); toast.error('❌ 2FA etkinleştirme hatası'); }
     };
 
     const verify2FASetup = async () => {
@@ -72,69 +72,69 @@ const useSecurityAPI = () => {
             });
             const data = await res.json();
             if (res.ok) {
-                toast.success('\u2705 2FA ba\u015Far\u0131yla etkinle\u015Ftirildi!');
+                toast.success('✅ 2FA başarıyla etkinleştirildi!');
                 setTwoFactorEnabled(true); setQrCode(''); setVerificationCode('');
                 fetchSecurityStatus();
-            } else { toast.error(`\u274C ${data.error || 'Ge\u00E7ersiz kod'}`); }
-        } catch (error) { console.error('Error verifying 2FA:', error); toast.error('\u274C Do\u011Frulama hatas\u0131'); }
+            } else { toast.error(`❌ ${data.error || 'Geçersiz kod'}`); }
+        } catch (error) { console.error('Error verifying 2FA:', error); toast.error('❌ Doğrulama hatası'); }
     };
 
     const disable2FA = async () => {
-        if (!await confirmDialog('2FA\'y\u0131 devre d\u0131\u015F\u0131 b\u0131rakmak istedi\u011Finizden emin misiniz?')) return;
+        if (!await confirmDialog('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) return;
         try {
             const res = await fetch(`${apiBaseUrl}/security/2fa/disable/`, { method: 'POST', headers: postHeaders });
             const data = await res.json();
-            if (res.ok) { toast.info('\u2139\uFE0F 2FA devre d\u0131\u015F\u0131 b\u0131rak\u0131ld\u0131'); setTwoFactorEnabled(false); fetchSecurityStatus(); }
-            else { toast.error(`\u274C ${data.error || '2FA devre d\u0131\u015F\u0131 b\u0131rak\u0131lamad\u0131'}`); }
-        } catch (error) { console.error('Error disabling 2FA:', error); toast.error('\u274C 2FA devre d\u0131\u015F\u0131 b\u0131rakma hatas\u0131'); }
+            if (res.ok) { toast.info('ℹ️ 2FA devre dışı bırakıldı'); setTwoFactorEnabled(false); fetchSecurityStatus(); }
+            else { toast.error(`❌ ${data.error || '2FA devre dışı bırakılamadı'}`); }
+        } catch (error) { console.error('Error disabling 2FA:', error); toast.error('❌ 2FA devre dışı bırakma hatası'); }
     };
 
     const getBackupCodes = async () => {
         try {
             const res = await fetch(`${apiBaseUrl}/security/2fa/backup-codes/`, { method: 'POST', headers: postHeaders });
             const data = await res.json();
-            if (res.ok) { setBackupCodes(data.backup_codes || []); toast.success('\u2705 Yedek kodlar olu\u015Fturuldu'); }
-            else { toast.error(`\u274C ${data.error || 'Yedek kodlar olu\u015Fturulamad\u0131'}`); }
-        } catch (error) { console.error('Error getting backup codes:', error); toast.error('\u274C Yedek kod hatas\u0131'); }
+            if (res.ok) { setBackupCodes(data.backup_codes || []); toast.success('✅ Yedek kodlar oluşturuldu'); }
+            else { toast.error(`❌ ${data.error || 'Yedek kodlar oluşturulamadı'}`); }
+        } catch (error) { console.error('Error getting backup codes:', error); toast.error('❌ Yedek kod hatası'); }
     };
 
     const revokeSession = async (sessionId) => {
         try {
             const res = await fetch(`${apiBaseUrl}/security/sessions/${sessionId}/revoke/`, { method: 'POST', headers: postHeaders });
             const data = await res.json();
-            if (res.ok) { toast.success('\u2705 Oturum sonland\u0131r\u0131ld\u0131'); fetchSessions(); }
-            else { toast.error(`\u274C ${data.error || 'Oturum sonland\u0131r\u0131lamad\u0131'}`); }
-        } catch (error) { console.error('Error revoking session:', error); toast.error('\u274C Oturum sonland\u0131rma hatas\u0131'); }
+            if (res.ok) { toast.success('✅ Oturum sonlandırıldı'); fetchSessions(); }
+            else { toast.error(`❌ ${data.error || 'Oturum sonlandırılamadı'}`); }
+        } catch (error) { console.error('Error revoking session:', error); toast.error('❌ Oturum sonlandırma hatası'); }
     };
 
     const revokeAllSessions = async () => {
-        if (!await confirmDialog('T\u00FCm oturumlar\u0131 sonland\u0131rmak istedi\u011Finizden emin misiniz?')) return;
+        if (!await confirmDialog('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')) return;
         try {
             const res = await fetch(`${apiBaseUrl}/security/sessions/revoke-all/`, { method: 'POST', headers: postHeaders });
             const data = await res.json();
-            if (res.ok) { toast.success('\u2705 T\u00FCm oturumlar sonland\u0131r\u0131ld\u0131'); fetchSessions(); }
-            else { toast.error(`\u274C ${data.error || 'Oturumlar sonland\u0131r\u0131lamad\u0131'}`); }
-        } catch (error) { console.error('Error revoking all sessions:', error); toast.error('\u274C Toplu sonland\u0131rma hatas\u0131'); }
+            if (res.ok) { toast.success('✅ Tüm oturumlar sonlandırıldı'); fetchSessions(); }
+            else { toast.error(`❌ ${data.error || 'Oturumlar sonlandırılamadı'}`); }
+        } catch (error) { console.error('Error revoking all sessions:', error); toast.error('❌ Toplu sonlandırma hatası'); }
     };
 
     const addIPToWhitelist = async () => {
-        if (!newIp.trim()) { toast.error('\u274C IP adresi gerekli'); return; }
+        if (!newIp.trim()) { toast.error('❌ IP adresi gerekli'); return; }
         try {
             const res = await fetch(`${apiBaseUrl}/security/ip-whitelist/add/`, {
                 method: 'POST', headers: postHeaders, body: JSON.stringify({ ip_address: newIp })
             });
             const data = await res.json();
-            if (res.ok) { toast.success('\u2705 IP beyaz listeye eklendi'); setNewIp(''); fetchIPWhitelist(); }
-            else { toast.error(`\u274C ${data.error || 'IP eklenemedi'}`); }
-        } catch (error) { console.error('Error adding IP:', error); toast.error('\u274C IP ekleme hatas\u0131'); }
+            if (res.ok) { toast.success('✅ IP beyaz listeye eklendi'); setNewIp(''); fetchIPWhitelist(); }
+            else { toast.error(`❌ ${data.error || 'IP eklenemedi'}`); }
+        } catch (error) { console.error('Error adding IP:', error); toast.error('❌ IP ekleme hatası'); }
     };
 
     const removeIPFromWhitelist = async (whitelistId) => {
         try {
             const res = await fetch(`${apiBaseUrl}/security/ip-whitelist/${whitelistId}/`, { method: 'DELETE', headers });
-            if (res.ok) { toast.success('\u2705 IP beyaz listeden kald\u0131r\u0131ld\u0131'); fetchIPWhitelist(); }
-            else { toast.error('\u274C IP kald\u0131r\u0131lamad\u0131'); }
-        } catch (error) { console.error('Error removing IP:', error); toast.error('\u274C IP kald\u0131rma hatas\u0131'); }
+            if (res.ok) { toast.success('✅ IP beyaz listeden kaldırıldı'); fetchIPWhitelist(); }
+            else { toast.error('❌ IP kaldırılamadı'); }
+        } catch (error) { console.error('Error removing IP:', error); toast.error('❌ IP kaldırma hatası'); }
     };
 
     const downloadBackupCodes = () => {
@@ -146,7 +146,7 @@ const useSecurityAPI = () => {
         a.download = `pawscord_backup_codes_${new Date().toISOString()}.txt`;
         a.click();
         window.URL.revokeObjectURL(url);
-        toast.success('\u2705 Yedek kodlar indirildi');
+        toast.success('✅ Yedek kodlar indirildi');
     };
 
     useEffect(() => {

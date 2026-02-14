@@ -25,9 +25,9 @@ const CollaborativeCodeEditor = ({ roomId, userId, username, apiBaseUrl, fetchWi
         <div style={styles.headerRight}>
           <div style={styles.collaborators}><FaUsers style={{ marginRight: '6px' }} /><span>{collaborators.length + 1}</span></div>
           <button onClick={copyCode} style={styles.actionButton} title="Kopyala"><FaCopy /></button>
-          <button onClick={downloadCode} style={styles.actionButton} title="\u0130ndir"><FaDownload /></button>
+          <button onClick={downloadCode} style={styles.actionButton} title="İndir"><FaDownload /></button>
           <button onClick={saveCode} disabled={saving} style={{ ...styles.actionButton, ...styles.saveButton }} title="Kaydet"><FaSave /></button>
-          <button onClick={runCode} disabled={running} style={{ ...styles.actionButton, ...styles.runButton }} title="\u00C7al\u0131\u015Ft\u0131r"><FaPlay /></button>
+          <button onClick={runCode} disabled={running} style={{ ...styles.actionButton, ...styles.runButton }} title="Çalıştır"><FaPlay /></button>
         </div>
       </div>
 

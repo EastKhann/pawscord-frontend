@@ -40,7 +40,7 @@ const useRaidProtection = (serverId, fetchWithAuth, apiBaseUrl) => {
                 const data = await res.json();
                 setRaidActivity(data.recent_activity || []);
                 if (data.raid_detected) {
-                    toast.error(`\u26a0\ufe0f RAID DETECTED!\n${data.message}\n\nAutomatic protection activated.`);
+                    toast.error(`⚠️ RAID DETECTED!\n${data.message}\n\nAutomatic protection activated.`);
                 }
             }
         } catch (error) {
@@ -81,10 +81,10 @@ const useRaidProtection = (serverId, fetchWithAuth, apiBaseUrl) => {
     };
 
     const activateLockdown = async () => {
-        if (!await confirmDialog('\u26a0\ufe0f LOCKDOWN MODE\n\nThis will:\n- Block all new joins\n- Require manual approval for each user\n- Kick suspicious accounts\n\nActivate?')) return;
+        if (!await confirmDialog('⚠️ LOCKDOWN MODE\n\nThis will:\n- Block all new joins\n- Require manual approval for each user\n- Kick suspicious accounts\n\nActivate?')) return;
         try {
             await updateSetting('lockdown_mode', true);
-            toast.success('\ud83d\udd12 Lockdown Mode Activated!');
+            toast.success('🔒 Lockdown Mode Activated!');
         } catch (error) {
             console.error('Failed to activate lockdown:', error);
         }

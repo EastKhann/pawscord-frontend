@@ -37,7 +37,7 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
       </div>
 
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>{'\u2699\uFE0F'} Detection Settings</h2>
+        <h2 style={styles.sectionTitle}>{'⚙️'} Detection Settings</h2>
         {TOGGLES.map(t => (
           <div key={t.key} style={styles.setting}>
             <div style={styles.settingInfo}>
@@ -72,7 +72,7 @@ const AIModerationPanel = ({ serverSlug, token, isMobile }) => {
         )}
       </div>
 
-      <button onClick={saveSettings} style={styles.saveBtn}>{'\uD83D\uDCBE'} Save Settings</button>
+      <button onClick={saveSettings} style={styles.saveBtn}>{'💾'} Save Settings</button>
     </div>
   );
 };

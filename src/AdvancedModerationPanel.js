@@ -158,7 +158,7 @@ const AdvancedModerationPanel = ({ serverId, onClose }) => {
                 <div className="log-content">
                   <div className="log-action">{log.action}</div>
                   <div className="log-details">
-                    {log.moderator?.username} {'\u2192'} {log.target?.username}
+                    {log.moderator?.username} {'→'} {log.target?.username}
                     {log.reason && ` - ${log.reason}`}
                   </div>
                   <div className="log-time">{new Date(log.timestamp).toLocaleString()}</div>

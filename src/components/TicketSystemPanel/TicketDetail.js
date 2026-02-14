@@ -6,7 +6,7 @@ const TicketDetail = ({ ticket, onClose, newMessage, setNewMessage, sendMessage,
           <span className="ticket-id-large">#{ticket.id}</span>
           <h3>{ticket.subject || 'Destek Talebi'}</h3>
         </div>
-        <button className="close-btn" onClick={onClose}>{'\u00d7'}</button>
+        <button className="close-btn" onClick={onClose}>{'×'}</button>
       </div>
 
       <div className="detail-body">
@@ -25,23 +25,23 @@ const TicketDetail = ({ ticket, onClose, newMessage, setNewMessage, sendMessage,
         <div className="message-input-container">
           <input
             type="text"
-            placeholder="Mesaj\u0131n\u0131z\u0131 yaz\u0131n..."
+            placeholder="Mesajınızı yazın..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
           />
           <button className="send-btn" onClick={sendMessage}>
-            {'\ud83d\udce4'} G\u00f6nder
+            {'📤'} Gönder
           </button>
         </div>
       </div>
 
       <div className="detail-footer">
         <button className="export-btn" onClick={() => exportTranscript(ticket.id)}>
-          {'\ud83d\udcc4'} Transcript \u0130ndir
+          {'📄'} Transcript İndir
         </button>
         <button className="close-ticket-btn-large" onClick={() => closeTicket(ticket.id)}>
-          {'\u2713'} Ticket'\u0131 Kapat
+          {'✓'} Ticket'ı Kapat
         </button>
       </div>
     </div>

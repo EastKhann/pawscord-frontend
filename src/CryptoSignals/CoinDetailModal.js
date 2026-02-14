@@ -31,7 +31,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                         <h2 style={{ margin: 0, color: '#f0b232', fontWeight: 700 }}>{selectedCoin.name.replace('USDT', '')}</h2>
                         <span style={S.modalBadge}>{rows.length} Strateji</span>
                     </div>
-                    <button onClick={onClose} style={S.modalCloseBtn}>{'\u2715'}</button>
+                    <button onClick={onClose} style={S.modalCloseBtn}>{'✕'}</button>
                 </div>
 
                 <div style={S.modalStats}>
@@ -39,13 +39,13 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                         <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#23a559' }}>
                             {isPositionsTab ? coinStats.uyumluCount : coinStats.profits}
                         </span>
-                        <span style={S.mStatLabel}>{isPositionsTab ? '\u2705 Uyumlu' : 'K\u00E2rda'}</span>
+                        <span style={S.mStatLabel}>{isPositionsTab ? '✅ Uyumlu' : 'Kârda'}</span>
                     </div>
                     <div style={S.mStatCard}>
                         <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#da373c' }}>
                             {isPositionsTab ? coinStats.tersCount : coinStats.losses}
                         </span>
-                        <span style={S.mStatLabel}>{isPositionsTab ? '\u26A0\uFE0F Ters Sinyal' : 'Zararda'}</span>
+                        <span style={S.mStatLabel}>{isPositionsTab ? '⚠️ Ters Sinyal' : 'Zararda'}</span>
                     </div>
                     <div style={S.mStatCard}>
                         <span style={{ fontSize: '1.3em', fontWeight: 700, color: coinStats.avgPnl >= 0 ? '#23a559' : '#da373c' }}>
@@ -66,7 +66,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                 </div>
 
                 <div style={S.modalBody}>
-                    <h3 style={{ margin: '0 0 12px', color: '#fff', fontSize: '1em' }}>{'\uD83D\uDCCA'} Strateji Detaylar{'\u0131'}</h3>
+                    <h3 style={{ margin: '0 0 12px', color: '#fff', fontSize: '1em' }}>{'📊'} Strateji Detaylar{'ı'}</h3>
                     <div style={S.strategyList}>
                         {rows.map((row, idx) => {
                             const pnl = parsePnl(row.pnl_percent);
@@ -79,8 +79,8 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                                     </div>
                                     <div style={S.strategyGrid}>
                                         {[
-                                            { label: 'Giri\u015F', val: `$${formatPrice(row.entry_price)}` },
-                                            { label: 'G\u00FCncel', val: `$${formatPrice(row.current_price)}` },
+                                            { label: 'Giriş', val: `$${formatPrice(row.entry_price)}` },
+                                            { label: 'Güncel', val: `$${formatPrice(row.current_price)}` },
                                             { label: 'PNL', val: row.pnl_percent || '-', color: isProfit ? '#23a559' : '#da373c', bold: true },
                                             { label: 'WR', val: row.win_rate || '-' },
                                             { label: 'X Kat', val: row.x_kat || '-', color: '#f0b232' },
@@ -95,7 +95,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 8, borderTop: '1px solid #40444b' }}>
                                         <StatusBadge status={row.status} />
                                         {row.days_ago !== undefined && (
-                                            <span style={{ color: '#949ba4', fontSize: '0.78em' }}>{row.days_ago} g{'\u00FC'}n {'\u00B7'} {row.bars_ago} bar</span>
+                                            <span style={{ color: '#949ba4', fontSize: '0.78em' }}>{row.days_ago} g{'ü'}n {'·'} {row.bars_ago} bar</span>
                                         )}
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                 <div style={{ padding: '12px 20px', borderTop: '1px solid #2f3136', textAlign: 'center' }}>
                     <a href={binanceUrl} target="_blank" rel="noopener noreferrer"
                         style={{ color: '#f0b232', textDecoration: 'none', fontWeight: 600, fontSize: '0.9em' }}>
-                        <FaExternalLinkAlt /> Binance Futures'da A{'\u00E7'}
+                        <FaExternalLinkAlt /> Binance Futures'da A{'ç'}
                     </a>
                 </div>
             </div>

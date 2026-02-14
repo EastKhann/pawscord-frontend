@@ -17,7 +17,7 @@ const LevelSelect = ({ knownQuestions, startQuiz }) => {
         return (
             <button
                 key={lvl.id}
-                onClick={() => remaining > 0 ? startQuiz(lvl.id) : toast.success("Tebrikler! Bu seviyedeki t\u00FCm sorular\u0131 tamamlad\u0131n.")}
+                onClick={() => remaining > 0 ? startQuiz(lvl.id) : toast.success("Tebrikler! Bu seviyedeki tüm soruları tamamladın.")}
                 style={{
                     ...styles.levelCard,
                     borderTop: `5px solid ${lvl.color}`,
@@ -27,7 +27,7 @@ const LevelSelect = ({ knownQuestions, startQuiz }) => {
                 <div style={styles.levelIcon}>{lvl.icon}</div>
                 <div style={styles.levelName}>{lvl.name}</div>
                 <div style={styles.levelCount}>
-                    {remaining === 0 ? "Tamamland\u0131! \uD83C\uDF89" : `${knownInLevel} / ${totalInDb} Tamamland\u0131`}
+                    {remaining === 0 ? "Tamamlandı! 🎉" : `${knownInLevel} / ${totalInDb} Tamamlandı`}
                 </div>
             </button>
         );
@@ -38,8 +38,8 @@ const LevelSelect = ({ knownQuestions, startQuiz }) => {
             <div style={styles.container}>
                 <div style={styles.headerArea}>
                     <Link to="/eng-learn" style={styles.backLink}><FaArrowLeft /> Merkez</Link>
-                    <h1 style={styles.mainTitle}>Seviyeni Se\u00E7</h1>
-                    <p style={styles.subTitle}>Kendini test etmek i\u00E7in bir zorluk seviyesi se\u00E7.</p>
+                    <h1 style={styles.mainTitle}>Seviyeni Seç</h1>
+                    <p style={styles.subTitle}>Kendini test etmek için bir zorluk seviyesi seç.</p>
                 </div>
                 <div style={styles.columnsWrapper}>
                     <div style={styles.column}>{colA.map(lvl => renderLevelCard(lvl))}</div>

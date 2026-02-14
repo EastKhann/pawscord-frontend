@@ -1,6 +1,6 @@
 const TicketConfig = ({ config, setConfig, categories, roles, channels, updateConfig }) => (
   <div className="ticket-config-section">
-    <h3>{'\u2699\ufe0f'} Sistem Ayarlar\u0131</h3>
+    <h3>{'⚙️'} Sistem Ayarları</h3>
 
     <div className="config-grid">
       <div className="config-item">
@@ -21,7 +21,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
           value={config.category_id}
           onChange={(e) => setConfig({ ...config, category_id: e.target.value })}
         >
-          <option value="">Kategori Se\u00e7in</option>
+          <option value="">Kategori Seçin</option>
           {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
@@ -29,12 +29,12 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
       </div>
 
       <div className="config-item">
-        <label>Destek Rol\u00fc</label>
+        <label>Destek Rolü</label>
         <select
           value={config.support_role_id}
           onChange={(e) => setConfig({ ...config, support_role_id: e.target.value })}
         >
-          <option value="">Rol Se\u00e7in</option>
+          <option value="">Rol Seçin</option>
           {roles.map((role) => (
             <option key={role.id} value={role.id}>{role.name}</option>
           ))}
@@ -42,7 +42,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
       </div>
 
       <div className="config-item">
-        <label>Kullan\u0131c\u0131 Ba\u015f\u0131na Max Ticket</label>
+        <label>Kullanıcı Başına Max Ticket</label>
         <input
           type="number"
           min="1"
@@ -64,12 +64,12 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
       </div>
 
       <div className="config-item">
-        <label>Transcript Kanal\u0131</label>
+        <label>Transcript Kanalı</label>
         <select
           value={config.transcript_channel_id}
           onChange={(e) => setConfig({ ...config, transcript_channel_id: e.target.value })}
         >
-          <option value="">Kanal Se\u00e7in (Opsiyonel)</option>
+          <option value="">Kanal Seçin (Opsiyonel)</option>
           {channels.map((channel) => (
             <option key={channel.id} value={channel.id}># {channel.name}</option>
           ))}
@@ -77,7 +77,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
       </div>
 
       <div className="config-item full-width">
-        <label>Ho\u015f Geldin Mesaj\u0131</label>
+        <label>Hoş Geldin Mesajı</label>
         <textarea
           value={config.welcome_message}
           onChange={(e) => setConfig({ ...config, welcome_message: e.target.value })}
@@ -87,7 +87,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
     </div>
 
     <button className="save-config-btn" onClick={updateConfig}>
-      {'\ud83d\udcbe'} Ayarlar\u0131 Kaydet
+      {'💾'} Ayarları Kaydet
     </button>
   </div>
 );

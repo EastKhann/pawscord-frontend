@@ -25,8 +25,8 @@ const useBookmarks = (fetchWithAuth, apiBaseUrl) => {
         setBookmarks(data);
       }
     } catch (error) {
-      console.error('Bookmark y\u00fckleme hatas\u0131:', error);
-      toast.error('Bookmark\'lar y\u00fcklenemedi');
+      console.error('Bookmark yükleme hatası:', error);
+      toast.error('Bookmark\'lar yüklenemedi');
     } finally {
       setLoading(false);
     }
@@ -40,13 +40,13 @@ const useBookmarks = (fetchWithAuth, apiBaseUrl) => {
         setTags(data);
       }
     } catch (error) {
-      console.error('Tag y\u00fckleme hatas\u0131:', error);
+      console.error('Tag yükleme hatası:', error);
     }
   };
 
   const createTag = async () => {
     if (!newTagName.trim()) {
-      toast.error('Tag ad\u0131 bo\u015f olamaz');
+      toast.error('Tag adı boş olamaz');
       return;
     }
     try {
@@ -56,17 +56,17 @@ const useBookmarks = (fetchWithAuth, apiBaseUrl) => {
         body: JSON.stringify({ name: newTagName, color: newTagColor })
       });
       if (response.ok) {
-        toast.success('Tag olu\u015fturuldu');
+        toast.success('Tag oluşturuldu');
         setNewTagName('');
         setNewTagColor('#5865f2');
         setShowNewTagModal(false);
         loadTags();
       } else {
-        toast.error('Tag olu\u015fturulamad\u0131');
+        toast.error('Tag oluşturulamadı');
       }
     } catch (error) {
-      console.error('Tag olu\u015fturma hatas\u0131:', error);
-      toast.error('Bir hata olu\u015ftu');
+      console.error('Tag oluşturma hatası:', error);
+      toast.error('Bir hata oluştu');
     }
   };
 
@@ -80,8 +80,8 @@ const useBookmarks = (fetchWithAuth, apiBaseUrl) => {
         toast.error('Bookmark silinemedi');
       }
     } catch (error) {
-      console.error('Bookmark silme hatas\u0131:', error);
-      toast.error('Bir hata olu\u015ftu');
+      console.error('Bookmark silme hatası:', error);
+      toast.error('Bir hata oluştu');
     }
   };
 
@@ -99,8 +99,8 @@ const useBookmarks = (fetchWithAuth, apiBaseUrl) => {
         toast.error('Tag eklenemedi');
       }
     } catch (error) {
-      console.error('Tag ekleme hatas\u0131:', error);
-      toast.error('Bir hata olu\u015ftu');
+      console.error('Tag ekleme hatası:', error);
+      toast.error('Bir hata oluştu');
     }
   };
 

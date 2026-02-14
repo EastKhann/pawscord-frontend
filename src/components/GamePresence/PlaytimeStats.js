@@ -28,7 +28,7 @@ export const PlaytimeStats = ({ username }) => {
   return (
     <div className="playtime-stats">
       <div className="ps-header">
-        <h3>{'\uD83C\uDFAE'} Game Activity</h3>
+        <h3>{'🎮'} Game Activity</h3>
         <span className="ps-total">{stats.total_playtime} total</span>
       </div>
       <div className="ps-games">

@@ -40,9 +40,9 @@ function useEnglishLearning() {
         let response = await originalFetch();
 
         if (response.status === 401 && url !== TOKEN_REFRESH_URL) {
-            console.warn("Token s\u00fcresi doldu, yenileniyor...");
+            console.warn("Token süresi doldu, yenileniyor...");
             const refreshToken = localStorage.getItem('refresh_token');
-            if (!refreshToken) { handleLogout(); throw new Error("Oturum s\u00fcresi doldu, giri\u015f yap\u0131n."); }
+            if (!refreshToken) { handleLogout(); throw new Error("Oturum süresi doldu, giriş yapın."); }
             try {
                 const refreshResponse = await fetch(TOKEN_REFRESH_URL, {
                     method: 'POST',
@@ -66,10 +66,10 @@ function useEnglishLearning() {
                     fetchWithAuth(GET_KNOWN_WORDS_URL)
                 ]);
                 if (!wordsResponse.ok) {
-                    if (wordsResponse.status === 401) throw new Error("L\u00fctfen \u00f6nce Pawscord'a giri\u015f yap\u0131n.");
-                    throw new Error('Kelimeler y\u00fcklenemedi. API hatas\u0131.');
+                    if (wordsResponse.status === 401) throw new Error("Lütfen önce Pawscord'a giriş yapın.");
+                    throw new Error('Kelimeler yüklenemedi. API hatası.');
                 }
-                if (!knownWordsResponse.ok) throw new Error('Bilinen kelimeler listesi al\u0131namad\u0131.');
+                if (!knownWordsResponse.ok) throw new Error('Bilinen kelimeler listesi alınamadı.');
 
                 const wordsData = await wordsResponse.json();
                 const knownWordsData = await knownWordsResponse.json();
@@ -127,7 +127,7 @@ function useEnglishLearning() {
             });
             if (!response.ok) throw new Error("Kelime kaydedilemedi");
             setKnownWords(await response.json());
-        } catch (err) { console.error("Kelime kaydetme API hatas\u0131:", err); }
+        } catch (err) { console.error("Kelime kaydetme API hatası:", err); }
     }, [currentWord, currentLevel, fetchWithAuth]);
 
     const { globalData } = useGlobalWebSocket();

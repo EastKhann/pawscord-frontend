@@ -24,22 +24,22 @@ export const ScheduledMessagesPanel = ({ onClose }) => {
         if (!newMessage.content || !newMessage.scheduled_time) return;
         try {
             await fetchWithAuth(`${API_URL}/features/scheduled-messages/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...newMessage, room_id: 1 }) });
-            setNewMessage({ content: '', scheduled_time: '' }); fetchScheduled(); toast.success('Mesaj planland\u0131!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            setNewMessage({ content: '', scheduled_time: '' }); fetchScheduled(); toast.success('Mesaj planlandı!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel scheduled-messages">
-            <div className="panel-header"><h3>{'\uD83D\uDCC5'} Planlanm\u0131\u015F Mesajlar</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'📅'} Planlanmış Mesajlar</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="scheduled-list">
                     {scheduled.map((msg, i) => (
                         <div key={i} className="scheduled-item"><span className="content">{msg.content}</span><span className="time">{new Date(msg.scheduled_time).toLocaleString()}</span></div>
                     ))}
-                    {scheduled.length === 0 && <p className="empty">Planlanm\u0131\u015F mesaj yok</p>}
+                    {scheduled.length === 0 && <p className="empty">Planlanmış mesaj yok</p>}
                 </div>
                 <div className="add-scheduled">
-                    <input value={newMessage.content} onChange={(e) => setNewMessage({ ...newMessage, content: e.target.value })} placeholder="Mesaj i\u00E7eri\u011Fi..." />
+                    <input value={newMessage.content} onChange={(e) => setNewMessage({ ...newMessage, content: e.target.value })} placeholder="Mesaj içeriği..." />
                     <input type="datetime-local" value={newMessage.scheduled_time} onChange={(e) => setNewMessage({ ...newMessage, scheduled_time: e.target.value })} />
                     <button onClick={addScheduled}>Planla</button>
                 </div>
@@ -64,15 +64,15 @@ export const MoodStatusPanel = ({ onClose }) => {
     const setMood = async (mood) => {
         try {
             await fetchWithAuth(`${API_URL}/features/mood/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mood }) });
-            setCurrentMood(mood); toast.success('Ruh halin g\u00FCncellendi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            setCurrentMood(mood); toast.success('Ruh halin güncellendi!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel mood-status">
-            <div className="panel-header"><h3>{'\uD83D\uDE0A'} Ruh Halin</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'😊'} Ruh Halin</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                <div className="current-mood"><span className="mood-emoji">{moods[currentMood]?.emoji || '\uD83D\uDE0A'}</span><span className="mood-name">{currentMood}</span></div>
+                <div className="current-mood"><span className="mood-emoji">{moods[currentMood]?.emoji || '😊'}</span><span className="mood-name">{currentMood}</span></div>
                 <div className="mood-grid">
                     {Object.entries(moods).map(([key, data]) => (
                         <button key={key} className={`mood-btn ${currentMood === key ? 'active' : ''}`} onClick={() => setMood(key)} style={{ borderColor: data.color }}>
@@ -100,13 +100,13 @@ export const ServerTemplatesPanel = ({ onClose }) => {
     const applyTemplate = async (templateId) => {
         try {
             await fetchWithAuth(`${API_URL}/features/server-templates/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ template: templateId, name: 'My Server' }) });
-            toast.success('\u015Eablon haz\u0131r!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            toast.success('Şablon hazır!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel server-templates">
-            <div className="panel-header"><h3>{'\uD83C\uDFA8'} Sunucu \u015Eablonlar\u0131</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🎨'} Sunucu Şablonları</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="templates-grid">
                     {Object.entries(templates).map(([id, template]) => (
@@ -141,22 +141,22 @@ export const CustomCommandsPanel = ({ serverId, onClose }) => {
         try {
             await fetchWithAuth(`${API_URL}/features/custom-commands/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...newCmd, server_id: serverId || 1 }) });
             setNewCmd({ name: '', response: '' }); fetchCommands(); toast.success('Komut eklendi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel custom-commands">
-            <div className="panel-header"><h3>{'\u26A1'} \u00D6zel Komutlar</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'⚡'} Özel Komutlar</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="commands-list">
                     {Object.entries(commands).map(([name, data]) => (
                         <div key={name} className="command-item"><code>{name}</code><span>{data.response}</span></div>
                     ))}
-                    {Object.keys(commands).length === 0 && <p className="empty">\u00D6zel komut yok</p>}
+                    {Object.keys(commands).length === 0 && <p className="empty">Özel komut yok</p>}
                 </div>
                 <div className="add-command">
                     <input value={newCmd.name} onChange={(e) => setNewCmd({ ...newCmd, name: e.target.value })} placeholder="!komut" />
-                    <input value={newCmd.response} onChange={(e) => setNewCmd({ ...newCmd, response: e.target.value })} placeholder="Yan\u0131t..." />
+                    <input value={newCmd.response} onChange={(e) => setNewCmd({ ...newCmd, response: e.target.value })} placeholder="Yanıt..." />
                     <button onClick={addCommand}>Ekle</button>
                 </div>
             </div>
@@ -179,14 +179,14 @@ export const ServerAnalyticsPanel = ({ serverId, onClose }) => {
 
     return (
         <div className="feature-panel server-analytics">
-            <div className="panel-header"><h3>{'\uD83D\uDCC8'} Sunucu Analiti\u011Fi</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'📈'} Sunucu Analitiği</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                {loading ? <div className="loading">Y\u00FCkleniyor...</div> : analytics && (<>
+                {loading ? <div className="loading">Yükleniyor...</div> : analytics && (<>
                     <div className="analytics-grid">
-                        <div className="stat-card"><span className="value">{analytics.total_members}</span><span className="label">Toplam \u00DCye</span></div>
+                        <div className="stat-card"><span className="value">{analytics.total_members}</span><span className="label">Toplam Üye</span></div>
                         <div className="stat-card"><span className="value">{analytics.new_members_week}</span><span className="label">Bu Hafta Yeni</span></div>
                         <div className="stat-card"><span className="value">{analytics.total_messages}</span><span className="label">Toplam Mesaj</span></div>
-                        <div className="stat-card"><span className="value">{analytics.weekly_messages}</span><span className="label">Haftal\u0131k Mesaj</span></div>
+                        <div className="stat-card"><span className="value">{analytics.weekly_messages}</span><span className="label">Haftalık Mesaj</span></div>
                     </div>
                     <div className="active-rooms">
                         <h4>En Aktif Odalar</h4>

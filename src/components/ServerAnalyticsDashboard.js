@@ -26,9 +26,9 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                     </div>
                     <div style={styles.headerRight}>
                         <select value={period} onChange={e => setPeriod(e.target.value)} style={styles.periodSelect}>
-                            <option value="7d">Son 7 G{'\u00FC'}n</option>
-                            <option value="30d">Son 30 G{'\u00FC'}n</option>
-                            <option value="90d">Son 90 G{'\u00FC'}n</option>
+                            <option value="7d">Son 7 G{'ü'}n</option>
+                            <option value="30d">Son 30 G{'ü'}n</option>
+                            <option value="90d">Son 90 G{'ü'}n</option>
                         </select>
                         <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>
                     </div>
@@ -38,20 +38,20 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                     {loading ? (
                         <div style={styles.loadingState}>
                             <div style={styles.spinner}></div>
-                            <span>Veriler y{'\u00FC'}kleniyor...</span>
+                            <span>Veriler y{'ü'}kleniyor...</span>
                         </div>
                     ) : analytics ? (
                         <>
                             <div style={styles.statsRow}>
-                                <StatCard icon={<FaUsers />} label={`Toplam \u00DCye`} value={analytics.member_growth?.total || 0} change={comparison?.change?.active_users} color="#5865f2" />
-                                <StatCard icon={<FaComments />} label="Toplam Mesaj" value={analytics.message_stats?.total || 0} subtext={`G\u00FCnl\u00FCk ort: ${analytics.message_stats?.daily_average || 0}`} change={comparison?.change?.messages} color="#43b581" />
-                                <StatCard icon={<FaUsers />} label={`Aktif \u00DCye`} value={analytics.active_users?.total || 0} subtext={`%${analytics.active_users?.activity_rate || 0} aktivite`} color="#faa61a" />
-                                <StatCard icon={<FaClock />} label="En Yo\u011Fun Saat" value={analytics.peak_hours?.peak_hour_label || '-'} color="#f04747" />
+                                <StatCard icon={<FaUsers />} label={`Toplam Üye`} value={analytics.member_growth?.total || 0} change={comparison?.change?.active_users} color="#5865f2" />
+                                <StatCard icon={<FaComments />} label="Toplam Mesaj" value={analytics.message_stats?.total || 0} subtext={`Günlük ort: ${analytics.message_stats?.daily_average || 0}`} change={comparison?.change?.messages} color="#43b581" />
+                                <StatCard icon={<FaUsers />} label={`Aktif Üye`} value={analytics.active_users?.total || 0} subtext={`%${analytics.active_users?.activity_rate || 0} aktivite`} color="#faa61a" />
+                                <StatCard icon={<FaClock />} label="En Yoğun Saat" value={analytics.peak_hours?.peak_hour_label || '-'} color="#f04747" />
                             </div>
 
                             <div style={styles.chartsRow}>
                                 <div style={styles.chartCard}>
-                                    <h3 style={styles.chartTitle}>{'\uD83D\uDCC8'} Mesaj Aktivitesi</h3>
+                                    <h3 style={styles.chartTitle}>{'📈'} Mesaj Aktivitesi</h3>
                                     <div style={styles.barChart}>
                                         {analytics.message_stats?.daily?.slice(-14).map((d, i) => {
                                             const maxCount = Math.max(...(analytics.message_stats?.daily?.map(x => x.count) || [1]));
@@ -67,7 +67,7 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                                 </div>
 
                                 <div style={styles.chartCard}>
-                                    <h3 style={styles.chartTitle}>{'\u23F0'} Saatlik Aktivite</h3>
+                                    <h3 style={styles.chartTitle}>{'⏰'} Saatlik Aktivite</h3>
                                     <div style={styles.hourlyChart}>
                                         {analytics.peak_hours?.hourly?.map((count, hour) => {
                                             const maxCount = Math.max(...(analytics.peak_hours?.hourly || [1]));
@@ -84,7 +84,7 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
 
                             <div style={styles.listsRow}>
                                 <div style={styles.listCard}>
-                                    <h3 style={styles.listTitle}><FaHashtag /> Pop{'\u00FC'}ler Kanallar</h3>
+                                    <h3 style={styles.listTitle}><FaHashtag /> Pop{'ü'}ler Kanallar</h3>
                                     <div style={styles.list}>
                                         {analytics.popular_channels?.slice(0, 5).map((channel, i) => (
                                             <div key={i} style={styles.listItem}>
@@ -100,7 +100,7 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                                 </div>
 
                                 <div style={styles.listCard}>
-                                    <h3 style={styles.listTitle}><FaUsers /> En Aktif {'\u00DC'}yeler</h3>
+                                    <h3 style={styles.listTitle}><FaUsers /> En Aktif {'Ü'}yeler</h3>
                                     <div style={styles.list}>
                                         {analytics.active_users?.top_users?.slice(0, 5).map((user, i) => (
                                             <div key={i} style={styles.listItem}>
@@ -116,13 +116,13 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                                 </div>
 
                                 <div style={styles.listCard}>
-                                    <h3 style={styles.listTitle}>{'\uD83D\uDCCA'} {'\u0130\u00E7'}erik Da{'\u011F\u0131'}l{'\u0131'}m{'\u0131'}</h3>
+                                    <h3 style={styles.listTitle}>{'📊'} {'İç'}erik Da{'ğı'}l{'ı'}m{'ı'}</h3>
                                     <div style={styles.pieChart}>
                                         {analytics.content_breakdown && (
                                             <>
                                                 <ContentBar label="Metin" value={analytics.content_breakdown.text_only} total={analytics.message_stats?.total || 1} color="#5865f2" />
                                                 <ContentBar label="Resimli" value={analytics.content_breakdown.with_images} total={analytics.message_stats?.total || 1} color="#43b581" />
-                                                <ContentBar label="Dosyal\u0131" value={analytics.content_breakdown.with_files} total={analytics.message_stats?.total || 1} color="#faa61a" />
+                                                <ContentBar label="Dosyalı" value={analytics.content_breakdown.with_files} total={analytics.message_stats?.total || 1} color="#faa61a" />
                                                 <ContentBar label="Ses" value={analytics.content_breakdown.voice_messages} total={analytics.message_stats?.total || 1} color="#f04747" />
                                             </>
                                         )}
@@ -132,18 +132,18 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
 
                             {comparison && (
                                 <div style={styles.comparisonSection}>
-                                    <h3 style={styles.sectionTitle}>{'\uD83D\uDCCA'} Haftal{'\u0131'}k Kar{'\u015F\u0131'}la{'\u015F'}t{'\u0131'}rma</h3>
+                                    <h3 style={styles.sectionTitle}>{'📊'} Haftal{'ı'}k Kar{'şı'}la{'ş'}t{'ı'}rma</h3>
                                     <div style={styles.comparisonGrid}>
                                         <ComparisonCard label="Mesajlar" thisWeek={comparison.this_week?.messages} lastWeek={comparison.last_week?.messages} change={comparison.change?.messages} />
-                                        <ComparisonCard label={`Aktif \u00DCyeler`} thisWeek={comparison.this_week?.active_users} lastWeek={comparison.last_week?.active_users} change={comparison.change?.active_users} />
+                                        <ComparisonCard label={`Aktif Üyeler`} thisWeek={comparison.this_week?.active_users} lastWeek={comparison.last_week?.active_users} change={comparison.change?.active_users} />
                                     </div>
                                 </div>
                             )}
                         </>
                     ) : (
                         <div style={styles.errorState}>
-                            <span style={{ fontSize: '48px' }}>{'\uD83D\uDCCA'}</span>
-                            <p>Analytics verileri y{'\u00FC'}klenemedi</p>
+                            <span style={{ fontSize: '48px' }}>{'📊'}</span>
+                            <p>Analytics verileri y{'ü'}klenemedi</p>
                         </div>
                     )}
                 </div>

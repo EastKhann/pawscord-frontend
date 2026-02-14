@@ -107,7 +107,7 @@ const ServerBoostPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         <div style={styles.perkIcon}>{perk.icon}</div>
                         <div style={styles.perkName}>{perk.name}</div>
                         <div style={styles.perkDescription}>{perk.description}</div>
-                        {currentLevel.level >= level && <div style={styles.perkUnlocked}>{'\u2713'} Unlocked</div>}
+                        {currentLevel.level >= level && <div style={styles.perkUnlocked}>{'✓'} Unlocked</div>}
                       </div>
                     ))}
                   </div>

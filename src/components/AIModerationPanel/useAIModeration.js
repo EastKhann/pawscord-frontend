@@ -33,10 +33,10 @@ const useAIModeration = (serverSlug, token) => {
   const saveSettings = async () => {
     try {
       await axios.post(`${getApiBase()}/moderation/${serverSlug}/update/`, { settings }, { headers: { Authorization: `Bearer ${token}` } });
-      toast.success('\u2705 Moderation settings saved!');
+      toast.success('✅ Moderation settings saved!');
     } catch (error) {
       console.error('Failed to save:', error);
-      toast.error('\u274C Failed to save settings');
+      toast.error('❌ Failed to save settings');
     }
   };
 

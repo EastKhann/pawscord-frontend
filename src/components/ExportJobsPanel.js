@@ -39,7 +39,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                       <div style={styles.jobTitle}>{EXPORT_TYPES.find(t => t.id === job.type)?.name || job.type}</div>
                       <div style={styles.jobMeta}>
                         <span>Created: {new Date(job.created_at).toLocaleString()}</span>
-                        {job.completed_at && <><span style={{ margin: '0 8px' }}>{'\u2022'}</span><span>Completed: {new Date(job.completed_at).toLocaleString()}</span></>}
+                        {job.completed_at && <><span style={{ margin: '0 8px' }}>{'•'}</span><span>Completed: {new Date(job.completed_at).toLocaleString()}</span></>}
                       </div>
                       {job.status === 'processing' && job.progress && (
                         <div style={styles.progressBar}><div style={{ ...styles.progressFill, width: `${job.progress}%` }} /><span style={styles.progressText}>{job.progress}%</span></div>
@@ -58,8 +58,8 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
           </div>
 
           <div style={styles.info}>
-            <p style={styles.infoText}>{'\uD83D\uDCE6'} Exports are processed in the background and may take a few minutes</p>
-            <p style={styles.infoText}>{'\uD83D\uDCBE'} Completed exports are available for 7 days before auto-deletion</p>
+            <p style={styles.infoText}>{'📦'} Exports are processed in the background and may take a few minutes</p>
+            <p style={styles.infoText}>{'💾'} Completed exports are available for 7 days before auto-deletion</p>
           </div>
         </div>
       </div>

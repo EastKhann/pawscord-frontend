@@ -1,12 +1,12 @@
 const CreateBotView = ({ newBot, setNewBot, handleCreateBot, onCancel }) => (
   <div className="create-bot-form">
-    <h3>{'\uD83E\uDD16'} Yeni Bot Olu{'\u015F'}tur</h3>
+    <h3>{'🤖'} Yeni Bot Olu{'ş'}tur</h3>
 
     <div className="form-group">
-      <label>Bot Ad{'\u0131'} *</label>
+      <label>Bot Ad{'ı'} *</label>
       <input
         type="text"
-        placeholder={'\u00D6'}rnekBot"
+        placeholder={'Ö'}rnekBot"
         value={newBot.name}
         onChange={e => setNewBot({ ...newBot, name: e.target.value })}
         maxLength={32}
@@ -14,7 +14,7 @@ const CreateBotView = ({ newBot, setNewBot, handleCreateBot, onCancel }) => (
     </div>
 
     <div className="form-group">
-      <label>A{'\u00E7\u0131'}klama</label>
+      <label>A{'çı'}klama</label>
       <textarea
         placeholder="Botunuz ne yapar?"
         value={newBot.description}
@@ -36,10 +36,10 @@ const CreateBotView = ({ newBot, setNewBot, handleCreateBot, onCancel }) => (
 
     <div className="form-actions">
       <button className="submit-btn" onClick={handleCreateBot}>
-        {'\u2728'} Bot Olu{'\u015F'}tur
+        {'✨'} Bot Olu{'ş'}tur
       </button>
       <button className="cancel-btn" onClick={onCancel}>
-        {'\u0130'}ptal
+        {'İ'}ptal
       </button>
     </div>
   </div>

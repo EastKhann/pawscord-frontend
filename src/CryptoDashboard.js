@@ -18,7 +18,7 @@ const CryptoDashboard = () => {
             color: api.sortBy === field ? '#f0b232' : '#949ba4',
             ...extraStyle
         }}>
-            {children} {api.sortBy === field ? (api.sortDir === 'asc' ? '\u25B2' : '\u25BC') : ''}
+            {children} {api.sortBy === field ? (api.sortDir === 'asc' ? '▲' : '▼') : ''}
         </th>
     );
 
@@ -28,7 +28,7 @@ const CryptoDashboard = () => {
             {/* HEADER */}
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
-                    <Link to="/" style={styles.backButton}><FaArrowLeft /> Ana Men\u00FC</Link>
+                    <Link to="/" style={styles.backButton}><FaArrowLeft /> Ana Menü</Link>
                     <h1 style={styles.title}>
                         <FaBitcoin style={{ color: '#f0b232', marginRight: '10px' }} />
                         Crypto AI Dashboard
@@ -37,7 +37,7 @@ const CryptoDashboard = () => {
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <button onClick={() => api.setShowPortfolio(true)} style={styles.portfolioBtn}>
-                        <FaWallet /> C\u00FCzdan (${formatPrice(api.portfolio?.balance || '0')})
+                        <FaWallet /> Cüzdan (${formatPrice(api.portfolio?.balance || '0')})
                     </button>
                     <button onClick={api.fetchData} style={styles.refreshButton}>
                         <FaSync className={api.loading ? 'spin' : ''} /> {api.loading ? '' : 'Yenile'}
@@ -48,22 +48,22 @@ const CryptoDashboard = () => {
             {/* META BAR */}
             {api.meta.export_date && (
                 <div style={styles.metaBar}>
-                    <span>\uD83D\uDCC5 Son G\u00FCncelleme: <strong>{api.meta.export_date}</strong></span>
-                    <span>\uD83D\uDCCA Strateji: <strong>{api.activeMode === 'balance_mode' ? api.meta.balance_strategies : api.meta.winrate_strategies}</strong></span>
+                    <span>📅 Son Güncelleme: <strong>{api.meta.export_date}</strong></span>
+                    <span>📊 Strateji: <strong>{api.activeMode === 'balance_mode' ? api.meta.balance_strategies : api.meta.winrate_strategies}</strong></span>
                     {api.positionCoins.length > 0 && (
-                        <span>\uD83D\uDCBC A\u00E7\u0131k Poz: <strong style={{ color: '#f0b232' }}>{api.positionCoins.length} Coin</strong></span>
+                        <span>💼 Açık Poz: <strong style={{ color: '#f0b232' }}>{api.positionCoins.length} Coin</strong></span>
                     )}
                 </div>
             )}
 
             {api.loading && !api.data ? (
                 <div style={styles.loader}>
-                    <div className="spin" style={{ fontSize: 40, display: 'inline-block' }}>\u23F3</div>
-                    <p>Kripto Verileri Y\u00FCkleniyor...</p>
+                    <div className="spin" style={{ fontSize: 40, display: 'inline-block' }}>⏳</div>
+                    <p>Kripto Verileri Yükleniyor...</p>
                 </div>
             ) : api.errorMsg ? (
                 <div style={{ textAlign: 'center', marginTop: 50 }}>
-                    <h3 style={{ color: '#da373c' }}>\u26A0\uFE0F {api.errorMsg}</h3>
+                    <h3 style={{ color: '#da373c' }}>⚠️ {api.errorMsg}</h3>
                     {api.debugInfo && (
                         <div style={{ backgroundColor: '#2b2d31', padding: 10, margin: '20px auto', maxWidth: 600, borderRadius: 8, textAlign: 'left' }}>
                             <strong style={{ color: '#f0b232' }}><FaBug /> Hata Verisi:</strong>
@@ -86,7 +86,7 @@ const CryptoDashboard = () => {
                             }}
                         >
                             <FaChartLine style={{ marginRight: 6 }} />
-                            {api.isMobile ? 'Balance' : '\uD83D\uDCB0 Balance S\u0131ralama'}
+                            {api.isMobile ? 'Balance' : '💰 Balance Sıralama'}
                         </button>
                         <button
                             onClick={() => api.setActiveMode('winrate_mode')}
@@ -97,7 +97,7 @@ const CryptoDashboard = () => {
                             }}
                         >
                             <FaTrophy style={{ marginRight: 6 }} />
-                            {api.isMobile ? 'Winrate' : '\uD83C\uDFC6 Winrate S\u0131ralama'}
+                            {api.isMobile ? 'Winrate' : '🏆 Winrate Sıralama'}
                         </button>
                     </div>
 
@@ -105,7 +105,7 @@ const CryptoDashboard = () => {
                     <div style={styles.tabBar}>
                         <div style={styles.tabs}>
                             {api.modeData && api.modeData.tabs && Object.keys(api.modeData.tabs).map(tabKey => {
-                                const config = TAB_CONFIG[tabKey] || { icon: '\uD83D\uDCCB', shortLabel: tabKey, color: '#949ba4' };
+                                const config = TAB_CONFIG[tabKey] || { icon: '📋', shortLabel: tabKey, color: '#949ba4' };
                                 const tab = api.modeData.tabs[tabKey];
                                 const isActive = api.activeTab === tabKey;
                                 return (
@@ -148,7 +148,7 @@ const CryptoDashboard = () => {
                         </div>
                         <div style={styles.resultInfo}>
                             <span style={{ color: '#949ba4', fontSize: '0.85em' }}>
-                                {api.processedData.length} sonu\u00E7 {api.searchQuery && `"${api.searchQuery}" i\u00E7in`}
+                                {api.processedData.length} sonuç {api.searchQuery && `"${api.searchQuery}" için`}
                             </span>
                         </div>
                     </div>
@@ -156,7 +156,7 @@ const CryptoDashboard = () => {
                     {/* POSITION COINS BANNER */}
                     {api.isPositionsTab && api.positionCoins.length > 0 && (
                         <div style={styles.positionBanner}>
-                            <strong>\uD83D\uDCBC A\u00E7\u0131k Pozisyon ({api.positionCoins.length}):</strong>{' '}
+                            <strong>💼 Açık Pozisyon ({api.positionCoins.length}):</strong>{' '}
                             {api.positionCoins.map((c, i) => {
                                 const status = api.positionCoinStatus[c];
                                 const isTers = status?.hasTersSinyal;
@@ -167,7 +167,7 @@ const CryptoDashboard = () => {
                                         color: isTers ? '#da373c' : '#23a559',
                                         border: `1px solid ${isTers ? 'rgba(218,55,60,0.4)' : 'rgba(35,165,89,0.4)'}`,
                                     }}>
-                                        {i + 1}. {isTers ? '\u26A0\uFE0F' : '\u2705'} {c.replace('USDT', '')}
+                                        {i + 1}. {isTers ? '⚠️' : '✅'} {c.replace('USDT', '')}
                                     </span>
                                 );
                             })}
@@ -184,14 +184,14 @@ const CryptoDashboard = () => {
                                     <th style={{ color: '#949ba4' }}>TF</th>
                                     <th style={{ color: '#949ba4' }}>Sinyal</th>
                                     {api.isPositionsTab && <>
-                                        <th style={{ color: '#949ba4' }}>Poz.Y\u00F6n\u00FC</th>
+                                        <th style={{ color: '#949ba4' }}>Poz.Yönü</th>
                                         <th style={{ color: '#949ba4' }}>Uyum</th>
                                     </>}
-                                    <th style={{ color: '#949ba4' }}>Giri\u015F</th>
-                                    <th style={{ color: '#949ba4' }}>G\u00FCncel</th>
+                                    <th style={{ color: '#949ba4' }}>Giriş</th>
+                                    <th style={{ color: '#949ba4' }}>Güncel</th>
                                     <SortHeader field="pnl">PNL%</SortHeader>
                                     <SortHeader field="win_rate">WR%</SortHeader>
-                                    <SortHeader field="trades">\u0130\u015Flem</SortHeader>
+                                    <SortHeader field="trades">İşlem</SortHeader>
                                     <SortHeader field="x_kat">X Kat</SortHeader>
                                     <th style={{ color: '#949ba4' }}>Hedef</th>
                                     <th style={{ color: '#949ba4' }}>Durum</th>
@@ -202,7 +202,7 @@ const CryptoDashboard = () => {
                                 {api.pagedData.length === 0 ? (
                                     <tr>
                                         <td colSpan={api.isPositionsTab ? 15 : 13} style={{ textAlign: 'center', padding: 40, color: '#949ba4' }}>
-                                            {api.searchQuery ? 'Arama sonucu bulunamad\u0131.' : 'Bu sekmede veri yok.'}
+                                            {api.searchQuery ? 'Arama sonucu bulunamadı.' : 'Bu sekmede veri yok.'}
                                         </td>
                                     </tr>
                                 ) : api.pagedData.map((item, idx) => {
@@ -259,7 +259,7 @@ const CryptoDashboard = () => {
                                                         cursor: livePrice ? 'pointer' : 'not-allowed'
                                                     }}
                                                     disabled={!livePrice}
-                                                    title={livePrice ? `${coinSymbol} Al/Sat` : 'Canl\u0131 fiyat bekleniyor'}
+                                                    title={livePrice ? `${coinSymbol} Al/Sat` : 'Canlı fiyat bekleniyor'}
                                                 >
                                                     <FaExchangeAlt />
                                                 </button>
@@ -279,7 +279,7 @@ const CryptoDashboard = () => {
                                 disabled={api.page === 1}
                                 style={{ ...styles.pageBtn, opacity: api.page === 1 ? 0.4 : 1 }}
                             >
-                                \u25C4 \u00D6nceki
+                                ◄ Önceki
                             </button>
                             <div style={styles.pageNumbers}>
                                 {Array.from({ length: Math.min(api.totalPages, 7) }, (_, i) => {
@@ -307,7 +307,7 @@ const CryptoDashboard = () => {
                                 disabled={api.page === api.totalPages}
                                 style={{ ...styles.pageBtn, opacity: api.page === api.totalPages ? 0.4 : 1 }}
                             >
-                                Sonraki \u25BA
+                                Sonraki ►
                             </button>
                         </div>
                     )}

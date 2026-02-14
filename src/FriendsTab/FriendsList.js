@@ -21,16 +21,16 @@ const isIgnoredApp = (appName) => {
     return false;
 };
 
-const STATUS_TEXT = { online: '\u00C7evrimi\u00E7i', idle: 'Bo\u015Fta', dnd: 'Rahats\u0131z Etmeyin', invisible: 'G\u00F6r\u00FCnmez', offline: '\u00C7evrimd\u0131\u015F\u0131' };
+const STATUS_TEXT = { online: 'Çevrimiçi', idle: 'Boşta', dnd: 'Rahatsız Etmeyin', invisible: 'Görünmez', offline: 'Çevrimdışı' };
 const STATUS_COLOR = { online: '#23a559', idle: '#f0b232', dnd: '#f23f43', invisible: '#80848e', offline: '#80848e' };
 
 const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStartDM, handleRemoveFriend, setActiveTab }) => {
     if (friends.length === 0) {
         return (
             <div style={styles.emptyState}>
-                <div style={{ fontSize: '3em', marginBottom: '10px' }}>{'\uD83E\uDD7A'}</div>
-                <p style={styles.emptyText}>Hen\u00FCz kimseyle arkada\u015F de\u011Filsin.</p>
-                <button onClick={() => setActiveTab('add')} style={styles.emptyBtn}>Arkada\u015F Ekle</button>
+                <div style={{ fontSize: '3em', marginBottom: '10px' }}>{'🥺'}</div>
+                <p style={styles.emptyText}>Henüz kimseyle arkadaş değilsin.</p>
+                <button onClick={() => setActiveTab('add')} style={styles.emptyBtn}>Arkadaş Ekle</button>
             </div>
         );
     }
@@ -44,7 +44,7 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
         const friendActivity = iAmSender ? friend.receiver_activity : friend.sender_activity;
         const isReallyOnline = Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
         const friendStatus = isReallyOnline ? 'online' : 'offline';
-        const statusText = STATUS_TEXT[friendStatus] || '\u00C7evrimd\u0131\u015F\u0131';
+        const statusText = STATUS_TEXT[friendStatus] || 'Çevrimdışı';
         const statusColor = STATUS_COLOR[friendStatus] || '#80848e';
 
         return (
@@ -56,12 +56,12 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
                         <div style={{ ...styles.status, color: statusColor }}>{statusText}</div>
                         {friendActivity?.spotify && (
                             <span style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                                {'\uD83C\uDFB5'} {friendActivity.spotify.track}
+                                {'🎵'} {friendActivity.spotify.track}
                             </span>
                         )}
                         {friendActivity?.steam && !isIgnoredApp(friendActivity.steam.game) && (
                             <span style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                                {'\uD83C\uDFAE'} {friendActivity.steam.game}
+                                {'🎮'} {friendActivity.steam.game}
                             </span>
                         )}
                     </div>
@@ -70,7 +70,7 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
                     <button style={styles.iconButton} title="Mesaj At" onClick={(e) => { e.stopPropagation(); onStartDM(friendUsername); }}>
                         <FaUserFriends />
                     </button>
-                    <button style={{ ...styles.iconButton, backgroundColor: '#ed4245' }} title="Arkada\u015Fl\u0131ktan \u00C7\u0131kar"
+                    <button style={{ ...styles.iconButton, backgroundColor: '#ed4245' }} title="Arkadaşlıktan Çıkar"
                         onClick={(e) => { e.stopPropagation(); handleRemoveFriend(friend.id, friendUsername); }}>
                         <FaTimes />
                     </button>

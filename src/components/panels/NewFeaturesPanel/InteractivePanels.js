@@ -20,10 +20,10 @@ export const UserBadgesPanel = ({ username, onClose }) => {
 
     return (
         <div className="feature-panel user-badges">
-            <div className="panel-header"><h3>{'\uD83C\uDFC5'} Rozetler</h3>{onClose && <button onClick={onClose} className="close-btn">{'\u2715'}</button>}</div>
+            <div className="panel-header"><h3>{'🏅'} Rozetler</h3>{onClose && <button onClick={onClose} className="close-btn">{'✕'}</button>}</div>
             <div className="panel-content">
-                {loading ? <div className="loading">Y\u00FCkleniyor...</div>
-                    : badges.length === 0 ? <div className="empty">Hen\u00FCz rozet yok</div>
+                {loading ? <div className="loading">Yükleniyor...</div>
+                    : badges.length === 0 ? <div className="empty">Henüz rozet yok</div>
                         : <div className="badges-grid">{badges.map((badge, i) => (
                             <div key={i} className="badge-item" title={badge.description}><span className="badge-icon">{badge.icon}</span><span className="badge-name">{badge.name}</span></div>
                         ))}</div>}
@@ -47,21 +47,21 @@ export const FavoriteRoomsPanel = ({ onClose, onRoomSelect }) => {
     const removeFavorite = async (roomId) => {
         try {
             await fetchWithAuth(`${API_URL}/features/favorite-rooms/`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ room_id: roomId }) });
-            setFavorites(favorites.filter(f => f.id !== roomId)); toast.success('Favorilerden kald\u0131r\u0131ld\u0131');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            setFavorites(favorites.filter(f => f.id !== roomId)); toast.success('Favorilerden kaldırıldı');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel favorite-rooms">
-            <div className="panel-header"><h3>{'\u2B50'} Favori Odalar</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'⭐'} Favori Odalar</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                {loading ? <div className="loading">Y\u00FCkleniyor...</div>
-                    : favorites.length === 0 ? <div className="empty"><p>Favori oda yok</p><small>Bir oday\u0131 favorilere eklemek i\u00E7in sa\u011F t\u0131kla</small></div>
+                {loading ? <div className="loading">Yükleniyor...</div>
+                    : favorites.length === 0 ? <div className="empty"><p>Favori oda yok</p><small>Bir odayı favorilere eklemek için sağ tıkla</small></div>
                         : <div className="favorites-list">{favorites.map(room => (
                             <div key={room.id} className="favorite-item">
                                 <span className="room-name" onClick={() => onRoomSelect && onRoomSelect(room.id)}>#{room.name}</span>
                                 {room.server_name && <span className="server-name">{room.server_name}</span>}
-                                <button className="remove-btn" onClick={() => removeFavorite(room.id)}>{'\u2715'}</button>
+                                <button className="remove-btn" onClick={() => removeFavorite(room.id)}>{'✕'}</button>
                             </div>
                         ))}</div>}
             </div>
@@ -83,21 +83,21 @@ export const EngagementMetricsPanel = ({ onClose }) => {
 
     return (
         <div className="feature-panel engagement-metrics">
-            <div className="panel-header"><h3>{'\uD83D\uDCCA'} Etkile\u015Fim Metrikleri</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'📊'} Etkileşim Metrikleri</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                {loading ? <div className="loading">Y\u00FCkleniyor...</div> : metrics && <>
+                {loading ? <div className="loading">Yükleniyor...</div> : metrics && <>
                     <div className="rank-badge">
-                        <span className="rank-icon">{'\uD83C\uDF1F'}</span>
+                        <span className="rank-icon">{'🌟'}</span>
                         <span className="rank-title">{metrics.rank}</span>
                         <span className="rank-score">{metrics.popularity_score} puan</span>
                     </div>
                     <div className="metrics-grid">
-                        <div className="metric-card"><span className="metric-icon">{'\u2764\uFE0F'}</span><span className="metric-value">{metrics.total_reactions}</span><span className="metric-label">Toplam Tepki</span></div>
-                        <div className="metric-card"><span className="metric-icon">{'\uD83D\uDCE2'}</span><span className="metric-value">{metrics.mentions_received}</span><span className="metric-label">Etiketlenme</span></div>
-                        <div className="metric-card"><span className="metric-icon">{'\uD83D\uDCAC'}</span><span className="metric-value">{metrics.replies_received}</span><span className="metric-label">Yan\u0131t</span></div>
+                        <div className="metric-card"><span className="metric-icon">{'❤️'}</span><span className="metric-value">{metrics.total_reactions}</span><span className="metric-label">Toplam Tepki</span></div>
+                        <div className="metric-card"><span className="metric-icon">{'📢'}</span><span className="metric-value">{metrics.mentions_received}</span><span className="metric-label">Etiketlenme</span></div>
+                        <div className="metric-card"><span className="metric-icon">{'💬'}</span><span className="metric-value">{metrics.replies_received}</span><span className="metric-label">Yanıt</span></div>
                     </div>
                     {metrics.top_message && (
-                        <div className="top-message"><h4>{'\uD83C\uDFC6'} En Pop\u00FCler Mesaj\u0131n</h4><p>"{metrics.top_message.content}"</p><span>{metrics.top_message.reactions} tepki</span></div>
+                        <div className="top-message"><h4>{'🏆'} En Popüler Mesajın</h4><p>"{metrics.top_message.content}"</p><span>{metrics.top_message.reactions} tepki</span></div>
                     )}
                 </>}
             </div>
@@ -121,26 +121,26 @@ export const StreakTrackerPanel = ({ onClose }) => {
         try {
             const res = await fetchWithAuth(`${API_URL}/features/streak/`, { method: 'POST' });
             const data = await res.json();
-            if (data.status === 'logged') { toast.success(`\uD83D\uDD25 ${data.current_streak} g\u00FCnl\u00FCk seri!`); fetchStreak(); }
-            else { toast.info('Bug\u00FCn zaten kay\u0131tl\u0131s\u0131n!'); }
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            if (data.status === 'logged') { toast.success(`🔥 ${data.current_streak} günlük seri!`); fetchStreak(); }
+            else { toast.info('Bugün zaten kayıtlısın!'); }
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel streak-tracker">
-            <div className="panel-header"><h3>{'\uD83D\uDD25'} G\u00FCnl\u00FCk Seri</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🔥'} Günlük Seri</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                {loading ? <div className="loading">Y\u00FCkleniyor...</div> : streak && <>
+                {loading ? <div className="loading">Yükleniyor...</div> : streak && <>
                     <div className="streak-display">
-                        <span className="streak-fire">{'\uD83D\uDD25'}</span>
+                        <span className="streak-fire">{'🔥'}</span>
                         <span className="streak-number">{streak.current_streak}</span>
-                        <span className="streak-label">g\u00FCn</span>
+                        <span className="streak-label">gün</span>
                     </div>
                     <div className="streak-stats">
-                        <div className="streak-stat"><span>{'\uD83C\uDFC6'} En Uzun:</span><span>{streak.longest_streak} g\u00FCn</span></div>
-                        <div className="streak-stat"><span>{'\uD83D\uDCC5'} Toplam Aktif:</span><span>{streak.total_active_days} g\u00FCn</span></div>
+                        <div className="streak-stat"><span>{'🏆'} En Uzun:</span><span>{streak.longest_streak} gün</span></div>
+                        <div className="streak-stat"><span>{'📅'} Toplam Aktif:</span><span>{streak.total_active_days} gün</span></div>
                     </div>
-                    <button className="log-activity-btn" onClick={logActivity}>{'\u2705'} Bug\u00FCn\u00FC Kaydet</button>
+                    <button className="log-activity-btn" onClick={logActivity}>{'✅'} Bugünü Kaydet</button>
                 </>}
             </div>
         </div>
@@ -163,19 +163,19 @@ export const VoiceEffectsPanel = ({ onClose }) => {
         try {
             await fetchWithAuth(`${API_URL}/features/voice-effects/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(effects) });
             toast.success('Ses efektleri kaydedildi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel voice-effects">
-            <div className="panel-header"><h3>{'\uD83C\uDFA4'} Ses Efektleri</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🎤'} Ses Efektleri</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                {loading ? <div className="loading">Y\u00FCkleniyor...</div> : <>
+                {loading ? <div className="loading">Yükleniyor...</div> : <>
                     <div className="effect-toggle"><label><input type="checkbox" checked={effects.enabled} onChange={e => setEffects({ ...effects, enabled: e.target.checked })} /> Efektleri Aktif Et</label></div>
-                    <div className="effect-slider"><label>{'\uD83C\uDFB5'} Pitch: {effects.pitch?.toFixed(1)}</label><input type="range" min="0.5" max="2" step="0.1" value={effects.pitch || 1} onChange={e => setEffects({ ...effects, pitch: parseFloat(e.target.value) })} /></div>
-                    <div className="effect-slider"><label>{'\uD83C\uDFD4\uFE0F'} Reverb: {effects.reverb}%</label><input type="range" min="0" max="100" value={effects.reverb || 0} onChange={e => setEffects({ ...effects, reverb: parseInt(e.target.value) })} /></div>
-                    <div className="effect-slider"><label>{'\uD83D\uDCE2'} Echo: {effects.echo}%</label><input type="range" min="0" max="100" value={effects.echo || 0} onChange={e => setEffects({ ...effects, echo: parseInt(e.target.value) })} /></div>
-                    <button onClick={saveEffects} className="save-btn">{'\uD83D\uDCBE'} Kaydet</button>
+                    <div className="effect-slider"><label>{'🎵'} Pitch: {effects.pitch?.toFixed(1)}</label><input type="range" min="0.5" max="2" step="0.1" value={effects.pitch || 1} onChange={e => setEffects({ ...effects, pitch: parseFloat(e.target.value) })} /></div>
+                    <div className="effect-slider"><label>{'🏔️'} Reverb: {effects.reverb}%</label><input type="range" min="0" max="100" value={effects.reverb || 0} onChange={e => setEffects({ ...effects, reverb: parseInt(e.target.value) })} /></div>
+                    <div className="effect-slider"><label>{'📢'} Echo: {effects.echo}%</label><input type="range" min="0" max="100" value={effects.echo || 0} onChange={e => setEffects({ ...effects, echo: parseInt(e.target.value) })} /></div>
+                    <button onClick={saveEffects} className="save-btn">{'💾'} Kaydet</button>
                 </>}
             </div>
         </div>

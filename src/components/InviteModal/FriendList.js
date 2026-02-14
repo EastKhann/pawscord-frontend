@@ -14,7 +14,7 @@ const FriendList = ({
                 <input
                     ref={searchRef}
                     type="text"
-                    placeholder="Arkada\u015F ara..."
+                    placeholder="Arkadaş ara..."
                     style={st.searchInput}
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
@@ -25,17 +25,17 @@ const FriendList = ({
             {loadingFriends ? (
                 <div style={st.emptyState}>
                     <div style={st.spinner} />
-                    <span style={st.emptyText}>Y\u00FCkleniyor...</span>
+                    <span style={st.emptyText}>Yükleniyor...</span>
                 </div>
             ) : filteredFriends.length === 0 ? (
                 <div style={st.emptyState}>
                     <FaUserFriends style={{ fontSize: '32px', color: '#4e5058', marginBottom: '8px' }} />
                     <span style={st.emptyText}>
                         {searchQuery
-                            ? 'Sonu\u00E7 bulunamad\u0131.'
+                            ? 'Sonuç bulunamadı.'
                             : friends.length === 0
-                                ? 'Hen\u00FCz arkada\u015F\u0131n yok.'
-                                : 'E\u015Fle\u015Fen arkada\u015F yok.'}
+                                ? 'Henüz arkadaşın yok.'
+                                : 'Eşleşen arkadaş yok.'}
                     </span>
                 </div>
             ) : (
@@ -59,7 +59,7 @@ const FriendList = ({
                                 disabled={isInvited}
                             >
                                 {isInvited
-                                    ? <><FaCheck style={{ marginRight: '4px' }} /> G\u00F6nderildi</>
+                                    ? <><FaCheck style={{ marginRight: '4px' }} /> Gönderildi</>
                                     : 'Davet Et'}
                             </button>
                         </div>

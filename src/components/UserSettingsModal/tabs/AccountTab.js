@@ -30,17 +30,17 @@ const AccountTab = ({ user, onAvatarChange }) => (
                 </div>
                 <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                     <SettingField label="KULLANICI ADI" value={user?.username} />
-                    <SettingField label="E-POSTA" value={user?.email || 'Ayarlanmam\u0131\u015F'} masked />
-                    <SettingField label="TELEFON" value={user?.phone || 'Eklenmemi\u015F'} />
+                    <SettingField label="E-POSTA" value={user?.email || 'Ayarlanmamış'} masked />
+                    <SettingField label="TELEFON" value={user?.phone || 'Eklenmemiş'} />
                 </div>
             </div>
         </SettingSection>
         <SettingSection title="Parola">
-            <button type="button" style={S.actionBtn}>Parolay\u0131 De\u011Fi\u015Ftir</button>
+            <button type="button" style={S.actionBtn}>Parolayı Değiştir</button>
         </SettingSection>
         <SettingSection title="Hesap Silme">
             <button type="button" style={{ ...S.actionBtn, backgroundColor: 'rgba(218,55,60,0.1)', color: '#da373c', borderColor: '#da373c' }}>
-                <FaTrash /> Hesab\u0131 Sil
+                <FaTrash /> Hesabı Sil
             </button>
         </SettingSection>
     </div>

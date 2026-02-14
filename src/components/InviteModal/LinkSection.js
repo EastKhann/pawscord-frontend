@@ -7,12 +7,12 @@ const LinkSection = ({
     regenerateLink, isRegenerating,
 }) => (
     <div style={st.linkSection}>
-        <div style={st.linkLabel}>VEYA B\u0130R SUNUCU DAVET L\u0130NK\u0130 G\u00D6NDER</div>
+        <div style={st.linkLabel}>VEYA BİR SUNUCU DAVET LİNKİ GÖNDER</div>
         <div style={st.linkBox}>
             {loadingLink ? (
                 <div style={st.linkLoading}>
                     <div style={st.spinner} />
-                    <span style={{ color: '#b5bac1', fontSize: '13px' }}>Link haz\u0131rlan\u0131yor...</span>
+                    <span style={{ color: '#b5bac1', fontSize: '13px' }}>Link hazırlanıyor...</span>
                 </div>
             ) : inviteLink ? (
                 <>
@@ -24,12 +24,12 @@ const LinkSection = ({
                         onClick={copyToClipboard}
                         style={{ ...st.copyBtn, ...(copied ? st.copyBtnDone : {}) }}
                     >
-                        {copied ? 'Kopyaland\u0131!' : 'Kopyala'}
+                        {copied ? 'Kopyalandı!' : 'Kopyala'}
                     </button>
                 </>
             ) : (
                 <div style={st.linkError}>
-                    <span style={{ color: '#f0b232', fontSize: '13px' }}>Link olu\u015Fturulamad\u0131</span>
+                    <span style={{ color: '#f0b232', fontSize: '13px' }}>Link oluşturulamadı</span>
                     <button onClick={getOrCreatePermanentLink} style={st.retryBtn}>Tekrar Dene</button>
                 </div>
             )}
@@ -43,10 +43,10 @@ const LinkSection = ({
                 onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#b5bac1'; }}
             >
                 <FaSync style={{ fontSize: '11px', animation: isRegenerating ? 'inviteSpin 1s linear infinite' : 'none' }} />
-                {isRegenerating ? 'Olu\u015Fturuluyor...' : 'Yeni Link Olu\u015Ftur'}
+                {isRegenerating ? 'Oluşturuluyor...' : 'Yeni Link Oluştur'}
             </button>
         )}
-        <div style={st.linkNote}>Bu davet linki s\u00FCresiz ge\u00E7erli ve s\u0131n\u0131rs\u0131z kullan\u0131ml\u0131.</div>
+        <div style={st.linkNote}>Bu davet linki süresiz geçerli ve sınırsız kullanımlı.</div>
     </div>
 );
 

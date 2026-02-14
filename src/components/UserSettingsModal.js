@@ -84,7 +84,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                         ))}
                         <button type="button" style={{ ...S.tabBtn, color: '#da373c' }} onClick={onClose}>
                             <FaSignOutAlt style={{ fontSize: 14 }} />
-                            <span>{'\u00C7\u0131k\u0131\u015F Yap'}</span>
+                            <span>{'Çıkış Yap'}</span>
                         </button>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                     <div style={styles.headerLeft}>
                         <FaShieldAlt style={{ ...styles.headerIcon, color: r.protection.enabled ? '#43b581' : '#72767d' }} />
                         <h2 style={styles.title}>Raid Protection</h2>
-                        {r.protection.lockdown_mode && <span style={styles.lockdownBadge}>{'\ud83d\udd12'} LOCKDOWN</span>}
+                        {r.protection.lockdown_mode && <span style={styles.lockdownBadge}>{'🔒'} LOCKDOWN</span>}
                     </div>
                     <button onClick={onClose} style={styles.closeButton}><FaTimes /></button>
                 </div>
@@ -110,7 +110,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
 
                         <div style={styles.setting}>
                             <div style={styles.settingInfo}>
-                                <div style={styles.settingLabel}>{'\ud83d\udd12'} Lockdown Mode</div>
+                                <div style={styles.settingLabel}>{'🔒'} Lockdown Mode</div>
                                 <div style={styles.settingDesc}>Block ALL new joins (emergency mode)</div>
                             </div>
                             {r.protection.lockdown_mode ? (
@@ -131,7 +131,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                             r.raidActivity.map((activity, idx) => (
                                 <div key={idx} style={styles.activityItem}>
                                     <div style={styles.activityIcon}>
-                                        {activity.type === 'raid' ? '\u26a0\ufe0f' : activity.type === 'suspicious' ? '\ud83d\udc40' : '\u2705'}
+                                        {activity.type === 'raid' ? '⚠️' : activity.type === 'suspicious' ? '👀' : '✅'}
                                     </div>
                                     <div style={styles.activityContent}>
                                         <div style={styles.activityText}>{activity.message}</div>

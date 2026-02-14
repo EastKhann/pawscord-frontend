@@ -20,17 +20,17 @@ const VoiceRecordingPanel = ({ serverId, channelId, channelName, onClose }) => {
     <div className="voice-recording-overlay" onClick={(e) => e.target.className === 'voice-recording-overlay' && onClose()}>
       <div className="voice-recording-panel">
         <div className="panel-header">
-          <h2><FaMicrophone /> Ses Kayd\u0131</h2>
+          <h2><FaMicrophone /> Ses Kaydı</h2>
           <div className="channel-info"><FaHashtag /> {channelName || 'Sesli Kanal'}</div>
           <button className="close-btn" onClick={onClose}><FaTimes /></button>
         </div>
 
         <div className="tabs">
           <button className={`tab ${activeTab === 'record' ? 'active' : ''}`} onClick={() => setActiveTab('record')}>
-            <FaMicrophone /> Kay\u0131t
+            <FaMicrophone /> Kayıt
           </button>
           <button className={`tab ${activeTab === 'recordings' ? 'active' : ''}`} onClick={() => setActiveTab('recordings')}>
-            <FaHistory /> Kay\u0131tlar ({recordings.length})
+            <FaHistory /> Kayıtlar ({recordings.length})
           </button>
           <button className={`tab ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
             <FaCog /> Ayarlar

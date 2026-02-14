@@ -72,7 +72,7 @@ const useLiveStream = ({ roomSlug, ws, onClose }) => {
             if (ws.current?.readyState === WebSocket.OPEN) {
                 ws.current.send(JSON.stringify({ type: 'stream_start', room_slug: roomSlug, stream_type: streamType }));
             }
-        } catch (error) { console.error('Failed to start stream:', error); toast.error('\u274C Failed to start stream. Please check permissions.'); }
+        } catch (error) { console.error('Failed to start stream:', error); toast.error('❌ Failed to start stream. Please check permissions.'); }
     };
 
     const stopStream = () => {

@@ -5,23 +5,23 @@ import { styles } from './EnglishLearningPage/englishLearningStyles';
 function EnglishLearningPage() {
     const e = useEnglishLearning();
 
-    if (e.isLoading) return <div style={styles.pageContainer}>Y\u00fckleniyor...</div>;
+    if (e.isLoading) return <div style={styles.pageContainer}>Yükleniyor...</div>;
 
     if (e.error) {
         return (
             <div style={styles.pageContainer}>
                 <h1 style={styles.errorText}>Hata: {e.error}</h1>
-                <Link to="/" style={styles.backButton}>Sohbete Geri D\u00f6n</Link>
+                <Link to="/" style={styles.backButton}>Sohbete Geri Dön</Link>
             </div>
         );
     }
 
     return (
         <div style={styles.pageContainer}>
-            <Link to="/eng-learn" style={styles.backButton}>{'\u2190'} Merkeze D\u00f6n</Link>
+            <Link to="/eng-learn" style={styles.backButton}>{'←'} Merkeze Dön</Link>
 
             <div style={styles.quizContainer}>
-                <h1 style={styles.pageTitle}>{'\u0130'}ngilizce Kelime {'\u00d6\u011fren'}</h1>
+                <h1 style={styles.pageTitle}>{'İ'}ngilizce Kelime {'Öğren'}</h1>
 
                 <div style={styles.levelAndProgressContainer}>
                     <div style={styles.controls}>
@@ -34,7 +34,7 @@ function EnglishLearningPage() {
                         </select>
                     </div>
                     <div style={styles.progressStats}>
-                        <span>Bildi\u011finiz: <strong>{e.levelStats.knownWords}</strong></span>
+                        <span>Bildiğiniz: <strong>{e.levelStats.knownWords}</strong></span>
                         <span>Toplam: <strong>{e.levelStats.totalWords}</strong></span>
                     </div>
                 </div>
@@ -47,9 +47,9 @@ function EnglishLearningPage() {
                 </div>
 
                 <div>
-                    <h4 style={styles.totalStatsHeader}>Genel Toplam {'\u0130'}lerleme</h4>
+                    <h4 style={styles.totalStatsHeader}>Genel Toplam {'İ'}lerleme</h4>
                     <div style={{ ...styles.progressStats, marginBottom: '8px' }}>
-                        <span>Toplam Bildi\u011finiz: <strong>{e.totalStats.totalKnownWords}</strong></span>
+                        <span>Toplam Bildiğiniz: <strong>{e.totalStats.totalKnownWords}</strong></span>
                         <span>Toplam Kelime: <strong>{e.totalStats.totalWords}</strong></span>
                     </div>
                     <div style={styles.progressBarBackground}>
@@ -63,7 +63,7 @@ function EnglishLearningPage() {
                 <div style={styles.wordArea}>
                     {e.levelComplete ? (
                         <h2 style={{ ...styles.term, color: 'var(--text-positive)' }}>
-                            Tebrikler! {'\ud83c\udf89'}<br />Bu seviyedeki t\u00fcm kelimeleri tamamlad\u0131n\u0131z.
+                            Tebrikler! {'🎉'}<br />Bu seviyedeki tüm kelimeleri tamamladınız.
                         </h2>
                     ) : e.currentWord ? (
                         <>
@@ -71,18 +71,18 @@ function EnglishLearningPage() {
                             {e.showAnswer && <p style={styles.meanings}>{e.currentWord.meanings.join(' / ')}</p>}
                         </>
                     ) : (
-                        <p>Bu seviyede kelime bulunamad\u0131.</p>
+                        <p>Bu seviyede kelime bulunamadı.</p>
                     )}
                 </div>
 
                 <div style={styles.buttonGroup}>
                     <button style={styles.actionButton} onClick={() => e.setShowAnswer(true)}
                         disabled={e.showAnswer || !e.currentWord || e.levelComplete}>
-                        Cevab\u0131 G\u00f6ster
+                        Cevabı Göster
                     </button>
                     <button style={{ ...styles.actionButton, ...styles.knownButton }}
                         onClick={e.handleMarkAsKnown} disabled={!e.currentWord || e.levelComplete}>
-                        Biliyorum (Ge\u00e7)
+                        Biliyorum (Geç)
                     </button>
                     <button style={{ ...styles.actionButton, ...styles.primaryButton }}
                         onClick={e.getNewWord} disabled={e.levelComplete || e.availableWordsForLevel.length <= 1}>

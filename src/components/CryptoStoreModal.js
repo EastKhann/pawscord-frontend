@@ -15,7 +15,7 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FaCoins color="#f0b232" size={24} />
-                        <h2 style={{ margin: 0, color: 'white' }}>Pawscord Ma{'\u011F'}aza</h2>
+                        <h2 style={{ margin: 0, color: 'white' }}>Pawscord Ma{'ğ'}aza</h2>
                     </div>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>
                 </div>
@@ -25,14 +25,14 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                         <span>Mevcut Bakiye:</span>
                         <strong style={{ color: '#f0b232', fontSize: '1.2em' }}>{store.balance} Coin</strong>
                         <button onClick={store.handleDailyClaim} style={styles.dailyBtn} disabled={store.loading}>
-                            {'\uD83C\uDF81'} +10
+                            {'🎁'} +10
                         </button>
                     </div>
                 </div>
 
                 <div style={styles.tabs}>
-                    <button style={store.activeTab === 'store' ? styles.activeTab : styles.tab} onClick={() => store.setActiveTab('store')}><FaShoppingBag /> Ma{'\u011F'}aza</button>
-                    <button style={store.activeTab === 'deposit' ? styles.activeTab : styles.tab} onClick={() => store.setActiveTab('deposit')}><FaBitcoin /> PawsCoin Sat{'\u0131'}n Al</button>
+                    <button style={store.activeTab === 'store' ? styles.activeTab : styles.tab} onClick={() => store.setActiveTab('store')}><FaShoppingBag /> Ma{'ğ'}aza</button>
+                    <button style={store.activeTab === 'deposit' ? styles.activeTab : styles.tab} onClick={() => store.setActiveTab('deposit')}><FaBitcoin /> PawsCoin Sat{'ı'}n Al</button>
                     <button style={store.activeTab === 'inventory' ? styles.activeTab : styles.tab} onClick={() => store.setActiveTab('inventory')}><FaTshirt /> Envanterim</button>
                 </div>
 
@@ -46,13 +46,13 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                     <div style={{ padding: '10px 20px', borderTop: '1px solid #1e1f22', backgroundColor: '#202225' }}>
                         {store.dailyInfo.claimed ? (
                             <div style={{ color: '#23a559' }}>
-                                {'\uD83C\uDF81'} {(store.dailyInfo.added_coins ?? 0)} coin ald{'\u0131'}n! Yeni bakiye: <strong>{store.dailyInfo.new_balance ?? store.balance}</strong>.
+                                {'🎁'} {(store.dailyInfo.added_coins ?? 0)} coin ald{'ı'}n! Yeni bakiye: <strong>{store.dailyInfo.new_balance ?? store.balance}</strong>.
                                 {typeof store.dailyInfo.streak !== 'undefined' && <span style={{ marginLeft: 8, color: '#b9bbbe' }}>Streak: {store.dailyInfo.streak}</span>}
                             </div>
                         ) : store.dailyInfo.reason === 'cooldown' ? (
-                            <div style={{ color: '#b9bbbe' }}>{'\u23F3'} G{'\u00FC'}nl{'\u00FC'}k {'\u00F6'}d{'\u00FC'}l i{'\u00E7'}in bekle: <strong>{Math.max(0, store.dailyInfo.remaining_seconds ?? 0)}</strong> sn</div>
+                            <div style={{ color: '#b9bbbe' }}>{'⏳'} G{'ü'}nl{'ü'}k {'ö'}d{'ü'}l i{'ç'}in bekle: <strong>{Math.max(0, store.dailyInfo.remaining_seconds ?? 0)}</strong> sn</div>
                         ) : (
-                            <div style={{ color: '#ff5d5d' }}>{'\u26A0\uFE0F'} {(store.dailyInfo.error || '\u00D6d\u00FCl al\u0131namad\u0131.')}</div>
+                            <div style={{ color: '#ff5d5d' }}>{'⚠️'} {(store.dailyInfo.error || 'Ödül alınamadı.')}</div>
                         )}
                     </div>
                 )}

@@ -179,12 +179,12 @@ const MessageInput = ({
 
             {editingMessage && (
                 <div style={styles.editPreview}>
-                    <span>{'\uD83D\uDCDD'} Mesaj d$([char]0x00FC)zenleniyor</span>
+                    <span>{'📝'} Mesaj d$([char]0x00FC)zenleniyor</span>
                     <button onClick={onCancelEdit} style={styles.cancelButton}><FaTimes /></button>
                 </div>
             )}
 
-            {draftSaved && !editingMessage && <div style={styles.draftSaved}>{'\u2705'} Taslak kaydedildi</div>}
+            {draftSaved && !editingMessage && <div style={styles.draftSaved}>{'✅'} Taslak kaydedildi</div>}
 
             <PendingFilesPreview pendingFiles={pendingFiles} setPendingFiles={setPendingFiles} removePendingFile={removePendingFile} />
 

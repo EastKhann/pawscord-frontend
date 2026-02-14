@@ -81,15 +81,15 @@ const VoiceUserContextMenu = ({
             {/* Actions */}
             <div style={styles.menuSection}>
                 <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('profile')}>
-                    <span style={{ marginRight: '8px', opacity: 0.7 }}>{'\uD83D\uDC64'}</span> Profili G{'\u00F6'}r{'\u00FC'}nt{'\u00FC'}le
+                    <span style={{ marginRight: '8px', opacity: 0.7 }}>{'👤'}</span> Profili G{'ö'}r{'ü'}nt{'ü'}le
                 </div>
                 <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('dm')}>
-                    <span style={{ marginRight: '8px', opacity: 0.7 }}>{'\uD83D\uDCAC'}</span> {'\u00D6'}zelden Mesaj At
+                    <span style={{ marginRight: '8px', opacity: 0.7 }}>{'💬'}</span> {'Ö'}zelden Mesaj At
                 </div>
                 {userObj.username !== currentUsername &&
                     !friendsList.some(f => f.sender_username === userObj.username || f.receiver_username === userObj.username) && (
                         <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('add_friend')}>
-                            <span style={{ marginRight: '8px', opacity: 0.7 }}>{'\u2795'}</span> Arkada{'\u015F'} Ekle
+                            <span style={{ marginRight: '8px', opacity: 0.7 }}>{'➕'}</span> Arkada{'ş'} Ekle
                         </div>
                     )}
             </div>
@@ -100,12 +100,12 @@ const VoiceUserContextMenu = ({
                     <div style={styles.menuDivider} />
                     <div style={styles.menuSection}>
                         <div style={{ fontSize: '10px', color: '#72767d', padding: '6px 12px 4px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                            Mod Ara{'\u00E7'}lar{'\u0131'}
+                            Mod Ara{'ç'}lar{'ı'}
                         </div>
                         <div className="user-context-menu-item" style={styles.menuItem} onClick={() => setShowMoveMenu(!showMoveMenu)}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                                <span><span style={{ marginRight: '8px', opacity: 0.7 }}>{'\uD83D\uDD00'}</span>Ba{'\u015F'}ka Kanala Ta{'\u015F\u0131'}</span>
-                                <span style={{ fontSize: '10px', transform: showMoveMenu ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s', color: '#72767d' }}>{'\u203A'}</span>
+                                <span><span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔀'}</span>Ba{'ş'}ka Kanala Ta{'şı'}</span>
+                                <span style={{ fontSize: '10px', transform: showMoveMenu ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s', color: '#72767d' }}>{'›'}</span>
                             </div>
                         </div>
 
@@ -114,25 +114,25 @@ const VoiceUserContextMenu = ({
                                 {voiceChannels.filter(c => c.slug !== roomName).map(channel => (
                                     <div key={channel.slug} style={{ ...styles.menuItem, paddingLeft: '24px', fontSize: '0.82em', display: 'flex', alignItems: 'center', gap: '8px' }}
                                         onClick={() => handleMenuAction('move', channel.slug)}>
-                                        <span style={{ color: '#5865f2' }}>{'\uD83D\uDD0A'}</span> {channel.name}
+                                        <span style={{ color: '#5865f2' }}>{'🔊'}</span> {channel.name}
                                     </div>
                                 ))}
                                 {voiceChannels.filter(c => c.slug !== roomName).length === 0 && (
                                     <div style={{ ...styles.menuItem, color: '#72767d', cursor: 'default', paddingLeft: '24px', fontSize: '0.82em' }}>
-                                        Ba{'\u015F'}ka kanal yok
+                                        Ba{'ş'}ka kanal yok
                                     </div>
                                 )}
                             </div>
                         )}
 
                         <div className="user-context-menu-item-danger" style={{ ...styles.menuItem, color: '#ed4245' }} onClick={() => handleMenuAction('kick')}>
-                            <span style={{ marginRight: '8px' }}>{'\u274C'}</span> Kanaldan At
+                            <span style={{ marginRight: '8px' }}>{'❌'}</span> Kanaldan At
                         </div>
                         <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('server_mute')}>
-                            <span style={{ marginRight: '8px', opacity: 0.7 }}>{'\uD83D\uDD07'}</span> Sunucu Sustur
+                            <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔇'}</span> Sunucu Sustur
                         </div>
                         <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('server_deafen')}>
-                            <span style={{ marginRight: '8px', opacity: 0.7 }}>{'\uD83D\uDE49'}</span> Sunucu Sa{'\u011F\u0131'}rla{'\u015F'}t{'\u0131'}r
+                            <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🙉'}</span> Sunucu Sa{'ğı'}rla{'ş'}t{'ı'}r
                         </div>
                     </div>
                 </>
@@ -143,7 +143,7 @@ const VoiceUserContextMenu = ({
                 <>
                     <div style={styles.menuDivider} />
                     <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('mute_local')}>
-                        <span style={{ marginRight: '8px', opacity: 0.7 }}>{'\uD83D\uDD07'}</span> Benim {'\u0130\u00E7'}in Sessize Al
+                        <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔇'}</span> Benim {'İç'}in Sessize Al
                     </div>
                 </>
             )}

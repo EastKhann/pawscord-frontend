@@ -21,7 +21,7 @@ export const MemberLevelsPanel = ({ serverId, onClose }) => {
 
     return (
         <div className="feature-panel member-levels">
-            <div className="panel-header"><h3>{'\uD83C\uDFC6'} Seviye S\u0131ralamas\u0131</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🏆'} Seviye Sıralaması</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="leaderboard">
                     {leaderboard.map((member, i) => (
@@ -32,7 +32,7 @@ export const MemberLevelsPanel = ({ serverId, onClose }) => {
                             <span className="xp">{member.xp} XP</span>
                         </div>
                     ))}
-                    {leaderboard.length === 0 && <p className="empty">Hen\u00FCz veri yok</p>}
+                    {leaderboard.length === 0 && <p className="empty">Henüz veri yok</p>}
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@ export const MemberLevelsPanel = ({ serverId, onClose }) => {
 // 27 WELCOME MESSAGES
 export const WelcomeMessagesPanel = ({ serverId, onClose }) => {
     const { fetchWithAuth } = useAuth();
-    const [config, setConfig] = useState({ enabled: false, message: 'Ho\u015F geldin {user}! \uD83C\uDF89', dm_enabled: false, dm_message: '' });
+    const [config, setConfig] = useState({ enabled: false, message: 'Hoş geldin {user}! 🎉', dm_enabled: false, dm_message: '' });
 
     useEffect(() => { fetchConfig(); }, []);
 
@@ -55,23 +55,23 @@ export const WelcomeMessagesPanel = ({ serverId, onClose }) => {
         try {
             await fetchWithAuth(`${API_URL}/features/welcome-messages/${serverId || 1}/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(config) });
             toast.success('Ayarlar kaydedildi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     return (
         <div className="feature-panel welcome-messages">
-            <div className="panel-header"><h3>{'\uD83D\uDC4B'} Ho\u015Fgeldin Mesajlar\u0131</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'👋'} Hoşgeldin Mesajları</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="setting-row">
-                    <label><input type="checkbox" checked={config.enabled} onChange={(e) => setConfig({ ...config, enabled: e.target.checked })} /> Ho\u015Fgeldin mesaj\u0131 aktif</label>
+                    <label><input type="checkbox" checked={config.enabled} onChange={(e) => setConfig({ ...config, enabled: e.target.checked })} /> Hoşgeldin mesajı aktif</label>
                 </div>
                 <div className="setting-row">
                     <label>Mesaj:</label>
-                    <textarea value={config.message} onChange={(e) => setConfig({ ...config, message: e.target.value })} placeholder="Ho\u015F geldin {user}!" />
-                    <small>Kullan\u0131c\u0131 ad\u0131 i\u00E7in {'{user}'} yaz\u0131n</small>
+                    <textarea value={config.message} onChange={(e) => setConfig({ ...config, message: e.target.value })} placeholder="Hoş geldin {user}!" />
+                    <small>Kullanıcı adı için {'{user}'} yazın</small>
                 </div>
                 <div className="setting-row">
-                    <label><input type="checkbox" checked={config.dm_enabled} onChange={(e) => setConfig({ ...config, dm_enabled: e.target.checked })} /> DM ile de g\u00F6nder</label>
+                    <label><input type="checkbox" checked={config.dm_enabled} onChange={(e) => setConfig({ ...config, dm_enabled: e.target.checked })} /> DM ile de gönder</label>
                 </div>
                 <button onClick={saveConfig} className="save-btn">Kaydet</button>
             </div>
@@ -94,21 +94,21 @@ export const PrivacySettingsPanel = ({ onClose }) => {
     const saveSettings = async () => {
         try {
             await fetchWithAuth(`${API_URL}/features/privacy-settings/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(settings) });
-            toast.success('Gizlilik ayarlar\u0131 kaydedildi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            toast.success('Gizlilik ayarları kaydedildi!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     const toggleSetting = (key) => { setSettings(prev => ({ ...prev, [key]: !prev[key] })); };
 
     return (
         <div className="feature-panel privacy-settings">
-            <div className="panel-header"><h3>{'\uD83D\uDD12'} Gizlilik Ayarlar\u0131</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🔒'} Gizlilik Ayarları</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
-                <div className="privacy-option" onClick={() => toggleSetting('show_online_status')}><span>{'\u00C7'}evrimi\u00E7i durumu g\u00F6ster</span><div className={`toggle ${settings.show_online_status ? 'on' : 'off'}`} /></div>
-                <div className="privacy-option" onClick={() => toggleSetting('allow_dms_from_strangers')}><span>Yabanc\u0131lardan DM al</span><div className={`toggle ${settings.allow_dms_from_strangers ? 'on' : 'off'}`} /></div>
-                <div className="privacy-option" onClick={() => toggleSetting('show_current_activity')}><span>Aktiviteyi g\u00F6ster</span><div className={`toggle ${settings.show_current_activity ? 'on' : 'off'}`} /></div>
-                <div className="privacy-option" onClick={() => toggleSetting('allow_friend_requests')}><span>Arkada\u015Fl\u0131k isteklerine izin ver</span><div className={`toggle ${settings.allow_friend_requests ? 'on' : 'off'}`} /></div>
-                <div className="privacy-option" onClick={() => toggleSetting('show_servers')}><span>Sunucular\u0131m\u0131 g\u00F6ster</span><div className={`toggle ${settings.show_servers ? 'on' : 'off'}`} /></div>
+                <div className="privacy-option" onClick={() => toggleSetting('show_online_status')}><span>{'Ç'}evrimiçi durumu göster</span><div className={`toggle ${settings.show_online_status ? 'on' : 'off'}`} /></div>
+                <div className="privacy-option" onClick={() => toggleSetting('allow_dms_from_strangers')}><span>Yabancılardan DM al</span><div className={`toggle ${settings.allow_dms_from_strangers ? 'on' : 'off'}`} /></div>
+                <div className="privacy-option" onClick={() => toggleSetting('show_current_activity')}><span>Aktiviteyi göster</span><div className={`toggle ${settings.show_current_activity ? 'on' : 'off'}`} /></div>
+                <div className="privacy-option" onClick={() => toggleSetting('allow_friend_requests')}><span>Arkadaşlık isteklerine izin ver</span><div className={`toggle ${settings.allow_friend_requests ? 'on' : 'off'}`} /></div>
+                <div className="privacy-option" onClick={() => toggleSetting('show_servers')}><span>Sunucularımı göster</span><div className={`toggle ${settings.show_servers ? 'on' : 'off'}`} /></div>
                 <div className="privacy-option" onClick={() => toggleSetting('read_receipts')}><span>Okundu bilgisi</span><div className={`toggle ${settings.read_receipts ? 'on' : 'off'}`} /></div>
                 <button onClick={saveSettings} className="save-btn">Kaydet</button>
             </div>
@@ -130,36 +130,36 @@ export const UserConnectionsPanel = ({ onClose }) => {
     };
 
     const connectPlatform = async (platform) => {
-        const username = prompt(`${platforms[platform]?.name} kullan\u0131c\u0131 ad\u0131n\u0131z\u0131 girin:`);
+        const username = prompt(`${platforms[platform]?.name} kullanıcı adınızı girin:`);
         if (!username) return;
         try {
             await fetchWithAuth(`${API_URL}/features/user-connections/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ platform, username }) });
-            fetchConnections(); toast.success('Ba\u011Flant\u0131 eklendi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            fetchConnections(); toast.success('Bağlantı eklendi!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     const disconnectPlatform = async (platform) => {
         try {
             await fetchWithAuth(`${API_URL}/features/user-connections/`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ platform }) });
-            fetchConnections(); toast.success('Ba\u011Flant\u0131 kald\u0131r\u0131ld\u0131!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            fetchConnections(); toast.success('Bağlantı kaldırıldı!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     const connectedPlatforms = connections.map(c => c.platform);
 
     return (
         <div className="feature-panel user-connections">
-            <div className="panel-header"><h3>{'\uD83D\uDD17'} Ba\u011Fl\u0131 Hesaplar</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🔗'} Bağlı Hesaplar</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="connected-list">
                     {connections.map((conn, i) => (
                         <div key={i} className="connection-item" style={{ borderColor: conn.color }}>
                             <span className="icon">{conn.icon}</span><span className="platform">{conn.display_name}</span><span className="username">@{conn.username}</span>
-                            <button onClick={() => disconnectPlatform(conn.platform)} className="disconnect-btn">{'\u2715'}</button>
+                            <button onClick={() => disconnectPlatform(conn.platform)} className="disconnect-btn">{'✕'}</button>
                         </div>
                     ))}
                 </div>
-                <h4>Ba\u011Flanabilir Platformlar</h4>
+                <h4>Bağlanabilir Platformlar</h4>
                 <div className="platforms-grid">
                     {Object.entries(platforms).filter(([key]) => !connectedPlatforms.includes(key)).map(([key, data]) => (
                         <button key={key} className="platform-btn" style={{ backgroundColor: data.color }} onClick={() => connectPlatform(key)}>
@@ -187,20 +187,20 @@ export const ActivityStatusPanel = ({ onClose }) => {
     const updateActivity = async () => {
         try {
             await fetchWithAuth(`${API_URL}/features/activity-status/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(activity) });
-            toast.success('Aktivite g\u00FCncellendi!');
-        } catch (e) { toast.error('Hata olu\u015Ftu'); }
+            toast.success('Aktivite güncellendi!');
+        } catch (e) { toast.error('Hata oluştu'); }
     };
 
     const activityTypes = [
-        { id: 'playing', label: 'Oynuyor', emoji: '\uD83C\uDFAE' },
-        { id: 'listening', label: 'Dinliyor', emoji: '\uD83C\uDFB5' },
-        { id: 'watching', label: '\u0130zliyor', emoji: '\uD83D\uDCFA' },
-        { id: 'streaming', label: 'Yay\u0131nda', emoji: '\uD83D\uDD34' }
+        { id: 'playing', label: 'Oynuyor', emoji: '🎮' },
+        { id: 'listening', label: 'Dinliyor', emoji: '🎵' },
+        { id: 'watching', label: 'İzliyor', emoji: '📺' },
+        { id: 'streaming', label: 'Yayında', emoji: '🔴' }
     ];
 
     return (
         <div className="feature-panel activity-status">
-            <div className="panel-header"><h3>{'\uD83C\uDFAE'} Aktivite Durumu</h3><button onClick={onClose} className="close-btn">{'\u2715'}</button></div>
+            <div className="panel-header"><h3>{'🎮'} Aktivite Durumu</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="activity-types">
                     {activityTypes.map(type => (
@@ -209,7 +209,7 @@ export const ActivityStatusPanel = ({ onClose }) => {
                         </button>
                     ))}
                 </div>
-                <input value={activity.name} onChange={(e) => setActivity({ ...activity, name: e.target.value })} placeholder="Oyun / M\u00FCzik / Video ad\u0131..." />
+                <input value={activity.name} onChange={(e) => setActivity({ ...activity, name: e.target.value })} placeholder="Oyun / Müzik / Video adı..." />
                 <input value={activity.details} onChange={(e) => setActivity({ ...activity, details: e.target.value })} placeholder="Detaylar..." />
                 <button onClick={updateActivity} className="save-btn">Kaydet</button>
             </div>

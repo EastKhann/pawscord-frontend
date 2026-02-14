@@ -20,11 +20,11 @@ export const LazyVideo = memo(({ src, style }) => {
         <div ref={videoRef} style={{ minHeight: '200px', ...style, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000' }}>
             {shouldLoad ? (
                 <video controls preload="metadata" src={src} style={style}>
-                    Taray{'\u0131'}c{'\u0131'}n{'\u0131'}z video oynatmay{'\u0131'} desteklemiyor.
-                    <a href={src} download>{'\u0130'}ndir</a>
+                    Taray{'ı'}c{'ı'}n{'ı'}z video oynatmay{'ı'} desteklemiyor.
+                    <a href={src} download>{'İ'}ndir</a>
                 </video>
             ) : (
-                <span style={{ color: '#aaa' }}>Video Y{'\u00FC'}kleniyor...</span>
+                <span style={{ color: '#aaa' }}>Video Y{'ü'}kleniyor...</span>
             )}
         </div>
     );
@@ -53,13 +53,13 @@ export const FileAttachment = memo(({ fileUrl, fileName, fileSize }) => {
     const fileSizeText = fileSize ? `(${(fileSize / 1024 / 1024).toFixed(2)} MB)` : '';
 
     const getFileIcon = () => {
-        if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return '\uD83D\uDCE6';
-        if (ext === 'pdf') return '\uD83D\uDCC4';
-        if (['doc', 'docx'].includes(ext)) return '\uD83D\uDCDD';
-        if (['xls', 'xlsx'].includes(ext)) return '\uD83D\uDCCA';
-        if (['ppt', 'pptx'].includes(ext)) return '\uD83D\uDCBD\uFE0F';
-        if (ext === 'txt') return '\uD83D\uDCC3';
-        return '\uD83D\uDCCE';
+        if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return '📦';
+        if (ext === 'pdf') return '📄';
+        if (['doc', 'docx'].includes(ext)) return '📝';
+        if (['xls', 'xlsx'].includes(ext)) return '📊';
+        if (['ppt', 'pptx'].includes(ext)) return '💽️';
+        if (ext === 'txt') return '📃';
+        return '📎';
     };
 
     return (
@@ -71,7 +71,7 @@ export const FileAttachment = memo(({ fileUrl, fileName, fileSize }) => {
             </div>
             <a href={fileUrl} download={fileName} style={styles.downloadButton} className="download-button-hover" onClick={e => e.stopPropagation()}>
                 <FaDownload size={18} />
-                <span style={{ marginLeft: '6px' }}>{'\u0130'}ndir</span>
+                <span style={{ marginLeft: '6px' }}>{'İ'}ndir</span>
             </a>
         </div>
     );
@@ -79,7 +79,7 @@ export const FileAttachment = memo(({ fileUrl, fileName, fileSize }) => {
 FileAttachment.displayName = 'FileAttachment';
 
 export const VoiceMessage = memo(({ fileUrl, fileName, duration, transcription, isTranscribing, onTranscribe }) => (
-    <Suspense fallback={<div style={styles.loadingMedia}>{'\uD83C\uDFB5'} Ses y{'\u00FC'}kleniyor...</div>}>
+    <Suspense fallback={<div style={styles.loadingMedia}>{'🎵'} Ses y{'ü'}kleniyor...</div>}>
         <div>
             <VoiceMessagePlayer
                 audioUrl={fileUrl}
@@ -88,14 +88,14 @@ export const VoiceMessage = memo(({ fileUrl, fileName, duration, transcription, 
             />
             {transcription && (
                 <div style={styles.voiceTranscription}>
-                    <div style={styles.transcriptionIcon}>{'\uD83D\uDCAC'}</div>
+                    <div style={styles.transcriptionIcon}>{'💬'}</div>
                     <div style={styles.transcriptionText}>{transcription}</div>
                 </div>
             )}
             {!transcription && !isTranscribing && (
-                <button onClick={onTranscribe} style={styles.transcribeButton}>{'\uD83D\uDCDD'} Metne {'\u00C7'}evir</button>
+                <button onClick={onTranscribe} style={styles.transcribeButton}>{'📝'} Metne {'Ç'}evir</button>
             )}
-            {isTranscribing && <div style={styles.transcribingLoader}>{'\u23F3'} {'\u00C7'}evriliyor...</div>}
+            {isTranscribing && <div style={styles.transcribingLoader}>{'⏳'} {'Ç'}evriliyor...</div>}
         </div>
     </Suspense>
 ));

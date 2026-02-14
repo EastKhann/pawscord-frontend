@@ -24,7 +24,7 @@ const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
                 if (onPendingCountChange) onPendingCountChange((data.incoming_requests || []).length);
             }
         } catch (error) {
-            console.error("Arkada\u015F listesi \u00E7ekilemedi:", error);
+            console.error("Arkadaş listesi çekilemedi:", error);
         } finally { setLoading(false); }
     }, [apiBaseUrl, fetchWithAuth, onPendingCountChange]);
 
@@ -33,7 +33,7 @@ const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
     useEffect(() => {
         if (globalData?.type === 'friend_list_update') {
             fetchFriendData();
-            setStatusMsg({ type: 'info', text: '\uD83D\uDD14 Arkada\u015F listeniz g\u00FCncellendi! "Bekleyenler" sekmesini kontrol edin.' });
+            setStatusMsg({ type: 'info', text: '🔔 Arkadaş listeniz güncellendi! "Bekleyenler" sekmesini kontrol edin.' });
             setTimeout(() => setStatusMsg(null), 5000);
         }
     }, [globalData, fetchFriendData]);
@@ -47,10 +47,10 @@ const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
             });
             const data = await response.json();
             if (response.ok) {
-                setStatusMsg({ type: 'success', text: `\u2705 \u0130stek g\u00F6nderildi: ${addUsername}` });
+                setStatusMsg({ type: 'success', text: `✅ İstek gönderildi: ${addUsername}` });
                 setAddUsername(''); fetchFriendData();
-            } else { setStatusMsg({ type: 'error', text: `\u274C ${data.error || 'Hata.'}` }); }
-        } catch (error) { setStatusMsg({ type: 'error', text: '\u274C Sunucu hatas\u0131.' }); }
+            } else { setStatusMsg({ type: 'error', text: `❌ ${data.error || 'Hata.'}` }); }
+        } catch (error) { setStatusMsg({ type: 'error', text: '❌ Sunucu hatası.' }); }
     }, [addUsername, apiBaseUrl, fetchWithAuth, fetchFriendData]);
 
     const handleRespond = useCallback(async (requestId, action) => {
@@ -60,18 +60,18 @@ const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
             });
             if (response.ok) {
                 fetchFriendData();
-                setStatusMsg({ type: 'success', text: action === 'accept' ? 'Arkada\u015Fl\u0131k kabul edildi!' : '\u0130stek reddedildi.' });
+                setStatusMsg({ type: 'success', text: action === 'accept' ? 'Arkadaşlık kabul edildi!' : 'İstek reddedildi.' });
             }
-        } catch (error) { console.error("\u0130\u015Flem ba\u015Far\u0131s\u0131z:", error); }
+        } catch (error) { console.error("İşlem başarısız:", error); }
     }, [apiBaseUrl, fetchWithAuth, fetchFriendData]);
 
     const handleRemoveFriend = useCallback(async (friendId, friendUsername) => {
-        if (!await confirmDialog(`${friendUsername} ile arkada\u015Fl\u0131\u011F\u0131 sonland\u0131rmak istedi\u011Finize emin misiniz?`)) return;
+        if (!await confirmDialog(`${friendUsername} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) return;
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/friends/remove/${friendId}/`, { method: 'DELETE' });
-            if (response.ok) { fetchFriendData(); setStatusMsg({ type: 'success', text: '\u274C Arkada\u015Fl\u0131k sonland\u0131r\u0131ld\u0131.' }); }
-            else { setStatusMsg({ type: 'error', text: '\u274C Silme ba\u015Far\u0131s\u0131z.' }); }
-        } catch (error) { console.error("Arkada\u015F silme hatas\u0131:", error); setStatusMsg({ type: 'error', text: '\u274C Sunucu hatas\u0131.' }); }
+            if (response.ok) { fetchFriendData(); setStatusMsg({ type: 'success', text: '❌ Arkadaşlık sonlandırıldı.' }); }
+            else { setStatusMsg({ type: 'error', text: '❌ Silme başarısız.' }); }
+        } catch (error) { console.error("Arkadaş silme hatası:", error); setStatusMsg({ type: 'error', text: '❌ Sunucu hatası.' }); }
     }, [apiBaseUrl, fetchWithAuth, fetchFriendData]);
 
     return {

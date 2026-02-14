@@ -8,7 +8,7 @@ const FlagCard = ({ flag, styles, onAction }) => (
           <FaExclamationTriangle /> {flag.type.toUpperCase()}
         </span>
         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '8px' }}>
-          {flag.user} {'\u2022'} {flag.timestamp}
+          {flag.user} {'•'} {flag.timestamp}
         </div>
       </div>
       <div style={{ fontSize: '18px', fontWeight: '700', color: flag.confidence > 80 ? '#da373c' : '#f0b732' }}>

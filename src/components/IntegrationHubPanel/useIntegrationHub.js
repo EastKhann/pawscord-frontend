@@ -98,18 +98,18 @@ const useIntegrationHub = (serverId) => {
                 if (data.oauth_url) {
                     window.open(data.oauth_url, '_blank', 'width=500,height=600');
                 }
-                toast.success(`${integrationId} entegrasyon ba\u015Flat\u0131ld\u0131`);
+                toast.success(`${integrationId} entegrasyon başlatıldı`);
                 fetchIntegrations();
             } else {
-                toast.error('Ba\u011Flant\u0131 ba\u015Flat\u0131lamad\u0131');
+                toast.error('Bağlantı başlatılamadı');
             }
         } catch (error) {
-            toast.error('Ba\u011Flant\u0131 hatas\u0131');
+            toast.error('Bağlantı hatası');
         }
     };
 
     const handleDisconnect = async (integrationId) => {
-        if (!await confirmDialog('Bu entegrasyonu kald\u0131rmak istedi\u011Finize emin misiniz?')) return;
+        if (!await confirmDialog('Bu entegrasyonu kaldırmak istediğinize emin misiniz?')) return;
 
         try {
             const response = await fetch(`/api/servers/${serverId}/integrations/${integrationId}/disconnect/`, {
@@ -118,11 +118,11 @@ const useIntegrationHub = (serverId) => {
             });
 
             if (response.ok) {
-                toast.success('Entegrasyon kald\u0131r\u0131ld\u0131');
+                toast.success('Entegrasyon kaldırıldı');
                 fetchIntegrations();
             }
         } catch (error) {
-            toast.error('Entegrasyon kald\u0131r\u0131lamad\u0131');
+            toast.error('Entegrasyon kaldırılamadı');
         }
     };
 
@@ -134,10 +134,10 @@ const useIntegrationHub = (serverId) => {
             });
 
             if (response.ok) {
-                toast.success('Senkronizasyon ba\u015Flat\u0131ld\u0131');
+                toast.success('Senkronizasyon başlatıldı');
             }
         } catch (error) {
-            toast.error('Senkronizasyon ba\u015Far\u0131s\u0131z');
+            toast.error('Senkronizasyon başarısız');
         }
     };
 

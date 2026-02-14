@@ -23,12 +23,12 @@ export const EVENT_COLORS = {
 };
 
 export const EVENT_TYPES = [
-    { value: 'voice', label: '\uD83C\uDFA4 Sesli Etkinlik' },
-    { value: 'stage', label: '\uD83C\uDF99\uFE0F Sahne Etkinli\u011Fi' },
-    { value: 'game', label: '\uD83C\uDFAE Oyun Gecesi' },
-    { value: 'watch', label: '\uD83D\uDCFA \u0130zleme Partisi' },
-    { value: 'tournament', label: '\uD83C\uDFC6 Turnuva' },
-    { value: 'meetup', label: '\uD83D\uDC65 Bulu\u015Fma' },
-    { value: 'external', label: '\uD83C\uDF10 Harici Etkinlik' },
-    { value: 'other', label: '\uD83D\uDCCC Di\u011Fer' },
+    { value: 'voice', label: '🎤 Sesli Etkinlik' },
+    { value: 'stage', label: '🎙️ Sahne Etkinliği' },
+    { value: 'game', label: '🎮 Oyun Gecesi' },
+    { value: 'watch', label: '📺 İzleme Partisi' },
+    { value: 'tournament', label: '🏆 Turnuva' },
+    { value: 'meetup', label: '👥 Buluşma' },
+    { value: 'external', label: '🌐 Harici Etkinlik' },
+    { value: 'other', label: '📌 Diğer' },
 ];

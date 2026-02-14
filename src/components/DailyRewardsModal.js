@@ -36,7 +36,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                     <div style={styles.rewardIcon}>{getRewardIcon(nextReward.type)}</div>
                     <div style={styles.rewardDetails}><div style={styles.rewardAmount}>{nextReward.amount} {nextReward.type}</div><div style={styles.rewardDescription}>{nextReward.description}</div></div>
                   </div>
-                  <button onClick={handleClaim} disabled={claiming} style={styles.claimBtn}>{claiming ? 'Claiming...' : 'Claim Reward \uD83C\uDF81'}</button>
+                  <button onClick={handleClaim} disabled={claiming} style={styles.claimBtn}>{claiming ? 'Claiming...' : 'Claim Reward 🎁'}</button>
                 </div>
               )}
 
@@ -66,8 +66,8 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
               </div>
 
               <div style={styles.info}>
-                <p style={styles.infoText}>\uD83D\uDCC5 Log in every day to maintain your streak and earn rewards!</p>
-                <p style={styles.infoText}>\uD83D\uDD25 Missing a day will reset your streak to 0</p>
+                <p style={styles.infoText}>📅 Log in every day to maintain your streak and earn rewards!</p>
+                <p style={styles.infoText}>🔥 Missing a day will reset your streak to 0</p>
               </div>
             </>
           )}

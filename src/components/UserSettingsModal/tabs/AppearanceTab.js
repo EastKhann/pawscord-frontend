@@ -20,14 +20,14 @@ const AppearanceTab = () => {
                             backgroundColor: t === 'dark' ? '#36393f' : t === 'light' ? '#fff' : '#000',
                         }}>
                             <span style={{ color: t === 'light' ? '#000' : '#fff', fontSize: 12, fontWeight: 600 }}>
-                                {t === 'dark' ? 'Koyu' : t === 'light' ? 'A\u00E7\u0131k' : 'AMOLED'}
+                                {t === 'dark' ? 'Koyu' : t === 'light' ? 'Açık' : 'AMOLED'}
                             </span>
                             {theme === t && <FaCheck style={{ color: '#5865f2', position: 'absolute', top: 4, right: 4, fontSize: 10 }} />}
                         </button>
                     ))}
                 </div>
             </SettingSection>
-            <SettingSection title="Yaz\u0131 Boyutu">
+            <SettingSection title="Yazı Boyutu">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <span style={{ color: '#949ba4', fontSize: 12 }}>12px</span>
                     <input type="range" min={12} max={24} value={fontSize} onChange={e => setFontSize(+e.target.value)} style={{ flex: 1, accentColor: '#5865f2' }} />

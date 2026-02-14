@@ -18,7 +18,7 @@ const useTicketSystem = (serverId) => {
     max_tickets_per_user: 3,
     auto_close_after: 48,
     transcript_channel_id: '',
-    welcome_message: 'Merhaba! Destek ekibimiz en k\u0131sa s\u00fcrede size yard\u0131mc\u0131 olacak.'
+    welcome_message: 'Merhaba! Destek ekibimiz en kısa sürede size yardımcı olacak.'
   });
   const [categories, setCategories] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -101,31 +101,31 @@ const useTicketSystem = (serverId) => {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(config)
       });
-      if (response.ok) toast.success('\u2705 Ayarlar g\u00fcncellendi');
-      else toast.error('\u274c Ayarlar g\u00fcncellenemedi');
+      if (response.ok) toast.success('✅ Ayarlar güncellendi');
+      else toast.error('❌ Ayarlar güncellenemedi');
     } catch (error) {
       console.error('Error updating config:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
   const closeTicket = async (ticketId) => {
-    if (!await confirmDialog('Ticket\'\u0131 kapatmak istedi\u011finize emin misiniz?')) return;
+    if (!await confirmDialog('Ticket\'ı kapatmak istediğinize emin misiniz?')) return;
     try {
       const response = await fetch(`${apiBaseUrl}/tickets/${ticketId}/close/`, {
         method: 'POST',
         headers: authHeader()
       });
       if (response.ok) {
-        toast.success('\u2705 Ticket kapat\u0131ld\u0131');
+        toast.success('✅ Ticket kapatıldı');
         fetchTickets();
         if (selectedTicket?.id === ticketId) setSelectedTicket(null);
       } else {
-        toast.error('\u274c Ticket kapat\u0131lamad\u0131');
+        toast.error('❌ Ticket kapatılamadı');
       }
     } catch (error) {
       console.error('Error closing ticket:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
@@ -136,11 +136,11 @@ const useTicketSystem = (serverId) => {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId })
       });
-      if (response.ok) { toast.success('\u2705 Ticket atand\u0131'); fetchTickets(); }
-      else toast.error('\u274c Ticket atanamad\u0131');
+      if (response.ok) { toast.success('✅ Ticket atandı'); fetchTickets(); }
+      else toast.error('❌ Ticket atanamadı');
     } catch (error) {
       console.error('Error assigning ticket:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
@@ -151,11 +151,11 @@ const useTicketSystem = (serverId) => {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ priority })
       });
-      if (response.ok) { toast.success('\u2705 \u00d6ncelik g\u00fcncellendi'); fetchTickets(); }
-      else toast.error('\u274c \u00d6ncelik g\u00fcncellenemedi');
+      if (response.ok) { toast.success('✅ Öncelik güncellendi'); fetchTickets(); }
+      else toast.error('❌ Öncelik güncellenemedi');
     } catch (error) {
       console.error('Error setting priority:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
@@ -174,13 +174,13 @@ const useTicketSystem = (serverId) => {
           messages: [...(selectedTicket.messages || []), data.message]
         });
         setNewMessage('');
-        toast.success('\u2705 Mesaj g\u00f6nderildi');
+        toast.success('✅ Mesaj gönderildi');
       } else {
-        toast.error('\u274c Mesaj g\u00f6nderilemedi');
+        toast.error('❌ Mesaj gönderilemedi');
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
@@ -196,30 +196,30 @@ const useTicketSystem = (serverId) => {
         a.href = url;
         a.download = `ticket-${ticketId}-transcript.txt`;
         a.click();
-        toast.success('\u2705 Transcript indirildi');
+        toast.success('✅ Transcript indirildi');
       } else {
-        toast.error('\u274c Transcript indirilemedi');
+        toast.error('❌ Transcript indirilemedi');
       }
     } catch (error) {
       console.error('Error exporting transcript:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
   const getStatusBadge = (status) => {
     const badges = {
-      open: { text: 'A\u00e7\u0131k', color: '#10b981' },
-      assigned: { text: 'Atand\u0131', color: '#f59e0b' },
-      closed: { text: 'Kapal\u0131', color: '#6b7280' }
+      open: { text: 'Açık', color: '#10b981' },
+      assigned: { text: 'Atandı', color: '#f59e0b' },
+      closed: { text: 'Kapalı', color: '#6b7280' }
     };
     return badges[status] || badges.open;
   };
 
   const getPriorityBadge = (priority) => {
     const badges = {
-      low: { text: 'D\u00fc\u015f\u00fck', color: '#10b981' },
+      low: { text: 'Düşük', color: '#10b981' },
       medium: { text: 'Orta', color: '#f59e0b' },
-      high: { text: 'Y\u00fcksek', color: '#ef4444' },
+      high: { text: 'Yüksek', color: '#ef4444' },
       urgent: { text: 'Acil', color: '#dc2626' }
     };
     return badges[priority] || badges.medium;

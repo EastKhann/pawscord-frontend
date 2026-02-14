@@ -9,7 +9,7 @@ const StoreTab = ({ storeItems, loading, balance, handleBuy }) => (
                 <div style={styles.iconPlace}>
                     {item.preview_image
                         ? <img src={item.preview_image} alt={item.name} style={{ width: 50, height: 50 }} />
-                        : <span style={{ fontSize: '2em' }}>{'\uD83C\uDF81'}</span>}
+                        : <span style={{ fontSize: '2em' }}>{'🎁'}</span>}
                 </div>
                 <h4>{item.name}</h4>
                 <p style={{ fontSize: '0.8em', color: '#999' }}>{item.description}</p>
@@ -23,7 +23,7 @@ const StoreTab = ({ storeItems, loading, balance, handleBuy }) => (
                 )}
             </div>
         ))}
-        {storeItems.length === 0 && <p style={{ color: '#ccc' }}>Ma\u011Fazada \u00FCr\u00FCn yok.</p>}
+        {storeItems.length === 0 && <p style={{ color: '#ccc' }}>Mağazada ürün yok.</p>}
     </div>
 );
 

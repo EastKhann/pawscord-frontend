@@ -12,16 +12,16 @@ export const INITIAL_GIVEAWAY = {
 export const DURATION_OPTIONS = [
   { value: 1800, label: '30 dakika' }, { value: 3600, label: '1 saat' },
   { value: 10800, label: '3 saat' }, { value: 21600, label: '6 saat' },
-  { value: 43200, label: '12 saat' }, { value: 86400, label: '1 g\u00FCn' },
-  { value: 172800, label: '2 g\u00FCn' }, { value: 259200, label: '3 g\u00FCn' },
+  { value: 43200, label: '12 saat' }, { value: 86400, label: '1 gün' },
+  { value: 172800, label: '2 gün' }, { value: 259200, label: '3 gün' },
   { value: 604800, label: '1 hafta' }
 ];
 
 export const getStatusBadge = (status) => {
   const badges = {
     active: { text: 'Aktif', color: '#10b981' },
-    ended: { text: 'Sonland\u0131', color: '#6b7280' },
-    cancelled: { text: '\u0130ptal', color: '#ef4444' }
+    ended: { text: 'Sonlandı', color: '#6b7280' },
+    cancelled: { text: 'İptal', color: '#ef4444' }
   };
   return badges[status] || badges.active;
 };
@@ -32,9 +32,9 @@ export const formatTimeRemaining = (endTime) => {
   const days = Math.floor(diff / 86400);
   const hours = Math.floor((diff % 86400) / 3600);
   const minutes = Math.floor((diff % 3600) / 60);
-  if (days > 0) return `${days}g ${hours}s kald\u0131`;
-  if (hours > 0) return `${hours}s ${minutes}dk kald\u0131`;
-  return `${minutes} dakika kald\u0131`;
+  if (days > 0) return `${days}g ${hours}s kaldı`;
+  if (hours > 0) return `${hours}s ${minutes}dk kaldı`;
+  return `${minutes} dakika kaldı`;
 };
 
 const useGiveaways = (serverId) => {
@@ -74,7 +74,7 @@ const useGiveaways = (serverId) => {
 
   const createGiveaway = async () => {
     if (!newGiveaway.title || !newGiveaway.prize || !newGiveaway.channel_id) {
-      toast.error('\u274C L\u00FCtfen t\u00FCm gerekli alanlar\u0131 doldurun'); return;
+      toast.error('❌ Lütfen tüm gerekli alanları doldurun'); return;
     }
     try {
       const r = await fetch(`${apiBaseUrl}/giveaways/create/`, {
@@ -82,36 +82,36 @@ const useGiveaways = (serverId) => {
         body: JSON.stringify({ server_id: serverId, ...newGiveaway })
       });
       if (r.ok) {
-        toast.success('\u2705 \u00C7ekili\u015F olu\u015Fturuldu!');
+        toast.success('✅ Çekiliş oluşturuldu!');
         setShowCreateModal(false); fetchGiveaways(); setNewGiveaway(INITIAL_GIVEAWAY);
-      } else { toast.error('\u274C \u00C7ekili\u015F olu\u015Fturulamad\u0131'); }
-    } catch (e) { console.error('Error creating giveaway:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      } else { toast.error('❌ Çekiliş oluşturulamadı'); }
+    } catch (e) { console.error('Error creating giveaway:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const endGiveaway = async (id) => {
-    if (!await confirmDialog('\u00C7ekili\u015Fi sonland\u0131rmak istedi\u011Finize emin misiniz?')) return;
+    if (!await confirmDialog('Çekilişi sonlandırmak istediğinize emin misiniz?')) return;
     try {
       const r = await fetch(`${apiBaseUrl}/giveaways/${id}/end/`, { method: 'POST', headers: authHeaders });
-      if (r.ok) { const d = await r.json(); toast.success(`\u2705 \u00C7ekili\u015F sonland\u0131! Kazananlar: ${d.winners.join(', ')}`); fetchGiveaways(); }
-      else toast.error('\u274C \u00C7ekili\u015F sonland\u0131r\u0131lamad\u0131');
-    } catch (e) { console.error('Error ending giveaway:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { const d = await r.json(); toast.success(`✅ Çekiliş sonlandı! Kazananlar: ${d.winners.join(', ')}`); fetchGiveaways(); }
+      else toast.error('❌ Çekiliş sonlandırılamadı');
+    } catch (e) { console.error('Error ending giveaway:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const rerollGiveaway = async (id) => {
     try {
       const r = await fetch(`${apiBaseUrl}/giveaways/${id}/reroll/`, { method: 'POST', headers: authHeaders });
-      if (r.ok) { const d = await r.json(); toast.success(`\u2705 Yeni kazanan: ${d.new_winner}`); fetchGiveaways(); }
-      else toast.error('\u274C Reroll yap\u0131lamad\u0131');
-    } catch (e) { console.error('Error rerolling giveaway:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { const d = await r.json(); toast.success(`✅ Yeni kazanan: ${d.new_winner}`); fetchGiveaways(); }
+      else toast.error('❌ Reroll yapılamadı');
+    } catch (e) { console.error('Error rerolling giveaway:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const deleteGiveaway = async (id) => {
-    if (!await confirmDialog('\u00C7ekili\u015Fi silmek istedi\u011Finize emin misiniz?')) return;
+    if (!await confirmDialog('Çekilişi silmek istediğinize emin misiniz?')) return;
     try {
       const r = await fetch(`${apiBaseUrl}/giveaways/${id}/delete/`, { method: 'DELETE', headers: authHeaders });
-      if (r.ok) { toast.success('\u2705 \u00C7ekili\u015F silindi'); fetchGiveaways(); }
-      else toast.error('\u274C \u00C7ekili\u015F silinemedi');
-    } catch (e) { console.error('Error deleting giveaway:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { toast.success('✅ Çekiliş silindi'); fetchGiveaways(); }
+      else toast.error('❌ Çekiliş silinemedi');
+    } catch (e) { console.error('Error deleting giveaway:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   return {

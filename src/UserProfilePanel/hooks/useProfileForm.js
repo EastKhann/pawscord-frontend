@@ -69,10 +69,10 @@ const useProfileForm = ({ user, onUpdate }) => {
             setLoading(l => ({ ...l, avatar: true }));
             const response = await authPost('/api/users/update_profile/', { avatar_url: avatar.url });
             setFormData(f => ({ ...f, avatar_url: avatar.url }));
-            toast.success(`\u2705 Avatar de\u011Fi\u015Ftirildi: ${avatar.name}`);
+            toast.success(`✅ Avatar değiştirildi: ${avatar.name}`);
             if (onUpdate) onUpdate(response.data);
         } catch (err) {
-            toast.error('\u274C Avatar de\u011Fi\u015Ftirilemedi.');
+            toast.error('❌ Avatar değiştirilemedi.');
         } finally { setLoading(l => ({ ...l, avatar: false })); }
     };
 
@@ -80,9 +80,9 @@ const useProfileForm = ({ user, onUpdate }) => {
         try {
             setLoading(l => ({ ...l, phoneUpdate: true }));
             await authPost('/api/users/update_phone/', { phone_number: phoneNumber });
-            toast.success('\u2705 Telefon numaras\u0131 g\u00FCncellendi!');
+            toast.success('✅ Telefon numarası güncellendi!');
         } catch (err) {
-            toast.error('Telefon numaras\u0131 g\u00FCncellenemedi.');
+            toast.error('Telefon numarası güncellenemedi.');
         } finally { setLoading(l => ({ ...l, phoneUpdate: false })); }
     };
 
@@ -93,8 +93,8 @@ const useProfileForm = ({ user, onUpdate }) => {
     const handleAvatarUpload = (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (file.size > 5 * 1024 * 1024) { toast.error('Avatar 5MB\'dan k\u00FC\u00E7\u00FCk olmal\u0131d\u0131r!'); return; }
-        if (!file.type.startsWith('image/')) { toast.error('L\u00FCtfen bir resim dosyas\u0131 se\u00E7in!'); return; }
+        if (file.size > 5 * 1024 * 1024) { toast.error('Avatar 5MB\'dan küçük olmalıdır!'); return; }
+        if (!file.type.startsWith('image/')) { toast.error('Lütfen bir resim dosyası seçin!'); return; }
         setTempImageFile(file);
         setShowCropper(true);
     };
@@ -111,10 +111,10 @@ const useProfileForm = ({ user, onUpdate }) => {
             setFormData(f => ({ ...f, avatar_url: avatarUrl }));
             setShowCropper(false);
             setTempImageFile(null);
-            toast.success('\u2705 Avatar g\u00FCncellendi!');
+            toast.success('✅ Avatar güncellendi!');
             if (onUpdate) onUpdate({ ...response.data, avatar_url: avatarUrl });
         } catch (err) {
-            toast.error('Avatar y\u00FCklenemedi: ' + (err.response?.data?.error || 'Bilinmeyen hata'));
+            toast.error('Avatar yüklenemedi: ' + (err.response?.data?.error || 'Bilinmeyen hata'));
         } finally { setLoading(l => ({ ...l, avatar: false })); }
     };
 
@@ -122,7 +122,7 @@ const useProfileForm = ({ user, onUpdate }) => {
         try {
             setLoading(l => ({ ...l, saveProfile: true }));
             const response = await authPost('/api/users/update_profile/', formData);
-            toast.success('\u2705 Profil kaydedildi!');
+            toast.success('✅ Profil kaydedildi!');
             if (onUpdate) onUpdate(response.data);
         } catch (err) {
             toast.error('Profil kaydedilemedi: ' + (err.response?.data?.error || 'Bilinmeyen hata'));

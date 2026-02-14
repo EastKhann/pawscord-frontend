@@ -74,19 +74,19 @@ const useCodeEditor = ({ roomId, userId, username, apiBaseUrl, fetchWithAuth, we
 
   const saveCode = async () => {
     setSaving(true);
-    try { const res = await fetchWithAuth(`${apiBaseUrl}/code-editor/save/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ room_id: roomId, code, language }) }); if (res.ok) toast.success('\u2705 Kod kaydedildi!'); }
-    catch (e) { console.error('Save error:', e); toast.error('\u274C Kaydetme ba\u015Far\u0131s\u0131z'); }
+    try { const res = await fetchWithAuth(`${apiBaseUrl}/code-editor/save/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ room_id: roomId, code, language }) }); if (res.ok) toast.success('✅ Kod kaydedildi!'); }
+    catch (e) { console.error('Save error:', e); toast.error('❌ Kaydetme başarısız'); }
     finally { setSaving(false); }
   };
 
   const runCode = async () => {
-    setRunning(true); setOutput('\u00C7al\u0131\u015Ft\u0131r\u0131l\u0131yor...');
+    setRunning(true); setOutput('Çalıştırılıyor...');
     try { const res = await fetchWithAuth(`${apiBaseUrl}/code-editor/run/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, language }) }); if (res.ok) { const d = await res.json(); setOutput(d.output || 'No output'); } else { const err = await res.json(); setOutput(`Error: ${err.error || 'Execution failed'}`); } }
     catch (e) { setOutput(`Error: ${e.message}`); }
     finally { setRunning(false); }
   };
 
-  const copyCode = () => { navigator.clipboard.writeText(code); toast.success('\u2705 Kod kopyaland\u0131!'); };
+  const copyCode = () => { navigator.clipboard.writeText(code); toast.success('✅ Kod kopyalandı!'); };
 
   const downloadCode = () => {
     const ext = FILE_EXTENSIONS[language] || 'txt';

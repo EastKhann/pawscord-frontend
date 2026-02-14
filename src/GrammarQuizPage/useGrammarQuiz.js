@@ -101,7 +101,7 @@ const useGrammarQuiz = () => {
             setKnownQuestions(prev => [...prev, currentQuestion.id]);
             handleNext();
         } catch (e) {
-            console.error("\u0130\u015Faretleme hatas\u0131:", e);
+            console.error("İşaretleme hatası:", e);
         }
     };
 

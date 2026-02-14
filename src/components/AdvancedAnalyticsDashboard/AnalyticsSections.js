@@ -22,7 +22,7 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
   return (
     <div className="charts-grid">
       <div className="chart-card">
-        <div className="chart-header"><h3><FaUsers /> {'\u00DC'}ye Aktivitesi</h3></div>
+        <div className="chart-header"><h3><FaUsers /> {'Ü'}ye Aktivitesi</h3></div>
         <div className="chart-body">{memberActivity.length > 0 ? renderSimpleChart(memberActivity, '#5865f2', 120) : <div className="no-data">Veri yok</div>}</div>
       </div>
       <div className="chart-card">
@@ -30,7 +30,7 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
         <div className="chart-body">{messageActivity.length > 0 ? renderSimpleChart(messageActivity, '#23a559', 120) : <div className="no-data">Veri yok</div>}</div>
       </div>
       <div className="chart-card wide">
-        <div className="chart-header"><h3><FaClock /> Yo{'\u011F'}unluk Saatleri</h3><span className="chart-info"><FaInfoCircle /> En yo{'\u011F'}un saatler ye{'\u015F'}il ile g{'\u00F6'}sterilir</span></div>
+        <div className="chart-header"><h3><FaClock /> Yo{'ğ'}unluk Saatleri</h3><span className="chart-info"><FaInfoCircle /> En yo{'ğ'}un saatler ye{'ş'}il ile g{'ö'}sterilir</span></div>
         <div className="chart-body">{peakHours.length > 0 ? renderPeakHoursChart() : <div className="no-data">Veri yok</div>}</div>
       </div>
     </div>
@@ -53,7 +53,7 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
       </div>
     </div>
     <div className="list-card">
-      <div className="list-header"><h3><FaUsers /> En Aktif {'\u00DC'}yeler</h3></div>
+      <div className="list-header"><h3><FaUsers /> En Aktif {'Ü'}yeler</h3></div>
       <div className="list-body">
         {topMembers.length > 0 ? topMembers.map((m, idx) => (
           <div key={m.id} className="list-item">
@@ -66,7 +66,7 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
       </div>
     </div>
     <div className="list-card">
-      <div className="list-header"><h3><FaHeart /> En {'\u00C7'}ok Kullan{'\u0131'}lan Reaksiyonlar</h3></div>
+      <div className="list-header"><h3><FaHeart /> En {'Ç'}ok Kullan{'ı'}lan Reaksiyonlar</h3></div>
       <div className="list-body">
         {reactionStats.length > 0 ? (
           <div className="reactions-grid">
@@ -76,11 +76,11 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
       </div>
     </div>
     <div className="list-card">
-      <div className="list-header"><h3><FaGlobe /> Co{'\u011F'}rafi Da{'\u011F\u0131'}l{'\u0131'}m</h3></div>
+      <div className="list-header"><h3><FaGlobe /> Co{'ğ'}rafi Da{'ğı'}l{'ı'}m</h3></div>
       <div className="list-body">
         {geoData.length > 0 ? geoData.map((g, idx) => (
           <div key={idx} className="list-item">
-            <span className="flag">{g.flag || '\uD83C\uDF0D'}</span>
+            <span className="flag">{g.flag || '🌍'}</span>
             <span className="name">{g.country}</span>
             <div className="bar-container"><div className="bar geo" style={{ width: `${(g.count / geoData[0].count) * 100}%` }} /></div>
             <span className="value">{g.percentage}%</span>
@@ -95,9 +95,9 @@ export const LinkClicksSection = ({ linkClicks }) => {
   if (linkClicks.length === 0) return null;
   return (
     <div className="links-section">
-      <h3><FaLink /> Link T{'\u0131'}klamalar{'\u0131'}</h3>
+      <h3><FaLink /> Link T{'ı'}klamalar{'ı'}</h3>
       <div className="links-table">
-        <div className="table-header"><span>URL</span><span>T{'\u0131'}klama</span><span>Benzersiz</span></div>
+        <div className="table-header"><span>URL</span><span>T{'ı'}klama</span><span>Benzersiz</span></div>
         {linkClicks.map((link, idx) => (
           <div key={idx} className="table-row">
             <span className="link-url" title={link.url}>{link.url.length > 50 ? link.url.substring(0, 50) + '...' : link.url}</span>

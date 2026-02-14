@@ -39,7 +39,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
         <div style={styles.tagsContainer}>
           <button onClick={() => setSelectedTag(null)}
             style={{ ...styles.tagChip, backgroundColor: !selectedTag ? '#5865f2' : '#2c2f33' }}>
-            <FaFolder /> T\u00fcm\u00fc ({bookmarks.length})
+            <FaFolder /> Tümü ({bookmarks.length})
           </button>
           {tags.map(tag => (
             <button key={tag.id} onClick={() => setSelectedTag(tag.id)}
@@ -52,11 +52,11 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
         {/* Bookmarks List */}
         <div style={styles.bookmarksList}>
           {loading ? (
-            <div style={styles.loading}>Y\u00fckleniyor...</div>
+            <div style={styles.loading}>Yükleniyor...</div>
           ) : filteredBookmarks.length === 0 ? (
             <div style={styles.empty}>
               <FaBookmark style={{ fontSize: '48px', color: '#555' }} />
-              <p>Hen\u00fcz bookmark yok</p>
+              <p>Henüz bookmark yok</p>
             </div>
           ) : (
             filteredBookmarks.map(bookmark => (
@@ -69,7 +69,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
                     </span>
                   </div>
                   <div style={styles.bookmarkText} onClick={() => onMessageClick?.(bookmark.message)}>
-                    {bookmark.message?.content || 'Mesaj i\u00e7eri\u011fi yok'}
+                    {bookmark.message?.content || 'Mesaj içeriği yok'}
                   </div>
                   <div style={styles.bookmarkTags}>
                     {bookmark.tags?.map(tag => (
@@ -92,16 +92,16 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
         {showNewTagModal && (
           <div style={styles.modalOverlay} onClick={() => setShowNewTagModal(false)}>
             <div style={styles.newTagModal} onClick={(e) => e.stopPropagation()}>
-              <h3>Yeni Tag Olu\u015ftur</h3>
-              <input type="text" placeholder="Tag ad\u0131..." value={newTagName}
+              <h3>Yeni Tag Oluştur</h3>
+              <input type="text" placeholder="Tag adı..." value={newTagName}
                 onChange={(e) => setNewTagName(e.target.value)} style={styles.input} autoFocus />
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <label>Renk:</label>
                 <input type="color" value={newTagColor} onChange={(e) => setNewTagColor(e.target.value)} style={styles.colorPicker} />
               </div>
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                <button onClick={createTag} style={styles.primaryBtn}>Olu\u015ftur</button>
-                <button onClick={() => setShowNewTagModal(false)} style={styles.secondaryBtn}>\u0130ptal</button>
+                <button onClick={createTag} style={styles.primaryBtn}>Oluştur</button>
+                <button onClick={() => setShowNewTagModal(false)} style={styles.secondaryBtn}>İptal</button>
               </div>
             </div>
           </div>

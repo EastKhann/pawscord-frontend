@@ -21,7 +21,7 @@ const RecordingsView = ({ recordings, playingId, setPlayingId, onDownload, onDel
     return (
       <div className="empty-state">
         <FaMicrophoneSlash />
-        <p>Hen\u00fcz kay\u0131t yok</p>
+        <p>Henüz kayıt yok</p>
       </div>
     );
   }
@@ -52,7 +52,7 @@ const RecordingsView = ({ recordings, playingId, setPlayingId, onDownload, onDel
               <button onClick={() => handlePlay(recording)} title="Oynat">
                 {playingId === recording.id ? <FaPause /> : <FaPlay />}
               </button>
-              <button onClick={() => onDownload(recording)} title="\u0130ndir"><FaDownload /></button>
+              <button onClick={() => onDownload(recording)} title="İndir"><FaDownload /></button>
               <button onClick={() => onDelete(recording.id)} className="delete" title="Sil"><FaTrash /></button>
             </div>
           </div>

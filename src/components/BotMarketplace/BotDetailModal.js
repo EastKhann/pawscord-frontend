@@ -44,10 +44,10 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
             if (response.ok) {
                 onInstall?.(bot, selectedServer);
                 setShowServerSelect(false);
-                toast.success(`${bot.name} ba\u015Far\u0131yla ${selectedServer.name} sunucusuna eklendi!`);
+                toast.success(`${bot.name} başarıyla ${selectedServer.name} sunucusuna eklendi!`);
             } else {
                 const error = await response.json();
-                toast.error(error.error || 'Y\u00FCkleme ba\u015Far\u0131s\u0131z');
+                toast.error(error.error || 'Yükleme başarısız');
             }
         } catch (e) {
             console.error('Install failed:', e);
@@ -66,18 +66,18 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
             <div className="bot-modal">
                 {/* Header */}
                 <div className="bot-modal-header" style={{ backgroundImage: bot.banner ? `url(${bot.banner})` : undefined }}>
-                    <button className="modal-close" onClick={onClose}>{'\u00D7'}</button>
+                    <button className="modal-close" onClick={onClose}>{'×'}</button>
                     <div className="bot-header-content">
                         <img src={bot.avatar || '/default-bot.png'} alt={bot.name} className="bot-large-avatar" />
                         <div className="bot-header-info">
                             <h2>
                                 {bot.name}
-                                {bot.is_verified && <span className="verified">{'\u2713'} Do\u011Frulanm\u0131\u015F</span>}
+                                {bot.is_verified && <span className="verified">{'✓'} Doğrulanmış</span>}
                             </h2>
                             <p>{bot.short_description}</p>
                             <div className="bot-stats">
-                                <span>{'\uD83D\uDCE5'} {bot.install_count?.toLocaleString()} sunucu</span>
-                                <span>{'\u2B50'} {bot.avg_rating} ({bot.review_count} yorum)</span>
+                                <span>{'📥'} {bot.install_count?.toLocaleString()} sunucu</span>
+                                <span>{'⭐'} {bot.avg_rating} ({bot.review_count} yorum)</span>
                             </div>
                         </div>
                         <button
@@ -92,7 +92,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                 {/* Tabs */}
                 <div className="bot-modal-tabs">
                     <button className={activeTab === 'overview' ? 'active' : ''} onClick={() => setActiveTab('overview')}>
-                        Genel Bak\u0131\u015F
+                        Genel Bakış
                     </button>
                     <button className={activeTab === 'commands' ? 'active' : ''} onClick={() => setActiveTab('commands')}>
                         Komutlar
@@ -107,37 +107,37 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                     {activeTab === 'overview' && (
                         <div className="overview-tab">
                             <div className="description-section">
-                                <h3>A\u00E7\u0131klama</h3>
+                                <h3>Açıklama</h3>
                                 <div className="description-content">{bot.description}</div>
                             </div>
 
                             {bot.features && bot.features.length > 0 && (
                                 <div className="features-section">
-                                    <h3>{'\u00D6'}zellikler</h3>
+                                    <h3>{'Ö'}zellikler</h3>
                                     <div className="features-list">
                                         {bot.features.map((feature, idx) => (
-                                            <div key={idx} className="feature-item">{'\u2705'} {feature}</div>
+                                            <div key={idx} className="feature-item">{'✅'} {feature}</div>
                                         ))}
                                     </div>
                                 </div>
                             )}
 
                             <div className="links-section">
-                                <h3>Ba\u011Flant\u0131lar</h3>
+                                <h3>Bağlantılar</h3>
                                 <div className="links-list">
                                     {bot.website && (
                                         <a href={bot.website} target="_blank" rel="noopener noreferrer">
-                                            {'\uD83C\uDF10'} Web Sitesi
+                                            {'🌐'} Web Sitesi
                                         </a>
                                     )}
                                     {bot.support_server && (
                                         <a href={`/invite/${bot.support_server}`}>
-                                            {'\uD83D\uDCAC'} Destek Sunucusu
+                                            {'💬'} Destek Sunucusu
                                         </a>
                                     )}
                                     {bot.privacy_policy && (
                                         <a href={bot.privacy_policy} target="_blank" rel="noopener noreferrer">
-                                            {'\uD83D\uDD12'} Gizlilik Politikas\u0131
+                                            {'🔒'} Gizlilik Politikası
                                         </a>
                                     )}
                                 </div>
@@ -145,7 +145,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
 
                             {bot.developer && (
                                 <div className="developer-section">
-                                    <h3>Geli\u015Ftirici</h3>
+                                    <h3>Geliştirici</h3>
                                     <div className="developer-info">
                                         <img src={bot.developer.avatar || '/default-avatar.png'} alt="" />
                                         <span>{bot.developer.username}</span>
@@ -168,7 +168,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="no-data">Komut listesi mevcut de\u011Fil</p>
+                                <p className="no-data">Komut listesi mevcut değil</p>
                             )}
                         </div>
                     )}
@@ -183,7 +183,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                                 <img src={review.avatar || '/default-avatar.png'} alt="" />
                                                 <span className="reviewer-name">{review.user}</span>
                                                 <span className="review-rating">
-                                                    {'\u2B50'.repeat(review.rating)}
+                                                    {'⭐'.repeat(review.rating)}
                                                 </span>
                                             </div>
                                             <p className="review-content">{review.content}</p>
@@ -194,7 +194,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="no-data">Hen\u00FCz yorum yok</p>
+                                <p className="no-data">Henüz yorum yok</p>
                             )}
                         </div>
                     )}
@@ -204,12 +204,12 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                 {showServerSelect && (
                     <div className="server-select-overlay">
                         <div className="server-select-modal">
-                            <h3>Sunucu Se\u00E7</h3>
+                            <h3>Sunucu Seç</h3>
                             <p>{bot.name} botunu hangi sunucuya eklemek istiyorsunuz?</p>
 
                             <div className="server-list">
                                 {servers.length === 0 ? (
-                                    <p className="no-servers">Admin oldu\u011Funuz sunucu bulunamad\u0131</p>
+                                    <p className="no-servers">Admin olduğunuz sunucu bulunamadı</p>
                                 ) : (
                                     servers.map((server) => (
                                         <div
@@ -219,7 +219,7 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
                                         >
                                             <img src={server.icon || '/default-server.png'} alt="" />
                                             <span>{server.name}</span>
-                                            <span className="member-count">{server.member_count} {'\u00FC'}ye</span>
+                                            <span className="member-count">{server.member_count} {'ü'}ye</span>
                                         </div>
                                     ))
                                 )}
@@ -227,14 +227,14 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
 
                             <div className="server-select-actions">
                                 <button className="cancel-btn" onClick={() => setShowServerSelect(false)}>
-                                    {'\u0130'}ptal
+                                    {'İ'}ptal
                                 </button>
                                 <button
                                     className="install-btn"
                                     disabled={!selectedServer || installing}
                                     onClick={handleInstall}
                                 >
-                                    {installing ? 'Y\u00FCkleniyor...' : 'Ekle'}
+                                    {installing ? 'Yükleniyor...' : 'Ekle'}
                                 </button>
                             </div>
                         </div>

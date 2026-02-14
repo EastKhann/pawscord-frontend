@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { toast } from '../../utils/toast';
 
 export const PERKS = [
-  { level: 1, icon: '\ud83c\udfa8', name: '128 Emoji Slots', description: 'Upload up to 128 custom emojis' },
-  { level: 1, icon: '\ud83c\udfb5', name: '128kbps Audio', description: 'Higher quality voice channels' },
-  { level: 1, icon: '\ud83d\uddbc\ufe0f', name: 'Animated Icon', description: 'Set an animated server icon' },
-  { level: 1, icon: '\ud83c\udf1f', name: 'Custom Invite Background', description: 'Customize your invite splash' },
-  { level: 2, icon: '\ud83d\ude00', name: '256 Emoji Slots', description: 'Even more custom emojis' },
-  { level: 2, icon: '\ud83c\udfa4', name: '256kbps Audio', description: 'Crystal clear voice quality' },
-  { level: 2, icon: '\ud83d\udce4', name: '50MB Upload Limit', description: 'Share larger files' },
-  { level: 2, icon: '\ud83c\udfac', name: '1080p Screen Share', description: 'HD screen sharing' },
-  { level: 3, icon: '\ud83c\udfad', name: '500 Emoji Slots', description: 'Maximum emoji capacity' },
-  { level: 3, icon: '\ud83c\udfa7', name: '384kbps Audio', description: 'Professional audio quality' },
-  { level: 3, icon: '\ud83d\udce6', name: '100MB Upload Limit', description: 'Share even larger files' },
-  { level: 3, icon: '\ud83d\udd17', name: 'Custom Vanity URL', description: 'Custom server invite link' },
+  { level: 1, icon: '🎨', name: '128 Emoji Slots', description: 'Upload up to 128 custom emojis' },
+  { level: 1, icon: '🎵', name: '128kbps Audio', description: 'Higher quality voice channels' },
+  { level: 1, icon: '🖼️', name: 'Animated Icon', description: 'Set an animated server icon' },
+  { level: 1, icon: '🌟', name: 'Custom Invite Background', description: 'Customize your invite splash' },
+  { level: 2, icon: '😀', name: '256 Emoji Slots', description: 'Even more custom emojis' },
+  { level: 2, icon: '🎤', name: '256kbps Audio', description: 'Crystal clear voice quality' },
+  { level: 2, icon: '📤', name: '50MB Upload Limit', description: 'Share larger files' },
+  { level: 2, icon: '🎬', name: '1080p Screen Share', description: 'HD screen sharing' },
+  { level: 3, icon: '🎭', name: '500 Emoji Slots', description: 'Maximum emoji capacity' },
+  { level: 3, icon: '🎧', name: '384kbps Audio', description: 'Professional audio quality' },
+  { level: 3, icon: '📦', name: '100MB Upload Limit', description: 'Share even larger files' },
+  { level: 3, icon: '🔗', name: 'Custom Vanity URL', description: 'Custom server invite link' },
 ];
 
 export const getBoostLevel = (boostCount) => {
@@ -71,7 +71,7 @@ const useServerBoost = (fetchWithAuth, apiBaseUrl, serverId) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ server_id: serverId })
       });
-      toast.success('\ud83d\ude80 Server boosted successfully!');
+      toast.success('🚀 Server boosted successfully!');
       fetchBoosts();
       fetchServerStats();
     } catch (error) {

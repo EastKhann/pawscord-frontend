@@ -3,9 +3,9 @@ import MessageSection from './WelcomeMessagesPanel/MessageSection';
 import './WelcomeMessagesPanel.css';
 
 const STAT_ITEMS = [
-  { icon: '\uD83D\uDC4B', key: 'total_welcomes', label: 'Toplam Kar\u015F\u0131lama' },
-  { icon: '\uD83D\uDE22', key: 'total_goodbyes', label: 'Toplam Veda' },
-  { icon: '\uD83D\uDCC5', key: 'welcomes_today', label: 'Bug\u00FCn Kat\u0131lan' },
+  { icon: '👋', key: 'total_welcomes', label: 'Toplam Karşılama' },
+  { icon: '😢', key: 'total_goodbyes', label: 'Toplam Veda' },
+  { icon: '📅', key: 'welcomes_today', label: 'Bugün Katılan' },
 ];
 
 const WelcomeMessagesPanel = ({ serverId, onClose }) => {
@@ -15,7 +15,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
     return (
       <div className="welcome-messages-overlay">
         <div className="welcome-messages-panel">
-          <div className="loading-state"><div className="spinner" /><p>Kar{'\u015F\u0131'}lama mesajlar{'\u0131'} y{'\u00FC'}kleniyor...</p></div>
+          <div className="loading-state"><div className="spinner" /><p>Kar{'şı'}lama mesajlar{'ı'} y{'ü'}kleniyor...</p></div>
         </div>
       </div>
     );
@@ -25,8 +25,8 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
     <div className="welcome-messages-overlay" onClick={onClose}>
       <div className="welcome-messages-panel" onClick={e => e.stopPropagation()}>
         <div className="welcome-header">
-          <h2>{'\uD83D\uDC4B'} Kar{'\u015F\u0131'}lama & Veda Mesajlar{'\u0131'}</h2>
-          <button className="close-btn" onClick={onClose}>{'\u00D7'}</button>
+          <h2>{'👋'} Kar{'şı'}lama & Veda Mesajlar{'ı'}</h2>
+          <button className="close-btn" onClick={onClose}>{'×'}</button>
         </div>
 
         {stats && (
@@ -43,7 +43,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
         <div className="config-content">
           <MessageSection
-            title="Ho\u015F Geldin Mesajlar\u0131" icon="\uD83D\uDC4B"
+            title="Hoş Geldin Mesajları" icon="👋"
             config={welcomeConfig} enabledKey="welcome_enabled" channelKey="welcome_channel_id"
             messageKey="welcome_message" embedKey="welcome_embed" embedColorKey="welcome_embed_color"
             embedTitleKey="welcome_embed_title" embedDescKey="welcome_embed_description"
@@ -53,7 +53,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
           />
 
           <MessageSection
-            title="Veda Mesajlar\u0131" icon="\uD83D\uDE22"
+            title="Veda Mesajları" icon="😢"
             config={welcomeConfig} enabledKey="goodbye_enabled" channelKey="goodbye_channel_id"
             messageKey="goodbye_message" embedKey="goodbye_embed" embedColorKey="goodbye_embed_color"
             channels={channels} updateConfig={updateConfig} insertVariable={insertVariable}
@@ -61,11 +61,11 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
 
           <div className="config-section">
             <div className="section-header">
-              <h3>{'\u2B50'} Otomatik Rol</h3>
+              <h3>{'⭐'} Otomatik Rol</h3>
               <label className="toggle-switch">
                 <input type="checkbox" checked={welcomeConfig.auto_role_enabled} onChange={e => updateConfig('auto_role_enabled', e.target.checked)} />
                 <span className="slider"></span>
-                <span className="toggle-label">{welcomeConfig.auto_role_enabled ? '\u2713 Aktif' : '\u2717 Pasif'}</span>
+                <span className="toggle-label">{welcomeConfig.auto_role_enabled ? '✓ Aktif' : '✗ Pasif'}</span>
               </label>
             </div>
             <div className="form-group">
@@ -89,7 +89,7 @@ const WelcomeMessagesPanel = ({ serverId, onClose }) => {
             </div>
           </div>
 
-          <button className="save-btn" onClick={saveConfig}>{'\uD83D\uDCBE'} Ayarlar{'\u0131'} Kaydet</button>
+          <button className="save-btn" onClick={saveConfig}>{'💾'} Ayarlar{'ı'} Kaydet</button>
         </div>
       </div>
     </div>

@@ -42,7 +42,7 @@ const useCryptoSignals = () => {
                 if (files.length > 0) setActiveFileKey(files[0].key);
             } catch (err) {
                 console.error('Signal list fetch error:', err);
-                setError('Sinyal dosyalar\u0131 y\u00FCklenemedi');
+                setError('Sinyal dosyaları yüklenemedi');
             }
         })();
     }, []);
@@ -62,7 +62,7 @@ const useCryptoSignals = () => {
             setTimeout(() => { if (tableRef.current && scrollRef.current > 0) tableRef.current.scrollTop = scrollRef.current; }, 50);
         } catch (err) {
             console.error('Signal fetch error:', err);
-            if (!data) setError('Sunucuya ba\u011Flan\u0131lamad\u0131: ' + err.message);
+            if (!data) setError('Sunucuya bağlanılamadı: ' + err.message);
         } finally { setLoading(false); }
     }, [activeFileKey]);
 

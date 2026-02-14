@@ -53,12 +53,12 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
             if (res.ok) {
                 const data = await res.json();
                 setInviteLink(data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`);
-                toast.success('\uD83D\uDD17 Yeni davet linki olu\u015Fturuldu!');
+                toast.success('🔗 Yeni davet linki oluşturuldu!');
             } else {
-                toast.error('Link olu\u015Fturulamad\u0131');
+                toast.error('Link oluşturulamadı');
             }
         } catch (e) {
-            toast.error('Link olu\u015Fturulurken hata: ' + e.message);
+            toast.error('Link oluşturulurken hata: ' + e.message);
         } finally {
             setIsRegenerating(false);
         }
@@ -73,7 +73,7 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
                 setFriends(Array.isArray(data) ? data : (data.friends || []));
             }
         } catch (e) {
-            console.error("Arkada\u015F listesi hatas\u0131:", e);
+            console.error("Arkadaş listesi hatası:", e);
         } finally {
             setLoadingFriends(false);
         }
@@ -89,7 +89,7 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ server_id: server.id, max_uses: 1, expires_in_hours: 24 })
                 });
-                if (!inviteRes.ok) throw new Error('Davet olu\u015Fturulamad\u0131');
+                if (!inviteRes.ok) throw new Error('Davet oluşturulamadı');
                 const inviteData = await inviteRes.json();
                 link = inviteData.url || inviteData.invite_link;
             }
@@ -98,21 +98,21 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ target_username: friendUsername })
             });
-            if (!convRes.ok) throw new Error('DM olu\u015Fturulamad\u0131');
+            if (!convRes.ok) throw new Error('DM oluşturulamadı');
             const convData = await convRes.json();
             const msgRes = await fetchWithAuth(`${apiBaseUrl}/messages/send_dm/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     conversation_id: convData.conversation_id,
-                    content: `Hey! Seni **${server?.name || 'sunucu'}** sunucusuna davet ediyorum! \uD83C\uDF89\n${link}`
+                    content: `Hey! Seni **${server?.name || 'sunucu'}** sunucusuna davet ediyorum! 🎉\n${link}`
                 })
             });
             if (msgRes.ok) {
-                toast.success(`\u2705 ${friendUsername} kullan\u0131c\u0131s\u0131na davet g\u00F6nderildi!`);
+                toast.success(`✅ ${friendUsername} kullanıcısına davet gönderildi!`);
             } else {
                 navigator.clipboard.writeText(link);
-                toast.success(`Link kopyaland\u0131! ${friendUsername} ile payla\u015Fabilirsiniz.`);
+                toast.success(`Link kopyalandı! ${friendUsername} ile paylaşabilirsiniz.`);
             }
         } catch (e) {
             setInvitedUsers(prev => {
@@ -120,7 +120,7 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
                 next.delete(friendUsername);
                 return next;
             });
-            toast.error("Davet g\u00F6nderilemedi: " + e.message);
+            toast.error("Davet gönderilemedi: " + e.message);
         }
     };
 
@@ -146,7 +146,7 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
     const copyToClipboard = () => {
         navigator.clipboard.writeText(inviteLink);
         setCopied(true);
-        toast.success('\uD83D\uDCCB Davet linki kopyaland\u0131!');
+        toast.success('📋 Davet linki kopyalandı!');
         setTimeout(() => setCopied(false), 2000);
     };
 

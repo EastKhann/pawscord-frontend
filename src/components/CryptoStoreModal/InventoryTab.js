@@ -9,18 +9,18 @@ const InventoryTab = ({ inventory, loading, handleEquip }) => (
                 <div style={styles.iconPlace}>
                     {entry.preview_image
                         ? <img src={entry.preview_image} alt={entry.name} style={{ width: 50, height: 50 }} />
-                        : <span style={{ fontSize: '2em' }}>{'\uD83C\uDF92'}</span>}
+                        : <span style={{ fontSize: '2em' }}>{'🎒'}</span>}
                 </div>
                 <h4>{entry.name}</h4>
                 <p style={{ fontSize: '0.8em', color: '#999' }}>{entry.item_type}</p>
                 {entry.is_equipped ? (
-                    <button style={styles.equippedBtn} disabled><FaCheck /> Ku\u015Fan\u0131ld\u0131</button>
+                    <button style={styles.equippedBtn} disabled><FaCheck /> Kuşanıldı</button>
                 ) : (
-                    <button onClick={() => handleEquip(entry.id)} style={styles.useBtn} disabled={loading}>Ku\u015Fan</button>
+                    <button onClick={() => handleEquip(entry.id)} style={styles.useBtn} disabled={loading}>Kuşan</button>
                 )}
             </div>
         ))}
-        {inventory.length === 0 && <p style={{ color: '#ccc' }}>Hen\u00FCz bir \u015Fey sat\u0131n almad\u0131n.</p>}
+        {inventory.length === 0 && <p style={{ color: '#ccc' }}>Henüz bir şey satın almadın.</p>}
     </div>
 );
 

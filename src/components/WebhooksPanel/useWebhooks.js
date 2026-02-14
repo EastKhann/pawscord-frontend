@@ -36,57 +36,57 @@ export default function useWebhooks(serverId) {
   };
 
   const createWebhook = async () => {
-    if (!newWebhook.name || !newWebhook.channel_id) { toast.error('\u274C Webhook ad\u0131 ve kanal se\u00e7imi zorunludur'); return; }
+    if (!newWebhook.name || !newWebhook.channel_id) { toast.error('❌ Webhook adı ve kanal seçimi zorunludur'); return; }
     try {
       const res = await fetch(`${apiBaseUrl}/webhooks/create/`, { method: 'POST', headers: authHeaders(), body: JSON.stringify({ server_id: serverId, ...newWebhook }) });
-      if (res.ok) { const d = await res.json(); setWebhooks(p => [...p, d.webhook]); setNewWebhook({ name: '', channel_id: '', avatar_url: '' }); setCreating(false); toast.success('\u2705 Webhook ba\u015far\u0131yla olu\u015fturuldu'); }
-      else toast.error('\u274C Webhook olu\u015fturulamad\u0131');
-    } catch { toast.error('\u274C Ba\u011flant\u0131 hatas\u0131'); }
+      if (res.ok) { const d = await res.json(); setWebhooks(p => [...p, d.webhook]); setNewWebhook({ name: '', channel_id: '', avatar_url: '' }); setCreating(false); toast.success('✅ Webhook başarıyla oluşturuldu'); }
+      else toast.error('❌ Webhook oluşturulamadı');
+    } catch { toast.error('❌ Bağlantı hatası'); }
   };
 
   const updateWebhook = async (webhookId, updates) => {
     try {
       const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/update/`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(updates) });
-      if (res.ok) { const d = await res.json(); setWebhooks(p => p.map(w => w.id === webhookId ? d.webhook : w)); setEditingWebhook(null); toast.success('\u2705 Webhook g\u00fcncellendi'); }
-      else toast.error('\u274C Webhook g\u00fcncellenemedi');
-    } catch { toast.error('\u274C Ba\u011flant\u0131 hatas\u0131'); }
+      if (res.ok) { const d = await res.json(); setWebhooks(p => p.map(w => w.id === webhookId ? d.webhook : w)); setEditingWebhook(null); toast.success('✅ Webhook güncellendi'); }
+      else toast.error('❌ Webhook güncellenemedi');
+    } catch { toast.error('❌ Bağlantı hatası'); }
   };
 
   const deleteWebhook = async (webhookId) => {
-    if (!await confirmDialog('Bu webhook\'u silmek istedi\u011finizden emin misiniz?')) return;
+    if (!await confirmDialog('Bu webhook\'u silmek istediğinizden emin misiniz?')) return;
     try {
       const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/delete/`, { method: 'DELETE', headers: authHeaders() });
-      if (res.ok) { setWebhooks(p => p.filter(w => w.id !== webhookId)); toast.success('\u2705 Webhook silindi'); }
-      else toast.error('\u274C Webhook silinemedi');
-    } catch { toast.error('\u274C Ba\u011flant\u0131 hatas\u0131'); }
+      if (res.ok) { setWebhooks(p => p.filter(w => w.id !== webhookId)); toast.success('✅ Webhook silindi'); }
+      else toast.error('❌ Webhook silinemedi');
+    } catch { toast.error('❌ Bağlantı hatası'); }
   };
 
   const testWebhook = async (webhookId) => {
     try {
       const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/test/`, { method: 'POST', headers: authHeaders() });
-      res.ok ? toast.success('\u2705 Test mesaj\u0131 g\u00f6nderildi') : toast.error('\u274C Test mesaj\u0131 g\u00f6nderilemedi');
-    } catch { toast.error('\u274C Ba\u011flant\u0131 hatas\u0131'); }
+      res.ok ? toast.success('✅ Test mesajı gönderildi') : toast.error('❌ Test mesajı gönderilemedi');
+    } catch { toast.error('❌ Bağlantı hatası'); }
   };
 
   const regenerateToken = async (webhookId) => {
-    if (!await confirmDialog('Webhook tokenini yenilemek istedi\u011finizden emin misiniz? Eski token ge\u00e7ersiz hale gelecek.')) return;
+    if (!await confirmDialog('Webhook tokenini yenilemek istediğinizden emin misiniz? Eski token geçersiz hale gelecek.')) return;
     try {
       const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/regenerate-token/`, { method: 'POST', headers: authHeaders() });
-      if (res.ok) { const d = await res.json(); setWebhooks(p => p.map(w => w.id === webhookId ? { ...w, token: d.token } : w)); toast.success('\u2705 Token yenilendi'); }
-      else toast.error('\u274C Token yenilenemedi');
-    } catch { toast.error('\u274C Ba\u011flant\u0131 hatas\u0131'); }
+      if (res.ok) { const d = await res.json(); setWebhooks(p => p.map(w => w.id === webhookId ? { ...w, token: d.token } : w)); toast.success('✅ Token yenilendi'); }
+      else toast.error('❌ Token yenilenemedi');
+    } catch { toast.error('❌ Bağlantı hatası'); }
   };
 
   const fetchWebhookLogs = async (webhookId) => {
     try {
       const res = await fetch(`${apiBaseUrl}/webhooks/${webhookId}/logs/`, { headers: authHeaders() });
       if (res.ok) { const d = await res.json(); setLogs(d.logs || []); setViewingLogs(webhookId); }
-    } catch { toast.error('\u274C Loglar y\u00fcklenemedi'); }
+    } catch { toast.error('❌ Loglar yüklenemedi'); }
   };
 
   const copyWebhookUrl = (webhook) => {
     navigator.clipboard.writeText(`${apiBaseUrl}/webhooks/${webhook.id}/${webhook.token}`);
-    toast.success('\u2705 Webhook URL kopyaland\u0131');
+    toast.success('✅ Webhook URL kopyalandı');
   };
 
   return {

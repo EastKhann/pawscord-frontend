@@ -65,10 +65,10 @@ const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
             if (res.ok) { setStats(await res.json()); }
             else {
                 console.error('Admin stats API error:', res.status);
-                toast.error('\u0130statistikler y\u00FCklenemedi');
+                toast.error('İstatistikler yüklenemedi');
                 setStats({ totalUsers: 0, onlineUsers: 0, totalServers: 0, totalMessages: 0, activeVoiceCalls: 0, premiumUsers: 0, newUsersToday: 0, messagesToday: 0, voiceMinutesToday: 0, reportsToday: 0, storageUsed: '0 GB', bandwidthToday: '0 GB', apiCalls: 0, avgResponseTime: 0, errorRate: '0', weeklyGrowth: '0', monthlyRevenue: 0 });
             }
-        } catch (err) { console.error('Stats fetch error:', err); toast.error('\u0130statistikler y\u00FCklenemedi'); }
+        } catch (err) { console.error('Stats fetch error:', err); toast.error('İstatistikler yüklenemedi'); }
         setLoading(false);
     }, [fetchWithAuth, apiBaseUrl]);
 

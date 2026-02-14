@@ -3,20 +3,20 @@ import { toast } from 'react-toastify';
 import { getApiBase } from '../../utils/apiEndpoints';
 
 const DEFAULT_CONFIG = {
-  welcome_enabled: false, welcome_channel_id: '', welcome_message: 'Ho\u015F geldin {user}! {server} sunucusuna kat\u0131ld\u0131n!',
-  welcome_embed: false, welcome_embed_color: '#5865f2', welcome_embed_title: 'Ho\u015F Geldin!', welcome_embed_description: '{user} sunucuya kat\u0131ld\u0131!',
-  welcome_dm: false, welcome_dm_message: 'Merhaba {user}! {server} sunucusuna ho\u015F geldin!',
-  goodbye_enabled: false, goodbye_channel_id: '', goodbye_message: '{user} sunucudan ayr\u0131ld\u0131. Ho\u015F\u00E7a kal!',
+  welcome_enabled: false, welcome_channel_id: '', welcome_message: 'Hoş geldin {user}! {server} sunucusuna katıldın!',
+  welcome_embed: false, welcome_embed_color: '#5865f2', welcome_embed_title: 'Hoş Geldin!', welcome_embed_description: '{user} sunucuya katıldı!',
+  welcome_dm: false, welcome_dm_message: 'Merhaba {user}! {server} sunucusuna hoş geldin!',
+  goodbye_enabled: false, goodbye_channel_id: '', goodbye_message: '{user} sunucudan ayrıldı. Hoşça kal!',
   goodbye_embed: false, goodbye_embed_color: '#ed4245',
   auto_role_enabled: false, auto_role_ids: []
 };
 
 export const VARIABLES = [
-  { code: '{user}', desc: 'Kullan\u0131c\u0131 ad\u0131' },
-  { code: '{user_mention}', desc: 'Kullan\u0131c\u0131 mention' },
-  { code: '{server}', desc: 'Sunucu ad\u0131' },
-  { code: '{member_count}', desc: '\u00DCye say\u0131s\u0131' },
-  { code: '{user_id}', desc: 'Kullan\u0131c\u0131 ID' },
+  { code: '{user}', desc: 'Kullanıcı adı' },
+  { code: '{user_mention}', desc: 'Kullanıcı mention' },
+  { code: '{server}', desc: 'Sunucu adı' },
+  { code: '{member_count}', desc: 'Üye sayısı' },
+  { code: '{user_id}', desc: 'Kullanıcı ID' },
 ];
 
 const useWelcomeMessages = (serverId) => {
@@ -53,15 +53,15 @@ const useWelcomeMessages = (serverId) => {
   const saveConfig = async () => {
     try {
       const res = await fetch(`${apiBaseUrl}/welcome-messages/server/${serverId}/update/`, { method: 'POST', headers: { ...headers(), 'Content-Type': 'application/json' }, body: JSON.stringify(welcomeConfig) });
-      if (res.ok) { toast.success('\u2705 Kar\u015F\u0131lama ayarlar\u0131 kaydedildi'); fetchStats(); } else toast.error('\u274C Kaydetme ba\u015Far\u0131s\u0131z');
-    } catch (e) { console.error('Error saving config:', e); toast.error('\u274C Kaydetme ba\u015Far\u0131s\u0131z'); }
+      if (res.ok) { toast.success('✅ Karşılama ayarları kaydedildi'); fetchStats(); } else toast.error('❌ Kaydetme başarısız');
+    } catch (e) { console.error('Error saving config:', e); toast.error('❌ Kaydetme başarısız'); }
   };
 
   const testWelcomeMessage = async () => {
     try {
       const res = await fetch(`${apiBaseUrl}/welcome-messages/server/${serverId}/test/`, { method: 'POST', headers: { ...headers(), 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'welcome' }) });
-      if (res.ok) toast.success('\u2705 Test mesaj\u0131 g\u00F6nderildi'); else toast.error('\u274C Test mesaj\u0131 g\u00F6nderilemedi');
-    } catch (e) { console.error('Error testing message:', e); toast.error('\u274C Test ba\u015Far\u0131s\u0131z'); }
+      if (res.ok) toast.success('✅ Test mesajı gönderildi'); else toast.error('❌ Test mesajı gönderilemedi');
+    } catch (e) { console.error('Error testing message:', e); toast.error('❌ Test başarısız'); }
   };
 
   const updateConfig = (field, value) => setWelcomeConfig({ ...welcomeConfig, [field]: value });

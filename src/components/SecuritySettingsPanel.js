@@ -12,26 +12,26 @@ const SecuritySettingsPanel = ({ onClose }) => {
         <div className="security-overlay" onClick={onClose}>
             <div className="security-panel" onClick={(e) => e.stopPropagation()}>
                 <div className="security-header">
-                    <h2>{'\uD83D\uDD12'} G\u00FCvenlik Ayarlar\u0131</h2>
-                    <button className="close-btn" onClick={onClose}>{'\u2715'}</button>
+                    <h2>{'🔒'} Güvenlik Ayarları</h2>
+                    <button className="close-btn" onClick={onClose}>{'✕'}</button>
                 </div>
 
                 {api.securityStatus && (
                     <div className="security-status">
                         <div className="status-item">
-                            <span className="status-icon">{'\uD83D\uDD10'}</span>
+                            <span className="status-icon">{'🔐'}</span>
                             <span className="status-label">2FA:</span>
                             <span className={`status-value ${api.twoFactorEnabled ? 'active' : 'inactive'}`}>
                                 {api.twoFactorEnabled ? 'Aktif' : 'Pasif'}
                             </span>
                         </div>
                         <div className="status-item">
-                            <span className="status-icon">{'\uD83D\uDCBB'}</span>
+                            <span className="status-icon">{'💻'}</span>
                             <span className="status-label">Aktif Oturumlar:</span>
                             <span className="status-value">{api.sessions.length}</span>
                         </div>
                         <div className="status-item">
-                            <span className="status-icon">{'\uD83C\uDF10'}</span>
+                            <span className="status-icon">{'🌐'}</span>
                             <span className="status-label">IP Whitelist:</span>
                             <span className="status-value">{api.ipWhitelist.length}</span>
                         </div>
@@ -39,7 +39,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
                 )}
 
                 <div className="security-tabs">
-                    {[['2fa', '\uD83D\uDD10 2FA'], ['sessions', '\uD83D\uDCBB Oturumlar'], ['ip', '\uD83C\uDF10 IP Whitelist']].map(([key, label]) => (
+                    {[['2fa', '🔐 2FA'], ['sessions', '💻 Oturumlar'], ['ip', '🌐 IP Whitelist']].map(([key, label]) => (
                         <button key={key} className={`tab-btn ${api.activeTab === key ? 'active' : ''}`}
                             onClick={() => api.setActiveTab(key)}>{label}</button>
                     ))}

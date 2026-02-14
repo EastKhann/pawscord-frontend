@@ -25,11 +25,11 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
                 body: JSON.stringify({ action, user_id: userId, ...extra })
             });
             if (res.ok) {
-                toast.success(`\u2705 ${action} i\u015Flemi ba\u015Far\u0131l\u0131!`);
+                toast.success(`✅ ${action} işlemi başarılı!`);
                 refetchUsers();
                 if (action === 'ban') refetchBannedUsers();
-            } else { toast.error('\u274C \u0130\u015Flem ba\u015Far\u0131s\u0131z!'); }
-        } catch (err) { toast.error('\u274C Hata olu\u015Ftu!'); }
+            } else { toast.error('❌ İşlem başarısız!'); }
+        } catch (err) { toast.error('❌ Hata oluştu!'); }
         setActionModal(null);
         setSelectedUser(null);
     };
@@ -41,15 +41,15 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: announceText })
             });
-            if (res.ok) { toast.success('\uD83D\uDCE2 Duyuru g\u00F6nderildi!'); setAnnounceText(''); setBroadcastModal(false); }
-        } catch (err) { toast.error('\u274C Duyuru g\u00F6nderilemedi!'); }
+            if (res.ok) { toast.success('📢 Duyuru gönderildi!'); setAnnounceText(''); setBroadcastModal(false); }
+        } catch (err) { toast.error('❌ Duyuru gönderilemedi!'); }
     };
 
     const handleBackup = async () => {
         setBackupStatus('running');
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/backup/`, { method: 'POST' });
-            if (res.ok) { setBackupStatus('success'); toast.success('\u2705 Yedekleme tamamland\u0131!'); }
+            if (res.ok) { setBackupStatus('success'); toast.success('✅ Yedekleme tamamlandı!'); }
             else { setBackupStatus('error'); }
         } catch (err) { setBackupStatus('error'); }
     };
@@ -57,8 +57,8 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
     const handleClearCache = async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/clear-cache/`, { method: 'POST' });
-            if (res.ok) { toast.success('\uD83E\uDDF9 Cache temizlendi!'); }
-        } catch (err) { toast.error('\u274C Cache temizlenemedi!'); }
+            if (res.ok) { toast.success('🧹 Cache temizlendi!'); }
+        } catch (err) { toast.error('❌ Cache temizlenemedi!'); }
     };
 
     const toggleMaintenance = async () => {
@@ -69,9 +69,9 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
             });
             if (res.ok) {
                 setMaintenanceMode(!maintenanceMode);
-                toast.success(maintenanceMode ? '\u2705 Bak\u0131m modu kapat\u0131ld\u0131!' : '\uD83D\uDD27 Bak\u0131m modu a\u00E7\u0131ld\u0131!');
+                toast.success(maintenanceMode ? '✅ Bakım modu kapatıldı!' : '🔧 Bakım modu açıldı!');
             }
-        } catch (err) { toast.error('\u274C Hata!'); }
+        } catch (err) { toast.error('❌ Hata!'); }
     };
 
     const openEditUserModal = (user) => {
@@ -95,14 +95,14 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
             });
             if (res.ok) {
                 const data = await res.json();
-                toast.success(`\u2705 ${data.message}`);
+                toast.success(`✅ ${data.message}`);
                 setEditUserModal(null);
                 refetchUsers();
             } else {
                 const data = await res.json();
-                toast.error(`\u274C ${data.error || 'G\u00FCncelleme ba\u015Far\u0131s\u0131z!'}`);
+                toast.error(`❌ ${data.error || 'Güncelleme başarısız!'}`);
             }
-        } catch (err) { toast.error('\u274C Hata olu\u015Ftu!'); }
+        } catch (err) { toast.error('❌ Hata oluştu!'); }
         setEditUserLoading(false);
     };
 
@@ -114,8 +114,8 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
                 body: JSON.stringify({ action: 'details', server_id: server.id })
             });
             if (res.ok) { setSelectedServer(await res.json()); }
-            else { toast.error('\u274C Sunucu detaylar\u0131 y\u00FCklenemedi!'); }
-        } catch (err) { toast.error('\u274C Hata olu\u015Ftu!'); }
+            else { toast.error('❌ Sunucu detayları yüklenemedi!'); }
+        } catch (err) { toast.error('❌ Hata oluştu!'); }
         setServerDetailLoading(false);
     };
 
@@ -126,11 +126,11 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
                 body: JSON.stringify({ action: 'delete', server_id: serverId })
             });
             if (res.ok) {
-                toast.success(`\u2705 "${serverName}" sunucusu silindi!`);
+                toast.success(`✅ "${serverName}" sunucusu silindi!`);
                 setDeleteConfirm(null);
                 refetchServers();
-            } else { toast.error('\u274C Sunucu silinemedi!'); }
-        } catch (err) { toast.error('\u274C Hata olu\u015Ftu!'); }
+            } else { toast.error('❌ Sunucu silinemedi!'); }
+        } catch (err) { toast.error('❌ Hata oluştu!'); }
     };
 
     const handleDeleteOldLogs = async () => {
@@ -139,9 +139,9 @@ const useAdminActions = ({ fetchWithAuth, apiBaseUrl, refetchUsers, refetchBanne
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ days: 30 })
             });
-            if (res.ok) { const data = await res.json(); toast.success(`\u2705 ${data.message}`); }
-            else { toast.error('\u274C Loglar silinemedi!'); }
-        } catch (err) { toast.error('\u274C Hata olu\u015Ftu!'); }
+            if (res.ok) { const data = await res.json(); toast.success(`✅ ${data.message}`); }
+            else { toast.error('❌ Loglar silinemedi!'); }
+        } catch (err) { toast.error('❌ Hata oluştu!'); }
     };
 
     const handleExportLogs = async (format, logType, logDateFrom, logDateTo) => {

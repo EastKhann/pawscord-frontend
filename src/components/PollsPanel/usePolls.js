@@ -11,12 +11,12 @@ export const INITIAL_POLL = {
 export const DURATION_OPTIONS = [
   { value: 3600, label: '1 saat' }, { value: 10800, label: '3 saat' },
   { value: 21600, label: '6 saat' }, { value: 43200, label: '12 saat' },
-  { value: 86400, label: '1 g\u00FCn' }, { value: 172800, label: '2 g\u00FCn' },
-  { value: 259200, label: '3 g\u00FCn' }, { value: 604800, label: '1 hafta' }
+  { value: 86400, label: '1 gün' }, { value: 172800, label: '2 gün' },
+  { value: 259200, label: '3 gün' }, { value: 604800, label: '1 hafta' }
 ];
 
 export const getStatusBadge = (status) => {
-  const badges = { active: { text: 'Aktif', color: '#10b981' }, ended: { text: 'Sonland\u0131', color: '#6b7280' } };
+  const badges = { active: { text: 'Aktif', color: '#10b981' }, ended: { text: 'Sonlandı', color: '#6b7280' } };
   return badges[status] || badges.active;
 };
 
@@ -26,9 +26,9 @@ export const formatTimeRemaining = (endTime) => {
   const days = Math.floor(diff / 86400);
   const hours = Math.floor((diff % 86400) / 3600);
   const minutes = Math.floor((diff % 3600) / 60);
-  if (days > 0) return `${days}g ${hours}s kald\u0131`;
-  if (hours > 0) return `${hours}s ${minutes}dk kald\u0131`;
-  return `${minutes} dakika kald\u0131`;
+  if (days > 0) return `${days}g ${hours}s kaldı`;
+  if (hours > 0) return `${hours}s ${minutes}dk kaldı`;
+  return `${minutes} dakika kaldı`;
 };
 
 export const calculatePercentage = (votes, totalVotes) => totalVotes === 0 ? 0 : Math.round((votes / totalVotes) * 100);
@@ -62,16 +62,16 @@ const usePolls = (serverId) => {
 
   const createPoll = async () => {
     const validOptions = newPoll.options.filter(o => o.trim());
-    if (!newPoll.question || !newPoll.channel_id) { toast.error('\u274C L\u00FCtfen soru ve kanal se\u00E7in'); return; }
-    if (validOptions.length < 2) { toast.error('\u274C En az 2 se\u00E7enek gerekli'); return; }
+    if (!newPoll.question || !newPoll.channel_id) { toast.error('❌ Lütfen soru ve kanal seçin'); return; }
+    if (validOptions.length < 2) { toast.error('❌ En az 2 seçenek gerekli'); return; }
     try {
       const r = await fetch(`${apiBaseUrl}/polls/create/`, {
         method: 'POST', headers: { ...authHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({ server_id: serverId, question: newPoll.question, channel_id: newPoll.channel_id, duration: newPoll.duration, allow_multiple_choices: newPoll.allow_multiple_choices, anonymous: newPoll.anonymous, options: validOptions })
       });
-      if (r.ok) { toast.success('\u2705 Anket olu\u015Fturuldu!'); setShowCreateModal(false); fetchPolls(); setNewPoll(INITIAL_POLL); }
-      else toast.error('\u274C Anket olu\u015Fturulamad\u0131');
-    } catch (e) { console.error('Error creating poll:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { toast.success('✅ Anket oluşturuldu!'); setShowCreateModal(false); fetchPolls(); setNewPoll(INITIAL_POLL); }
+      else toast.error('❌ Anket oluşturulamadı');
+    } catch (e) { console.error('Error creating poll:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const vote = async (pollId, optionId) => {
@@ -80,30 +80,30 @@ const usePolls = (serverId) => {
         method: 'POST', headers: { ...authHeaders, 'Content-Type': 'application/json' },
         body: JSON.stringify({ option_id: optionId })
       });
-      if (r.ok) { toast.success('\u2705 Oyunuz kaydedildi'); fetchPolls(); }
-      else { const d = await r.json(); toast.error(`\u274C ${d.error || 'Oy kullan\u0131lamad\u0131'}`); }
-    } catch (e) { console.error('Error voting:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { toast.success('✅ Oyunuz kaydedildi'); fetchPolls(); }
+      else { const d = await r.json(); toast.error(`❌ ${d.error || 'Oy kullanılamadı'}`); }
+    } catch (e) { console.error('Error voting:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const endPoll = async (pollId) => {
-    if (!await confirmDialog('Anketi sonland\u0131rmak istedi\u011Finize emin misiniz?')) return;
+    if (!await confirmDialog('Anketi sonlandırmak istediğinize emin misiniz?')) return;
     try {
       const r = await fetch(`${apiBaseUrl}/polls/${pollId}/end/`, { method: 'POST', headers: authHeaders });
-      if (r.ok) { toast.success('\u2705 Anket sonland\u0131r\u0131ld\u0131'); fetchPolls(); }
-      else toast.error('\u274C Anket sonland\u0131r\u0131lamad\u0131');
-    } catch (e) { console.error('Error ending poll:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { toast.success('✅ Anket sonlandırıldı'); fetchPolls(); }
+      else toast.error('❌ Anket sonlandırılamadı');
+    } catch (e) { console.error('Error ending poll:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
   const deletePoll = async (pollId) => {
-    if (!await confirmDialog('Anketi silmek istedi\u011Finize emin misiniz?')) return;
+    if (!await confirmDialog('Anketi silmek istediğinize emin misiniz?')) return;
     try {
       const r = await fetch(`${apiBaseUrl}/polls/${pollId}/delete/`, { method: 'DELETE', headers: authHeaders });
-      if (r.ok) { toast.success('\u2705 Anket silindi'); fetchPolls(); }
-      else toast.error('\u274C Anket silinemedi');
-    } catch (e) { console.error('Error deleting poll:', e); toast.error('\u274C Ba\u011Flant\u0131 hatas\u0131'); }
+      if (r.ok) { toast.success('✅ Anket silindi'); fetchPolls(); }
+      else toast.error('❌ Anket silinemedi');
+    } catch (e) { console.error('Error deleting poll:', e); toast.error('❌ Bağlantı hatası'); }
   };
 
-  const addOption = () => { if (newPoll.options.length < 10) setNewPoll({ ...newPoll, options: [...newPoll.options, ''] }); else toast.warning('\u26A0\uFE0F Maksimum 10 se\u00E7enek eklenebilir'); };
+  const addOption = () => { if (newPoll.options.length < 10) setNewPoll({ ...newPoll, options: [...newPoll.options, ''] }); else toast.warning('⚠️ Maksimum 10 seçenek eklenebilir'); };
   const removeOption = (i) => { if (newPoll.options.length > 2) setNewPoll({ ...newPoll, options: newPoll.options.filter((_, idx) => idx !== i) }); };
   const updateOption = (i, v) => { const opts = [...newPoll.options]; opts[i] = v; setNewPoll({ ...newPoll, options: opts }); };
 

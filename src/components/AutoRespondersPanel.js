@@ -50,7 +50,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
                   <div style={styles.responderInfo}>
                     <div style={styles.trigger}>Trigger: <span style={styles.triggerValue}>{resp.trigger}</span></div>
                     <div style={styles.response}>{resp.response}</div>
-                    <div style={styles.meta}>{MATCH_TYPES.find(t => t.value === resp.match_type)?.label}{resp.case_sensitive && ' \u2022 Case Sensitive'}{' \u2022 Uses: ' + (resp.usage_count || 0)}</div>
+                    <div style={styles.meta}>{MATCH_TYPES.find(t => t.value === resp.match_type)?.label}{resp.case_sensitive && ' • Case Sensitive'}{' • Uses: ' + (resp.usage_count || 0)}</div>
                   </div>
                   <div style={styles.actions}>
                     <button onClick={() => toggleResponder(resp.id, !resp.enabled)} style={styles.toggleButton} title={resp.enabled ? 'Disable' : 'Enable'}>

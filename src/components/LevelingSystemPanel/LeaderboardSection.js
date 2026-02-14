@@ -2,7 +2,7 @@ import { getRankColor, getLevelForXP, getXPForLevel } from './useLevelingSystem'
 
 const LeaderboardSection = ({ leaderboard, resetUserXP }) => (
   <div className="leaderboard-section">
-    <h3>{'\u{1F3C6}'} S{'\u0131'}ralama</h3>
+    <h3>{'\u{1F3C6}'} S{'ı'}ralama</h3>
     {leaderboard.length > 0 ? (
       <div className="leaderboard-list">
         {leaderboard.map((user, idx) => {
@@ -21,17 +21,17 @@ const LeaderboardSection = ({ leaderboard, resetUserXP }) => (
                 <div className="xp-bar-container">
                   <div className="xp-bar" style={{ width: `${Math.min(progress, 100)}%`, background: `linear-gradient(90deg, #5865f2, #7289da)` }} />
                 </div>
-                <span className="xp-text">Seviye {level} {'\u2022'} {user.xp} XP</span>
+                <span className="xp-text">Seviye {level} {'•'} {user.xp} XP</span>
               </div>
               <button className="reset-xp-btn" onClick={() => resetUserXP(user.user_id)}>
-                {'\u{1F504}'} S{'\u0131'}f{'\u0131'}rla
+                {'\u{1F504}'} S{'ı'}f{'ı'}rla
               </button>
             </div>
           );
         })}
       </div>
     ) : (
-      <p className="no-data">Hen{'\u00FC'}z veri yok</p>
+      <p className="no-data">Hen{'ü'}z veri yok</p>
     )}
   </div>
 );

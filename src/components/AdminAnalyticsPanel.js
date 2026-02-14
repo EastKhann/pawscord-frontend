@@ -40,15 +40,15 @@ const AdminAnalyticsPanel = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     };
 
     if (loading) return (
-        <div style={styles.overlay}><div style={styles.modal}><div style={styles.loading}>Y\u00FCkleniyor...</div></div></div>
+        <div style={styles.overlay}><div style={styles.modal}><div style={styles.loading}>Yükleniyor...</div></div></div>
     );
     if (!stats) return (
-        <div style={styles.overlay}><div style={styles.modal}><div style={styles.error}>Analytics verisi y\u00FCklenemedi</div></div></div>
+        <div style={styles.overlay}><div style={styles.modal}><div style={styles.error}>Analytics verisi yüklenemedi</div></div></div>
     );
 
     const TABS = [
         { key: 'overview', icon: <FaChartLine />, label: 'Genel' },
-        { key: 'users', icon: <FaUsers />, label: 'Kullan\u0131c\u0131lar' },
+        { key: 'users', icon: <FaUsers />, label: 'Kullanıcılar' },
         { key: 'premium', icon: <FaCrown />, label: 'Premium' },
         { key: 'servers', icon: <FaServer />, label: 'Sunucular' }
     ];

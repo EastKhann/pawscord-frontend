@@ -43,7 +43,7 @@ const BotsTab = ({ o }) => (
                                 <div style={styles.botName}>{bot.name}</div>
                                 <div style={styles.botDescription}>{bot.description}</div>
                                 <div style={styles.botStatus}>
-                                    Status: {bot.is_active ? '\ud83d\udfe2 Active' : '\ud83d\udd34 Inactive'}
+                                    Status: {bot.is_active ? '🟢 Active' : '🔴 Inactive'}
                                 </div>
                             </div>
                             <button onClick={() => o.deleteBot(bot.id)} style={styles.deleteButton}><FaTrash /></button>

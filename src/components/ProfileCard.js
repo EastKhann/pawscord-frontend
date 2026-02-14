@@ -24,14 +24,14 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
   }, [username, API_URL]);
 
   if (loading) return <div className="profile-card loading"><div className="loading-spinner" /></div>;
-  if (!profile) return <div className="profile-card error">Profil y\u00fcklenemedi</div>;
+  if (!profile) return <div className="profile-card error">Profil yüklenemedi</div>;
 
   const colors = profile.custom_colors || profile.theme_colors;
 
   return (
     <div className={`profile-card ${compact ? 'compact' : ''}`} style={{ '--primary': colors.primary, '--secondary': colors.secondary, '--accent': colors.accent, '--bg': colors.background }}>
       <div className="card-banner" style={{ backgroundImage: profile.banner ? `url(${profile.banner})` : undefined, backgroundColor: profile.banner_color }}>
-        {onEdit && <button className="edit-btn" onClick={onEdit}>{'\u270F\uFE0F'}</button>}
+        {onEdit && <button className="edit-btn" onClick={onEdit}>{'✏️'}</button>}
       </div>
 
       <div className="card-avatar">
@@ -53,7 +53,7 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
         <div className="card-stats">
           <div className="stat"><span className="stat-value">Lv.{profile.level}</span><span className="stat-label">Seviye</span></div>
           <div className="stat"><span className="stat-value">{profile.xp?.toLocaleString()}</span><span className="stat-label">XP</span></div>
-          <div className="stat"><span className="stat-value">{new Date(profile.created_at).toLocaleDateString('tr-TR', { month: 'short', year: 'numeric' })}</span><span className="stat-label">Kat\u0131l\u0131m</span></div>
+          <div className="stat"><span className="stat-value">{new Date(profile.created_at).toLocaleDateString('tr-TR', { month: 'short', year: 'numeric' })}</span><span className="stat-label">Katılım</span></div>
         </div>
 
         {profile.links?.length > 0 && (
@@ -62,8 +62,8 @@ export const ProfileCard = ({ username, onEdit, compact = false }) => {
           </div>
         )}
 
-        {profile.spotify_connected && <div className="spotify-badge">{'\uD83C\uDFB5'} Spotify Ba\u011fl\u0131</div>}
-        {profile.is_premium && <div className="premium-badge">{'\uD83D\uDC8E'} Premium</div>}
+        {profile.spotify_connected && <div className="spotify-badge">{'🎵'} Spotify Bağlı</div>}
+        {profile.is_premium && <div className="premium-badge">{'💎'} Premium</div>}
       </div>
     </div>
   );

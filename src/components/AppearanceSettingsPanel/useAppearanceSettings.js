@@ -103,13 +103,13 @@ const useAppearanceSettings = () => {
       if (response.ok) {
         setSettings(newSettings);
         applyTheme(newSettings);
-        toast.success('\u2705 G\u00f6r\u00fcn\u00fcm ayarlar\u0131 kaydedildi');
+        toast.success('✅ Görünüm ayarları kaydedildi');
       } else {
-        toast.error('\u274c Ayarlar kaydedilemedi');
+        toast.error('❌ Ayarlar kaydedilemedi');
       }
     } catch (error) {
       console.error('Error updating settings:', error);
-      toast.error('\u274c Ba\u011flant\u0131 hatas\u0131');
+      toast.error('❌ Bağlantı hatası');
     }
   };
 
@@ -124,7 +124,7 @@ const useAppearanceSettings = () => {
   };
 
   const resetToDefaults = async () => {
-    if (!await confirmDialog('T\u00fcm g\u00f6r\u00fcn\u00fcm ayarlar\u0131n\u0131 vars\u0131y\u0131lana d\u00f6nd\u00fcrmek istedi\u011finizden emin misiniz?')) {
+    if (!await confirmDialog('Tüm görünüm ayarlarını varsıyılana döndürmek istediğinizden emin misiniz?')) {
       return;
     }
 
@@ -139,11 +139,11 @@ const useAppearanceSettings = () => {
         const data = await response.json();
         setSettings(data);
         applyTheme(data);
-        toast.success('\u2705 Ayarlar vars\u0131y\u0131lana d\u00f6nd\u00fcr\u00fcld\u00fc');
+        toast.success('✅ Ayarlar varsıyılana döndürüldü');
       }
     } catch (error) {
       console.error('Error resetting settings:', error);
-      toast.error('\u274c Ayarlar s\u0131f\u0131rlanamad\u0131');
+      toast.error('❌ Ayarlar sıfırlanamadı');
     }
   };
 

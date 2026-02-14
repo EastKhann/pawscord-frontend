@@ -5,7 +5,7 @@ import styles from './friendsTabStyles';
 
 const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRespond }) => (
     <div style={styles.listContainer}>
-        <h4 style={styles.listHeader}>BEKLEYEN {'\u0130'}STEKLER {'\u2014'} {requests.length}</h4>
+        <h4 style={styles.listHeader}>BEKLEYEN {'İ'}STEKLER {'—'} {requests.length}</h4>
         {requests.length === 0 && outgoing.length === 0 && <p style={styles.emptyText}>Bekleyen istek yok.</p>}
 
         {requests.map(req => {
@@ -17,7 +17,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                         <LazyImage src={senderAvatar || getDeterministicAvatar(senderUsername)} style={styles.avatar} alt="avatar" />
                         <div style={{ marginLeft: '12px' }}>
                             <strong style={{ color: 'white', display: 'block' }}>{senderUsername}</strong>
-                            <span style={{ fontSize: '0.8em', color: '#faa61a' }}>Sana istek g\u00F6nderdi!</span>
+                            <span style={{ fontSize: '0.8em', color: '#faa61a' }}>Sana istek gönderdi!</span>
                         </div>
                     </div>
                     <div style={styles.actions}>
@@ -30,7 +30,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
 
         {outgoing.length > 0 && (
             <>
-                <h4 style={{ ...styles.listHeader, marginTop: '30px' }}>G{'\u00D6'}NDERD{'\u0130'}KLER{'\u0130'}M {'\u2014'} {outgoing.length}</h4>
+                <h4 style={{ ...styles.listHeader, marginTop: '30px' }}>G{'Ö'}NDERD{'İ'}KLER{'İ'}M {'—'} {outgoing.length}</h4>
                 {outgoing.map(req => {
                     const receiverUsername = req.receiver_username || 'Unknown';
                     const receiverAvatar = req.receiver_avatar;
@@ -40,7 +40,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                                 <LazyImage src={receiverAvatar || getDeterministicAvatar(receiverUsername)} style={styles.avatar} alt="avatar" />
                                 <span style={{ marginLeft: '12px', color: '#b9bbbe' }}>{receiverUsername} (Bekliyor...)</span>
                             </div>
-                            <button onClick={() => handleRespond(req.id, 'reject')} style={styles.rejectBtn} title="{'\u0130'}ptal Et"><FaTimes /></button>
+                            <button onClick={() => handleRespond(req.id, 'reject')} style={styles.rejectBtn} title="{'İ'}ptal Et"><FaTimes /></button>
                         </div>
                     );
                 })}

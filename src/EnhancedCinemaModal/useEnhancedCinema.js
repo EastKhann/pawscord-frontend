@@ -11,7 +11,7 @@ const useEnhancedCinema = (ws) => {
 
     // Playlist state
     const [playlist, setPlaylist] = useState([
-        { id: 1, url: 'https://www.youtube.com/watch?v=jfKfPfyJRdk', title: 'lofi hip hop radio \uD83D\uDCDA' },
+        { id: 1, url: 'https://www.youtube.com/watch?v=jfKfPfyJRdk', title: 'lofi hip hop radio 📚' },
     ]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showPlaylist, setShowPlaylist] = useState(false);

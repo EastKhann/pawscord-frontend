@@ -29,7 +29,7 @@ const useProfileCustomization = (userId, fetchWithAuth, apiBaseUrl) => {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(customization)
       });
-      if (r.ok) toast.success('\u2705 Profil \u00F6zelle\u015Ftirmeleri kaydedildi!');
+      if (r.ok) toast.success('✅ Profil özelleştirmeleri kaydedildi!');
     } catch (e) { console.error('Failed to save customization:', e); }
   };
 

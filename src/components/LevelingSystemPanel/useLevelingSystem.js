@@ -5,7 +5,7 @@ import confirmDialog from '../../utils/confirmDialog';
 
 const DEFAULT_CONFIG = {
   enabled: false, xp_per_message: 15, xp_cooldown: 60,
-  level_up_message: 'Tebrikler {user}! Seviye {level} oldun! \uD83C\uDF89',
+  level_up_message: 'Tebrikler {user}! Seviye {level} oldun! 🎉',
   announce_channel_id: '', stack_roles: false, reset_on_leave: false,
 };
 
@@ -53,22 +53,22 @@ const useLevelingSystem = (serverId) => {
   useEffect(() => { if (serverId) { fetchConfig(); fetchLevelRoles(); fetchRoles(); fetchChannels(); fetchLeaderboard(); } }, [serverId]);
 
   const saveConfig = async () => {
-    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/config/update/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify(config) }); if (r.ok) toast.success('\u2705 Ayarlar kaydedildi'); else toast.error('\u274C Kaydetme ba\u015Far\u0131s\u0131z'); } catch (e) { toast.error('\u274C Hata olu\u015Ftu'); }
+    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/config/update/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify(config) }); if (r.ok) toast.success('✅ Ayarlar kaydedildi'); else toast.error('❌ Kaydetme başarısız'); } catch (e) { toast.error('❌ Hata oluştu'); }
   };
 
   const addLevelRole = async () => {
-    if (!newRole.role_id) { toast.error('\u26A0\uFE0F Rol se\u00E7in'); return; }
-    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/add/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify(newRole) }); if (r.ok) { fetchLevelRoles(); setNewRole({ level: 1, role_id: '' }); toast.success('\u2705 Rol eklendi'); } } catch (e) { toast.error('\u274C Hata'); }
+    if (!newRole.role_id) { toast.error('⚠️ Rol seçin'); return; }
+    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/add/`, { method: 'POST', headers: jsonHeaders(), body: JSON.stringify(newRole) }); if (r.ok) { fetchLevelRoles(); setNewRole({ level: 1, role_id: '' }); toast.success('✅ Rol eklendi'); } } catch (e) { toast.error('❌ Hata'); }
   };
 
   const removeLevelRole = async (roleId) => {
-    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/${roleId}/delete/`, { method: 'DELETE', headers: headers() }); if (r.ok) { fetchLevelRoles(); toast.success('\u2705 Rol kald\u0131r\u0131ld\u0131'); } } catch (e) { toast.error('\u274C Hata'); }
+    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/roles/${roleId}/delete/`, { method: 'DELETE', headers: headers() }); if (r.ok) { fetchLevelRoles(); toast.success('✅ Rol kaldırıldı'); } } catch (e) { toast.error('❌ Hata'); }
   };
 
   const resetUserXP = async (userId) => {
-    const confirmed = await confirmDialog('Bu kullan\u0131c\u0131n\u0131n XP\'sini s\u0131f\u0131rlamak istedi\u011Finize emin misiniz?');
+    const confirmed = await confirmDialog('Bu kullanıcının XP\'sini sıfırlamak istediğinize emin misiniz?');
     if (!confirmed) return;
-    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/user/${userId}/reset/`, { method: 'POST', headers: headers() }); if (r.ok) { fetchLeaderboard(); toast.success('\u2705 XP s\u0131f\u0131rland\u0131'); } } catch (e) { toast.error('\u274C Hata'); }
+    try { const r = await fetch(`${apiBaseUrl}/leveling/server/${serverId}/user/${userId}/reset/`, { method: 'POST', headers: headers() }); if (r.ok) { fetchLeaderboard(); toast.success('✅ XP sıfırlandı'); } } catch (e) { toast.error('❌ Hata'); }
   };
 
   const updateConfig = (key, value) => setConfig({ ...config, [key]: value });
