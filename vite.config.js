@@ -216,7 +216,9 @@ export default defineConfig({
                 !id.includes('react-toastify') && !id.includes('react-color') &&
                 !id.includes('react-chartjs') && !id.includes('react-player') &&
                 !id.includes('react-window') && !id.includes('react-virtualized') &&
-                !id.includes('react-syntax') && !id.includes('react-dnd')) {
+                !id.includes('react-syntax') && !id.includes('react-dnd') &&
+                !id.includes('react-redux') && !id.includes('@reduxjs') &&
+                !id.includes('@sentry') && !id.includes('@tiptap')) {
                 return 'react-core'; // React + ReactDOM + Scheduler tek chunk'ta
               }
             }
@@ -236,9 +238,12 @@ export default defineConfig({
               return 'ui-vendor';
             }
 
-            // Chart libraries - Recharts MUST go to react-core (SES/lockdown fix)
-            if (id.includes('recharts')) {
-              return 'react-core'; // 🔥 FIX: Recharts needs React globals from react-core
+            // Chart libraries - all chart libs in chart-vendor (imports react-core, no circular dep)
+            if (id.includes('recharts') || id.includes('victory-vendor') ||
+                id.includes('@reduxjs/toolkit') || id.includes('react-redux') ||
+                id.includes('reselect') || id.includes('immer') ||
+                id.includes('use-sync-external-store')) {
+              return 'chart-vendor'; // Recharts + its Redux/toolkit deps
             }
             if (id.includes('chart.js') && !id.includes('react-chartjs')) {
               return 'chart-vendor'; // Pure chart.js
@@ -256,8 +261,8 @@ export default defineConfig({
             if (id.includes('@tiptap')) {
               return 'editor-vendor';
             }
-            if (id.includes('dnd')) {
-              return 'ui-vendor'; // Move to ui-vendor to avoid circular deps
+            if (id.includes('react-dnd') || id.includes('dnd-core') || id.includes('@dnd-kit')) {
+              return 'ui-vendor'; // DnD libraries
             }
 
             // Crypto & Security
