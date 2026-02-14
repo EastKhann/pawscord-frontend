@@ -4,6 +4,8 @@
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useChatStore } from '../stores/useChatStore';
+import { soundManager } from '../utils/notificationSounds';
+import { loadSavedTheme } from '../utils/ThemeManager';
 
 export default function useChatConnection({
     activeChat, username, token, isAuthenticated, isInitialDataLoaded,
@@ -81,7 +83,6 @@ export default function useChatConnection({
 
                 if (data.username !== username) {
                     try {
-                        const { soundManager } = require('../utils/notificationSounds');
                         const isMention = data.content?.includes(`@${username}`) || data.mentions?.includes(username);
                         const isDM = data.type === 'dm';
                         if (isMention) soundManager.play('mention');
@@ -115,7 +116,6 @@ export default function useChatConnection({
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
 
-        const { loadSavedTheme } = require('../utils/ThemeManager');
         const saved = loadSavedTheme();
         setCurrentTheme(saved);
 
