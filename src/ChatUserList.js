@@ -88,7 +88,7 @@ const ChatUserList = ({
       {/* HEADER */}
       <div style={styles.header}>
         <span style={styles.headerTitle}>
-          {isServer ? 'Sunucu \u00dcyeleri' : 'Arkada\u015flar'}
+          {isServer ? 'Sunucu Üyeleri' : 'Arkadaşlar'}
         </span>
         <span style={styles.headerCount}>{onlineCount} / {totalCount}</span>
       </div>
@@ -99,7 +99,7 @@ const ChatUserList = ({
           <div style={styles.emptyState}>
             <FaCircle size={24} color="#43b581" style={{ opacity: 0.3 }} />
             <p style={{ color: '#b9bbbe', fontSize: '13px', marginTop: '8px' }}>
-              {isServer ? 'Bu sunucuda kimse yok' : 'Arkada\u015f listesi bo\u015f. Arkada\u015f ekle!'}
+              {isServer ? 'Bu sunucuda kimse yok' : 'Arkadaş listesi boş. Arkadaş ekle!'}
             </p>
           </div>
         ) : (
@@ -108,7 +108,7 @@ const ChatUserList = ({
               <>
                 <div style={styles.sectionHeader}>
                   <FaCircle size={8} color="#43b581" />
-                  <span style={styles.sectionTitle}>\u00c7evrimi\u00e7i \u2014 {onlineList.length}</span>
+                  <span style={styles.sectionTitle}>Çevrimiçi — {onlineList.length}</span>
                 </div>
                 {renderUserList(onlineList)}
               </>
@@ -118,7 +118,7 @@ const ChatUserList = ({
               <>
                 <div style={{ ...styles.sectionHeader, marginTop: onlineList.length > 0 ? '16px' : '0' }}>
                   <FaMoon size={8} color="#747f8d" />
-                  <span style={styles.sectionTitle}>\u00c7evrimd\u0131\u015f\u0131 \u2014 {offlineList.length}</span>
+                  <span style={styles.sectionTitle}>Çevrimdışı — {offlineList.length}</span>
                 </div>
                 {renderUserList(offlineList)}
               </>
@@ -131,14 +131,14 @@ const ChatUserList = ({
       <div style={styles.quickAccessSection}>
         {currentUserProfile?.is_whitelisted && (
           <>
-            <div style={styles.quickAccessHeader}>HIZLI ER\u0130\u015e\u0130M</div>
+            <div style={styles.quickAccessHeader}>HIZLI ERİŞİM</div>
             <button
               onClick={() => navigate('/eng-learn')}
               style={styles.quickAccessButton}
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(88, 101, 242, 0.4)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(88, 101, 242, 0.3)'; }}
             >
-              <span style={{ fontSize: '18px' }}>\ud83d\udcda</span>
+              <span style={{ fontSize: '18px' }}>📚</span>
               <span>English Learn</span>
             </button>
             <button
@@ -151,13 +151,13 @@ const ChatUserList = ({
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(243, 156, 18, 0.4)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(243, 156, 18, 0.3)'; }}
             >
-              <span style={{ fontSize: '18px' }}>\ud83d\udcca</span>
+              <span style={{ fontSize: '18px' }}>📊</span>
               <span>Crypto Signals</span>
             </button>
           </>
         )}
         <div style={styles.pawscordLogo}>
-          <div style={{ fontSize: '24px', marginBottom: '4px' }}>\ud83d\udc3e</div>
+          <div style={{ fontSize: '24px', marginBottom: '4px' }}>🐾</div>
           <div style={{ fontWeight: 'bold', color: '#5865f2', fontSize: '14px' }}>PAWSCORD</div>
           <div style={{ fontSize: '11px', color: '#b9bbbe', opacity: 0.7, marginTop: '2px' }}>v1.1.133</div>
         </div>

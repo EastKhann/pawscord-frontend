@@ -170,12 +170,17 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
         }
     };
 
-    const handleCreateServer = async (e) => {
-        e.preventDefault();
-        if (!newServerName.trim()) return;
+    const handleCreateServer = async (nameOrEvent, isPublic) => {
+        // Called from AddServerModal with (name, isPublic) or from a form with (event)
+        if (nameOrEvent?.preventDefault) {
+            nameOrEvent.preventDefault();
+        }
+        const serverName = typeof nameOrEvent === 'string' ? nameOrEvent : newServerName;
+        const serverPublic = typeof nameOrEvent === 'string' ? isPublic : isNewServerPublic;
+        if (!serverName?.trim()) return;
         await fetchWithAuth(`${apiUrl}/servers/create/`, {
             method: 'POST',
-            body: JSON.stringify({ name: newServerName, is_public: isNewServerPublic })
+            body: JSON.stringify({ name: serverName, is_public: !!serverPublic })
         });
         setNewServerName('');
         setIsNewServerPublic(false);

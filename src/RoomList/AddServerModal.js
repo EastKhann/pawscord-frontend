@@ -9,7 +9,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => 
     const [isNewServerPublic, setIsNewServerPublic] = useState(false);
 
     const handleCreateServer = async (e) => {
-        e.preventDefault();
+        e?.preventDefault();
         if (!newServerName.trim()) return;
         await onCreateServer(newServerName, isNewServerPublic);
         setNewServerName('');
