@@ -1,0 +1,41 @@
+export const THEME_PRESETS = [
+  { name: 'Discord Purple', primary: '#5865f2', accent: '#4752c4', bg: '#2b2d31' },
+  { name: 'Sunset Orange', primary: '#f26522', accent: '#e04e1b', bg: '#2d2420' },
+  { name: 'Forest Green', primary: '#3ba55d', accent: '#2d7d46', bg: '#1f2b23' },
+  { name: 'Ocean Blue', primary: '#3498db', accent: '#2980b9', bg: '#1e2838' },
+  { name: 'Rose Pink', primary: '#e91e63', accent: '#c2185b', bg: '#2d1f26' },
+  { name: 'Golden Yellow', primary: '#faa61a', accent: '#f57c00', bg: '#2d2819' },
+  { name: 'Dark Red', primary: '#ed4245', accent: '#c03537', bg: '#2d1e1f' },
+  { name: 'Cyber Purple', primary: '#9b59b6', accent: '#8e44ad', bg: '#251f2d' }
+];
+
+export const styles = {
+  container: { width: '100%', height: '100%', backgroundColor: '#313338', display: 'flex', flexDirection: 'column' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #1e1f22', backgroundColor: '#2b2d31' },
+  title: { margin: 0, color: '#fff', fontSize: '20px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '10px' },
+  headerActions: { display: 'flex', gap: '12px' },
+  previewButton: { backgroundColor: '#383a40', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: '500' },
+  previewButtonActive: { backgroundColor: '#5865f2', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: '500' },
+  saveButton: { backgroundColor: '#3ba55d', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' },
+  editContainer: { flex: 1, overflowY: 'auto', padding: '20px' },
+  section: { backgroundColor: '#2b2d31', borderRadius: '8px', padding: '20px', marginBottom: '16px' },
+  sectionTitle: { color: '#fff', fontSize: '16px', fontWeight: '600', marginBottom: '16px' },
+  inputGroup: { marginBottom: '16px' },
+  label: { display: 'block', color: '#b5bac1', fontSize: '14px', marginBottom: '8px', fontWeight: '500' },
+  colorInput: { width: '100%', height: '50px', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  fileInput: { display: 'none' },
+  uploadButton: { backgroundColor: '#5865f2', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' },
+  presetGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '12px' },
+  presetCard: { padding: '20px', borderRadius: '8px', cursor: 'pointer', textAlign: 'center', transition: 'transform 0.2s' },
+  presetName: { color: '#fff', fontSize: '13px', fontWeight: '600', textShadow: '0 2px 4px rgba(0,0,0,0.3)' },
+  colorGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' },
+  bioTextarea: { width: '100%', padding: '12px', backgroundColor: '#1e1f22', border: '1px solid #1e1f22', borderRadius: '4px', color: '#fff', fontSize: '14px', resize: 'vertical', minHeight: '100px', fontFamily: 'inherit' },
+  charCount: { textAlign: 'right', color: '#b5bac1', fontSize: '12px', marginTop: '8px' },
+  checkbox: { display: 'flex', alignItems: 'center', gap: '12px', color: '#b5bac1', fontSize: '14px', marginBottom: '12px', cursor: 'pointer' },
+  preview: { flex: 1, overflowY: 'auto', padding: '40px' },
+  previewBanner: { width: '100%', height: '200px', borderRadius: '8px 8px 0 0', backgroundSize: 'cover', backgroundPosition: 'center' },
+  previewContent: { backgroundColor: '#2b2d31', borderRadius: '0 0 8px 8px', padding: '60px 20px 20px', position: 'relative' },
+  previewAvatar: { width: '120px', height: '120px', borderRadius: '50%', backgroundColor: '#5865f2', position: 'absolute', top: '-60px', left: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' },
+  previewInfo: { marginTop: '20px' },
+  loading: { display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#b5bac1' }
+};

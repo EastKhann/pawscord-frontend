@@ -1,609 +1,223 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
+import { styles } from './SettingsModal/settingsModalStyles';
+import useMicTest from './SettingsModal/useMicTest';
 
 const SettingsModal = ({
-    audioSettings,
-    vadSensitivity,
-    isNoiseSuppressionEnabled,
-    screenShareQuality,
-    screenShareFPS,
-    onClose,
-    onSave,
-    onVadChange,
-    onNoiseToggle,
-    onScreenQualityChange,
-    onScreenFPSChange
+  audioSettings,
+  vadSensitivity,
+  isNoiseSuppressionEnabled,
+  screenShareQuality,
+  screenShareFPS,
+  onClose,
+  onSave,
+  onVadChange,
+  onNoiseToggle,
+  onScreenQualityChange,
+  onScreenFPSChange
 }) => {
-    const [settings, setSettings] = useState(audioSettings);
-    const [tempVadSensitivity, setTempVadSensitivity] = useState(vadSensitivity);
-    const [tempScreenQuality, setTempScreenQuality] = useState(screenShareQuality);
-    const [tempScreenFPS, setTempScreenFPS] = useState(screenShareFPS);
+  const [settings, setSettings] = useState(audioSettings);
+  const [tempVadSensitivity, setTempVadSensitivity] = useState(vadSensitivity);
+  const [tempScreenQuality, setTempScreenQuality] = useState(screenShareQuality);
+  const [tempScreenFPS, setTempScreenFPS] = useState(screenShareFPS);
+  const { micLevel, isTesting, setIsTesting } = useMicTest();
 
-    // 🔥 YENİ: Microphone Test
-    const [micLevel, setMicLevel] = useState(0);
-    const [isTesting, setIsTesting] = useState(false);
-    const testStreamRef = React.useRef(null);
-    const analyserRef = React.useRef(null);
-    const animationRef = React.useRef(null);
-
-    // 🔥 YENİ: Microphone Test Start/Stop
-    React.useEffect(() => {
-        if (!isTesting) {
-            // Stop testing
-            if (animationRef.current) cancelAnimationFrame(animationRef.current);
-            if (testStreamRef.current) {
-                testStreamRef.current.getTracks().forEach(track => track.stop());
-                testStreamRef.current = null;
-            }
-            setMicLevel(0);
-            return;
-        }
-
-        // Start testing
-        (async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                testStreamRef.current = stream;
-
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                const audioContext = new AudioContext();
-                const analyser = audioContext.createAnalyser();
-                analyser.fftSize = 256;
-                analyser.smoothingTimeConstant = 0.8;
-                analyserRef.current = analyser;
-
-                const source = audioContext.createMediaStreamSource(stream);
-                source.connect(analyser);
-
-                const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-                const updateLevel = () => {
-                    analyser.getByteFrequencyData(dataArray);
-                    const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                    setMicLevel(Math.min(100, average * 1.5)); // Scale to 0-100
-                    animationRef.current = requestAnimationFrame(updateLevel);
-                };
-
-                updateLevel();
-            } catch (err) {
-                console.error('Mic test error:', err);
-                setIsTesting(false);
-            }
-        })();
-
-        return () => {
-            if (animationRef.current) cancelAnimationFrame(animationRef.current);
-            if (testStreamRef.current) {
-                testStreamRef.current.getTracks().forEach(track => track.stop());
-            }
-        };
-    }, [isTesting]);
-
-    return (
-        <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10000,
-            padding: '20px', // Ekrana yapışmasın
-        }}>
-            <div style={{
-                background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
-                borderRadius: '16px',
-                maxWidth: '500px',
-                width: '90%',
-                maxHeight: '90vh', // Ekran yüksekliğinin %90'ı
-                display: 'flex',
-                flexDirection: 'column',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-                overflow: 'hidden', // Taşma kontrolü
-            }}>
-                {/* Header - Sabit */}
-                <div style={{
-                    padding: '24px 32px',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                    flexShrink: 0, // Küçülmesin
-                }}>
-                    <h2 style={{
-                        color: '#fff',
-                        margin: 0,
-                        fontSize: '24px',
-                        fontWeight: 700,
-                    }}>
-                        ⚙️ Ses Ayarları
-                    </h2>
-                </div>
-
-                {/* Content - Kaydırılabilir */}
-                <div style={{
-                    padding: '24px 32px',
-                    overflowY: 'auto', // Dikey kaydırma
-                    flex: 1, // Kalan alanı kaplasın
-                }}>
-                    {/* 🔥 YENİ: Microphone Test Panel */}
-                    <div style={{
-                        marginBottom: '20px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                        border: isTesting ? '2px solid #43b581' : '1px solid rgba(255,255,255,0.1)',
-                    }}>
-                        <div style={{ marginBottom: '12px', color: '#fff' }}>
-                            <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '4px' }}>
-                                🎤 Mikrofon Testi
-                            </div>
-                            <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)' }}>
-                                Mikrofonunuzun çalışıp çalışmadığını test edin
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={() => setIsTesting(!isTesting)}
-                            style={{
-                                width: '100%',
-                                padding: '10px',
-                                background: isTesting ? '#43b581' : '#5865f2',
-                                border: 'none',
-                                borderRadius: '8px',
-                                color: '#fff',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                marginBottom: '12px',
-                            }}
-                        >
-                            {isTesting ? '⏹️ Testi Durdur' : '▶️ Testi Başlat'}
-                        </button>
-
-                        {isTesting && (
-                            <div>
-                                <div style={{
-                                    height: '8px',
-                                    background: 'rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '4px',
-                                    overflow: 'hidden',
-                                    marginBottom: '8px',
-                                }}>
-                                    <div style={{
-                                        height: '100%',
-                                        width: `${micLevel}%`,
-                                        background: micLevel > 70 ? '#43b581' : micLevel > 40 ? '#faa61a' : '#ed4245',
-                                        borderRadius: '4px',
-                                        transition: 'width 0.1s ease',
-                                    }} />
-                                </div>
-                                <div style={{
-                                    fontSize: '12px',
-                                    color: micLevel > 10 ? '#43b581' : '#ed4245',
-                                    textAlign: 'center',
-                                    fontWeight: 600,
-                                }}>
-                                    {micLevel > 10 ? '✅ Mikrofonunuz çalışıyor!' : '⚠️ Konuşun veya ses yapın'}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Echo Cancellation */}
-                    <div style={{
-                        marginBottom: '20px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                    }}>
-                        <label style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            color: '#fff',
-                        }}>
-                            <input
-                                type="checkbox"
-                                checked={settings.echoCancellation}
-                                onChange={(e) => setSettings({
-                                    ...settings,
-                                    echoCancellation: e.target.checked
-                                })}
-                                style={{
-                                    width: '20px',
-                                    height: '20px',
-                                    cursor: 'pointer',
-                                }}
-                            />
-                            <div>
-                                <div style={{ fontWeight: 600, fontSize: '16px' }}>
-                                    🔊 Yankı Engelleme
-                                </div>
-                                <div style={{
-                                    fontSize: '13px',
-                                    color: 'rgba(255, 255, 255, 0.6)',
-                                    marginTop: '4px',
-                                }}>
-                                    Hoparlörden gelen sesi mikrofona almaz
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-
-                    {/* Noise Suppression */}
-                    <div style={{
-                        marginBottom: '20px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                    }}>
-                        <label style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            color: '#fff',
-                        }}>
-                            <input
-                                type="checkbox"
-                                checked={isNoiseSuppressionEnabled}
-                                onChange={() => onNoiseToggle && onNoiseToggle()}
-                                style={{
-                                    width: '20px',
-                                    height: '20px',
-                                    cursor: 'pointer',
-                                }}
-                            />
-                            <div>
-                                <div style={{ fontWeight: 600, fontSize: '16px' }}>
-                                    🎙️ Gürültü Engelleme
-                                </div>
-                                <div style={{
-                                    fontSize: '13px',
-                                    color: 'rgba(255, 255, 255, 0.6)',
-                                    marginTop: '4px',
-                                }}>
-                                    Arka plan gürültüsünü azaltır (Klavye, fan vb.)
-                                    <br />
-                                    <span style={{ color: '#ff9800', fontWeight: 600 }}>
-                                        ⚠️ Müzik paylaşırken kapatın!
-                                    </span>
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-
-                    {/* 🔥 YENİ: Push-to-Talk Mode */}
-                    <div style={{
-                        marginBottom: '20px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                    }}>
-                        <div style={{ marginBottom: '12px', color: '#fff' }}>
-                            <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '4px' }}>
-                                🎙️ Ses Modu
-                            </div>
-                            <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)' }}>
-                                Voice Activity veya Push-to-Talk
-                            </div>
-                        </div>
-
-                        <div style={{ marginBottom: '12px' }}>
-                            <select
-                                value={audioSettings?.pttMode ? 'ptt' : 'voice'}
-                                onChange={(e) => {
-                                    const isPtt = e.target.value === 'ptt';
-                                    setSettings({ ...settings, pttMode: isPtt });
-                                    togglePTTMode && togglePTTMode();
-                                }}
-                                style={{
-                                    width: '100%',
-                                    padding: '10px',
-                                    background: '#2b2d31',
-                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '8px',
-                                    color: '#fff',
-                                    fontSize: '14px',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <option value="voice">🎤 Voice Activity (Otomatik)</option>
-                                <option value="ptt">⌨️ Push-to-Talk (Tuşa basınca)</option>
-                            </select>
-                        </div>
-
-                        {audioSettings?.pttMode && (
-                            <div style={{ marginTop: '12px' }}>
-                                <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
-                                    ⌨️ PTT Tuşu:
-                                </div>
-                                <select
-                                    value={audioSettings?.pttKey || 'Space'}
-                                    onChange={(e) => {
-                                        setSettings({ ...settings, pttKey: e.target.value });
-                                        updatePTTKey && updatePTTKey(e.target.value);
-                                    }}
-                                    style={{
-                                        width: '100%',
-                                        padding: '8px',
-                                        background: '#2b2d31',
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                        borderRadius: '8px',
-                                        color: '#fff',
-                                        fontSize: '13px',
-                                        cursor: 'pointer',
-                                    }}
-                                >
-                                    <option value="Space">Space (Boşluk)</option>
-                                    <option value="ControlLeft">Ctrl (Sol)</option>
-                                    <option value="ControlRight">Ctrl (Sağ)</option>
-                                    <option value="ShiftLeft">Shift (Sol)</option>
-                                    <option value="AltLeft">Alt (Sol)</option>
-                                    <option value="KeyV">V</option>
-                                    <option value="KeyC">C</option>
-                                </select>
-                                <div style={{ fontSize: '11px', color: '#43b581', marginTop: '6px', textAlign: 'center' }}>
-                                    ℹ️ Tuşa basılı tutunca konuşursunuz
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* 🔥 YENİ: VAD Sensitivity Slider */}
-                    <div style={{
-                        marginBottom: '20px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                    }}>
-                        <div style={{ marginBottom: '12px', color: '#fff' }}>
-                            <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '4px' }}>
-                                🎚️ Mikrofon Hassasiyeti
-                            </div>
-                            <div style={{
-                                fontSize: '13px',
-                                color: 'rgba(255, 255, 255, 0.6)',
-                            }}>
-                                Konuşma algılama eşiği (Düşük = Hassas, Yüksek = Az Hassas)
-                            </div>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ color: '#fff', fontSize: '14px' }}>20</span>
-                            <input
-                                type="range"
-                                min="20"
-                                max="80"
-                                value={tempVadSensitivity}
-                                onChange={(e) => {
-                                    setTempVadSensitivity(parseInt(e.target.value));
-                                    onVadChange && onVadChange(parseInt(e.target.value));
-                                }}
-                                style={{
-                                    flex: 1,
-                                    height: '6px',
-                                    borderRadius: '3px',
-                                    outline: 'none',
-                                    background: `linear-gradient(to right, #5865f2 0%, #5865f2 ${((tempVadSensitivity - 20) / 60) * 100}%, rgba(255,255,255,0.2) ${((tempVadSensitivity - 20) / 60) * 100}%, rgba(255,255,255,0.2) 100%)`,
-                                    cursor: 'pointer'
-                                }}
-                            />
-                            <span style={{ color: '#fff', fontSize: '14px' }}>80</span>
-                            <span style={{
-                                color: '#5865f2',
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                minWidth: '40px',
-                                textAlign: 'right'
-                            }}>
-                                {tempVadSensitivity}
-                            </span>
-                        </div>
-                        <div style={{
-                            marginTop: '8px',
-                            fontSize: '12px',
-                            color: tempVadSensitivity < 35
-                                ? '#ff9800'
-                                : tempVadSensitivity > 60
-                                    ? '#ff9800'
-                                    : '#43b581',
-                            textAlign: 'center'
-                        }}>
-                            {tempVadSensitivity < 35
-                                ? '⚠️ Çok hassas - False positive olabilir'
-                                : tempVadSensitivity > 60
-                                    ? '⚠️ Az hassas - Konuşma algılanmayabilir'
-                                    : '✅ Optimal hassasiyet'}
-                        </div>
-                    </div>
-
-                    {/* 🔥 YENİ: Screen Share Quality */}
-                    <div style={{
-                        marginBottom: '20px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                    }}>
-                        <div style={{ marginBottom: '12px', color: '#fff' }}>
-                            <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '4px' }}>
-                                📺 Ekran Paylaşımı Kalitesi
-                            </div>
-                            <div style={{
-                                fontSize: '13px',
-                                color: 'rgba(255, 255, 255, 0.6)',
-                            }}>
-                                Yüksek kalite = Daha fazla bandwidth
-                            </div>
-                        </div>
-
-                        {/* Quality Selector */}
-                        <div style={{ marginBottom: '12px' }}>
-                            <select
-                                value={tempScreenQuality}
-                                onChange={(e) => {
-                                    setTempScreenQuality(e.target.value);
-                                    onScreenQualityChange && onScreenQualityChange(e.target.value);
-                                }}
-                                style={{
-                                    width: '100%',
-                                    padding: '10px',
-                                    background: '#2b2d31',
-                                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                                    borderRadius: '8px',
-                                    color: '#fff',
-                                    fontSize: '14px',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <option value="720p">720p (HD) - Az bandwidth</option>
-                                <option value="1080p">1080p (Full HD) - Önerilen ✅</option>
-                                <option value="4K">4K (Ultra HD) - Çok bandwidth</option>
-                            </select>
-                        </div>
-
-                        {/* FPS Slider */}
-                        <div style={{ marginBottom: '8px', color: '#fff' }}>
-                            <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '8px' }}>
-                                🎬 FPS: {tempScreenFPS}
-                            </div>
-                            <input
-                                type="range"
-                                min="15"
-                                max="60"
-                                step="15"
-                                value={tempScreenFPS}
-                                onChange={(e) => {
-                                    const v = parseInt(e.target.value);
-                                    setTempScreenFPS(v);
-                                    onScreenFPSChange && onScreenFPSChange(v);
-                                }}
-                                style={{
-                                    width: '100%',
-                                    cursor: 'pointer',
-                                }}
-                            />
-                        </div>
-                        <div style={{
-                            fontSize: '12px',
-                            color: tempScreenFPS === 30 ? '#43b581' : '#faa61a',
-                            textAlign: 'center',
-                        }}>
-                            {tempScreenFPS === 30 ? '✅ Optimal (Önerilen)' : tempScreenFPS < 30 ? '⚠️ Düşük FPS' : '⚠️ Yüksek bandwidth'}
-                        </div>
-
-                        {/* 🔥 YENİ: System Audio Checkbox */}
-                        <div style={{ marginTop: '12px' }}>
-                            <label style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                cursor: 'pointer',
-                                color: '#fff',
-                                fontSize: '14px',
-                            }}>
-                                <input
-                                    type="checkbox"
-                                    checked={audioSettings?.includeSystemAudio || false}
-                                    onChange={(e) => {
-                                        setSettings({ ...settings, includeSystemAudio: e.target.checked });
-                                        toggleSystemAudio && toggleSystemAudio(e.target.checked);
-                                    }}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                                <span>🔊 Sistem sesini dahil et (Oyun/Video sesi)</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    {/* Auto Gain Control */}
-                    <div style={{
-                        marginBottom: '32px',
-                        padding: '16px',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        borderRadius: '12px',
-                    }}>
-                        <label style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            cursor: 'pointer',
-                            color: '#fff',
-                        }}>
-                            <input
-                                type="checkbox"
-                                checked={settings.autoGainControl}
-                                onChange={(e) => setSettings({
-                                    ...settings,
-                                    autoGainControl: e.target.checked
-                                })}
-                                style={{
-                                    width: '20px',
-                                    height: '20px',
-                                    cursor: 'pointer',
-                                }}
-                            />
-                            <div>
-                                <div style={{ fontWeight: 600, fontSize: '16px' }}>
-                                    📊 Otomatik Ses Seviyesi
-                                </div>
-                                <div style={{
-                                    fontSize: '13px',
-                                    color: 'rgba(255, 255, 255, 0.6)',
-                                    marginTop: '4px',
-                                }}>
-                                    Ses seviyesini otomatik ayarlar
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                {/* Footer - Sabit butonlar */}
-                <div style={{
-                    padding: '20px 32px',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                    flexShrink: 0,
-                    display: 'flex',
-                    gap: '12px',
-                    justifyContent: 'flex-end',
-                    background: 'rgba(0, 0, 0, 0.2)',
-                }}>
-                    <button
-                        onClick={onClose}
-                        style={{
-                            background: 'rgba(255, 255, 255, 0.1)',
-                            border: 'none',
-                            borderRadius: '8px',
-                            padding: '12px 24px',
-                            color: '#fff',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                        }}
-                    >
-                        İptal
-                    </button>
-                    <button
-                        onClick={() => onSave(settings)}
-                        style={{
-                            background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
-                            border: 'none',
-                            borderRadius: '8px',
-                            padding: '12px 24px',
-                            color: '#fff',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            fontWeight: 600,
-                            boxShadow: '0 4px 16px rgba(88, 101, 242, 0.4)',
-                        }}
-                    >
-                        Kaydet
-                    </button>
-                </div>
-            </div>
+  return (
+    <div style={styles.overlay}>
+      <div style={styles.panel}>
+        {/* Header */}
+        <div style={styles.header}>
+          <h2 style={styles.headerTitle}>\u2699\ufe0f Ses Ayarlar\u0131</h2>
         </div>
-    );
+
+        {/* Content */}
+        <div style={styles.content}>
+          {/* Mic Test */}
+          <div style={{ ...styles.section, border: isTesting ? '2px solid #43b581' : '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={styles.sectionHeader}>
+              <div style={styles.sectionTitleRow}>\ud83c\udfa4 Mikrofon Testi</div>
+              <div style={styles.descNoMargin}>Mikrofonunuzun \u00e7al\u0131\u015f\u0131p \u00e7al\u0131\u015fmad\u0131\u011f\u0131n\u0131 test edin</div>
+            </div>
+            <button onClick={() => setIsTesting(!isTesting)} style={styles.testBtn(isTesting)}>
+              {isTesting ? '\u23f9\ufe0f Testi Durdur' : '\u25b6\ufe0f Testi Ba\u015flat'}
+            </button>
+            {isTesting && (
+              <div>
+                <div style={styles.levelBar}>
+                  <div style={{
+                    height: '100%', width: `${micLevel}%`,
+                    background: micLevel > 70 ? '#43b581' : micLevel > 40 ? '#faa61a' : '#ed4245',
+                    borderRadius: '4px', transition: 'width 0.1s ease',
+                  }} />
+                </div>
+                <div style={{ fontSize: '12px', color: micLevel > 10 ? '#43b581' : '#ed4245', textAlign: 'center', fontWeight: 600 }}>
+                  {micLevel > 10 ? '\u2705 Mikrofonunuz \u00e7al\u0131\u015f\u0131yor!' : '\u26a0\ufe0f Konu\u015fun veya ses yap\u0131n'}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Echo Cancellation */}
+          <div style={styles.section}>
+            <label style={styles.checkLabel}>
+              <input type="checkbox" checked={settings.echoCancellation}
+                onChange={(e) => setSettings({ ...settings, echoCancellation: e.target.checked })}
+                style={styles.checkbox} />
+              <div>
+                <div style={styles.title}>\ud83d\udd0a Yank\u0131 Engelleme</div>
+                <div style={styles.desc}>Hoparl\u00f6rden gelen sesi mikrofona almaz</div>
+              </div>
+            </label>
+          </div>
+
+          {/* Noise Suppression */}
+          <div style={styles.section}>
+            <label style={styles.checkLabel}>
+              <input type="checkbox" checked={isNoiseSuppressionEnabled}
+                onChange={() => onNoiseToggle && onNoiseToggle()}
+                style={styles.checkbox} />
+              <div>
+                <div style={styles.title}>\ud83c\udfa4\ufe0f G\u00fcr\u00fclt\u00fc Engelleme</div>
+                <div style={styles.desc}>
+                  Arka plan g\u00fcr\u00fclt\u00fcs\u00fcn\u00fc azalt\u0131r (Klavye, fan vb.)
+                  <br />
+                  <span style={{ color: '#ff9800', fontWeight: 600 }}>
+                    \u26a0\ufe0f M\u00fczik payla\u015f\u0131rken kapat\u0131n!
+                  </span>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          {/* PTT Mode */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <div style={styles.sectionTitleRow}>\ud83c\udfa4\ufe0f Ses Modu</div>
+              <div style={styles.descNoMargin}>Voice Activity veya Push-to-Talk</div>
+            </div>
+            <div style={{ marginBottom: '12px' }}>
+              <select value={audioSettings?.pttMode ? 'ptt' : 'voice'}
+                onChange={(e) => {
+                  const isPtt = e.target.value === 'ptt';
+                  setSettings({ ...settings, pttMode: isPtt });
+                  typeof togglePTTMode !== 'undefined' && togglePTTMode && togglePTTMode();
+                }}
+                style={styles.select}>
+                <option value="voice">\ud83c\udfa4 Voice Activity (Otomatik)</option>
+                <option value="ptt">\u2328\ufe0f Push-to-Talk (Tu\u015fa bas\u0131nca)</option>
+              </select>
+            </div>
+            {audioSettings?.pttMode && (
+              <div style={{ marginTop: '12px' }}>
+                <div style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
+                  \u2328\ufe0f PTT Tu\u015fu:
+                </div>
+                <select value={audioSettings?.pttKey || 'Space'}
+                  onChange={(e) => {
+                    setSettings({ ...settings, pttKey: e.target.value });
+                    typeof updatePTTKey !== 'undefined' && updatePTTKey && updatePTTKey(e.target.value);
+                  }}
+                  style={{ ...styles.select, padding: '8px', fontSize: '13px' }}>
+                  <option value="Space">Space (Bo\u015fluk)</option>
+                  <option value="ControlLeft">Ctrl (Sol)</option>
+                  <option value="ControlRight">Ctrl (Sa\u011f)</option>
+                  <option value="ShiftLeft">Shift (Sol)</option>
+                  <option value="AltLeft">Alt (Sol)</option>
+                  <option value="KeyV">V</option>
+                  <option value="KeyC">C</option>
+                </select>
+                <div style={{ fontSize: '11px', color: '#43b581', marginTop: '6px', textAlign: 'center' }}>
+                  \u2139\ufe0f Tu\u015fa bas\u0131l\u0131 tutunca konu\u015fursunuz
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* VAD Sensitivity */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <div style={styles.sectionTitleRow}>\ud83c\udf9a\ufe0f Mikrofon Hassasiyeti</div>
+              <div style={styles.descNoMargin}>Konu\u015fma alg\u0131lama e\u015fi\u011fi (D\u00fc\u015f\u00fck = Hassas, Y\u00fcksek = Az Hassas)</div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: '#fff', fontSize: '14px' }}>20</span>
+              <input type="range" min="20" max="80" value={tempVadSensitivity}
+                onChange={(e) => {
+                  setTempVadSensitivity(parseInt(e.target.value));
+                  onVadChange && onVadChange(parseInt(e.target.value));
+                }}
+                style={{
+                  flex: 1, height: '6px', borderRadius: '3px', outline: 'none', cursor: 'pointer',
+                  background: `linear-gradient(to right, #5865f2 0%, #5865f2 ${((tempVadSensitivity - 20) / 60) * 100}%, rgba(255,255,255,0.2) ${((tempVadSensitivity - 20) / 60) * 100}%, rgba(255,255,255,0.2) 100%)`,
+                }} />
+              <span style={{ color: '#fff', fontSize: '14px' }}>80</span>
+              <span style={{ color: '#5865f2', fontSize: '16px', fontWeight: 'bold', minWidth: '40px', textAlign: 'right' }}>{tempVadSensitivity}</span>
+            </div>
+            <div style={{
+              marginTop: '8px', fontSize: '12px', textAlign: 'center',
+              color: tempVadSensitivity < 35 ? '#ff9800' : tempVadSensitivity > 60 ? '#ff9800' : '#43b581',
+            }}>
+              {tempVadSensitivity < 35 ? '\u26a0\ufe0f \u00c7ok hassas - False positive olabilir'
+                : tempVadSensitivity > 60 ? '\u26a0\ufe0f Az hassas - Konu\u015fma alg\u0131lanmayabilir'
+                : '\u2705 Optimal hassasiyet'}
+            </div>
+          </div>
+
+          {/* Screen Share Quality */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <div style={styles.sectionTitleRow}>\ud83d\udcfa Ekran Payla\u015f\u0131m\u0131 Kalitesi</div>
+              <div style={styles.descNoMargin}>Y\u00fcksek kalite = Daha fazla bandwidth</div>
+            </div>
+            <div style={{ marginBottom: '12px' }}>
+              <select value={tempScreenQuality}
+                onChange={(e) => { setTempScreenQuality(e.target.value); onScreenQualityChange && onScreenQualityChange(e.target.value); }}
+                style={styles.select}>
+                <option value="720p">720p (HD) - Az bandwidth</option>
+                <option value="1080p">1080p (Full HD) - \u00d6nerilen \u2705</option>
+                <option value="4K">4K (Ultra HD) - \u00c7ok bandwidth</option>
+              </select>
+            </div>
+            <div style={{ marginBottom: '8px', color: '#fff' }}>
+              <div style={styles.titleSmall}>\ud83c\udfac FPS: {tempScreenFPS}</div>
+              <input type="range" min="15" max="60" step="15" value={tempScreenFPS}
+                onChange={(e) => { const v = parseInt(e.target.value); setTempScreenFPS(v); onScreenFPSChange && onScreenFPSChange(v); }}
+                style={{ width: '100%', cursor: 'pointer' }} />
+            </div>
+            <div style={{ fontSize: '12px', textAlign: 'center', color: tempScreenFPS === 30 ? '#43b581' : '#faa61a' }}>
+              {tempScreenFPS === 30 ? '\u2705 Optimal (\u00d6nerilen)' : tempScreenFPS < 30 ? '\u26a0\ufe0f D\u00fc\u015f\u00fck FPS' : '\u26a0\ufe0f Y\u00fcksek bandwidth'}
+            </div>
+            <div style={{ marginTop: '12px' }}>
+              <label style={{ ...styles.checkLabel, fontSize: '14px' }}>
+                <input type="checkbox" checked={audioSettings?.includeSystemAudio || false}
+                  onChange={(e) => { setSettings({ ...settings, includeSystemAudio: e.target.checked }); typeof toggleSystemAudio !== 'undefined' && toggleSystemAudio && toggleSystemAudio(e.target.checked); }}
+                  style={{ cursor: 'pointer' }} />
+                <span>\ud83d\udd0a Sistem sesini dahil et (Oyun/Video sesi)</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Auto Gain Control */}
+          <div style={styles.sectionLast}>
+            <label style={styles.checkLabel}>
+              <input type="checkbox" checked={settings.autoGainControl}
+                onChange={(e) => setSettings({ ...settings, autoGainControl: e.target.checked })}
+                style={styles.checkbox} />
+              <div>
+                <div style={styles.title}>\ud83d\udcca Otomatik Ses Seviyesi</div>
+                <div style={styles.desc}>Ses seviyesini otomatik ayarlar</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div style={styles.footer}>
+          <button onClick={onClose} style={styles.cancelBtn}>\u0130ptal</button>
+          <button onClick={() => onSave(settings)} style={styles.saveBtn}>Kaydet</button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default SettingsModal;
