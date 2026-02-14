@@ -1,0 +1,118 @@
+// frontend/src/CryptoSignals/CoinDetailModal.js
+import React, { useMemo } from 'react';
+import { FaBitcoin, FaExternalLinkAlt } from 'react-icons/fa';
+import { formatPrice, parsePnl } from './utils';
+import { SignalBadge, StatusBadge } from './components';
+import S from './styles';
+
+const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
+    if (!selectedCoin) return null;
+
+    const rows = selectedCoin.data;
+    const coinStats = useMemo(() => {
+        const profits = rows.filter(r => parsePnl(r.pnl_percent) > 0).length;
+        const losses = rows.filter(r => parsePnl(r.pnl_percent) < 0).length;
+        const tersCount = rows.filter(r => r.ters_sinyal === true).length;
+        const uyumluCount = rows.filter(r => r.ters_sinyal !== true).length;
+        const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
+        const avgWr = rows.reduce((s, r) => s + parseFloat(String(r.win_rate || '0').replace('%', '')), 0) / rows.length;
+        const price = rows[0]?.current_price;
+        return { profits, losses, tersCount, uyumluCount, avgPnl, avgWr, price };
+    }, [rows]);
+
+    const binanceUrl = `https://www.binance.com/en/futures/${selectedCoin.name.endsWith('USDT') ? selectedCoin.name : selectedCoin.name + 'USDT'}`;
+
+    return (
+        <div style={S.modalOverlay} onClick={onClose}>
+            <div style={S.modal} onClick={e => e.stopPropagation()}>
+                <div style={S.modalHeader}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <FaBitcoin style={{ fontSize: 28, color: '#f0b232' }} />
+                        <h2 style={{ margin: 0, color: '#f0b232', fontWeight: 700 }}>{selectedCoin.name.replace('USDT', '')}</h2>
+                        <span style={S.modalBadge}>{rows.length} Strateji</span>
+                    </div>
+                    <button onClick={onClose} style={S.modalCloseBtn}>{'\u2715'}</button>
+                </div>
+
+                <div style={S.modalStats}>
+                    <div style={S.mStatCard}>
+                        <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#23a559' }}>
+                            {isPositionsTab ? coinStats.uyumluCount : coinStats.profits}
+                        </span>
+                        <span style={S.mStatLabel}>{isPositionsTab ? '\u2705 Uyumlu' : 'K\u00E2rda'}</span>
+                    </div>
+                    <div style={S.mStatCard}>
+                        <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#da373c' }}>
+                            {isPositionsTab ? coinStats.tersCount : coinStats.losses}
+                        </span>
+                        <span style={S.mStatLabel}>{isPositionsTab ? '\u26A0\uFE0F Ters Sinyal' : 'Zararda'}</span>
+                    </div>
+                    <div style={S.mStatCard}>
+                        <span style={{ fontSize: '1.3em', fontWeight: 700, color: coinStats.avgPnl >= 0 ? '#23a559' : '#da373c' }}>
+                            {coinStats.avgPnl >= 0 ? '+' : ''}{coinStats.avgPnl.toFixed(2)}%
+                        </span>
+                        <span style={S.mStatLabel}>Ort. PNL</span>
+                    </div>
+                    <div style={S.mStatCard}>
+                        <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#f0b232' }}>{coinStats.avgWr.toFixed(1)}%</span>
+                        <span style={S.mStatLabel}>Ort. WR</span>
+                    </div>
+                    {coinStats.price && (
+                        <div style={S.mStatCard}>
+                            <span style={{ fontSize: '1.3em', fontWeight: 700, color: '#fff' }}>${formatPrice(coinStats.price)}</span>
+                            <span style={S.mStatLabel}>Fiyat</span>
+                        </div>
+                    )}
+                </div>
+
+                <div style={S.modalBody}>
+                    <h3 style={{ margin: '0 0 12px', color: '#fff', fontSize: '1em' }}>{'\uD83D\uDCCA'} Strateji Detaylar{'\u0131'}</h3>
+                    <div style={S.strategyList}>
+                        {rows.map((row, idx) => {
+                            const pnl = parsePnl(row.pnl_percent);
+                            const isProfit = pnl > 0;
+                            return (
+                                <div key={idx} style={{ ...S.strategyCard, borderLeft: `4px solid ${isProfit ? '#23a559' : '#da373c'}`, animationDelay: `${idx * 0.04}s` }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                                        <span style={{ color: '#5865f2', fontWeight: 700, fontSize: '1.05em' }}>{row.timeframe}</span>
+                                        <SignalBadge value={row.signal || row.sinyal_yonu || row.pozisyon_yonu || '-'} />
+                                    </div>
+                                    <div style={S.strategyGrid}>
+                                        {[
+                                            { label: 'Giri\u015F', val: `$${formatPrice(row.entry_price)}` },
+                                            { label: 'G\u00FCncel', val: `$${formatPrice(row.current_price)}` },
+                                            { label: 'PNL', val: row.pnl_percent || '-', color: isProfit ? '#23a559' : '#da373c', bold: true },
+                                            { label: 'WR', val: row.win_rate || '-' },
+                                            { label: 'X Kat', val: row.x_kat || '-', color: '#f0b232' },
+                                            { label: 'Hedef', val: row.hedef_roe || '-', color: '#5865f2' },
+                                        ].map(({ label, val, color, bold }, i) => (
+                                            <div key={i} style={S.stratItem}>
+                                                <span style={S.stratItemLabel}>{label}</span>
+                                                <span style={{ ...S.stratItemVal, ...(color ? { color } : {}), ...(bold ? { fontWeight: 700 } : {}) }}>{val}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 8, borderTop: '1px solid #40444b' }}>
+                                        <StatusBadge status={row.status} />
+                                        {row.days_ago !== undefined && (
+                                            <span style={{ color: '#949ba4', fontSize: '0.78em' }}>{row.days_ago} g{'\u00FC'}n {'\u00B7'} {row.bars_ago} bar</span>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div style={{ padding: '12px 20px', borderTop: '1px solid #2f3136', textAlign: 'center' }}>
+                    <a href={binanceUrl} target="_blank" rel="noopener noreferrer"
+                        style={{ color: '#f0b232', textDecoration: 'none', fontWeight: 600, fontSize: '0.9em' }}>
+                        <FaExternalLinkAlt /> Binance Futures'da A{'\u00E7'}
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default React.memo(CoinDetailModal);

@@ -1,172 +1,66 @@
-// frontend/src/components/PremiumStoreModal.js
 import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
-import { FaTimes, FaCrown, FaShoppingCart, FaRocket, FaCheck, FaStar } from 'react-icons/fa';
+import { FaTimes, FaCrown, FaShoppingCart, FaRocket } from 'react-icons/fa';
 import { useAuth } from '../AuthContext';
 import CoinStoreModal from './CoinStoreModal';
 import { getApiBase } from '../utils/apiEndpoints';
 import confirmDialog from '../utils/confirmDialog';
+import styles from './PremiumStoreModal/styles';
+import PremiumTab from './PremiumStoreModal/PremiumTab';
+import StoreTab from './PremiumStoreModal/StoreTab';
+import BoostTab from './PremiumStoreModal/BoostTab';
 
 const PremiumStoreModal = ({ onClose }) => {
     const { user, token } = useAuth();
-    const [activeTab, setActiveTab] = useState('premium'); // premium, store, boost
+    const [activeTab, setActiveTab] = useState('premium');
     const [premiumStatus, setPremiumStatus] = useState(null);
     const [storeItems, setStoreItems] = useState([]);
-    const [userInventory, setUserInventory] = useState([]); // 🆕 Kullanıcının envanteri
+    const [userInventory, setUserInventory] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showCoinStore, setShowCoinStore] = useState(false); // 💰 Coin mağazası modal
+    const [showCoinStore, setShowCoinStore] = useState(false);
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getApiBase();
 
-    // Premium durumunu yükle
     useEffect(() => {
         fetchPremiumStatus();
         fetchStoreItems();
-        fetchUserInventory(); // 🆕 Envanteri çek
+        fetchUserInventory();
     }, []);
 
     const fetchPremiumStatus = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/premium/status/`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-            const data = await response.json();
-            setPremiumStatus(data);
+            setPremiumStatus(await response.json());
         } catch (error) {
-            console.error('Premium status hatası:', error);
+            console.error('Premium status error:', error);
         }
     };
 
     const fetchStoreItems = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/store/items/`);
-            const data = await response.json();
-            setStoreItems(data);
-            setLoading(false);
+            setStoreItems(await response.json());
         } catch (error) {
-            console.error('Store items hatası:', error);
+            console.error('Store items error:', error);
+        } finally {
             setLoading(false);
         }
     };
 
-    // 🆕 Kullanıcının envanterini çek
     const fetchUserInventory = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/store/inventory/`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await response.json();
-
-            // ✅ Array kontrolü ekle
-            const inventoryArray = Array.isArray(data) ? data : [];
-            setUserInventory(inventoryArray);
+            setUserInventory(Array.isArray(data) ? data : []);
         } catch (error) {
-            console.error('Inventory hatası:', error);
-            setUserInventory([]); // Hata durumunda boş array
+            console.error('Inventory error:', error);
+            setUserInventory([]);
         }
     };
-
-    // Premium Plans
-    const premiumPlans = {
-        basic: {
-            tier: 'basic',
-            name: "Pawscord Nitro Basic",
-            price: 29.99,
-            priceYearly: 299.99,
-            color: "#5865f2",
-            features: [
-                { text: "100 sunucu", included: true },
-                { text: "Sınırsız arkadaş", included: true },
-                { text: "50 MB dosya yükleme", included: true },
-                { text: "1080p video kalitesi", included: true },
-                { text: "50 özel emoji", included: true },
-                { text: "Animated avatar", included: true },
-                { text: "HD ekran paylaşımı", included: true },
-                { text: "Özel rozet", included: true },
-                { text: "Server boosting", included: false },
-                { text: "4K video", included: false }
-            ]
-        },
-        premium: {
-            tier: 'premium',
-            name: "Pawscord Nitro Premium",
-            price: 49.99,
-            priceYearly: 499.99,
-            color: "#f0b232",
-            popular: true,
-            features: [
-                { text: "Sınırsız sunucu", included: true },
-                { text: "Sınırsız arkadaş", included: true },
-                { text: "500 MB dosya yükleme", included: true },
-                { text: "4K video kalitesi", included: true },
-                { text: "200 özel emoji", included: true },
-                { text: "Animated avatar + banner", included: true },
-                { text: "4K ekran paylaşımı 60FPS", included: true },
-                { text: "2x Server boost dahil", included: true },
-                { text: "AI asistan", included: true },
-                { text: "Özel profil temaları", included: true }
-            ]
-        }
-    };
-
-    // Default store items (backend'den gelmezse)
-    const defaultStoreItems = [
-        {
-            id: 1,
-            name: "Özel Emoji Paketi",
-            price: 9.99,
-            description: "50 premium emoji",
-            icon: "😎",
-            type: "one_time"
-        },
-        {
-            id: 2,
-            name: "Profil Teması",
-            price: 14.99,
-            description: "Özel profil arka planı",
-            icon: "🎨",
-            type: "one_time"
-        },
-        {
-            id: 3,
-            name: "Server Boost",
-            price: 19.99,
-            description: "Sunucunu güçlendir (1 ay)",
-            icon: "🚀",
-            type: "subscription"
-        },
-        {
-            id: 4,
-            name: "Özel Rozet",
-            price: 24.99,
-            description: "Kendi rozetini yükle",
-            icon: "⭐",
-            type: "one_time"
-        },
-        {
-            id: 5,
-            name: "Ses Efektleri",
-            price: 12.99,
-            description: "10 ses efekti paketi",
-            icon: "🎵",
-            type: "one_time"
-        },
-        {
-            id: 6,
-            name: "Animated Sticker Paketi",
-            price: 16.99,
-            description: "30 animated sticker",
-            icon: "✨",
-            type: "one_time"
-        }
-    ];
-
-    // Backend'den gelen items veya default items kullan
-    const displayItems = storeItems.length > 0 ? storeItems : defaultStoreItems;
 
     const handlePurchase = async (plan, isYearly = false) => {
         setLoading(true);
@@ -180,22 +74,19 @@ const PremiumStoreModal = ({ onClose }) => {
                 body: JSON.stringify({
                     tier: plan.tier,
                     is_yearly: isYearly,
-                    payment_method: 'test'  // Test modu - gerçek ödeme için 'iyzico' kullanılacak
+                    payment_method: 'test'
                 })
             });
-
             const data = await response.json();
-
             if (data.success) {
-                toast.success(`🎉 ${plan.name} başarıyla aktif edildi!\n\nFiyat: ${isYearly ? plan.priceYearly : plan.price} TL`);
-                await fetchPremiumStatus(); // Durumu güncelle
+                toast.success(`${plan.name} basariyla aktif edildi!`);
+                await fetchPremiumStatus();
                 onClose();
             } else {
-                toast.error(`❌ Hata: ${data.message}`);
+                toast.error(`Hata: ${data.message}`);
             }
         } catch (error) {
-            console.error('Satın alma hatası:', error);
-            toast.error('❌ Bir hata oluştu. Lütfen tekrar deneyin.');
+            toast.error('Bir hata olustu. Lutfen tekrar deneyin.');
         } finally {
             setLoading(false);
         }
@@ -210,35 +101,22 @@ const PremiumStoreModal = ({ onClose }) => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    item_id: item.id,
-                    payment_method: 'test'
-                })
+                body: JSON.stringify({ item_id: item.id, payment_method: 'test' })
             });
-
             const data = await response.json();
             if (response.ok) {
-                toast.success(`✅ ${item.name} satın alındı!`);
-                setUserCoins(data.remaining_coins || userCoins - item.price);
+                toast.success(`${item.name} satin alindi!`);
                 await fetchUserInventory();
             } else if (data.insufficient_coins) {
-                // 💰 Yetersiz coin - coin store'u aç
                 const buyCoins = await confirmDialog(
-                    `❌ Yetersiz bakiye!\n\n` +
-                    `Gerekli: ${data.required} coin\n` +
-                    `Mevcut: ${data.current} coin\n` +
-                    `Eksik: ${data.needed} coin\n\n` +
-                    `Coin satın almak ister misiniz?`
+                    `Yetersiz bakiye!\nGerekli: ${data.required} coin\nMevcut: ${data.current} coin\nCoin satin almak ister misiniz?`
                 );
-                if (buyCoins) {
-                    setShowCoinStore(true);
-                }
+                if (buyCoins) setShowCoinStore(true);
             } else {
-                toast.error(`❌ Hata: ${data.message || 'Bilinmeyen hata'}`);
+                toast.error(`Hata: ${data.message || 'Bilinmeyen hata'}`);
             }
         } catch (error) {
-            console.error('❌ [PURCHASE] Satın alma hatası:', error);
-            toast.error('❌ Bir hata oluştu. Lütfen tekrar deneyin.');
+            toast.error('Bir hata olustu.');
         } finally {
             setLoading(false);
         }
@@ -251,7 +129,6 @@ const PremiumStoreModal = ({ onClose }) => {
                     onClose={() => setShowCoinStore(false)}
                     currentCoins={premiumStatus?.coins || 0}
                     onPurchaseComplete={(newBalance) => {
-                        // Bakiyeyi güncelle
                         setPremiumStatus(prev => prev ? { ...prev, coins: newBalance } : null);
                         fetchPremiumStatus();
                     }}
@@ -263,10 +140,9 @@ const PremiumStoreModal = ({ onClose }) => {
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaCrown style={{ color: '#f0b232', marginRight: '10px' }} />
-                        <h2 style={styles.title}>Premium Mağaza</h2>
+                        <h2 style={styles.title}>Premium Magaza</h2>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        {/* Coin Balance */}
                         <div style={{
                             background: 'linear-gradient(135deg, #f0b232 0%, #c79100 100%)',
                             padding: '8px 16px',
@@ -275,19 +151,12 @@ const PremiumStoreModal = ({ onClose }) => {
                             alignItems: 'center',
                             gap: '6px',
                             cursor: 'pointer',
-                            transition: 'transform 0.2s',
                         }}
                             onClick={() => setShowCoinStore(true)}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                            title="Coin satın al"
+                            title="Coin satin al"
                         >
                             <span style={{ fontSize: '18px' }}>💰</span>
-                            <span style={{
-                                fontWeight: 'bold',
-                                color: '#000',
-                                fontSize: '14px'
-                            }}>
+                            <span style={{ fontWeight: 'bold', color: '#000', fontSize: '14px' }}>
                                 {(premiumStatus?.coins || 0).toLocaleString()}
                             </span>
                         </div>
@@ -299,283 +168,37 @@ const PremiumStoreModal = ({ onClose }) => {
 
                 {/* Tabs */}
                 <div style={styles.tabs}>
-                    <button
-                        onClick={() => setActiveTab('premium')}
-                        style={{
-                            ...styles.tab,
-                            ...(activeTab === 'premium' && styles.activeTab)
-                        }}
-                    >
+                    <button onClick={() => setActiveTab('premium')} style={{ ...styles.tab, ...(activeTab === 'premium' && styles.activeTab) }}>
                         <FaCrown /> Premium
                     </button>
-                    <button
-                        onClick={() => setActiveTab('store')}
-                        style={{
-                            ...styles.tab,
-                            ...(activeTab === 'store' && styles.activeTab)
-                        }}
-                    >
-                        <FaShoppingCart /> Mağaza
+                    <button onClick={() => setActiveTab('store')} style={{ ...styles.tab, ...(activeTab === 'store' && styles.activeTab) }}>
+                        <FaShoppingCart /> Magaza
                     </button>
-                    <button
-                        onClick={() => setActiveTab('boost')}
-                        style={{
-                            ...styles.tab,
-                            ...(activeTab === 'boost' && styles.activeTab)
-                        }}
-                    >
+                    <button onClick={() => setActiveTab('boost')} style={{ ...styles.tab, ...(activeTab === 'boost' && styles.activeTab) }}>
                         <FaRocket /> Server Boost
                     </button>
                 </div>
 
                 {/* Content */}
                 <div style={styles.content}>
-                    {activeTab === 'premium' && (
-                        <div style={styles.premiumTab}>
-                            <h3 style={styles.sectionTitle}>Premium Üyelik Planları</h3>
-                            <div style={styles.plansGrid}>
-                                {/* Free Plan */}
-                                <div style={styles.planCard}>
-                                    <div style={styles.planHeader}>
-                                        <h4 style={styles.planName}>Ücretsiz</h4>
-                                        <div style={styles.planPrice}>
-                                            <span style={styles.price}>0</span>
-                                            <span style={styles.currency}>TL/ay</span>
-                                        </div>
-                                    </div>
-                                    <div style={styles.featuresList}>
-                                        <div style={styles.feature}>✅ 50 sunucu</div>
-                                        <div style={styles.feature}>✅ 100 arkadaş</div>
-                                        <div style={styles.feature}>✅ 8 MB dosya yükleme</div>
-                                        <div style={styles.feature}>✅ 720p video</div>
-                                        <div style={{ ...styles.feature, opacity: 0.5 }}>❌ Özel emoji</div>
-                                        <div style={{ ...styles.feature, opacity: 0.5 }}>❌ Animated avatar</div>
-                                    </div>
-                                    <button style={styles.currentPlanButton} disabled>
-                                        Mevcut Plan
-                                    </button>
-                                </div>
-
-                                {/* Basic Plan */}
-                                <div style={styles.planCard}>
-                                    <div style={{ ...styles.planHeader, borderColor: premiumPlans.basic.color }}>
-                                        <h4 style={styles.planName}>{premiumPlans.basic.name}</h4>
-                                        <div style={styles.planPrice}>
-                                            <span style={styles.price}>{premiumPlans.basic.price}</span>
-                                            <span style={styles.currency}>TL/ay</span>
-                                        </div>
-                                    </div>
-                                    <div style={styles.featuresList}>
-                                        {premiumPlans.basic.features.map((feature, i) => (
-                                            <div
-                                                key={i}
-                                                style={{
-                                                    ...styles.feature,
-                                                    opacity: feature.included ? 1 : 0.5
-                                                }}
-                                            >
-                                                {feature.included ? '✅' : '❌'} {feature.text}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <button
-                                        onClick={() => handlePurchase(premiumPlans.basic, false)}
-                                        style={{ ...styles.purchaseButton, backgroundColor: premiumPlans.basic.color }}
-                                    >
-                                        Satın Al (Aylık)
-                                    </button>
-                                    <button
-                                        onClick={() => handlePurchase(premiumPlans.basic, true)}
-                                        style={styles.yearlyButton}
-                                    >
-                                        Yıllık Al (%16 İndirim) - {premiumPlans.basic.priceYearly} TL
-                                    </button>
-                                </div>
-
-                                {/* Premium Plan */}
-                                <div style={{ ...styles.planCard, ...styles.popularCard }}>
-                                    <div style={styles.popularBadge}>
-                                        <FaStar /> EN POPÜLER
-                                    </div>
-                                    <div style={{ ...styles.planHeader, borderColor: premiumPlans.premium.color }}>
-                                        <h4 style={styles.planName}>{premiumPlans.premium.name}</h4>
-                                        <div style={styles.planPrice}>
-                                            <span style={styles.price}>{premiumPlans.premium.price}</span>
-                                            <span style={styles.currency}>TL/ay</span>
-                                        </div>
-                                    </div>
-                                    <div style={styles.featuresList}>
-                                        {premiumPlans.premium.features.map((feature, i) => (
-                                            <div
-                                                key={i}
-                                                style={{
-                                                    ...styles.feature,
-                                                    opacity: feature.included ? 1 : 0.5
-                                                }}
-                                            >
-                                                {feature.included ? '✅' : '❌'} {feature.text}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <button
-                                        onClick={() => handlePurchase(premiumPlans.premium, false)}
-                                        style={{ ...styles.purchaseButton, backgroundColor: premiumPlans.premium.color }}
-                                    >
-                                        Satın Al (Aylık)
-                                    </button>
-                                    <button
-                                        onClick={() => handlePurchase(premiumPlans.premium, true)}
-                                        style={styles.yearlyButton}
-                                    >
-                                        Yıllık Al (%16 İndirim) - {premiumPlans.premium.priceYearly} TL
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
+                    {activeTab === 'premium' && <PremiumTab styles={styles} handlePurchase={handlePurchase} />}
                     {activeTab === 'store' && (
-                        <div style={styles.storeTab}>
-                            <h3 style={styles.sectionTitle}>Mağaza Ürünleri</h3>
-                            <div style={styles.storeGrid}>
-                                {displayItems.map(item => {
-                                    // 🔥 Ownership kontrolü: Envanterde var mı?
-                                    // Backend'den gelen inventory item'larda item_details var
-                                    const isOwned = userInventory.some(inv =>
-                                        inv.item_details?.id === item.id || inv.item === item.id
-                                    );
-
-                                    return (
-                                        <div key={item.id} style={{
-                                            ...styles.storeItem,
-                                            ...(isOwned && { opacity: 0.6, borderColor: '#43b581' })
-                                        }}>
-                                            <div style={styles.itemIcon}>{item.icon || '🎁'}</div>
-                                            <h4 style={styles.itemName}>{item.name}</h4>
-                                            <p style={styles.itemDescription}>{item.description}</p>
-                                            <div style={styles.itemPrice}>{item.price} TL</div>
-
-                                            {isOwned ? (
-                                                <button
-                                                    disabled
-                                                    style={{
-                                                        ...styles.buyButton,
-                                                        backgroundColor: '#43b581',
-                                                        cursor: 'not-allowed',
-                                                        opacity: 0.7
-                                                    }}
-                                                >
-                                                    ✓ Sahip
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    onClick={() => handleBuyItem(item)}
-                                                    style={styles.buyButton}
-                                                    disabled={loading}
-                                                >
-                                                    {loading ? 'Yükleniyor...' : 'Satın Al'}
-                                                </button>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+                        <StoreTab
+                            styles={styles}
+                            storeItems={storeItems}
+                            userInventory={userInventory}
+                            handleBuyItem={handleBuyItem}
+                            loading={loading}
+                        />
                     )}
-
                     {activeTab === 'boost' && (
-                        <div style={styles.boostTab}>
-                            <div style={styles.boostHeader}>
-                                <h3 style={styles.boostTitle}>
-                                    <span style={styles.boostIcon}>🚀</span>
-                                    Server Boosting
-                                </h3>
-                                <p style={styles.boostSubtitle}>
-                                    Sevdiğin sunucuları güçlendir ve özel özellikler kazan!
-                                </p>
-                            </div>
-
-                            <div style={styles.boostTiersContainer}>
-                                {/* Seviye 1 */}
-                                <div style={{ ...styles.boostTierCard, borderColor: '#cd7f32' }}>
-                                    <div style={{ ...styles.tierBadge, background: 'linear-gradient(135deg, #cd7f32, #a0522d)' }}>
-                                        <span style={styles.tierNumber}>1</span>
-                                    </div>
-                                    <h4 style={styles.tierTitle}>Seviye 1</h4>
-                                    <p style={styles.tierRequirement}>2 Boost gerekli</p>
-                                    <ul style={styles.tierFeatureList}>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎨</span> 100 emoji slot</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎵</span> 256 kbps ses kalitesi</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📁</span> 50 MB dosya yükleme</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>✨</span> Animated sunucu ikonu</li>
-                                    </ul>
-                                </div>
-
-                                {/* Seviye 2 */}
-                                <div style={{ ...styles.boostTierCard, borderColor: '#c0c0c0', transform: 'scale(1.02)' }}>
-                                    <div style={{ ...styles.tierBadge, background: 'linear-gradient(135deg, #c0c0c0, #808080)' }}>
-                                        <span style={styles.tierNumber}>2</span>
-                                    </div>
-                                    <div style={styles.popularBadge}>⭐ Popüler</div>
-                                    <h4 style={styles.tierTitle}>Seviye 2</h4>
-                                    <p style={styles.tierRequirement}>7 Boost gerekli</p>
-                                    <ul style={styles.tierFeatureList}>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎨</span> 150 emoji slot</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎵</span> 384 kbps ses kalitesi</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📁</span> 100 MB dosya yükleme</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📺</span> 1080p Go Live stream</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🔗</span> Özel davet linki</li>
-                                    </ul>
-                                </div>
-
-                                {/* Seviye 3 */}
-                                <div style={{ ...styles.boostTierCard, borderColor: '#ffd700', boxShadow: '0 0 20px rgba(255, 215, 0, 0.3)' }}>
-                                    <div style={{ ...styles.tierBadge, background: 'linear-gradient(135deg, #ffd700, #ff8c00)' }}>
-                                        <span style={styles.tierNumber}>3</span>
-                                    </div>
-                                    <div style={{ ...styles.premiumBadge }}>👑 Premium</div>
-                                    <h4 style={styles.tierTitle}>Seviye 3</h4>
-                                    <p style={styles.tierRequirement}>14 Boost gerekli</p>
-                                    <ul style={styles.tierFeatureList}>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎨</span> 250 emoji slot</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🎵</span> 384 kbps ses kalitesi</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📁</span> 500 MB dosya yükleme</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>📺</span> 4K Go Live 60FPS</li>
-                                        <li style={styles.tierFeature}><span style={styles.featureIcon}>🔊</span> Özel ses efektleri</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <button
-                                onClick={async () => {
-                                    const serverId = prompt('Boost yapmak istediğin sunucu ID\'sini gir:');
-                                    if (!serverId) return;
-                                    setLoading(true);
-                                    try {
-                                        const res = await fetch(`${API_BASE_URL}/api/servers/boost/`, {
-                                            method: 'POST',
-                                            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({ server_id: serverId, level: 1 })
-                                        });
-                                        const data = await res.json();
-                                        if (data.status === 'boosted') {
-                                            toast.success('🚀 Sunucu başarıyla boost edildi!');
-                                        } else {
-                                            toast.error(`❌ ${data.error || 'Boost yapılamadı'}`);
-                                        }
-                                    } catch (err) {
-                                        toast.error('❌ Bir hata oluştu');
-                                    } finally {
-                                        setLoading(false);
-                                    }
-                                }}
-                                style={styles.boostPurchaseButton}
-                                disabled={loading}
-                            >
-                                <span style={styles.boostButtonIcon}>🚀</span>
-                                Boost Satın Al (19.99 TL/ay)
-                            </button>
-                        </div>
+                        <BoostTab
+                            styles={styles}
+                            loading={loading}
+                            setLoading={setLoading}
+                            token={token}
+                            API_BASE_URL={API_BASE_URL}
+                        />
                     )}
                 </div>
             </div>
@@ -583,406 +206,4 @@ const PremiumStoreModal = ({ onClose }) => {
     );
 };
 
-const styles = {
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 10000,
-        padding: '20px',
-    },
-    modal: {
-        backgroundColor: '#2b2d31',
-        borderRadius: '16px',
-        width: '90%',
-        maxWidth: '1200px',
-        maxHeight: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-        overflow: 'hidden',
-    },
-    header: {
-        padding: '20px 24px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    headerLeft: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    title: {
-        margin: 0,
-        color: '#fff',
-        fontSize: '24px',
-        fontWeight: 'bold',
-    },
-    closeButton: {
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
-        fontSize: '24px',
-        cursor: 'pointer',
-        padding: '8px',
-        transition: 'color 0.2s',
-    },
-    tabs: {
-        display: 'flex',
-        padding: '0 24px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-        gap: '8px',
-    },
-    tab: {
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
-        padding: '12px 20px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        fontWeight: '600',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        borderBottom: '2px solid transparent',
-        transition: 'all 0.2s',
-    },
-    activeTab: {
-        color: '#fff',
-        borderBottomColor: '#5865f2',
-    },
-    content: {
-        flex: 1,
-        overflowY: 'auto',
-        padding: '24px',
-    },
-    sectionTitle: {
-        color: '#fff',
-        fontSize: '20px',
-        marginBottom: '20px',
-        fontWeight: 'bold',
-    },
-    plansGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '20px',
-    },
-    planCard: {
-        backgroundColor: '#1e1f22',
-        borderRadius: '12px',
-        padding: '20px',
-        border: '2px solid transparent',
-        transition: 'all 0.3s',
-        position: 'relative',
-    },
-    popularCard: {
-        border: '2px solid #f0b232',
-        transform: 'scale(1.05)',
-    },
-    popularBadge: {
-        position: 'absolute',
-        top: '-12px',
-        right: '20px',
-        backgroundColor: '#f0b232',
-        color: '#000',
-        padding: '4px 12px',
-        borderRadius: '12px',
-        fontSize: '11px',
-        fontWeight: 'bold',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-    },
-    planHeader: {
-        borderBottom: '2px solid #5865f2',
-        paddingBottom: '16px',
-        marginBottom: '16px',
-    },
-    planName: {
-        color: '#fff',
-        fontSize: '18px',
-        margin: '0 0 8px 0',
-        fontWeight: 'bold',
-    },
-    planPrice: {
-        display: 'flex',
-        alignItems: 'baseline',
-        gap: '4px',
-    },
-    price: {
-        color: '#fff',
-        fontSize: '32px',
-        fontWeight: 'bold',
-    },
-    currency: {
-        color: '#b9bbbe',
-        fontSize: '14px',
-    },
-    featuresList: {
-        marginBottom: '20px',
-    },
-    feature: {
-        color: '#dcddde',
-        fontSize: '14px',
-        padding: '8px 0',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-    },
-    purchaseButton: {
-        width: '100%',
-        padding: '12px',
-        borderRadius: '8px',
-        border: 'none',
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: '14px',
-        cursor: 'pointer',
-        marginBottom: '8px',
-        transition: 'transform 0.2s',
-    },
-    yearlyButton: {
-        width: '100%',
-        padding: '10px',
-        borderRadius: '8px',
-        border: '1px solid #5865f2',
-        backgroundColor: 'transparent',
-        color: '#5865f2',
-        fontWeight: '600',
-        fontSize: '12px',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-    },
-    currentPlanButton: {
-        width: '100%',
-        padding: '12px',
-        borderRadius: '8px',
-        border: '1px solid #4e5058',
-        backgroundColor: 'transparent',
-        color: '#4e5058',
-        fontWeight: 'bold',
-        fontSize: '14px',
-        cursor: 'not-allowed',
-    },
-    storeGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '16px',
-    },
-    storeItem: {
-        backgroundColor: '#1e1f22',
-        borderRadius: '12px',
-        padding: '20px',
-        textAlign: 'center',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        transition: 'all 0.3s',
-    },
-    itemIcon: {
-        fontSize: '48px',
-        marginBottom: '12px',
-    },
-    itemName: {
-        color: '#fff',
-        fontSize: '16px',
-        margin: '0 0 8px 0',
-        fontWeight: 'bold',
-    },
-    itemDescription: {
-        color: '#b9bbbe',
-        fontSize: '13px',
-        margin: '0 0 12px 0',
-    },
-    itemPrice: {
-        color: '#f0b232',
-        fontSize: '20px',
-        fontWeight: 'bold',
-        marginBottom: '12px',
-    },
-    buyButton: {
-        width: '100%',
-        padding: '10px',
-        borderRadius: '8px',
-        border: 'none',
-        backgroundColor: '#5865f2',
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: '14px',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-    },
-    boostDescription: {
-        color: '#b9bbbe',
-        fontSize: '14px',
-        marginBottom: '24px',
-    },
-    boostTiers: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '16px',
-        marginBottom: '24px',
-    },
-    boostTier: {
-        backgroundColor: '#1e1f22',
-        borderRadius: '12px',
-        padding: '20px',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-    },
-    boostButton: {
-        width: '100%',
-        maxWidth: '400px',
-        padding: '16px',
-        borderRadius: '8px',
-        border: 'none',
-        backgroundColor: '#f0b232',
-        color: '#000',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        cursor: 'pointer',
-        display: 'block',
-        margin: '0 auto',
-    },
-    // Server Boost Tab - Yeni Stiller
-    boostTab: {
-        padding: '10px 0',
-    },
-    boostHeader: {
-        textAlign: 'center',
-        marginBottom: '30px',
-    },
-    boostTitle: {
-        color: '#fff',
-        fontSize: '28px',
-        fontWeight: '700',
-        margin: '0 0 10px 0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '10px',
-    },
-    boostIcon: {
-        fontSize: '32px',
-    },
-    boostSubtitle: {
-        color: '#b9bbbe',
-        fontSize: '15px',
-        margin: 0,
-    },
-    boostTiersContainer: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '20px',
-        marginBottom: '30px',
-    },
-    boostTierCard: {
-        background: 'linear-gradient(145deg, #2b2d31, #1e1f22)',
-        borderRadius: '16px',
-        padding: '25px 20px',
-        border: '2px solid',
-        position: 'relative',
-        transition: 'all 0.3s ease',
-        textAlign: 'center',
-    },
-    tierBadge: {
-        width: '60px',
-        height: '60px',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: '0 auto 15px auto',
-        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
-    },
-    tierNumber: {
-        color: '#fff',
-        fontSize: '28px',
-        fontWeight: 'bold',
-        textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-    },
-    tierTitle: {
-        color: '#fff',
-        fontSize: '20px',
-        fontWeight: '700',
-        margin: '0 0 5px 0',
-    },
-    tierRequirement: {
-        color: '#72767d',
-        fontSize: '13px',
-        margin: '0 0 15px 0',
-    },
-    tierFeatureList: {
-        listStyle: 'none',
-        padding: 0,
-        margin: 0,
-        textAlign: 'left',
-    },
-    tierFeature: {
-        color: '#dcddde',
-        fontSize: '13px',
-        padding: '6px 0',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-    },
-    featureIcon: {
-        fontSize: '14px',
-    },
-    popularBadgeAlt: {
-        position: 'absolute',
-        top: '-12px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        background: 'linear-gradient(135deg, #5865f2, #7c8af2)',
-        color: '#fff',
-        fontSize: '11px',
-        fontWeight: 'bold',
-        padding: '4px 14px',
-        borderRadius: '12px',
-        boxShadow: '0 2px 10px rgba(88, 101, 242, 0.4)',
-    },
-    premiumBadge: {
-        position: 'absolute',
-        top: '-12px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        background: 'linear-gradient(135deg, #ffd700, #ff8c00)',
-        color: '#000',
-        fontSize: '11px',
-        fontWeight: 'bold',
-        padding: '4px 14px',
-        borderRadius: '12px',
-        boxShadow: '0 2px 10px rgba(255, 215, 0, 0.4)',
-    },
-    boostPurchaseButton: {
-        width: '100%',
-        maxWidth: '350px',
-        padding: '16px 24px',
-        borderRadius: '12px',
-        border: 'none',
-        background: 'linear-gradient(135deg, #ff6b9d, #f0b232, #ffd700)',
-        color: '#000',
-        fontWeight: 'bold',
-        fontSize: '16px',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '10px',
-        margin: '0 auto',
-        boxShadow: '0 4px 20px rgba(240, 178, 50, 0.4)',
-        transition: 'all 0.3s ease',
-    },
-    boostButtonIcon: {
-        fontSize: '20px',
-    },
-};
-
 export default PremiumStoreModal;
-
-
-

@@ -1,0 +1,84 @@
+import { useState } from 'react';
+import styles from './styles';
+
+const CreateTournamentModal = ({ onClose, onCreate }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        game: '',
+        max_participants: 8,
+        start_date: '',
+        prize: '',
+        rules: ''
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onCreate(formData);
+    };
+
+    return (
+        <div style={styles.modalOverlay}>
+            <div style={styles.modal}>
+                <h3 style={styles.modalTitle}>Yeni Turnuva Olu{'\u015F'}tur</h3>
+                <form onSubmit={handleSubmit} style={styles.form}>
+                    <input
+                        type="text"
+                        placeholder="Turnuva Ad{'\u0131'}"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        style={styles.input}
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Oyun"
+                        value={formData.game}
+                        onChange={(e) => setFormData({ ...formData, game: e.target.value })}
+                        style={styles.input}
+                        required
+                    />
+                    <select
+                        value={formData.max_participants}
+                        onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) })}
+                        style={styles.input}
+                    >
+                        <option value={4}>4 Ki{'\u015F'}i</option>
+                        <option value={8}>8 Ki{'\u015F'}i</option>
+                        <option value={16}>16 Ki{'\u015F'}i</option>
+                        <option value={32}>32 Ki{'\u015F'}i</option>
+                    </select>
+                    <input
+                        type="datetime-local"
+                        value={formData.start_date}
+                        onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                        style={styles.input}
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder={'\u00D6d\u00FCl (opsiyonel)'}
+                        value={formData.prize}
+                        onChange={(e) => setFormData({ ...formData, prize: e.target.value })}
+                        style={styles.input}
+                    />
+                    <textarea
+                        placeholder="Kurallar"
+                        value={formData.rules}
+                        onChange={(e) => setFormData({ ...formData, rules: e.target.value })}
+                        style={{ ...styles.input, minHeight: '100px' }}
+                    />
+                    <div style={styles.modalButtons}>
+                        <button type="button" onClick={onClose} style={styles.cancelButton}>
+                            {'\u0130'}ptal
+                        </button>
+                        <button type="submit" style={styles.submitButton}>
+                            Olu{'\u015F'}tur
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default CreateTournamentModal;

@@ -1,0 +1,37 @@
+import { useState } from 'react';
+import { FaMicrophone, FaVolumeUp } from 'react-icons/fa';
+import SettingSection from '../components/SettingSection';
+import ToggleSwitch from '../components/ToggleSwitch';
+import S from '../styles';
+
+const VoiceTab = () => {
+    const [inputVolume, setInputVolume] = useState(100);
+    const [outputVolume, setOutputVolume] = useState(100);
+    const [noiseSuppression, setNoiseSuppression] = useState(true);
+    const [echoCancellation, setEchoCancellation] = useState(true);
+
+    return (
+        <div>
+            <SettingSection title="Ses Giri\u015F">
+                <div style={S.volumeRow}>
+                    <FaMicrophone style={{ color: '#949ba4' }} />
+                    <input type="range" min={0} max={200} value={inputVolume} onChange={e => setInputVolume(+e.target.value)} style={{ flex: 1, accentColor: '#5865f2' }} />
+                    <span style={{ color: '#fff', minWidth: 40, textAlign: 'right' }}>{inputVolume}%</span>
+                </div>
+            </SettingSection>
+            <SettingSection title="Ses \u00C7\u0131k\u0131\u015F">
+                <div style={S.volumeRow}>
+                    <FaVolumeUp style={{ color: '#949ba4' }} />
+                    <input type="range" min={0} max={200} value={outputVolume} onChange={e => setOutputVolume(+e.target.value)} style={{ flex: 1, accentColor: '#5865f2' }} />
+                    <span style={{ color: '#fff', minWidth: 40, textAlign: 'right' }}>{outputVolume}%</span>
+                </div>
+            </SettingSection>
+            <SettingSection title="Geli\u015Fmi\u015F">
+                <ToggleSwitch label="G\u00FCr\u00FClt\u00FC Bast\u0131rma" value={noiseSuppression} onChange={setNoiseSuppression} />
+                <ToggleSwitch label="Yank\u0131 \u00D6nleme" value={echoCancellation} onChange={setEchoCancellation} />
+            </SettingSection>
+        </div>
+    );
+};
+
+export default VoiceTab;

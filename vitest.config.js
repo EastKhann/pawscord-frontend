@@ -8,6 +8,13 @@ import path from 'path';
 export default defineConfig({
     plugins: [react()],
 
+    // Allow .js files with JSX (CRA compatibility — matches vite.config.js)
+    esbuild: {
+        loader: 'jsx',
+        include: /src\/.*\.jsx?$/,
+        exclude: [],
+    },
+
     test: {
         // Test environment
         environment: 'jsdom',

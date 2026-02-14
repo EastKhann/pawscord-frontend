@@ -1,133 +1,23 @@
 // frontend/src/UserProfileModal.js
+// Decomposed: styles.js + hooks/useProfileModal.js
 
-import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import toast from './utils/toast';
 import { FaUserPlus, FaCheck, FaCoins, FaDesktop, FaClock, FaStickyNote } from 'react-icons/fa';
 import { AchievementsPanel } from './components/AchievementBadge';
 import SessionManagerModal from './components/SessionManagerModal';
 import UserNotesModal from './components/UserNotesModal';
-
-const getIconForLink = (key) => {
-    if (key.includes('steam')) return 'fab fa-steam';
-    if (key.includes('x')) return 'fab fa-twitter';
-    if (key.includes('instagram')) return 'fab fa-instagram';
-    return 'fa fa-link';
-};
-
-const formatUrl = (url, key) => {
-    if (!url || url.trim() === '') return '#';
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    if (key === 'x') return `https://x.com/${url.replace('@', '')}`;
-    if (key === 'instagram') return `https://instagram.com/${url.replace('@', '')}`;
-    return `https://${url}`;
-};
+import { styles } from './UserProfileModal/styles';
+import { useProfileModal, getIconForLink, formatUrl, linkDisplayNames } from './UserProfileModal/hooks/useProfileModal';
 
 const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDeterministicAvatar, fetchWithAuth, apiBaseUrl, currentUser, friendsList }) => {
-
-    const [requestStatus, setRequestStatus] = useState('idle');
-    const [showSessionManager, setShowSessionManager] = useState(false);
-    const [showNotes, setShowNotes] = useState(false);
-    const [activeTab, setActiveTab] = useState('profile'); // 🆕 Tab management
-    const [presenceHistory, setPresenceHistory] = useState([]); // 🆕 Presence history
-
-    // 🆕 Fetch presence history
-    useEffect(() => {
-        if (activeTab === 'activity' && user.username) {
-            const fetchPresenceHistory = async () => {
-                try {
-                    const response = await fetchWithAuth(`${apiBaseUrl}/presence/${user.username}/`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        // Backend returns {presence: [...]} but we need just the array
-                        setPresenceHistory(data.presence || []);
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch presence history:', error);
-                    setPresenceHistory([]);
-                }
-            };
-            fetchPresenceHistory();
-        }
-    }, [activeTab, user.username, fetchWithAuth, apiBaseUrl]);
+    const {
+        requestStatus, showSessionManager, setShowSessionManager,
+        showNotes, setShowNotes, activeTab, setActiveTab,
+        presenceHistory, isFriend, isSelf,
+        handleAddFriend, copyToClipboard, handleSendMoney, validLinks
+    } = useProfileModal({ user, fetchWithAuth, apiBaseUrl, currentUser, friendsList });
 
     if (!user) return null;
-
-    // 🔥 DÜZELTME: Arkadaş kontrolü - friendsList artık {username, avatar, ...} objeler array'i
-    const isFriend = friendsList && Array.isArray(friendsList) && (
-        friendsList.some(f => {
-            // String kontrolü (eski format)
-            if (typeof f === 'string') return f === user.username;
-            // Object kontrolü - direkt username (yeni format) veya sender/receiver (eski friend request format)
-            return f.username === user.username ||
-                f.sender_username === user.username ||
-                f.receiver_username === user.username;
-        })
-    );
-    const isSelf = user.username === currentUser;
-
-
-    const handleAddFriend = async () => {
-        setRequestStatus('loading');
-        try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, {
-                method: 'POST',
-                body: JSON.stringify({ username: user.username })
-            });
-
-            if (response.ok) {
-                setRequestStatus('success');
-            } else {
-                toast.error("❌ İstek gönderilemedi. Zaten ekli veya bekliyor olabilir.");
-                setRequestStatus('idle');
-            }
-        } catch (error) {
-            console.error("Arkadaş ekleme hatası:", error);
-            setRequestStatus('idle');
-        }
-    };
-
-    const copyToClipboard = (text, key) => {
-        try {
-            navigator.clipboard.writeText(text);
-            toast.success(`✅ '${key}' panoya kopyalandı`);
-        } catch (err) {
-            toast.error('❌ Kopyalama hatası.');
-        }
-    };
-
-    const linkDisplayNames = {
-        steam_trade: 'Steam Trade URL',
-        steam_profile: 'Steam Profili',
-        steam_friend_code: 'Steam Arkadaş Kodu',
-        x: 'X (Twitter)',
-        instagram: 'Instagram'
-    };
-
-    const handleSendMoney = async () => {
-        const amount = prompt(`Ne kadar Coin göndermek istiyorsun? (${user.username} kişisine)`);
-        if (!amount) return;
-
-        try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/transfer/`, {
-                method: 'POST',
-                body: JSON.stringify({ target_username: user.username, amount: amount })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                toast.success(data.message);
-            } else {
-                toast.error(data.error);
-            }
-        } catch (e) { toast.error("❌ Hata."); }
-    };
-
-    const socialLinks = user.social_links || {};
-    const validLinks = Object.entries(socialLinks).filter(([key, value]) => value && value.trim() !== '');
-
-    const handleMessageClick = () => {
-        onStartDM(user.username);
-    };
 
     const rawAvatarUrl = user.avatar || getDeterministicAvatar(user.username);
     // 🔥 FIX: rawAvatarUrl string olmalı
@@ -299,7 +189,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         )}
 
                         {!isSelf && (
-                            <button onClick={handleMessageClick} style={{ ...styles.messageButton, flex: 1 }}>
+                            <button onClick={() => onStartDM(user.username)} style={{ ...styles.messageButton, flex: 1 }}>
                                 💬 Mesaj Gönder
                             </button>
                         )}
@@ -504,204 +394,5 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
     return ReactDOM.createPortal(modalContent, document.body);
 };
 
-const styles = {
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        backdropFilter: 'blur(8px)'
-    },
-    modal: {
-        width: '500px',
-        maxWidth: '90vw',
-        backgroundColor: '#2f3136',
-        borderRadius: '16px',
-        boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden',
-        maxHeight: '90vh',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
-    },
-    actionButton: {
-        padding: '12px 20px',
-        color: 'white',
-        border: 'none',
-        borderRadius: '8px',
-        fontWeight: '600',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px',
-        fontSize: '14px',
-        transition: 'all 0.2s',
-        cursor: 'pointer'
-    },
-    messageButton: {
-        padding: '12px 20px',
-        backgroundColor: '#5865f2',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        fontWeight: 'bold',
-        fontSize: '0.9em'
-    },
-    content: {
-        padding: '20px',
-        maxHeight: '60vh',
-        overflowY: 'auto'
-    },
-    username: {
-        color: 'var(--text-primary)',
-        margin: '0 0 10px 0',
-        fontSize: '1.8em'
-    },
-    // 🔥 YENİ: Arkadaş Kodu Stilleri
-    friendCodeContainer: {
-        backgroundColor: 'rgba(88, 101, 242, 0.1)',
-        padding: '10px 15px',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        border: '1px dashed #5865f2',
-        marginBottom: '15px',
-        transition: 'background-color 0.2s'
-    },
-    friendCodeLabel: {
-        fontSize: '0.75em',
-        color: '#949ba4',
-        textTransform: 'uppercase',
-        fontWeight: 'bold',
-        marginBottom: '4px'
-    },
-    friendCodeValue: {
-        fontSize: '1.3em',
-        color: '#5865f2',
-        fontWeight: '800',
-        letterSpacing: '2px'
-    },
-    section: {
-        marginTop: '20px'
-    },
-    sectionTitle: {
-        color: 'var(--text-secondary)',
-        fontSize: '0.8em',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        margin: '0 0 8px 0',
-        borderBottom: '1px solid var(--border-primary)',
-        paddingBottom: '5px'
-    },
-    statusText: {
-        color: 'var(--text-primary)',
-        margin: 0,
-        fontSize: '0.9em'
-    },
-    linksContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px'
-    },
-    linkButton: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 12px',
-        backgroundColor: 'var(--background-secondary)',
-        borderRadius: '4px',
-        color: 'var(--text-primary)',
-        textDecoration: 'none',
-        transition: 'background-color 0.2s ease',
-        border: 'none',
-        fontFamily: 'inherit',
-        fontSize: '1em',
-        width: 'auto',
-        cursor: 'pointer',
-        textAlign: 'left',
-        alignSelf: 'flex-start'
-    },
-    linkText: {
-        marginLeft: '10px',
-        fontWeight: '500'
-    },
-    // 🆕 Tabs styles
-    tabsContainer: {
-        display: 'flex',
-        gap: '10px',
-        borderBottom: '2px solid var(--background-tertiary)',
-        marginBottom: '20px'
-    },
-    tabButton: {
-        background: 'none',
-        border: 'none',
-        padding: '10px 20px',
-        color: 'var(--text-secondary)',
-        cursor: 'pointer',
-        fontWeight: '500',
-        borderBottom: '2px solid transparent',
-        transition: 'all 0.2s',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px'
-    },
-    activeTab: {
-        color: 'var(--brand-color)',
-        borderBottomColor: 'var(--brand-color)'
-    },
-    // 🆕 Presence History styles
-    presenceTimeline: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-        marginTop: '15px'
-    },
-    presenceEntry: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '10px',
-        backgroundColor: 'var(--background-secondary)',
-        borderRadius: '6px',
-        transition: 'background-color 0.2s'
-    },
-    presenceStatus: {
-        width: '12px',
-        height: '12px',
-        borderRadius: '50%',
-        flexShrink: 0
-    },
-    presenceDetails: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        flex: 1
-    },
-    presenceStatusText: {
-        color: 'var(--text-primary)',
-        fontWeight: '500',
-        fontSize: '0.95em'
-    },
-    presenceTime: {
-        color: 'var(--text-secondary)',
-        fontSize: '0.85em'
-    },
-    noDataText: {
-        color: 'var(--text-secondary)',
-        textAlign: 'center',
-        padding: '20px',
-        fontStyle: 'italic'
-    }
-};
-
-export default UserProfileModal
+export default UserProfileModal;
 
