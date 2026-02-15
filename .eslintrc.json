@@ -7,7 +7,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:react-hooks/recommended"
+        "plugin:react-hooks/recommended",
+        "plugin:prettier/recommended"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -33,18 +34,38 @@
             "warn",
             {
                 "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^_"
+                "varsIgnorePattern": "^_",
+                "destructuredArrayIgnorePattern": "^_"
             }
         ],
         "no-console": "warn",
+        "no-debugger": "error",
+        "no-alert": "warn",
+        "no-duplicate-imports": "error",
+        "no-self-compare": "error",
+        "no-template-curly-in-string": "warn",
+        "prefer-const": "warn",
+        "no-var": "error",
+        "eqeqeq": [
+            "warn",
+            "smart"
+        ],
+        "no-eval": "error",
+        "no-implied-eval": "error",
+        "no-new-func": "error",
+        "no-return-await": "warn",
+        "require-await": "warn",
         "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/rules-of-hooks": "error",
         "no-empty": "warn",
-        "no-constant-condition": "warn"
+        "no-constant-condition": "warn",
+        "prettier/prettier": "warn"
     },
     "ignorePatterns": [
         "dist/",
         "build/",
         "node_modules/",
-        "*.min.js"
+        "*.min.js",
+        "*.min.css"
     ]
 }

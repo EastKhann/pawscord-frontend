@@ -288,9 +288,21 @@ class NotificationManager {
     }
 
     /**
-     * Show push notification
+     * Show push notification (respects persisted prefs — Faz 6)
      */
     async push(title, options = {}) {
+        // Check user's persisted notification prefs
+        try {
+            const raw = localStorage.getItem('pawscord_notification_prefs');
+            if (raw) {
+                const prefs = JSON.parse(raw);
+                if (prefs.desktop === false) return;
+                if (options.isDM && prefs.dms === false) return;
+                if (options.isMention && prefs.mentions === false) return;
+                if (options.isEveryone && prefs.everyone === false) return;
+            }
+        } catch { /* ignore parse errors */ }
+
         if (!('Notification' in window)) {
             console.warn('Push notifications not supported');
             return;

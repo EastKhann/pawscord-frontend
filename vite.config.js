@@ -20,7 +20,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/__tests__/setup.js',
-    include: ['src/**/*.{test,spec}.{js,jsx}'],
+    include: ['src/**/*.{test,spec}.{js,jsx,ts,tsx}'],
     css: false,
     coverage: {
       provider: 'v8',
@@ -163,11 +163,12 @@ export default defineConfig({
     },
   },
 
-  // Allow .js files with JSX (CRA compatibility)
+  // Allow .js files with JSX (CRA compatibility) + TypeScript support
   // ⚡ drop: production build'de TÜM console.log ve debugger ifadelerini siler
+  // tsx loader handles both TypeScript and JSX syntax for all source files
   esbuild: {
-    loader: 'jsx',
-    include: /src\/.*\.jsx?$/,
+    loader: 'tsx',
+    include: /src\/.*\.[jt]sx?$/,
     exclude: [],
     keepNames: true,
     drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
@@ -178,6 +179,8 @@ export default defineConfig({
     esbuildOptions: {
       loader: {
         '.js': 'jsx',
+        '.ts': 'tsx',
+        '.tsx': 'tsx',
       },
     },
   },
@@ -241,9 +244,9 @@ export default defineConfig({
 
             // Chart libraries - all chart libs in chart-vendor (imports react-core, no circular dep)
             if (id.includes('recharts') || id.includes('victory-vendor') ||
-                id.includes('@reduxjs/toolkit') || id.includes('react-redux') ||
-                id.includes('reselect') || id.includes('immer') ||
-                id.includes('use-sync-external-store')) {
+              id.includes('@reduxjs/toolkit') || id.includes('react-redux') ||
+              id.includes('reselect') || id.includes('immer') ||
+              id.includes('use-sync-external-store')) {
               return 'chart-vendor'; // Recharts + its Redux/toolkit deps
             }
             if (id.includes('chart.js') && !id.includes('react-chartjs')) {

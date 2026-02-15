@@ -1,11 +1,10 @@
 ﻿import { createContext, useContext, useRef, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import logger from './utils/logger';
 import toast from './utils/toast';
 import { spatialAudio } from './SpatialAudioEngine';
 import { API_URL_BASE_STRING, WS_PROTOCOL, API_HOST, isElectron } from './utils/constants';
 import { authFetch } from './utils/authFetch';
-import { DEFAULT_ICE_SERVERS, RTC_CONFIGURATION, setRtcIceServers } from './VoiceContext/constants';
+import { DEFAULT_ICE_SERVERS, setRtcIceServers } from './VoiceContext/constants';
 import { applyProfessionalAudioFilters } from './VoiceContext/audioProcessing';
 import { createVoiceEffect } from './VoiceContext/voiceEffects';
 import { useVoiceSettings } from './VoiceContext/useVoiceSettings';
@@ -13,6 +12,8 @@ import { useRecording } from './VoiceContext/useRecording';
 import { useStatsMonitoring } from './VoiceContext/useStatsMonitoring';
 import { useAudioVisualizer } from './VoiceContext/useAudioVisualizer';
 import { useMediaControls } from './VoiceContext/useMediaControls';
+import { useWebRTC } from './VoiceContext/useWebRTC';
+import { useSignalHandler } from './VoiceContext/useSignalHandler';
 
 const VoiceContext = createContext(null);
 
@@ -151,6 +152,7 @@ export const VoiceProvider = ({ children }) => {
     const isLeavingRef = useRef(false); // 🔥 Prevent recursive leave calls
     const isSwitchingRef = useRef(false); // 🔥 Prevent infinite switch loop
     const joinVoiceRoomRef = useRef(null); // 🔥 Ref for joinVoiceRoom (used in handleSignalMessage before definition)
+    const leaveVoiceRoomRef = useRef(null); // 🔥 Ref for leaveVoiceRoom (used in useSignalHandler)
     const micHealthIntervalRef = useRef(null); // 🔥 Mic watchdog
 
     // 🎵 Voice Effect Refs
@@ -430,673 +432,50 @@ export const VoiceProvider = ({ children }) => {
         });
     }, [remoteStreams, isSpatialAudioEnabled]);
 
-    const sendSignal = useCallback((signal) => {
-        if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
-            logger.signal(`Sending ${signal.type} to ${signal.receiver_username || 'BROADCAST'}`);
-            voiceWsRef.current.send(JSON.stringify({ ...signal, sender_username: username }));
-        } else {
-            logger.warn("[Signal] WS not ready, cannot send:", signal.type);
-        }
-    }, [username]);
-
-    // 🔥 YENİ: Bandwidth Adaptasyonu - Ping'e göre video kalitesi ayarla
-    const adjustBandwidth = useCallback((peerConnection, quality) => {
-        try {
-            const senders = peerConnection.getSenders();
-            const videoSender = senders.find(sender => sender.track?.kind === 'video');
-
-            if (!videoSender) {
-                return;
-            }
-
-            const parameters = videoSender.getParameters();
-            if (!parameters.encodings || parameters.encodings.length === 0) {
-                parameters.encodings = [{}];
-            }
-
-            // Kalite ayarları
-            const qualitySettings = {
-                low: { maxBitrate: 300000, maxFramerate: 15 },      // 300kbps, 15fps (Mobil)
-                medium: { maxBitrate: 800000, maxFramerate: 24 },   // 800kbps, 24fps
-                high: { maxBitrate: 2500000, maxFramerate: 30 }     // 2.5Mbps, 30fps (Desktop)
-            };
-
-            const settings = qualitySettings[quality] || qualitySettings.medium;
-
-            parameters.encodings[0].maxBitrate = settings.maxBitrate;
-            parameters.encodings[0].maxFramerate = settings.maxFramerate;
-
-            videoSender.setParameters(parameters)
-                .then(() => {
-                })
-                .catch(err => {
-                    console.warn('[Bandwidth] Failed to set parameters:', err);
-                });
-        } catch (err) {
-            console.warn('[Bandwidth] Error adjusting bandwidth:', err);
-        }
-    }, []);
-
-    const handleRemoteStream = useCallback((partnerUsername, event) => {
-        const { track } = event;
-        logger.webrtc(`Track Received from ${partnerUsername}:`, track.kind, track.id, 'label:', track.label, 'hint:', track.contentHint);
-
-        // ✅ FIX: Kamera ve ekran paylaşımını ayır
-        // Not: contentHint WebRTC üzerinden transfer edilmez, label'e bakmalıyız
-        const trackLabel = (track.label || '').toLowerCase();
-        const isScreenTrack =
-            trackLabel.includes('screen') ||
-            trackLabel.includes('window') ||
-            trackLabel.includes('monitor') ||
-            trackLabel.includes('display') ||
-            trackLabel.includes('tab') ||
-            track.contentHint === 'detail'; // Lokal track için geçerli
-
-        const streamKey = track.kind === 'video' && isScreenTrack
-            ? `${partnerUsername}_screen`
-            : track.kind === 'video'
-                ? `${partnerUsername}_camera`
-                : partnerUsername; // Audio için base key
-
-
-        setRemoteStreams(prev => {
-            const currentStream = prev[streamKey];
-
-            if (currentStream) {
-                // Aynı track ID'si varsa ekleme
-                if (!currentStream.getTracks().some(t => t.id === track.id)) {
-                    currentStream.addTrack(track);
-                    const refreshedStream = new MediaStream(currentStream.getTracks());
-                    return { ...prev, [streamKey]: refreshedStream };
-                }
-                return prev;
-            }
-
-            // Yeni stream oluştur
-            const newStream = new MediaStream([track]);
-            return { ...prev, [streamKey]: newStream };
-        });
-
-        if (track.kind === 'audio') {
-            initializeAudio();
-
-            // 🔥 FIX: Tek yönlü ses sorunu - Audio elementi oluştur ve çal
-            // Browser autoplay policy'si bazen remote audio'yu engelleyebilir
-            try {
-                const audioEl = document.createElement('audio');
-                audioEl.id = `remote-audio-${partnerUsername}`;
-                audioEl.srcObject = new MediaStream([track]);
-                audioEl.autoplay = true;
-                audioEl.playsInline = true;
-
-                // Mevcut elementi kaldır (varsa)
-                const existingEl = document.getElementById(`remote-audio-${partnerUsername}`);
-                if (existingEl) existingEl.remove();
-
-                // DOM'a ekle (görünmez)
-                audioEl.style.display = 'none';
-                document.body.appendChild(audioEl);
-
-                // Play promise - autoplay engellenirse user gesture bekle
-                audioEl.play().then(() => {
-                }).catch(err => {
-                    console.warn(`[Audio] Autoplay blocked for ${partnerUsername}, waiting for interaction:`, err.message);
-                    // User gesture sonrası tekrar dene
-                    const resumeAudio = () => {
-                        audioEl.play().catch(() => { });
-                        document.removeEventListener('click', resumeAudio);
-                    };
-                    document.addEventListener('click', resumeAudio, { once: true });
-                });
-
-            } catch (err) {
-                console.error(`[Audio] Failed to create audio element for ${partnerUsername}:`, err);
-            }
-        } else if (track.kind === 'video') {
-        }
-    }, [initializeAudio]);
-
-    // 🔥 FIX: Buffer ICE candidates until remote description is set
-    const iceCandidateBufferRef = useRef({}); // { [username]: ICECandidate[] }
-
-    const createPeerConnection = useCallback((partnerUsername, isInitiator = false) => {
-        if (peerConnectionsRef.current[partnerUsername]) {
-            logger.warn(`PC already exists for ${partnerUsername}`);
-            return peerConnectionsRef.current[partnerUsername];
-        }
-
-        logger.webrtc(`Creating PC for ${partnerUsername} (Initiator: ${isInitiator})`);
-
-        const pc = new RTCPeerConnection(RTC_CONFIGURATION);
-        peerConnectionsRef.current[partnerUsername] = pc;
-
-        // 🔥 YENİ: Codec Preferences - Opus için optimizasyon
-        try {
-            const transceivers = pc.getTransceivers();
-            transceivers.forEach(transceiver => {
-                if (transceiver.sender && transceiver.sender.track?.kind === 'audio') {
-                    const codecs = RTCRtpSender.getCapabilities('audio')?.codecs || [];
-                    // Opus codec'i öncelikli yap
-                    const opusCodecs = codecs.filter(c => c.mimeType.toLowerCase().includes('opus'));
-                    const otherCodecs = codecs.filter(c => !c.mimeType.toLowerCase().includes('opus'));
-                    const orderedCodecs = [...opusCodecs, ...otherCodecs];
-                    if (transceiver.setCodecPreferences && orderedCodecs.length > 0) {
-                        transceiver.setCodecPreferences(orderedCodecs);
-                    }
-                }
-            });
-        } catch (e) {
-            console.warn('[Codec] setCodecPreferences not supported:', e.message);
-        }
-
-        // 🔥 YENİ: Global window'a expose et (connection quality monitoring için)
-        if (typeof window !== 'undefined') {
-            window.__pawscord_peer_connections__ = peerConnectionsRef.current;
-        }
-
-        pc.onicecandidate = (event) => {
-            if (event.candidate) {
-                logger.signal(`Sending candidate to ${partnerUsername}`);
-                sendSignal({
-                    type: 'candidate',
-                    candidate: event.candidate,
-                    receiver_username: partnerUsername
-                });
-            }
-        };
-
-        pc.ontrack = (event) => handleRemoteStream(partnerUsername, event);
-
-        // 🔥 FIX: Sadece audio stream'i otomatik ekle (mic)
-        // Camera/screen stream'leri user_joined event'inde eklenir
-        if (localStreamRef.current) {
-            localStreamRef.current.getTracks().forEach(track => {
-                logger.webrtc(`Adding local audio track to PC for ${partnerUsername}:`, track.kind);
-                pc.addTrack(track, localStreamRef.current);
-            });
-        } else {
-            logger.warn(`No local stream available when creating PC for ${partnerUsername}`);
-        }
-
-        pc.oniceconnectionstatechange = () => {
-
-            if (pc.iceConnectionState === 'failed') {
-                console.warn(`[WebRTC] ICE failed with ${partnerUsername}, attempting restart...`);
-                setIsReconnecting(true);
-                // 🚀 OPTIMIZATION: Cached TURN creds kullan (1-saat TTL), re-fetch yapma!
-                pc.restartIce();
-                setTimeout(() => setIsReconnecting(false), 3000);
-
-            } else if (pc.iceConnectionState === 'disconnected') {
-                console.warn(`[WebRTC] ICE disconnected from ${partnerUsername}, waiting for reconnection...`);
-                setIsReconnecting(true);
-
-                // 🔥 İYİLEŞTİRME: 15 saniye timeout (mobil kullanıcılar için artırıldı)
-                setTimeout(() => {
-                    if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
-                        console.error(`[WebRTC] ICE reconnection timeout for ${partnerUsername}, cleaning up...`);
-                        setRemoteStreams(prev => {
-                            const newStreams = { ...prev };
-                            delete newStreams[partnerUsername];
-                            return newStreams;
-                        });
-                        if (peerConnectionsRef.current[partnerUsername]) {
-                            peerConnectionsRef.current[partnerUsername].close();
-                            delete peerConnectionsRef.current[partnerUsername];
-                        }
-                    }
-                    setIsReconnecting(false);
-                }, 15000); // 10000'den 15000'e artırıldı
-
-            } else if (pc.iceConnectionState === 'closed') {
-                setRemoteStreams(prev => {
-                    const newStreams = { ...prev };
-                    delete newStreams[partnerUsername];
-                    return newStreams;
-                });
-                if (peerConnectionsRef.current[partnerUsername]) {
-                    delete peerConnectionsRef.current[partnerUsername];
-                }
-                setIsReconnecting(false);
-            } else if (pc.iceConnectionState === 'connected') {
-                setIsReconnecting(false);
-
-                // 🔥 YENİ: Bandwidth Adaptasyonu - Ping ve packet loss'a göre kalite ayarla
-                setTimeout(async () => {
-                    try {
-                        const stats = await pc.getStats();
-
-                        stats.forEach(report => {
-                            if (report.type === 'candidate-pair' && report.state === 'succeeded') {
-                                const rtt = report.currentRoundTripTime * 1000; // ms cinsine çevir
-
-
-                                // Yüksek ping (300ms+) veya çok yüksek ping (500ms+)
-                                if (rtt > 500) {
-                                    console.warn(`⚠️ [Bandwidth] High latency detected (${rtt.toFixed(0)}ms), reducing video quality to LOW`);
-                                    adjustBandwidth(pc, 'low');
-                                } else if (rtt > 300) {
-                                    console.warn(`⚠️ [Bandwidth] Medium latency detected (${rtt.toFixed(0)}ms), reducing video quality to MEDIUM`);
-                                    adjustBandwidth(pc, 'medium');
-                                } else {
-                                    adjustBandwidth(pc, 'high');
-                                }
-                            }
-                        });
-                    } catch (err) {
-                        console.warn('[Bandwidth] Failed to get stats:', err);
-                    }
-                }, 2000); // 2 saniye sonra kontrol et (bağlantı stabilize olsun)
-
-            } else if (pc.iceConnectionState === 'checking') {
-            }
-        };
-
-        return pc;
-    }, [sendSignal, handleRemoteStream]);
-
-    const handleSignalMessage = useCallback(async (data) => {
-        // 🧹 KICKED (Inactivity cleanup or mod action)
-        if (data.type === 'kicked') {
-            console.warn('🔴 [Voice] Kicked from channel:', data.reason, data.message);
-
-            // 🔥 FIX: If moved to another channel, auto-rejoin instead of just leaving
-            if (data.reason === 'moved' && data.target_channel) {
-                toast.info(`🔀 ${data.message || 'Başka kanala taşındınız'}`, 3000);
-                // Leave current channel first, then join the target channel
-                leaveVoiceRoom();
-                // Small delay to let cleanup finish before rejoining
-                const targetChannel = data.target_channel;
-                setTimeout(() => {
-                    if (joinVoiceRoomRef.current) {
-                        joinVoiceRoomRef.current(targetChannel);
-                    }
-                }, 800);
-            } else {
-                toast.warning(`Sesli Kanaldan Çıkarıldınız\n\nNeden: ${data.message}`, 5000);
-                leaveVoiceRoom();
-            }
-            return;
-        }
-
-        // 🔥 VIDEO ENDED - Karşı taraf kamerayı/ekranı kapattı
-        if (data.type === 'video_ended') {
-            const senderUsername = data.from || data.username;
-            const streamType = data.streamType || 'camera';
-            const streamKey = `${senderUsername}_${streamType}`;
-
-
-            // Remote stream'i temizle (siyah ekran önleme)
-            setRemoteStreams(prev => {
-                const newStreams = { ...prev };
-                if (newStreams[streamKey]) {
-                    // Track'leri durdur
-                    newStreams[streamKey].getTracks().forEach(t => t.stop());
-                    delete newStreams[streamKey];
-                }
-                return newStreams;
-            });
-            return;
-        }
-
-        // 💬 VOICE REACTION RECEIVED
-        if (data.type === 'voice_reaction') {
-            const senderUsername = data.from || data.username;
-            setLastReaction({
-                username: senderUsername,
-                emoji: data.emoji,
-                timestamp: Date.now()
-            });
-            // Auto-clear after 3 seconds
-            setTimeout(() => {
-                setLastReaction(prev => {
-                    if (prev && prev.timestamp === Date.now()) return null;
-                    return prev;
-                });
-            }, 3000);
-            return;
-        }
-
-        // 🎮 GAME SIGNAL RECEIVED
-        if (data.type === 'game_signal') {
-            const senderUsername = data.from || data.username;
-
-            setGameState(prev => {
-                const newState = { ...prev };
-
-                if (data.action === 'start') {
-                    newState.gameType = data.game_type;
-                    newState.players = [senderUsername, data.target].filter(Boolean);
-                    newState.moves = {};
-                    newState.result = null;
-                    newState.currentTurn = senderUsername;
-                } else if (data.action === 'move') {
-                    newState.moves = {
-                        ...prev.moves,
-                        [senderUsername]: data.move
-                    };
-
-                    // RPS: Check if both players moved
-                    if (data.game_type === 'rps' && Object.keys(newState.moves).length === 2) {
-                        const [p1, p2] = Object.keys(newState.moves);
-                        const m1 = newState.moves[p1];
-                        const m2 = newState.moves[p2];
-
-                        // RPS logic
-                        const winMap = { rock: 'scissors', scissors: 'paper', paper: 'rock' };
-                        if (m1 === m2) {
-                            newState.result = { winner: null, type: 'draw' };
-                        } else if (winMap[m1] === m2) {
-                            newState.result = { winner: p1, loser: p2 };
-                        } else {
-                            newState.result = { winner: p2, loser: p1 };
-                        }
-                    }
-                } else if (data.action === 'end') {
-                    newState.result = data.result || { type: 'cancelled' };
-                }
-
-                return newState;
-            });
-            return;
-        }
-
-        // 🎬 CINEMA SYNC RECEIVED
-        if (data.type === 'cinema_sync') {
-            const senderUsername = data.from || data.username;
-
-            setCinemaState(prev => ({
-                ...prev,
-                isActive: data.action !== 'stop',
-                url: data.url || prev.url,
-                playing: data.action === 'play',
-                time: data.time || prev.time,
-                lastSyncAction: data.action,
-                timestamp: Date.now(),
-                syncedBy: senderUsername
-            }));
-            return;
-        }
-
-        // �🔥 Mevcut kullanıcı listesini al
-        if (data.type === 'current_users') {
-
-            setConnectedUsers(prev => {
-                const backendUsers = data.users || [];
-
-                // Backend listesinde ben var mıyım kontrol et
-                const meInBackendList = backendUsers.some(u => u.username === username);
-
-                // Eğer backend'de yoksa, mevcut listemdeki kendi bilgimi koru
-                const myInfo = prev.find(u => u.username === username);
-
-                // Backend listesini al, eğer ben yoksa ekle
-                let finalList = [...backendUsers];
-                if (!meInBackendList && myInfo) {
-                    finalList = [myInfo, ...backendUsers];
-                } else if (!meInBackendList && username) {
-                    // Hiç yoksa default bilgilerle ekle
-                    finalList = [{
-                        username: username,
-                        isMuted: isMuted,
-                        isCameraOn: isVideoEnabled,
-                        isScreenSharing: isScreenSharing,
-                        isTalking: isTalking
-                    }, ...backendUsers];
-                }
-
-                return finalList;
-            });
-            return;
-        }
-
-        // 🔥 FIX: Backend sends 'from' for WebRTC signals, 'username' for user_joined
-        const senderUsername = data.from || data.sender_username || data.username;
-        const { type, sdp, candidate } = data;
-
-        // DEBUG: Eğer sender bulunamadıysa, tüm datayı logla
-        if (!senderUsername) {
-            console.error('[Signal] No sender username found in message:', data);
-            return;
-        }
-
-        if (senderUsername === username) {
-            return;
-        }
-
-
-        let pc = peerConnectionsRef.current[senderUsername];
-
-        if (!pc) {
-            if (type === 'offer') {
-                pc = createPeerConnection(senderUsername, false);
-            } else if (type === 'user_joined') {
-                // Yeni biri katıldı, ben teklif yapmalıyım (Initiator)
-                logger.signal(`${senderUsername} joined, I will create offer`);
-
-                // 🆕 Kullanıcıyı listeye ekle
-                setConnectedUsers(prev => {
-                    if (prev.find(u => u.username === senderUsername)) return prev;
-                    return [...prev, {
-                        username: senderUsername,
-                        isMuted: false,
-                        isCameraOn: false,
-                        isScreenSharing: false
-                    }];
-                });
-
-                pc = createPeerConnection(senderUsername, true);
-
-                // 🔥 CRITICAL FIX: Mevcut stream'leri yeni kullanıcıya ekle!
-
-                // 🔥 YENİ: Audio stream'i ekle (sesli chat için zorunlu!)
-                if (localStreamRef.current) {
-                    // ✅ Track'lerin zaten eklenmiş olup olmadığını kontrol et
-                    const existingSenders = pc.getSenders();
-                    localStreamRef.current.getTracks().forEach(track => {
-                        const trackAlreadyAdded = existingSenders.some(sender => sender.track === track);
-                        if (!trackAlreadyAdded) {
-                            logger.webrtc(`Adding audio track to new peer ${senderUsername}:`, track.kind);
-                            pc.addTrack(track, localStreamRef.current);
-                        } else {
-                            logger.webrtc(`⏭️ Audio track already added to ${senderUsername}, skipping`);
-                        }
-                    });
-                }
-
-                if (localCameraStreamRef.current) {
-                    // ✅ Track'lerin zaten eklenmiş olup olmadığını kontrol et
-                    const existingSenders = pc.getSenders();
-                    localCameraStreamRef.current.getTracks().forEach(track => {
-                        const trackAlreadyAdded = existingSenders.some(sender => sender.track === track);
-                        if (!trackAlreadyAdded) {
-                            logger.webrtc(`Adding camera track to new peer ${senderUsername}:`, track.kind);
-                            pc.addTrack(track, localCameraStreamRef.current);
-                        } else {
-                            logger.webrtc(`⏭️ Camera track already added to ${senderUsername}, skipping`);
-                        }
-                    });
-                }
-
-                if (localScreenStreamRef.current) {
-                    // ✅ Track'lerin zaten eklenmiş olup olmadığını kontrol et
-                    const existingSenders = pc.getSenders();
-                    localScreenStreamRef.current.getTracks().forEach(track => {
-                        const trackAlreadyAdded = existingSenders.some(sender => sender.track === track);
-                        if (!trackAlreadyAdded) {
-                            logger.webrtc(`Adding screen track to new peer ${senderUsername}:`, track.kind);
-                            pc.addTrack(track, localScreenStreamRef.current);
-                        } else {
-                            logger.webrtc(`⏭️ Screen track already added to ${senderUsername}, skipping`);
-                        }
-                    });
-                }
-
-                try {
-                    const offer = await pc.createOffer();
-                    await pc.setLocalDescription(offer);
-                    sendSignal({
-                        type: 'offer',
-                        sdp: pc.localDescription,
-                        target: senderUsername
-                    });
-                    logger.signal(`Sent offer to ${senderUsername}`);
-                } catch (e) {
-                    logger.error("Offer creation failed", e);
-                    console.error(`❌ [user_joined] Failed to create/send offer to ${senderUsername}:`, e);
-                }
-                return;
-            } else if (type === 'user_left') {
-                // Kullanıcı ayrıldı, temizlik yap
-
-                // 🆕 Kullanıcıyı listeden çıkar
-                setConnectedUsers(prev => prev.filter(u => u.username !== senderUsername));
-
-                // 🔥 FIX: Audio elementi temizle
-                const audioEl = document.getElementById(`remote-audio-${senderUsername}`);
-                if (audioEl) {
-                    audioEl.pause();
-                    audioEl.srcObject = null;
-                    audioEl.remove();
-                }
-
-                setRemoteStreams(prev => {
-                    const newStreams = { ...prev };
-                    // Tüm stream türlerini temizle
-                    delete newStreams[senderUsername];
-                    delete newStreams[`${senderUsername}_camera`];
-                    delete newStreams[`${senderUsername}_screen`];
-                    return newStreams;
-                });
-                if (peerConnectionsRef.current[senderUsername]) {
-                    peerConnectionsRef.current[senderUsername].close();
-                    delete peerConnectionsRef.current[senderUsername];
-                }
-                return;
-            } else if (type === 'stream_update') {
-                // Stream durumu değişti (kamera açıldı/kapandı vb)
-
-                // Kullanıcı listesini güncelle
-                setConnectedUsers(prev => prev.map(u => {
-                    if (u.username === senderUsername) {
-                        return {
-                            ...u,
-                            isCameraOn: data.streamType === 'camera' ? data.enabled : u.isCameraOn,
-                            isScreenSharing: data.streamType === 'screen' ? data.enabled : u.isScreenSharing
-                        };
-                    }
-                    return u;
-                }));
-
-                // 🔥 CRITICAL FIX: Eğer stream aktifse ve peer connection yoksa, oluştur
-                if (data.enabled && !peerConnectionsRef.current[senderUsername]) {
-                    const newPC = createPeerConnection(senderUsername, true);
-
-                    // 🔥 Kendi stream'lerimi ekle (audio dahil!)
-                    if (localStreamRef.current) {
-                        localStreamRef.current.getTracks().forEach(track => {
-                            logger.webrtc(`Adding audio track to ${senderUsername}:`, track.kind);
-                            newPC.addTrack(track, localStreamRef.current);
-                        });
-                    }
-                    if (localCameraStreamRef.current) {
-                        localCameraStreamRef.current.getTracks().forEach(track => {
-                            logger.webrtc(`Adding camera track to ${senderUsername}:`, track.kind);
-                            newPC.addTrack(track, localCameraStreamRef.current);
-                        });
-                    }
-                    if (localScreenStreamRef.current) {
-                        localScreenStreamRef.current.getTracks().forEach(track => {
-                            logger.webrtc(`Adding screen track to ${senderUsername}:`, track.kind);
-                            newPC.addTrack(track, localScreenStreamRef.current);
-                        });
-                    }
-
-                    // Offer oluştur
-                    try {
-                        const offer = await newPC.createOffer();
-                        await newPC.setLocalDescription(offer);
-                        sendSignal({
-                            type: 'offer',
-                            sdp: newPC.localDescription,
-                            target: senderUsername
-                        });
-                        logger.signal(`Sent offer to ${senderUsername} after stream_update`);
-                    } catch (e) {
-                        logger.error(`Failed to create offer for ${senderUsername}:`, e);
-                    }
-                }
-                return;
-            } else {
-                console.warn(`[Signal] Ignored ${type} from ${senderUsername} (No PC)`);
-                return;
-            }
-        }
-
-        try {
-            // 🔥 CRITICAL FIX: Check signalingState BEFORE processing answer/offer
-            if (type === 'offer') {
-                // Only accept offer if we're in 'stable' state
-                if (pc.signalingState !== 'stable') {
-                    console.warn(`[Signal] Ignoring offer from ${senderUsername}, already in state: ${pc.signalingState}`);
-                    return;
-                }
-
-                await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-                const answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
-                sendSignal({
-                    type: 'answer',
-                    sdp: pc.localDescription,
-                    target: senderUsername
-                });
-
-                // 🔥 FIX: Process buffered ICE candidates after remote description is set
-                if (iceCandidateBufferRef.current[senderUsername]) {
-                    for (const bufferedCandidate of iceCandidateBufferRef.current[senderUsername]) {
-                        try {
-                            await pc.addIceCandidate(bufferedCandidate);
-                        } catch (e) {
-                            console.warn(`[Signal] Failed to add buffered candidate:`, e);
-                        }
-                    }
-                    delete iceCandidateBufferRef.current[senderUsername];
-                }
-            } else if (type === 'answer') {
-                // 🔥 CRITICAL FIX: Only accept answer if we're in 'have-local-offer' state
-                if (pc.signalingState !== 'have-local-offer') {
-                    console.warn(`[WebRTC] Error handling answer from ${senderUsername}: InvalidStateError: Failed to execute 'setRemoteDescription' on 'RTCPeerConnection': Failed to set remote answer sdp: Called in wrong state: ${pc.signalingState}`);
-                    return;
-                }
-
-                await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-
-                // 🔥 FIX: Process buffered ICE candidates after remote description is set
-                if (iceCandidateBufferRef.current[senderUsername]) {
-                    for (const bufferedCandidate of iceCandidateBufferRef.current[senderUsername]) {
-                        try {
-                            await pc.addIceCandidate(bufferedCandidate);
-                        } catch (e) {
-                            console.warn(`[Signal] Failed to add buffered candidate:`, e);
-                        }
-                    }
-                    delete iceCandidateBufferRef.current[senderUsername];
-                }
-            } else if (type === 'candidate') {
-                if (pc.remoteDescription) {
-                    await pc.addIceCandidate(new RTCIceCandidate(candidate));
-                } else {
-                    // 🔥 FIX: Buffer candidate until remote description is set
-                    if (!iceCandidateBufferRef.current[senderUsername]) {
-                        iceCandidateBufferRef.current[senderUsername] = [];
-                    }
-                    iceCandidateBufferRef.current[senderUsername].push(new RTCIceCandidate(candidate));
-                }
-            }
-        } catch (e) {
-            console.error(`[WebRTC] Error handling ${type} from ${senderUsername}:`, e);
-        }
-    }, [username, createPeerConnection, sendSignal]);
+    // 🔥 WebRTC Hook - peer connection, signaling, bandwidth management
+    const {
+        sendSignal,
+        adjustBandwidth,
+        handleRemoteStream,
+        createPeerConnection,
+        iceCandidateBufferRef,
+        addLocalStreamsToPeer,
+    } = useWebRTC({
+        username,
+        voiceWsRef,
+        peerConnectionsRef,
+        localStreamRef,
+        localCameraStreamRef,
+        localScreenStreamRef,
+        setRemoteStreams,
+        setIsReconnecting,
+        initializeAudio,
+    });
+
+    // 🔥 Signal Handler Hook - handles all WebSocket signal messages
+    const { handleSignalMessage } = useSignalHandler({
+        username,
+        isMuted,
+        isVideoEnabled,
+        isScreenSharing,
+        isTalking,
+        createPeerConnection,
+        sendSignal,
+        iceCandidateBufferRef,
+        addLocalStreamsToPeer,
+        peerConnectionsRef,
+        localStreamRef,
+        localCameraStreamRef,
+        localScreenStreamRef,
+        joinVoiceRoomRef,
+        setRemoteStreams,
+        setConnectedUsers,
+        setLastReaction,
+        setGameState,
+        setCinemaState,
+        setIsReconnecting,
+        leaveVoiceRoomRef,
+    });
 
     // --- SESLİ SOHBETTEN AYRILMA ---
     const leaveVoiceRoom = useCallback(() => {
@@ -1495,7 +874,8 @@ export const VoiceProvider = ({ children }) => {
     // 🔥 Keep joinVoiceRoomRef in sync (for use in handleSignalMessage before definition)
     useEffect(() => {
         joinVoiceRoomRef.current = joinVoiceRoom;
-    }, [joinVoiceRoom]);
+        leaveVoiceRoomRef.current = leaveVoiceRoom;
+    }, [joinVoiceRoom, leaveVoiceRoom]);
 
     // --- TOGGLE FUNCTIONS (extracted to useMediaControls hook) ---
     const { toggleMute, toggleDeafened, toggleVideo, toggleCamera, toggleScreenShare } = useMediaControls({
