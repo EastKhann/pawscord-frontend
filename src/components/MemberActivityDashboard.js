@@ -324,7 +324,7 @@ const MemberActivityDashboard = ({ serverId, onClose, fetchWithAuth, apiBaseUrl 
                                         onClick={() => setSelectedMember(member)}
                                     >
                                         <div className="col col-member">
-                                            <span className="rank">#{index + 1}</span>
+                                            <span className="rank">{index + 1}</span>
                                             <div className="member-avatar">
                                                 <FaUser />
                                             </div>

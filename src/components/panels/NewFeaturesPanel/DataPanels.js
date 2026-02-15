@@ -138,7 +138,7 @@ export const ServerInsightsPanel = ({ serverId, onClose }) => {
                     {insights.top_members?.length > 0 && (
                         <div className="top-list"><h4>{'🏆'} En Aktif Üyeler</h4>
                             {insights.top_members.slice(0, 5).map((m, i) => (
-                                <div key={i} className="list-item"><span className="rank">#{i + 1}</span><span className="name">{m.sender__username}</span><span className="count">{m.count} mesaj</span></div>
+                                <div key={i} className="list-item"><span className="rank">{i + 1}</span><span className="name">{m.sender__username}</span><span className="count">{m.count} mesaj</span></div>
                             ))}
                         </div>
                     )}
@@ -172,7 +172,7 @@ export const ActivityFeedPanel = ({ onClose }) => {
                                     <span className="activity-icon">{activity.type === 'mention' ? '📢' : '💬'}</span>
                                     <div className="activity-content">
                                         <strong>{activity.user}</strong>
-                                        <span className="activity-room">#{activity.room}</span>
+                                        <span className="activity-room">{activity.room}</span>
                                         <p>{activity.preview}</p>
                                     </div>
                                 </div>

@@ -44,7 +44,7 @@ const TicketSystemPanel = ({ serverId, onClose }) => {
                   <div key={ticket.id} className="ticket-card" onClick={() => t.setSelectedTicket(ticket)}>
                     <div className="ticket-card-header">
                       <div className="ticket-info">
-                        <span className="ticket-id">#{ticket.id}</span>
+                        <span className="ticket-id">{ticket.id}</span>
                         <h4>{ticket.subject || 'Destek Talebi'}</h4>
                       </div>
                       <div className="ticket-badges">

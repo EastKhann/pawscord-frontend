@@ -3,7 +3,7 @@ const TicketDetail = ({ ticket, onClose, newMessage, setNewMessage, sendMessage,
     <div className="ticket-detail-panel" onClick={(e) => e.stopPropagation()}>
       <div className="detail-header">
         <div>
-          <span className="ticket-id-large">#{ticket.id}</span>
+          <span className="ticket-id-large">{ticket.id}</span>
           <h3>{ticket.subject || 'Destek Talebi'}</h3>
         </div>
         <button className="close-btn" onClick={onClose}>{'×'}</button>

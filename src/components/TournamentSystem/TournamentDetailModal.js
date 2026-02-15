@@ -99,7 +99,7 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
                             {tournament.participants?.map(p => (
                                 <div key={p.id} style={styles.participant}>
                                     <span>{p.username}</span>
-                                    {p.seed && <span style={styles.seed}>#{p.seed}</span>}
+                                    {p.seed && <span style={styles.seed}>{p.seed}</span>}
                                 </div>
                             ))}
                         </div>

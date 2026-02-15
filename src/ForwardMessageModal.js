@@ -21,7 +21,7 @@ const ForwardMessageModal = ({ message, rooms, conversations, onClose, onForward
             .map(room => ({
                 type: 'room',
                 id: room.slug,
-                name: `# ${room.slug}`
+                name: room.name || room.slug.replace(/-\d+-\d+$/, '')
             }));
 
         const filteredDMs = conversations

@@ -160,7 +160,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                     {reminder.description && <p>{reminder.description}</p>}
                     <div className="reminder-meta">
                       <span>⏰ {formatTime(reminder.remind_at)}</span>
-                      <span>📍 # {channels.find(c => c.id === reminder.channel_id)?.name}</span>
+                      <span>📍 {channels.find(c => c.id === reminder.channel_id)?.name}</span>
                       <span className="repeat-badge" style={{background: getRepeatBadge(reminder.repeat).color}}>
                         🔄 {getRepeatBadge(reminder.repeat).text}
                       </span>
@@ -211,7 +211,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                   <label>Kanal *</label>
                   <select value={newReminder.channel_id} onChange={(e) => setNewReminder({...newReminder, channel_id: e.target.value})}>
                     <option value="">Seçin</option>
-                    {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                    {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                   </select>
                 </div>
               </div>

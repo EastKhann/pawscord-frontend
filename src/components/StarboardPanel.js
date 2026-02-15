@@ -134,7 +134,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                     <label>📢 Starboard Kanalı</label>
                     <select value={config.channel_id} onChange={(e) => setConfig({...config, channel_id: e.target.value})}>
                       <option value="">Seçin</option>
-                      {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                      {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                   </div>
 
@@ -198,7 +198,7 @@ const StarboardPanel = ({ serverId, onClose }) => {
                           )}
                         </div>
                         <div className="star-footer">
-                          <span className="star-channel"># {star.channel_name}</span>
+                          <span className="star-channel">{star.channel_name}</span>
                           <span className="star-time">{new Date(star.created_at).toLocaleString('tr-TR')}</span>
                           <button className="remove-btn" onClick={() => removeMessage(star.message_id)}>🗑️</button>
                         </div>

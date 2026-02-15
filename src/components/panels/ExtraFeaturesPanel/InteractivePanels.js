@@ -26,7 +26,7 @@ export const MemberLevelsPanel = ({ serverId, onClose }) => {
                 <div className="leaderboard">
                     {leaderboard.map((member, i) => (
                         <div key={i} className={`member-row ${i < 3 ? 'top-' + (i + 1) : ''}`}>
-                            <span className="rank">#{i + 1}</span>
+                            <span className="rank">{i + 1}</span>
                             <span className="username">{member.username}</span>
                             <span className="level">Lv.{member.level}</span>
                             <span className="xp">{member.xp} XP</span>

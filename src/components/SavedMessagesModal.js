@@ -97,7 +97,7 @@ const SavedMessagesModal = ({ type = 'bookmarks', onClose, fetchWithAuth, apiBas
                                             {msg.content?.length > 150 && '...'}
                                         </div>
                                         {msg.room_name && (
-                                            <div style={styles.roomTag}>#{msg.room_name}</div>
+                                            <div style={styles.roomTag}>{msg.room_name}</div>
                                         )}
                                     </div>
                                     <div style={styles.actions}>

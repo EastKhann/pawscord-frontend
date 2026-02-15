@@ -158,7 +158,7 @@ const ChannelAnalyticsPanel = ({ serverId, onClose, fetchWithAuth }) => {
                                         className={`channel-item ${selectedChannel === channel.id ? 'selected' : ''}`}
                                         onClick={() => setSelectedChannel(channel.id === selectedChannel ? null : channel.id)}
                                     >
-                                        <span className={`rank ${index < 3 ? 'top' : ''}`}>#{index + 1}</span>
+                                        <span className={`rank ${index < 3 ? 'top' : ''}`}>{index + 1}</span>
                                         <span className="channel-icon">{getChannelIcon(channel.type)}</span>
                                         <div className="channel-info">
                                             <span className="channel-name">{channel.name}</span>
@@ -195,7 +195,7 @@ const ChannelAnalyticsPanel = ({ serverId, onClose, fetchWithAuth }) => {
                         <div className="peak-hours">
                             {(analytics?.peak_hours || []).map((item, index) => (
                                 <div key={index} className="peak-item">
-                                    <span className="peak-rank">#{index + 1}</span>
+                                    <span className="peak-rank">{index + 1}</span>
                                     <div className="peak-time">
                                         <FaCalendarAlt />
                                         <span>{item.hour}:00 - {item.hour + 1}:00</span>

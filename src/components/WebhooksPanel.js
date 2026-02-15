@@ -23,7 +23,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
             <div className="create-webhook-form">
               <h3>Yeni Webhook</h3>
               <div className="form-group"><label>Webhook Adı *</label><input type="text" placeholder="Örn: GitHub Bot" value={w.newWebhook.name} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, name: e.target.value })} /></div>
-              <div className="form-group"><label>Kanal *</label><select value={w.newWebhook.channel_id} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, channel_id: e.target.value })}><option value="">Kanal seçin...</option>{w.channels.map(ch => <option key={ch.id} value={ch.id}>#{ch.name}</option>)}</select></div>
+              <div className="form-group"><label>Kanal *</label><select value={w.newWebhook.channel_id} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, channel_id: e.target.value })}><option value="">Kanal seçin...</option>{w.channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}</select></div>
               <div className="form-group"><label>Avatar URL (Opsiyonel)</label><input type="text" placeholder="https://example.com/avatar.png" value={w.newWebhook.avatar_url} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, avatar_url: e.target.value })} /></div>
               <div className="form-actions"><button className="cancel-btn" onClick={() => w.setCreating(false)}>İptal</button><button className="submit-btn" onClick={w.createWebhook}>Oluştur</button></div>
             </div>
@@ -36,7 +36,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                   {w.editingWebhook === wh.id ? (
                     <div className="edit-webhook-form">
                       <div className="form-group"><label>Webhook Adı</label><input type="text" defaultValue={wh.name} id={`edit-name-${wh.id}`} /></div>
-                      <div className="form-group"><label>Kanal</label><select defaultValue={wh.channel_id} id={`edit-channel-${wh.id}`}>{w.channels.map(ch => <option key={ch.id} value={ch.id}>#{ch.name}</option>)}</select></div>
+                      <div className="form-group"><label>Kanal</label><select defaultValue={wh.channel_id} id={`edit-channel-${wh.id}`}>{w.channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}</select></div>
                       <div className="form-group"><label>Avatar URL</label><input type="text" defaultValue={wh.avatar_url || ''} id={`edit-avatar-${wh.id}`} /></div>
                       <div className="form-actions">
                         <button className="cancel-btn" onClick={() => w.setEditingWebhook(null)}>İptal</button>
@@ -49,7 +49,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                         <div className="webhook-avatar">{wh.avatar_url ? <img src={wh.avatar_url} alt={wh.name} /> : <div className="default-avatar">{'🔗'}</div>}</div>
                         <div className="webhook-details">
                           <h4>{wh.name}</h4>
-                          <p>#{w.channels.find(c => c.id === wh.channel_id)?.name || 'Bilinmeyen Kanal'}</p>
+                          <p>{w.channels.find(c => c.id === wh.channel_id)?.name || 'Bilinmeyen Kanal'}</p>
                           <span className="webhook-id">ID: {wh.id}</span>
                         </div>
                       </div>

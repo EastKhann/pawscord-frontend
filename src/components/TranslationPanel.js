@@ -206,7 +206,7 @@ const TranslationPanel = ({ serverId, onClose }) => {
                       const langData = languages.find(l => l.code === lang.code);
                       return (
                         <div key={idx} className="top-language-item">
-                          <span className="rank">#{idx + 1}</span>
+                          <span className="rank">{idx + 1}</span>
                           <span className="flag">{langData?.flag}</span>
                           <span className="name">{langData?.name}</span>
                           <span className="count">{lang.count} çeviri</span>

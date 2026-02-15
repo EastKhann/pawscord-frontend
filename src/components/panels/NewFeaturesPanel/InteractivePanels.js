@@ -59,7 +59,7 @@ export const FavoriteRoomsPanel = ({ onClose, onRoomSelect }) => {
                     : favorites.length === 0 ? <div className="empty"><p>Favori oda yok</p><small>Bir odayı favorilere eklemek için sağ tıkla</small></div>
                         : <div className="favorites-list">{favorites.map(room => (
                             <div key={room.id} className="favorite-item">
-                                <span className="room-name" onClick={() => onRoomSelect && onRoomSelect(room.id)}>#{room.name}</span>
+                                <span className="room-name" onClick={() => onRoomSelect && onRoomSelect(room.id)}>{room.name}</span>
                                 {room.server_name && <span className="server-name">{room.server_name}</span>}
                                 <button className="remove-btn" onClick={() => removeFavorite(room.id)}>{'✕'}</button>
                             </div>

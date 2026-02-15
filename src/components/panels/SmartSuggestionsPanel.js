@@ -228,7 +228,7 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
                             <div className="topics-list">
                                 {(suggestions?.trending_topics || []).map((topic, index) => (
                                     <div key={index} className="topic-item">
-                                        <span className="topic-rank">#{index + 1}</span>
+                                        <span className="topic-rank">{index + 1}</span>
                                         <div className="topic-info">
                                             <span className="topic-name">{topic.topic}</span>
                                             <span className="topic-mentions">{topic.mentions} mentions</span>

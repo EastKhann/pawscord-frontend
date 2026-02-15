@@ -54,7 +54,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
                             <div key={i} style={S.previewChannel}>
                                 <span style={S.previewEmoji}>{wc.emoji}</span>
                                 <div>
-                                    <span style={S.previewChannelName}>#{channel?.name || 'kanal'}</span>
+                                    <span style={S.previewChannelName}>{channel?.name || 'kanal'}</span>
                                     <span style={S.previewChannelDesc}>{wc.description}</span>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@ const WelcomeScreenEditor = ({ serverName, initialConfig, channels = [], onSave 
                         >
                             <option value="">Kanal seç...</option>
                             {channels.map(c => (
-                                <option key={c.id} value={c.id}>#{c.name}</option>
+                                <option key={c.id} value={c.id}>{c.name}</option>
                             ))}
                         </select>
                         <input

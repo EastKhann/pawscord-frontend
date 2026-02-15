@@ -163,7 +163,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                                 leaderboard.map((user, idx) => (
                                     <div key={idx} style={styles.leaderboardItem}>
                                         <div style={styles.rank}>
-                                            {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`}
+                                            {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}`}
                                         </div>
                                         <div style={styles.userInfo}>
                                             <div style={styles.username}>{user.username}</div>

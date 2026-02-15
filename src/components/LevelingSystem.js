@@ -88,7 +88,7 @@ export const RankDisplay = ({ rank, total }) => {
     return (
         <div className="rank-display">
             <span className="rank-icon">{getRankIcon(rank)}</span>
-            <span className="rank-number">#{rank}</span>
+            <span className="rank-number">{rank}</span>
             {total && <span className="rank-total">/ {total}</span>}
         </div>
     );
@@ -171,7 +171,7 @@ export const Leaderboard = ({ serverId, serverName, onClose }) => {
                                             {user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉'}
                                         </span>
                                     ) : (
-                                        <span className="rank-num">#{user.rank}</span>
+                                        <span className="rank-num">{user.rank}</span>
                                     )}
                                 </div>
                                 <img
@@ -284,7 +284,7 @@ export const UserLevelCard = ({ username }) => {
                 <div className="card-stats">
                     <div className="stat-item">
                         <span className="stat-label">Rank</span>
-                        <span className="stat-value">#{stats.rank}</span>
+                        <span className="stat-value">{stats.rank}</span>
                     </div>
                     <div className="stat-item">
                         <span className="stat-label">Mesaj</span>

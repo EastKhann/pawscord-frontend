@@ -33,7 +33,7 @@ const CreateGiveawayModal = ({ newGiveaway, setNewGiveaway, channels, roles, onC
                             <select value={newGiveaway.channel_id} onChange={(e) => update('channel_id', e.target.value)}>
                                 <option value="">Kanal Se{'ç'}in</option>
                                 {channels.map((ch) => (
-                                    <option key={ch.id} value={ch.id}># {ch.name}</option>
+                                    <option key={ch.id} value={ch.id}>{ch.name}</option>
                                 ))}
                             </select>
                         </div>

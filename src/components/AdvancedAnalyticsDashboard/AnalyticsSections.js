@@ -45,7 +45,7 @@ export const ListsSection = ({ topChannels, topMembers, reactionStats, geoData }
         {topChannels.length > 0 ? topChannels.map((ch, idx) => (
           <div key={ch.id} className="list-item">
             <span className="rank">{idx + 1}</span>
-            <span className="name"># {ch.name}</span>
+            <span className="name">{ch.name}</span>
             <div className="bar-container"><div className="bar" style={{ width: `${(ch.messages / topChannels[0].messages) * 100}%` }} /></div>
             <span className="value">{formatNumber(ch.messages)}</span>
           </div>

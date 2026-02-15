@@ -201,7 +201,7 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                     <label>Kanal *</label>
                     <select value={newAnnouncement.channel_id} onChange={(e) => setNewAnnouncement({...newAnnouncement, channel_id: e.target.value})}>
                       <option value="">Seçin</option>
-                      {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                      {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                   </div>
                   <div className="form-group">

@@ -93,7 +93,7 @@ const WaitlistPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                 <div key={idx} style={styles.entryCard}>
                                     <div style={styles.entryInfo}>
                                         <div style={styles.entryHeader}>
-                                            <span style={styles.entryPosition}>#{entry.position}</span>
+                                            <span style={styles.entryPosition}>{entry.position}</span>
                                             <span style={styles.entryEmail}>{entry.email}</span>
                                         </div>
                                         <div style={styles.entryMeta}>

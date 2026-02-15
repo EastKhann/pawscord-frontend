@@ -37,7 +37,7 @@ const DraftsTab = ({ deleteDraft, drafts }) => {
             >
               <div style={{ flex: 1 }}>
                 <h4 style={{ color: '#fff', margin: '0 0 8px 0', fontSize: '14px' }}>
-                  {draft.channel_name || `Kanal #${draft.channel_id}`}
+                  {draft.channel_name || `Kanal ${draft.channel_id}`}
                 </h4>
                 <p style={{
                   color: '#b9bbbe',

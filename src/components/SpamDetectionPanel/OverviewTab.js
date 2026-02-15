@@ -66,7 +66,7 @@ const OverviewTab = ({ stats, settings }) => (
             <div style={styles.offendersList}>
                 {stats.topOffenders.map((offender, index) => (
                     <div key={index} style={styles.offenderItem}>
-                        <div style={styles.offenderRank}>#{index + 1}</div>
+                        <div style={styles.offenderRank}>{index + 1}</div>
                         <div style={styles.offenderInfo}>
                             <span style={styles.offenderName}>{offender.username}</span>
                             <span style={styles.offenderCount}>{offender.count} ihlal</span>

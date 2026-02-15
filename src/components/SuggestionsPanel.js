@@ -154,7 +154,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                     <label>📢 Öneri Kanalı</label>
                     <select value={config.channel_id} onChange={(e) => setConfig({...config, channel_id: e.target.value})}>
                       <option value="">Seçin</option>
-                      {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                      {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                   </div>
 
@@ -162,7 +162,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                     <label>📋 İnceleme Kanalı</label>
                     <select value={config.review_channel_id} onChange={(e) => setConfig({...config, review_channel_id: e.target.value})}>
                       <option value="">Seçin</option>
-                      {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                      {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                   </div>
 

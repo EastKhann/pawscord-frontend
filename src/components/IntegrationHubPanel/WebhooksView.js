@@ -62,7 +62,7 @@ const CreateWebhookModal = ({ serverId, token, onClose, onCreated }) => {
                     <select value={channelId} onChange={(e) => setChannelId(e.target.value)}>
                         <option value="">Kanal seçin...</option>
                         {channels.map(ch => (
-                            <option key={ch.id} value={ch.id}>#{ch.name}</option>
+                            <option key={ch.id} value={ch.id}>{ch.name}</option>
                         ))}
                     </select>
                 </div>
@@ -142,7 +142,7 @@ const WebhooksView = ({ serverId, token }) => {
                             </div>
                             <div className="webhook-info">
                                 <h4>{webhook.name}</h4>
-                                <span className="webhook-channel">#{webhook.channel_name}</span>
+                                <span className="webhook-channel">{webhook.channel_name}</span>
                                 <div className="webhook-url">
                                     <code>{webhook.url.substring(0, 40)}...</code>
                                     <button onClick={() => {

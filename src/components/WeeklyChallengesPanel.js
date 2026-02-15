@@ -38,7 +38,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
                 {[
                     { icon: <FaFire size={20} color="#f04747" />, value: userProgress.streak, label: 'Günlük Seri' },
                     { icon: <FaStar size={20} color="#faa61a" />, value: userProgress.weeklyPoints, label: 'Haftalık Puan' },
-                    { icon: <FaTrophy size={20} color="#5865f2" />, value: `#${userProgress.rank}`, label: 'Sıralama' },
+                    { icon: <FaTrophy size={20} color="#5865f2" />, value: `${userProgress.rank}`, label: 'Sıralama' },
                     { icon: <FaMedal size={20} color="#43b581" />, value: userProgress.completedChallenges, label: 'Tamamlanan' }
                 ].map(s => (
                     <div key={s.label} style={styles.statCard}>

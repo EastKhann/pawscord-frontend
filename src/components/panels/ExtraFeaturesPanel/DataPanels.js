@@ -112,7 +112,7 @@ export const ServerTemplatesPanel = ({ onClose }) => {
                     {Object.entries(templates).map(([id, template]) => (
                         <div key={id} className="template-card" style={{ borderColor: template.color }}>
                             <h4>{template.name}</h4>
-                            <div className="rooms">{template.rooms.map((room, i) => (<span key={i} className="room-tag">#{room}</span>))}</div>
+                            <div className="rooms">{template.rooms.map((room, i) => (<span key={i} className="room-tag">{room}</span>))}</div>
                             <div className="roles">{template.roles.map((role, i) => (<span key={i} className="role-tag">{role}</span>))}</div>
                             <button onClick={() => applyTemplate(id)}>Kullan</button>
                         </div>
@@ -190,7 +190,7 @@ export const ServerAnalyticsPanel = ({ serverId, onClose }) => {
                     </div>
                     <div className="active-rooms">
                         <h4>En Aktif Odalar</h4>
-                        {analytics.active_rooms?.map((room, i) => (<div key={i} className="room-stat"><span>#{room.room__name}</span><span>{room.count} mesaj</span></div>))}
+                        {analytics.active_rooms?.map((room, i) => (<div key={i} className="room-stat"><span>{room.room__name}</span><span>{room.count} mesaj</span></div>))}
                     </div>
                 </>)}
             </div>

@@ -16,7 +16,7 @@ const UsersTab = ({ stats }) => (
                 <div style={styles.list}>
                     {stats.top_users.map((user, index) => (
                         <div key={index} style={styles.listItem}>
-                            <span>#{index + 1} {user.username}</span>
+                            <span>{index + 1} {user.username}</span>
                             <span>{user.message_count} mesaj</span>
                         </div>
                     ))}

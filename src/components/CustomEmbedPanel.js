@@ -309,7 +309,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
                   <div className="embed-actions">
                     <select value={selectedChannel} onChange={(e) => setSelectedChannel(e.target.value)}>
                       <option value="">Kanal seç</option>
-                      {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                      {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                     <button onClick={() => sendEmbed(embed.id)}>📤 Gönder</button>
                     <button onClick={() => deleteEmbed(embed.id)}>🗑️</button>

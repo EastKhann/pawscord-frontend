@@ -35,7 +35,7 @@ const VoiceWaitingRoom = ({ channelName, maxUsers, currentUsers, position, onLea
                 </div>
 
                 <div style={styles.content}>
-                    <p style={styles.channelName}>#{channelName}</p>
+                    <p style={styles.channelName}>{channelName}</p>
 
                     <div style={styles.info}>
                         <div style={styles.infoItem}>
@@ -45,7 +45,7 @@ const VoiceWaitingRoom = ({ channelName, maxUsers, currentUsers, position, onLea
 
                         <div style={styles.infoItem}>
                             <span style={styles.infoLabel}>Sıradaki Pozisyon:</span>
-                            <span style={styles.infoValue}>#{position + 1}</span>
+                            <span style={styles.infoValue}>{position + 1}</span>
                         </div>
 
                         <div style={styles.infoItem}>

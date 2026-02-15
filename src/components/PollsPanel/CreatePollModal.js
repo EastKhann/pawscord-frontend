@@ -19,7 +19,7 @@ const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, add
             <label>Kanal *</label>
             <select value={newPoll.channel_id} onChange={(e) => setNewPoll({ ...newPoll, channel_id: e.target.value })}>
               <option value="">Kanal Se{'ç'}in</option>
-              {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+              {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
             </select>
           </div>
           <div className="form-group">

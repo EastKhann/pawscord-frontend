@@ -304,7 +304,7 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                                 <div className="activities-list">
                                     {(insights?.top_activities || []).map((activity, index) => (
                                         <div key={index} className={`activity-item rank-${index + 1}`}>
-                                            <span className="activity-rank">#{index + 1}</span>
+                                            <span className="activity-rank">{index + 1}</span>
                                             <div className="activity-icon">
                                                 {getActivityIcon(activity.icon)}
                                             </div>

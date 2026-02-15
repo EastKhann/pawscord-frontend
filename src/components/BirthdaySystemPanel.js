@@ -165,7 +165,7 @@ const BirthdaySystemPanel = ({ serverId, onClose }) => {
                     <label>📢 Duyuru Kanalı</label>
                     <select value={config.announcement_channel_id} onChange={(e) => setConfig({...config, announcement_channel_id: e.target.value})}>
                       <option value="">Seçin</option>
-                      {channels.map(ch => <option key={ch.id} value={ch.id}># {ch.name}</option>)}
+                      {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                   </div>
 

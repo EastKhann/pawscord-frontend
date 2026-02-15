@@ -1,12 +1,12 @@
 ﻿// frontend/src/VoiceChatPanel.js
-// ðŸŽ¤ PROFESYONEL SESLÄ° SOHBET PANELÄ° - Discord/Zoom TarzÄ±
+// 🎤 PROFESYONEL SESLİ SOHBET PANELİ - Discord/Zoom Tarzı
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useVoice } from './VoiceContext';
 import { useAuth } from './AuthContext';
-import useResponsive from './hooks/useResponsive'; // ðŸ”¥ RESPONSIVE
+import useResponsive from './hooks/useResponsive'; // 🔥 RESPONSIVE
 import UserContextMenu from './components/UserContextMenu';
-import VoiceSettingsPanel from './components/VoiceSettingsPanel'; // ðŸ”¥ YENÄ°: GeliÅŸmiÅŸ Ses AyarlarÄ±
+import VoiceSettingsPanel from './components/VoiceSettingsPanel'; // 🔥 YENİ: Gelişmiş Ses Ayarları
 import toast from './utils/toast';
 import { PRODUCTION_URL } from './utils/constants';
 
@@ -19,10 +19,10 @@ import useVoiceMonitoring from './VoiceChatPanel/useVoiceMonitoring';
 import './VoiceChatPanel/voicePanelStyles';
 import { getDeterministicAvatarFallback } from './VoiceChatPanel/avatarUtils';
 
-// ðŸ”¥ YENÄ°: Avatar URL'sinden _100x100 thumbnail suffix'ini kaldÄ±r
+// 🔥 YENİ: Avatar URL'sinden _100x100 thumbnail suffix'ini kaldır
 const getFullResolutionAvatar = (avatarUrl) => {
     if (!avatarUrl) return null;
-    // _100x100 veya benzeri thumbnail suffix'lerini kaldÄ±r
+    // _100x100 veya benzeri thumbnail suffix'lerini kaldır
     return avatarUrl
         .replace(/_100x100\./gi, '.')
         .replace(/_150x150\./gi, '.')
@@ -35,9 +35,10 @@ const VoiceChatPanel = ({
     onClose,
     isMinimized,
     onToggleMinimize,
-    getRealUserAvatar,  // ðŸ”¥ YENÄ°: GerÃ§ek avatar URL alÄ±cÄ±
-    allUsers = [],      // ðŸ”¥ YENÄ°: TÃ¼m kullanÄ±cÄ± listesi
-    currentUserProfile  // ðŸ”¥ YENÄ°: Mevcut kullanÄ±cÄ±nÄ±n profili
+    showHeader = true,  // When embedded in voice view page, hide header to avoid duplicate
+    getRealUserAvatar,  // 🔥 YENİ: Gerçek avatar URL alıcı
+    allUsers = [],      // 🔥 YENİ: Tüm kullanıcı listesi
+    currentUserProfile  // 🔥 YENİ: Mevcut kullanıcının profili
 }) => {
     const {
         isInVoice,
@@ -86,22 +87,22 @@ const VoiceChatPanel = ({
         isTalking = false
     } = useVoice();
 
-    // ðŸ”¥ ALIAS: isCameraOn = isVideoEnabled
+    // 🔥 ALIAS: isCameraOn = isVideoEnabled
     const isCameraOn = isVideoEnabled;
 
-    // ðŸ”¥ FIX: Combine local and remote streams
+    // 🔥 FIX: Combine local and remote streams
     const { user: currentUser } = useAuth();
     const combinedUsers = React.useMemo(() => {
         const users = [...connectedUsers];
-        // Kendi local stream'imi ekle (eÄŸer yoksa)
+        // Kendi local stream'imi ekle (eğer yoksa)
         if (currentUser && !users.some(u => u.username === currentUser.username)) {
             users.push({
                 username: currentUser.username,
                 isMuted: isMuted,
                 isCameraOn: isCameraOn,
                 isScreenSharing: isScreenSharing,
-                isTalking: isTalking, // Burada kullan ama dependency'de deÄŸil
-                isLocal: true // ðŸ”¥ Flag to identify local user
+                isTalking: isTalking, // Burada kullan ama dependency'de değil
+                isLocal: true // 🔥 Flag to identify local user
             });
         } else if (currentUser) {
             // Update existing user with local state
@@ -112,22 +113,22 @@ const VoiceChatPanel = ({
                     isMuted: isMuted,
                     isCameraOn: isCameraOn,
                     isScreenSharing: isScreenSharing,
-                    isTalking: isTalking, // Burada kullan ama dependency'de deÄŸil
+                    isTalking: isTalking, // Burada kullan ama dependency'de değil
                     isLocal: true
                 };
             }
         }
         return users;
     }, [connectedUsers, currentUser, isMuted, isCameraOn, isScreenSharing]);
-    // ðŸ”¥ PERFORMANS: isTalking Ã§Ä±karÄ±ldÄ±! Her 150ms re-render engellenecek
+    // 🔥 PERFORMANS: isTalking çıkarıldı! Her 150ms re-render engellenecek
 
-    // ðŸ”¥ YENÄ°: GerÃ§ek avatar alma fonksiyonu (TAM Ã‡Ã–ZÃœNÃœRLÃœKLÃœ)
+    // 🔥 YENİ: Gerçek avatar alma fonksiyonu (TAM ÇÖZÜNÜRLÜKLÜ)
     const getUserAvatar = useCallback((username) => {
         let avatarUrl = null;
 
-        // 1. Ã–nce currentUserProfile kontrol et (kendi avatar'Ä±m)
+        // 1. Önce currentUserProfile kontrol et (kendi avatar'ım)
         if (currentUserProfile && username === currentUser?.username) {
-            // ðŸ”¥ FIX: avatar string olmalÄ±
+            // 🔥 FIX: avatar string olmalı
             if (currentUserProfile.avatar && typeof currentUserProfile.avatar === 'string') {
                 // Tam URL ise direkt kullan
                 if (currentUserProfile.avatar.startsWith('http') || currentUserProfile.avatar.startsWith('blob:')) {
@@ -147,7 +148,7 @@ const VoiceChatPanel = ({
         // 3. allUsers'tan avatar bul
         if (!avatarUrl) {
             const userFromList = allUsers.find(u => u.username === username);
-            // ðŸ”¥ FIX: avatar string olmalÄ±
+            // 🔥 FIX: avatar string olmalı
             if (userFromList?.avatar && typeof userFromList.avatar === 'string') {
                 if (userFromList.avatar.startsWith('http') || userFromList.avatar.startsWith('blob:')) {
                     avatarUrl = userFromList.avatar;
@@ -157,16 +158,16 @@ const VoiceChatPanel = ({
             }
         }
 
-        // 4. Avatar bulunduysa, tam Ã§Ã¶zÃ¼nÃ¼rlÃ¼klÃ¼ versiyonu dÃ¶ndÃ¼r
+        // 4. Avatar bulunduysa, tam çözünürlüklü versiyonu döndür
         if (avatarUrl) {
             return getFullResolutionAvatar(avatarUrl);
         }
 
-        // 5. Fallback: Deterministic avatar (yÃ¼ksek Ã§Ã¶zÃ¼nÃ¼rlÃ¼k)
+        // 5. Fallback: Deterministic avatar (yüksek çözünürlük)
         return getDeterministicAvatarFallback(username, 256);
     }, [currentUserProfile, currentUser, getRealUserAvatar, allUsers]);
 
-    // ðŸ”¥ Separate camera and screen streams
+    // 🔥 Separate camera and screen streams
     const allStreams = React.useMemo(() => {
         const streams = { ...remoteStreams };
         if (currentUser?.username) {
@@ -183,16 +184,16 @@ const VoiceChatPanel = ({
     const [expandedUser, setExpandedUser] = useState(null); // Fullscreen mode
     const [pinnedUser, setPinnedUser] = useState(null); // Pinned user
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [contextMenu, setContextMenu] = useState(null); // ðŸ†• User context menu
+    const [contextMenu, setContextMenu] = useState(null); // 🆕 User context menu
     const [volumeSettings, setVolumeSettings] = useState(() => {
-        // ðŸ”¥ YENÄ°: localStorage'dan yÃ¼kle
+        // 🔥 YENİ: localStorage'dan yükle
         try {
             const saved = localStorage.getItem('pawscord_voice_volumes');
             return saved ? JSON.parse(saved) : {};
         } catch {
             return {};
         }
-    }); // ðŸ†• Per-user volume
+    }); // 🆕 Per-user volume
 
     const [showEchoWarning, setShowEchoWarning] = useState(true);
 
@@ -209,7 +210,7 @@ const VoiceChatPanel = ({
     });
 
 
-    // ðŸ”¥ YENÄ°: RoomList'teki ayar butonundan settings aÃ§ma
+    // 🔥 YENİ: RoomList'teki ayar butonundan settings açma
     useEffect(() => {
         const handleOpenSettings = () => {
             setIsSettingsOpen(true);
@@ -218,7 +219,7 @@ const VoiceChatPanel = ({
         return () => window.removeEventListener('openVoiceSettings', handleOpenSettings);
     }, []);
 
-    // ðŸ”¥ YENÄ°: Volume ayarlarÄ±nÄ± localStorage'a kaydet
+    // 🔥 YENİ: Volume ayarlarını localStorage'a kaydet
     useEffect(() => {
         try {
             localStorage.setItem('pawscord_voice_volumes', JSON.stringify(volumeSettings));
@@ -227,11 +228,11 @@ const VoiceChatPanel = ({
         }
     }, [volumeSettings]);
 
-    // ðŸ”¥ RESPONSIVE HOOK
-    // ðŸ”¥ RESPONSIVE HOOK
+    // 🔥 RESPONSIVE HOOK
+    // 🔥 RESPONSIVE HOOK
     const { isMobile } = useResponsive();
 
-    // ðŸŽ¨ RENDER MODES (mobile iÃ§in Ã¶zel)
+    // 🎨 RENDER MODES (mobile için özel)
     const renderMode = expandedUser ? 'fullscreen' :
         isMinimized ? 'minimized' :
             isMobile ? 'mobile' : 'grid';
@@ -242,7 +243,7 @@ const VoiceChatPanel = ({
         }
     }, [isInVoice, onClose]);
 
-    // ðŸŽ¯ VIDEO GRID LAYOUT (responsive)
+    // 🎯 VIDEO GRID LAYOUT (responsive)
     const getGridLayout = (count) => {
         // Mobile: 1 column
         if (isMobile) {
@@ -259,12 +260,12 @@ const VoiceChatPanel = ({
 
     // Calculate total stream count (camera + screen shares)
     const totalStreamCount = React.useMemo(() => {
-        let count = combinedUsers.length; // Her kullanÄ±cÄ± iÃ§in kamera kartÄ±
+        let count = combinedUsers.length; // Her kullanıcı için kamera kartı
         combinedUsers.forEach(user => {
             const baseKey = user.username;
             const hasScreenStream = allStreams[`${baseKey}_screen`];
             if (hasScreenStream && user.isScreenSharing) {
-                count++; // Ekran paylaÅŸÄ±mÄ± varsa bir kart daha ekle
+                count++; // Ekran paylaşımı varsa bir kart daha ekle
             }
         });
         return count;
@@ -273,7 +274,7 @@ const VoiceChatPanel = ({
     const userCount = combinedUsers.length;
     const { cols, rows } = getGridLayout(totalStreamCount);
 
-    // ðŸ†• CONTEXT MENU HANDLERS
+    // 🆕 CONTEXT MENU HANDLERS
     const handleSendMessage = useCallback(async (targetUser) => {
         window.location.hash = `#/dm/${targetUser.username}`;
     }, []);
@@ -289,13 +290,13 @@ const VoiceChatPanel = ({
                 body: JSON.stringify({ username: targetUser.username })
             });
             if (response.ok) {
-                toast.success(`âœ… ${targetUser.username} kullanÄ±cÄ±sÄ±na arkadaÅŸlÄ±k isteÄŸi gÃ¶nderildi!`);
+                toast.success(`✅ ${targetUser.username} kullanıcısına arkadaşlık isteği gönderildi!`);
             } else {
-                toast.error('âŒ ArkadaÅŸlÄ±k isteÄŸi gÃ¶nderilemedi');
+                toast.error('❌ Arkadaşlık isteği gönderilemedi');
             }
         } catch (error) {
             console.error('Friend request error:', error);
-            toast.error('âŒ Bir hata oluÅŸtu');
+            toast.error('❌ Bir hata oluştu');
         }
     }, []);
 
@@ -310,23 +311,23 @@ const VoiceChatPanel = ({
                 body: JSON.stringify({ username: targetUser.username })
             });
             if (response.ok) {
-                toast.success(`âœ… ${targetUser.username} engellendi!`);
+                toast.success(`✅ ${targetUser.username} engellendi!`);
             } else {
-                toast.error('âŒ Engelleme iÅŸlemi baÅŸarÄ±sÄ±z');
+                toast.error('❌ Engelleme işlemi başarısız');
             }
         } catch (error) {
             console.error('Block error:', error);
-            toast.error('âŒ Bir hata oluÅŸtu');
+            toast.error('❌ Bir hata oluştu');
         }
     }, []);
 
     const handleViewProfile = useCallback((targetUser) => {
         setContextMenu(null);
-        // ðŸ”¥ Profil panelini aÃ§
+        // 🔥 Profil panelini aç
         if (window.openUserProfile) {
             window.openUserProfile(targetUser.username);
         } else {
-            // Fallback - profil sayfasÄ±na git
+            // Fallback - profil sayfasına git
             window.location.hash = `#/profile/${targetUser.username}`;
         }
     }, []);
@@ -352,18 +353,18 @@ const VoiceChatPanel = ({
             }
         }));
 
-        // ðŸ”¥ Ä°YÄ°LEÅžTÄ°RME: Audio element'e anÄ±nda uygula (GainNode ile >100% destek)
+        // 🔥 İYİLEŞTİRME: Audio element'e anında uygula (GainNode ile >100% destek)
         const audioElements = document.querySelectorAll(`audio[data-username="${targetUser.username}"]`);
         audioElements.forEach(audio => {
             if (volume <= 100) {
-                // Normal range â€” use native volume
+                // Normal range — use native volume
                 audio.volume = volume / 100;
                 // Disconnect any existing GainNode
                 if (audio._gainNode) {
                     try { audio._gainNode.gain.value = 1; } catch (e) { /* */ }
                 }
             } else {
-                // >100% â€” use Web Audio API GainNode for amplification
+                // >100% — use Web Audio API GainNode for amplification
                 audio.volume = 1.0; // Max native volume
                 try {
                     if (!audio._audioContext) {
@@ -381,41 +382,41 @@ const VoiceChatPanel = ({
         });
     }, []);
 
-    // ðŸŽ¨ HELPER: Status Badges
+    // 🎨 HELPER: Status Badges
     const renderStatusBadges = () => {
         const badges = [];
         if (isRecording) {
             badges.push(
                 <span key="rec" style={{ background: 'rgba(237,66,69,0.2)', color: '#ed4245', border: '1px solid rgba(237,66,69,0.4)', padding: '4px 8px', borderRadius: '10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    âºï¸ KayÄ±tta ({Math.floor(recordingDuration / 60).toString().padStart(2, '0')}:{Math.floor(recordingDuration % 60).toString().padStart(2, '0')})
+                    ⏺️ Kayıtta ({Math.floor(recordingDuration / 60).toString().padStart(2, '0')}:{Math.floor(recordingDuration % 60).toString().padStart(2, '0')})
                 </span>
             );
         }
         if (isScreenSharing) {
             badges.push(
                 <span key="ss" style={{ background: 'rgba(88,101,242,0.15)', color: '#8893ff', border: '1px solid rgba(88,101,242,0.35)', padding: '4px 8px', borderRadius: '10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    ðŸ–¥ï¸ PaylaÅŸÄ±lÄ±yor {screenShareQuality} â€¢ {screenShareFPS}fps{includeSystemAudio ? ' â€¢ ðŸ”Š Sistem' : ''}
+                    🖥️ Paylaşılıyor {screenShareQuality} • {screenShareFPS}fps{includeSystemAudio ? ' • 🔊 Sistem' : ''}
                 </span>
             );
         }
         if (isPTTMode) {
             badges.push(
                 <span key="ptt" style={{ background: 'rgba(250,166,26,0.18)', color: '#faa61a', border: '1px solid rgba(250,166,26,0.35)', padding: '4px 8px', borderRadius: '10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    ðŸŽ™ï¸ PTT ({pttKey}) {isPTTActive ? 'â€¢ Aktif' : ''}
+                    🎙️ PTT ({pttKey}) {isPTTActive ? '• Aktif' : ''}
                 </span>
             );
         }
         if (isReconnecting) {
             badges.push(
                 <span key="reconnect" style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', padding: '4px 8px', borderRadius: '10px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                    ðŸ”„ Yeniden baÄŸlanÄ±yor
+                    🔄 Yeniden bağlanıyor
                 </span>
             );
         }
         return badges.length ? <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>{badges}</div> : null;
     };
 
-    // ðŸŽ¨ HELPER: Stream Type Badge (Ekran/Kamera GÃ¶stergesi)
+    // 🎨 HELPER: Stream Type Badge (Ekran/Kamera Göstergesi)
     const renderStreamBadge = (user) => {
         if (user.streamType === 'screen') {
             return (
@@ -436,7 +437,7 @@ const VoiceChatPanel = ({
                     gap: '8px',
                     animation: 'badgePulse 2s infinite',
                 }}>
-                    ðŸ–¥ï¸ <span style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>{user.username} - Ekran PaylaÅŸÄ±yor</span>
+                    🖥️ <span style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>{user.username} - Ekran Paylaşıyor</span>
                 </div>
             );
         } else if (user.streamType === 'camera') {
@@ -457,7 +458,7 @@ const VoiceChatPanel = ({
                     alignItems: 'center',
                     gap: '6px',
                 }}>
-                    ðŸ“¹ Kamera
+                    📹 Kamera
                 </div>
             );
         }
@@ -486,7 +487,7 @@ const VoiceChatPanel = ({
         );
     }
 
-    // ðŸŽ¨ FULLSCREEN VIEW (Bir kullanÄ±cÄ± geniÅŸletildi)
+    // 🎨 FULLSCREEN VIEW (Bir kullanıcı genişletildi)
     if (renderMode === 'fullscreen' && expandedUser) {
         const streamKey = expandedUser.streamType === 'screen'
             ? `${expandedUser.username}_screen`
@@ -522,10 +523,10 @@ const VoiceChatPanel = ({
                             fontSize: '14px',
                         }}
                     >
-                        â¬…ï¸ Geri
+                        ⬅️ Geri
                     </button>
                     <h3 style={{ color: '#fff', margin: 0, flex: 1 }}>
-                        ðŸ‘¤ {expandedUser.username} {expandedUser.streamType === 'screen' && 'ðŸ–¥ï¸ Ekran PaylaÅŸÄ±mÄ±'}
+                        👤 {expandedUser.username} {expandedUser.streamType === 'screen' && '🖥️ Ekran Paylaşımı'}
                     </h3>
                 </div>
 
@@ -547,14 +548,14 @@ const VoiceChatPanel = ({
                 {/* FULLSCREEN CONTROLS */}
                 <ControlBar
                     isMuted={isMuted}
-                    isDeafened={isDeafened} // ðŸ”¥ YENÄ°
+                    isDeafened={isDeafened} // 🔥 YENİ
                     isCameraOn={isCameraOn}
                     isScreenSharing={isScreenSharing}
                     isSpatialAudio={isSpatialAudioEnabled}
                     isRecording={isRecording}
                     recordingDuration={recordingDuration}
                     onToggleMute={toggleMute}
-                    onToggleDeafened={toggleDeafened} // ðŸ”¥ YENÄ°
+                    onToggleDeafened={toggleDeafened} // 🔥 YENİ
                     onToggleCamera={toggleCamera}
                     onToggleScreenShare={toggleScreenShare}
                     onToggleSpatialAudio={toggleSpatialAudio}
@@ -566,7 +567,7 @@ const VoiceChatPanel = ({
         );
     }
 
-    // ðŸŽ¨ GRID VIEW (Ana GÃ¶rÃ¼nÃ¼m)
+    // 🎨 GRID VIEW (Ana Görünüm)
     return (
         <div style={{
             width: '100%',
@@ -577,7 +578,7 @@ const VoiceChatPanel = ({
             overflow: 'hidden',
         }}>
             {/* HEADER */}
-            <div style={{
+            {showHeader && <div style={{
                 background: 'rgba(0, 0, 0, 0.3)',
                 padding: '16px 24px',
                 display: 'flex',
@@ -604,9 +605,9 @@ const VoiceChatPanel = ({
                     gap: '12px',
                     letterSpacing: '0.3px',
                 }}>
-                    ðŸŽ™ï¸ {roomName}
+                    🎙️ {roomName}
                     {renderStatusBadges()}
-                    {/* ðŸ”¥ YENÄ°: Network Quality Badge */}
+                    {/* 🔥 YENİ: Network Quality Badge */}
                     {networkQuality === 'poor' && (
                         <div style={{
                             background: 'rgba(240, 71, 71, 0.2)',
@@ -620,7 +621,7 @@ const VoiceChatPanel = ({
                             alignItems: 'center',
                             gap: '4px',
                         }}>
-                            âš ï¸ ZayÄ±f BaÄŸlantÄ±
+                            ⚠️ Zayıf Bağlantı
                         </div>
                     )}
                     {networkQuality === 'excellent' && networkType !== 'unknown' && (
@@ -636,7 +637,7 @@ const VoiceChatPanel = ({
                             alignItems: 'center',
                             gap: '4px',
                         }}>
-                            ðŸ“¶ {networkType.toUpperCase()}
+                            📶 {networkType.toUpperCase()}
                         </div>
                     )}
                 </h2>
@@ -644,7 +645,7 @@ const VoiceChatPanel = ({
                     color: 'rgba(255, 255, 255, 0.7)',
                     fontSize: '14px',
                 }}>
-                    ðŸ‘¥ {userCount} kiÅŸi
+                    👥 {userCount} kişi
                 </div>
                 <button
                     onClick={onToggleMinimize}
@@ -658,9 +659,9 @@ const VoiceChatPanel = ({
                         fontSize: '13px',
                     }}
                 >
-                    â¬‡ï¸ KÃ¼Ã§Ã¼lt
+                    ⬇️ Küçült
                 </button>
-            </div>
+            </div>}
 
             {/* VIDEO GRID */}
             <div style={{
@@ -668,23 +669,23 @@ const VoiceChatPanel = ({
                 padding: '20px',
                 display: 'flex',
                 flexDirection: 'column',
-                overflow: 'auto', // ðŸ”¥ FIX: auto olsun ki scroll yapÄ±labilsin
+                overflow: 'auto', // 🔥 FIX: auto olsun ki scroll yapılabilsin
                 position: 'relative',
-                minHeight: 0, // ðŸ”¥ FIX: Flex child overflow iÃ§in gerekli
+                minHeight: 0, // 🔥 FIX: Flex child overflow için gerekli
             }}>
-                {/* Ana ekran paylaÅŸÄ±mlarÄ± varsa bÃ¼yÃ¼k gÃ¶ster */}
+                {/* Ana ekran paylaşımları varsa büyük göster */}
                 {(() => {
                     const screenShares = combinedUsers.filter(u => u.isScreenSharing && allStreams[`${u.username}_screen`]);
                     const hasScreenShares = screenShares.length > 0;
 
                     if (hasScreenShares) {
-                        // ðŸ”¥ FIX: TÃ¼m kullanÄ±cÄ±larÄ± tek grid'de gÃ¶ster (ekran + kamera karÄ±ÅŸÄ±k)
+                        // 🔥 FIX: Tüm kullanıcıları tek grid'de göster (ekran + kamera karışık)
                         const allItems = [];
 
-                        // Ã–nce ekran paylaÅŸÄ±mlarÄ±nÄ± ekle
+                        // Önce ekran paylaşımlarını ekle
                         screenShares.forEach(user => {
                             const screenStream = allStreams[`${user.username}_screen`];
-                            if (screenStream) { // ðŸ”¥ Stream varsa ekle
+                            if (screenStream) { // 🔥 Stream varsa ekle
                                 allItems.push({
                                     key: `${user.username}_screen`,
                                     username: user.username,
@@ -708,11 +709,11 @@ const VoiceChatPanel = ({
                             }
                         });
 
-                        // Sonra kameralarÄ± ekle (sadece aktif stream'ler veya kendim)
+                        // Sonra kameraları ekle (sadece aktif stream'ler veya kendim)
                         combinedUsers.forEach(user => {
                             const cameraStream = allStreams[`${user.username}_camera`] || allStreams[user.username];
 
-                            // ðŸ”¥ CRITICAL: Stream varsa VEYA kendim isem gÃ¶ster
+                            // 🔥 CRITICAL: Stream varsa VEYA kendim isem göster
                             const shouldShow = (cameraStream && cameraStream.active) || user.isLocal;
 
                             if (shouldShow) {
@@ -728,7 +729,7 @@ const VoiceChatPanel = ({
                                                 streamType: 'camera',
                                                 volume: remoteVolumes[user.username] || 100,
                                                 onVolumeChange: (vol) => setRemoteVolume(user.username, vol),
-                                                isTalking: talkingIndicators[user.username] || false, // ðŸ”¥ YENÄ°
+                                                isTalking: talkingIndicators[user.username] || false, // 🔥 YENİ
                                             }}
                                             stream={cameraStream}
                                             isActive={activeSpeaker === user.username}
@@ -745,7 +746,7 @@ const VoiceChatPanel = ({
                             }
                         });
 
-                        // Grid layout hesapla - Daha iyi daÄŸÄ±lÄ±m
+                        // Grid layout hesapla - Daha iyi dağılım
                         const totalItems = allItems.length;
                         let cols, rows;
 
@@ -772,18 +773,18 @@ const VoiceChatPanel = ({
                                 gridTemplateRows: `repeat(${rows}, 1fr)`,
                                 gap: '16px',
                                 padding: '0',
-                                position: 'relative', // ðŸ”¥ FIX: Parent relative olmalÄ±
+                                position: 'relative', // 🔥 FIX: Parent relative olmalı
                             }}>
                                 {allItems.map((item, index) => (
                                     <div
                                         key={item.key}
                                         style={{
-                                            position: 'relative', // ðŸ”¥ FIX: Her cell relative
+                                            position: 'relative', // 🔥 FIX: Her cell relative
                                             width: '100%',
                                             height: '100%',
-                                            overflow: 'hidden', // ðŸ”¥ FIX: TaÅŸmayÄ± Ã¶nle
-                                            zIndex: 1, // ðŸ”¥ FIX: Base z-index
-                                            isolation: 'isolate', // ðŸ”¥ FIX: Z-index context izolasyonu
+                                            overflow: 'hidden', // 🔥 FIX: Taşmayı önle
+                                            zIndex: 1, // 🔥 FIX: Base z-index
+                                            isolation: 'isolate', // 🔥 FIX: Z-index context izolasyonu
                                         }}
                                     >
                                         {item.component}
@@ -792,14 +793,14 @@ const VoiceChatPanel = ({
                             </div>
                         );
                     } else {
-                        // ðŸ”¥ YENÄ°: HiÃ§ stream yoksa profil fotoÄŸraflarÄ±nÄ± gÃ¶ster
+                        // 🔥 YENİ: Hiç stream yoksa profil fotoğraflarını göster
                         const hasAnyActiveStream = combinedUsers.some(u => {
                             const cameraStream = allStreams[`${u.username}_camera`] || allStreams[u.username];
                             return cameraStream && cameraStream.active;
                         });
 
                         if (!hasAnyActiveStream) {
-                            // Profil kartlarÄ± gÃ¶ster
+                            // Profil kartları göster
                             return (
                                 <div style={{
                                     flex: 1,
@@ -892,22 +893,22 @@ const VoiceChatPanel = ({
                                             }}>
                                                 {user.isMuted && (
                                                     <span
-                                                        title="Mikrofon KapalÄ±"
+                                                        title="Mikrofon Kapalı"
                                                         style={{
                                                             filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))',
                                                         }}
                                                     >
-                                                        ðŸ”‡
+                                                        🔇
                                                     </span>
                                                 )}
                                                 {user.isDeafened && (
                                                     <span
-                                                        title="KulaklÄ±k KapalÄ±"
+                                                        title="Kulaklık Kapalı"
                                                         style={{
                                                             filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))',
                                                         }}
                                                     >
-                                                        ðŸ”ˆ
+                                                        🔈
                                                     </span>
                                                 )}
                                             </div>
@@ -925,7 +926,7 @@ const VoiceChatPanel = ({
                                 gridTemplateColumns: `repeat(${cols}, 1fr)`,
                                 gridTemplateRows: `repeat(${rows}, 1fr)`,
                                 gap: '16px',
-                                // ðŸ”¥ FIX: Responsive sizing
+                                // 🔥 FIX: Responsive sizing
                                 minHeight: '400px',
                                 height: '100%',
                             }}>
@@ -958,9 +959,9 @@ const VoiceChatPanel = ({
                 })()}
             </div>
 
-            {/* ðŸ”¥ CONTROL BAR KALDIRILDI - Sol sidebar'da "Ses BaÄŸlandÄ±" bÃ¶lÃ¼mÃ¼nden kontrol edilecek */}
+            {/* 🔥 CONTROL BAR KALDIRILDI - Sol sidebar'da "Ses Bağlandı" bölümünden kontrol edilecek */}
 
-            {/* ðŸ”¥ YENÄ°: ECHO WARNING */}
+            {/* 🔥 YENİ: ECHO WARNING */}
             {hasEchoRisk && showEchoWarning && (
                 <div style={{
                     position: 'absolute',
@@ -979,10 +980,10 @@ const VoiceChatPanel = ({
                     animation: 'pulse 2s infinite',
                     maxWidth: '90%',
                 }}>
-                    <div style={{ fontSize: '24px', animation: 'pulse 1.5s infinite' }}>âš ï¸</div>
+                    <div style={{ fontSize: '24px', animation: 'pulse 1.5s infinite' }}>⚠️</div>
                     <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 'bold', marginBottom: '4px', fontSize: '15px' }}>Echo Tespit Edildi!</div>
-                        <div style={{ fontSize: '13px', opacity: 0.9 }}>KulaklÄ±k kullanmanÄ±z Ã¶nerilir. HoparlÃ¶r kullanÄ±mÄ± echo'ya neden olur.</div>
+                        <div style={{ fontSize: '13px', opacity: 0.9 }}>Kulaklık kullanmanız önerilir. Hoparlör kullanımı echo'ya neden olur.</div>
                     </div>
                     <button
                         onClick={() => setShowEchoWarning(false)}
@@ -1002,7 +1003,7 @@ const VoiceChatPanel = ({
                 </div>
             )}
 
-            {/* SETTINGS MODAL - YENÄ° GELÄ°ÅžMÄ°Åž PANEL */}
+            {/* SETTINGS MODAL - YENİ GELİŞMİŞ PANEL */}
             {isSettingsOpen && (
                 <VoiceSettingsPanel
                     onClose={() => setIsSettingsOpen(false)}
@@ -1010,7 +1011,7 @@ const VoiceChatPanel = ({
                 />
             )}
 
-            {/* ðŸ†• CONTEXT MENU */}
+            {/* 🆕 CONTEXT MENU */}
             {contextMenu && (
                 <UserContextMenu
                     user={contextMenu.user}
@@ -1030,17 +1031,17 @@ const VoiceChatPanel = ({
     );
 };
 
-// ðŸŽ® CONTROL BAR COMPONENT - Discord Style
+// 🎮 CONTROL BAR COMPONENT - Discord Style
 
-// ðŸ”˜ VOICE CONTROL BUTTON - Modern Discord Style
+// 🔘 VOICE CONTROL BUTTON - Modern Discord Style
 
-// ðŸ”˜ MINI BUTTON
+// 🔘 MINI BUTTON
 
-// ðŸ”˜ ACTION BUTTON
+// 🔘 ACTION BUTTON
 
-// ðŸ“¹ VIDEO FEED COMPONENT
+// 📹 VIDEO FEED COMPONENT
 
-// âš™ï¸ SETTINGS MODAL COMPONENT
+// ⚙️ SETTINGS MODAL COMPONENT
 
 export default React.memo(VoiceChatPanel);
 

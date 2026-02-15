@@ -171,7 +171,7 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                             {hl.author_avatar ? <img src={hl.author_avatar} alt="" /> : <div className="default-avatar">👤</div>}
                             <div className="author-info">
                               <span className="author-name">{hl.author_name}</span>
-                              <span className="channel-name"># {hl.channel_name}</span>
+                              <span className="channel-name">{hl.channel_name}</span>
                             </div>
                           </div>
                           <span className="highlight-time">{new Date(hl.created_at).toLocaleString('tr-TR')}</span>

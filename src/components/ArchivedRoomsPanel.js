@@ -101,7 +101,7 @@ const ArchivedRoomsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) =>
                                     <FaArchive style={{ color: '#888' }} />
                                 </div>
                                 <div style={styles.roomContent}>
-                                    <div style={styles.roomName}>#{room.name}</div>
+                                    <div style={styles.roomName}>{room.name}</div>
                                     <div style={styles.roomMeta}>
                                         <FaClock style={{ fontSize: '12px' }} />
                                         <span>Arşivlendi: {new Date(room.archived_at).toLocaleDateString('tr-TR')}</span>

@@ -1,102 +1,57 @@
-// frontend/src/RoomList.js
-
+// frontend/src/RoomList.js — Orchestrator (refactored from 1961 lines)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import {
-    FaUserFriends, FaChevronDown, FaChevronRight, FaPlus, FaCog,
-    FaVolumeUp, FaRobot, FaChartLine, FaServer, FaTimes,
-    FaUserPlus, FaTrash, FaEdit, FaCompass, FaHeart, FaCoffee, FaBitcoin, FaCopy,
-    FaMicrophone, FaMicrophoneSlash, FaHeadphones,
-    FaFilm, FaDesktop, FaVideoSlash, FaPhoneSlash,
-    TbHeadphonesOff // ⚡ OPTIMIZATION: Tek yerden import
-} from './utils/iconOptimization'; // ⚡ OPTIMIZATION: -130KB bundle size
-import VoiceUserList from './VoiceUserList';
+import { FaCog } from './utils/iconOptimization';
 import toast from './utils/toast';
-import UserFooter from './components/UserFooter'; // 🔥 Profesyonel user footer
+import UserFooter from './components/UserFooter';
 import { styles } from './SidebarStyles';
-import InviteModal from './components/InviteModal';
-import SavedMessagesModal from './components/SavedMessagesModal';
-import ScheduledMessageModal from './components/ScheduledMessageModal';
-import WebhookManager from './components/WebhookManager';
-import ModeratorTools from './components/ModeratorTools';
-import QuickActionsMenu from './components/QuickActionsMenu';
-import AuditLogViewer from './components/AuditLogViewer';
-import ReportsViewer from './components/ReportsViewer';
-import VanityURLManager from './components/VanityURLManager';
-import AutoResponderManager from './components/AutoResponderManager';
-import ServerContextMenu from './components/ServerContextMenu';
-import ChannelSettingsModal from './components/ChannelSettingsModal';
-import LazyImage from './components/LazyImage'; // ⚡ OPTIMIZATION: Progressive image loading
-import ConfirmModal from './components/ConfirmModal'; // 🔥 YENİ: Modern confirmation dialog
+
+// Sub-components
 import SupportModal from './RoomList/SupportModal';
-import DiscoveryModal from './RoomList/DiscoveryModal';
 import AddServerModal from './RoomList/AddServerModal';
 import ActionMenuModal from './RoomList/ActionMenuModal';
-import InviteToServerModal from './RoomList/InviteToServerModal';
 import useServerActions from './RoomList/useServerActions';
 import useDMActions from './RoomList/useDMActions';
+import ServerRail from './RoomList/ServerRail';
+import HomePanel from './RoomList/HomePanel';
+import ServerPanel from './RoomList/ServerPanel';
+import QuickAccessButtons from './RoomList/QuickAccessButtons';
+import VoiceControlBar from './RoomList/VoiceControlBar';
+import SupportButton from './RoomList/SupportButton';
+import RoomListModals from './RoomList/RoomListModals';
 import './RoomList/animations';
 
 const RoomList = ({
     onFriendsClick, onWelcomeClick, isAdmin, categories: servers = [],
-    conversations = [], currentRoom,
-    currentConversationId,
+    conversations = [], currentRoom, currentConversationId,
     onRoomSelect, onDMSelect, joinVoiceChat, leaveVoiceChat,
-    unreadCounts = {}, // Hata koruması
-    voiceUsers, currentUsername, currentUserProfile, currentVoiceRoom, remoteVolumes,
-    setRemoteVolume, onProfileClick, onViewUserProfile, getDeterministicAvatar, isPttActive,
+    unreadCounts = {}, voiceUsers, currentUsername, currentUserProfile,
+    currentVoiceRoom, remoteVolumes, setRemoteVolume, onProfileClick,
+    onViewUserProfile, getDeterministicAvatar, isPttActive,
     setIsLeftSidebarVisible, apiBaseUrl, fetchWithAuth,
-    activeChat, onOpenServerSettings, allUsers, onlineUsers, // ✨ EKLENDİ: Arkadaş kodu ve online durumu için gerekli
-    friendsList = [], // 🔥 YENİ: Arkadaş listesi
-    pendingFriendRequests = 0, // 🔥 YENİ: Bekleyen arkadaşlık istekleri sayısı
-    toggleMute, toggleDeafened, isMuted, isDeafened, // 🎤 YENİ: Ses Kontrolleri
-    isInVoice, isConnecting, toggleVideo, toggleScreenShare, isVideoEnabled, isScreenSharing, // 🎥 YENİ: Video/Ekran
-    onServerDragStart, onServerDragOver, onServerDragEnd, onServerDrop, onMoveServer, // 🔥 YENİ: Drag & Drop
-    updateAvailable = false, // 🔥 YENİ: Güncelleme durumu
-    onUpdateClick, // 🔥 YENİ: Güncelleme butonu handler
-    onOpenStore, // 🔥 YENİ: Mağaza modal'ı aç
-    onOpenAnalytics, // 🔥 YENİ: Analytics panel aç
-    onOpenAdminPanel, // 🔥 Admin Panel modal
-    // 💰 Payment & Engagement System (2026-01-19)
-    onOpenPaymentPanel,
-    onOpenStoreModal,
-    onOpenDailyRewards,
-    onOpenAPIUsage,
-    onOpenExportJobs,
-    onOpenScheduledAnnouncements,
-    // 🎮 New Features (2026-01-28)
-    onOpenMiniGames,
-    onOpenProjectCollaboration,
-    onOpenAvatarStudio,
-    onServerSelect // 🔥 YENİ: Sunucu seçildiğinde sağ panelde üyeleri göster
+    activeChat, onOpenServerSettings, allUsers, onlineUsers,
+    friendsList = [], pendingFriendRequests = 0,
+    toggleMute, toggleDeafened, isMuted, isDeafened,
+    isInVoice, isConnecting, toggleVideo, toggleScreenShare, isVideoEnabled, isScreenSharing,
+    onServerDragStart, onServerDragOver, onServerDragEnd, onServerDrop, onMoveServer,
+    updateAvailable = false, onUpdateClick, onOpenStore, onOpenAnalytics, onOpenAdminPanel,
+    onOpenPaymentPanel, onOpenStoreModal, onOpenDailyRewards, onOpenAPIUsage,
+    onOpenExportJobs, onOpenScheduledAnnouncements,
+    onOpenMiniGames, onOpenProjectCollaboration, onOpenAvatarStudio, onServerSelect
 }) => {
-    // --- GÜVENLİK ÖNLEMİ ---
+    // --- Derived values ---
     const safeUnreadCounts = unreadCounts || {};
-
-    // 🔥 API URL - apiBaseUrl bare host (e.g. https://api.pawscord.com), /api prefix ekle
     const apiUrl = `${apiBaseUrl}/api`;
+    const activeVoiceUsers = voiceUsers || {};
+    const actualCurrentRoom = currentRoom || (activeChat?.type === 'room' ? activeChat.id : null);
 
-    // 🔥 Avatar URL Helper - relative path'leri tam URL'ye çevir
     const getAvatarUrl = useCallback((avatarPath, fallbackUsername) => {
-        // 🔥 FIX: avatarPath string değilse veya boşsa fallback kullan
-        if (!avatarPath || typeof avatarPath !== 'string') {
-            return getDeterministicAvatar(fallbackUsername);
-        }
-        // HTTP/HTTPS/Blob URL'ler zaten tam
-        if (avatarPath.startsWith('http://') || avatarPath.startsWith('https://') || avatarPath.startsWith('blob:')) {
-            return avatarPath;
-        }
-        // ui-avatars.com kontrolü
+        if (!avatarPath || typeof avatarPath !== 'string') return getDeterministicAvatar(fallbackUsername);
+        if (avatarPath.startsWith('http://') || avatarPath.startsWith('https://') || avatarPath.startsWith('blob:')) return avatarPath;
         if (avatarPath.includes('ui-avatars.com')) return avatarPath;
-        // Relative path -> tam URL
         let path = avatarPath.startsWith('/') ? avatarPath : `/${avatarPath}`;
         return `${apiBaseUrl}${path}`;
     }, [apiBaseUrl, getDeterministicAvatar]);
 
-    // 🔥 currentRoom değerini hesapla (activeChat'ten veya prop'tan)
-    const actualCurrentRoom = currentRoom || (activeChat?.type === 'room' ? activeChat.id : null);
-
-    // 🔥 Voice room slug → display name resolver
     const voiceRoomDisplayName = useMemo(() => {
         if (!currentVoiceRoom) return '';
         for (const server of servers) {
@@ -110,21 +65,21 @@ const RoomList = ({
         return String(currentVoiceRoom);
     }, [currentVoiceRoom, servers]);
 
-    const [inviteCodeInput, setInviteCodeInput] = useState('');
+    // --- State ---
     const [selectedServerId, setSelectedServerId] = useState('home');
     const [collapsedCategories, setCollapsedCategories] = useState({});
-    const [draggedServerId, setDraggedServerId] = useState(null); // 🔥 YENİ: Sürüklenen sunucu
-    const [dropTargetIndex, setDropTargetIndex] = useState(null); // 🔥 YENİ: Drop hedefi index
-    const [dropPosition, setDropPosition] = useState(null); // 🔥 YENİ: 'before' veya 'after'
-    const [hoveredServerId, setHoveredServerId] = useState(null); // 🔥 Discord-style hover effect
-    const [actionMenu, setActionMenu] = useState(null); // { type: 'category' | 'room', id: string, name: string }
-    const [serverContextMenu, setServerContextMenu] = useState(null); // { x, y, server, isOwner }
+    const [draggedServerId, setDraggedServerId] = useState(null);
+    const [dropTargetIndex, setDropTargetIndex] = useState(null);
+    const [dropPosition, setDropPosition] = useState(null);
+    const [hoveredServerId, setHoveredServerId] = useState(null);
+    const [actionMenu, setActionMenu] = useState(null);
+    const [serverContextMenu, setServerContextMenu] = useState(null);
+    const [dropTargetChannel, setDropTargetChannel] = useState(null);
 
-    // Modallar - TÜM STATE'LER BAŞTA TANIMLANMALI
+    // Modal states
     const [showDiscovery, setShowDiscovery] = useState(false);
     const [showSupportModal, setShowSupportModal] = useState(false);
     const [showAddMenu, setShowAddMenu] = useState(false);
-    const [isCreatingServer, setIsCreatingServer] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [inviteModalServer, setInviteModalServer] = useState(null);
     const [showSavedMessages, setShowSavedMessages] = useState(null);
@@ -138,26 +93,20 @@ const RoomList = ({
     const [showAutoResponder, setShowAutoResponder] = useState(false);
     const [showChannelSettings, setShowChannelSettings] = useState(false);
     const [selectedRoom, setSelectedRoom] = useState(null);
-    const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
 
-    // 🔇 Muted Servers (LocalStorage'dan yükle)
     const [mutedServers, setMutedServers] = useState(() => {
         const saved = localStorage.getItem('mutedServers');
         return saved ? JSON.parse(saved) : [];
     });
 
-    const activeVoiceUsers = voiceUsers || {};
-    const [dropTargetChannel, setDropTargetChannel] = useState(null);
-
-    // ✅ Hook calls for extracted logic
+    // --- Hooks ---
     const {
         publicServers, newServerName, setNewServerName, newCategoryName, setNewCategoryName,
         newRoomName, setNewRoomName, newRoomType, setNewRoomType, isNewServerPublic, setIsNewServerPublic,
         activeServerIdForCategory, setActiveServerIdForCategory,
         activeCategoryIdForRoom, setActiveCategoryIdForRoom,
         editingItemId, setEditingItemId, editName, setEditName,
-        deleteServerModal, setDeleteServerModal,
-        leaveServerModal, setLeaveServerModal,
+        deleteServerModal, setDeleteServerModal, leaveServerModal, setLeaveServerModal,
         handleLeaveServer, executeLeaveServer, handleChangeServerIcon,
         handleChangeServerPrivacy, handleCopyServerInvite,
         handleCreateServer, handleCreateCategory, handleCreateRoom,
@@ -170,25 +119,19 @@ const RoomList = ({
     });
 
     const {
-        dmContextMenu, setDmContextMenu,
-        inviteToServerModal, setInviteToServerModal,
-        handleClearDM, handleHideDM, handleViewProfile,
-        handleInviteToServer, handleSendServerInvite,
-        handleMuteUser, handlePinConversation, handleBlockUser,
-        handleAddFriend, handleRemoveFriend
-    } = useDMActions({
-        apiUrl, fetchWithAuth, servers, onViewUserProfile
-    });
+        dmContextMenu, setDmContextMenu, inviteToServerModal, setInviteToServerModal,
+        handleClearDM, handleHideDM, handleViewProfile, handleInviteToServer,
+        handleSendServerInvite, handleMuteUser, handlePinConversation,
+        handleBlockUser, handleAddFriend, handleRemoveFriend
+    } = useDMActions({ apiUrl, fetchWithAuth, servers, onViewUserProfile });
 
-    // ✅ TÜM HOOKS TANIMLANDI - ŞİMDİ FONKSİYONLAR
-
+    // --- Effects ---
     useEffect(() => {
         if (activeChat && (activeChat.type === 'welcome' || activeChat.type === 'friends' || activeChat.type === 'dm')) {
             setSelectedServerId('home');
         }
     }, [activeChat]);
 
-    // 🔥 Click outside to close DM context menu
     useEffect(() => {
         const handleClickOutside = () => setDmContextMenu(null);
         if (dmContextMenu) {
@@ -197,14 +140,12 @@ const RoomList = ({
         }
     }, [dmContextMenu]);
 
+    // --- Handlers ---
     const toggleCategory = (id) => setCollapsedCategories(p => ({ ...p, [id]: !p[id] }));
 
     const handleServerClick = (server) => {
         setSelectedServerId(server.id);
-        // 🔥 YENİ: Sunucu seçildiğinde App.js'e bildir - sağ panelde üyeleri göster
-        if (onServerSelect) {
-            onServerSelect(server);
-        }
+        if (onServerSelect) onServerSelect(server);
     };
 
     const handleOpenActionMenu = (e, type, id, name) => {
@@ -214,13 +155,8 @@ const RoomList = ({
 
     const executeRename = (e) => {
         e.preventDefault();
-        if (actionMenu.type === 'category') {
-            setEditingItemId(`cat-${actionMenu.id}`);
-            setEditName(actionMenu.name);
-        } else {
-            setEditingItemId(`room-${actionMenu.id}`);
-            setEditName(actionMenu.name);
-        }
+        setEditingItemId(actionMenu.type === 'category' ? `cat-${actionMenu.id}` : `room-${actionMenu.id}`);
+        setEditName(actionMenu.name);
         setActionMenu(null);
     };
 
@@ -232,1730 +168,210 @@ const RoomList = ({
 
     const executeSettings = (e) => {
         e.preventDefault();
-
-
         if (actionMenu.type === 'room') {
-            // Kanal ayarlarını aç - server.categories.rooms yapısında ara
-            let foundRoom = null;
-            let foundServerId = null;
-
+            let foundRoom = null, foundServerId = null;
             servers?.forEach(server => {
                 server.categories?.forEach(category => {
                     if (category.rooms) {
                         const room = category.rooms.find(ch => ch.slug === actionMenu.id);
-                        if (room) {
-                            foundRoom = { ...room, server_id: server.id, category_id: category.id };
-                            foundServerId = server.id;
-                        }
+                        if (room) { foundRoom = { ...room, server_id: server.id, category_id: category.id }; foundServerId = server.id; }
                     }
                 });
             });
-
-            if (foundRoom) {
-                setSelectedRoom(foundRoom);
-                setSelectedServerId(foundServerId);
-                setShowChannelSettings(true);
-            } else {
-                console.error('❌ Kanal bulunamadı:', actionMenu.id);
-                toast.error('Kanal ayarları açılırken bir hata oluştu. Kanal bulunamadı.');
-            }
+            if (foundRoom) { setSelectedRoom(foundRoom); setSelectedServerId(foundServerId); setShowChannelSettings(true); }
+            else { toast.error('Kanal ayarları açılırken bir hata oluştu. Kanal bulunamadı.'); }
         }
         setActionMenu(null);
     };
 
-    // 🆕 SUNUCU SAĞ TIK
     const handleServerContextMenu = (e, server) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const isOwner = server.owner_username === currentUsername;
-
-        setServerContextMenu({
-            x: e.clientX,
-            y: e.clientY,
-            server,
-            isOwner
-        });
+        e.preventDefault(); e.stopPropagation();
+        setServerContextMenu({ x: e.clientX, y: e.clientY, server, isOwner: server.owner_username === currentUsername });
     };
 
-    // 🔥 YENİ: Drag & Drop Wrapper Fonksiyonları (Visual Feedback için)
+    // Drag & Drop
     const handleServerDragStartWrapper = (e, serverId, index) => {
         setDraggedServerId(serverId);
         if (onServerDragStart) onServerDragStart(e, serverId, index);
     };
-
     const handleServerDragOverWrapper = (e, index) => {
         e.preventDefault();
-
-        // 🔥 YENİ: Mouse pozisyonuna göre üst/alt yarı hesapla
         const rect = e.currentTarget.getBoundingClientRect();
-        const mouseY = e.clientY;
-        const elementMiddle = rect.top + (rect.height / 2);
-
-        // Mouse üst yarıdaysa 'before', alt yarıdaysa 'after'
-        const position = mouseY < elementMiddle ? 'before' : 'after';
-
-        setDropTargetIndex(index);
-        setDropPosition(position);
-
+        const position = e.clientY < rect.top + (rect.height / 2) ? 'before' : 'after';
+        setDropTargetIndex(index); setDropPosition(position);
         if (onServerDragOver) onServerDragOver(e);
     };
-
     const handleServerDragEndWrapper = (e) => {
-        setDraggedServerId(null);
-        setDropTargetIndex(null);
-        setDropPosition(null);
+        setDraggedServerId(null); setDropTargetIndex(null); setDropPosition(null);
         if (onServerDragEnd) onServerDragEnd(e);
     };
-
     const handleServerDropWrapper = (e, index) => {
-        // 🔥 FIX: Compute position directly from mouse coordinates instead of
-        // reading React state (dropPosition), which can be stale due to batching.
         const rect = e.currentTarget.getBoundingClientRect();
-        const mouseY = e.clientY;
-        const elementMiddle = rect.top + (rect.height / 2);
-        const position = mouseY < elementMiddle ? 'before' : 'after';
-
-        setDropTargetIndex(null);
-        setDropPosition(null);
-        setDraggedServerId(null);
-
-        // Position bilgisini parent'a ilet
-        if (onServerDrop) {
-            // Position'a göre hedef index'i ayarla
-            const actualTargetIndex = position === 'after' ? index + 1 : index;
-            onServerDrop(e, actualTargetIndex);
-        }
+        const position = e.clientY < rect.top + (rect.height / 2) ? 'before' : 'after';
+        setDropTargetIndex(null); setDropPosition(null); setDraggedServerId(null);
+        if (onServerDrop) onServerDrop(e, position === 'after' ? index + 1 : index);
     };
 
-    // --- DAVET OLUŞTURMA ---
     const handleCreateInvite = (e, server) => {
         e.stopPropagation();
-        setInviteModalServer(server);
-        setShowInviteModal(true);
+        setInviteModalServer(server); setShowInviteModal(true);
     };
 
+    // --- Render ---
     return (
         <div style={{ display: 'flex', width: '100%', height: '100%' }}>
-
-            {/* --- AKSİYON MENÜSÜ MODALI (Edit/Delete) --- */}
-            <ActionMenuModal actionMenu={actionMenu} onClose={() => setActionMenu(null)} onRename={executeRename} onDelete={executeDelete} onSettings={executeSettings} />
-
-            {/* --- DESTEK MODALI --- */}
+            <ActionMenuModal actionMenu={actionMenu} onClose={() => setActionMenu(null)}
+                onRename={executeRename} onDelete={executeDelete} onSettings={executeSettings} />
             <SupportModal isOpen={showSupportModal} onClose={() => setShowSupportModal(false)} />
 
-            {/* 1. KOLON: SERVER RAIL */}
-            <div style={styles.serverRail}>
-                {/* 🏠 Home Icon - Discord Style with Active Pill */}
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center', marginBottom: '8px' }}>
-                    {/* Active Pill Indicator */}
-                    <div style={{
-                        position: 'absolute',
-                        left: 0,
-                        width: '4px',
-                        height: selectedServerId === 'home' ? '40px' : (hoveredServerId === 'home' ? '20px' : '0px'),
-                        backgroundColor: '#fff',
-                        borderRadius: '0 4px 4px 0',
-                        transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                    }} />
-                    <div
-                        style={{
-                            ...styles.serverIcon,
-                            backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#313338',
-                            borderRadius: selectedServerId === 'home' || hoveredServerId === 'home' ? '16px' : '50%',
-                            width: '48px',
-                            height: '48px',
-                            marginBottom: 0,
-                            transition: 'border-radius 0.3s ease, background-color 0.3s ease'
-                        }}
-                        onClick={() => { setSelectedServerId('home'); onWelcomeClick(); }}
-                        onMouseEnter={() => setHoveredServerId('home')}
-                        onMouseLeave={() => setHoveredServerId(null)}
-                        title="Ana Sayfa"
-                    >
-                        <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" style={{ width: '32px', height: '32px', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none' }} />
-                    </div>
-                </div>
-                <div style={styles.separator} />
+            {/* Column 1: Server Rail */}
+            <ServerRail
+                servers={servers} selectedServerId={selectedServerId}
+                hoveredServerId={hoveredServerId} setHoveredServerId={setHoveredServerId}
+                safeUnreadCounts={safeUnreadCounts}
+                draggedServerId={draggedServerId} dropTargetIndex={dropTargetIndex} dropPosition={dropPosition}
+                onHomeClick={() => { setSelectedServerId('home'); onWelcomeClick(); }}
+                handleServerClick={handleServerClick} handleServerContextMenu={handleServerContextMenu}
+                handleServerDragStartWrapper={handleServerDragStartWrapper}
+                handleServerDragOverWrapper={handleServerDragOverWrapper}
+                handleServerDragEndWrapper={handleServerDragEndWrapper}
+                handleServerDropWrapper={handleServerDropWrapper}
+                onOpenStore={onOpenStore}
+                onDiscoverClick={() => { setShowDiscovery(true); handleOpenDiscovery(); }}
+                onAddClick={() => setShowAddMenu(true)}
+            />
 
-                {servers && servers.map((server, index) => {
-                    const initials = server.name.substring(0, 2).toUpperCase();
-                    const isActive = selectedServerId === server.id;
-                    const isDragging = draggedServerId === server.id;
-                    const isDropTarget = dropTargetIndex === index && !isDragging;
-
-                    // Calculate server unread count (moved out of useMemo - can't use hooks in loops!)
-                    const serverUnread = Object.keys(safeUnreadCounts)
-                        .filter(k => k.startsWith(`room-`) && server.categories?.some(cat => cat.rooms?.some(r => `room-${r.slug}` === k)))
-                        .reduce((sum, k) => sum + (safeUnreadCounts[k] || 0), 0);
-
-                    return (
-                        <div
-                            key={server.id}
-                            style={{
-                                position: 'relative',
-                                marginBottom: '8px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                width: '100%',
-                                justifyContent: 'center'
-                            }}
-                        >
-                            {/* 🔥 Discord Active Pill Indicator */}
-                            <div style={{
-                                position: 'absolute',
-                                left: 0,
-                                width: '4px',
-                                height: isActive ? '40px' : (hoveredServerId === server.id ? '20px' : (serverUnread > 0 ? '8px' : '0px')),
-                                backgroundColor: '#fff',
-                                borderRadius: '0 4px 4px 0',
-                                transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                            }} />
-
-                            {/* 🔥 YENİ: Üst drop indicator çizgisi */}
-                            {isDropTarget && dropPosition === 'before' && (
-                                <div style={{
-                                    position: 'absolute',
-                                    top: '-4px',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    width: '40px',
-                                    height: '3px',
-                                    backgroundColor: '#43b581',
-                                    borderRadius: '2px',
-                                    zIndex: 1000,
-                                    boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
-                                }} />
-                            )}
-
-                            <div
-                                draggable={true}
-                                onDragStart={(e) => handleServerDragStartWrapper(e, server.id, index)}
-                                onDragOver={(e) => handleServerDragOverWrapper(e, index)}
-                                onDragEnd={handleServerDragEndWrapper}
-                                onDrop={(e) => handleServerDropWrapper(e, index)}
-                                style={{
-                                    ...styles.serverIcon,
-                                    backgroundColor: isActive ? '#5865f2' : (hoveredServerId === server.id ? '#5865f2' : '#313338'),
-                                    borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
-                                    cursor: isDragging ? 'grabbing' : 'grab',
-                                    position: 'relative',
-                                    transition: 'border-radius 0.3s ease, background-color 0.3s ease, opacity 0.2s ease, transform 0.1s ease',
-                                    opacity: isDragging ? 0.4 : 1,
-                                    marginBottom: 0
-                                }}
-                                onClick={() => handleServerClick(server)}
-                                onContextMenu={(e) => handleServerContextMenu(e, server)}
-                                onMouseEnter={() => setHoveredServerId(server.id)}
-                                onMouseLeave={() => setHoveredServerId(null)}
-                                onMouseDown={(e) => {
-                                    e.currentTarget.style.cursor = 'grabbing';
-                                    e.currentTarget.style.transform = 'scale(0.95)';
-                                }}
-                                onMouseUp={(e) => {
-                                    e.currentTarget.style.cursor = 'grab';
-                                    e.currentTarget.style.transform = 'scale(1)';
-                                }}
-                                title={server.name}
-                            >
-                                {server.icon ? (
-                                    <LazyImage src={server.icon} alt={server.name} style={{ width: '100%', height: '100%', borderRadius: 'inherit', objectFit: 'cover' }} />
-                                ) : (
-                                    <span style={{ fontWeight: 'bold', fontSize: '14px', color: 'white' }}>{initials}</span>
-                                )}
-                                {serverUnread > 0 && (
-                                    <div style={styles.serverBadge}>{serverUnread > 99 ? '99+' : serverUnread}</div>
-                                )}
-                            </div>
-
-                            {/* 🔥 YENİ: Alt drop indicator çizgisi */}
-                            {isDropTarget && dropPosition === 'after' && (
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: '-4px',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    width: '40px',
-                                    height: '3px',
-                                    backgroundColor: '#43b581',
-                                    borderRadius: '2px',
-                                    zIndex: 1000,
-                                    boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
-                                }} />
-                            )}
-                        </div>
-                    );
-                })}
-
-                <div
-                    style={{
-                        ...styles.serverIcon,
-                        backgroundColor: hoveredServerId === 'discover' ? '#23a559' : '#313338',
-                        color: hoveredServerId === 'discover' ? 'white' : '#23a559',
-                        marginTop: '10px',
-                        borderRadius: hoveredServerId === 'discover' ? '16px' : '50%',
-                        transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'
-                    }}
-                    onClick={() => { setShowDiscovery(true); handleOpenDiscovery(); }}
-                    onMouseEnter={() => setHoveredServerId('discover')}
-                    onMouseLeave={() => setHoveredServerId(null)}
-                    title="Sunucu Keşfet"
-                >
-                    <FaCompass size={24} />
-                </div>
-
-                {/* 🛒 MAĞAZA İKONU */}
-                <div
-                    style={{
-                        ...styles.serverIcon,
-                        background: hoveredServerId === 'store' ? 'linear-gradient(135deg, #F1C40F 0%, #F39C12 100%)' : '#313338',
-                        color: hoveredServerId === 'store' ? '#000' : '#F1C40F',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        borderRadius: hoveredServerId === 'store' ? '16px' : '50%',
-                        transition: 'border-radius 0.3s ease, background 0.3s ease, color 0.3s ease'
-                    }}
-                    onClick={onOpenStore}
-                    onMouseEnter={() => setHoveredServerId('store')}
-                    onMouseLeave={() => setHoveredServerId(null)}
-                    title="Premium Mağaza"
-                >
-                    🛒
-                </div>
-
-                <div
-                    style={{
-                        ...styles.serverIcon,
-                        backgroundColor: hoveredServerId === 'add' ? '#23a559' : '#313338',
-                        color: hoveredServerId === 'add' ? 'white' : '#23a559',
-                        borderRadius: hoveredServerId === 'add' ? '16px' : '50%',
-                        transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'
-                    }}
-                    onClick={() => setShowAddMenu(true)}
-                    onMouseEnter={() => setHoveredServerId('add')}
-                    onMouseLeave={() => setHoveredServerId(null)}
-                    title="Ekle"
-                >
-                    <FaPlus size={20} />
-                </div>
-            </div>
-
-            {/* 2. KOLON: PANEL */}
+            {/* Column 2: Sidebar */}
             <div style={styles.sidebar}>
                 {selectedServerId === 'home' && (
-                    <div style={styles.topSection}>
-                        <div style={styles.headerTitle}>Ana Sayfa</div>
-                        <div style={styles.channelsContainer}>
-                            <div style={{ ...styles.roomItem, marginBottom: 5 }} onClick={() => onRoomSelect('ai')}>
-                                <div style={styles.channelContent}><FaRobot style={{ marginRight: 8 }} /> <span>PawPaw AI</span></div>
-                            </div>
-                            <div style={{ ...styles.roomItem, marginBottom: 15 }} onClick={() => onRoomSelect('sinyal-bot')}>
-                                <div style={styles.channelContent}><FaChartLine style={{ marginRight: 8 }} /> <span>Sinyal Bot</span></div>
-                            </div>
-                        </div>
-                        <div style={styles.dmListContainer}>
-                            <div style={styles.groupHeader}>
-                                <span>ÖZEL MESAJLAR</span>
-                                <button onClick={onFriendsClick} style={{ ...styles.addDmButton, position: 'relative' }}>
-                                    <FaUserFriends /> Ekle
-                                    {/* 🔥 YENİ: Bekleyen arkadaşlık istekleri badge'i */}
-                                    {pendingFriendRequests > 0 && (
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: '-6px',
-                                            right: '-6px',
-                                            backgroundColor: '#ed4245',
-                                            color: 'white',
-                                            borderRadius: '50%',
-                                            width: '18px',
-                                            height: '18px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '11px',
-                                            fontWeight: 'bold',
-                                            border: '2px solid #2b2d31',
-                                            zIndex: 1
-                                        }}>
-                                            {pendingFriendRequests > 9 ? '9+' : pendingFriendRequests}
-                                        </div>
-                                    )}
-                                </button>
-                            </div>
-                            {!conversations || conversations.length === 0 ? (
-                                <div style={{
-                                    padding: '20px',
-                                    textAlign: 'center',
-                                    color: '#72767d',
-                                    fontSize: '0.9em'
-                                }}>
-                                    Henüz özel mesaj yok.<br />
-                                    Arkadaş ekle butonuna tıklayarak başla!
-                                </div>
-                            ) : (
-                                conversations.map(conv => {
-                                    const otherUser = conv.participants.find(p => p.username !== currentUsername);
-                                    if (!otherUser) return null;
-                                    const unread = safeUnreadCounts[`dm-${conv.id}`] || 0;
-                                    return (
-                                        <div
-                                            key={conv.id}
-                                            style={{
-                                                ...styles.dmItem,
-                                                backgroundColor: currentConversationId === conv.id ? 'rgba(255,255,255,0.1)' : 'transparent',
-                                                position: 'relative'
-                                            }}
-                                            onClick={() => onDMSelect(conv.id, otherUser.username)}
-                                            onContextMenu={(e) => {
-                                                e.preventDefault();
-                                                setDmContextMenu({
-                                                    x: e.clientX,
-                                                    y: e.clientY,
-                                                    conversation: conv
-                                                });
-                                            }}
-                                            onDragOver={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                e.currentTarget.style.backgroundColor = 'rgba(88, 101, 242, 0.3)';
-                                            }}
-                                            onDragLeave={(e) => {
-                                                e.preventDefault();
-                                                e.currentTarget.style.backgroundColor = currentConversationId === conv.id ? 'rgba(255,255,255,0.1)' : 'transparent';
-                                            }}
-                                            onDrop={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                e.currentTarget.style.backgroundColor = currentConversationId === conv.id ? 'rgba(255,255,255,0.1)' : 'transparent';
-                                                const files = e.dataTransfer.files;
-                                                if (files && files.length > 0) {
-                                                    onDMSelect(conv.id, otherUser.username);
-                                                    setTimeout(() => {
-                                                        const fileInput = document.querySelector('input[type="file"]');
-                                                        if (fileInput) {
-                                                            const dt = new DataTransfer();
-                                                            for (let i = 0; i < files.length; i++) {
-                                                                dt.items.add(files[i]);
-                                                            }
-                                                            fileInput.files = dt.files;
-                                                            fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-                                                        }
-                                                    }, 100);
-                                                    toast.success(`📎 ${files.length} dosya ${otherUser.username}'a gönderiliyor...`);
-                                                }
-                                            }}
-                                        >
-                                            <div style={{ position: 'relative', width: 32, height: 32 }}>
-                                                <LazyImage src={getAvatarUrl(otherUser.avatar, otherUser.username)} style={{ ...styles.avatarSmall, width: 32, height: 32 }} alt="" />
-                                                {/* Status Dot */}
-                                                {(() => {
-                                                    const isOnline = onlineUsers.includes(otherUser.username);
-                                                    const statusColor = isOnline ? '#23a559' : '#80848e';
-                                                    return (
-                                                        <div style={{
-                                                            position: 'absolute', bottom: -2, right: -2, width: 12, height: 12,
-                                                            borderRadius: '50%', backgroundColor: statusColor, border: '2px solid #2b2d31'
-                                                        }} />
-                                                    );
-                                                })()}
-                                            </div>
-                                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginLeft: 8, overflow: 'hidden' }}>
-                                                <span style={{ fontWeight: unread ? 'bold' : 'normal', color: '#dbdee1' }}>{otherUser.username}</span>
-                                                {(() => {
-                                                    const liveUser = allUsers?.find(u => u.username === otherUser.username) || otherUser;
-                                                    const activity = liveUser.current_activity;
-                                                    if (!activity) return null;
-
-                                                    const els = [];
-                                                    // Check for composite structure
-                                                    if (activity.steam) {
-                                                        els.push(
-                                                            <span key="steam" style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                                🎮 {activity.steam.name}
-                                                            </span>
-                                                        );
-                                                    }
-                                                    if (activity.spotify) {
-                                                        els.push(
-                                                            <span key="spotify" style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                                🎵 {activity.spotify.name}
-                                                            </span>
-                                                        );
-                                                    }
-                                                    // Fallback for flat structure
-                                                    if (els.length === 0) {
-                                                        if (activity.type === 'listening') {
-                                                            els.push(<span key="leg-sp" style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎵 {activity.name}</span>);
-                                                        } else if (activity.type === 'playing') {
-                                                            els.push(<span key="leg-st" style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎮 {activity.name}</span>);
-                                                        }
-                                                    }
-
-                                                    return els;
-                                                })()}
-                                            </div>
-                                            {unread > 0 && <span style={styles.unreadBadge}>{unread}</span>}
-                                        </div>
-                                    );
-                                }))}
-                        </div>
-                    </div>
+                    <HomePanel
+                        conversations={conversations} currentConversationId={currentConversationId}
+                        currentUsername={currentUsername} onRoomSelect={onRoomSelect} onDMSelect={onDMSelect}
+                        onFriendsClick={onFriendsClick} pendingFriendRequests={pendingFriendRequests}
+                        safeUnreadCounts={safeUnreadCounts} onlineUsers={onlineUsers} allUsers={allUsers}
+                        getAvatarUrl={getAvatarUrl} setDmContextMenu={setDmContextMenu}
+                    />
                 )}
 
                 {selectedServerId !== 'home' && servers && (
-                    <div style={styles.topSection}>
-                        {servers.filter(s => s.id === selectedServerId).map(server => {
-                            const isOwner = server.owner_username === currentUsername || isAdmin;
-                            const canManage = isOwner || server.my_permissions?.is_owner;
-
-                            return (
-                                <div key={server.id}>
-                                    {/* SERVER HEADER */}
-                                    <div style={styles.serverHeader}>
-                                        <h3 style={{ maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{server.name}</h3>
-                                        <div style={{ display: 'flex', gap: '5px' }}>
-                                            <button style={styles.iconBtn} onClick={(e) => handleCreateInvite(e, server)} title="Davet Linki">
-                                                <FaUserPlus />
-                                            </button>
-
-                                            {isOwner && <button style={styles.iconBtn} onClick={(e) => { e.stopPropagation(); setActiveServerIdForCategory(server.id) }} title="Kategori Ekle"><FaPlus /></button>}
-
-                                            {canManage && (
-                                                <button
-                                                    style={styles.iconBtn}
-                                                    onClick={(e) => { e.stopPropagation(); if (onOpenServerSettings) onOpenServerSettings(server); }}
-                                                    title="Sunucu Ayarları"
-                                                >
-                                                    <FaCog />
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* KATEGORİ EKLEME FORMU */}
-                                    {activeServerIdForCategory === server.id && (
-                                        <form onSubmit={(e) => handleCreateCategory(e, server.id)} style={styles.addCategoryForm}>
-                                            <input autoFocus placeholder="Kategori Adı..." value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} style={styles.addRoomInput} />
-                                            <div style={styles.addRoomControls}><button type="submit" style={styles.addRoomButton}>Ekle</button><button type="button" onClick={() => setActiveServerIdForCategory(null)} style={{ ...styles.addRoomButton, background: '#da373c' }}>X</button></div>
-                                        </form>
-                                    )}
-
-                                    {server.categories && server.categories.map(cat => {
-                                        const isCollapsed = collapsedCategories[cat.id];
-                                        const isEditingThisCat = editingItemId === `cat-${cat.id}`;
-
-                                        return (
-                                            <div key={cat.id} style={{ marginBottom: 5 }}>
-                                                <div style={styles.categoryHeader} onClick={() => toggleCategory(cat.id)}>
-                                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                        {isCollapsed ? <FaChevronRight size={9} /> : <FaChevronDown size={9} />}
-
-                                                        {isEditingThisCat ? (
-                                                            <form onSubmit={(e) => handleRenameCategory(e, cat.id)} onClick={e => e.stopPropagation()} style={{ marginLeft: 5 }}>
-                                                                <input autoFocus value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
-                                                            </form>
-                                                        ) : (
-                                                            <span style={{ marginLeft: 5 }}>{cat.name}</span>
-                                                        )}
-                                                    </div>
-
-                                                    {isOwner && (
-                                                        <div style={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>
-                                                            {/* TEK DÜZENLEME BUTONU VE EKLEME BUTONU (2 TABE) */}
-                                                            <button style={styles.iconBtn} onClick={(e) => handleOpenActionMenu(e, 'category', cat.id, cat.name)}><FaCog size={10} /></button>
-                                                            <button style={styles.iconBtn} onClick={(e) => { e.stopPropagation(); setActiveCategoryIdForRoom(cat.id) }}><FaPlus size={10} /></button>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {activeCategoryIdForRoom === cat.id && (
-                                                    <form onSubmit={(e) => handleCreateRoom(e, cat.id)} style={{ padding: '5px 10px' }}>
-                                                        <input autoFocus placeholder="Kanal Adı..." value={newRoomName} onChange={e => setNewRoomName(e.target.value)} style={styles.addRoomInput} />
-                                                        <select value={newRoomType} onChange={e => setNewRoomType(e.target.value)} style={styles.channelTypeSelect}>
-                                                            <option value="text">📝 Metin</option>
-                                                            <option value="voice">🎤 Sesli</option>
-                                                            <option value="kanban">📋 Kanban Board</option>
-                                                        </select>
-                                                        <div style={styles.addRoomControls}><button type="submit" style={styles.addRoomButton}>Ekle</button><button type="button" onClick={() => setActiveCategoryIdForRoom(null)} style={{ ...styles.addRoomButton, background: '#da373c' }}>X</button></div>
-                                                    </form>
-                                                )}
-
-                                                {!isCollapsed && cat.rooms && cat.rooms.map(room => {
-                                                    const isActive = currentVoiceRoom === room.slug;
-                                                    const unread = safeUnreadCounts[`room-${room.slug}`] || 0;
-                                                    const isVoice = room.channel_type === 'voice';
-                                                    const isEditingThisRoom = editingItemId === `room-${room.slug}`;
-                                                    const userCount = isVoice && activeVoiceUsers[room.slug] ? activeVoiceUsers[room.slug].length : 0;
-                                                    const isLocked = room.is_locked || room.is_private; // 🔒 Kilitli veya özel kanal
-                                                    const isFull = isVoice && room.user_limit && userCount >= room.user_limit; // 👥 Kanal dolu
-
-                                                    return (
-                                                        <div key={room.id} className="channel-wrapper">
-                                                            <div
-                                                                className={`channel-item ${isVoice ? 'voice-channel' : 'text-channel'} ${isActive ? 'active' : ''} ${dropTargetChannel === room.slug ? 'voice-channel-drop-target' : ''}`}
-                                                                style={{
-                                                                    ...styles.roomItem,
-                                                                    marginLeft: 8,
-                                                                    backgroundColor: dropTargetChannel === room.slug
-                                                                        ? 'rgba(88, 101, 242, 0.2)'
-                                                                        : isActive ? 'rgba(88, 101, 242, 0.15)' : 'transparent',
-                                                                    color: isActive ? '#fff' : '#949ba4',
-                                                                    borderLeft: dropTargetChannel === room.slug
-                                                                        ? '3px solid #5865f2'
-                                                                        : isActive ? '3px solid #5865f2' : '3px solid transparent',
-                                                                    paddingLeft: isActive ? '5px' : '8px',
-                                                                    transition: 'all 0.2s ease',
-                                                                    borderRadius: '6px',
-                                                                    margin: '2px 8px',
-                                                                    position: 'relative',
-                                                                    ...(dropTargetChannel === room.slug ? {
-                                                                        boxShadow: 'inset 0 0 12px rgba(88, 101, 242, 0.15), 0 0 8px rgba(88, 101, 242, 0.2)',
-                                                                        border: '1px dashed rgba(88, 101, 242, 0.5)',
-                                                                    } : {})
-                                                                }}
-                                                                onClick={() => { if (isVoice) joinVoiceChat(room.slug); else onRoomSelect(room.slug); }}
-                                                                onDragOver={(e) => {
-                                                                    if (!isVoice) return;
-                                                                    e.preventDefault();
-                                                                    e.dataTransfer.dropEffect = 'move';
-                                                                    setDropTargetChannel(room.slug);
-                                                                }}
-                                                                onDragLeave={(e) => {
-                                                                    if (dropTargetChannel === room.slug) {
-                                                                        setDropTargetChannel(null);
-                                                                    }
-                                                                }}
-                                                                onDrop={(e) => {
-                                                                    e.preventDefault();
-                                                                    setDropTargetChannel(null);
-                                                                    if (!isVoice || !isAdmin) return;
-                                                                    try {
-                                                                        const data = JSON.parse(e.dataTransfer.getData('application/json'));
-                                                                        if (data.username && data.fromChannel && data.fromChannel !== room.slug) {
-                                                                            handleMoveUserToChannel(data.username, data.fromChannel, room.slug);
-                                                                        }
-                                                                    } catch (err) {
-                                                                        console.error('Drop error:', err);
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <div style={styles.channelContent}>
-                                                                    {isVoice && (
-                                                                        <FaVolumeUp
-                                                                            style={{
-                                                                                ...styles.voiceIcon,
-                                                                                color: isActive ? '#43b581' : '#949ba4',
-                                                                                transition: 'color 0.2s ease'
-                                                                            }}
-                                                                        />
-                                                                    )}
-                                                                    {!isVoice && <FaCog style={{ ...styles.hashtagIcon, fontSize: '0.9em' }} />}
-
-                                                                    {isEditingThisRoom ? (
-                                                                        <form onSubmit={(e) => handleRenameRoom(e, room.slug)} onClick={e => e.stopPropagation()} style={{ flex: 1 }}>
-                                                                            <input autoFocus value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
-                                                                        </form>
-                                                                    ) : (
-                                                                        <span style={{
-                                                                            ...styles.channelNameText,
-                                                                            paddingLeft: '5px',
-                                                                            fontWeight: isActive ? '600' : 'normal',
-                                                                            flex: 1,
-                                                                            display: 'flex',
-                                                                            alignItems: 'center',
-                                                                            gap: '6px'
-                                                                        }}>
-                                                                            {room.name}
-
-                                                                            {/* 🔥 KANAL BADGE'LERİ */}
-                                                                            {room.is_private && <span style={{ fontSize: '0.7em', color: '#faa61a', border: '1px solid #faa61a', borderRadius: '3px', padding: '1px 4px' }}>🔒</span>}
-                                                                            {room.is_nsfw && <span style={{ fontSize: '0.7em', color: '#f04747', border: '1px solid #f04747', borderRadius: '3px', padding: '1px 4px' }}>18+</span>}
-                                                                            {room.is_locked && <span style={{ fontSize: '0.7em', color: '#949ba4', border: '1px solid #949ba4', borderRadius: '3px', padding: '1px 4px' }}>🔐</span>}
-                                                                            {room.admin_only_chat && <span style={{ fontSize: '0.7em', color: '#43b581', border: '1px solid #43b581', borderRadius: '3px', padding: '1px 4px' }}>📢</span>}
-                                                                        </span>
-                                                                    )}
-
-                                                                    {/* Kullanıcı Sayısı (Voice için) - (2/5) veya (2/∞) formatı */}
-                                                                    {isVoice && (
-                                                                        <span style={{
-                                                                            fontSize: '0.75em',
-                                                                            color: userCount > 0 ? '#43b581' : '#72767d',
-                                                                            fontWeight: '500',
-                                                                            marginLeft: 'auto',
-                                                                            marginRight: '4px',
-                                                                        }}>
-                                                                            ({userCount}/{room.user_limit > 0 ? room.user_limit : '∞'})
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-
-                                                                {isOwner && !isEditingThisRoom && (
-                                                                    <div style={{ display: 'flex', gap: '3px', marginLeft: '5px' }}>
-                                                                        {/* ODA İÇİN TEK SIMGE */}
-                                                                        <button style={styles.iconBtn} onClick={(e) => handleOpenActionMenu(e, 'room', room.slug, room.name)}><FaCog size={12} /></button>
-                                                                    </div>
-                                                                )}
-
-                                                                {unread > 0 && <span style={styles.unreadBadge}>{unread}</span>}
-                                                            </div>
-
-                                                            {/* Sesli Kanalda Kim Var - Her Zaman Göster */}
-                                                            {isVoice && (
-                                                                <div style={{
-                                                                    marginLeft: '28px',
-                                                                    marginTop: '2px',
-                                                                    marginBottom: '2px',
-                                                                    // backgroundColor: kaldırıldı - şeffaf olacak
-                                                                    padding: '0', // Padding kaldırıldı
-                                                                    position: 'relative', // Context menu için
-                                                                    zIndex: 1
-                                                                }}>
-                                                                    <VoiceUserList
-                                                                        voiceUsers={activeVoiceUsers}
-                                                                        roomName={room.slug}
-                                                                        currentUsername={currentUsername}
-                                                                        remoteVolumes={remoteVolumes}
-                                                                        setRemoteVolume={setRemoteVolume}
-                                                                        isClientInThisChannel={currentVoiceRoom === room.slug}
-                                                                        isPttActive={isPttActive}
-                                                                        isAdmin={isAdmin}
-                                                                        voiceChannels={cat.rooms.filter(r => r.is_voice)}
-                                                                        friendsList={friendsList} // 🔥 YENİ: Arkadaş listesi
-                                                                        getDeterministicAvatar={getDeterministicAvatar} // 🔥 Avatar helper function
-                                                                        allUsers={allUsers} // 🔥 Tüm kullanıcılar
-                                                                        onUserAction={(action, username, targetChannel) => {
-                                                                            if (action === 'profile') {
-                                                                                onViewUserProfile?.(username);
-                                                                            } else if (action === 'message' || action === 'dm') {
-                                                                                // DM açma
-                                                                                const conversation = conversations.find(c =>
-                                                                                    c.participants.some(p => p.username === username)
-                                                                                );
-                                                                                if (conversation) {
-                                                                                    onDMSelect(conversation.id, username);
-                                                                                } else {
-                                                                                }
-                                                                            } else if (action === 'add_friend') {
-                                                                                // 🔥 YENİ: Gerçek arkadaş ekleme
-                                                                                handleAddFriend(username);
-                                                                            } else if (action === 'remove_friend') {
-                                                                                // 🔥 YENİ: Arkadaş çıkarma
-                                                                                handleRemoveFriend(username);
-                                                                            } else if (action === 'mute_local') {
-                                                                                // Lokal susturma - console log yeterli
-                                                                            } else if (action === 'move' && targetChannel) {
-                                                                                // Kullanıcıyı başka kanala taşı - direkt yap
-                                                                                handleMoveUserToChannel(username, room.slug, targetChannel);
-                                                                            } else if (action === 'kick') {
-                                                                                // Kullanıcıyı kanaldan at - direkt yap
-                                                                                handleKickUserFromChannel(username, room.slug);
-                                                                            } else if (action === 'server_mute') {
-                                                                                // Sunucu susturma - console log
-                                                                            } else if (action === 'server_deafen') {
-                                                                                // Sunucu sağırlaştırma - console log
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            )
-                        })}
-                    </div>
+                    <ServerPanel
+                        servers={servers} selectedServerId={selectedServerId}
+                        isAdmin={isAdmin} currentUsername={currentUsername}
+                        currentVoiceRoom={currentVoiceRoom} activeVoiceUsers={activeVoiceUsers}
+                        collapsedCategories={collapsedCategories} toggleCategory={toggleCategory}
+                        editingItemId={editingItemId} setEditingItemId={setEditingItemId}
+                        editName={editName} setEditName={setEditName}
+                        newCategoryName={newCategoryName} setNewCategoryName={setNewCategoryName}
+                        newRoomName={newRoomName} setNewRoomName={setNewRoomName}
+                        newRoomType={newRoomType} setNewRoomType={setNewRoomType}
+                        activeServerIdForCategory={activeServerIdForCategory} setActiveServerIdForCategory={setActiveServerIdForCategory}
+                        activeCategoryIdForRoom={activeCategoryIdForRoom} setActiveCategoryIdForRoom={setActiveCategoryIdForRoom}
+                        handleCreateCategory={handleCreateCategory} handleCreateRoom={handleCreateRoom}
+                        handleRenameCategory={handleRenameCategory} handleRenameRoom={handleRenameRoom}
+                        handleOpenActionMenu={handleOpenActionMenu} handleCreateInvite={handleCreateInvite}
+                        onOpenServerSettings={onOpenServerSettings}
+                        joinVoiceChat={joinVoiceChat} onRoomSelect={onRoomSelect}
+                        safeUnreadCounts={safeUnreadCounts} onDMSelect={onDMSelect}
+                        conversations={conversations} friendsList={friendsList}
+                        getDeterministicAvatar={getDeterministicAvatar} allUsers={allUsers}
+                        isPttActive={isPttActive} remoteVolumes={remoteVolumes} setRemoteVolume={setRemoteVolume}
+                        dropTargetChannel={dropTargetChannel} setDropTargetChannel={setDropTargetChannel}
+                        handleAddFriend={handleAddFriend} handleRemoveFriend={handleRemoveFriend}
+                        handleMoveUserToChannel={handleMoveUserToChannel}
+                        handleKickUserFromChannel={handleKickUserFromChannel}
+                        onViewUserProfile={onViewUserProfile}
+                    />
                 )}
 
-                {/* EKLEME MENÜSÜ MODALI */}
                 <AddServerModal isOpen={showAddMenu} onClose={() => setShowAddMenu(false)} onCreateServer={handleCreateServer} />
 
                 <div style={styles.bottomSection}>
-
-                    {/* 🔥 Modern Admin Panel Button */}
+                    {/* Admin Panel Button */}
                     {isAdmin && (
-                        <button
-                            onClick={onOpenAdminPanel}
-                            style={{
-                                width: '100%',
-                                padding: '12px',
-                                marginBottom: '10px',
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                color: 'white',
-                                fontWeight: '600',
-                                fontSize: '0.95em',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                transition: 'all 0.3s ease',
-                                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.6)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)';
-                            }}
+                        <button onClick={onOpenAdminPanel} style={{
+                            width: '100%', padding: '12px', marginBottom: '10px',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            border: 'none', borderRadius: '8px', color: 'white',
+                            fontWeight: '600', fontSize: '0.95em', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                            transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+                        }}
+                            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.6)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.4)'; }}
                         >
-                            <FaCog size={16} />
-                            <span>Admin Panel</span>
+                            <FaCog size={16} /><span>Admin Panel</span>
                         </button>
                     )}
 
-                    {/* 💰 Quick Access Buttons - Compact Horizontal Layout */}
-                    <div style={{
-                        display: 'flex',
-                        gap: '5px',
-                        marginBottom: '10px',
-                        padding: '5px',
-                        backgroundColor: '#1e1f22',
-                        borderRadius: '8px',
-                        overflowX: 'auto',
-                        scrollbarWidth: 'thin'
-                    }}>
-                        {onOpenPaymentPanel && (
-                            <button onClick={onOpenPaymentPanel} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="💰 Payment Panel" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                💰
-                            </button>
-                        )}
-                        {onOpenStoreModal && (
-                            <button onClick={onOpenStoreModal} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="🛒 Store" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                🛒
-                            </button>
-                        )}
-                        {onOpenDailyRewards && (
-                            <button onClick={onOpenDailyRewards} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="🎁 Daily Rewards" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                🎁
-                            </button>
-                        )}
-                        {onOpenAPIUsage && (
-                            <button onClick={onOpenAPIUsage} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="📊 API Usage" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                📊
-                            </button>
-                        )}
-                        {onOpenExportJobs && (
-                            <button onClick={onOpenExportJobs} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="📥 Export Jobs" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                📥
-                            </button>
-                        )}
-                        {onOpenScheduledAnnouncements && (
-                            <button onClick={onOpenScheduledAnnouncements} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="📢 Scheduled Announcements" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                📢
-                            </button>
-                        )}
-                        {/* 🎮 NEW FEATURES (2026-01-28) */}
-                        {onOpenMiniGames && (
-                            <button onClick={onOpenMiniGames} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="🎮 Mini Games" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                🎮
-                            </button>
-                        )}
-                        {onOpenProjectCollaboration && (
-                            <button onClick={onOpenProjectCollaboration} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="📂 Projects" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                📂
-                            </button>
-                        )}
-                        {onOpenAvatarStudio && (
-                            <button onClick={onOpenAvatarStudio} style={{
-                                minWidth: '36px',
-                                width: '36px',
-                                height: '36px',
-                                padding: '0',
-                                background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }} title="🎨 Avatar Studio" onMouseEnter={(e) => e.target.style.transform = 'scale(1.1)'} onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}>
-                                🎨
-                            </button>
-                        )}
-                    </div>
+                    <QuickAccessButtons handlers={{
+                        onOpenPaymentPanel, onOpenStoreModal, onOpenDailyRewards, onOpenAPIUsage,
+                        onOpenExportJobs, onOpenScheduledAnnouncements, onOpenMiniGames,
+                        onOpenProjectCollaboration, onOpenAvatarStudio
+                    }} />
 
-                    {(isInVoice || isConnecting) && (
-                        <div style={{
-                            padding: '8px',
-                            backgroundColor: '#232428',
-                            borderTop: '1px solid #1e1f22',
-                            borderBottom: '1px solid #1e1f22'
-                        }}>
-                            {/* 🔥 Avatar ve Kanal Bilgisi */}
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                marginBottom: '8px',
-                                padding: '0 4px'
-                            }}>
-                                {/* 🔥 Kullanıcı Avatarı */}
-                                <div style={{ position: 'relative' }}>
-                                    <img
-                                        src={getAvatarUrl(currentUserProfile?.avatar, currentUsername)}
-                                        alt={currentUsername}
-                                        style={{
-                                            width: '32px',
-                                            height: '32px',
-                                            borderRadius: '50%',
-                                            border: '2px solid #23a559',
-                                            boxShadow: '0 0 8px rgba(35, 165, 89, 0.5)'
-                                        }}
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = getDeterministicAvatar(currentUsername);
-                                        }}
-                                    />
-                                    {/* 🎤 Mikrofon Status Badge */}
-                                    <div style={{
-                                        position: 'absolute',
-                                        bottom: '-2px',
-                                        right: '-2px',
-                                        width: '16px',
-                                        height: '16px',
-                                        borderRadius: '50%',
-                                        backgroundColor: isMuted ? '#f04747' : '#23a559',
-                                        border: '2px solid #232428',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '8px'
-                                    }}>
-                                        {isMuted ? '🔇' : '🎤'}
-                                    </div>
-                                </div>
+                    <VoiceControlBar
+                        isInVoice={isInVoice} isConnecting={isConnecting}
+                        isMuted={isMuted} isDeafened={isDeafened}
+                        isVideoEnabled={isVideoEnabled} isScreenSharing={isScreenSharing}
+                        toggleVideo={toggleVideo} toggleScreenShare={toggleScreenShare}
+                        toggleMute={toggleMute} toggleDeafened={toggleDeafened}
+                        leaveVoiceChat={leaveVoiceChat}
+                        voiceRoomDisplayName={voiceRoomDisplayName}
+                        getAvatarUrl={getAvatarUrl}
+                        currentUserProfile={currentUserProfile} currentUsername={currentUsername}
+                        getDeterministicAvatar={getDeterministicAvatar}
+                    />
 
-                                {/* 🔥 Kanal Bilgisi ve Durum */}
-                                <div style={{ flex: 1, overflow: 'hidden' }}>
-                                    <div style={{ color: isConnecting ? '#eba61e' : '#23a559', fontWeight: 'bold', fontSize: '0.8em' }}>
-                                        {isConnecting ? 'Bağlanılıyor...' : 'Ses Bağlandı'}
-                                    </div>
-                                    <div style={{ fontSize: '0.7em', color: '#b9bbbe', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {voiceRoomDisplayName} / Genel
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                gap: '5px'
-                            }}>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); toggleVideo(); }}
-                                    style={{
-                                        flex: 1,
-                                        background: isVideoEnabled ? '#23a559' : '#2b2d31',
-                                        border: 'none',
-                                        color: 'white',
-                                        padding: '8px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    title={isVideoEnabled ? "Kamerayı Kapat" : "Kamerayı Aç"}
-                                >
-                                    {isVideoEnabled ? <FaFilm size={16} /> : <FaVideoSlash size={16} />}
-                                </button>
-
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); toggleScreenShare(); }}
-                                    style={{
-                                        flex: 1,
-                                        background: isScreenSharing ? '#23a559' : '#2b2d31',
-                                        border: 'none',
-                                        color: 'white',
-                                        padding: '8px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    title={isScreenSharing ? "Paylaşımı Durdur" : "Ekran Paylaş"}
-                                >
-                                    <FaDesktop size={16} />
-                                </button>
-
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); toggleMute(); }}
-                                    style={{
-                                        flex: 1,
-                                        background: isMuted ? '#da373c' : '#2b2d31',
-                                        border: 'none',
-                                        color: 'white',
-                                        padding: '8px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    title={isMuted ? "Sesi Aç" : "Sessize Al"}
-                                >
-                                    {isMuted ? <FaMicrophoneSlash size={16} /> : <FaMicrophone size={16} />}
-                                </button>
-
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); toggleDeafened(); }}
-                                    style={{
-                                        flex: 1,
-                                        background: isDeafened ? '#da373c' : '#2b2d31',
-                                        border: 'none',
-                                        color: 'white',
-                                        padding: '8px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    title={isDeafened ? "Duy" : "Sağırlaştır"}
-                                >
-                                    {isDeafened ? <TbHeadphonesOff size={18} /> : <FaHeadphones size={16} />}
-                                </button>
-
-                                {/* � AYARLAR BUTONU */}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Ses ayarları modal'ını aç - VoiceChatPanel'e mesaj gönder
-                                        window.dispatchEvent(new CustomEvent('openVoiceSettings'));
-                                    }}
-                                    style={{
-                                        flex: 1,
-                                        background: '#2b2d31',
-                                        border: 'none',
-                                        color: 'white',
-                                        padding: '8px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    title="Ses Ayarları"
-                                >
-                                    <FaCog size={16} />
-                                </button>
-
-                                {/* �🔥 ÇIKIŞ BUTONU */}
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        if (typeof leaveVoiceChat === 'function') {
-                                            leaveVoiceChat();
-                                        } else {
-                                            console.error('leaveVoiceChat is not a function');
-                                        }
-                                    }}
-                                    style={{
-                                        flex: 1,
-                                        background: '#da373c',
-                                        border: 'none',
-                                        color: 'white',
-                                        padding: '8px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    title="Sesli Kanaldan Çık"
-                                >
-                                    <FaPhoneSlash size={16} />
-                                </button>
-                            </div>
-                        </div>
+                    {!(isInVoice || isConnecting) && (
+                        <SupportButton onClick={() => setShowSupportModal(true)} />
                     )}
 
-                    {/* 💝 DEVELOPER SUPPORT BUTTON - Sesli sohbette gizle */}
-                    {!(isInVoice || isConnecting) && <div
-                        onClick={() => setShowSupportModal(true)}
-                        style={{
-                            backgroundColor: '#1e1f22',
-                            padding: (isInVoice || isConnecting) ? '6px 10px' : '10px 14px',
-                            margin: '0 8px 8px 8px',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: (isInVoice || isConnecting) ? '8px' : '12px',
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                            border: '1px solid transparent',
-                            background: 'linear-gradient(135deg, rgba(235, 69, 158, 0.06) 0%, rgba(88, 101, 242, 0.06) 100%)',
-                            overflow: 'hidden',
-                            flexShrink: 0,
-                            minHeight: (isInVoice || isConnecting) ? '36px' : '44px',
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(235, 69, 158, 0.12) 0%, rgba(88, 101, 242, 0.12) 100%)';
-                            e.currentTarget.style.borderColor = '#eb459e';
-                            e.currentTarget.style.transform = 'scale(1.01)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(235, 69, 158, 0.06) 0%, rgba(88, 101, 242, 0.06) 100%)';
-                            e.currentTarget.style.borderColor = 'transparent';
-                            e.currentTarget.style.transform = 'scale(1)';
-                        }}
-                        title="Geliştiriciye Destek Ol"
-                    >
-                        <FaHeart style={{
-                            color: '#eb459e',
-                            fontSize: (isInVoice || isConnecting) ? '14px' : '18px',
-                            flexShrink: 0,
-                            animation: 'heartPulse 2s ease-in-out infinite',
-                        }} />
-                        <div style={{ flex: 1, textAlign: 'left', overflow: 'hidden' }}>
-                            <div style={{
-                                color: 'white',
-                                fontWeight: '600',
-                                fontSize: (isInVoice || isConnecting) ? '11px' : '13px',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}>
-                                {(isInVoice || isConnecting) ? "Destekle" : "Developer'ı Destekle"}
-                            </div>
-                        </div>
-                        <div style={{
-                            background: 'linear-gradient(135deg, rgba(235, 69, 158, 0.2) 0%, rgba(88, 101, 242, 0.2) 100%)',
-                            padding: (isInVoice || isConnecting) ? '2px 6px' : '4px 8px',
-                            borderRadius: '10px',
-                            fontSize: (isInVoice || isConnecting) ? '10px' : '12px',
-                            color: '#eb459e',
-                            fontWeight: 'bold',
-                            flexShrink: 0,
-                        }}>
-                            ☕
-                        </div>
-                    </div>}
-
-                    {/* 👤 USER FOOTER - Profesyonel ses kontrolleri ile */}
                     <UserFooter
-                        currentUserProfile={currentUserProfile}
-                        currentUsername={currentUsername}
-                        getDeterministicAvatar={getDeterministicAvatar}
-                        onProfileClick={onProfileClick}
-                        updateAvailable={updateAvailable}
-                        onUpdateClick={onUpdateClick}
+                        currentUserProfile={currentUserProfile} currentUsername={currentUsername}
+                        getDeterministicAvatar={getDeterministicAvatar} onProfileClick={onProfileClick}
+                        updateAvailable={updateAvailable} onUpdateClick={onUpdateClick}
                     />
                 </div>
             </div>
 
-            {/* KEŞFET PENCERESİ */}
-            <DiscoveryModal isOpen={showDiscovery} onClose={() => setShowDiscovery(false)} publicServers={publicServers} onJoinServer={handleJoinServer} onJoinViaCode={handleJoinViaCode} />
-
-            {/* Davet Modal */}
-            {
-                showInviteModal && inviteModalServer && (
-                    <InviteModal
-                        onClose={() => {
-                            setShowInviteModal(false);
-                            setInviteModalServer(null);
-                        }}
-                        server={inviteModalServer}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiUrl}
-                        currentUser={currentUsername}
-                    />
-                )
-            }
-
-            {/* Saved Messages Modal */}
-            {
-                showSavedMessages && createPortal(
-                    <SavedMessagesModal
-                        type={showSavedMessages}
-                        onClose={() => setShowSavedMessages(null)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Scheduled Message Modal */}
-            {
-                showScheduledMessages && createPortal(
-                    <ScheduledMessageModal
-                        room={actualCurrentRoom}
-                        conversation={currentConversationId}
-                        onClose={() => setShowScheduledMessages(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Webhook Manager */}
-            {
-                showWebhooks && createPortal(
-                    <WebhookManager
-                        serverId={selectedServerId}
-                        onClose={() => setShowWebhooks(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Moderator Tools */}
-            {
-                showModTools && createPortal(
-                    <ModeratorTools
-                        serverId={selectedServerId}
-                        onClose={() => setShowModTools(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Quick Actions Menu */}
-            {
-                showQuickActions && createPortal(
-                    <QuickActionsMenu
-                        onClose={() => setShowQuickActions(false)}
-                        onOpenWebhooks={() => { setShowQuickActions(false); setShowWebhooks(true); }}
-                        onOpenAuditLogs={() => { setShowQuickActions(false); setShowAuditLogs(true); }}
-                        onOpenReports={() => { setShowQuickActions(false); setShowReports(true); }}
-                        onOpenVanityURL={() => { setShowQuickActions(false); setShowVanityURL(true); }}
-                        onOpenAutoResponder={() => { setShowQuickActions(false); setShowAutoResponder(true); }}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Audit Log Viewer */}
-            {
-                showAuditLogs && createPortal(
-                    <AuditLogViewer
-                        serverId={selectedServerId}
-                        onClose={() => setShowAuditLogs(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Reports Viewer */}
-            {
-                showReports && createPortal(
-                    <ReportsViewer
-                        serverId={selectedServerId}
-                        onClose={() => setShowReports(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Vanity URL Manager */}
-            {
-                showVanityURL && createPortal(
-                    <VanityURLManager
-                        serverId={selectedServerId}
-                        onClose={() => setShowVanityURL(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* Auto Responder Manager */}
-            {
-                showAutoResponder && createPortal(
-                    <AutoResponderManager
-                        serverId={selectedServerId}
-                        onClose={() => setShowAutoResponder(false)}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />,
-                    document.body
-                )
-            }
-
-            {/* 🆕 SUNUCU CONTEXT MENU */}
-            {serverContextMenu && createPortal(
-                <ServerContextMenu
-                    x={serverContextMenu.x}
-                    y={serverContextMenu.y}
-                    server={serverContextMenu.server}
-                    isOwner={serverContextMenu.isOwner}
-                    onClose={() => setServerContextMenu(null)}
-                    onLeaveServer={() => handleLeaveServer(serverContextMenu.server.id)}
-                    onServerSettings={() => {
-                        onOpenServerSettings(serverContextMenu.server);
-                        setServerContextMenu(null);
-                    }}
-                    onMuteServer={() => {
-                        const serverId = serverContextMenu.server.id;
-                        setMutedServers(prev => {
-                            const updated = [...prev, serverId];
-                            localStorage.setItem('mutedServers', JSON.stringify(updated));
-                            return updated;
-                        });
-                        setServerContextMenu(null);
-                    }}
-                    onUnmuteServer={() => {
-                        const serverId = serverContextMenu.server.id;
-                        setMutedServers(prev => {
-                            const updated = prev.filter(id => id !== serverId);
-                            localStorage.setItem('mutedServers', JSON.stringify(updated));
-                            return updated;
-                        });
-                        setServerContextMenu(null);
-                    }}
-                    onMoveUp={() => handleMoveServer(serverContextMenu.server.id, 'up')}
-                    onMoveDown={() => handleMoveServer(serverContextMenu.server.id, 'down')}
-                    onCopyInvite={() => handleCopyServerInvite(serverContextMenu.server.id)}
-                    onChangeIcon={() => {
-                        handleChangeServerIcon(serverContextMenu.server.id);
-                        setServerContextMenu(null);
-                    }}
-                    onChangePrivacy={() => {
-                        handleChangeServerPrivacy(serverContextMenu.server.id);
-                        setServerContextMenu(null);
-                    }}
-                    onDeleteServer={async () => {
-                        const serverId = serverContextMenu.server.id;
-                        const serverName = serverContextMenu.server.name;
-
-                        // Modern confirm modal'ı aç
-                        setDeleteServerModal({
-                            server: serverContextMenu.server,
-                            isOpen: true
-                        });
-
-                        setServerContextMenu(null);
-                    }}
-                    canMoveUp={servers && servers.findIndex(s => s.id === serverContextMenu.server.id) > 0}
-                    canMoveDown={servers && servers.findIndex(s => s.id === serverContextMenu.server.id) < servers.length - 1}
-                    isMuted={mutedServers.includes(serverContextMenu.server.id)}
-                />,
-                document.body
-            )}
-
-            {/* 🆕 DM CONTEXT MENU - Modern & Feature-Rich */}
-            {dmContextMenu && createPortal(
-                (() => {
-                    const otherUser = dmContextMenu.conversation.participants.find(p => p.username !== currentUsername);
-                    if (!otherUser) return null;
-
-                    const menuItems = [
-                        {
-                            icon: '👤',
-                            label: 'Profili Görüntüle',
-                            color: '#dbdee1',
-                            onClick: () => handleViewProfile(otherUser.username),
-                            divider: false
-                        },
-                        {
-                            icon: '💬',
-                            label: 'Mesaj Gönder',
-                            color: '#dbdee1',
-                            onClick: () => {
-                                const otherParticipant = dmContextMenu.conversation.participants?.find(p => p.username !== currentUsername);
-                                onDMSelect(dmContextMenu.conversation.id, otherParticipant?.username);
-                                setDmContextMenu(null);
-                            },
-                            divider: true
-                        },
-                        {
-                            icon: '🎫',
-                            label: 'Sunucuya Davet Et',
-                            color: '#5865f2',
-                            onClick: () => handleInviteToServer(otherUser.username),
-                            divider: false
-                        },
-                        {
-                            icon: '📌',
-                            label: 'Konuşmayı Sabitle',
-                            color: '#dbdee1',
-                            onClick: () => handlePinConversation(dmContextMenu.conversation.id),
-                            divider: true
-                        },
-                        {
-                            icon: '🔇',
-                            label: 'Sessize Al',
-                            color: '#b9bbbe',
-                            onClick: () => handleMuteUser(otherUser.username, dmContextMenu.conversation.id),
-                            divider: false
-                        },
-                        {
-                            icon: '👁️‍🗨️',
-                            label: 'Konuşmayı Gizle',
-                            color: '#b9bbbe',
-                            onClick: () => handleHideDM(dmContextMenu.conversation.id),
-                            divider: true
-                        },
-                        {
-                            icon: '🗑️',
-                            label: 'Konuşmayı Temizle',
-                            color: '#f23f42',
-                            onClick: () => handleClearDM(dmContextMenu.conversation.id),
-                            divider: false
-                        },
-                        {
-                            icon: '🚫',
-                            label: 'Kullanıcıyı Engelle',
-                            color: '#ed4245',
-                            onClick: () => handleBlockUser(otherUser.username),
-                            divider: false
-                        }
-                    ];
-
-                    return (
-                        <div
-                            onClick={(e) => e.stopPropagation()}
-                            style={{
-                                position: 'fixed',
-                                top: dmContextMenu.y,
-                                left: dmContextMenu.x,
-                                backgroundColor: '#111214',
-                                border: '1px solid #2b2d31',
-                                borderRadius: '8px',
-                                minWidth: '220px',
-                                boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 1px rgba(0,0,0,0.5)',
-                                zIndex: 999999,
-                                overflow: 'hidden',
-                                animation: 'contextMenuSlide 0.1s ease-out'
-                            }}
-                        >
-                            {/* User Info Header */}
-                            <div style={{
-                                padding: '12px',
-                                backgroundColor: '#1e1f22',
-                                borderBottom: '1px solid #2b2d31',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '10px'
-                            }}>
-                                <img
-                                    src={getAvatarUrl(otherUser.avatar, otherUser.username)}
-                                    style={{
-                                        width: 32,
-                                        height: 32,
-                                        borderRadius: '50%',
-                                        objectFit: 'cover'
-                                    }}
-                                    alt=""
-                                />
-                                <div style={{ flex: 1, overflow: 'hidden' }}>
-                                    <div style={{
-                                        color: '#f2f3f5',
-                                        fontSize: '14px',
-                                        fontWeight: '600',
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis'
-                                    }}>
-                                        {otherUser.username}
-                                    </div>
-                                    <div style={{
-                                        color: '#b9bbbe',
-                                        fontSize: '12px',
-                                        marginTop: '2px'
-                                    }}>
-                                        {onlineUsers.includes(otherUser.username) ? '🟢 Çevrimiçi' : '⚫ Çevrimdışı'}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Menu Items */}
-                            {menuItems.map((item, index) => (
-                                <React.Fragment key={index}>
-                                    <div
-                                        onClick={item.onClick}
-                                        style={{
-                                            padding: '10px 12px',
-                                            cursor: 'pointer',
-                                            color: item.color,
-                                            fontSize: '14px',
-                                            fontWeight: '500',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '10px',
-                                            transition: 'all 0.1s ease',
-                                            backgroundColor: 'transparent'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.backgroundColor = item.color === '#f23f42' || item.color === '#ed4245'
-                                                ? 'rgba(237, 66, 69, 0.15)'
-                                                : 'rgba(88, 101, 242, 0.1)';
-                                            e.currentTarget.style.paddingLeft = '16px';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.backgroundColor = 'transparent';
-                                            e.currentTarget.style.paddingLeft = '12px';
-                                        }}
-                                    >
-                                        <span style={{ fontSize: '16px', width: '20px', textAlign: 'center' }}>
-                                            {item.icon}
-                                        </span>
-                                        <span style={{ flex: 1 }}>{item.label}</span>
-                                    </div>
-                                    {item.divider && (
-                                        <div style={{
-                                            height: '1px',
-                                            backgroundColor: '#2b2d31',
-                                            margin: '4px 8px'
-                                        }} />
-                                    )}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                    );
-                })(),
-                document.body
-            )}
-
-            {/* 🔥 Server Delete Confirmation Modal */}
-            {deleteServerModal?.isOpen && (
-                <ConfirmModal
-                    isOpen={deleteServerModal.isOpen}
-                    onClose={() => setDeleteServerModal(null)}
-                    onConfirm={async () => {
-                        const serverId = deleteServerModal.server.id;
-                        const serverName = deleteServerModal.server.name;
-
-                        try {
-                            const response = await fetchWithAuth(`${apiUrl}/servers/${serverId}/delete/`, {
-                                method: 'DELETE'
-                            });
-
-                            if (response.ok) {
-                                toast.success(`"${serverName}" sunucusu başarıyla silindi!`, 5000);
-
-                                // Ana sayfaya dön
-                                setSelectedServerId('home');
-                                onWelcomeClick();
-
-                                // WebSocket sunucu listesini otomatik güncelleyecek
-                            } else {
-                                const error = await response.json();
-                                console.error('❌ Sunucu silinirken hata:', error);
-                                toast.error(`Hata: ${error.error || 'Sunucu silinirken bir hata oluştu'}`);
-                            }
-                        } catch (error) {
-                            console.error('❌ Sunucu silme hatası:', error);
-                            toast.error('Sunucu silinirken bir hata oluştu. Lütfen tekrar deneyin.');
-                        }
-                    }}
-                    title="⚠️ Sunucuyu Sil"
-                    message={`"${deleteServerModal.server.name}" sunucusunu KALİCİ OLARAK silmek üzeresiniz!`}
-                    confirmText="Sunucuyu Sil"
-                    cancelText="İptal"
-                    type="danger"
-                    requireTextConfirmation={true}
-                    confirmationText={deleteServerModal.server.name}
-                    inputPlaceholder={`Onaylamak için "${deleteServerModal.server.name}" yazın...`}
-                    dangerDetails={[
-                        'Sunucudaki TÜM kanallar silinecek',
-                        'Sunucudaki TÜM mesajlar silinecek',
-                        'TÜM üyeler atılacak',
-                        'Tüm roller ve ayarlar silinecek'
-                    ]}
-                />
-            )}
-
-            {/* 🔥 Server Leave Confirmation Modal */}
-            {leaveServerModal?.isOpen && (
-                <ConfirmModal
-                    isOpen={leaveServerModal.isOpen}
-                    onClose={() => setLeaveServerModal(null)}
-                    onConfirm={async () => {
-                        await executeLeaveServer(leaveServerModal.server.id);
-                    }}
-                    title="🚪 Sunucudan Ayrıl"
-                    message={`"${leaveServerModal.server.name}" sunucusundan ayrılmak istediğinize emin misiniz?`}
-                    confirmText="Ayrıl"
-                    cancelText="Vazgeç"
-                    type="warning"
-                    dangerDetails={[
-                        'Sunucudaki mesajlarınız silinmeyecek',
-                        'Tekrar katılmak için davet almanız gerekecek',
-                        'Sunucuyla ilgili tüm bildirimler duracak'
-                    ]}
-                />
-            )}
-
-            {/* 🆕 SUNUCUYA DAVET MODAL - Sunucu Seçimi */}
-            <InviteToServerModal inviteToServerModal={inviteToServerModal} servers={servers} onSendInvite={handleSendServerInvite} onClose={() => setInviteToServerModal(null)} />
-
-            {/* Channel Settings Modal */}
-            {showChannelSettings && selectedRoom && (() => {
-                // Sunucunun rollerini bul
-                const currentServer = servers?.find(s => s.id === selectedRoom.server_id);
-                const serverRoles = currentServer?.roles || [];
-
-                return (
-                    <ChannelSettingsModal
-                        room={selectedRoom}
-                        serverId={selectedRoom.server_id || selectedServerId}
-                        serverRoles={serverRoles}
-                        onClose={() => {
-                            setShowChannelSettings(false);
-                            setSelectedRoom(null);
-                        }}
-                        onUpdate={(updatedRoom) => {
-                            setShowChannelSettings(false);
-                            setSelectedRoom(null);
-                        }}
-                        fetchWithAuth={fetchWithAuth}
-                        apiBaseUrl={apiBaseUrl}
-                    />
-                );
-            })()}
-        </div >
+            {/* All Modals & Context Menus */}
+            <RoomListModals
+                showDiscovery={showDiscovery} setShowDiscovery={setShowDiscovery}
+                publicServers={publicServers} handleJoinServer={handleJoinServer} handleJoinViaCode={handleJoinViaCode}
+                showInviteModal={showInviteModal} setShowInviteModal={setShowInviteModal}
+                inviteModalServer={inviteModalServer} setInviteModalServer={setInviteModalServer}
+                fetchWithAuth={fetchWithAuth} apiUrl={apiUrl} apiBaseUrl={apiBaseUrl} currentUsername={currentUsername}
+                showSavedMessages={showSavedMessages} setShowSavedMessages={setShowSavedMessages}
+                showScheduledMessages={showScheduledMessages} setShowScheduledMessages={setShowScheduledMessages}
+                actualCurrentRoom={actualCurrentRoom} currentConversationId={currentConversationId}
+                showWebhooks={showWebhooks} setShowWebhooks={setShowWebhooks} selectedServerId={selectedServerId}
+                showModTools={showModTools} setShowModTools={setShowModTools}
+                showQuickActions={showQuickActions} setShowQuickActions={setShowQuickActions}
+                setShowAuditLogs={setShowAuditLogs} setShowReports={setShowReports}
+                setShowVanityURL={setShowVanityURL} setShowAutoResponder={setShowAutoResponder}
+                showAuditLogs={showAuditLogs} showReports={showReports}
+                showVanityURL={showVanityURL} showAutoResponder={showAutoResponder}
+                serverContextMenu={serverContextMenu} setServerContextMenu={setServerContextMenu}
+                handleLeaveServer={handleLeaveServer} onOpenServerSettings={onOpenServerSettings}
+                handleMoveServer={handleMoveServer} handleCopyServerInvite={handleCopyServerInvite}
+                handleChangeServerIcon={handleChangeServerIcon} handleChangeServerPrivacy={handleChangeServerPrivacy}
+                mutedServers={mutedServers} setMutedServers={setMutedServers} servers={servers}
+                deleteServerModal={deleteServerModal} setDeleteServerModal={setDeleteServerModal}
+                leaveServerModal={leaveServerModal} setLeaveServerModal={setLeaveServerModal}
+                executeLeaveServer={executeLeaveServer}
+                setSelectedServerId={setSelectedServerId} onWelcomeClick={onWelcomeClick}
+                dmContextMenu={dmContextMenu} setDmContextMenu={setDmContextMenu}
+                getAvatarUrl={getAvatarUrl} onlineUsers={onlineUsers} onDMSelect={onDMSelect}
+                handleViewProfile={handleViewProfile} handleInviteToServer={handleInviteToServer}
+                handlePinConversation={handlePinConversation} handleMuteUser={handleMuteUser}
+                handleHideDM={handleHideDM} handleClearDM={handleClearDM} handleBlockUser={handleBlockUser}
+                inviteToServerModal={inviteToServerModal} setInviteToServerModal={setInviteToServerModal}
+                handleSendServerInvite={handleSendServerInvite}
+                showChannelSettings={showChannelSettings} setShowChannelSettings={setShowChannelSettings}
+                selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}
+            />
+        </div>
     );
 };
 
-// ✨ PERFORMANS İÇİN MEMO EKLENDİ
 export default React.memo(RoomList);

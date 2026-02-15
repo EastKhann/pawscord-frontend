@@ -94,7 +94,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     ) : (
                                         endpoints.slice(0, 10).map((endpoint, idx) => (
                                             <div key={idx} style={styles.endpointItem} onClick={() => setSelectedEndpoint(endpoint)}>
-                                                <div style={styles.endpointRank}>#{idx + 1}</div>
+                                                <div style={styles.endpointRank}>{idx + 1}</div>
                                                 <div style={styles.endpointDetails}>
                                                     <div style={styles.endpointPath}>
                                                         <span style={styles.endpointMethod}>{endpoint.method}</span>

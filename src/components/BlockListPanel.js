@@ -205,7 +205,7 @@ const BlockListPanel = ({ onClose }) => {
                                     <div className="user-info">
                                         <div className="user-name">
                                             <span className="username">{user.username}</span>
-                                            <span className="user-tag">#{user.discriminator || '0000'}</span>
+                                            <span className="user-tag">{user.discriminator || '0000'}</span>
                                         </div>
                                         {user.email && (
                                             <span className="user-email">{user.email}</span>

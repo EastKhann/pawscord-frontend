@@ -71,7 +71,7 @@ const TicketConfig = ({ config, setConfig, categories, roles, channels, updateCo
         >
           <option value="">Kanal Seçin (Opsiyonel)</option>
           {channels.map((channel) => (
-            <option key={channel.id} value={channel.id}># {channel.name}</option>
+            <option key={channel.id} value={channel.id}>{channel.name}</option>
           ))}
         </select>
       </div>

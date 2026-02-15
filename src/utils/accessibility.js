@@ -339,7 +339,7 @@ export const createFocusTrap = (container, options = {}) => {
  */
 export const createSkipLink = (targetId) => {
     const skipLink = document.createElement('a');
-    skipLink.href = `#${targetId}`;
+    skipLink.href = `${targetId}`;
     skipLink.className = 'skip-link';
     skipLink.textContent = 'Ana içeriğe geç';
 

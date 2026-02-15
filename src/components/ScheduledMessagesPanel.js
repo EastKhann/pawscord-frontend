@@ -255,7 +255,7 @@ const ScheduledMessagesPanel = ({ apiBaseUrl, roomSlug, onClose }) => {
                                 <div key={msg.id} className={`scheduled-message-card ${getStatusColor(msg.scheduled_time)}`}>
                                     <div className="message-header">
                                         <div className="message-info">
-                                            <span className="room-badge"># {msg.room_slug}</span>
+                                            <span className="room-badge">{msg.room_slug}</span>
                                             <span className="time-badge">{formatDateTime(msg.scheduled_time)}</span>
                                         </div>
                                         <button 

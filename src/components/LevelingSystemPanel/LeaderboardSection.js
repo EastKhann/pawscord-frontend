@@ -14,7 +14,7 @@ const LeaderboardSection = ({ leaderboard, resetUserXP }) => (
 
           return (
             <div key={user.user_id} className="leaderboard-item">
-              <span className="rank" style={{ color: getRankColor(rank) }}>#{rank}</span>
+              <span className="rank" style={{ color: getRankColor(rank) }}>{rank}</span>
               <img className="user-avatar" src={user.avatar || `https://ui-avatars.com/api/?name=${user.username}`} alt={user.username} />
               <div className="user-info">
                 <span className="username">{user.username}</span>

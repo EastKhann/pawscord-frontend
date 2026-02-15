@@ -313,7 +313,7 @@ const ReactionRolesPanel = ({ serverId, onClose }) => {
                   <div className="meta-item">
                     <span className="meta-label">📢 Kanal:</span>
                     <span className="meta-value">
-                      {rr.channel_name ? `#${rr.channel_name}` : 'Belirtilmedi'}
+                      {rr.channel_name ? `${rr.channel_name}` : 'Belirtilmedi'}
                     </span>
                   </div>
                   <div className="meta-item">

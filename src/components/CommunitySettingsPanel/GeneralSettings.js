@@ -18,14 +18,14 @@ const GeneralSettings = ({ settings, setSettings, channels }) => (
         <label><FaGavel /> Kurallar Kanal{'ı'}</label>
         <select value={settings.rules_channel_id} onChange={(e) => setSettings(prev => ({ ...prev, rules_channel_id: e.target.value }))}>
           <option value="">Se{'ç'}in...</option>
-          {channels.map(ch => <option key={ch.id} value={ch.id}>#{ch.name}</option>)}
+          {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
         </select>
       </div>
       <div className="form-group">
         <label><FaBullhorn /> G{'ü'}ncellemeler Kanal{'ı'}</label>
         <select value={settings.public_updates_channel_id} onChange={(e) => setSettings(prev => ({ ...prev, public_updates_channel_id: e.target.value }))}>
           <option value="">Se{'ç'}in...</option>
-          {channels.map(ch => <option key={ch.id} value={ch.id}>#{ch.name}</option>)}
+          {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
         </select>
       </div>
     </div>

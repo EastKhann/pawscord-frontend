@@ -313,7 +313,7 @@ const ChannelAnalyticsPanel = ({ channelId, channelName, onClose, fetchWithAuth,
                                 <div className="contributors-list">
                                     {analytics.top_contributors.map((user, i) => (
                                         <div key={i} className="contributor-item">
-                                            <span className="rank">#{i + 1}</span>
+                                            <span className="rank">{i + 1}</span>
                                             <div className="contributor-avatar">
                                                 {user.username.charAt(0).toUpperCase()}
                                             </div>

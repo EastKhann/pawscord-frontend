@@ -178,7 +178,7 @@ const OverviewTab = ({ stats }) => (
                 <div style={styles.list}>
                     {stats.top_pages.slice(0, 10).map((page, index) => (
                         <div key={index} style={styles.listItem}>
-                            <span>#{index + 1} {page?.path || 'Unknown'}</span>
+                            <span>{index + 1} {page?.path || 'Unknown'}</span>
                             <span style={{ color: '#e91e63', fontWeight: 'bold' }}>{(page?.views || 0).toLocaleString()} ziyaret</span>
                         </div>
                     ))}

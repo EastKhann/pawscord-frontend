@@ -62,7 +62,7 @@ const ServerDetailModal = ({ selectedServer, setSelectedServer }) => {
                                                     display: 'flex', justifyContent: 'space-between', padding: '8px 12px',
                                                     borderBottom: '1px solid #2a2a2e', fontSize: '12px'
                                                 }}>
-                                                    <span style={{ color: '#fff' }}>#{channel.name}</span>
+                                                    <span style={{ color: '#fff' }}>{channel.name}</span>
                                                     <span style={styles.badge('#5865f2')}>{channel.type}</span>
                                                 </div>
                                             ))}

@@ -312,7 +312,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
                         )}
                         {log.channel && (
                           <span className="log-channel">
-                            📢 #{log.channel.name}
+                            📢 {log.channel.name}
                           </span>
                         )}
                         {log.target_user && (

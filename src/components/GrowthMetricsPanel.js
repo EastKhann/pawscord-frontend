@@ -153,7 +153,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                     <div style={styles.contributorsList}>
                                         {metrics.top_contributors.slice(0, 10).map((user, idx) => (
                                             <div key={idx} style={styles.contributorCard}>
-                                                <div style={styles.contributorRank}>#{idx + 1}</div>
+                                                <div style={styles.contributorRank}>{idx + 1}</div>
                                                 <div style={styles.contributorInfo}>
                                                     <div style={styles.contributorName}>{user.username}</div>
                                                     <div style={styles.contributorStat}>{formatNumber(user.message_count)} messages</div>

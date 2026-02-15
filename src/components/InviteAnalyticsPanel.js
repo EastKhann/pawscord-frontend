@@ -112,7 +112,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
                                 <div style={styles.invitesList}>
                                     {(analytics.top_invites || []).map((invite, idx) => (
                                         <div key={idx} style={styles.inviteCard}>
-                                            <div style={styles.inviteRank}>#{idx + 1}</div>
+                                            <div style={styles.inviteRank}>{idx + 1}</div>
                                             <div style={styles.inviteInfo}>
                                                 <div style={styles.inviteCode}>{invite.code}</div>
                                                 <div style={styles.inviteMeta}>

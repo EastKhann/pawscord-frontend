@@ -207,22 +207,30 @@ const AppContent = () => {
         return [...ordered, ...unordered];
     }, [categories, serverOrder]);
 
-    const chatTitle = useMemo(() => {
-        if (activeChat.type === 'room') {
-            if (categories) {
-                for (const server of categories) {
-                    if (server.categories) {
-                        for (const cat of server.categories) {
-                            const foundRoom = cat.rooms?.find(r => r.slug === activeChat.id);
-                            if (foundRoom) return String(foundRoom.name);
-                        }
-                    }
+    // Resolve slug -> display name from categories
+    const resolveRoomName = useCallback((slug) => {
+        if (!slug || !categories) return slug || '';
+        for (const server of categories) {
+            if (server.categories) {
+                for (const cat of server.categories) {
+                    const foundRoom = cat.rooms?.find(r => r.slug === slug);
+                    if (foundRoom) return String(foundRoom.name);
                 }
             }
-            return String(activeChat.id);
-        } else if (activeChat.type === 'dm') return `@ ${String(activeChat.targetUser || 'DM')}`;
+        }
+        // Fallback: strip server-id suffix from slug (e.g., "genel-6-7143" -> "genel")
+        return String(slug).replace(/-\d+-\d+$/, '');
+    }, [categories]);
+
+    const chatTitle = useMemo(() => {
+        if (activeChat.type === 'room') return resolveRoomName(activeChat.id);
+        else if (activeChat.type === 'dm') return String(activeChat.targetUser || 'DM');
         return '';
-    }, [activeChat, categories]);
+    }, [activeChat, categories, resolveRoomName]);
+
+    const voiceRoomDisplayName = useMemo(() => {
+        return resolveRoomName(currentVoiceRoom);
+    }, [currentVoiceRoom, resolveRoomName]);
 
     const activeRoomType = useMemo(() => {
         if (activeChat.type !== 'room' || !categories) return 'text';
@@ -330,7 +338,7 @@ const AppContent = () => {
 
     const navigateToPath = useCallback((hashPath) => {
         if (!hashPath) return;
-        window.location.hash = hashPath.startsWith('#/') ? hashPath : `#${hashPath.startsWith('/') ? hashPath : `/${hashPath}`}`;
+        window.location.hash = hashPath.startsWith('#/') ? hashPath : `${hashPath.startsWith('/') ? hashPath : `/${hashPath}`}`;
         if (isMobile) setIsRightSidebarVisible(false);
     }, [isMobile]);
 
@@ -416,7 +424,7 @@ const AppContent = () => {
         API_BASE_URL, handleDMClick, isInVoice,
         setServerOrder, serverOrder,
         setActiveChat, setCurrentUserProfile, setCategories,
-        setConversations, setAllUsers, setIsInitialDataLoaded: () => {},
+        setConversations, setAllUsers, setIsInitialDataLoaded: () => { },
         setAuthError, login, logout, setViewingProfile,
         ABSOLUTE_HOST_URL, ROOM_LIST_URL,
     });
@@ -571,7 +579,7 @@ const AppContent = () => {
                                 isPttActive={isPttActive} apiBaseUrl={ABSOLUTE_HOST_URL}
                                 fetchWithAuth={fetchWithAuth}
                                 onHideConversation={messageHandlers.handleHideConversation}
-                                handleDrop={() => {}} dropTarget={dropTarget} setDropTarget={setDropTarget}
+                                handleDrop={() => { }} dropTarget={dropTarget} setDropTarget={setDropTarget}
                                 isDragging={fileUpload.isDragging}
                                 onOpenCreateGroup={() => openModal('groupModal')}
                                 toggleMute={toggleMute} toggleDeafened={toggleDeafened}
@@ -627,7 +635,7 @@ const AppContent = () => {
                         </div>
                     ) : activeRoomType === 'kanban' ? (
                         <div style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-                            <div style={styles.chatHeader}><h2># {chatTitle} (Pano)</h2></div>
+                            <div style={styles.chatHeader}><h2>{chatTitle} (Pano)</h2></div>
                             <Suspense fallback={<LoadingSpinner size="medium" text="Pano yükleniyor..." />}>
                                 <KanbanBoard roomSlug={activeChat.id} apiBaseUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />
                             </Suspense>
@@ -637,15 +645,15 @@ const AppContent = () => {
                             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     {isMobile && <button onClick={() => setActiveChat('welcome', 'welcome')} style={styles.mobileMenuButton}>←</button>}
-                                    <h2 style={{ margin: 0, fontSize: '1.2em' }}>🔊 {currentVoiceRoom}</h2>
+                                    <h2 style={{ margin: 0, fontSize: '1.2em' }}>🔊 {voiceRoomDisplayName}</h2>
                                 </div>
                                 <button onClick={() => { leaveChannel(); setActiveChat('welcome', 'welcome'); }}
                                     style={{ background: '#ed4245', color: 'white', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontWeight: 'bold' }}>
                                     Bağlantıyı Kes
                                 </button>
                             </div>
-                            <VoiceChatPanel roomName={currentVoiceRoom} onClose={() => { leaveChannel(); setActiveChat('welcome', 'welcome'); }}
-                                isMinimized={false} onToggleMinimize={() => {}}
+                            <VoiceChatPanel roomName={voiceRoomDisplayName} onClose={() => { leaveChannel(); setActiveChat('welcome', 'welcome'); }}
+                                isMinimized={false} onToggleMinimize={() => { }} showHeader={false}
                                 getRealUserAvatar={getRealUserAvatar} allUsers={allUsers} currentUserProfile={currentUserProfile} />
                         </div>
                     ) : (
@@ -661,7 +669,7 @@ const AppContent = () => {
                                         <button onClick={() => { setActiveChat('welcome', 'welcome'); setIsLeftSidebarVisible(false); setIsRightSidebarVisible(false); }} style={{ ...styles.mobileMenuButton, fontSize: '1.2em' }}>←</button>
                                     )}
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: isMobile ? '1em' : '1.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {activeChat.type === 'dm' ? `@ ${String(activeChat.targetUser || 'DM')}` : `# ${String(chatTitle)}`}
+                                        {activeChat.type === 'dm' ? `@ ${chatTitle}` : chatTitle}
                                     </h2>
                                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>{isConnected ? '✓' : '✗'}</div>
                                 </div>
@@ -711,7 +719,7 @@ const AppContent = () => {
                                                     allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
                                                     onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
                                                     onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                                                    onToggleReaction={() => {}} onStartForward={setForwardingMessage}
+                                                    onToggleReaction={() => { }} onStartForward={setForwardingMessage}
                                                     isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
                                                     onToggleSelection={(id) => { const s = new Set(selectedMessages); if (s.has(id)) s.delete(id); else s.add(id); setSelectedMessages(s); }}
                                                     onScrollToMessage={messageHandlers.scrollToMessage}
@@ -757,7 +765,7 @@ const AppContent = () => {
                                                                 allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
                                                                 onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
                                                                 onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                                                                onToggleReaction={() => {}} onStartForward={setForwardingMessage}
+                                                                onToggleReaction={() => { }} onStartForward={setForwardingMessage}
                                                                 isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
                                                                 onToggleSelection={(id) => { const s = new Set(selectedMessages); if (s.has(id)) s.delete(id); else s.add(id); setSelectedMessages(s); }}
                                                                 onScrollToMessage={messageHandlers.scrollToMessage}
@@ -800,7 +808,7 @@ const AppContent = () => {
                                 <Suspense fallback={<div style={{ padding: '12px', color: '#72767d' }}>Yükleniyor...</div>}>
                                     <MessageInput onSendMessage={messageHandlers.sendMessage} onFileUpload={fileUpload.uploadFile}
                                         onShowCodeSnippet={() => openModal('snippetModal')}
-                                        placeholder={chatTitle ? `${activeChat.type === 'dm' ? chatTitle : `# ${chatTitle}`} kanalına mesaj gönder` : 'Mesaj yaz...'}
+                                        placeholder={chatTitle ? `${chatTitle} kanalına mesaj gönder` : 'Mesaj yaz...'}
                                         disabled={fileUpload.isUploading} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL}
                                         activeChat={activeChat} pendingFilesFromDrop={fileUpload.pendingFilesFromDrop}
                                         onClearPendingFiles={() => fileUpload.setPendingFilesFromDrop([])} />
@@ -862,7 +870,7 @@ const AppContent = () => {
                 )}
 
                 {isInVoice && showVoiceIsland && activeChat.type !== 'voice' && (
-                    <VoiceChatPanel roomName={currentVoiceRoom}
+                    <VoiceChatPanel roomName={voiceRoomDisplayName}
                         onClose={() => setShowVoiceIsland(false)}
                         isMinimized={isVoicePanelMinimized}
                         onToggleMinimize={() => setIsVoicePanelMinimized(!isVoicePanelMinimized)}

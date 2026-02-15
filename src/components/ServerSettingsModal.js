@@ -23,7 +23,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
     const [activeTab, setActiveTab] = useState('roles');
     const isOwner = server.my_permissions?.is_owner || server.owner_username === currentUsername;
 
-    // Roles â€” shared between ServerMembers and StatsTab
+    // Roles — shared between ServerMembers and StatsTab
     const [roles, setRoles] = useState([]);
 
     // Load roles for ServerMembers and StatsTab
@@ -76,7 +76,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                 {/* DISCORD-STYLE LAYOUT: Sidebar + Content */}
                 <div style={styles.layoutContainer}>
 
-                    {/* â•â•â•â•â• LEFT SIDEBAR â•â•â•â•â• */}
+                    {/* ═════ LEFT SIDEBAR ═════ */}
                     <div style={styles.sidebar}>
                         <div style={styles.sidebarHeader}>
                             <div style={styles.sidebarServerIcon}>
@@ -88,14 +88,14 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                             </div>
                             <div style={styles.sidebarServerInfo}>
                                 <span style={styles.sidebarServerName}>{server.name}</span>
-                                <span style={styles.sidebarServerSub}>Sunucu AyarlarÄ±</span>
+                                <span style={styles.sidebarServerSub}>Sunucu Ayarları</span>
                             </div>
                         </div>
 
                         <div className="ss-sidebar" style={styles.sidebarNav}>
-                            {/* YÃ¶netim Section */}
+                            {/* Yönetim Section */}
                             <div style={styles.navSection}>
-                                <span style={styles.navSectionLabel}>YÃ–NETÄ°M</span>
+                                <span style={styles.navSectionLabel}>YÖNETİM</span>
                                 <button className={`ss-nav-item${activeTab === 'management' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'management' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('management')}>
                                     <FaCog style={styles.navIcon} /> Genel Ayarlar
                                 </button>
@@ -103,23 +103,23 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                                     <FaShieldAlt style={styles.navIcon} /> Roller
                                 </button>
                                 <button className={`ss-nav-item${activeTab === 'members' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'members' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('members')}>
-                                    <FaUsers style={styles.navIcon} /> Ãœyeler
+                                    <FaUsers style={styles.navIcon} /> Üyeler
                                 </button>
                             </div>
 
                             <div style={styles.navDivider} />
 
-                            {/* Ã–zellikler Section */}
+                            {/* Özellikler Section */}
                             <div style={styles.navSection}>
-                                <span style={styles.navSectionLabel}>Ã–ZELLÄ°KLER</span>
+                                <span style={styles.navSectionLabel}>ÖZELLİKLER</span>
                                 <button className={`ss-nav-item${activeTab === 'autoresponders' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'autoresponders' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('autoresponders')}>
-                                    <FaRobot style={styles.navIcon} /> Otomatik YanÄ±tlar
+                                    <FaRobot style={styles.navIcon} /> Otomatik Yanıtlar
                                 </button>
                                 <button className={`ss-nav-item${activeTab === 'vanity' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'vanity' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('vanity')}>
-                                    <FaLink style={styles.navIcon} /> Ã–zel URL
+                                    <FaLink style={styles.navIcon} /> Özel URL
                                 </button>
                                 <button className={`ss-nav-item${activeTab === 'welcome' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'welcome' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('welcome')}>
-                                    <FaHandPaper style={styles.navIcon} /> HoÅŸ Geldin MesajÄ±
+                                    <FaHandPaper style={styles.navIcon} /> Hoş Geldin Mesajı
                                 </button>
                                 <button className={`ss-nav-item${activeTab === 'systembot' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'systembot' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('systembot')}>
                                     <FaRobot style={styles.navIcon} /> Sistem Botu
@@ -128,14 +128,14 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                             <div style={styles.navDivider} />
 
-                            {/* GÃ¼venlik Section */}
+                            {/* Güvenlik Section */}
                             <div style={styles.navSection}>
-                                <span style={styles.navSectionLabel}>GÃœVENLÄ°K</span>
+                                <span style={styles.navSectionLabel}>GÜVENLİK</span>
                                 <button className={`ss-nav-item${activeTab === 'moderation' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'moderation' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('moderation')}>
                                     <FaGavel style={styles.navIcon} /> Moderasyon
                                 </button>
                                 <button className={`ss-nav-item${activeTab === 'bans' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'bans' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('bans')}>
-                                    <FaBan style={styles.navIcon} /> Ban YÃ¶netimi
+                                    <FaBan style={styles.navIcon} /> Ban Yönetimi
                                 </button>
                                 <button className={`ss-nav-item${activeTab === 'auditlog' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'auditlog' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('auditlog')}>
                                     <FaHistory style={styles.navIcon} /> Audit Log
@@ -146,30 +146,30 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                             {/* Analitik Section */}
                             <div style={styles.navSection}>
-                                <span style={styles.navSectionLabel}>ANALÄ°TÄ°K</span>
+                                <span style={styles.navSectionLabel}>ANALİTİK</span>
                                 <button className={`ss-nav-item${activeTab === 'stats' ? ' ss-nav-active' : ''}`} style={{ ...styles.navItem, ...(activeTab === 'stats' ? styles.navItemActive : {}) }} onClick={() => setActiveTab('stats')}>
-                                    <FaChartBar style={styles.navIcon} /> Ä°statistikler
+                                    <FaChartBar style={styles.navIcon} /> İstatistikler
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    {/* â•â•â•â•â• RIGHT CONTENT â•â•â•â•â• */}
+                    {/* ═════ RIGHT CONTENT ═════ */}
                     <div style={styles.mainContent}>
                         {/* Content Header */}
                         <div style={styles.contentHeader}>
                             <h2 style={styles.contentTitle}>
-                                {activeTab === 'roles' && 'ðŸ›¡ï¸ Roller'}
-                                {activeTab === 'members' && 'ðŸ‘¥ Ãœyeler'}
-                                {activeTab === 'management' && 'âš™ï¸ Genel Ayarlar'}
-                                {activeTab === 'autoresponders' && 'ðŸ¤– Otomatik YanÄ±tlar'}
-                                {activeTab === 'vanity' && 'ðŸ”— Ã–zel Davet URL'}
-                                {activeTab === 'welcome' && 'ðŸ‘‹ HoÅŸ Geldin MesajÄ±'}
-                                {activeTab === 'moderation' && 'ðŸ›¡ï¸ Moderasyon'}
-                                {activeTab === 'bans' && 'ðŸš« Ban YÃ¶netimi'}
-                                {activeTab === 'auditlog' && 'ðŸ“œ Audit Log'}
-                                {activeTab === 'stats' && 'ðŸ“Š Sunucu Ä°statistikleri'}
-                                {activeTab === 'systembot' && 'ðŸ¤– Sistem Botu AyarlarÄ±'}
+                                {activeTab === 'roles' && '🛡️ Roller'}
+                                {activeTab === 'members' && '👥 Üyeler'}
+                                {activeTab === 'management' && '⚙️ Genel Ayarlar'}
+                                {activeTab === 'autoresponders' && '🤖 Otomatik Yanıtlar'}
+                                {activeTab === 'vanity' && '🔗 Özel Davet URL'}
+                                {activeTab === 'welcome' && '👋 Hoş Geldin Mesajı'}
+                                {activeTab === 'moderation' && '🛡️ Moderasyon'}
+                                {activeTab === 'bans' && '🚫 Ban Yönetimi'}
+                                {activeTab === 'auditlog' && '📜 Audit Log'}
+                                {activeTab === 'stats' && '📊 Sunucu İstatistikleri'}
+                                {activeTab === 'systembot' && '🤖 Sistem Botu Ayarları'}
                             </h2>
                             <button className="ss-close-btn" onClick={onClose} style={styles.closeBtn}><FaTimes size={20} /></button>
                         </div>
@@ -197,9 +197,9 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                             {activeTab === 'autoresponders' && (
                                 <div>
-                                    <h3 style={styles.sectionTitle}>ðŸ¤– Otomatik YanÄ±tlar</h3>
+                                    <h3 style={styles.sectionTitle}>🤖 Otomatik Yanıtlar</h3>
                                     <p style={{ color: '#b9bbbe', marginBottom: '20px' }}>
-                                        Belirli anahtar kelimeler iÃ§in otomatik yanÄ±tlar oluÅŸturun.
+                                        Belirli anahtar kelimeler için otomatik yanıtlar oluşturun.
                                     </p>
                                     <AutoResponderManager serverId={server.id} fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} embedded={true} />
                                 </div>
@@ -207,9 +207,9 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                             {activeTab === 'vanity' && (
                                 <div>
-                                    <h3 style={styles.sectionTitle}>ðŸ”— Ã–zel Davet URL'i</h3>
+                                    <h3 style={styles.sectionTitle}>🔗 Özel Davet URL'i</h3>
                                     <p style={{ color: '#b9bbbe', marginBottom: '20px' }}>
-                                        Sunucunuz iÃ§in hatÄ±rlanmasÄ± kolay Ã¶zel bir URL oluÅŸturun.
+                                        Sunucunuz için hatırlanması kolay özel bir URL oluşturun.
                                     </p>
                                     <VanityURLManager serverId={server.id} fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} embedded={true} />
                                 </div>
@@ -217,9 +217,9 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
 
                             {activeTab === 'welcome' && (
                                 <div>
-                                    <h3 style={styles.sectionTitle}>ðŸ‘‹ HoÅŸ Geldin MesajÄ±</h3>
+                                    <h3 style={styles.sectionTitle}>👋 Hoş Geldin Mesajı</h3>
                                     <p style={{ color: '#b9bbbe', marginBottom: '20px' }}>
-                                        Yeni Ã¼yeler iÃ§in Ã¶zel hoÅŸ geldin mesajÄ± oluÅŸturun.
+                                        Yeni üyeler için özel hoş geldin mesajı oluşturun.
                                     </p>
                                     <WelcomeTemplateEditor serverId={server.id} fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />
                                 </div>

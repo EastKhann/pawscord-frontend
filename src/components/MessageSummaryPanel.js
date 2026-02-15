@@ -264,7 +264,7 @@ const MessageSummaryPanel = ({ channelId, onClose, fetchWithAuth, apiBaseUrl }) 
                                         <FaFileAlt />
                                     </div>
                                     <div className="history-info">
-                                        <span className="history-channel">#{summary.channel}</span>
+                                        <span className="history-channel">{summary.channel}</span>
                                         <span className="history-meta">
                                             {summary.message_count} messages • {summary.time_range}
                                         </span>

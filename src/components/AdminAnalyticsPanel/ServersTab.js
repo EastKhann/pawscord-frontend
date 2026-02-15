@@ -16,7 +16,7 @@ const ServersTab = ({ stats }) => (
                 <div style={styles.list}>
                     {stats.top_servers.map((server, index) => (
                         <div key={index} style={styles.listItem}>
-                            <span>#{index + 1} {server.name}</span>
+                            <span>{index + 1} {server.name}</span>
                             <span>{server.member_count} üye</span>
                         </div>
                     ))}

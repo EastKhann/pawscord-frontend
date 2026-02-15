@@ -381,7 +381,7 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
                   {index === 0 && <i className="fas fa-crown gold"></i>}
                   {index === 1 && <i className="fas fa-medal silver"></i>}
                   {index === 2 && <i className="fas fa-medal bronze"></i>}
-                  {index > 2 && <span>#{index + 1}</span>}
+                  {index > 2 && <span>{index + 1}</span>}
                 </div>
                 <div className="user-info">
                   <div className="user-avatar">

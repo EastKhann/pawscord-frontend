@@ -226,7 +226,7 @@ const MessageSearchPanel = ({ serverId, channelId, onClose, onSelectMessage }) =
                                                 <span className="message-date">{formatDate(message.created_at)}</span>
                                             </div>
                                             {message.channel && (
-                                                <span className="channel-tag">#{message.channel.name}</span>
+                                                <span className="channel-tag">{message.channel.name}</span>
                                             )}
                                         </div>
                                         <div className="message-content">

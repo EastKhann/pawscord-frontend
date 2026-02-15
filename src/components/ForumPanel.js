@@ -253,7 +253,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                             <button className="back-btn" onClick={() => setSelectedForum(null)}>
                                 ← Geri
                             </button>
-                            <h3># {selectedForum.name}</h3>
+                            <h3>{selectedForum.name}</h3>
                             <button 
                                 className="new-post-btn"
                                 onClick={() => setShowCreatePost(!showCreatePost)}

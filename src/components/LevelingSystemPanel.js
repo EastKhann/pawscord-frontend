@@ -46,7 +46,7 @@ const LevelingSystemPanel = ({ serverId, onClose }) => {
                 <label>Duyuru Kanal{'ı'}</label>
                 <select value={config.announce_channel_id} onChange={e => updateConfig('announce_channel_id', e.target.value)} disabled={!config.enabled}>
                   <option value="">Se{'ç'}iniz (opsiyonel)</option>
-                  {channels.map(ch => <option key={ch.id} value={ch.id}>#{ch.name}</option>)}
+                  {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                 </select>
               </div>
               <div className="form-group full-width">

@@ -88,7 +88,7 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                                     <div style={styles.list}>
                                         {analytics.popular_channels?.slice(0, 5).map((channel, i) => (
                                             <div key={i} style={styles.listItem}>
-                                                <span style={styles.listRank}>#{i + 1}</span>
+                                                <span style={styles.listRank}>{i + 1}</span>
                                                 <span style={styles.listName}>{channel.name}</span>
                                                 <span style={styles.listValue}>{channel.messages} mesaj</span>
                                             </div>
@@ -104,7 +104,7 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                                     <div style={styles.list}>
                                         {analytics.active_users?.top_users?.slice(0, 5).map((user, i) => (
                                             <div key={i} style={styles.listItem}>
-                                                <span style={styles.listRank}>#{i + 1}</span>
+                                                <span style={styles.listRank}>{i + 1}</span>
                                                 <span style={styles.listName}>{user.username}</span>
                                                 <span style={styles.listValue}>{user.messages} mesaj</span>
                                             </div>

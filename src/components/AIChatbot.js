@@ -134,7 +134,7 @@ const AIChatbot = ({ channelId, channelName, onClose }) => {
                 <div className="header-left">
                     <span className="bot-badge">🤖 AI</span>
                     <h3>PawsCord Assistant</h3>
-                    {channelName && <span className="channel-tag">#{channelName}</span>}
+                    {channelName && <span className="channel-tag">{channelName}</span>}
                 </div>
                 <div className="header-actions">
                     <button onClick={getSummarization} disabled={isLoading} className="summary-btn">

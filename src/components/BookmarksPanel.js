@@ -112,7 +112,7 @@ const BookmarkCard = ({ bookmark, onRemove }) => {
                 <span style={styles.bookmarkTime}>
                     {new Date(bookmark.created_at).toLocaleDateString('tr-TR')}
                 </span>
-                <span style={styles.bookmarkChannel}>#{bookmark.channel_name}</span>
+                <span style={styles.bookmarkChannel}>{bookmark.channel_name}</span>
             </div>
         </div>
     );

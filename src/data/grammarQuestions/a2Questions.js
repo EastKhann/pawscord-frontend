@@ -1,0 +1,870 @@
+// A2 Level Grammar Questions
+
+const A2_QUESTIONS = [
+
+    // --- PAST SIMPLE (GEÇMİŞ ZAMAN) ---
+    {
+        id: 2001, level: 'A2', type: 'input',
+        question: "I _____ (go) to the cinema last night.",
+        answer: "went",
+        explanation: {
+            title: "Past Simple (Düzensiz Fiiller)",
+            rule: "Geçmiş zamanda (last night) olumlu cümle kurarken fiilin 2. hali kullanılır. 'Go' düzensiz bir fiildir.",
+            tips: "Go -> Went",
+            examples: ["I went to school.", "She went home."],
+            translation: "Dün gece sinemaya gittim."
+        }
+    },
+    {
+        id: 2002, level: 'A2', type: 'choice',
+        question: "We _____ play football yesterday.",
+        options: ["didn't", "don't", "weren't", "not"],
+        answer: "didn't",
+        explanation: {
+            title: "Past Simple (Olumsuzluk)",
+            rule: "Geçmiş zamanda fiil cümlelerinin olumsuzu 'did not' (didn't) ile yapılır. Fiil yalın hale döner.",
+            tips: "Did not + V1 (Yalın)",
+            examples: ["I didn't see him.", "They didn't come."],
+            translation: "Dün futbol oynamadık."
+        }
+    },
+    {
+        id: 2003, level: 'A2', type: 'choice',
+        question: "_____ you see the match last week?",
+        options: ["Do", "Were", "Did", "Are"],
+        answer: "Did",
+        explanation: {
+            title: "Past Simple (Soru)",
+            rule: "Geçmiş zamanda fiil cümlesi soru yapılırken 'Did' başa gelir.",
+            tips: "Did + Özne + V1 ?",
+            examples: ["Did you sleep?", "Did she call?"],
+            translation: "Geçen hafta maçı izledin mi?"
+        }
+    },
+    {
+        id: 2004, level: 'A2', type: 'choice',
+        question: "Where _____ you born?",
+        options: ["did", "was", "were", "are"],
+        answer: "were",
+        explanation: {
+            title: "Was / Were (Doğmak)",
+            rule: "'Born' (doğmak) fiili pasif yapıda kullanılır ve geçmiş zaman olduğu için 'was/were' alır. 'You' olduğu için 'were'.",
+            tips: "I was born | You were born",
+            examples: ["I was born in 1995."],
+            translation: "Nerede doğdun?"
+        }
+    },
+
+    // --- PAST CONTINUOUS (ŞİMDİKİ ZAMANIN HİKAYESİ) ---
+    {
+        id: 2005, level: 'A2', type: 'input',
+        question: "I _____ (sleep) when you called me.",
+        answer: "was sleeping",
+        explanation: {
+            title: "Past Continuous (Was/Were + -ing)",
+            rule: "Geçmişte belli bir anda devam eden eylemleri anlatır. 'When' (dığında) ile kısa eylem gelince, uzun eylem -ing alır.",
+            tips: "I/He/She/It -> was | You/We/They -> were",
+            examples: ["She was reading.", "They were running."],
+            translation: "Sen beni aradığında ben uyuyordum."
+        }
+    },
+    {
+        id: 2006, level: 'A2', type: 'choice',
+        question: "While my mother was cooking, I _____ TV.",
+        options: ["watch", "watched", "was watching", "am watching"],
+        answer: "was watching",
+        explanation: {
+            title: "Past Continuous (While)",
+            rule: "'While' (iken) bağlacı ile aynı anda yapılan iki uzun eylem anlatılabilir. İki taraf da 'was/were + -ing' olur.",
+            tips: "While + Uzun Eylem, Uzun Eylem",
+            examples: ["While I was studying, she was listening to music."],
+            translation: "Annem yemek yaparken ben TV izliyordum."
+        }
+    },
+
+    // --- COMPARATIVES (KARŞILAŞTIRMA) ---
+    {
+        id: 2007, level: 'A2', type: 'input',
+        question: "This box is _____ (heavy) than that one.",
+        answer: "heavier",
+        explanation: {
+            title: "Comparatives (-y ile bitenler)",
+            rule: "Sonu 'y' ile biten iki heceli sıfatlarda 'y' düşer, '-ier' takısı gelir.",
+            tips: "Heavy -> Heavier | Happy -> Happier",
+            examples: ["English is easier than Chinese."],
+            translation: "Bu kutu, şundakinden daha ağır."
+        }
+    },
+    {
+        id: 2008, level: 'A2', type: 'choice',
+        question: "A Ferrari is _____ than a Toyota.",
+        options: ["expensive", "more expensive", "expensiver", "most expensive"],
+        answer: "more expensive",
+        explanation: {
+            title: "Comparatives (Uzun Sıfatlar)",
+            rule: "Çok heceli (uzun) sıfatları karşılaştırırken başına 'more' getirilir.",
+            tips: "More + Sıfat + Than",
+            examples: ["More beautiful", "More interesting"],
+            translation: "Ferrari, Toyota'dan daha pahalıdır."
+        }
+    },
+
+    // --- SUPERLATIVES (EN ÜSTÜNLÜK) ---
+    {
+        id: 2009, level: 'A2', type: 'input',
+        question: "She is the _____ (good) student in the class.",
+        answer: "best",
+        explanation: {
+            title: "Superlatives (Düzensiz Sıfatlar)",
+            rule: "'Good' (iyi) sıfatının en üstünlük hali düzensizdir ve 'The best' (en iyi) olur.",
+            tips: "Good -> Better -> The Best",
+            examples: ["He is the best player."],
+            translation: "O, sınıftaki en iyi öğrencidir."
+        }
+    },
+    {
+        id: 2010, level: 'A2', type: 'choice',
+        question: "What is the _____ city in the world?",
+        options: ["crowded", "more crowded", "most crowded", "crowdedest"],
+        answer: "most crowded",
+        explanation: {
+            title: "Superlatives (Uzun Sıfatlar)",
+            rule: "Uzun sıfatlarda 'en' demek için 'the most' kullanılır.",
+            tips: "The most + Sıfat",
+            examples: ["The most expensive car."],
+            translation: "Dünyadaki en kalabalık şehir hangisidir?"
+        }
+    },
+
+    // --- MODALS (KİPLER) ---
+    {
+        id: 2011, level: 'A2', type: 'choice',
+        question: "It's raining. You _____ take an umbrella.",
+        options: ["should", "mustn't", "can't", "don't have to"],
+        answer: "should",
+        explanation: {
+            title: "Modals - Should (Tavsiye)",
+            rule: "Birine tavsiye verirken (yapsan iyi olur) 'should' kullanılır.",
+            tips: "Should = Tavsiye",
+            examples: ["You look tired. You should sleep."],
+            translation: "Yağmur yağıyor. Şemsiye almalısın (alsan iyi olur)."
+        }
+    },
+    {
+        id: 2012, level: 'A2', type: 'choice',
+        question: "You _____ smoke in the hospital. It is forbidden.",
+        options: ["don't have to", "mustn't", "shouldn't", "haven't"],
+        answer: "mustn't",
+        explanation: {
+            title: "Modals - Mustn't (Yasak)",
+            rule: "Bir şeyin yasak olduğunu belirtmek için 'mustn't' kullanılır. 'Don't have to' zorunluluk yok demektir, yasak değildir.",
+            tips: "Mustn't = Yapamazsın (Yasak!)",
+            examples: ["You mustn't park here."],
+            translation: "Hastanede sigara içemezsin. Yasaktır."
+        }
+    },
+    {
+        id: 2013, level: 'A2', type: 'choice',
+        question: "I _____ get up early tomorrow because it's Sunday.",
+        options: ["mustn't", "don't have to", "can't", "shouldn't"],
+        answer: "don't have to",
+        explanation: {
+            title: "Modals - Don't Have To",
+            rule: "Bir şeyi yapmana gerek yoksa (zorunluluk yoksa) 'don't have to' kullanılır.",
+            tips: "Don't have to = Yapmasan da olur",
+            examples: ["We don't have to go to school today."],
+            translation: "Yarın erken kalkmama gerek yok çünkü Pazar günü."
+        }
+    },
+
+    // --- FUTURE FORMS (GELECEK ZAMAN) ---
+    {
+        id: 2014, level: 'A2', type: 'choice',
+        question: "Look at those clouds! It _____ rain.",
+        options: ["will", "is going to", "does", "can"],
+        answer: "is going to",
+        explanation: {
+            title: "Future - Be Going To",
+            rule: "Gözle görülebilir bir kanıt varsa (bulutlar) ve olay olmak üzereyse 'going to' kullanılır.",
+            tips: "Kanıt var -> Going to | Tahmin/Ani karar -> Will",
+            examples: ["Watch out! You are going to fall."],
+            translation: "Şu bulutlara bak! Yağmur yağacak."
+        }
+    },
+    {
+        id: 2015, level: 'A2', type: 'choice',
+        question: "The phone is ringing. I _____ answer it.",
+        options: ["am going to", "will", "am answering", "answer"],
+        answer: "will",
+        explanation: {
+            title: "Future - Will (Ani Karar)",
+            rule: "Konuşma anında verilen ani kararlar için 'will' kullanılır.",
+            tips: "Ani karar -> Will",
+            examples: ["It's cold. I will close the window."],
+            translation: "Telefon çalıyor. Ben bakarım (bakacağım)."
+        }
+    },
+    {
+        id: 2016, level: 'A2', type: 'choice',
+        question: "We _____ to Italy next summer. We booked the tickets.",
+        options: ["will go", "are going", "go", "went"],
+        answer: "are going",
+        explanation: {
+            title: "Present Continuous for Future",
+            rule: "Gelecekte yapılması kesinleşmiş, planlanmış ve ayarlanmış (bilet alınmış) eylemler için Şimdiki Zaman (Present Continuous) kullanılır.",
+            tips: "Planlanmış Gelecek -> is/are -ing",
+            examples: ["I am meeting John tonight."],
+            translation: "Gelecek yaz İtalya'ya gidiyoruz. Biletleri aldık."
+        }
+    },
+
+    // --- ADVERBS (ZARFLAR) ---
+    {
+        id: 2017, level: 'A2', type: 'input',
+        question: "Please listen _____ (careful).",
+        answer: "carefully",
+        explanation: {
+            title: "Adverbs of Manner (Durum Zarfları)",
+            rule: "Fiili nitelemek için (nasıl dinle?) sıfatın sonuna '-ly' eklenir.",
+            tips: "Sıfat + ly = Zarf (Slow -> Slowly)",
+            examples: ["He runs quickly."],
+            translation: "Lütfen dikkatlice dinle."
+        }
+    },
+    {
+        id: 2018, level: 'A2', type: 'choice',
+        question: "He is a _____ driver.",
+        options: ["good", "well", "better", "best"],
+        answer: "good",
+        explanation: {
+            title: "Adjective vs Adverb",
+            rule: "İsmi nitelerken (driver) sıfat (good) kullanılır. Fiili niteleseydi zarf (well) olurdu.",
+            tips: "Good driver (Sıfat) | Drives well (Zarf)",
+            examples: ["She is a good singer.", "She sings well."],
+            translation: "O iyi bir sürücüdür."
+        }
+    },
+
+    // --- PRESENT PERFECT (GİRİŞ) ---
+    {
+        id: 2019, level: 'A2', type: 'input',
+        question: "I _____ (lose) my keys. I can't find them.",
+        answer: "have lost",
+        explanation: {
+            title: "Present Perfect Tense",
+            rule: "Geçmişte olmuş ama etkisi hala devam eden (anahtarlar hala kayıp) olaylar için 'Have/Has + V3' kullanılır.",
+            tips: "Lose -> Lost -> Lost (3. hal)",
+            examples: ["I have broken my leg. (Hala kırık)"],
+            translation: "Anahtarlarımı kaybettim. Onları bulamıyorum."
+        }
+    },
+    {
+        id: 2020, level: 'A2', type: 'choice',
+        question: "Have you _____ been to London?",
+        options: ["never", "ever", "yet", "just"],
+        answer: "ever",
+        explanation: {
+            title: "Present Perfect (Ever)",
+            rule: "Hayat tecrübelerini sorarken 'Hiç ... yaptın mı?' anlamında 'Ever' kullanılır.",
+            tips: "Soru cümlelerinde 'ever' kullanılır.",
+            examples: ["Have you ever eaten sushi?"],
+            translation: "Hiç Londra'da bulundun mu?"
+        }
+    },
+
+    // --- FIRST CONDITIONAL (TİP 1 KOŞUL CÜMLESİ) ---
+    {
+        id: 2021, level: 'A2', type: 'input',
+        question: "If it _____ (rain), we will stay at home.",
+        answer: "rains",
+        explanation: {
+            title: "First Conditional",
+            rule: "'If' (Eğer) cümlesi Geniş Zaman (Present Simple), diğer taraf Gelecek Zaman (Will) olur.",
+            tips: "If + Present, ... Will ...",
+            examples: ["If I see him, I will tell him."],
+            translation: "Eğer yağmur yağarsa, evde kalacağız."
+        }
+    },
+
+    // --- PRONOUNS & POSSESSIVES ---
+    {
+        id: 2022, level: 'A2', type: 'choice',
+        question: "Is this book _____ or yours?",
+        options: ["my", "mine", "me", "I"],
+        answer: "mine",
+        explanation: {
+            title: "Possessive Pronouns (İyelik Zamirleri)",
+            rule: "İsmi kullanmadan 'benimki' demek için 'mine' kullanılır.",
+            tips: "My book (Sıfat) -> Mine (Zamir)",
+            examples: ["It is not yours, it is mine."],
+            translation: "Bu kitap benimki mi yoksa seninki mi?"
+        }
+    },
+
+    // --- PREPOSITIONS (EDATLAR - YER/YÖN) ---
+    {
+        id: 2023, level: 'A2', type: 'choice',
+        question: "The cat jumped _____ the wall.",
+        options: ["over", "in", "at", "under"],
+        answer: "over",
+        explanation: {
+            title: "Hareket Edatları",
+            rule: "Bir engelin üzerinden geçmek anlamında 'over' kullanılır.",
+            tips: "Over = Üzerinden (temas etmeden veya atlayarak)",
+            examples: ["The plane flew over the city."],
+            translation: "Kedi duvarın üzerinden atladı."
+        }
+    },
+    {
+        id: 2024, level: 'A2', type: 'choice',
+        question: "I am waiting _____ the bus stop.",
+        options: ["in", "on", "at", "to"],
+        answer: "at",
+        explanation: {
+            title: "Yer Edatları (At)",
+            rule: "Belirli bir noktada (durak, kapı, masa) bulunmayı anlatırken 'at' kullanılır.",
+            tips: "At the door, At the station, At home.",
+            examples: ["She is at the bank."],
+            translation: "Otobüs durağında bekliyorum."
+        }
+    },
+
+    // --- GERUND / INFINITIVE (BASİT) ---
+    {
+        id: 2025, level: 'A2', type: 'choice',
+        question: "I enjoy _____ movies.",
+        options: ["watch", "to watch", "watching", "watched"],
+        answer: "watching",
+        explanation: {
+            title: "Gerunds (-ing)",
+            rule: "'Enjoy', 'like', 'love', 'hate' gibi duygu belirten fiillerden sonra gelen fiil '-ing' alır.",
+            tips: "Enjoy + V-ing",
+            examples: ["I love swimming."],
+            translation: "Film izlemekten keyif alırım."
+        }
+    },
+    {
+        id: 2026, level: 'A2', type: 'choice',
+        question: "I want _____ a new phone.",
+        options: ["buy", "to buy", "buying", "bought"],
+        answer: "to buy",
+        explanation: {
+            title: "Infinitives (To V1)",
+            rule: "'Want', 'need', 'hope', 'decide' gibi fiillerden sonra 'to + fiil' gelir.",
+            tips: "Want + to + V1",
+            examples: ["I need to sleep."],
+            translation: "Yeni bir telefon almak istiyorum."
+        }
+    },
+
+    // --- CONJUNCTIONS (BAĞLAÇLAR) ---
+    {
+        id: 2027, level: 'A2', type: 'choice',
+        question: "I was tired, _____ I went to bed early.",
+        options: ["because", "but", "so", "or"],
+        answer: "so",
+        explanation: {
+            title: "Bağlaçlar (So)",
+            rule: "Sonuç bildirmek için (bu yüzden, bu nedenle) 'so' kullanılır.",
+            tips: "Sebep -> Because | Sonuç -> So",
+            examples: ["It was raining, so I took an umbrella."],
+            translation: "Yorgundum, bu yüzden erken yattım."
+        }
+    },
+    {
+        id: 2028, level: 'A2', type: 'choice',
+        question: "I like football, _____ I don't like basketball.",
+        options: ["and", "but", "so", "because"],
+        answer: "but",
+        explanation: {
+            title: "Bağlaçlar (But)",
+            rule: "Zıtlık bildirmek için (ama, fakat) 'but' kullanılır.",
+            tips: "Olumlu + But + Olumsuz",
+            examples: ["She is rich but unhappy."],
+            translation: "Futbolu severim ama basketbolu sevmem."
+        }
+    },
+
+    // --- TOO / ENOUGH ---
+    {
+        id: 2029, level: 'A2', type: 'choice',
+        question: "This coffee is _____ hot to drink.",
+        options: ["enough", "too", "very", "much"],
+        answer: "too",
+        explanation: {
+            title: "Too (Aşırı)",
+            rule: "'Too + Sıfat' yapısı 'gereğinden fazla, aşırı' anlamına gelir ve genelde olumsuz bir sonuç doğurur.",
+            tips: "Too hot to drink = İçilemeyecek kadar sıcak",
+            examples: ["He is too young to drive."],
+            translation: "Bu kahve içilemeyecek kadar sıcak."
+        }
+    },
+    {
+        id: 2030, level: 'A2', type: 'choice',
+        question: "He isn't old _____ to drive.",
+        options: ["too", "enough", "very", "more"],
+        answer: "enough",
+        explanation: {
+            title: "Enough (Yeterli)",
+            rule: "'Enough' kelimesi sıfattan SONRA gelir.",
+            tips: "Adjective + Enough (Old enough, Rich enough)",
+            examples: ["Are you warm enough?"],
+            translation: "O, araba sürmek için yeterince yaşlı (büyük) değil."
+        }
+    }
+];
+
+
+const EXTRA_A2_QUESTIONS = [
+
+    // --- ZERO CONDITIONAL (GENEL DOĞRULAR) ---
+    {
+        id: 2031, level: 'A2', type: 'choice',
+        question: "If you heat ice, it _____.",
+        options: ["melt", "melts", "melted", "will melt"],
+        answer: "melts",
+        explanation: {
+            title: "Zero Conditional",
+            rule: "Bilimsel gerçekler veya genel doğrular için 'If + Present Simple, ... Present Simple' yapısı kullanılır.",
+            tips: "Her zaman doğru olan şeyler -> Geniş Zaman",
+            examples: ["If you mix red and white, you get pink."],
+            translation: "Buzu ısıtırsan erir."
+        }
+    },
+
+    // --- PRESENT PERFECT (JUST) ---
+    {
+        id: 2032, level: 'A2', type: 'choice',
+        question: "I have _____ finished my homework. The ink is still wet.",
+        options: ["yet", "ever", "just", "since"],
+        answer: "just",
+        explanation: {
+            title: "Present Perfect (Just)",
+            rule: "Bir eylemin 'az önce / henüz yeni' bittiğini anlatmak için 'Just' kullanılır.",
+            tips: "Have + just + V3",
+            examples: ["I have just eaten."],
+            translation: "Ödevimi az önce bitirdim. Mürekkebi hala ıslak."
+        }
+    },
+
+    // --- PRESENT PERFECT (YET) ---
+    {
+        id: 2033, level: 'A2', type: 'choice',
+        question: "Have you cleaned your room _____?",
+        options: ["just", "yet", "already", "never"],
+        answer: "yet",
+        explanation: {
+            title: "Present Perfect (Yet)",
+            rule: "Soru ve olumsuz cümlelerin sonunda 'henüz / daha' anlamında 'Yet' kullanılır.",
+            tips: "Cümle sonuna gelir -> Yet",
+            examples: ["I haven't finished yet."],
+            translation: "Odanı henüz temizledin mi?"
+        }
+    },
+
+    // --- QUANTIFIERS (MUCH/MANY) ---
+    {
+        id: 2034, level: 'A2', type: 'choice',
+        question: "How _____ water do you drink every day?",
+        options: ["many", "much", "any", "a few"],
+        answer: "much",
+        explanation: {
+            title: "Much vs Many",
+            rule: "Sayılamayan isimler (water, money, sugar) için 'How much', sayılabilenler için 'How many' kullanılır.",
+            tips: "Water sayılamaz -> Much",
+            examples: ["How much money do you have?"],
+            translation: "Her gün ne kadar su içersin?"
+        }
+    },
+
+    // --- MODALS (COULD - GEÇMİŞ YETENEK) ---
+    {
+        id: 2035, level: 'A2', type: 'choice',
+        question: "I _____ swim when I was 5 years old.",
+        options: ["can", "could", "should", "must"],
+        answer: "could",
+        explanation: {
+            title: "Could (Past Ability)",
+            rule: "'Can' (yapabilmek) modalının geçmiş hali 'Could'dur. Geçmişteki yetenekleri anlatır.",
+            tips: "When I was young -> I could...",
+            examples: ["She could read when she was 4."],
+            translation: "5 yaşındayken yüzebiliyordum."
+        }
+    },
+
+    // --- INDEFINITE PRONOUNS (ANYTHING) ---
+    {
+        id: 2036, level: 'A2', type: 'choice',
+        question: "I didn't buy _____ at the supermarket.",
+        options: ["something", "anything", "nothing", "everything"],
+        answer: "anything",
+        explanation: {
+            title: "Anything (Hiçbir şey)",
+            rule: "Olumsuz cümlelerde (didn't) nesne olarak 'anything' kullanılır. 'Nothing' zaten olumsuzluk içerdiği için çift olumsuz (didn't buy nothing) yapılmaz.",
+            tips: "Not + Anything",
+            examples: ["I don't know anything."],
+            translation: "Süpermarketten hiçbir şey almadım."
+        }
+    },
+
+    // --- COMPARATIVES (IRREGULAR - BAD) ---
+    {
+        id: 2037, level: 'A2', type: 'input',
+        question: "My grades are _____ (bad) than yours.",
+        answer: "worse",
+        explanation: {
+            title: "Irregular Comparatives (Bad)",
+            rule: "'Bad' (kötü) sıfatı düzensizdir. 'Badder' olmaz, 'Worse' (daha kötü) olur.",
+            tips: "Bad -> Worse -> The Worst",
+            examples: ["The weather is worse today."],
+            translation: "Benim notlarım seninkilerden daha kötü."
+        }
+    },
+
+    // --- SUPERLATIVES (IRREGULAR - GOOD) ---
+    {
+        id: 2038, level: 'A2', type: 'choice',
+        question: "This is the _____ pizza in the city.",
+        options: ["goodest", "better", "best", "most good"],
+        answer: "best",
+        explanation: {
+            title: "Irregular Superlatives (Good)",
+            rule: "'Good' sıfatının en üstünlük hali 'The Best'tir.",
+            tips: "Good -> Better -> The Best",
+            examples: ["He is the best player."],
+            translation: "Bu, şehirdeki en iyi pizza."
+        }
+    },
+
+    // --- PREPOSITIONS OF PLACE (UNDER) ---
+    {
+        id: 2039, level: 'A2', type: 'choice',
+        question: "The cat is sleeping _____ the table.",
+        options: ["in", "on", "under", "at"],
+        answer: "under",
+        explanation: {
+            title: "Prepositions (Under)",
+            rule: "Bir şeyin 'altında' olduğunu belirtmek için 'under' kullanılır.",
+            tips: "Under the sea, Under the table.",
+            examples: ["Your shoes are under the bed."],
+            translation: "Kedi masanın altında uyuyor."
+        }
+    },
+
+    // --- INFINITIVE OF PURPOSE ---
+    {
+        id: 2040, level: 'A2', type: 'choice',
+        question: "I went to the post office _____ a letter.",
+        options: ["send", "to send", "for send", "sending"],
+        answer: "to send",
+        explanation: {
+            title: "Infinitive of Purpose",
+            rule: "Amacımızı (neden gittin?) belirtirken 'to + fiil' kullanılır.",
+            tips: "To do something = Yapmak için",
+            examples: ["I called him to say hello."],
+            translation: "Mektup göndermek için postaneye gittim."
+        }
+    },
+
+    // --- QUESTION TAGS (SIMPLE) ---
+    {
+        id: 2041, level: 'A2', type: 'choice',
+        question: "You are a student, _____?",
+        options: ["aren't you", "don't you", "are you", "do you"],
+        answer: "aren't you",
+        explanation: {
+            title: "Question Tags (To Be)",
+            rule: "Cümle olumlu (You are) ise eklenti olumsuz (aren't you) olur.",
+            tips: "+ -> - | - -> +",
+            examples: ["She is happy, isn't she?"],
+            translation: "Öğrencisin, değil mi?"
+        }
+    },
+
+    // --- FUTURE (WILL - PREDICTION) ---
+    {
+        id: 2042, level: 'A2', type: 'choice',
+        question: "I think it _____ rain tomorrow.",
+        options: ["is going to", "will", "is raining", "rains"],
+        answer: "will",
+        explanation: {
+            title: "Future with Will (Tahmin)",
+            rule: "'I think', 'I hope', 'I believe' gibi kişisel tahmin ve düşünce bildiren ifadelerle 'Will' kullanılır.",
+            tips: "I think -> Will",
+            examples: ["I think she will pass the exam."],
+            translation: "Bence yarın yağmur yağacak."
+        }
+    },
+
+    // --- ADVERBS OF FREQUENCY (POSITION) ---
+    {
+        id: 2043, level: 'A2', type: 'choice',
+        question: "She _____ late for work.",
+        options: ["is never", "never is", "never does", "does never"],
+        answer: "is never",
+        explanation: {
+            title: "Adverbs of Frequency (To Be)",
+            rule: "Sıklık zarfları (never, always, usually) fiilden önce gelir, AMA 'Am/Is/Are'dan SONRA gelir.",
+            tips: "Subject + To Be + Frequency Adverb",
+            examples: ["He is always happy. (Always is değil!)"],
+            translation: "O, işe asla geç kalmaz."
+        }
+    },
+
+    // --- PHRASAL VERBS (GET UP) ---
+    {
+        id: 2044, level: 'A2', type: 'input',
+        question: "What time do you _____ (get) up in the morning?",
+        answer: "get",
+        explanation: {
+            title: "Phrasal Verb: Get Up",
+            rule: "'Get up' (yataktan kalkmak) en yaygın kullanılan phrasal verb'lerden biridir.",
+            tips: "Wake up (Uyanmak) vs Get up (Kalkmak)",
+            examples: ["I get up at 7."],
+            translation: "Sabahları kaçta kalkarsın?"
+        }
+    },
+
+    // --- LIKE + V-ING ---
+    {
+        id: 2045, level: 'A2', type: 'choice',
+        question: "I like _____ football on TV.",
+        options: ["watch", "watching", "watched", "to watching"],
+        answer: "watching",
+        explanation: {
+            title: "Like + Gerund",
+            rule: "'Like', 'love', 'hate' fiillerinden sonra gelen eylem genellikle -ing alır.",
+            tips: "Like doing something.",
+            examples: ["She likes reading."],
+            translation: "TV'de futbol izlemeyi severim."
+        }
+    },
+
+    // --- WH- QUESTIONS (HOW OFTEN) ---
+    {
+        id: 2046, level: 'A2', type: 'choice',
+        question: "_____ often do you go to the gym?",
+        options: ["What", "How", "When", "Why"],
+        answer: "How",
+        explanation: {
+            title: "Question Word: How Often",
+            rule: "Sıklık sormak için 'How often' (Ne sıklıkla) kalıbı kullanılır.",
+            tips: "Cevapta 'Always, sometimes, once a week' varsa soru 'How often'dır.",
+            examples: ["How often do you brush your teeth?"],
+            translation: "Spor salonuna ne sıklıkla gidersin?"
+        }
+    },
+
+    // --- PREPOSITIONS OF TIME (IN) ---
+    {
+        id: 2047, level: 'A2', type: 'choice',
+        question: "I was born _____ 1999.",
+        options: ["on", "at", "in", "of"],
+        answer: "in",
+        explanation: {
+            title: "Prepositions of Time (Years)",
+            rule: "Yıllardan bahsederken 'IN' kullanılır.",
+            tips: "IN 1990, IN 2023.",
+            examples: ["We met in 2010."],
+            translation: "1999'da doğdum."
+        }
+    },
+
+    // --- MODALS (SHOULD - ADVICE) ---
+    {
+        id: 2048, level: 'A2', type: 'choice',
+        question: "You have a toothache. You _____ go to the dentist.",
+        options: ["should", "can", "might", "will"],
+        answer: "should",
+        explanation: {
+            title: "Should (Advice)",
+            rule: "Tavsiye verirken 'should' kullanılır.",
+            tips: "Should = Yapsan iyi olur.",
+            examples: ["You look tired. You should rest."],
+            translation: "Dişin ağrıyor. Dişçiye gitmelisin."
+        }
+    },
+
+    // --- CONJUNCTIONS (BECAUSE) ---
+    {
+        id: 2049, level: 'A2', type: 'choice',
+        question: "I didn't go to school _____ I was sick.",
+        options: ["so", "but", "because", "and"],
+        answer: "because",
+        explanation: {
+            title: "Conjunctions: Because",
+            rule: "Sebep bildirmek için 'because' (çünkü) kullanılır.",
+            tips: "Sonuç (Okula gitmedim) <- Sebep (Hastaydım)",
+            examples: ["I am happy because I passed the exam."],
+            translation: "Okula gitmedim çünkü hastaydım."
+        }
+    },
+
+    // --- POSSESSIVE PRONOUNS (MINE) ---
+    {
+        id: 2050, level: 'A2', type: 'choice',
+        question: "That book is not yours, it is _____.",
+        options: ["my", "me", "mine", "I"],
+        answer: "mine",
+        explanation: {
+            title: "Possessive Pronouns",
+            rule: "Cümle sonunda 'benimki' demek için 'mine' kullanılır. 'My' sıfattır, isimle kullanılır (My book).",
+            tips: "It is my book = It is mine.",
+            examples: ["Is this yours or mine?"],
+            translation: "O kitap senin değil, benimki."
+        }
+    },
+
+    // --- PREPOSITIONS (BY BUS) ---
+    {
+        id: 2051, level: 'A2', type: 'choice',
+        question: "I usually go to work _____ bus.",
+        options: ["on", "in", "by", "with"],
+        answer: "by",
+        explanation: {
+            title: "Transport Prepositions",
+            rule: "Ulaşım araçlarıyla (bus, car, train, plane) 'BY' kullanılır.",
+            tips: "By car, By bus, By plane. (İstisna: On foot - yürüyerek)",
+            examples: ["He travels by train."],
+            translation: "İşe genellikle otobüsle giderim."
+        }
+    },
+
+    // --- PAST SIMPLE (BE - WERE) ---
+    {
+        id: 2052, level: 'A2', type: 'choice',
+        question: "Where _____ you yesterday?",
+        options: ["was", "were", "did", "are"],
+        answer: "were",
+        explanation: {
+            title: "Past Simple: To Be",
+            rule: "'You' öznesi için geçmiş zamanda 'Were' kullanılır. 'Did' fiil cümlelerinde kullanılır, durum cümlelerinde değil.",
+            tips: "I/He/She/It was | We/You/They were",
+            examples: ["We were at the cinema."],
+            translation: "Dün neredeydin?"
+        }
+    },
+
+    // --- OBJECT PRONOUNS (THEM) ---
+    {
+        id: 2053, level: 'A2', type: 'choice',
+        question: "I don't like dogs. I am afraid of _____.",
+        options: ["they", "them", "their", "theirs"],
+        answer: "them",
+        explanation: {
+            title: "Object Pronouns",
+            rule: "Edatlardan (of) veya fiillerden sonra nesne zamiri gelir. 'Dogs' çoğul olduğu için 'them' kullanılır.",
+            tips: "They (Özne) -> Them (Nesne)",
+            examples: ["Call them."],
+            translation: "Köpekleri sevmem. Onlardan korkarım."
+        }
+    },
+
+    // --- REFLEXIVE PRONOUNS (HIMSELF) ---
+    {
+        id: 2054, level: 'A2', type: 'input',
+        question: "He looked at _____ (he) in the mirror.",
+        answer: "himself",
+        explanation: {
+            title: "Reflexive Pronouns",
+            rule: "Özne (He) ve nesne aynı kişi ise dönüşlü zamir (himself) kullanılır.",
+            tips: "He -> Himself | She -> Herself",
+            examples: ["She cut herself."],
+            translation: "Aynada kendine baktı."
+        }
+    },
+
+    // --- PHRASAL VERBS (TURN OFF) ---
+    {
+        id: 2055, level: 'A2', type: 'choice',
+        question: "Please _____ off the lights before you leave.",
+        options: ["close", "turn", "make", "get"],
+        answer: "turn",
+        explanation: {
+            title: "Phrasal Verb: Turn Off",
+            rule: "Elektronik cihazları veya ışıkları kapatmak için 'Turn off' veya 'Switch off' kullanılır. 'Close' kapı/pencere için kullanılır.",
+            tips: "Turn on (Açmak) / Turn off (Kapatmak)",
+            examples: ["Turn off the TV."],
+            translation: "Lütfen çıkmadan önce ışıkları kapat."
+        }
+    },
+
+    // --- ORDINAL NUMBERS ---
+    {
+        id: 2056, level: 'A2', type: 'choice',
+        question: "My birthday is on the _____ of May.",
+        options: ["one", "first", "once", "number one"],
+        answer: "first",
+        explanation: {
+            title: "Ordinal Numbers (Dates)",
+            rule: "Tarihlerde sıra sayıları (first, second, third) kullanılır.",
+            tips: "1st = First",
+            examples: ["The second of June."],
+            translation: "Doğum günüm Mayıs'ın birinde (birinci günü)."
+        }
+    },
+
+    // --- SOME / ANY ---
+    {
+        id: 2057, level: 'A2', type: 'choice',
+        question: "Would you like _____ coffee?",
+        options: ["some", "any", "a", "many"],
+        answer: "some",
+        explanation: {
+            title: "Some in Offers",
+            rule: "Normalde soru cümlelerinde 'Any' kullanılır, ancak teklif (Would you like?) veya rica durumlarında 'Some' kullanılır.",
+            tips: "Teklif/Rica -> Some",
+            examples: ["Can I have some water?"],
+            translation: "Biraz kahve ister misiniz?"
+        }
+    },
+
+    // --- ADJECTIVES (-ING) ---
+    {
+        id: 2058, level: 'A2', type: 'choice',
+        question: "The movie was very _____.",
+        options: ["bored", "boring", "bore", "bores"],
+        answer: "boring",
+        explanation: {
+            title: "Adjectives: -ed vs -ing",
+            rule: "Nesneleri veya durumları tarif ederken -ing (boring) kullanılır. İnsanların hislerini tarif ederken -ed (bored) kullanılır.",
+            tips: "Movie -> Boring | I am -> Bored",
+            examples: ["This book is interesting."],
+            translation: "Film çok sıkıcıydı."
+        }
+    },
+
+    // --- VOCABULARY (MAKE BREAKFAST) ---
+    {
+        id: 2059, level: 'A2', type: 'choice',
+        question: "I usually _____ breakfast at 7 AM.",
+        options: ["do", "make", "have", "take"],
+        answer: "have",
+        explanation: {
+            title: "Collocation: Have Breakfast",
+            rule: "Kahvaltı, öğle yemeği yemek anlamında 'Have breakfast/lunch/dinner' kalıbı kullanılır. 'Eat' de olur ama şıklarda yoksa 'Have' doğrudur.",
+            tips: "Have a meal.",
+            examples: ["We had dinner at a restaurant."],
+            translation: "Genellikle sabah 7'de kahvaltı yaparım."
+        }
+    },
+
+    // --- PAST CONTINUOUS (INTERRUPTED) ---
+    {
+        id: 2060, level: 'A2', type: 'choice',
+        question: "I was sleeping when the phone _____.",
+        options: ["ring", "rang", "was ringing", "rings"],
+        answer: "rang",
+        explanation: {
+            title: "Past Continuous & Past Simple",
+            rule: "Uzun eylem (uyuyordum) devam ederken kısa eylem (telefon çaldı) araya girerse, kısa eylem için Past Simple (V2) kullanılır.",
+            tips: "When + V2 (Kısa eylem)",
+            examples: ["I was reading when he came."],
+            translation: "Telefon çaldığında uyuyordum."
+        }
+    }
+];
+
+// Ana listeye ekleme
+
+export const a2Questions = [...A2_QUESTIONS, ...EXTRA_A2_QUESTIONS];

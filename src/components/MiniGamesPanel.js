@@ -142,7 +142,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                         <div style={styles.leaderboard}>
                             {leaderboard.map((player, idx) => (
                                 <div key={player.username} style={styles.leaderboardRow}>
-                                    <span style={styles.rank}>#{idx + 1}</span>
+                                    <span style={styles.rank}>{idx + 1}</span>
                                     <span style={styles.playerName}>{player.username}</span>
                                     <span style={styles.wins}>{player.wins} wins</span>
                                     <span style={styles.totalScore}>{player.total_score} pts</span>

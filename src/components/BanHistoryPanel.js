@@ -237,7 +237,7 @@ const BanHistoryPanel = ({ serverId, serverName, onClose }) => {
                                         </div>
                                         <div className="user-info">
                                             <span className="username">{ban.user.username}</span>
-                                            <span className="discriminator">#{ban.user.discriminator}</span>
+                                            <span className="discriminator">{ban.user.discriminator}</span>
                                         </div>
                                     </div>
                                     <div className="ban-reason">

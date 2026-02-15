@@ -192,7 +192,7 @@ const ReactionStatsPanel = ({ serverId, onClose, fetchWithAuth }) => {
                             <div className="emoji-leaderboard">
                                 {(stats?.top_emojis || []).map((item, index) => (
                                     <div key={index} className={`leaderboard-item ${index < 3 ? 'top-three' : ''}`}>
-                                        <span className="rank">#{index + 1}</span>
+                                        <span className="rank">{index + 1}</span>
                                         <span className="emoji-large">{item.emoji}</span>
                                         <div className="emoji-details">
                                             <span className="emoji-name">{item.name || 'Custom Emoji'}</span>
@@ -224,7 +224,7 @@ const ReactionStatsPanel = ({ serverId, onClose, fetchWithAuth }) => {
                                 {(stats?.top_reactors || []).map((user, index) => (
                                     <div key={index} className={`user-item ${index < 3 ? 'top-three' : ''}`}>
                                         <span className={`rank rank-${index + 1}`}>
-                                            {index < 3 ? <FaTrophy /> : `#${index + 1}`}
+                                            {index < 3 ? <FaTrophy /> : `${index + 1}`}
                                         </span>
                                         <div className="user-avatar">
                                             {user.avatar ? (

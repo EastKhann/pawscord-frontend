@@ -132,7 +132,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
                                 >
                                     <option value="">Kanal Seçin</option>
                                     {channels.map(ch => (
-                                        <option key={ch.id} value={ch.id}>#{ch.name}</option>
+                                        <option key={ch.id} value={ch.id}>{ch.name}</option>
                                     ))}
                                 </select>
                             </div>
