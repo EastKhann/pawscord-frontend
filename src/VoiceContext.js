@@ -581,7 +581,13 @@ export const VoiceProvider = ({ children }) => {
 
     // --- SESLİ SOHBETE KATILMA ---
     const joinVoiceRoom = useCallback(async (roomSlug) => {
-        // 🔄 Eğer zaten bir kanalda ise ve farklı bir kanala geçmek isteniyorsa
+        // � Token yoksa bağlanma (auth gerekli)
+        if (!token) {
+            console.warn('[VoiceWS] No auth token, skipping voice join');
+            return;
+        }
+
+        // �🔄 Eğer zaten bir kanalda ise ve farklı bir kanala geçmek isteniyorsa
         if (isInVoice && currentRoom && currentRoom !== roomSlug && !isSwitchingRef.current) {
 
             // 🔒 Switching flag set et (sonsuz döngü önleme)
@@ -797,6 +803,13 @@ export const VoiceProvider = ({ children }) => {
 
                 // 2️⃣ Normal kapanma (code 1000) kontrolü
                 if (event.code === 1000) {
+                    leaveVoiceRoom();
+                    return;
+                }
+
+                // 2.5️⃣ Auth rejection (4001 = origin fail, 4003 = auth fail, 1006 = abnormal before accept)
+                if (event.code === 4001 || event.code === 4003 || (!token && event.code === 1006)) {
+                    console.warn(`[VoiceWS] Auth/origin rejection (code: ${event.code}), not retrying`);
                     leaveVoiceRoom();
                     return;
                 }
