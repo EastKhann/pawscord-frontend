@@ -2,11 +2,11 @@
 // User and authentication state management
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import type { UserStore } from '../types/store';
 
 export const useUserStore = create<UserStore>()(
-    persist(
+    devtools(persist(
         (set, get) => ({
             // --- USER STATE ---
             currentUser: null,
@@ -109,5 +109,5 @@ export const useUserStore = create<UserStore>()(
                 preferences: state.preferences,
             }),
         }
-    )
+    ), { name: 'pawscord-user-store' })
 );

@@ -8,10 +8,10 @@ import path from 'path';
 export default defineConfig({
     plugins: [react()],
 
-    // Allow .js files with JSX (CRA compatibility — matches vite.config.js)
+    // tsx loader handles both TypeScript and JSX syntax (matches vite.config.js)
     esbuild: {
-        loader: 'jsx',
-        include: /src\/.*\.jsx?$/,
+        loader: 'tsx',
+        include: /src\/.*\.[jt]sx?$/,
         exclude: [],
     },
 

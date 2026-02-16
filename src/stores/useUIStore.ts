@@ -4,11 +4,11 @@
 // All show* booleans from App.js are now centralized here.
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import type { UIStore } from '../types/store';
 
 export const useUIStore = create<UIStore>()(
-    persist(
+    devtools(persist(
         (set, get) => ({
             // --- MODAL STATES ---
             // All modal visibility flags. Dynamic keys are auto-created by openModal().
@@ -241,7 +241,29 @@ export const useUIStore = create<UIStore>()(
             animationState: 'start',
             setAnimationState: (val) => set({ animationState: typeof val === 'function' ? val(get().animationState) : val }),
             isConnected: false,
-            setIsConnected: (val) => set({ isConnected: typeof val === 'function' ? val(get().isConnected) : val }),
+            connectionStatus: 'disconnected' as 'disconnected' | 'connecting' | 'connected',
+            setIsConnected: (val) => {
+                const connected = typeof val === 'function' ? val(get().isConnected) : val;
+                set({ isConnected: connected, connectionStatus: connected ? 'connected' : 'disconnected' });
+            },
+            setConnectionStatus: (status: 'disconnected' | 'connecting' | 'connected') => set({ connectionStatus: status, isConnected: status === 'connected' }),
+
+            // Global loading & error state
+            isLoading: false,
+            setLoading: (val: boolean | ((prev: boolean) => boolean)) => set({ isLoading: typeof val === 'function' ? val(get().isLoading) : val }),
+            globalError: null as string | null,
+            setError: (error: string | null) => set({ globalError: error }),
+            clearError: () => set({ globalError: null }),
+
+            // Toast notifications queue
+            toastNotifications: [] as Array<{ id: number; type: string; message: string }>,
+            addNotification: (notification: { type: string; message: string }) => set(state => ({
+                toastNotifications: [...state.toastNotifications, { id: Date.now(), ...notification }]
+            })),
+            removeNotification: (id: number) => set(state => ({
+                toastNotifications: state.toastNotifications.filter((n: any) => n.id !== id)
+            })),
+            clearNotifications: () => set({ toastNotifications: [] }),
             updateStatusText: '',
             setUpdateStatusText: (val) => set({ updateStatusText: typeof val === 'function' ? val(get().updateStatusText) : val }),
             downloadProgress: 0,
@@ -326,5 +348,5 @@ export const useUIStore = create<UIStore>()(
                 panels: state.panels,
             }),
         }
-    )
+    ), { name: 'pawscord-ui-store' })
 );

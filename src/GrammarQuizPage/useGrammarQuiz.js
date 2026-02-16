@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { QUESTIONS_DB } from '../data/grammarQuestions';
+import { loadQuestionsByLevel } from '../data/grammarQuestions';
 import { API_BASE_URL } from '../utils/constants';
 
 const API_URL_BASE = API_BASE_URL;
@@ -17,6 +17,7 @@ const useGrammarQuiz = () => {
     const [isCorrect, setIsCorrect] = useState(null);
     const [score, setScore] = useState(0);
     const [knownQuestions, setKnownQuestions] = useState([]);
+    const [levelQuestions, setLevelQuestions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const getToken = () => localStorage.getItem('access_token');
@@ -49,10 +50,20 @@ const useGrammarQuiz = () => {
         loadKnownQuestions();
     }, [fetchWithAuth]);
 
+    // Load questions lazily when level is selected
+    useEffect(() => {
+        if (!selectedLevel) { setLevelQuestions([]); return; }
+        let cancelled = false;
+        loadQuestionsByLevel(selectedLevel).then(qs => {
+            if (!cancelled) setLevelQuestions(qs || []);
+        });
+        return () => { cancelled = true; };
+    }, [selectedLevel]);
+
     const activeQuestions = useMemo(() => {
-        if (!selectedLevel) return [];
-        return QUESTIONS_DB.filter(q => q.level === selectedLevel && !knownQuestions.includes(q.id));
-    }, [selectedLevel, knownQuestions]);
+        if (!selectedLevel || !levelQuestions.length) return [];
+        return levelQuestions.filter(q => !knownQuestions.includes(q.id));
+    }, [selectedLevel, levelQuestions, knownQuestions]);
 
     const currentQuestion = activeQuestions[currentQuestionIndex];
     const totalQuestions = activeQuestions.length;

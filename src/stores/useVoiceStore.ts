@@ -2,9 +2,10 @@
 // Voice chat state management
 
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 import type { VoiceStore } from '../types/store';
 
-export const useVoiceStore = create<VoiceStore>((set, get) => ({
+export const useVoiceStore = create<VoiceStore>()(devtools((set, get) => ({
     // --- VOICE STATE ---
     isInVoiceChat: false,
     currentVoiceRoom: null,
@@ -106,4 +107,4 @@ export const useVoiceStore = create<VoiceStore>((set, get) => ({
     setConnectionQuality: (quality) => set({ connectionQuality: quality }),
     setLatency: (latency) => set({ latency }),
     setPacketLoss: (loss) => set({ packetLoss: loss }),
-}));
+}), { name: 'pawscord-voice-store' }));

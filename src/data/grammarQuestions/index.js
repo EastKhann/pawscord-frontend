@@ -40,23 +40,5 @@ export async function loadAllQuestions() {
   return results.flat();
 }
 
-/**
- * Synchronous QUESTIONS_DB for backwards compatibility.
- * WARNING: This loads ALL levels eagerly. Migrate to loadQuestionsByLevel() instead.
- * @deprecated Use loadQuestionsByLevel() or loadAllQuestions() for lazy loading.
- */
-import { a1Questions } from './a1Questions';
-import { a2Questions } from './a2Questions';
-import { b1Questions } from './b1Questions';
-import { b2Questions } from './b2Questions';
-import { c1Questions } from './c1Questions';
-import { c2Questions } from './c2Questions';
-
-export const QUESTIONS_DB = [
-  ...a1Questions,
-  ...a2Questions,
-  ...b1Questions,
-  ...b2Questions,
-  ...c1Questions,
-  ...c2Questions,
-];
+// QUESTIONS_DB removed — all consumers migrated to loadQuestionsByLevel() / loadAllQuestions()
+// This eliminates ~240KB of eager imports from the initial bundle.

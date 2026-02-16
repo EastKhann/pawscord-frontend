@@ -1,12 +1,13 @@
 // frontend/src/stores/useChatStore.ts
 
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 import type { ChatStore } from '../types/store';
 
 // Basit bir ID üretici (App.js'den alındı)
 const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();
 
-export const useChatStore = create<ChatStore>((set, get) => ({
+export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
     // --- STATE (Veriler) ---
     messages: [],
     encryptionKeys: {},
@@ -85,6 +86,18 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         messages: state.messages.map(m => m.id === id ? { ...m, ...updates } : m)
     })),
 
+    // Mesaj Silme
+    removeMessage: (id) => set((state) => ({
+        messages: state.messages.filter(m => m.id !== id)
+    })),
+
+    // Kullanıcı durumu güncelleme
+    updateUserStatus: (userId, status) => set((state) => ({
+        onlineUsers: state.onlineUsers.map((u: any) =>
+            (u.id || u.user_id) === userId ? { ...u, status } : u
+        )
+    })),
+
     // Mesajları Toplu Yükleme (Geçmişi çekerken)
     // 🛡️ GUARD: Bozuk mesajları filtrele
     setMessages: (newMessages) => set((state) => {
@@ -144,5 +157,5 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             can_ban_members: false
         }
     }),
-}));
+}), { name: 'pawscord-chat-store' }));
 

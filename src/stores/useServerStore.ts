@@ -4,11 +4,11 @@
 // Gradually migrate server-related useState from App.js here.
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import type { ServerStore } from '../types/store';
 
 export const useServerStore = create<ServerStore>()(
-    persist(
+    devtools(persist(
         (set, get) => ({
             // --- SERVER STATE ---
             servers: [],                    // All user's servers
@@ -116,5 +116,5 @@ export const useServerStore = create<ServerStore>()(
                 })),
             }),
         }
-    )
+    ), { name: 'pawscord-server-store' })
 );

@@ -1,17 +1,24 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import { QUESTIONS_DB, LEVELS } from '../data/grammarQuestions';
+import { LEVELS, loadAllQuestions } from '../data/grammarQuestions';
 import toast from '../utils/toast';
 import styles from './grammarQuizStyles';
 
 const LevelSelect = ({ knownQuestions, startQuiz }) => {
+    const [allQuestions, setAllQuestions] = useState([]);
+
+    useEffect(() => {
+        loadAllQuestions().then(qs => setAllQuestions(qs));
+    }, []);
+
     const colA = LEVELS.filter(l => l.id.startsWith('A'));
     const colB = LEVELS.filter(l => l.id.startsWith('B'));
     const colC = LEVELS.filter(l => l.id.startsWith('C'));
 
     const renderLevelCard = (lvl) => {
-        const totalInDb = QUESTIONS_DB.filter(q => q.level === lvl.id).length;
-        const knownInLevel = QUESTIONS_DB.filter(q => q.level === lvl.id && knownQuestions.includes(q.id)).length;
+        const totalInDb = allQuestions.filter(q => q.level === lvl.id).length;
+        const knownInLevel = allQuestions.filter(q => q.level === lvl.id && knownQuestions.includes(q.id)).length;
         const remaining = totalInDb - knownInLevel;
 
         return (
