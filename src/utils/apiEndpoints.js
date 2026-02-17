@@ -34,8 +34,8 @@ const getApiBaseUrl = () => {
     const envApiUrl = import.meta.env.VITE_API_BASE_URL;
     if (envApiUrl) return envApiUrl.replace(/\/api\/?$/, '');
 
-    // 5. Development fallback
-    if (isLocalhost) {
+    // 5. Development fallback (only in dev builds)
+    if (isLocalhost && import.meta.env.DEV) {
         return 'http://localhost:8888';
     }
 

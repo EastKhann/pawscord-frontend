@@ -14,10 +14,10 @@ const HomePanel = ({
         <div style={styles.topSection}>
             <div style={styles.headerTitle}>Ana Sayfa</div>
             <div style={styles.channelsContainer}>
-                <div style={{ ...styles.roomItem, marginBottom: 5 }} onClick={() => onRoomSelect('ai')}>
+                <div style={{ ...styles.roomItem, marginBottom: 5 }} role="button" tabIndex={0} onClick={() => onRoomSelect('ai')} onKeyDown={e => e.key === 'Enter' && onRoomSelect('ai')} aria-label="PawPaw AI kanalı">
                     <div style={styles.channelContent}><FaRobot style={{ marginRight: 8 }} /> <span>PawPaw AI</span></div>
                 </div>
-                <div style={{ ...styles.roomItem, marginBottom: 15 }} onClick={() => onRoomSelect('sinyal-bot')}>
+                <div style={{ ...styles.roomItem, marginBottom: 15 }} role="button" tabIndex={0} onClick={() => onRoomSelect('sinyal-bot')} onKeyDown={e => e.key === 'Enter' && onRoomSelect('sinyal-bot')} aria-label="Sinyal Bot kanalı">
                     <div style={styles.channelContent}><FaChartLine style={{ marginRight: 8 }} /> <span>Sinyal Bot</span></div>
                 </div>
             </div>

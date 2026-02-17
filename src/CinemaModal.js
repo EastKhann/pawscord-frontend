@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import useModalA11y from './hooks/useModalA11y';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaTimes, FaLink, FaExclamationCircle, FaPlay, FaPause } from 'react-icons/fa';
 
@@ -88,9 +89,11 @@ const CinemaModal = ({ onClose, ws }) => {
         setInputUrl('');
     };
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Sinema & Müzik' });
+
     return (
-        <div style={styles.overlay}>
-            <div style={styles.modal}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>🍿 Sinema & Müzik</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import './LogoutModal.css';
+import useModalA11y from '../hooks/useModalA11y';
 
 const LogoutModal = ({ isOpen, onClose, onConfirm, username }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ isOpen, onClose, label: 'Çıkış' });
     const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     if (!isOpen) return null;
@@ -14,8 +16,8 @@ const LogoutModal = ({ isOpen, onClose, onConfirm, username }) => {
     };
 
     return (
-        <div className="logout-modal-overlay" onClick={onClose}>
-            <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="logout-modal-overlay" {...overlayProps}>
+            <div className="logout-modal" {...dialogProps}>
                 {!isLoggingOut ? (
                     <>
                         {/* Header */}

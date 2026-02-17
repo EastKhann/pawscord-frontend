@@ -37,17 +37,13 @@ const isTokenExpired = (token) => {
     }
 };
 
-// Refresh the access token
+// Refresh the access token (uses httpOnly cookie — no JS access to refresh token)
 const refreshToken = async () => {
-    const refreshTokenValue = localStorage.getItem('refresh_token');
-    if (!refreshTokenValue) {
-        throw new Error('No refresh token available');
-    }
-
     const response = await fetch(`${API_URL_BASE}/api/auth/token/refresh/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh: refreshTokenValue })
+        credentials: 'include', // 🔐 Send httpOnly refresh_token cookie
+        body: JSON.stringify({}) // Refresh token comes from cookie
     });
 
     if (!response.ok) {
@@ -56,10 +52,6 @@ const refreshToken = async () => {
 
     const data = await response.json();
     localStorage.setItem('access_token', data.access);
-
-    if (data.refresh) {
-        localStorage.setItem('refresh_token', data.refresh);
-    }
 
     return data.access;
 };

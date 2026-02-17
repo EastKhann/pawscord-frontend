@@ -3,6 +3,7 @@ import { FaTimes, FaShoppingCart, FaCoins, FaFire, FaCrown, FaPalette, FaMedal, 
 import useStoreAPI from './StoreModal/useStoreAPI';
 import ItemDetailModal from './StoreModal/ItemDetailModal';
 import s, { CATEGORIES, getRarityColor } from './StoreModal/storeModalStyles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const ICON_MAP = { FaShoppingCart, FaPalette, FaMedal, FaFire, FaCrown };
 
@@ -19,11 +20,12 @@ const ItemCard = ({ item, onClick }) => (
 );
 
 const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Mağaza' });
     const store = useStoreAPI({ fetchWithAuth, apiBaseUrl });
 
     return (
-        <div style={s.overlay} onClick={onClose}>
-            <div style={s.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={s.overlay} {...overlayProps}>
+            <div style={s.modal} {...dialogProps}>
                 <div style={s.header}>
                     <div style={s.headerLeft}>
                         <FaShoppingCart style={{ fontSize: '24px', color: '#5865f2' }} />

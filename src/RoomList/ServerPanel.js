@@ -54,7 +54,7 @@ const ServerPanel = ({
                         {/* KATEGORİ EKLEME FORMU */}
                         {activeServerIdForCategory === server.id && (
                             <form onSubmit={(e) => handleCreateCategory(e, server.id)} style={styles.addCategoryForm}>
-                                <input autoFocus placeholder="Kategori Adı..." value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} style={styles.addRoomInput} />
+                                <input autoFocus placeholder="Kategori Adı..." aria-label="Kategori adı" value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} style={styles.addRoomInput} />
                                 <div style={styles.addRoomControls}>
                                     <button type="submit" style={styles.addRoomButton}>Ekle</button>
                                     <button type="button" onClick={() => setActiveServerIdForCategory(null)} style={{ ...styles.addRoomButton, background: '#da373c' }}>X</button>
@@ -117,7 +117,7 @@ const ServerPanel = ({
 };
 
 // Category section sub-component
-const CategorySection = ({
+const CategorySection = React.memo(({
     cat, server, isOwner, isAdmin, currentUsername, currentVoiceRoom,
     activeVoiceUsers, collapsedCategories, toggleCategory,
     editingItemId, setEditingItemId, editName, setEditName,
@@ -141,7 +141,7 @@ const CategorySection = ({
                     {isCollapsed ? <FaChevronRight size={9} /> : <FaChevronDown size={9} />}
                     {isEditingThisCat ? (
                         <form onSubmit={(e) => handleRenameCategory(e, cat.id)} onClick={e => e.stopPropagation()} style={{ marginLeft: 5 }}>
-                            <input autoFocus value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
+                            <input autoFocus aria-label="Kategori adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
                         </form>
                     ) : (
                         <span style={{ marginLeft: 5 }}>{cat.name}</span>
@@ -158,7 +158,7 @@ const CategorySection = ({
             {/* Kanal Ekleme Formu */}
             {activeCategoryIdForRoom === cat.id && (
                 <form onSubmit={(e) => handleCreateRoom(e, cat.id)} style={{ padding: '5px 10px' }}>
-                    <input autoFocus placeholder="Kanal Adı..." value={newRoomName} onChange={e => setNewRoomName(e.target.value)} style={styles.addRoomInput} />
+                    <input autoFocus placeholder="Kanal Adı..." aria-label="Kanal adı" value={newRoomName} onChange={e => setNewRoomName(e.target.value)} style={styles.addRoomInput} />
                     <select value={newRoomType} onChange={e => setNewRoomType(e.target.value)} style={styles.channelTypeSelect}>
                         <option value="text">📝 Metin</option>
                         <option value="voice">🎤 Sesli</option>
@@ -211,10 +211,10 @@ const CategorySection = ({
             ))}
         </div>
     );
-};
+});
 
 // Channel item sub-component
-const ChannelItem = ({
+const ChannelItem = React.memo(({
     room, cat, server, isOwner, isAdmin, currentUsername, currentVoiceRoom,
     activeVoiceUsers, editingItemId, setEditingItemId, editName, setEditName,
     handleRenameRoom, handleOpenActionMenu, joinVoiceChat, onRoomSelect,
@@ -273,7 +273,7 @@ const ChannelItem = ({
 
                     {isEditingThisRoom ? (
                         <form onSubmit={(e) => handleRenameRoom(e, room.slug)} onClick={e => e.stopPropagation()} style={{ flex: 1 }}>
-                            <input autoFocus value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
+                            <input autoFocus aria-label="Kanal adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
                         </form>
                     ) : (
                         <span style={{ ...styles.channelNameText, paddingLeft: '5px', fontWeight: isActive ? '600' : 'normal', flex: 1, display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -332,6 +332,6 @@ const ChannelItem = ({
             )}
         </div>
     );
-};
+});
 
 export default React.memo(ServerPanel);

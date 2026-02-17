@@ -2,6 +2,7 @@
 // Refactored: All tabs extracted as self-contained components
 
 import { useState, useEffect, useCallback } from 'react';
+import useModalA11y from '../hooks/useModalA11y';
 import { FaTimes, FaUsers, FaShieldAlt, FaCog, FaRobot, FaLink, FaHandPaper, FaChartBar, FaHistory, FaBan, FaGavel } from 'react-icons/fa';
 import ServerMembers from './ServerMembers';
 import AutoResponderManager from './AutoResponderManager';
@@ -67,11 +68,13 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
         return () => { const el = document.getElementById(id); if (el) el.remove(); };
     }, []);
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Sunucu Ayarları' });
+
     if (!isOwner) return null;
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
 
                 {/* DISCORD-STYLE LAYOUT: Sidebar + Content */}
                 <div style={styles.layoutContainer}>

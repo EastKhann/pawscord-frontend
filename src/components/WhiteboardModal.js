@@ -2,8 +2,10 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { FaTimes, FaEraser, FaPen, FaTrash } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Çizim Tahtası' });
     const canvasRef = useRef(null);
     const ws = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -34,12 +36,6 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
 
         return () => ws.current.close();
     }, [roomSlug, wsProtocol, apiHost]);
-
-    useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
 
     // Canvas Boyutlandırma
     useEffect(() => {
@@ -102,8 +98,8 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>🎨 Ortak Çizim Tahtası</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

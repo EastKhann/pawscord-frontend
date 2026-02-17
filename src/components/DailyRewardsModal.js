@@ -1,6 +1,7 @@
 import { FaTimes, FaGift, FaFire, FaCoins, FaCrown, FaCheckCircle } from 'react-icons/fa';
 import styles from './DailyRewardsModal/dailyRewardsStyles';
 import useDailyRewards, { calculateTimeUntilNextReward } from './DailyRewardsModal/useDailyRewards';
+import useModalA11y from '../hooks/useModalA11y';
 
 const getRewardIcon = (type) => {
   switch (type) {
@@ -11,11 +12,12 @@ const getRewardIcon = (type) => {
 };
 
 const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
+  const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Günlük Ödüller' });
   const { rewards, streak, canClaim, loading, claiming, lastClaimed, nextReward, handleClaim } = useDailyRewards({ fetchWithAuth, apiBaseUrl });
 
   return (
-    <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modal} onClick={e => e.stopPropagation()}>
+    <div style={styles.overlay} {...overlayProps}>
+      <div style={styles.modal} {...dialogProps}>
         <div style={styles.header}>
           <div style={styles.headerLeft}><FaGift style={{ fontSize: '24px', color: '#43b581' }} /><h2 style={{ margin: 0, fontSize: '20px' }}>Daily Rewards</h2></div>
           <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

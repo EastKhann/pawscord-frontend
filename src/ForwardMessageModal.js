@@ -3,6 +3,7 @@
 
 import React, { useState, useMemo } from 'react';
 import toast from './utils/toast';
+import useModalA11y from './hooks/useModalA11y';
 
 const ForwardMessageModal = ({ message, rooms, conversations, onClose, onForward, currentUsername, getDeterministicAvatar }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -57,9 +58,11 @@ const ForwardMessageModal = ({ message, rooms, conversations, onClose, onForward
         }
     };
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Mesaj Aktar' });
+
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <button style={styles.closeButton} onClick={onClose}>×</button>
                 {message.id === 'bulk' ? (
                     <>
@@ -81,6 +84,7 @@ const ForwardMessageModal = ({ message, rooms, conversations, onClose, onForward
                 <input
                     type="text"
                     placeholder="Sohbet ara (#oda veya @kullanıcı)..."
+                    aria-label="Sohbet ara"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={styles.searchInput}
@@ -110,6 +114,7 @@ const ForwardMessageModal = ({ message, rooms, conversations, onClose, onForward
 
                 <textarea
                     placeholder="İsteğe bağlı not ekle..."
+                    aria-label="Aktarım notu"
                     value={forwardContent}
                     onChange={(e) => setForwardContent(e.target.value)}
                     style={styles.textArea}

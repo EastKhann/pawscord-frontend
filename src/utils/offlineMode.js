@@ -323,7 +323,7 @@ class OfflineModeManager {
         if (isElectron || isPawscordDomain) {
             return 'https://api.pawscord.com';
         }
-        if (isLocalhost) {
+        if (isLocalhost && import.meta.env.DEV) {
             return 'http://localhost:8888/api';
         }
         return 'https://api.pawscord.com';

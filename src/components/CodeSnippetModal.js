@@ -1,18 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaCode, FaTimes, FaPaperPlane } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const LANGUAGES = ['javascript', 'python', 'html', 'css', 'java', 'cpp', 'csharp', 'sql', 'json', 'typescript', 'go', 'rust', 'php'];
 
 const CodeSnippetModal = ({ onClose, onSend }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kod Paylaş' });
     const [title, setTitle] = useState('');
     const [language, setLanguage] = useState('javascript');
     const [code, setCode] = useState('');
-
-    useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -21,8 +17,8 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FaCode color="#5865f2" /> Kod Paylaş

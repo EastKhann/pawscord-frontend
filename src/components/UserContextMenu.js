@@ -52,7 +52,7 @@ const UserContextMenu = ({
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 setFocusedIndex((prev) => Math.max(prev - 1, 0));
-            } else if (e.key === 'Enter') {
+            } else if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 triggerFocusedAction();
             }
@@ -142,6 +142,7 @@ const UserContextMenu = ({
                         background: focusedIndex === 0 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
                     onClick={() => handleAction('profile')}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('profile'); } }}
                     onMouseEnter={() => setFocusedIndex(0)}
                 >
                     <FaUser /> Profili Görüntüle
@@ -157,6 +158,7 @@ const UserContextMenu = ({
                         background: focusedIndex === 1 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
                     onClick={() => handleAction('message')}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('message'); } }}
                     onMouseEnter={() => setFocusedIndex(1)}
                 >
                     <FaComments /> Mesaj Gönder
@@ -172,6 +174,7 @@ const UserContextMenu = ({
                         background: focusedIndex === 2 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
                     onClick={() => handleAction('invite_to_server')}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('invite_to_server'); } }}
                     onMouseEnter={() => setFocusedIndex(2)}
                 >
                     <FaArrowRight /> Sunucuya Davet Et
@@ -188,6 +191,7 @@ const UserContextMenu = ({
                             background: focusedIndex === 3 ? 'rgba(237, 66, 69, 0.15)' : 'transparent'
                         }}
                         onClick={() => handleAction('remove_friend')}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('remove_friend'); } }}
                         onMouseEnter={() => setFocusedIndex(3)}
                     >
                         <FaBan /> Arkadaşlıktan Çıkar
@@ -202,6 +206,7 @@ const UserContextMenu = ({
                             background: focusedIndex === 3 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                         }}
                         onClick={() => handleAction('add_friend')}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('add_friend'); } }}
                         onMouseEnter={() => setFocusedIndex(3)}
                     >
                         <FaUser /> Arkadaş Ekle
@@ -221,6 +226,7 @@ const UserContextMenu = ({
                         background: focusedIndex === 4 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
                     onClick={() => handleAction('mute_user')}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('mute_user'); } }}
                     onMouseEnter={() => setFocusedIndex(4)}
                 >
                     <FaVolumeMute /> Sessize Al
@@ -236,6 +242,7 @@ const UserContextMenu = ({
                         background: focusedIndex === 5 ? 'rgba(237, 66, 69, 0.15)' : 'transparent'
                     }}
                     onClick={() => handleAction('block_user')}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('block_user'); } }}
                     onMouseEnter={() => setFocusedIndex(5)}
                 >
                     <FaBan /> Kullanıcıyı Engelle
@@ -280,6 +287,7 @@ const UserContextMenu = ({
                                                 e.stopPropagation();
                                                 handleAction('move', channel.slug);
                                             }}
+                                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleAction('move', channel.slug); } }}
                                         >
                                             {channel.name}
                                         </div>
@@ -298,6 +306,7 @@ const UserContextMenu = ({
                                 background: focusedIndex === 5 ? 'rgba(237, 66, 69, 0.15)' : 'transparent'
                             }}
                             onClick={() => handleAction('kick')}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('kick'); } }}
                             onMouseEnter={() => setFocusedIndex(5)}
                         >
                             <FaBan /> Kanaldan At
@@ -313,6 +322,7 @@ const UserContextMenu = ({
                                 background: focusedIndex === 6 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                             }}
                             onClick={() => handleAction('server_mute')}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('server_mute'); } }}
                             onMouseEnter={() => setFocusedIndex(6)}
                         >
                             <FaUserShield /> Mikrofonu Kapat (Server)

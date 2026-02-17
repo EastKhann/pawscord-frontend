@@ -8,6 +8,7 @@ import SessionManagerModal from './components/SessionManagerModal';
 import UserNotesModal from './components/UserNotesModal';
 import { styles } from './UserProfileModal/styles';
 import { useProfileModal, getIconForLink, formatUrl, linkDisplayNames } from './UserProfileModal/hooks/useProfileModal';
+import useModalA11y from './hooks/useModalA11y';
 
 const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDeterministicAvatar, fetchWithAuth, apiBaseUrl, currentUser, friendsList }) => {
     const {
@@ -27,9 +28,11 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
     // Cache busting for avatar updates
     const avatarSrc = avatarUrl + (user.avatar && typeof user.avatar === 'string' ? `?t=${Date.now()}` : '');
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: `${user.username} profili` });
+
     const modalContent = (
-        <div style={{ ...styles.overlay, zIndex: 9999 }} onClick={onClose}>
-            <div style={{ ...styles.modal, zIndex: 10000, position: 'relative' }} onClick={e => e.stopPropagation()}>
+        <div style={{ ...styles.overlay, zIndex: 9999 }} {...overlayProps}>
+            <div style={{ ...styles.modal, zIndex: 10000, position: 'relative' }} {...dialogProps}>
 
                 {/* 🎨 MODERN PROFILE BANNER */}
                 <div style={{

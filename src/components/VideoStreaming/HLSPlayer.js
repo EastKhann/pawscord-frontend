@@ -17,6 +17,7 @@ const HLSPlayer = memo(({
 
     useEffect(() => {
         let isMounted = true;
+        let loadedMetadataHandler = null;
 
         const initPlayer = async () => {
             try {
@@ -75,12 +76,13 @@ const HLSPlayer = memo(({
                 } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
                     // Native HLS support (Safari)
                     videoRef.current.src = src;
-                    videoRef.current.addEventListener('loadedmetadata', () => {
+                    loadedMetadataHandler = () => {
                         if (isMounted) {
                             onLoaded?.();
                             videoRef.current?.play();
                         }
-                    });
+                    };
+                    videoRef.current.addEventListener('loadedmetadata', loadedMetadataHandler);
                 } else {
                     console.error('HLS is not supported in this browser');
                     onError?.(new Error('HLS not supported'));
@@ -99,6 +101,9 @@ const HLSPlayer = memo(({
             if (hlsRef.current) {
                 hlsRef.current.destroy();
                 hlsRef.current = null;
+            }
+            if (loadedMetadataHandler && videoRef.current) {
+                videoRef.current.removeEventListener('loadedmetadata', loadedMetadataHandler);
             }
         };
     }, [src, onLoaded, onError]);

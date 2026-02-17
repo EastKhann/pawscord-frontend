@@ -15,6 +15,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
     const [status, setStatus] = useState('processing');
     const [error, setError] = useState(null);
     const exchangeAttempted = useRef(false);  // Prevent double exchange
+    const timerRefs = useRef([]);
 
     useEffect(() => {
         const handleCallback = async () => {
@@ -36,7 +37,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 console.error('🔐 [AuthCallback] Error param:', errorParam);
                 setStatus('error');
                 setError('Google giriş başarısız oldu. Lütfen tekrar deneyin.');
-                setTimeout(() => navigate('/'), 3000);
+                timerRefs.current.push(setTimeout(() => navigate('/'), 3000));
                 return;
             }
 
@@ -55,14 +56,14 @@ const AuthCallback = ({ apiBaseUrl }) => {
                     setStatus('success');
 
                     // Redirect based on password status
-                    setTimeout(() => {
+                    timerRefs.current.push(setTimeout(() => {
                         navigate(needsPassword ? '/settings?section=security&action=set-password' : '/');
-                    }, 1500);
+                    }, 1500));
                 } catch (err) {
                     console.error('🔐 [AuthCallback] Direct token error:', err);
                     setStatus('error');
                     setError('Token işleme hatası.');
-                    setTimeout(() => navigate('/'), 3000);
+                    timerRefs.current.push(setTimeout(() => navigate('/'), 3000));
                 }
                 return;
             }
@@ -72,7 +73,7 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 console.error('🔐 [AuthCallback] No code or tokens found');
                 setStatus('error');
                 setError('Yetkilendirme bilgisi bulunamadı.');
-                setTimeout(() => navigate('/'), 3000);
+                timerRefs.current.push(setTimeout(() => navigate('/'), 3000));
                 return;
             }
 
@@ -104,14 +105,14 @@ const AuthCallback = ({ apiBaseUrl }) => {
                     // Redirect based on password status
                     if (needs_password) {
                         // User needs to set a password (new Google user)
-                        setTimeout(() => {
+                        timerRefs.current.push(setTimeout(() => {
                             navigate('/settings?section=security&action=set-password');
-                        }, 1500);
+                        }, 1500));
                     } else {
                         // Existing user, go to main app
-                        setTimeout(() => {
+                        timerRefs.current.push(setTimeout(() => {
                             navigate('/');
-                        }, 1500);
+                        }, 1500));
                     }
                 } else {
                     throw new Error(response.data.error || 'Token exchange failed');
@@ -120,11 +121,16 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 console.error('Auth callback error:', err);
                 setStatus('error');
                 setError(err.response?.data?.error || 'Giriş işlemi başarısız oldu.');
-                setTimeout(() => navigate('/'), 3000);
+                timerRefs.current.push(setTimeout(() => navigate('/'), 3000));
             }
         };
 
         handleCallback();
+
+        return () => {
+            timerRefs.current.forEach(id => clearTimeout(id));
+            timerRefs.current = [];
+        };
     }, [searchParams, navigate, login, apiBaseUrl]);
 
     return (

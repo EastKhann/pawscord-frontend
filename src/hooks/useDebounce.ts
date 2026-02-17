@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 /**
  * Değeri debounce eder - gereksiz render ve API çağrılarını önler
  */
-export const useDebounce = <T>(value: T, delay: number = 500): T => {
+export const useDebounce = <T,>(value: T, delay: number = 500): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {

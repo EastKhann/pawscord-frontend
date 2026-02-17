@@ -1,17 +1,12 @@
 // frontend/src/components/DownloadModal.js
 
-import { useEffect } from 'react';
 import { FaWindows, FaAndroid, FaApple, FaTimes, FaDownload, FaInfoCircle } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 import { Capacitor } from '@capacitor/core';
 
 const DownloadModal = ({ onClose, apiBaseUrl }) => {
     const isNativeApp = Capacitor.isNativePlatform();
-
-    useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'İndirme' });
 
     const handleDownload = (platform) => {
         if (platform === 'windows') {
@@ -30,9 +25,9 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
+        <div style={styles.overlay} {...overlayProps}>
             {/* 👇 DÜZELTME YAPILAN KISIM: style={styles.modal} */}
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+            <div style={styles.modal} {...dialogProps}>
 
                 <div style={styles.header}>
                     <h2 style={styles.title}>Pawscord'u İndir</h2>

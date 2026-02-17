@@ -13,20 +13,20 @@
  *   - App/useServerHandlers.js → Server drag/reorder + auth + user context actions
  *   - App/ToolbarMenu.js       → Toolbar dropdown menu component
  *   - App/InviteServerModal.js → Invite-to-server modal component
+ *   - App/useAppCallbacks.js   → Scroll, avatar, draft, navigation, computed values
+ *   - App/ChatArea.js          → Main chat rendering (header, messages, input)
  */
-import React, { useState, useEffect, useRef, useCallback, useMemo, Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense } from 'react';
 import './index.css';
 import './styles/modern-theme.css';
-import { Capacitor } from '@capacitor/core';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import SuspenseWithBoundary from './components/SuspenseWithBoundary';
 
 // --- STORES & HOOKS ---
 import { useChatStore } from './stores/useChatStore';
 import { useUIStore } from './stores/useUIStore';
 import useResponsive from './hooks/useResponsive';
 import { useOptimizedMessages, useOnlineUsers } from './hooks/useOptimizedMessages';
-import { useThrottle } from './utils/performanceOptimization';
 import { useDebounce } from './hooks/usePerformanceHooks';
 
 // --- CONTEXTS ---
@@ -40,18 +40,13 @@ import LoadingSpinner from './components/LoadingSpinner';
 import AppModals from './components/AppModals';
 import SplashScreen from './SplashScreen';
 import ConnectionStatusBar from './components/ConnectionStatusBar';
-import ScrollToBottomButton from './components/ScrollToBottomButton';
-import MessageDateDivider from './components/MessageDateDivider';
-import TypingIndicatorEnhanced from './components/TypingIndicatorEnhanced';
-import ImageGalleryGroup from './components/ImageGalleryGroup';
-import { FaTimes, FaUsers, FaBell, FaSearch, FaMicrophone, FaHeadphones, FaVideo, FaDesktop, FaPhoneSlash } from 'react-icons/fa';
+import { FaTimes, FaUsers } from 'react-icons/fa';
 
 // --- LAZY IMPORTS ---
 import {
-    Message, VirtualMessageList, MessageInput,
     LoginPage, WelcomeScreen, KanbanBoard,
     FriendsTab, RoomList, VoiceChatPanel, ChatUserList,
-    FloatingVoiceIsland, CinemaPlayer, NotificationDropdown,
+    FloatingVoiceIsland, CinemaPlayer,
     UserContextMenu, VoiceAudioController, StickyMessageBanner,
     VanityInviteScreen, InviteCodeScreen,
 } from './App/lazyImports';
@@ -61,13 +56,11 @@ import {
     isElectron, isNative,
     MEDIA_BASE_URL, API_BASE_URL, ABSOLUTE_HOST_URL,
     WS_PROTOCOL, API_HOST, ROOM_LIST_URL,
-    CONVERSATION_LIST_URL, GET_OR_CREATE_CONVERSATION_URL,
-    DRAFT_STORAGE_KEY, getTemporaryId,
+    CONVERSATION_LIST_URL,
     MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL,
 } from './config/api';
 import styles from './styles/appStyles';
 import { GOOGLE_WEB_CLIENT_ID } from './utils/constants';
-import confirmDialog from './utils/confirmDialog';
 
 // --- EXTRACTED HOOKS ---
 import useFetchWithAuth from './App/useFetchWithAuth';
@@ -79,8 +72,11 @@ import useFileUpload from './App/useFileUpload';
 import useServerHandlers from './App/useServerHandlers';
 
 // --- EXTRACTED COMPONENTS ---
-import ToolbarMenu from './App/ToolbarMenu';
+import ChatArea from './App/ChatArea';
 import InviteServerModal from './App/InviteServerModal';
+
+// --- EXTRACTED CALLBACKS & COMPUTED ---
+import useAppCallbacks from './App/useAppCallbacks';
 
 // --- MAIN CONTENT ---
 const AppContent = () => {
@@ -184,183 +180,25 @@ const AppContent = () => {
     const optimizedMessages = useOptimizedMessages(rawMessages, debouncedSearchQuery, activeChat);
     const optimizedOnlineUsers = useOnlineUsers(allUsers);
 
-    const isAdmin = username === 'Eastkhan' || username === 'PawPaw' || currentUserProfile?.role === 'admin';
-
-    const currentUserPermissions = useMemo(() => {
-        const currentServer = categories?.find(c => c.id === activeChat?.serverId);
-        const isServerOwner = currentServer?.owner === username || currentServer?.created_by === username;
-        const isMod = serverMembers?.find(m => m.username === username)?.role === 'moderator';
-        return {
-            isAdmin, isServerOwner, isModerator: isMod,
-            canKick: isAdmin || isServerOwner || isMod, canBan: isAdmin || isServerOwner,
-            canMute: isAdmin || isServerOwner || isMod, canWarn: isAdmin || isServerOwner || isMod,
-            canManageRoles: isAdmin || isServerOwner
-        };
-    }, [isAdmin, categories, activeChat?.serverId, username, serverMembers]);
-
-    const sortedServers = useMemo(() => {
-        if (!categories || categories.length === 0) return [];
-        if (!serverOrder || serverOrder.length === 0) return categories;
-        const ordered = [], unordered = [];
-        serverOrder.forEach(id => { const s = categories.find(c => c.id === id); if (s) ordered.push(s); });
-        categories.forEach(s => { if (!serverOrder.includes(s.id)) unordered.push(s); });
-        return [...ordered, ...unordered];
-    }, [categories, serverOrder]);
-
-    // Resolve slug -> display name from categories
-    const resolveRoomName = useCallback((slug) => {
-        if (!slug || !categories) return slug || '';
-        for (const server of categories) {
-            if (server.categories) {
-                for (const cat of server.categories) {
-                    const foundRoom = cat.rooms?.find(r => r.slug === slug);
-                    if (foundRoom) return String(foundRoom.name);
-                }
-            }
-        }
-        // Fallback: strip server-id suffix from slug (e.g., "genel-6-7143" -> "genel")
-        return String(slug).replace(/-\d+-\d+$/, '');
-    }, [categories]);
-
-    const chatTitle = useMemo(() => {
-        if (activeChat.type === 'room') return resolveRoomName(activeChat.id);
-        else if (activeChat.type === 'dm') return String(activeChat.targetUser || 'DM');
-        return '';
-    }, [activeChat, categories, resolveRoomName]);
-
-    const voiceRoomDisplayName = useMemo(() => {
-        return resolveRoomName(currentVoiceRoom);
-    }, [currentVoiceRoom, resolveRoomName]);
-
-    const activeRoomType = useMemo(() => {
-        if (activeChat.type !== 'room' || !categories) return 'text';
-        for (const srv of categories) {
-            if (srv.categories) {
-                for (const cat of srv.categories) {
-                    const room = cat.rooms?.find(r => r.slug === activeChat.id);
-                    if (room) return room.channel_type;
-                }
-            }
-        }
-        return 'text';
-    }, [activeChat, categories]);
-
-    const isImageOnlyMessage = (msg) => {
-        if (!msg) return false;
-        const hasImage = !!(msg.image_url || msg.image);
-        const hasFileImage = !!(msg.file_url || msg.file) && !msg.is_voice_message && /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(msg.file_name || '');
-        const hasContent = !!(msg.content && msg.content.trim());
-        return (hasImage || hasFileImage) && !hasContent && !msg.poll && !msg.reply_to;
-    };
-
-    // ─── SCROLL ───
-    const scrollToBottom = useCallback((behavior = 'auto') => {
-        if (messagesEndRef.current) messagesEndRef.current.scrollIntoView({ behavior });
-    }, []);
-
-    const isNearBottom = useCallback(() => {
-        const el = messageBoxRef.current;
-        if (!el) return true;
-        return (el.scrollHeight - el.scrollTop - el.clientHeight) < 160;
-    }, []);
-
-    const handleMessageScroll = useCallback(() => {
-        const el = messageBoxRef.current;
-        if (!el) return;
-        setShowScrollToBottom((el.scrollHeight - el.scrollTop - el.clientHeight) > 160);
-    }, []);
-
-    const throttledHandleMessageScroll = useThrottle(handleMessageScroll, 100);
-
-    // ─── AVATARS ───
-    const getDeterministicAvatar = useCallback((uname) => {
-        if (uname === '⚡ Signal Bot') return `${MEDIA_BASE_URL}/static/bot/signal.png`;
-        if (uname === 'PawPaw AI') return `${MEDIA_BASE_URL}/static/bot/ai.png`;
-        if (!uname || !defaultAvatars || defaultAvatars.length === 0) return `${MEDIA_BASE_URL}/avatars/cat_1.png`;
-        let hash = 0;
-        for (let i = 0; i < uname.length; i++) hash = uname.charCodeAt(i) + ((hash << 5) - hash);
-        const index = Math.abs(hash % defaultAvatars.length);
-        const avatarItem = defaultAvatars[index];
-        let path;
-        if (typeof avatarItem === 'object' && avatarItem !== null) path = avatarItem.original || avatarItem.thumbnail || avatarItem.url;
-        else if (typeof avatarItem === 'string') path = avatarItem;
-        if (!path || typeof path !== 'string') return `${MEDIA_BASE_URL}/avatars/cat_1.png`;
-        if (path.startsWith('http') || path.startsWith('blob:')) return path;
-        if (!path.startsWith('/')) path = '/' + path;
-        return `${MEDIA_BASE_URL}${path}`;
-    }, [defaultAvatars]);
-
-    const getRealUserAvatar = useCallback((targetUsername) => {
-        const userObj = allUsers.find(u => u.username === targetUsername);
-        if (userObj && userObj.avatar && typeof userObj.avatar === 'string') {
-            if (userObj.avatar.startsWith('http') || userObj.avatar.startsWith('blob:')) return userObj.avatar;
-            let avatarPath = userObj.avatar;
-            if (!avatarPath.startsWith('/')) avatarPath = '/' + avatarPath;
-            return `${MEDIA_BASE_URL}${avatarPath}`;
-        }
-        return getDeterministicAvatar(targetUsername);
-    }, [allUsers, getDeterministicAvatar]);
-
-    // ─── DRAFT SYSTEM ───
-    const chatDraftKey = useMemo(() => (!activeChat || !activeChat.id) ? '' : `${activeChat.type}-${activeChat.id}`, [activeChat]);
-
-    const loadDraftMap = useCallback(() => {
-        try { const raw = localStorage.getItem(DRAFT_STORAGE_KEY); if (!raw) return {}; const parsed = JSON.parse(raw); return parsed && typeof parsed === 'object' ? parsed : {}; }
-        catch (e) { return {}; }
-    }, []);
-
-    const persistDraft = useCallback((value) => {
-        if (!chatDraftKey) return;
-        const map = loadDraftMap();
-        map[chatDraftKey] = value;
-        localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(map));
-    }, [chatDraftKey, loadDraftMap]);
-
-    useEffect(() => {
-        if (!chatDraftKey) { setDraftText(''); setHasDraftMessage(false); return; }
-        const drafts = loadDraftMap();
-        const restored = drafts[chatDraftKey] || '';
-        setDraftText(restored);
-        setHasDraftMessage(!!restored.trim());
-    }, [chatDraftKey, loadDraftMap]);
-
-    // ─── NAVIGATION ───
-    const handleRoomChange = (slug) => {
-        setActiveChat('room', slug);
-        if (isMobile) setIsLeftSidebarVisible(false);
-    };
-
-    const handleDMClick = (targetUser) => {
-        fetchWithAuth(GET_OR_CREATE_CONVERSATION_URL, { method: 'POST', body: JSON.stringify({ target_username: targetUser }) })
-            .then(r => r.json())
-            .then(data => { setActiveChat('dm', data.conversation_id, targetUser); if (isMobile) setIsLeftSidebarVisible(false); });
-    };
-
-    const navigateToPath = useCallback((hashPath) => {
-        if (!hashPath) return;
-        window.location.hash = hashPath.startsWith('#/') ? hashPath : `${hashPath.startsWith('/') ? hashPath : `/${hashPath}`}`;
-        if (isMobile) setIsRightSidebarVisible(false);
-    }, [isMobile]);
-
-    const handleWelcomeClick = useCallback(() => {
-        setActiveChat('welcome', 'welcome', null);
-        if (isMobile) setIsLeftSidebarVisible(false);
-    }, [isMobile]);
-
-    const toggleNotifications = useCallback(() => {
-        setSoundSettings(prev => {
-            const next = { ...prev, notifications: !prev.notifications };
-            localStorage.setItem('chat_sound_settings', JSON.stringify(next));
-            return next;
-        });
-    }, []);
-
-    const handleCopyLink = useCallback(async () => {
-        if (!activeChat?.id) return;
-        const link = `${window.location.origin}/#/${activeChat.type === 'dm' ? `dm/${activeChat.id}` : `room/${activeChat.id}`}`;
-        try { await navigator.clipboard.writeText(link); setUpdateStatusText('Link kopyalandı'); setTimeout(() => setUpdateStatusText(''), 1500); }
-        catch (e) { console.error('Link kopyalanamadı', e); }
-    }, [activeChat]);
+    // ─── CALLBACKS & COMPUTED (extracted) ───
+    const {
+        scrollToBottom, isNearBottom, handleMessageScroll, throttledHandleMessageScroll,
+        getDeterministicAvatar, getRealUserAvatar,
+        persistDraft,
+        handleRoomChange, handleDMClick, navigateToPath, handleWelcomeClick,
+        toggleNotifications, handleCopyLink,
+        sortedServers, chatTitle, voiceRoomDisplayName,
+        activeRoomType, isAdmin, currentUserPermissions,
+    } = useAppCallbacks({
+        setActiveChat, setIsLeftSidebarVisible, setIsRightSidebarVisible,
+        setSoundSettings, setUpdateStatusText, setShowScrollToBottom,
+        setDraftText, setHasDraftMessage,
+        isMobile, activeChat, defaultAvatars, allUsers,
+        categories, serverOrder, currentVoiceRoom,
+        username, currentUserProfile, serverMembers,
+        messagesEndRef, messageBoxRef,
+        fetchWithAuth,
+    });
 
     // ═══════════════════════════════════════════════════════════════
     // EXTRACTED HOOKS
@@ -467,6 +305,35 @@ const AppContent = () => {
     }, []);
 
     // ═══════════════════════════════════════════════════════════════
+    // STABLE CALLBACK REFS (prevent child re-renders from inline arrows)
+    // ═══════════════════════════════════════════════════════════════
+    const handleFriendsClick = useCallback(() => setActiveChat('friends', 'friends'), [setActiveChat]);
+    const handleProfileClick = useCallback(() => openModal('profilePanel'), [openModal]);
+    const handleOpenStore = useCallback(() => openModal('store'), [openModal]);
+    const handleOpenGroupModal = useCallback(() => openModal('groupModal'), [openModal]);
+    const handleOpenDownloadModal = useCallback(() => openModal('downloadModal'), [openModal]);
+    const handleOpenAnalytics = useCallback(() => openModal('analytics'), [openModal]);
+    const handleOpenAdminPanel = useCallback(() => openModal('adminPanel'), [openModal]);
+    const handleOpenPaymentPanel = useCallback(() => openModal('paymentPanel'), [openModal]);
+    const handleOpenStoreModal = useCallback(() => openModal('storeModal'), [openModal]);
+    const handleOpenDailyRewards = useCallback(() => openModal('dailyRewards'), [openModal]);
+    const handleOpenAPIUsage = useCallback(() => openModal('aPIUsagePanel'), [openModal]);
+    const handleOpenExportJobs = useCallback(() => openModal('exportJobsPanel'), [openModal]);
+    const handleOpenScheduledAnnouncements = useCallback(() => openModal('scheduledAnnouncements'), [openModal]);
+    const handleOpenMiniGames = useCallback(() => openModal('miniGames'), [openModal]);
+    const handleOpenProjectCollaboration = useCallback(() => openModal('projectCollaboration'), [openModal]);
+    const handleOpenAvatarStudio = useCallback(() => openModal('avatarStudio'), [openModal]);
+    const handleOpenCinema = useCallback(() => { openModal('cinema'); if (isMobile) setIsLeftSidebarVisible(false); }, [openModal, isMobile]);
+    const handleCloseLeftSidebar = useCallback(() => setIsLeftSidebarVisible(false), []);
+    const handleCloseRightSidebar = useCallback(() => setIsRightSidebarVisible(false), []);
+    const handleViewUserProfile = useCallback((u) => { const usr = allUsers.find(a => a.username === u); if (usr) setViewingProfile(usr); }, [allUsers]);
+    const handleDismissMaintenance = useCallback(() => setMaintenanceMode(null), []);
+    const handleCloseVanityInvite = useCallback(() => { setShowVanityInvite(null); window.location.hash = '#/'; }, []);
+    const handleCloseInviteCode = useCallback(() => { setShowInviteCode(null); window.location.hash = '#/'; }, []);
+    const handleSwitchToFriends = useCallback(() => { setActiveChat('friends', 'friends'); if (isMobile) setIsLeftSidebarVisible(false); }, [setActiveChat, isMobile]);
+    const handleSwitchToAI = useCallback(() => handleRoomChange('ai'), [handleRoomChange]);
+
+    // ═══════════════════════════════════════════════════════════════
     // RENDER
     // ═══════════════════════════════════════════════════════════════
 
@@ -489,14 +356,14 @@ const AppContent = () => {
     if (showVanityInvite) return (
         <Suspense fallback={<LoadingSpinner size="large" text="Davet yükleniyor..." />}>
             <VanityInviteScreen vanityPath={showVanityInvite} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL}
-                onClose={() => { setShowVanityInvite(null); window.location.hash = '#/'; }} />
+                onClose={handleCloseVanityInvite} />
         </Suspense>
     );
 
     if (showInviteCode) return (
         <Suspense fallback={<LoadingSpinner size="large" text="Davet yükleniyor..." />}>
             <InviteCodeScreen inviteCode={showInviteCode} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL}
-                onClose={() => { setShowInviteCode(null); window.location.hash = '#/'; }} />
+                onClose={handleCloseInviteCode} />
         </Suspense>
     );
 
@@ -504,7 +371,7 @@ const AppContent = () => {
     return (
         <div style={{ ...styles.mainContainer }} className="dark-theme">
             {showSplash && <SplashScreen animationState={animationState} />}
-            {maintenanceMode && <MaintenanceBanner message={maintenanceMode.message} endTime={maintenanceMode.endTime} level={maintenanceMode.level} onDismiss={() => setMaintenanceMode(null)} />}
+            {maintenanceMode && <MaintenanceBanner message={maintenanceMode.message} endTime={maintenanceMode.endTime} level={maintenanceMode.level} onDismiss={handleDismissMaintenance} />}
 
             <AppModals
                 fetchWithAuth={fetchWithAuth} activeChat={activeChat} username={username}
@@ -530,8 +397,8 @@ const AppContent = () => {
                 isMuted={isMuted} isDeafened={isDeafened} toggleMute={toggleMute} toggleDeafened={toggleDeafened}
             />
 
-            {isMobile && isLeftSidebarVisible && <div style={styles.mobileOverlay} onClick={() => setIsLeftSidebarVisible(false)} />}
-            {isMobile && isRightSidebarVisible && <div style={styles.mobileOverlay} onClick={() => setIsRightSidebarVisible(false)} />}
+            {isMobile && isLeftSidebarVisible && <div style={styles.mobileOverlay} role="presentation" aria-label="Kenar çubuğunu kapat" onClick={handleCloseLeftSidebar} />}
+            {isMobile && isRightSidebarVisible && <div style={styles.mobileOverlay} role="presentation" aria-label="Kenar çubuğunu kapat" onClick={handleCloseRightSidebar} />}
 
             <ConnectionStatusBar />
 
@@ -542,22 +409,22 @@ const AppContent = () => {
                         {isMobile && (
                             <div style={styles.mobileSidebarHeader}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    <img src="https://media.pawscord.com/assets/logo.png" alt="" style={{ width: '24px', height: '24px' }} onError={(e) => { e.target.style.display = 'none'; }} />
+                                    <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" style={{ width: '24px', height: '24px' }} onError={(e) => { e.target.style.display = 'none'; }} />
                                     <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }}>Pawscord</span>
                                 </div>
-                                <button onClick={() => setIsLeftSidebarVisible(false)} style={styles.closeSidebarButton}><FaTimes /></button>
+                                <button onClick={handleCloseLeftSidebar} style={styles.closeSidebarButton}><FaTimes /></button>
                             </div>
                         )}
-                        <Suspense fallback={<LoadingSpinner size="medium" text="Kanallar yükleniyor..." />}>
+                        <SuspenseWithBoundary fallback={<LoadingSpinner size="medium" text="Kanallar yükleniyor..." />} section="Kanal Listesi">
                             <RoomList
-                                onFriendsClick={() => setActiveChat('friends', 'friends')}
+                                onFriendsClick={handleFriendsClick}
                                 onRoomSelect={handleRoomChange}
                                 onDMSelect={(id, targetUsername) => setActiveChat('dm', id, targetUsername)}
                                 onWelcomeClick={handleWelcomeClick}
                                 setIsLeftSidebarVisible={setIsLeftSidebarVisible}
-                                onProfileClick={() => openModal('profilePanel')}
-                                onViewUserProfile={(u) => { const usr = allUsers.find(a => a.username === u); if (usr) setViewingProfile(usr); }}
-                                onOpenStore={() => openModal('store')}
+                                onProfileClick={handleProfileClick}
+                                onViewUserProfile={handleViewUserProfile}
+                                onOpenStore={handleOpenStore}
                                 onOpenServerSettings={(server) => serverHandlers.setServerToEdit(server)}
                                 categories={sortedServers}
                                 onServerDragStart={serverHandlers.handleServerDragStart}
@@ -581,26 +448,26 @@ const AppContent = () => {
                                 onHideConversation={messageHandlers.handleHideConversation}
                                 handleDrop={() => { }} dropTarget={dropTarget} setDropTarget={setDropTarget}
                                 isDragging={fileUpload.isDragging}
-                                onOpenCreateGroup={() => openModal('groupModal')}
+                                onOpenCreateGroup={handleOpenGroupModal}
                                 toggleMute={toggleMute} toggleDeafened={toggleDeafened}
                                 isMuted={isMuted} isDeafened={isDeafened} isInVoice={isInVoice}
                                 toggleVideo={toggleVideo} toggleScreenShare={toggleScreenShare}
                                 isVideoEnabled={isVideoEnabled} isScreenSharing={isScreenSharing}
-                                updateAvailable={updateAvailable} onUpdateClick={() => openModal('downloadModal')}
-                                onOpenAnalytics={() => openModal('analytics')}
-                                onOpenAdminPanel={() => openModal('adminPanel')}
-                                onOpenPaymentPanel={() => openModal('paymentPanel')}
-                                onOpenStoreModal={() => openModal('storeModal')}
-                                onOpenDailyRewards={() => openModal('dailyRewards')}
-                                onOpenAPIUsage={() => openModal('aPIUsagePanel')}
-                                onOpenExportJobs={() => openModal('exportJobsPanel')}
-                                onOpenScheduledAnnouncements={() => openModal('scheduledAnnouncements')}
-                                onOpenMiniGames={() => openModal('miniGames')}
-                                onOpenProjectCollaboration={() => openModal('projectCollaboration')}
-                                onOpenAvatarStudio={() => openModal('avatarStudio')}
+                                updateAvailable={updateAvailable} onUpdateClick={handleOpenDownloadModal}
+                                onOpenAnalytics={handleOpenAnalytics}
+                                onOpenAdminPanel={handleOpenAdminPanel}
+                                onOpenPaymentPanel={handleOpenPaymentPanel}
+                                onOpenStoreModal={handleOpenStoreModal}
+                                onOpenDailyRewards={handleOpenDailyRewards}
+                                onOpenAPIUsage={handleOpenAPIUsage}
+                                onOpenExportJobs={handleOpenExportJobs}
+                                onOpenScheduledAnnouncements={handleOpenScheduledAnnouncements}
+                                onOpenMiniGames={handleOpenMiniGames}
+                                onOpenProjectCollaboration={handleOpenProjectCollaboration}
+                                onOpenAvatarStudio={handleOpenAvatarStudio}
                                 onServerSelect={handleServerSelect}
                             />
-                        </Suspense>
+                        </SuspenseWithBoundary>
                     </div>
                 )}
 
@@ -614,11 +481,11 @@ const AppContent = () => {
 
                     {activeChat.type === 'friends' ? (
                         <div style={{ width: '100%', height: '100%', paddingTop: mobileWebPadding }}>
-                            <Suspense fallback={<LoadingSpinner size="medium" text="Arkadaşlar yükleniyor..." />}>
+                            <SuspenseWithBoundary fallback={<LoadingSpinner size="medium" text="Arkadaşlar yükleniyor..." />} section="Arkadaşlar">
                                 <FriendsTab fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} onStartDM={handleDMClick}
                                     getDeterministicAvatar={getDeterministicAvatar} onClose={() => setActiveChat('welcome', 'welcome')}
                                     onPendingCountChange={setPendingFriendRequests} onlineUsers={onlineUsers} />
-                            </Suspense>
+                            </SuspenseWithBoundary>
                         </div>
                     ) : activeChat.type === 'welcome' ? (
                         <div style={{ width: '100%', height: '100%' }}>
@@ -628,9 +495,9 @@ const AppContent = () => {
                                     updateAvailable={updateAvailable} isDownloading={isDownloading}
                                     downloadProgress={downloadProgress} updateStatusText={updateStatusText}
                                     onStartUpdate={handleStartUpdate}
-                                    onSwitchToFriends={() => { setActiveChat('friends', 'friends'); if (isMobile) setIsLeftSidebarVisible(false); }}
-                                    onSwitchToAI={() => handleRoomChange('ai')}
-                                    onSwitchToCinema={() => { openModal('cinema'); if (isMobile) setIsLeftSidebarVisible(false); }} />
+                                    onSwitchToFriends={handleSwitchToFriends}
+                                    onSwitchToAI={handleSwitchToAI}
+                                    onSwitchToCinema={handleOpenCinema} />
                             </Suspense>
                         </div>
                     ) : activeRoomType === 'kanban' ? (
@@ -657,164 +524,30 @@ const AppContent = () => {
                                 getRealUserAvatar={getRealUserAvatar} allUsers={allUsers} currentUserProfile={currentUserProfile} />
                         </div>
                     ) : (
-                        <div style={{ ...styles.chatArea, position: 'relative', paddingTop: mobileWebPadding, boxSizing: 'border-box' }}
-                            onDrop={fileUpload.handleChatDrop} onDragOver={(e) => e.preventDefault()}
-                            onDragEnter={fileUpload.handleChatDragEnter} onDragLeave={fileUpload.handleChatDragLeave}>
-
-                            {/* CHAT HEADER */}
-                            <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '8px' }}>
-                                    {isMobile && !isLeftSidebarVisible && <button onClick={() => setIsLeftSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}>☰</button>}
-                                    {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
-                                        <button onClick={() => { setActiveChat('welcome', 'welcome'); setIsLeftSidebarVisible(false); setIsRightSidebarVisible(false); }} style={{ ...styles.mobileMenuButton, fontSize: '1.2em' }}>←</button>
-                                    )}
-                                    <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: isMobile ? '1em' : '1.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {activeChat.type === 'dm' ? `@ ${chatTitle}` : chatTitle}
-                                    </h2>
-                                    <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>{isConnected ? '✓' : '✗'}</div>
-                                </div>
-                                <div style={{ display: 'flex', gap: isMobile ? '5px' : '10px', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', position: 'relative' }}>
-                                    <form onSubmit={(e) => messageHandlers.handleSearchMessages(e, debouncedSearchQuery)} style={styles.searchForm}>
-                                        <input type="text" placeholder="Ara..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={styles.searchInput} ref={searchInputRef} />
-                                        <FaSearch style={styles.searchIcon} />
-                                    </form>
-                                    {!isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
-                                    <button onClick={() => toggleModal('notifications')} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler"><FaBell /></button>
-                                    {modals.notifications && (
-                                        <div style={{ position: 'absolute', top: '54px', right: '20px', zIndex: 1000 }}>
-                                            <Suspense fallback={<LoadingSpinner size="small" text="" />}>
-                                                <NotificationDropdown currentUser={username} onClose={() => closeModal('notifications')} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />
-                                            </Suspense>
-                                        </div>
-                                    )}
-                                    <div className="toolbar-menu-container" style={{ position: 'relative' }}>
-                                        <button onClick={() => toggleModal('toolbarMenu')} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla">⋮</button>
-                                        {modals.toolbarMenu && (
-                                            <ToolbarMenu
-                                                activeChat={activeChat} hasKey={hasKey} modals={modals}
-                                                soundSettings={soundSettings} isInVoice={isInVoice} username={username}
-                                                openModal={openModal} closeModal={closeModal} toggleModal={toggleModal}
-                                                handleCopyLink={handleCopyLink} toggleNotifications={toggleNotifications}
-                                                handleSummarize={messageHandlers.handleSummarize}
-                                                handleClearChat={messageHandlers.handleClearChat}
-                                                handleAdminDeleteConversation={messageHandlers.handleAdminDeleteConversation}
-                                            />
-                                        )}
-                                    </div>
-                                    {isMobile && !isRightSidebarVisible && <button onClick={() => setIsRightSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}><FaUsers /></button>}
-                                </div>
-                            </div>
-
-                            {/* MESSAGE LIST */}
-                            <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}>
-                                <Suspense fallback={<p style={styles.systemMessage}>Mesajlar yükleniyor...</p>}>
-                                    {messageHistoryLoading ? (
-                                        <p style={styles.systemMessage}>Yükleniyor...</p>
-                                    ) : optimizedMessages.length > 50 ? (
-                                        <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
-                                            renderMessage={(msg, index) => (
-                                                <Message key={msg.id || msg.temp_id || index} msg={msg} currentUser={username}
-                                                    absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                                    onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
-                                                    allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                                    onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
-                                                    onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                                                    onToggleReaction={() => { }} onStartForward={setForwardingMessage}
-                                                    isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
-                                                    onToggleSelection={(id) => { const s = new Set(selectedMessages); if (s.has(id)) s.delete(id); else s.add(id); setSelectedMessages(s); }}
-                                                    onScrollToMessage={messageHandlers.scrollToMessage}
-                                                    onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                    onTogglePin={messageHandlers.handleTogglePin}
-                                                    onVisible={messageHandlers.handleMessageVisible} />
-                                            )} />
-                                    ) : (
-                                        <>
-                                            {(() => {
-                                                const elements = [];
-                                                let i = 0;
-                                                while (i < optimizedMessages.length) {
-                                                    const msg = optimizedMessages[i];
-                                                    const key = msg.id || msg.temp_id || i;
-                                                    const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
-                                                    const showDateDivider = !prevMsg || (msg.timestamp && prevMsg.timestamp && new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString());
-
-                                                    if (isImageOnlyMessage(msg)) {
-                                                        const galleryMsgs = [msg];
-                                                        let j = i + 1;
-                                                        while (j < optimizedMessages.length && isImageOnlyMessage(optimizedMessages[j]) && optimizedMessages[j].username === msg.username && msg.timestamp && optimizedMessages[j].timestamp && Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000) { galleryMsgs.push(optimizedMessages[j]); j++; }
-                                                        if (galleryMsgs.length >= 2) {
-                                                            elements.push(
-                                                                <React.Fragment key={`gallery-${galleryMsgs.map(m => m.id || m.temp_id).join('-')}`}>
-                                                                    {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
-                                                                    <ImageGalleryGroup messages={galleryMsgs} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                                                        onOpenGallery={(images, startIndex) => setGalleryData({ images, startIndex })}
-                                                                        onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                                        onDelete={messageHandlers.handleDeleteMessage} allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                                                        fetchWithAuth={fetchWithAuth} onVisible={messageHandlers.handleMessageVisible} />
-                                                                </React.Fragment>
-                                                            );
-                                                            i = j; continue;
-                                                        }
-                                                    }
-
-                                                    elements.push(
-                                                        <React.Fragment key={key}>
-                                                            {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
-                                                            <Message msg={msg} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                                                onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
-                                                                allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                                                onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
-                                                                onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                                                                onToggleReaction={() => { }} onStartForward={setForwardingMessage}
-                                                                isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
-                                                                onToggleSelection={(id) => { const s = new Set(selectedMessages); if (s.has(id)) s.delete(id); else s.add(id); setSelectedMessages(s); }}
-                                                                onScrollToMessage={messageHandlers.scrollToMessage}
-                                                                onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                                onTogglePin={messageHandlers.handleTogglePin}
-                                                                onVisible={messageHandlers.handleMessageVisible} />
-                                                        </React.Fragment>
-                                                    );
-                                                    i++;
-                                                }
-                                                return elements;
-                                            })()}
-                                            <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
-                                        </>
-                                    )}
-                                </Suspense>
-                            </div>
-
-                            {/* DRAG OVERLAY */}
-                            {fileUpload.isDragging && (
-                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(30, 31, 34, 0.9)', border: '3px dashed #5865f2', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 1000 }}>
-                                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>📁</div>
-                                    <div style={{ color: '#5865f2', fontSize: '1.4em', fontWeight: 'bold' }}>Dosyaları buraya bırakın</div>
-                                </div>
-                            )}
-
-                            {showScrollToBottom && <ScrollToBottomButton onClick={() => { scrollToBottom('smooth'); setShowScrollToBottom(false); }} unreadCount={0} />}
-
-                            <div style={{ ...styles.inputContainer, paddingBottom: isNative ? `calc(16px + ${safeAreaBottom})` : (isMobile ? '25px' : '16px') }}>
-                                {fileUpload.isUploading && fileUpload.uploadProgress > 0 && (
-                                    <div style={{ position: 'absolute', top: '-40px', left: '16px', right: '16px', backgroundColor: '#2b2d31', borderRadius: '8px', padding: '8px 12px', boxShadow: '0 2px 10px rgba(0,0,0,0.3)', zIndex: 1001 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                            <span style={{ color: '#b9bbbe', fontSize: '12px', whiteSpace: 'nowrap' }}>📤 Yükleniyor: {fileUpload.uploadProgress}%</span>
-                                            <div style={{ flex: 1, height: '6px', backgroundColor: '#40444b', borderRadius: '3px', overflow: 'hidden' }}>
-                                                <div style={{ width: `${fileUpload.uploadProgress}%`, height: '100%', backgroundColor: '#5865f2', borderRadius: '3px', transition: 'width 0.3s ease' }} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                <Suspense fallback={<div style={{ padding: '12px', color: '#72767d' }}>Yükleniyor...</div>}>
-                                    <MessageInput onSendMessage={messageHandlers.sendMessage} onFileUpload={fileUpload.uploadFile}
-                                        onShowCodeSnippet={() => openModal('snippetModal')}
-                                        placeholder={chatTitle ? `${chatTitle} kanalına mesaj gönder` : 'Mesaj yaz...'}
-                                        disabled={fileUpload.isUploading} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL}
-                                        activeChat={activeChat} pendingFilesFromDrop={fileUpload.pendingFilesFromDrop}
-                                        onClearPendingFiles={() => fileUpload.setPendingFilesFromDrop([])} />
-                                </Suspense>
-                            </div>
-                        </div>
+                        <ChatArea
+                            isMobile={isMobile} isNative={isNative} safeAreaBottom={safeAreaBottom} mobileWebPadding={mobileWebPadding}
+                            isLeftSidebarVisible={isLeftSidebarVisible} setIsLeftSidebarVisible={setIsLeftSidebarVisible}
+                            isRightSidebarVisible={isRightSidebarVisible} setIsRightSidebarVisible={setIsRightSidebarVisible}
+                            activeChat={activeChat} setActiveChat={setActiveChat} chatTitle={chatTitle} isConnected={isConnected}
+                            optimizedMessages={optimizedMessages} messageHistoryLoading={messageHistoryLoading}
+                            showScrollToBottom={showScrollToBottom} setShowScrollToBottom={setShowScrollToBottom}
+                            searchQuery={searchQuery} setSearchQuery={setSearchQuery} debouncedSearchQuery={debouncedSearchQuery} searchInputRef={searchInputRef}
+                            isSelectionMode={isSelectionMode} selectedMessages={selectedMessages} setSelectedMessages={setSelectedMessages}
+                            username={username} isAdmin={isAdmin} allUsers={allUsers}
+                            hasKey={hasKey}
+                            modals={modals} openModal={openModal} closeModal={closeModal} toggleModal={toggleModal}
+                            activeTypingUsers={activeTypingUsers}
+                            soundSettings={soundSettings} isInVoice={isInVoice}
+                            messageHandlers={messageHandlers} fileUpload={fileUpload}
+                            scrollToBottom={scrollToBottom} throttledHandleMessageScroll={throttledHandleMessageScroll}
+                            handleCopyLink={handleCopyLink} toggleNotifications={toggleNotifications}
+                            getDeterministicAvatar={getDeterministicAvatar}
+                            setZoomedImage={setZoomedImage} setViewingProfile={setViewingProfile} setEditingMessage={setEditingMessage}
+                            setReplyingTo={setReplyingTo} setForwardingMessage={setForwardingMessage} setGalleryData={setGalleryData}
+                            setChartSymbol={setChartSymbol}
+                            messageBoxRef={messageBoxRef} messagesEndRef={messagesEndRef}
+                            ABSOLUTE_HOST_URL={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth}
+                        />
                     )}
 
                     {/* ─── RIGHT SIDEBAR ─── */}
@@ -831,7 +564,7 @@ const AppContent = () => {
                                     <button onClick={() => setIsRightSidebarVisible(false)} style={styles.closeSidebarButton}><FaTimes /></button>
                                 </div>
                             )}
-                            <Suspense fallback={<LoadingSpinner size="small" text="Kullanıcılar yükleniyor..." />}>
+                            <SuspenseWithBoundary fallback={<LoadingSpinner size="small" text="Kullanıcılar yükleniyor..." />} section="Kullanıcı Listesi">
                                 <ChatUserList chatUsers={[]} allUsers={allUsers} onlineUsers={onlineUsers}
                                     currentUser={username} currentUserProfile={currentUserProfile}
                                     getDeterministicAvatar={getDeterministicAvatar}
@@ -851,7 +584,7 @@ const AppContent = () => {
                                     }}
                                     activeChat={activeChat} serverMembers={serverMembers}
                                     friendsList={friendsList} onNavigate={navigateToPath} />
-                            </Suspense>
+                            </SuspenseWithBoundary>
                         </div>
                     )}
                 </div>

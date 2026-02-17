@@ -2,13 +2,15 @@ import { FaTimes, FaCoins } from 'react-icons/fa';
 import useCoinStore from './CoinStoreModal/useCoinStore';
 import PackageCard from './CoinStoreModal/PackageCard';
 import { styles, ANIMATIONS_CSS, INFO_ITEMS } from './CoinStoreModal/coinStoreStyles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
+  const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Coin Mağazası' });
   const { packages, loading, selectedPackage, handlePurchase } = useCoinStore(onPurchaseComplete, onClose);
 
   return (
-    <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <div style={styles.overlay} {...overlayProps}>
+      <div style={styles.modal} {...dialogProps}>
 
         {/* Header */}
         <div style={styles.header}>

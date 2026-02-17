@@ -2,23 +2,16 @@
 
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
+import useModalA11y from './hooks/useModalA11y';
 
 const ImageModal = ({ imageUrl, onClose }) => {
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape') {
-                onClose();
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [onClose]);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Resim Önizleme' });
 
     const modalContent = (
-        <div style={styles.overlay} onClick={onClose}>
-            <img src={imageUrl} style={styles.image} alt="Büyütülmüş Resim" />
+        <div style={styles.overlay} {...overlayProps}>
+            <div {...dialogProps} style={{ outline: 'none' }}>
+                <img src={imageUrl} style={styles.image} alt="Büyütülmüş Resim" />
+            </div>
         </div>
     );
 

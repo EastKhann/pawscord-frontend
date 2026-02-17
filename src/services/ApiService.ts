@@ -433,17 +433,15 @@ class ApiService {
     }
 
     /**
-     * Refresh access token
+     * Refresh access token (uses httpOnly cookie)
      */
     async refreshToken() {
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (!refreshToken) return false;
-
         try {
-            const response = await fetch(`${this.baseURL}/api/auth/refresh/`, {
+            const response = await fetch(`${this.baseURL}/api/auth/token/refresh/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ refresh: refreshToken })
+                credentials: 'include',
+                body: JSON.stringify({})
             });
 
             if (response.ok) {
@@ -455,9 +453,8 @@ class ApiService {
             console.error('Token refresh failed:', e);
         }
 
-        // Clear tokens on failure
+        // Clear access token on failure
         localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
         return false;
     }
 

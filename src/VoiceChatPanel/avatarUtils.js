@@ -4,6 +4,18 @@
 import SparkMD5 from 'spark-md5';
 
 /**
+ * Remove thumbnail suffixes from avatar URLs to get full resolution
+ */
+export const getFullResolutionAvatar = (avatarUrl) => {
+    if (!avatarUrl) return null;
+    return avatarUrl
+        .replace(/_100x100\./gi, '.')
+        .replace(/_150x150\./gi, '.')
+        .replace(/_50x50\./gi, '.')
+        .replace(/\?.*$/, '');
+};
+
+/**
  * Generate a deterministic avatar fallback URL based on username hash
  * @param {string} username - The username to generate avatar for
  * @param {number} size - Avatar size in pixels

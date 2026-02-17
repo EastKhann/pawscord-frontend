@@ -5,13 +5,15 @@ import StoreTab from './CryptoStoreModal/StoreTab';
 import InventoryTab from './CryptoStoreModal/InventoryTab';
 import DepositTab from './CryptoStoreModal/DepositTab';
 import styles from './CryptoStoreModal/cryptoStoreStyles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kripto Mağaza' });
     const store = useCryptoStore({ fetchWithAuth, apiBaseUrl, onClose });
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FaCoins color="#f0b232" size={24} />

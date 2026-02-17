@@ -9,8 +9,10 @@ import styles from './PremiumStoreModal/styles';
 import PremiumTab from './PremiumStoreModal/PremiumTab';
 import StoreTab from './PremiumStoreModal/StoreTab';
 import BoostTab from './PremiumStoreModal/BoostTab';
+import useModalA11y from '../hooks/useModalA11y';
 
 const PremiumStoreModal = ({ onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Premium Mağaza' });
     const { user, token } = useAuth();
     const [activeTab, setActiveTab] = useState('premium');
     const [premiumStatus, setPremiumStatus] = useState(null);
@@ -123,7 +125,7 @@ const PremiumStoreModal = ({ onClose }) => {
     };
 
     return (
-        <div style={styles.overlay}>
+        <div style={styles.overlay} {...overlayProps}>
             {showCoinStore && (
                 <CoinStoreModal
                     onClose={() => setShowCoinStore(false)}
@@ -135,7 +137,7 @@ const PremiumStoreModal = ({ onClose }) => {
                 />
             )}
 
-            <div style={styles.modal}>
+            <div style={styles.modal} {...dialogProps}>
                 {/* Header */}
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>

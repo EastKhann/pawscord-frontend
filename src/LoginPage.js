@@ -401,7 +401,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
                 <div className="toggle-mode">
                     {isLoginMode ? "Hesabın yok mu? " : "Zaten üye misin? "}
-                    <span onClick={() => { setIsLoginMode(!isLoginMode); setAuthError(''); }}>
+                    <span role="button" tabIndex={0} onClick={() => { setIsLoginMode(!isLoginMode); setAuthError(''); }} onKeyDown={e => { if (e.key === 'Enter') { setIsLoginMode(!isLoginMode); setAuthError(''); } }} style={{ cursor: 'pointer' }}>
                         {isLoginMode ? "Kayıt Ol" : "Giriş Yap"}
                     </span>
                 </div>

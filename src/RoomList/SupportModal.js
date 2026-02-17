@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaHeart, FaCoffee, FaBitcoin, FaCopy, FaTimes } from '../utils/iconOptimization';
+import useModalA11y from '../hooks/useModalA11y';
 import { styles } from '../SidebarStyles';
 
 const cryptoAddresses = {
@@ -21,9 +22,11 @@ const SupportModal = ({ isOpen, onClose }) => {
 
     if (!isOpen) return null;
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Bizi Destekle' });
+
     return (
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={styles.selectionModalContent} onClick={e => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.selectionModalContent} {...dialogProps}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                     <h3 style={{ color: 'white', margin: 0 }}>Bizi Destekle <FaHeart color="#eb459e" /></h3>
                     <FaTimes style={{ cursor: 'pointer', color: '#b9bbbe' }} onClick={onClose} />

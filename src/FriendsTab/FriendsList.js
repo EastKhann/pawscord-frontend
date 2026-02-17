@@ -49,7 +49,7 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
 
         return (
             <div key={friend.id} style={styles.listItem}>
-                <div style={styles.userInfo} onClick={() => onStartDM(friendUsername)}>
+                <div style={styles.userInfo} role="button" tabIndex={0} onClick={() => onStartDM(friendUsername)} onKeyDown={e => e.key === 'Enter' && onStartDM(friendUsername)} aria-label={`${friendUsername} ile sohbet et`}>
                     <LazyImage src={displayAvatar || getDeterministicAvatar(friendUsername)} style={styles.avatar} alt="avatar" />
                     <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                         <div style={styles.username}>{friendUsername}</div>
@@ -80,4 +80,4 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
     });
 };
 
-export default FriendsList;
+export default React.memo(FriendsList);

@@ -180,7 +180,7 @@ const Message = ({
 
             <div style={styles.contentWrapper}>
                 {msg.reply_to && (
-                    <div style={styles.replyContainer} onClick={() => onScrollToMessage(msg.reply_to.id)}>
+                    <div style={styles.replyContainer} role="button" tabIndex={0} onClick={() => onScrollToMessage(msg.reply_to.id)} onKeyDown={e => e.key === 'Enter' && onScrollToMessage(msg.reply_to.id)} aria-label="Yanıtlanan mesaja git">
                         <div style={styles.replyLine} />
                         <span style={{ fontWeight: 'bold', marginRight: 5 }}>@{msg.reply_to.username}</span>
                         <span style={{ opacity: 0.7, fontSize: '0.9em' }}>
@@ -294,8 +294,9 @@ const Message = ({
                     {groupedReactions.length > 0 && (
                         <div style={styles.reactionsRow}>
                             {groupedReactions.map(({ emoji, count }) => (
-                                <span key={emoji} onClick={() => onToggleReaction(msg.id, emoji)}
-                                    style={{ ...styles.reactionTag, border: myReaction(emoji) ? '1px solid #5865f2' : '1px solid transparent' }}>
+                                <span key={emoji} role="button" tabIndex={0} onClick={() => onToggleReaction(msg.id, emoji)} onKeyDown={e => e.key === 'Enter' && onToggleReaction(msg.id, emoji)}
+                                    style={{ ...styles.reactionTag, border: myReaction(emoji) ? '1px solid #5865f2' : '1px solid transparent', cursor: 'pointer' }}
+                                    aria-label={`${emoji} tepki (${count})`}>
                                     {emoji} {count}
                                 </span>
                             ))}

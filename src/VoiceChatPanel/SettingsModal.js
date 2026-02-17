@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { styles } from './SettingsModal/settingsModalStyles';
 import useMicTest from './SettingsModal/useMicTest';
+import useModalA11y from '../hooks/useModalA11y';
 
 const SettingsModal = ({
   audioSettings,
@@ -20,10 +21,11 @@ const SettingsModal = ({
   const [tempScreenQuality, setTempScreenQuality] = useState(screenShareQuality);
   const [tempScreenFPS, setTempScreenFPS] = useState(screenShareFPS);
   const { micLevel, isTesting, setIsTesting } = useMicTest();
+  const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Ses Ayarları' });
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.panel}>
+    <div style={styles.overlay} {...overlayProps}>
+      <div style={styles.panel} {...dialogProps}>
         {/* Header */}
         <div style={styles.header}>
           <h2 style={styles.headerTitle}>⚙️ Ses Ayarları</h2>
@@ -158,7 +160,7 @@ const SettingsModal = ({
             }}>
               {tempVadSensitivity < 35 ? '⚠️ Çok hassas - False positive olabilir'
                 : tempVadSensitivity > 60 ? '⚠️ Az hassas - Konuşma algılanmayabilir'
-                : '✅ Optimal hassasiyet'}
+                  : '✅ Optimal hassasiyet'}
             </div>
           </div>
 

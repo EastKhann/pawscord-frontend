@@ -47,7 +47,7 @@ export const LOCAL_GIF_LIST_URL = `${API_BASE_URL}/gifs/list_local/`;
 export const DRAFT_STORAGE_KEY = 'chat_drafts_v1';
 
 // Utility functions
-export const getTemporaryId = () => (Date.now() + Math.floor(Math.random() * 1000)).toString();
+export const getTemporaryId = () => `${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 
 export const calculateFileHash = async (file) => {
     const SparkMD5 = (await import('spark-md5')).default;

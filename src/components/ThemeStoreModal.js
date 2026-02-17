@@ -1,10 +1,12 @@
 import { THEMES, applyTheme } from '../utils/ThemeManager';
 import { FaPalette, FaCheck } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const ThemeStoreModal = ({ onClose, currentTheme, onThemeChange }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Tema Mağazası' });
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <FaPalette style={{ marginRight: 10, fontSize: '1.2em', color: '#f0b232' }} />
                     <h2 style={{ margin: 0 }}>Tema Mağazası</h2>

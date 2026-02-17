@@ -68,6 +68,7 @@ const VoiceUserContextMenu = ({
                     <div style={{ position: 'relative', height: '20px', display: 'flex', alignItems: 'center' }}>
                         <input type="range" min="0" max="200" value={volumeVal}
                             onChange={(e) => handleVolumeChange(userObj.username, e)}
+                            aria-label={`${userObj.username} ses seviyesi`}
                             className="voice-volume-slider"
                             style={{ width: '100%', height: '6px', cursor: 'pointer', WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none', background: 'transparent', outline: 'none', position: 'relative', zIndex: 2 }} />
                         <div style={{ position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', height: '6px', borderRadius: '3px', overflow: 'hidden', pointerEvents: 'none', zIndex: 1, background: '#1e1f22' }}>
@@ -79,16 +80,16 @@ const VoiceUserContextMenu = ({
             )}
 
             {/* Actions */}
-            <div style={styles.menuSection}>
-                <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('profile')}>
+            <div style={styles.menuSection} role="menu">
+                <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={() => handleMenuAction('profile')} onKeyDown={e => e.key === 'Enter' && handleMenuAction('profile')}>
                     <span style={{ marginRight: '8px', opacity: 0.7 }}>{'👤'}</span> Profili G{'ö'}r{'ü'}nt{'ü'}le
                 </div>
-                <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('dm')}>
+                <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={() => handleMenuAction('dm')} onKeyDown={e => e.key === 'Enter' && handleMenuAction('dm')}>
                     <span style={{ marginRight: '8px', opacity: 0.7 }}>{'💬'}</span> {'Ö'}zelden Mesaj At
                 </div>
                 {userObj.username !== currentUsername &&
                     !friendsList.some(f => f.sender_username === userObj.username || f.receiver_username === userObj.username) && (
-                        <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('add_friend')}>
+                        <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={() => handleMenuAction('add_friend')} onKeyDown={e => e.key === 'Enter' && handleMenuAction('add_friend')}>
                             <span style={{ marginRight: '8px', opacity: 0.7 }}>{'➕'}</span> Arkada{'ş'} Ekle
                         </div>
                     )}

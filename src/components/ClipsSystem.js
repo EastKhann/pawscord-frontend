@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './ClipsSystem.css';
 import confirmDialog from '../utils/confirmDialog';
 
@@ -10,6 +10,16 @@ const ClipsSystem = ({ serverId, onClose }) => {
   const [clipName, setClipName] = useState('');
   const [selectedClip, setSelectedClip] = useState(null);
   const [playingClip, setPlayingClip] = useState(null);
+  const clipTimerRef = useRef(null);
+  const playTimerRef = useRef(null);
+
+  // 🧹 Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      clearTimeout(clipTimerRef.current);
+      clearTimeout(playTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (activeTab === 'my-clips') {
@@ -77,7 +87,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setTimeout(() => {
+        clipTimerRef.current = setTimeout(() => {
           stopClip(data.clip_id);
         }, 30000); // Auto-stop after 30 seconds
       } else {
@@ -149,7 +159,7 @@ const ClipsSystem = ({ serverId, onClose }) => {
   const playClip = (clip) => {
     setPlayingClip(clip.id);
     // Simulate playback
-    setTimeout(() => setPlayingClip(null), 3000);
+    playTimerRef.current = setTimeout(() => setPlayingClip(null), 3000);
   };
 
   return (

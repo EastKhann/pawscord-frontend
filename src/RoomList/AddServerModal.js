@@ -29,7 +29,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => 
                         <FaTimes style={{ cursor: 'pointer', color: '#b9bbbe' }} onClick={() => { setIsCreatingServer(false); onClose(); }} />
                     </div>
                     <p style={{ color: '#b9bbbe', fontSize: '0.9em' }}>Sunucuna bir isim ver.</p>
-                    <input autoFocus placeholder="Sunucu Adı..." value={newServerName} onChange={e => setNewServerName(e.target.value)} style={styles.addRoomInput} />
+                    <input autoFocus placeholder="Sunucu Adı..." aria-label="Sunucu adı" value={newServerName} onChange={e => setNewServerName(e.target.value)} style={styles.addRoomInput} />
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '10px 0' }}>
                         <input type="checkbox" id="publicCheck" checked={isNewServerPublic} onChange={(e) => setIsNewServerPublic(e.target.checked)} style={{ width: '16px', height: '16px', accentColor: '#23a559' }} />

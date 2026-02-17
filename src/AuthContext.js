@@ -25,30 +25,19 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const refreshTimerRef = useRef(null);
 
-    // 🔄 Token Refresh Function
+    // 🔄 Token Refresh Function (uses httpOnly cookie — no JS access to refresh token)
     const refreshAccessToken = useCallback(async () => {
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (!refreshToken) {
-            console.warn('⚠️ [Auth] No refresh token available');
-            logout();
-            return false;
-        }
-
         try {
             const response = await fetch(`${API_URL_BASE}/api/auth/token/refresh/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ refresh: refreshToken })
+                credentials: 'include', // 🔒 Send httpOnly refresh_token cookie
+                body: JSON.stringify({}) // Refresh token comes from cookie
             });
 
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('access_token', data.access);
-
-                // Eğer yeni refresh token dönerse onu da kaydet
-                if (data.refresh) {
-                    localStorage.setItem('refresh_token', data.refresh);
-                }
 
                 const decoded = jwtDecode(data.access);
                 setToken(data.access);
@@ -146,7 +135,8 @@ export const AuthProvider = ({ children }) => {
     const login = (accessToken, refreshToken) => {
         try {
             localStorage.setItem('access_token', accessToken);
-            localStorage.setItem('refresh_token', refreshToken);
+            // 🔒 refresh_token is now stored as httpOnly cookie by the backend
+            // No longer stored in localStorage (XSS protection)
             const decoded = jwtDecode(accessToken);
 
             localStorage.setItem('chat_username', decoded.username);
@@ -167,8 +157,13 @@ export const AuthProvider = ({ children }) => {
         if (refreshTimerRef.current) {
             clearTimeout(refreshTimerRef.current);
         }
+        // Call backend to blacklist refresh token & delete httpOnly cookie
+        fetch(`${API_URL_BASE}/api/auth/logout/`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+        }).catch(() => { }); // fire-and-forget, don't block logout on network error
         localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
         localStorage.removeItem('chat_username');
         setToken(null);
         setUser(null);

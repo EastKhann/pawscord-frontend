@@ -24,7 +24,7 @@ function useEnglishLearning() {
 
     const handleLogout = useCallback(() => {
         localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        // refresh_token is httpOnly cookie — cleared by backend
         navigate('/');
     }, [navigate]);
 
@@ -34,20 +34,19 @@ function useEnglishLearning() {
             const headers = options.headers || {};
             if (token) headers['Authorization'] = `Bearer ${token}`;
             if (!(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
-            return fetch(url, { ...options, headers });
+            return fetch(url, { ...options, headers, credentials: 'include' });
         };
 
         let response = await originalFetch();
 
         if (response.status === 401 && url !== TOKEN_REFRESH_URL) {
             console.warn("Token süresi doldu, yenileniyor...");
-            const refreshToken = localStorage.getItem('refresh_token');
-            if (!refreshToken) { handleLogout(); throw new Error("Oturum süresi doldu, giriş yapın."); }
             try {
                 const refreshResponse = await fetch(TOKEN_REFRESH_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ refresh: refreshToken }),
+                    credentials: 'include',
+                    body: JSON.stringify({}),
                 });
                 const data = await refreshResponse.json();
                 if (!refreshResponse.ok) { handleLogout(); throw new Error("Oturum yenilenemedi."); }

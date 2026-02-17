@@ -106,18 +106,19 @@ describe('API Configuration', () => {
         it('should return unique values on successive calls', () => {
             const ids = new Set();
             for (let i = 0; i < 100; i++) ids.add(getTemporaryId());
-            // With random component, collisions should be extremely rare
-            expect(ids.size).toBeGreaterThanOrEqual(95);
+            // With timestamp + random(36) component, every ID should be unique
+            expect(ids.size).toBe(100);
         });
 
-        it('should be based on Date.now (starts with timestamp prefix)', () => {
+        it('should contain timestamp prefix and random suffix', () => {
             const before = Date.now();
             const id = getTemporaryId();
-            const after = Date.now();
-            const numId = parseInt(id, 10);
-            // The id is Date.now() + random(0-999), so numId should be in range
-            expect(numId).toBeGreaterThanOrEqual(before);
-            expect(numId).toBeLessThanOrEqual(after + 1000);
+            // Format: "timestamp_randomChars"
+            expect(id).toContain('_');
+            const [timestampPart] = id.split('_');
+            const ts = parseInt(timestampPart, 10);
+            expect(ts).toBeGreaterThanOrEqual(before);
+            expect(ts).toBeLessThanOrEqual(Date.now());
         });
     });
 

@@ -22,6 +22,10 @@ export default function useChatConnection({
     setCurrentTheme,
 }) {
     const ws = useRef(null);
+    const chatReconnectRef = useRef(null);
+    const chatReconnectAttempts = useRef(0);
+    const intentionalChatClose = useRef(false);
+    const MAX_CHAT_RECONNECT = 8;
 
     const { setTypingUser, incrementUnread } = useChatStore();
 
@@ -53,10 +57,20 @@ export default function useChatConnection({
         const newWs = new WebSocket(wsUrl);
         ws.current = newWs;
 
-        newWs.onopen = () => setIsConnected(true);
+        newWs.onopen = () => {
+            setIsConnected(true);
+            chatReconnectAttempts.current = 0;
+            intentionalChatClose.current = false;
+        };
 
         newWs.onmessage = (event) => {
-            const data = JSON.parse(event.data);
+            let data;
+            try {
+                data = JSON.parse(event.data);
+            } catch (e) {
+                console.error('❌ [ChatWS] Failed to parse message:', e);
+                return;
+            }
             if (data.type === 'chat' || data.type === 'dm' || data.type === 'chat_message_handler') {
                 const getCacheKeyFromMessage = (msgData) => {
                     if (msgData.room) return `room-${msgData.room}`;
@@ -113,7 +127,22 @@ export default function useChatConnection({
         };
 
         newWs.onerror = (error) => console.error('❌ [WebSocket] Connection error:', error);
-        newWs.onclose = () => setIsConnected(false);
+        newWs.onclose = (event) => {
+            setIsConnected(false);
+            // Reconnect unless intentionally closed (room switch / unmount)
+            if (!intentionalChatClose.current && event.code !== 1000 && event.code !== 1001) {
+                if (chatReconnectAttempts.current >= MAX_CHAT_RECONNECT) {
+                    console.warn('❌ [ChatWS] Max reconnect attempts reached');
+                    return;
+                }
+                chatReconnectAttempts.current++;
+                const delay = Math.min(2000 * Math.pow(1.5, chatReconnectAttempts.current - 1), 30000);
+                console.log(`🔄 [ChatWS] Reconnecting in ${Math.round(delay / 1000)}s (attempt ${chatReconnectAttempts.current}/${MAX_CHAT_RECONNECT})`);
+                chatReconnectRef.current = setTimeout(() => {
+                    if (!intentionalChatClose.current) connectWebSocket();
+                }, delay);
+            }
+        };
     }, [activeChat.id, activeChat.type, username, token]);
 
     // --- 🔌 STATUS WEBSOCKET ---
@@ -246,6 +275,8 @@ export default function useChatConnection({
 
         return () => {
             isCancelled = true;
+            intentionalChatClose.current = true;
+            clearTimeout(chatReconnectRef.current);
             // Close WebSocket on chat switch to prevent "closed before established" errors
             if (ws.current) {
                 try { ws.current.close(1000, 'chat_switch'); } catch (e) { /* ignore */ }

@@ -183,7 +183,6 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
     // 🔚 Ses bittiğinde
     useEffect(() => {
         const audio = audioRef.current;
-        if (!audio) return;
 
         const handleEnded = () => {
             setIsPlaying(false);
@@ -191,10 +190,14 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
             cancelAnimationFrame(animationRef.current);
         };
 
-        audio.addEventListener('ended', handleEnded);
+        if (audio) {
+            audio.addEventListener('ended', handleEnded);
+        }
 
         return () => {
-            audio.removeEventListener('ended', handleEnded);
+            if (audio) {
+                audio.removeEventListener('ended', handleEnded);
+            }
             cancelAnimationFrame(animationRef.current);
         };
     }, []);

@@ -1,10 +1,13 @@
 import React from 'react';
 import { FaTimes, FaMagic, FaRobot } from 'react-icons/fa';
+import useModalA11y from './hooks/useModalA11y';
 
 const SummaryModal = ({ isLoading, summaryText, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'AI Sohbet Özeti' });
+
     return (
-        <div style={styles.overlay}>
-            <div style={styles.modal}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 {/* Header */}
                 <div style={styles.header}>
                     <div style={styles.headerTitle}>

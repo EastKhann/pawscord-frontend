@@ -42,17 +42,6 @@ const useCodeEditor = ({ roomId, userId, username, apiBaseUrl, fetchWithAuth, we
     cursorDecorations.current.delete(data.user_id);
   };
 
-  const setupWebSocket = () => {
-    if (!websocket) return;
-    websocket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'code_update') handleRemoteCodeUpdate(data);
-      else if (data.type === 'cursor_update') handleRemoteCursorUpdate(data);
-      else if (data.type === 'collaborator_joined') handleCollaboratorJoined(data);
-      else if (data.type === 'collaborator_left') handleCollaboratorLeft(data);
-    });
-  };
-
   const loadSavedCode = async () => {
     try {
       const res = await fetchWithAuth(`${apiBaseUrl}/code-editor/load/?room_id=${roomId}`);
@@ -60,7 +49,26 @@ const useCodeEditor = ({ roomId, userId, username, apiBaseUrl, fetchWithAuth, we
     } catch (e) { console.error('Failed to load code:', e); }
   };
 
-  useEffect(() => { setupWebSocket(); loadSavedCode(); return () => { if (window.monacoEditor) { window.monacoEditor.dispose(); delete window.monacoEditor; } if (websocket) websocket.close(); }; }, []);
+  useEffect(() => {
+    const handleMessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'code_update') handleRemoteCodeUpdate(data);
+      else if (data.type === 'cursor_update') handleRemoteCursorUpdate(data);
+      else if (data.type === 'collaborator_joined') handleCollaboratorJoined(data);
+      else if (data.type === 'collaborator_left') handleCollaboratorLeft(data);
+    };
+    if (websocket) {
+      websocket.addEventListener('message', handleMessage);
+    }
+    loadSavedCode();
+    return () => {
+      if (websocket) {
+        websocket.removeEventListener('message', handleMessage);
+        websocket.close();
+      }
+      if (window.monacoEditor) { window.monacoEditor.dispose(); delete window.monacoEditor; }
+    };
+  }, []);
 
   const broadcastCodeChange = (newCode, changes) => {
     if (!websocket || websocket.readyState !== WebSocket.OPEN) return;

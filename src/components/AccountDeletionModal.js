@@ -1,6 +1,7 @@
 import { FaExclamationTriangle, FaTimes, FaTrash, FaLock, FaSpinner } from 'react-icons/fa';
 import styles from './AccountDeletionModal/accountDeletionStyles';
 import useAccountDeletion from './AccountDeletionModal/useAccountDeletion';
+import useModalA11y from '../hooks/useModalA11y';
 
 const DELETE_ITEMS = [
   '✗ Tüm mesajlarınız', '✗ Profil bilgileriniz ve avatarınız',
@@ -10,13 +11,14 @@ const DELETE_ITEMS = [
 ];
 
 const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetchWithAuth, apiBaseUrl }) => {
+  const { overlayProps, dialogProps } = useModalA11y({ isOpen, onClose, label: 'Hesap Silme' });
   const { step, setStep, password, setPassword, confirmText, setConfirmText, isDeleting, error, CONFIRM_PHRASE, handleClose, handleProceedToConfirm, handleDelete, isDeleteDisabled } = useAccountDeletion({ onClose, onConfirmDelete, username, fetchWithAuth, apiBaseUrl });
 
   if (!isOpen) return null;
 
   return (
-    <div style={styles.overlay} onClick={handleClose}>
-      <div style={styles.modal} onClick={e => e.stopPropagation()}>
+    <div style={styles.overlay} {...overlayProps}>
+      <div style={styles.modal} {...dialogProps}>
         <div style={styles.header}>
           <div style={styles.headerIcon}><FaExclamationTriangle size={24} color="#f04747" /></div>
           <h2 style={styles.title}>Hesabı Sil</h2>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext';
 import toast from '../utils/toast';
 import { getApiBase } from '../utils/apiEndpoints';
+import useModalA11y from '../hooks/useModalA11y';
 
 const PremiumModal = ({ isOpen, onClose }) => {
     const { token } = useAuth();
@@ -85,6 +86,8 @@ const PremiumModal = ({ isOpen, onClose }) => {
         return icons[tierId] || '';
     };
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Premium' });
+
     return (
         <div style={{
             position: 'fixed',
@@ -98,7 +101,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
             justifyContent: 'center',
             zIndex: 10000,
             padding: '20px',
-        }} onClick={onClose}>
+        }} {...overlayProps}>
             <div style={{
                 background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
                 borderRadius: '24px',
@@ -108,7 +111,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                 overflowY: 'auto',
                 padding: '40px',
                 position: 'relative',
-            }} onClick={(e) => e.stopPropagation()}>
+            }} {...dialogProps}>
                 {/* Close Button */}
                 <button
                     onClick={onClose}

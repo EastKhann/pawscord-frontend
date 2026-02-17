@@ -1,18 +1,14 @@
 // frontend/src/components/CreateGroupModal.js
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaTimes, FaUserPlus, FaCheck } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 import toast from '../utils/toast';
 
 const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onGroupCreated }) => {
     const [selectedFriends, setSelectedFriends] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Grup Oluştur' });
 
     const toggleFriend = (username) => {
         if (selectedFriends.includes(username)) {
@@ -52,8 +48,8 @@ const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onG
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>Grup Oluştur</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

@@ -241,13 +241,14 @@ export default function useAppEffects({
         initializeCSSOptimization();
 
         // 🚀 CODE SPLITTING: Preload critical chunks after 3 seconds
-        setTimeout(() => {
+        const preloadTimer = setTimeout(() => {
             preloadCriticalChunks();
         }, 3000);
 
         // 🚀 CODE SPLITTING: Prefetch next chunks during idle time
+        let idleCallbackId;
         if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => {
+            idleCallbackId = requestIdleCallback(() => {
                 prefetchNextChunks();
             });
         }
@@ -258,6 +259,13 @@ export default function useAppEffects({
                 // Deep link handler initialized
             });
         }
+
+        return () => {
+            clearTimeout(preloadTimer);
+            if (idleCallbackId && 'cancelIdleCallback' in window) {
+                cancelIdleCallback(idleCallbackId);
+            }
+        };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // =========================================================================

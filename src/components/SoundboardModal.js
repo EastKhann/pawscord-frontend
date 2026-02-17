@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { FaTimes, FaMusic, FaVolumeUp } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absoluteHostUrl }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Ses Paneli' });
     const [sounds, setSounds] = useState([]);
 
     useEffect(() => {
@@ -13,12 +15,6 @@ const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absol
             .then(data => setSounds(data))
             .catch(err => console.error(err));
     }, [apiBaseUrl, fetchWithAuth]);
-
-    useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
 
     const playSound = (soundUrl) => {
         // Tam URL oluştur
@@ -48,8 +44,8 @@ const SoundboardModal = ({ onClose, fetchWithAuth, apiBaseUrl, sendSignal, absol
     const displaySounds = sounds.length > 0 ? sounds : fallbackSounds;
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 10, textShadow: '0 0 10px rgba(235, 69, 158, 0.5)' }}>
                         <FaMusic color="#eb459e" /> Ses Paneli

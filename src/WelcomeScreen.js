@@ -140,7 +140,7 @@ const WelcomeScreen = ({
                 <div style={styles.cardsGrid}>
 
                     {/* 1. ARKADAŞLAR KARTI (Doğru çalışıyor) */}
-                    <div style={styles.card} onClick={onSwitchToFriends}>
+                    <div style={styles.card} role="button" tabIndex={0} onClick={onSwitchToFriends} onKeyDown={e => e.key === 'Enter' && onSwitchToFriends()} aria-label="Arkadaşların">
                         <div style={{ ...styles.iconBox, background: 'rgba(88, 101, 242, 0.15)', color: '#5865f2' }}>
                             <FaUserFriends size={isMobile ? 20 : 24} />
                         </div>
@@ -149,7 +149,7 @@ const WelcomeScreen = ({
                     </div>
 
                     {/* 2. SUNUCULAR KARTI */}
-                    <div style={styles.card} onClick={onOpenMenu}>
+                    <div style={styles.card} role="button" tabIndex={0} onClick={onOpenMenu} onKeyDown={e => e.key === 'Enter' && onOpenMenu()} aria-label="Sunucular">
                         <div style={{ ...styles.iconBox, background: 'rgba(35, 165, 89, 0.15)', color: '#23a559' }}>
                             <FaCompass size={isMobile ? 20 : 24} />
                         </div>
@@ -158,7 +158,7 @@ const WelcomeScreen = ({
                     </div>
 
                     {/* 3. AKTİVİTELER KARTI (Düzeltme: onClick eklendi) */}
-                    <div style={styles.card} onClick={onSwitchToCinema}> {/* 👈 ARTIK SİNEMAYI AÇACAK */}
+                    <div style={styles.card} role="button" tabIndex={0} onClick={onSwitchToCinema} onKeyDown={e => e.key === 'Enter' && onSwitchToCinema()} aria-label="Aktiviteler">
                         <div style={{ ...styles.iconBox, background: 'rgba(240, 178, 50, 0.15)', color: '#f0b232' }}>
                             <FaGamepad size={isMobile ? 20 : 24} />
                         </div>
@@ -167,7 +167,7 @@ const WelcomeScreen = ({
                     </div>
 
                     {/* 4. YAPAY ZEKA KARTI (Doğru çalışıyor) */}
-                    <div style={styles.card} onClick={onSwitchToAI}>
+                    <div style={styles.card} role="button" tabIndex={0} onClick={onSwitchToAI} onKeyDown={e => e.key === 'Enter' && onSwitchToAI()} aria-label="Yapay Zeka">
                         <div style={{ ...styles.iconBox, background: 'rgba(235, 69, 158, 0.15)', color: '#eb459e' }}>
                             <FaMagic size={isMobile ? 20 : 24} />
                         </div>

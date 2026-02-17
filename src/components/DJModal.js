@@ -3,8 +3,10 @@
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaPlay, FaPause, FaForward, FaPlus, FaTimes, FaMusic } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const DJModal = ({ onClose, ws, roomSlug }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'DJ Odası' });
     const [queue, setQueue] = useState([]);
     const [currentUrl, setCurrentUrl] = useState('');
     const [inputUrl, setInputUrl] = useState('');
@@ -56,15 +58,9 @@ const DJModal = ({ onClose, ws, roomSlug }) => {
         return () => ws.current?.removeEventListener('message', handleMessage);
     }, [ws]);
 
-    useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
-
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>🎵 DJ Odası</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

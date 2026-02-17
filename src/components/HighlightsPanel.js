@@ -5,6 +5,8 @@ import DOMPurify from 'dompurify';
 import { api } from '../services/ApiService';  // 🚀 Centralized API service
 import confirmDialog from '../utils/confirmDialog';
 
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const HighlightsPanel = ({ serverId, onClose }) => {
   const [config, setConfig] = useState({
     enabled: false,
@@ -178,10 +180,14 @@ const HighlightsPanel = ({ serverId, onClose }) => {
                         </div>
                         <div className="highlight-content">
                           <p dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(hl.content.replace(
-                              new RegExp(`(${config.keywords.join('|')})`, 'gi'),
-                              `<mark style="background: ${config.highlight_color}; color: #000; padding: 2px 4px; border-radius: 4px;">$1</mark>`
-                            ))
+                            __html: DOMPurify.sanitize(
+                              config.keywords.length > 0
+                                ? hl.content.replace(
+                                  new RegExp(`(${config.keywords.map(escapeRegex).join('|')})`, 'gi'),
+                                  `<mark style="background: ${config.highlight_color}; color: #000; padding: 2px 4px; border-radius: 4px;">$1</mark>`
+                                )
+                                : hl.content
+                            )
                           }} />
                         </div>
                       </div>

@@ -91,4 +91,4 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
     );
 };
 
-export default UserItem;
+export default React.memo(UserItem);

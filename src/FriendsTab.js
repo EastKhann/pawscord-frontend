@@ -46,7 +46,7 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
                         <p style={{ color: '#b9bbbe', fontSize: '0.9em', marginBottom: '20px' }}>Kullan{'ı'}c{'ı'} ad{'ı'}n{'ı'} girerek arkada{'ş'} ekleyebilirsin.</p>
                         <form onSubmit={api.handleSendRequest} style={styles.addForm}>
                             <input type="text" value={api.addUsername} onChange={(e) => api.setAddUsername(e.target.value)}
-                                placeholder="Kullanıcı Adı veya Arkadaş Kodu (Örn: 8392014)" style={styles.input} autoFocus />
+                                placeholder="Kullanıcı Adı veya Arkadaş Kodu (Örn: 8392014)" aria-label="Kullanıcı adı veya arkadaş kodu" style={styles.input} autoFocus />
                             <button type="submit" style={styles.sendRequestBtn}><FaPaperPlane style={{ marginRight: '5px' }} /> G{'ö'}nder</button>
                         </form>
                     </div>

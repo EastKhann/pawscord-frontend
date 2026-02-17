@@ -1,8 +1,11 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import useModalA11y from '../hooks/useModalA11y';
 
 const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClose }) => {
     if (!inviteToServerModal || !inviteToServerModal.isOpen) return null;
+
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Sunucuya Davet Et' });
 
     return createPortal(
         <div
@@ -18,10 +21,10 @@ const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClo
                 alignItems: 'center',
                 zIndex: 999999
             }}
-            onClick={onClose}
+            {...overlayProps}
         >
             <div
-                onClick={(e) => e.stopPropagation()}
+                {...dialogProps}
                 style={{
                     backgroundColor: '#2b2d31',
                     borderRadius: '12px',

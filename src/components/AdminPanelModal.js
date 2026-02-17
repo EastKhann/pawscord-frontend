@@ -4,6 +4,7 @@ import { FaTimes, FaCrown, FaChartLine, FaUsers, FaServer, FaUserShield, FaBook,
 import { MdStorage, MdSecurity } from 'react-icons/md';
 import styles from './AdminPanelModal/styles';
 import useAdminAPI from './AdminPanelModal/hooks/useAdminAPI';
+import useModalA11y from '../hooks/useModalA11y';
 
 import {
     DashboardTab, UsersTab, ServersTab, LogsTab, ModerationTab,
@@ -83,9 +84,11 @@ const AdminPanelModal = ({
         }
     };
 
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Yönetici Paneli' });
+
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaCrown size={20} color="#ffd700" />
