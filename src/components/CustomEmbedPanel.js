@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import './CustomEmbedPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
@@ -158,16 +158,30 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
     });
   };
 
+  // 🎯 Performance: Memoized event handlers
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleToggleEditor = useCallback(() => setShowEditor(prev => !prev), []);
+  const handleChannelChange = useCallback((e) => setSelectedChannel(e.target.value), []);
+  const handleAuthorNameChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, author_name: e.target.value })), []);
+  const handleAuthorIconChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, author_icon: e.target.value })), []);
+  const handleTitleChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, title: e.target.value })), []);
+  const handleDescriptionChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, description: e.target.value })), []);
+  const handleColorChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, color: e.target.value })), []);
+  const handleThumbnailChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, thumbnail: e.target.value })), []);
+  const handleImageChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, image: e.target.value })), []);
+  const handleFooterTextChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, footer_text: e.target.value })), []);
+  const handleFooterIconChange = useCallback((e) => setCurrentEmbed(prev => ({ ...prev, footer_icon: e.target.value })), []);
+
   return (
     <div className="custom-embed-overlay" onClick={onClose}>
-      <div className="custom-embed-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="custom-embed-panel" onClick={handleStopPropagation}>
         <div className="custom-embed-header">
           <h2>📝 Özel Embed Oluşturucu</h2>
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="custom-embed-content">
-          <button className="create-embed-btn" onClick={() => setShowEditor(!showEditor)}>
+          <button className="create-embed-btn" onClick={handleToggleEditor}>
             {showEditor ? '❌ Düzenleyiciyi Kapat' : '+ Yeni Embed Oluştur'}
           </button>
 
@@ -179,11 +193,11 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
                   <div className="form-row">
                     <div className="form-group">
                       <label>İsim</label>
-                      <input value={currentEmbed.author_name} onChange={(e) => setCurrentEmbed({...currentEmbed, author_name: e.target.value})} placeholder="Yazar adı" />
+                      <input value={currentEmbed.author_name} onChange={handleAuthorNameChange} placeholder="Yazar adı" />
                     </div>
                     <div className="form-group">
                       <label>İkon URL</label>
-                      <input value={currentEmbed.author_icon} onChange={(e) => setCurrentEmbed({...currentEmbed, author_icon: e.target.value})} placeholder="https://..." />
+                      <input value={currentEmbed.author_icon} onChange={handleAuthorIconChange} placeholder="https://..." />
                     </div>
                   </div>
                 </div>
@@ -192,15 +206,15 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
                   <h3>İçerik</h3>
                   <div className="form-group">
                     <label>Başlık</label>
-                    <input value={currentEmbed.title} onChange={(e) => setCurrentEmbed({...currentEmbed, title: e.target.value})} placeholder="Embed başlığı" />
+                    <input value={currentEmbed.title} onChange={handleTitleChange} placeholder="Embed başlığı" />
                   </div>
                   <div className="form-group">
                     <label>Açıklama</label>
-                    <textarea value={currentEmbed.description} onChange={(e) => setCurrentEmbed({...currentEmbed, description: e.target.value})} rows="4" placeholder="Embed açıklaması" />
+                    <textarea value={currentEmbed.description} onChange={handleDescriptionChange} rows="4" placeholder="Embed açıklaması" />
                   </div>
                   <div className="form-group">
                     <label>Renk</label>
-                    <input type="color" value={currentEmbed.color} onChange={(e) => setCurrentEmbed({...currentEmbed, color: e.target.value})} />
+                    <input type="color" value={currentEmbed.color} onChange={handleColorChange} />
                   </div>
                 </div>
 
@@ -209,11 +223,11 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
                   <div className="form-row">
                     <div className="form-group">
                       <label>Küçük Resim URL</label>
-                      <input value={currentEmbed.thumbnail} onChange={(e) => setCurrentEmbed({...currentEmbed, thumbnail: e.target.value})} placeholder="https://..." />
+                      <input value={currentEmbed.thumbnail} onChange={handleThumbnailChange} placeholder="https://..." />
                     </div>
                     <div className="form-group">
                       <label>Büyük Resim URL</label>
-                      <input value={currentEmbed.image} onChange={(e) => setCurrentEmbed({...currentEmbed, image: e.target.value})} placeholder="https://..." />
+                      <input value={currentEmbed.image} onChange={handleImageChange} placeholder="https://..." />
                     </div>
                   </div>
                 </div>
@@ -243,11 +257,11 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
                   <div className="form-row">
                     <div className="form-group">
                       <label>Metin</label>
-                      <input value={currentEmbed.footer_text} onChange={(e) => setCurrentEmbed({...currentEmbed, footer_text: e.target.value})} placeholder="Footer metni" />
+                      <input value={currentEmbed.footer_text} onChange={handleFooterTextChange} placeholder="Footer metni" />
                     </div>
                     <div className="form-group">
                       <label>İkon URL</label>
-                      <input value={currentEmbed.footer_icon} onChange={(e) => setCurrentEmbed({...currentEmbed, footer_icon: e.target.value})} placeholder="https://..." />
+                      <input value={currentEmbed.footer_icon} onChange={handleFooterIconChange} placeholder="https://..." />
                     </div>
                   </div>
                 </div>
@@ -257,7 +271,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
               <div className="embed-preview">
                 <h3>Önizleme</h3>
-                <div className="discord-embed" style={{borderLeftColor: currentEmbed.color}}>
+                <div className="discord-embed" style={{ borderLeftColor: currentEmbed.color }}>
                   {currentEmbed.author_name && (
                     <div className="embed-author">
                       {currentEmbed.author_icon && <img src={currentEmbed.author_icon} alt="" />}
@@ -307,7 +321,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
                     <p>{embed.description?.substring(0, 100)}{embed.description?.length > 100 ? '...' : ''}</p>
                   </div>
                   <div className="embed-actions">
-                    <select value={selectedChannel} onChange={(e) => setSelectedChannel(e.target.value)}>
+                    <select value={selectedChannel} onChange={handleChannelChange}>
                       <option value="">Kanal seç</option>
                       {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
@@ -324,5 +338,5 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
   );
 };
 
-export default CustomEmbedPanel;
+export default memo(CustomEmbedPanel);
 

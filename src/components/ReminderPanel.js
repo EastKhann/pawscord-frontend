@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import './ReminderPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
@@ -19,6 +19,15 @@ const ReminderPanel = ({ serverId, onClose }) => {
   });
   const [channels, setChannels] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleShowCreate = useCallback(() => setShowCreateModal(true), []);
+  const handleHideCreate = useCallback(() => setShowCreateModal(false), []);
+  const handleTitleChange = useCallback((e) => setNewReminder(prev => ({ ...prev, title: e.target.value })), []);
+  const handleDescChange = useCallback((e) => setNewReminder(prev => ({ ...prev, description: e.target.value })), []);
+  const handleRemindAtChange = useCallback((e) => setNewReminder(prev => ({ ...prev, remind_at: e.target.value })), []);
+  const handleRepeatChange = useCallback((e) => setNewReminder(prev => ({ ...prev, repeat: e.target.value })), []);
+  const handleChannelChange = useCallback((e) => setNewReminder(prev => ({ ...prev, channel_id: e.target.value })), []);
 
   useEffect(() => {
     fetchReminders();
@@ -130,14 +139,14 @@ const ReminderPanel = ({ serverId, onClose }) => {
 
   return (
     <div className="reminder-overlay" onClick={onClose}>
-      <div className="reminder-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="reminder-panel" onClick={handleStopPropagation}>
         <div className="reminder-header">
           <h2>⏰ Hatırlatıcılar</h2>
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="reminder-content">
-          <button className="create-reminder-btn" onClick={() => setShowCreateModal(true)}>
+          <button className="create-reminder-btn" onClick={handleShowCreate}>
             + Yeni Hatırlatıcı
           </button>
 
@@ -161,7 +170,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
                     <div className="reminder-meta">
                       <span>⏰ {formatTime(reminder.remind_at)}</span>
                       <span>📍 {channels.find(c => c.id === reminder.channel_id)?.name}</span>
-                      <span className="repeat-badge" style={{background: getRepeatBadge(reminder.repeat).color}}>
+                      <span className="repeat-badge" style={{ background: getRepeatBadge(reminder.repeat).color }}>
                         🔄 {getRepeatBadge(reminder.repeat).text}
                       </span>
                     </div>
@@ -177,29 +186,29 @@ const ReminderPanel = ({ serverId, onClose }) => {
         </div>
 
         {showCreateModal && (
-          <div className="create-modal-overlay" onClick={() => setShowCreateModal(false)}>
-            <div className="create-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="create-modal-overlay" onClick={handleHideCreate}>
+            <div className="create-modal" onClick={handleStopPropagation}>
               <div className="modal-header">
                 <h3>Yeni Hatırlatıcı</h3>
-                <button className="close-btn" onClick={() => setShowCreateModal(false)}>×</button>
+                <button className="close-btn" onClick={handleHideCreate}>×</button>
               </div>
               <div className="modal-body">
                 <div className="form-group">
                   <label>Başlık *</label>
-                  <input value={newReminder.title} onChange={(e) => setNewReminder({...newReminder, title: e.target.value})} />
+                  <input value={newReminder.title} onChange={handleTitleChange} />
                 </div>
                 <div className="form-group">
                   <label>Açıklama</label>
-                  <textarea value={newReminder.description} onChange={(e) => setNewReminder({...newReminder, description: e.target.value})} rows="3" />
+                  <textarea value={newReminder.description} onChange={handleDescChange} rows="3" />
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Tarih/Saat *</label>
-                    <input type="datetime-local" value={newReminder.remind_at} onChange={(e) => setNewReminder({...newReminder, remind_at: e.target.value})} />
+                    <input type="datetime-local" value={newReminder.remind_at} onChange={handleRemindAtChange} />
                   </div>
                   <div className="form-group">
                     <label>Tekrar</label>
-                    <select value={newReminder.repeat} onChange={(e) => setNewReminder({...newReminder, repeat: e.target.value})}>
+                    <select value={newReminder.repeat} onChange={handleRepeatChange}>
                       <option value="once">Bir kez</option>
                       <option value="daily">Günlük</option>
                       <option value="weekly">Haftalık</option>
@@ -209,14 +218,14 @@ const ReminderPanel = ({ serverId, onClose }) => {
                 </div>
                 <div className="form-group">
                   <label>Kanal *</label>
-                  <select value={newReminder.channel_id} onChange={(e) => setNewReminder({...newReminder, channel_id: e.target.value})}>
+                  <select value={newReminder.channel_id} onChange={handleChannelChange}>
                     <option value="">Seçin</option>
                     {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                   </select>
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="cancel-btn" onClick={() => setShowCreateModal(false)}>İptal</button>
+                <button className="cancel-btn" onClick={handleHideCreate}>İptal</button>
                 <button className="submit-btn" onClick={createReminder}>⏰ Oluştur</button>
               </div>
             </div>
@@ -227,5 +236,5 @@ const ReminderPanel = ({ serverId, onClose }) => {
   );
 };
 
-export default ReminderPanel;
+export default memo(ReminderPanel);
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaLock, FaEye, FaEyeSlash, FaSpinner, FaCheckCircle, FaGoogle } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 import toast from '../utils/toast';
 import './PasswordSetupModal.css';
 
@@ -10,6 +11,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: true, label: 'Password Setup' });
 
     const validatePassword = () => {
         if (password.length < 8) {
@@ -91,8 +93,8 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
 
     if (success) {
         return (
-            <div className="password-setup-overlay">
-                <div className="password-setup-modal success">
+            <div className="password-setup-overlay" {...overlayProps}>
+                <div className="password-setup-modal success" {...dialogProps}>
                     <div className="success-icon">
                         <FaCheckCircle />
                     </div>
@@ -104,8 +106,8 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
     }
 
     return (
-        <div className="password-setup-overlay">
-            <div className="password-setup-modal">
+        <div className="password-setup-overlay" {...overlayProps}>
+            <div className="password-setup-modal" {...dialogProps}>
                 <div className="password-setup-header">
                     <div className="header-icon">
                         <FaGoogle className="google-icon" />

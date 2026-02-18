@@ -1,4 +1,5 @@
 // frontend/src/components/BotDeveloperPortal.js - Decomposed
+import React, { useCallback, memo } from 'react';
 import {
     FaRobot, FaPlus, FaTrash, FaEdit, FaKey, FaCopy,
     FaChartLine, FaLink, FaServer, FaTimes,
@@ -20,27 +21,40 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
         copyToClipboard, editBot, resetForm
     } = useBotPortal(apiBaseUrl);
 
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleViewList = useCallback(() => setView('list'), [setView]);
+    const handleViewCreate = useCallback(() => { setView('create'); resetForm(); }, [setView, resetForm]);
+    const handleViewCreateNoReset = useCallback(() => setView('create'), [setView]);
+    const handleViewDocs = useCallback(() => setView('docs'), [setView]);
+    const handleFormName = useCallback((e) => setBotForm(prev => ({ ...prev, name: e.target.value })), []);
+    const handleFormDescription = useCallback((e) => setBotForm(prev => ({ ...prev, description: e.target.value })), []);
+    const handleFormAvatar = useCallback((e) => setBotForm(prev => ({ ...prev, avatar_url: e.target.value })), []);
+    const handleFormPrefix = useCallback((e) => setBotForm(prev => ({ ...prev, prefix: e.target.value })), []);
+    const handleFormPublic = useCallback((e) => setBotForm(prev => ({ ...prev, is_public: e.target.checked })), []);
+    const handleCloseWebhookForm = useCallback(() => setShowWebhookForm(false), [setShowWebhookForm]);
+    const handleWebhookUrlChange = useCallback((e) => setWebhookUrl(e.target.value), [setWebhookUrl]);
+
     return (
         <div className="bot-portal-overlay" onClick={onClose}>
-            <div className="bot-portal-panel" onClick={e => e.stopPropagation()}>
+            <div className="bot-portal-panel" onClick={handleStopPropagation}>
                 <div className="portal-header">
                     <h2><FaRobot /> Bot Geliştirici Portalı</h2>
                     <div className="header-actions">
                         <button
                             className={`nav-btn ${view === 'list' ? 'active' : ''}`}
-                            onClick={() => setView('list')}
+                            onClick={handleViewList}
                         >
                             <FaRobot /> Botlarım
                         </button>
                         <button
                             className={`nav-btn ${view === 'create' ? 'active' : ''}`}
-                            onClick={() => { setView('create'); resetForm(); }}
+                            onClick={handleViewCreate}
                         >
                             <FaPlus /> Yeni Bot
                         </button>
                         <button
                             className={`nav-btn ${view === 'docs' ? 'active' : ''}`}
-                            onClick={() => setView('docs')}
+                            onClick={handleViewDocs}
                         >
                             <FaBook /> Dokümantasyon
                         </button>
@@ -162,7 +176,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                 <div className="no-bots">
                                     <FaRobot className="empty-icon" />
                                     <p>Henüz bot oluşturmadınız</p>
-                                    <button onClick={() => setView('create')}>
+                                    <button onClick={handleViewCreateNoReset}>
                                         <FaPlus /> İlk botunu oluştur
                                     </button>
                                 </div>
@@ -181,7 +195,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                     type="text"
                                     placeholder="Harika Bot"
                                     value={botForm.name}
-                                    onChange={(e) => setBotForm({ ...botForm, name: e.target.value })}
+                                    onChange={handleFormName}
                                     maxLength={32}
                                 />
                             </div>
@@ -191,7 +205,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                 <textarea
                                     placeholder="Bu bot ne yapar?"
                                     value={botForm.description}
-                                    onChange={(e) => setBotForm({ ...botForm, description: e.target.value })}
+                                    onChange={handleFormDescription}
                                     rows={3}
                                 />
                             </div>
@@ -202,7 +216,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                     type="text"
                                     placeholder="https://..."
                                     value={botForm.avatar_url}
-                                    onChange={(e) => setBotForm({ ...botForm, avatar_url: e.target.value })}
+                                    onChange={handleFormAvatar}
                                 />
                             </div>
 
@@ -212,7 +226,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                     type="text"
                                     placeholder="!"
                                     value={botForm.prefix}
-                                    onChange={(e) => setBotForm({ ...botForm, prefix: e.target.value })}
+                                    onChange={handleFormPrefix}
                                     maxLength={5}
                                 />
                             </div>
@@ -241,7 +255,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                     <input
                                         type="checkbox"
                                         checked={botForm.is_public}
-                                        onChange={(e) => setBotForm({ ...botForm, is_public: e.target.checked })}
+                                        onChange={handleFormPublic}
                                     />
                                     <span>Bot'u herkese açık yap (keşfedilebilir)</span>
                                 </label>
@@ -256,7 +270,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                 </button>
                                 <button
                                     className="cancel-btn"
-                                    onClick={() => setView('list')}
+                                    onClick={handleViewList}
                                 >
                                     İptal
                                 </button>
@@ -267,7 +281,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                     {/* Analytics View */}
                     {view === 'analytics' && selectedBot && (
                         <div className="analytics-view">
-                            <button className="back-btn" onClick={() => setView('list')}>
+                            <button className="back-btn" onClick={handleViewList}>
                                 ← Geri
                             </button>
                             <h3>📊 {selectedBot.name} - Analitik</h3>
@@ -327,7 +341,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                     type="text"
                                     placeholder="https://your-server.com/webhook"
                                     value={webhookUrl}
-                                    onChange={(e) => setWebhookUrl(e.target.value)}
+                                    onChange={handleWebhookUrlChange}
                                 />
                             </div>
 
@@ -341,9 +355,9 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                                 checked={webhookEvents.includes(event.id)}
                                                 onChange={(e) => {
                                                     if (e.target.checked) {
-                                                        setWebhookEvents([...webhookEvents, event.id]);
+                                                        setWebhookEvents(prev => [...prev, event.id]);
                                                     } else {
-                                                        setWebhookEvents(webhookEvents.filter(ev => ev !== event.id));
+                                                        setWebhookEvents(prev => prev.filter(ev => ev !== event.id));
                                                     }
                                                 }}
                                             />
@@ -362,7 +376,7 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
                                 </button>
                                 <button
                                     className="cancel-btn"
-                                    onClick={() => setShowWebhookForm(false)}
+                                    onClick={handleCloseWebhookForm}
                                 >
                                     İptal
                                 </button>
@@ -375,4 +389,4 @@ const BotDeveloperPortal = ({ apiBaseUrl, onClose, currentUser }) => {
     );
 };
 
-export default BotDeveloperPortal;
+export default memo(BotDeveloperPortal);

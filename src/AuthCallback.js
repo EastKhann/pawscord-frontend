@@ -41,16 +41,15 @@ const AuthCallback = ({ apiBaseUrl }) => {
                 return;
             }
 
-            // 🔐 DIRECT TOKEN MODE: Tokens passed directly in URL
-            if (accessToken && refreshToken) {
+            // 🔐 DIRECT TOKEN MODE: Access token in URL, refresh in httpOnly cookie
+            if (accessToken) {
                 try {
-                    // Store tokens securely (🔥 FIX: refresh_token snake_case kullan)
+                    // Store access token
                     localStorage.setItem('access_token', accessToken);
-                    localStorage.setItem('refresh_token', refreshToken);
 
-                    // Update auth context
+                    // Update auth context (refresh token is in httpOnly cookie)
                     if (login) {
-                        await login(accessToken, refreshToken);
+                        await login(accessToken);
                     }
 
                     setStatus('success');

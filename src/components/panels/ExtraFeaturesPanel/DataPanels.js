@@ -1,6 +1,6 @@
 // ExtraFeaturesPanel/DataPanels.js
 // Panels 21-25: ScheduledMessages, MoodStatus, ServerTemplates, CustomCommands, ServerAnalytics
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { useAuth } from '../../../AuthContext';
 import toast from '../../../utils/toast';
 import { getApiBase } from '../../../utils/apiEndpoints';
@@ -8,7 +8,7 @@ import { getApiBase } from '../../../utils/apiEndpoints';
 const API_URL = getApiBase();
 
 // 21 SCHEDULED MESSAGES
-export const ScheduledMessagesPanel = ({ onClose }) => {
+export const ScheduledMessagesPanel = memo(({ onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [scheduled, setScheduled] = useState([]);
     const [newMessage, setNewMessage] = useState({ content: '', scheduled_time: '' });
@@ -28,6 +28,9 @@ export const ScheduledMessagesPanel = ({ onClose }) => {
         } catch (e) { toast.error('Hata oluştu'); }
     };
 
+    const handleContentChange = useCallback((e) => setNewMessage(prev => ({ ...prev, content: e.target.value })), []);
+    const handleTimeChange = useCallback((e) => setNewMessage(prev => ({ ...prev, scheduled_time: e.target.value })), []);
+
     return (
         <div className="feature-panel scheduled-messages">
             <div className="panel-header"><h3>{'📅'} Planlanmış Mesajlar</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
@@ -39,17 +42,19 @@ export const ScheduledMessagesPanel = ({ onClose }) => {
                     {scheduled.length === 0 && <p className="empty">Planlanmış mesaj yok</p>}
                 </div>
                 <div className="add-scheduled">
-                    <input value={newMessage.content} onChange={(e) => setNewMessage({ ...newMessage, content: e.target.value })} placeholder="Mesaj içeriği..." />
-                    <input type="datetime-local" value={newMessage.scheduled_time} onChange={(e) => setNewMessage({ ...newMessage, scheduled_time: e.target.value })} />
+                    <input value={newMessage.content} onChange={handleContentChange} placeholder="Mesaj içeriği..." />
+                    <input type="datetime-local" value={newMessage.scheduled_time} onChange={handleTimeChange} />
                     <button onClick={addScheduled}>Planla</button>
                 </div>
             </div>
         </div>
     );
-};
+});
+
+ScheduledMessagesPanel.displayName = 'ScheduledMessagesPanel';
 
 // 22 MOOD STATUS
-export const MoodStatusPanel = ({ onClose }) => {
+export const MoodStatusPanel = memo(({ onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [currentMood, setCurrentMood] = useState('happy');
     const [moods, setMoods] = useState({});
@@ -61,12 +66,12 @@ export const MoodStatusPanel = ({ onClose }) => {
         catch (e) { console.error('Mood error:', e); }
     };
 
-    const setMood = async (mood) => {
+    const setMood = useCallback(async (mood) => {
         try {
             await fetchWithAuth(`${API_URL}/features/mood/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mood }) });
             setCurrentMood(mood); toast.success('Ruh halin güncellendi!');
         } catch (e) { toast.error('Hata oluştu'); }
-    };
+    }, [fetchWithAuth]);
 
     return (
         <div className="feature-panel mood-status">
@@ -83,10 +88,12 @@ export const MoodStatusPanel = ({ onClose }) => {
             </div>
         </div>
     );
-};
+});
+
+MoodStatusPanel.displayName = 'MoodStatusPanel';
 
 // 23 SERVER TEMPLATES
-export const ServerTemplatesPanel = ({ onClose }) => {
+export const ServerTemplatesPanel = memo(({ onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [templates, setTemplates] = useState({});
 
@@ -97,12 +104,12 @@ export const ServerTemplatesPanel = ({ onClose }) => {
         catch (e) { console.error('Templates error:', e); }
     };
 
-    const applyTemplate = async (templateId) => {
+    const applyTemplate = useCallback(async (templateId) => {
         try {
             await fetchWithAuth(`${API_URL}/features/server-templates/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ template: templateId, name: 'My Server' }) });
             toast.success('Şablon hazır!');
         } catch (e) { toast.error('Hata oluştu'); }
-    };
+    }, [fetchWithAuth]);
 
     return (
         <div className="feature-panel server-templates">
@@ -121,10 +128,12 @@ export const ServerTemplatesPanel = ({ onClose }) => {
             </div>
         </div>
     );
-};
+});
+
+ServerTemplatesPanel.displayName = 'ServerTemplatesPanel';
 
 // 24 CUSTOM COMMANDS
-export const CustomCommandsPanel = ({ serverId, onClose }) => {
+export const CustomCommandsPanel = memo(({ serverId, onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [commands, setCommands] = useState({});
     const [newCmd, setNewCmd] = useState({ name: '', response: '' });
@@ -144,6 +153,9 @@ export const CustomCommandsPanel = ({ serverId, onClose }) => {
         } catch (e) { toast.error('Hata oluştu'); }
     };
 
+    const handleCmdNameChange = useCallback((e) => setNewCmd(prev => ({ ...prev, name: e.target.value })), []);
+    const handleCmdResponseChange = useCallback((e) => setNewCmd(prev => ({ ...prev, response: e.target.value })), []);
+
     return (
         <div className="feature-panel custom-commands">
             <div className="panel-header"><h3>{'⚡'} Özel Komutlar</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
@@ -155,17 +167,19 @@ export const CustomCommandsPanel = ({ serverId, onClose }) => {
                     {Object.keys(commands).length === 0 && <p className="empty">Özel komut yok</p>}
                 </div>
                 <div className="add-command">
-                    <input value={newCmd.name} onChange={(e) => setNewCmd({ ...newCmd, name: e.target.value })} placeholder="!komut" />
-                    <input value={newCmd.response} onChange={(e) => setNewCmd({ ...newCmd, response: e.target.value })} placeholder="Yanıt..." />
+                    <input value={newCmd.name} onChange={handleCmdNameChange} placeholder="!komut" />
+                    <input value={newCmd.response} onChange={handleCmdResponseChange} placeholder="Yanıt..." />
                     <button onClick={addCommand}>Ekle</button>
                 </div>
             </div>
         </div>
     );
-};
+});
+
+CustomCommandsPanel.displayName = 'CustomCommandsPanel';
 
 // 25 SERVER ANALYTICS
-export const ServerAnalyticsPanel = ({ serverId, onClose }) => {
+export const ServerAnalyticsPanel = memo(({ serverId, onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [analytics, setAnalytics] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -196,4 +210,6 @@ export const ServerAnalyticsPanel = ({ serverId, onClose }) => {
             </div>
         </div>
     );
-};
+});
+
+ServerAnalyticsPanel.displayName = 'ServerAnalyticsPanel';

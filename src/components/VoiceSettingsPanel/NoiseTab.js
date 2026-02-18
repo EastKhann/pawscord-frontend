@@ -1,8 +1,35 @@
+import { useCallback, memo } from 'react';
 import { toast } from 'react-toastify';
 import { FaShieldAlt, FaWaveSquare, FaBolt, FaSlidersH } from 'react-icons/fa';
 
-const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => {
+const NoiseTab = memo(({ settings, updateSetting, applyAudioConstraints, voice }) => {
     const { isNoiseSuppressionEnabled, toggleNoiseSuppression, updateNoiseSuppressionLevel, noiseSuppressionLevel } = voice;
+
+    const handleNoiseSuppressionToggle = useCallback((e) => {
+        updateSetting('noise_suppression', e.target.checked);
+        if (toggleNoiseSuppression && isNoiseSuppressionEnabled !== e.target.checked) toggleNoiseSuppression();
+        toast.success(e.target.checked ? '🛡️ Gürültü engelleme açıldı' : '🔇 Gürültü engelleme kapatıldı');
+    }, [updateSetting, toggleNoiseSuppression, isNoiseSuppressionEnabled]);
+
+    const handleNoiseLevel = useCallback((levelId, levelLabel) => {
+        updateSetting('noise_suppression_level', levelId);
+        if (updateNoiseSuppressionLevel) updateNoiseSuppressionLevel(levelId);
+        toast.info(`🎚️ Gürültü seviyesi: ${levelLabel}`);
+    }, [updateSetting, updateNoiseSuppressionLevel]);
+
+    const handleEchoCancellationToggle = useCallback((e) => {
+        updateSetting('echo_cancellation', e.target.checked);
+        applyAudioConstraints({ echoCancellation: e.target.checked });
+    }, [updateSetting, applyAudioConstraints]);
+
+    const handleEchoCancellationLevel = useCallback(e => updateSetting('echo_cancellation_level', e.target.value), [updateSetting]);
+    const handleNoiseGateToggle = useCallback(e => updateSetting('noise_gate', e.target.checked), [updateSetting]);
+    const handleNoiseGateThreshold = useCallback(e => updateSetting('noise_gate_threshold', parseInt(e.target.value)), [updateSetting]);
+    const handleNoiseGateAttack = useCallback(e => updateSetting('noise_gate_attack', parseInt(e.target.value)), [updateSetting]);
+    const handleNoiseGateRelease = useCallback(e => updateSetting('noise_gate_release', parseInt(e.target.value)), [updateSetting]);
+    const handleAGCToggle = useCallback(e => updateSetting('automatic_gain_control', e.target.checked), [updateSetting]);
+    const handleHighPassToggle = useCallback(e => updateSetting('high_pass_filter', e.target.checked), [updateSetting]);
+    const handleHighPassFrequency = useCallback(e => updateSetting('high_pass_frequency', parseInt(e.target.value)), [updateSetting]);
 
     return (
         <div className="tab-content">
@@ -13,11 +40,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                     <h3>🛡️ Gürültü Bastırma</h3>
                     <label className="toggle-switch">
                         <input type="checkbox" checked={isNoiseSuppressionEnabled ?? settings.noise_suppression}
-                            onChange={(e) => {
-                                updateSetting('noise_suppression', e.target.checked);
-                                if (toggleNoiseSuppression && isNoiseSuppressionEnabled !== e.target.checked) toggleNoiseSuppression();
-                                toast.success(e.target.checked ? '🛡️ Gürültü engelleme açıldı' : '🔇 Gürültü engelleme kapatıldı');
-                            }} />
+                            onChange={handleNoiseSuppressionToggle} />
                         <span className="slider"></span>
                     </label>
                 </div>
@@ -35,11 +58,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                             ].map(level => (
                                 <button key={level.id}
                                     className={`level-btn ${(noiseSuppressionLevel || settings.noise_suppression_level) === level.id ? 'active' : ''}`}
-                                    onClick={() => {
-                                        updateSetting('noise_suppression_level', level.id);
-                                        if (updateNoiseSuppressionLevel) updateNoiseSuppressionLevel(level.id);
-                                        toast.info(`🎚️ Gürültü seviyesi: ${level.label}`);
-                                    }}>
+                                    onClick={() => handleNoiseLevel(level.id, level.label)}>
                                     <span className="level-name">{level.label}</span>
                                     <span className="level-desc">{level.desc}</span>
                                 </button>
@@ -56,10 +75,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                     <h3>🔇 Yankı Önleme</h3>
                     <label className="toggle-switch">
                         <input type="checkbox" checked={settings.echo_cancellation}
-                            onChange={(e) => {
-                                updateSetting('echo_cancellation', e.target.checked);
-                                applyAudioConstraints({ echoCancellation: e.target.checked });
-                            }} />
+                            onChange={handleEchoCancellationToggle} />
                         <span className="slider"></span>
                     </label>
                 </div>
@@ -67,7 +83,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                 {settings.echo_cancellation && (
                     <div className="level-selector">
                         <select value={settings.echo_cancellation_level}
-                            onChange={(e) => updateSetting('echo_cancellation_level', e.target.value)} className="inline-select">
+                            onChange={handleEchoCancellationLevel} className="inline-select">
                             <option value="low">Düşük</option>
                             <option value="medium">Orta</option>
                             <option value="high">Yüksek (Önerilen)</option>
@@ -83,7 +99,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                     <h3>⚡ Gürültü Kapısı (Noise Gate)</h3>
                     <label className="toggle-switch">
                         <input type="checkbox" checked={settings.noise_gate}
-                            onChange={(e) => updateSetting('noise_gate', e.target.checked)} />
+                            onChange={handleNoiseGateToggle} />
                         <span className="slider"></span>
                     </label>
                 </div>
@@ -93,14 +109,14 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                         <div className="gate-slider">
                             <label>Eşik Değeri: <strong>{settings.noise_gate_threshold} dB</strong></label>
                             <input type="range" min="-80" max="-20" value={settings.noise_gate_threshold}
-                                onChange={(e) => updateSetting('noise_gate_threshold', parseInt(e.target.value))} className="premium-slider" />
+                                onChange={handleNoiseGateThreshold} className="premium-slider" />
                             <div className="slider-hint"><span>Hassas (-80)</span><span>Sert (-20)</span></div>
                         </div>
                         <div className="gate-timing">
                             <div className="timing-item">
                                 <label>Açılış Süresi</label>
                                 <select value={settings.noise_gate_attack}
-                                    onChange={(e) => updateSetting('noise_gate_attack', parseInt(e.target.value))}>
+                                    onChange={handleNoiseGateAttack}>
                                     <option value="5">5ms (Hızlı)</option>
                                     <option value="10">10ms (Normal)</option>
                                     <option value="20">20ms (Yumuşak)</option>
@@ -109,7 +125,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                             <div className="timing-item">
                                 <label>Kapanış Süresi</label>
                                 <select value={settings.noise_gate_release}
-                                    onChange={(e) => updateSetting('noise_gate_release', parseInt(e.target.value))}>
+                                    onChange={handleNoiseGateRelease}>
                                     <option value="50">50ms (Hızlı)</option>
                                     <option value="100">100ms (Normal)</option>
                                     <option value="200">200ms (Yumuşak)</option>
@@ -127,7 +143,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                     <h3>🎚️ Otomatik Ses Ayarlama (AGC)</h3>
                     <label className="toggle-switch">
                         <input type="checkbox" checked={settings.automatic_gain_control}
-                            onChange={(e) => updateSetting('automatic_gain_control', e.target.checked)} />
+                            onChange={handleAGCToggle} />
                         <span className="slider"></span>
                     </label>
                 </div>
@@ -158,7 +174,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                     <h3>🔉 Düşük Frekans Filtresi</h3>
                     <label className="toggle-switch">
                         <input type="checkbox" checked={settings.high_pass_filter}
-                            onChange={(e) => updateSetting('high_pass_filter', e.target.checked)} />
+                            onChange={handleHighPassToggle} />
                         <span className="slider"></span>
                     </label>
                 </div>
@@ -167,7 +183,7 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
                     <div className="frequency-selector">
                         <label>Kesim Frekansı:</label>
                         <select value={settings.high_pass_frequency}
-                            onChange={(e) => updateSetting('high_pass_frequency', parseInt(e.target.value))}>
+                            onChange={handleHighPassFrequency}>
                             <option value="50">50 Hz (Minimal)</option>
                             <option value="80">80 Hz (Önerilen)</option>
                             <option value="100">100 Hz (Agresif)</option>
@@ -178,6 +194,6 @@ const NoiseTab = ({ settings, updateSetting, applyAudioConstraints, voice }) => 
             </div>
         </div>
     );
-};
+});
 
 export default NoiseTab;

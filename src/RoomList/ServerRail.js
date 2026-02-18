@@ -1,5 +1,5 @@
 // frontend/src/RoomList/ServerRail.js
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FaCompass, FaPlus } from '../utils/iconOptimization';
 import LazyImage from '../components/LazyImage';
 import { styles } from '../SidebarStyles';
@@ -12,6 +12,16 @@ const ServerRail = ({
     handleServerDragEndWrapper, handleServerDropWrapper,
     onOpenStore, onDiscoverClick, onAddClick
 }) => {
+    const handleHomeHover = useCallback(() => setHoveredServerId('home'), [setHoveredServerId]);
+    const handleHomeLeave = useCallback(() => setHoveredServerId(null), [setHoveredServerId]);
+    const handleDiscoverHover = useCallback(() => setHoveredServerId('discover'), [setHoveredServerId]);
+    const handleDiscoverLeave = useCallback(() => setHoveredServerId(null), [setHoveredServerId]);
+    const handleStoreHover = useCallback(() => setHoveredServerId('store'), [setHoveredServerId]);
+    const handleStoreLeave = useCallback(() => setHoveredServerId(null), [setHoveredServerId]);
+    const handleAddHover = useCallback(() => setHoveredServerId('add'), [setHoveredServerId]);
+    const handleAddLeave = useCallback(() => setHoveredServerId(null), [setHoveredServerId]);
+    const handleImgError = useCallback((e) => { e.target.style.display = 'none'; }, []);
+
     return (
         <div style={styles.serverRail}>
             {/* 🏠 Home Icon */}
@@ -31,13 +41,13 @@ const ServerRail = ({
                         transition: 'border-radius 0.3s ease, background-color 0.3s ease'
                     }}
                     onClick={onHomeClick}
-                    onMouseEnter={() => setHoveredServerId('home')}
-                    onMouseLeave={() => setHoveredServerId(null)}
+                    onMouseEnter={handleHomeHover}
+                    onMouseLeave={handleHomeLeave}
                     title="Ana Sayfa"
                 >
                     <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord"
                         style={{ width: '32px', height: '32px', objectFit: 'contain' }}
-                        onError={(e) => { e.target.style.display = 'none'; }} />
+                        onError={handleImgError} />
                 </div>
             </div>
             <div style={styles.separator} />
@@ -131,8 +141,8 @@ const ServerRail = ({
                     transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'
                 }}
                 onClick={onDiscoverClick}
-                onMouseEnter={() => setHoveredServerId('discover')}
-                onMouseLeave={() => setHoveredServerId(null)}
+                onMouseEnter={handleDiscoverHover}
+                onMouseLeave={handleDiscoverLeave}
                 title="Sunucu Keşfet"
             >
                 <FaCompass size={24} />
@@ -149,8 +159,8 @@ const ServerRail = ({
                     transition: 'border-radius 0.3s ease, background 0.3s ease, color 0.3s ease'
                 }}
                 onClick={onOpenStore}
-                onMouseEnter={() => setHoveredServerId('store')}
-                onMouseLeave={() => setHoveredServerId(null)}
+                onMouseEnter={handleStoreHover}
+                onMouseLeave={handleStoreLeave}
                 title="Premium Mağaza"
             >
                 🛒
@@ -166,8 +176,8 @@ const ServerRail = ({
                     transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'
                 }}
                 onClick={onAddClick}
-                onMouseEnter={() => setHoveredServerId('add')}
-                onMouseLeave={() => setHoveredServerId(null)}
+                onMouseEnter={handleAddHover}
+                onMouseLeave={handleAddLeave}
                 title="Ekle"
             >
                 <FaPlus size={20} />

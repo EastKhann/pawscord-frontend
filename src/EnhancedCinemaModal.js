@@ -1,11 +1,13 @@
 // frontend/src/EnhancedCinemaModal.js
 import { lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
+import useModalA11y from './hooks/useModalA11y';
 import { FaTimes, FaPlay, FaPause, FaStepForward, FaStepBackward, FaListUl } from 'react-icons/fa';
 import { getStyles } from './EnhancedCinemaModal/enhancedCinemaStyles';
 import useEnhancedCinema from './EnhancedCinemaModal/useEnhancedCinema';
 
 const EnhancedCinemaModal = ({ onClose, ws, isMobile }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Sinema Modu' });
     const {
         currentVideo,
         playing, setPlaying,

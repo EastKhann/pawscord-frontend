@@ -1,12 +1,14 @@
 import { FaTimes } from 'react-icons/fa';
 import { formatPrice } from './helpers';
 import styles from './styles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const PortfolioModal = ({ portfolio, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!portfolio, label: 'Portföy' });
     if (!portfolio) return null;
     return (
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.modalContent} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h2>💼 Cüzdanım</h2>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

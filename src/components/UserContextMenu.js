@@ -36,6 +36,41 @@ const UserContextMenu = ({
         onClose();
     }, [onAction, user, onClose]);
 
+    // 🎯 Performance: Memoized click handlers
+    const handleProfileClick = useCallback(() => handleAction('profile'), [handleAction]);
+    const handleMessageClick = useCallback(() => handleAction('message'), [handleAction]);
+    const handleInviteClick = useCallback(() => handleAction('invite_to_server'), [handleAction]);
+    const handleRemoveFriendClick = useCallback(() => handleAction('remove_friend'), [handleAction]);
+    const handleAddFriendClick = useCallback(() => handleAction('add_friend'), [handleAction]);
+    const handleMuteClick = useCallback(() => handleAction('mute_user'), [handleAction]);
+    const handleBlockClick = useCallback(() => handleAction('block_user'), [handleAction]);
+    const handleKickClick = useCallback(() => handleAction('kick'), [handleAction]);
+    const handleServerMuteClick = useCallback(() => handleAction('server_mute'), [handleAction]);
+
+    // 🎯 Performance: Memoized keydown handlers
+    const handleProfileKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('profile'); } }, [handleAction]);
+    const handleMessageKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('message'); } }, [handleAction]);
+    const handleInviteKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('invite_to_server'); } }, [handleAction]);
+    const handleRemoveFriendKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('remove_friend'); } }, [handleAction]);
+    const handleAddFriendKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('add_friend'); } }, [handleAction]);
+    const handleMuteKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('mute_user'); } }, [handleAction]);
+    const handleBlockKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('block_user'); } }, [handleAction]);
+    const handleKickKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('kick'); } }, [handleAction]);
+    const handleServerMuteKeyDown = useCallback((e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('server_mute'); } }, [handleAction]);
+
+    // 🎯 Performance: Memoized focus index handlers
+    const handleFocus0 = useCallback(() => setFocusedIndex(0), []);
+    const handleFocus1 = useCallback(() => setFocusedIndex(1), []);
+    const handleFocus2 = useCallback(() => setFocusedIndex(2), []);
+    const handleFocus3 = useCallback(() => setFocusedIndex(3), []);
+    const handleFocus4 = useCallback(() => setFocusedIndex(4), []);
+    const handleFocus5 = useCallback(() => setFocusedIndex(5), []);
+    const handleFocus6 = useCallback(() => setFocusedIndex(6), []);
+
+    // 🎯 Performance: Submenu handlers
+    const handleShowMoveSubmenu = useCallback(() => { setShowMoveSubmenu(true); setFocusedIndex(4); }, []);
+    const handleHideMoveSubmenu = useCallback(() => setShowMoveSubmenu(false), []);
+
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -141,9 +176,9 @@ const UserContextMenu = ({
                         ...styles.menuItem,
                         background: focusedIndex === 0 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
-                    onClick={() => handleAction('profile')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('profile'); } }}
-                    onMouseEnter={() => setFocusedIndex(0)}
+                    onClick={handleProfileClick}
+                    onKeyDown={handleProfileKeyDown}
+                    onMouseEnter={handleFocus0}
                 >
                     <FaUser /> Profili Görüntüle
                 </div>
@@ -157,9 +192,9 @@ const UserContextMenu = ({
                         ...styles.menuItem,
                         background: focusedIndex === 1 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
-                    onClick={() => handleAction('message')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('message'); } }}
-                    onMouseEnter={() => setFocusedIndex(1)}
+                    onClick={handleMessageClick}
+                    onKeyDown={handleMessageKeyDown}
+                    onMouseEnter={handleFocus1}
                 >
                     <FaComments /> Mesaj Gönder
                 </div>
@@ -173,9 +208,9 @@ const UserContextMenu = ({
                         ...styles.menuItem,
                         background: focusedIndex === 2 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
-                    onClick={() => handleAction('invite_to_server')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('invite_to_server'); } }}
-                    onMouseEnter={() => setFocusedIndex(2)}
+                    onClick={handleInviteClick}
+                    onKeyDown={handleInviteKeyDown}
+                    onMouseEnter={handleFocus2}
                 >
                     <FaArrowRight /> Sunucuya Davet Et
                 </div>
@@ -190,9 +225,9 @@ const UserContextMenu = ({
                             ...styles.menuItemDanger,
                             background: focusedIndex === 3 ? 'rgba(237, 66, 69, 0.15)' : 'transparent'
                         }}
-                        onClick={() => handleAction('remove_friend')}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('remove_friend'); } }}
-                        onMouseEnter={() => setFocusedIndex(3)}
+                        onClick={handleRemoveFriendClick}
+                        onKeyDown={handleRemoveFriendKeyDown}
+                        onMouseEnter={handleFocus3}
                     >
                         <FaBan /> Arkadaşlıktan Çıkar
                     </div>
@@ -205,9 +240,9 @@ const UserContextMenu = ({
                             ...styles.menuItem,
                             background: focusedIndex === 3 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                         }}
-                        onClick={() => handleAction('add_friend')}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('add_friend'); } }}
-                        onMouseEnter={() => setFocusedIndex(3)}
+                        onClick={handleAddFriendClick}
+                        onKeyDown={handleAddFriendKeyDown}
+                        onMouseEnter={handleFocus3}
                     >
                         <FaUser /> Arkadaş Ekle
                     </div>
@@ -225,9 +260,9 @@ const UserContextMenu = ({
                         ...styles.menuItem,
                         background: focusedIndex === 4 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                     }}
-                    onClick={() => handleAction('mute_user')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('mute_user'); } }}
-                    onMouseEnter={() => setFocusedIndex(4)}
+                    onClick={handleMuteClick}
+                    onKeyDown={handleMuteKeyDown}
+                    onMouseEnter={handleFocus4}
                 >
                     <FaVolumeMute /> Sessize Al
                 </div>
@@ -241,9 +276,9 @@ const UserContextMenu = ({
                         ...styles.menuItemDanger,
                         background: focusedIndex === 5 ? 'rgba(237, 66, 69, 0.15)' : 'transparent'
                     }}
-                    onClick={() => handleAction('block_user')}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('block_user'); } }}
-                    onMouseEnter={() => setFocusedIndex(5)}
+                    onClick={handleBlockClick}
+                    onKeyDown={handleBlockKeyDown}
+                    onMouseEnter={handleFocus5}
                 >
                     <FaBan /> Kullanıcıyı Engelle
                 </div>
@@ -267,11 +302,8 @@ const UserContextMenu = ({
                                 ...styles.menuItem,
                                 background: focusedIndex === 4 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                             }}
-                            onMouseEnter={() => {
-                                setShowMoveSubmenu(true);
-                                setFocusedIndex(4);
-                            }}
-                            onMouseLeave={() => setShowMoveSubmenu(false)}
+                            onMouseEnter={handleShowMoveSubmenu}
+                            onMouseLeave={handleHideMoveSubmenu}
                         >
                             <FaArrowRight /> Kanala Taşı
                             {showMoveSubmenu && voiceChannels.length > 0 && (
@@ -305,9 +337,9 @@ const UserContextMenu = ({
                                 ...styles.menuItemDanger,
                                 background: focusedIndex === 5 ? 'rgba(237, 66, 69, 0.15)' : 'transparent'
                             }}
-                            onClick={() => handleAction('kick')}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('kick'); } }}
-                            onMouseEnter={() => setFocusedIndex(5)}
+                            onClick={handleKickClick}
+                            onKeyDown={handleKickKeyDown}
+                            onMouseEnter={handleFocus5}
                         >
                             <FaBan /> Kanaldan At
                         </div>
@@ -321,9 +353,9 @@ const UserContextMenu = ({
                                 ...styles.menuItem,
                                 background: focusedIndex === 6 ? 'rgba(88, 101, 242, 0.2)' : 'transparent'
                             }}
-                            onClick={() => handleAction('server_mute')}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction('server_mute'); } }}
-                            onMouseEnter={() => setFocusedIndex(6)}
+                            onClick={handleServerMuteClick}
+                            onKeyDown={handleServerMuteKeyDown}
+                            onMouseEnter={handleFocus6}
                         >
                             <FaUserShield /> Mikrofonu Kapat (Server)
                         </div>

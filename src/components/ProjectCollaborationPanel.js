@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { FaTimes, FaProjectDiagram, FaPlus, FaFile, FaFolder, FaUsers, FaEdit, FaClock, FaComment, FaDownload, FaHistory } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -17,6 +17,20 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
     // Create document state
     const [docTitle, setDocTitle] = useState('');
     const [docContent, setDocContent] = useState('');
+
+    // useCallback handlers
+    const handleGoToProjects = useCallback(() => { setView('projects'); setSelectedProject(null); }, []);
+    const handleGoToProjectDetail = useCallback(() => setView('project-detail'), []);
+    const handleGoToCreate = useCallback(() => setView('create'), []);
+    const handleGoToCreateDoc = useCallback(() => setView('create-doc'), []);
+    const handleCancelToProjects = useCallback(() => setView('projects'), []);
+    const handleCancelToProjectDetail = useCallback(() => setView('project-detail'), []);
+    const handleProjectNameChange = useCallback((e) => setProjectName(e.target.value), []);
+    const handleProjectDescChange = useCallback((e) => setProjectDesc(e.target.value), []);
+    const handleDocTitleChange = useCallback((e) => setDocTitle(e.target.value), []);
+    const handleDocContentChange = useCallback((e) => setDocContent(e.target.value), []);
+    const handleDocEditorTitleChange = useCallback((e) => setSelectedDoc(prev => ({ ...prev, title: e.target.value })), []);
+    const handleDocEditorContentChange = useCallback((e) => setSelectedDoc(prev => ({ ...prev, content: e.target.value })), []);
 
     useEffect(() => {
         fetchProjects();
@@ -146,7 +160,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
 
                 <div style={styles.breadcrumbs}>
                     <button
-                        onClick={() => { setView('projects'); setSelectedProject(null); }}
+                        onClick={handleGoToProjects}
                         style={styles.breadcrumb}
                     >
                         Projects
@@ -155,7 +169,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                         <>
                             <span style={styles.breadcrumbSep}>/</span>
                             <button
-                                onClick={() => setView('project-detail')}
+                                onClick={handleGoToProjectDetail}
                                 style={styles.breadcrumb}
                             >
                                 {selectedProject.name}
@@ -174,7 +188,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                     {view === 'projects' && (
                         <>
                             <button
-                                onClick={() => setView('create')}
+                                onClick={handleGoToCreate}
                                 style={styles.createProjectBtn}
                             >
                                 <FaPlus /> New Project
@@ -210,17 +224,17 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 type="text"
                                 placeholder="Project Name"
                                 value={projectName}
-                                onChange={(e) => setProjectName(e.target.value)}
+                                onChange={handleProjectNameChange}
                                 style={styles.input}
                             />
                             <textarea
                                 placeholder="Description (optional)"
                                 value={projectDesc}
-                                onChange={(e) => setProjectDesc(e.target.value)}
+                                onChange={handleProjectDescChange}
                                 style={styles.textarea}
                             />
                             <div style={styles.formActions}>
-                                <button onClick={() => setView('projects')} style={styles.cancelBtn}>
+                                <button onClick={handleCancelToProjects} style={styles.cancelBtn}>
                                     Cancel
                                 </button>
                                 <button onClick={createProject} style={styles.submitBtn} disabled={loading}>
@@ -237,7 +251,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                     <h3 style={styles.projectTitle}>{selectedProject.name}</h3>
                                     <p style={styles.projectDescription}>{selectedProject.description}</p>
                                 </div>
-                                <button onClick={() => setView('create-doc')} style={styles.newDocBtn}>
+                                <button onClick={handleGoToCreateDoc} style={styles.newDocBtn}>
                                     <FaPlus /> New Document
                                 </button>
                             </div>
@@ -291,17 +305,17 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 type="text"
                                 placeholder="Document Title"
                                 value={docTitle}
-                                onChange={(e) => setDocTitle(e.target.value)}
+                                onChange={handleDocTitleChange}
                                 style={styles.input}
                             />
                             <textarea
                                 placeholder="Start writing..."
                                 value={docContent}
-                                onChange={(e) => setDocContent(e.target.value)}
+                                onChange={handleDocContentChange}
                                 style={{ ...styles.textarea, minHeight: '200px' }}
                             />
                             <div style={styles.formActions}>
-                                <button onClick={() => setView('project-detail')} style={styles.cancelBtn}>
+                                <button onClick={handleCancelToProjectDetail} style={styles.cancelBtn}>
                                     Cancel
                                 </button>
                                 <button onClick={createDocument} style={styles.submitBtn} disabled={loading}>
@@ -317,7 +331,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                                 <input
                                     type="text"
                                     value={selectedDoc.title}
-                                    onChange={(e) => setSelectedDoc({ ...selectedDoc, title: e.target.value })}
+                                    onChange={handleDocEditorTitleChange}
                                     style={styles.docTitleInput}
                                 />
                                 <div style={styles.editorActions}>
@@ -331,7 +345,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
                             </div>
                             <textarea
                                 value={selectedDoc.content}
-                                onChange={(e) => setSelectedDoc({ ...selectedDoc, content: e.target.value })}
+                                onChange={handleDocEditorContentChange}
                                 style={styles.editor}
                                 placeholder="Start writing your document..."
                             />
@@ -419,4 +433,4 @@ const styles = {
     editorFooter: { display: 'flex', justifyContent: 'space-between', padding: '10px 0', color: '#72767d', fontSize: '12px' }
 };
 
-export default ProjectCollaborationPanel;
+export default memo(ProjectCollaborationPanel);

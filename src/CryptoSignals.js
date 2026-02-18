@@ -1,4 +1,5 @@
 // frontend/src/CryptoSignals.js
+import { useCallback, memo } from 'react';
 import { FaArrowLeft, FaSync, FaBitcoin, FaClock, FaChartLine, FaTrophy, FaFilter, FaTimes, FaExternalLinkAlt, FaSortAmountDown, FaSortAmountUp, FaWallet } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import useWindowWidth from './hooks/useWindowWidth';
@@ -18,6 +19,15 @@ const CryptoSignals = () => {
         tabData, processedData, pagedData, totalPages, isPositionsTab, handleSort, stats,
         positionCoinStatus, coinGroups, fetchData
     } = useCryptoSignals();
+
+    const handleAutoRefreshChange = useCallback((e) => setAutoRefresh(e.target.checked), [setAutoRefresh]);
+    const handleRefresh = useCallback(() => fetchData(activeFileKey), [fetchData, activeFileKey]);
+    const handleSearchChange = useCallback((e) => setSearchQuery(e.target.value), [setSearchQuery]);
+    const handleClearSearch = useCallback(() => setSearchQuery(''), [setSearchQuery]);
+    const handleToggleView = useCallback(() => setViewMode(v => v === 'table' ? 'cards' : 'table'), [setViewMode]);
+    const handleCloseModal = useCallback(() => setSelectedCoin(null), [setSelectedCoin]);
+    const handlePrevPage = useCallback(() => setPage(p => Math.max(1, p - 1)), [setPage]);
+    const handleNextPage = useCallback(() => setPage(p => Math.min(totalPages, p + 1)), [setPage, totalPages]);
 
     const SortHeader = ({ field, children, style: extra }) => (
         <th onClick={() => handleSort(field)} style={{
@@ -39,7 +49,7 @@ const CryptoSignals = () => {
         return (<div style={S.page}><div style={{ textAlign: 'center', marginTop: 80 }}>
             <div style={{ fontSize: 60, marginBottom: 16 }}>{'⚠️'}</div>
             <h3 style={{ color: '#da373c', marginBottom: 8 }}>{error}</h3>
-            <button onClick={() => fetchData(activeFileKey)} style={S.primaryBtn}>Tekrar Dene</button>
+            <button onClick={handleRefresh} style={S.primaryBtn}>Tekrar Dene</button>
         </div></div>);
     }
 
@@ -56,8 +66,8 @@ const CryptoSignals = () => {
                 </div>
                 <div style={S.headerRight}>
                     {lastUpdate && <span style={S.updateTime}><FaClock /> {lastUpdate.toLocaleTimeString('tr-TR')}</span>}
-                    <label style={S.checkboxLabel}><input type="checkbox" checked={autoRefresh} onChange={e => setAutoRefresh(e.target.checked)} /> Oto</label>
-                    <button onClick={() => fetchData(activeFileKey)} style={S.primaryBtn}>
+                    <label style={S.checkboxLabel}><input type="checkbox" checked={autoRefresh} onChange={handleAutoRefreshChange} /> Oto</label>
+                    <button onClick={handleRefresh} style={S.primaryBtn}>
                         <FaSync className={loading ? 'crypto-spin' : ''} /> Yenile
                     </button>
                 </div>
@@ -77,7 +87,7 @@ const CryptoSignals = () => {
 
             <div style={S.modeToggle}>
                 {[{ key: 'balance_mode', icon: <FaChartLine />, label: isMobile ? 'Balance' : '💰 Balance Sıralama', color: '#f0b232' },
-                  { key: 'winrate_mode', icon: <FaTrophy />, label: isMobile ? 'Winrate' : '🏆 Winrate Sıralama', color: '#23a559' }
+                { key: 'winrate_mode', icon: <FaTrophy />, label: isMobile ? 'Winrate' : '🏆 Winrate Sıralama', color: '#23a559' }
                 ].map(m => (
                     <button key={m.key} onClick={() => setActiveMode(m.key)}
                         style={{ ...S.modeBtn, ...(activeMode === m.key ? S.modeBtnActive : {}), borderColor: activeMode === m.key ? m.color : '#40444b' }}>
@@ -125,13 +135,13 @@ const CryptoSignals = () => {
             <div style={S.filterBar}>
                 <div style={S.searchBox}>
                     <FaFilter style={{ color: '#949ba4', flexShrink: 0 }} />
-                    <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                    <input type="text" value={searchQuery} onChange={handleSearchChange}
                         placeholder="Coin ara... (BTC, ETH, SOL)" style={S.searchInput} />
-                    {searchQuery && <button onClick={() => setSearchQuery('')} style={S.clearBtn}><FaTimes /></button>}
+                    {searchQuery && <button onClick={handleClearSearch} style={S.clearBtn}><FaTimes /></button>}
                 </div>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <span style={{ color: '#949ba4', fontSize: '0.85em' }}>{processedData.length} sonuç</span>
-                    <button onClick={() => setViewMode(v => v === 'table' ? 'cards' : 'table')} style={S.viewToggle}
+                    <button onClick={handleToggleView} style={S.viewToggle}
                         title={viewMode === 'table' ? 'Kart görünümü' : 'Tablo görünümü'}>
                         {viewMode === 'table' ? '🃏 ' : '📋 '}
                     </button>
@@ -250,20 +260,20 @@ const CryptoSignals = () => {
                     </div>
                     {totalPages > 1 && (
                         <div style={S.pagination}>
-                            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ ...S.pageBtn, opacity: page === 1 ? 0.4 : 1 }}>{'◄'}</button>
+                            <button onClick={handlePrevPage} disabled={page === 1} style={{ ...S.pageBtn, opacity: page === 1 ? 0.4 : 1 }}>{'◄'}</button>
                             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
                                 let num; if (totalPages <= 7) num = i + 1; else if (page <= 4) num = i + 1; else if (page >= totalPages - 3) num = totalPages - 6 + i; else num = page - 3 + i;
                                 return (<button key={num} onClick={() => setPage(num)} style={{ ...S.pageNumBtn, ...(page === num ? S.pageNumActive : {}) }}>{num}</button>);
                             })}
-                            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={{ ...S.pageBtn, opacity: page === totalPages ? 0.4 : 1 }}>{'►'}</button>
+                            <button onClick={handleNextPage} disabled={page === totalPages} style={{ ...S.pageBtn, opacity: page === totalPages ? 0.4 : 1 }}>{'►'}</button>
                         </div>
                     )}
                 </>
             )}
 
-            <CoinDetailModal selectedCoin={selectedCoin} isPositionsTab={isPositionsTab} onClose={() => setSelectedCoin(null)} />
+            <CoinDetailModal selectedCoin={selectedCoin} isPositionsTab={isPositionsTab} onClose={handleCloseModal} />
         </div>
     );
 };
 
-export default CryptoSignals;
+export default memo(CryptoSignals);

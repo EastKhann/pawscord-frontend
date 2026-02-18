@@ -2,6 +2,7 @@
 // Decomposed: styles.js + hooks/useProfileModal.js
 
 import ReactDOM from 'react-dom';
+import { useCallback, memo } from 'react';
 import { FaUserPlus, FaCheck, FaCoins, FaDesktop, FaClock, FaStickyNote } from 'react-icons/fa';
 import { AchievementsPanel } from './components/AchievementBadge';
 import SessionManagerModal from './components/SessionManagerModal';
@@ -29,6 +30,24 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
     const avatarSrc = avatarUrl + (user.avatar && typeof user.avatar === 'string' ? `?t=${Date.now()}` : '');
 
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: `${user.username} profili` });
+
+    const handleAvatarEnter = useCallback((e) => e.currentTarget.style.transform = 'scale(1.05)', []);
+    const handleAvatarLeave = useCallback((e) => e.currentTarget.style.transform = 'scale(1)', []);
+    const handleAvatarClick = useCallback(() => onImageClick(avatarUrl), [onImageClick, avatarUrl]);
+    const handleClose = useCallback((e) => { e.preventDefault(); e.stopPropagation(); onClose(); }, [onClose]);
+    const handleCloseBtnEnter = useCallback((e) => { e.currentTarget.style.background = 'rgba(240, 71, 71, 0.8)'; e.currentTarget.style.transform = 'scale(1.1)'; }, []);
+    const handleCloseBtnLeave = useCallback((e) => { e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'; e.currentTarget.style.transform = 'scale(1)'; }, []);
+    const handleOpenSessionManager = useCallback(() => setShowSessionManager(true), [setShowSessionManager]);
+    const handleStartDM = useCallback(() => onStartDM(user?.username), [onStartDM, user?.username]);
+    const handleOpenNotes = useCallback(() => setShowNotes(true), [setShowNotes]);
+    const handleFriendCodeEnter = useCallback((e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.2)', []);
+    const handleFriendCodeLeave = useCallback((e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.1)', []);
+    const handleTabProfile = useCallback(() => setActiveTab('profile'), [setActiveTab]);
+    const handleTabActivity = useCallback(() => setActiveTab('activity'), [setActiveTab]);
+    const handleTabNotes = useCallback(() => setActiveTab('notes'), [setActiveTab]);
+    const handleCloseInlineNotes = useCallback(() => setActiveTab('profile'), [setActiveTab]);
+    const handleCloseNotes = useCallback(() => setShowNotes(false), [setShowNotes]);
+    const handleCloseSessionManager = useCallback(() => setShowSessionManager(false), [setShowSessionManager]);
 
     const modalContent = (
         <div style={{ ...styles.overlay, zIndex: 9999 }} {...overlayProps}>
@@ -75,9 +94,9 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         zIndex: 1000,
                         backgroundColor: '#2f3136' // Background color for loading state
                     }}
-                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                        onClick={() => onImageClick(avatarUrl)}
+                        onMouseEnter={handleAvatarEnter}
+                        onMouseLeave={handleAvatarLeave}
+                        onClick={handleAvatarClick}
                     >
                         <img
                             src={avatarSrc}
@@ -102,11 +121,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                     }}>
                         {/* Close button */}
                         <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                onClose();
-                            }}
+                            onClick={handleClose}
                             style={{
                                 width: '36px',
                                 height: '36px',
@@ -122,14 +137,8 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                                 transition: 'all 0.2s ease',
                                 zIndex: 1001
                             }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(240, 71, 71, 0.8)';
-                                e.currentTarget.style.transform = 'scale(1.1)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)';
-                                e.currentTarget.style.transform = 'scale(1)';
-                            }}
+                            onMouseEnter={handleCloseBtnEnter}
+                            onMouseLeave={handleCloseBtnLeave}
                         >×</button>
                     </div>
                 </div>
@@ -183,7 +192,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
 
                         {isSelf && (
                             <button
-                                onClick={() => setShowSessionManager(true)}
+                                onClick={handleOpenSessionManager}
                                 style={{ ...styles.actionButton, backgroundColor: '#43b581', flex: 1 }}
                                 title="Aktif Oturumları Yönet"
                             >
@@ -192,14 +201,14 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         )}
 
                         {!isSelf && (
-                            <button onClick={() => onStartDM(user.username)} style={{ ...styles.messageButton, flex: 1 }}>
+                            <button onClick={handleStartDM} style={{ ...styles.messageButton, flex: 1 }}>
                                 💬 Mesaj Gönder
                             </button>
                         )}
 
                         {!isSelf && (
                             <button
-                                onClick={() => setShowNotes(true)}
+                                onClick={handleOpenNotes}
                                 style={{ ...styles.actionButton, backgroundColor: '#faa61a', flex: 0, minWidth: '44px' }}
                                 title="Kullanıcı Notu"
                             >
@@ -229,8 +238,8 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                                 cursor: 'pointer',
                                 transition: 'all 0.2s'
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.2)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.1)'}
+                            onMouseEnter={handleFriendCodeEnter}
+                            onMouseLeave={handleFriendCodeLeave}
                             title="Kodu Kopyalamak İçin Tıkla"
                         >
                             <span style={styles.friendCodeLabel}>Arkadaş Kodu</span>
@@ -248,20 +257,20 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                     {/* 🆕 Tabs */}
                     <div style={styles.tabsContainer}>
                         <button
-                            onClick={() => setActiveTab('profile')}
+                            onClick={handleTabProfile}
                             style={{ ...styles.tabButton, ...(activeTab === 'profile' && styles.activeTab) }}
                         >
                             Profile
                         </button>
                         <button
-                            onClick={() => setActiveTab('activity')}
+                            onClick={handleTabActivity}
                             style={{ ...styles.tabButton, ...(activeTab === 'activity' && styles.activeTab) }}
                         >
                             <FaClock /> Activity
                         </button>
                         {!isSelf && (
                             <button
-                                onClick={() => setActiveTab('notes')}
+                                onClick={handleTabNotes}
                                 style={{ ...styles.tabButton, ...(activeTab === 'notes' && styles.activeTab) }}
                             >
                                 <FaStickyNote /> Notes
@@ -368,7 +377,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         targetUser={user.username}
                         apiBaseUrl={apiBaseUrl ? apiBaseUrl.replace(/\/api\/?$/, '') + '/api' : ''}
                         fetchWithAuth={fetchWithAuth}
-                        onClose={() => setActiveTab('profile')}
+                        onClose={handleCloseInlineNotes}
                         inline={true}
                     />
                 </div>
@@ -380,13 +389,13 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                     targetUser={user.username}
                     apiBaseUrl={apiBaseUrl ? apiBaseUrl.replace(/\/api\/?$/, '') + '/api' : ''}
                     fetchWithAuth={fetchWithAuth}
-                    onClose={() => setShowNotes(false)}
+                    onClose={handleCloseNotes}
                 />
             )}
 
             {showSessionManager && (
                 <SessionManagerModal
-                    onClose={() => setShowSessionManager(false)}
+                    onClose={handleCloseSessionManager}
                     fetchWithAuth={fetchWithAuth}
                     apiBaseUrl={apiBaseUrl}
                 />
@@ -397,5 +406,5 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
     return ReactDOM.createPortal(modalContent, document.body);
 };
 
-export default UserProfileModal;
+export default memo(UserProfileModal);
 

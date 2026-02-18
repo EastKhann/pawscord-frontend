@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import styles from './styles';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const CreateTournamentModal = ({ onClose, onCreate }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Turnuva Oluştur' });
     const [formData, setFormData] = useState({
         name: '',
         game: '',
@@ -17,8 +19,8 @@ const CreateTournamentModal = ({ onClose, onCreate }) => {
     };
 
     return (
-        <div style={styles.modalOverlay}>
-            <div style={styles.modal}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <h3 style={styles.modalTitle}>Yeni Turnuva Olu{'ş'}tur</h3>
                 <form onSubmit={handleSubmit} style={styles.form}>
                     <input

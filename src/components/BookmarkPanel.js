@@ -1,3 +1,4 @@
+import { useCallback, memo } from 'react';
 import { FaTimes, FaTags, FaTrash, FaSearch, FaPlus, FaBookmark, FaFolder } from 'react-icons/fa';
 import { styles } from './BookmarkPanel/bookmarkPanelStyles';
 import useBookmarks from './BookmarkPanel/useBookmarks';
@@ -11,9 +12,18 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
     createTag, deleteBookmark, addTagToBookmark, filteredBookmarks
   } = useBookmarks(fetchWithAuth, apiBaseUrl);
 
+  // useCallback handlers
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleSearchChange = useCallback((e) => setSearchQuery(e.target.value), [setSearchQuery]);
+  const handleShowNewTag = useCallback(() => setShowNewTagModal(true), [setShowNewTagModal]);
+  const handleSelectAllTags = useCallback(() => setSelectedTag(null), [setSelectedTag]);
+  const handleHideNewTagModal = useCallback(() => setShowNewTagModal(false), [setShowNewTagModal]);
+  const handleNewTagNameChange = useCallback((e) => setNewTagName(e.target.value), [setNewTagName]);
+  const handleNewTagColorChange = useCallback((e) => setNewTagColor(e.target.value), [setNewTagColor]);
+
   return (
     <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div style={styles.modal} onClick={handleStopPropagation}>
         {/* Header */}
         <div style={styles.header}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -28,16 +38,16 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
           <div style={styles.searchBox}>
             <FaSearch style={{ color: '#888' }} />
             <input type="text" placeholder="Mesajlarda ara..." value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} style={styles.searchInput} />
+              onChange={handleSearchChange} style={styles.searchInput} />
           </div>
-          <button onClick={() => setShowNewTagModal(true)} style={styles.newTagBtn}>
+          <button onClick={handleShowNewTag} style={styles.newTagBtn}>
             <FaPlus /> Yeni Tag
           </button>
         </div>
 
         {/* Tags */}
         <div style={styles.tagsContainer}>
-          <button onClick={() => setSelectedTag(null)}
+          <button onClick={handleSelectAllTags}
             style={{ ...styles.tagChip, backgroundColor: !selectedTag ? '#5865f2' : '#2c2f33' }}>
             <FaFolder /> Tümü ({bookmarks.length})
           </button>
@@ -90,18 +100,18 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
 
         {/* New Tag Modal */}
         {showNewTagModal && (
-          <div style={styles.modalOverlay} onClick={() => setShowNewTagModal(false)}>
-            <div style={styles.newTagModal} onClick={(e) => e.stopPropagation()}>
+          <div style={styles.modalOverlay} onClick={handleHideNewTagModal}>
+            <div style={styles.newTagModal} onClick={handleStopPropagation}>
               <h3>Yeni Tag Oluştur</h3>
               <input type="text" placeholder="Tag adı..." value={newTagName}
-                onChange={(e) => setNewTagName(e.target.value)} style={styles.input} autoFocus />
+                onChange={handleNewTagNameChange} style={styles.input} autoFocus />
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <label>Renk:</label>
-                <input type="color" value={newTagColor} onChange={(e) => setNewTagColor(e.target.value)} style={styles.colorPicker} />
+                <input type="color" value={newTagColor} onChange={handleNewTagColorChange} style={styles.colorPicker} />
               </div>
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                 <button onClick={createTag} style={styles.primaryBtn}>Oluştur</button>
-                <button onClick={() => setShowNewTagModal(false)} style={styles.secondaryBtn}>İptal</button>
+                <button onClick={handleHideNewTagModal} style={styles.secondaryBtn}>İptal</button>
               </div>
             </div>
           </div>
@@ -111,4 +121,4 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
   );
 };
 
-export default BookmarkPanel;
+export default memo(BookmarkPanel);

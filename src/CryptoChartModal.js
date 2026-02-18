@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
+import useModalA11y from './hooks/useModalA11y';
 
 const CryptoChartModal = ({ symbol, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kripto Grafik' });
     const containerRef = useRef();
 
     // Sembol temizliği (USDT yoksa ekleyelim, varsa olduğu gibi kalsın)
@@ -45,8 +47,8 @@ const CryptoChartModal = ({ symbol, onClose }) => {
     }, [cleanSymbol]);
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3>📈 {rawSymbol} Grafiği</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

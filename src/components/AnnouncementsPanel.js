@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import './AnnouncementsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
@@ -136,16 +136,28 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
     }
   };
 
+  // 🎯 Performance: Memoized event handlers
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleShowCreateModal = useCallback(() => setShowCreateModal(true), []);
+  const handleHideCreateModal = useCallback(() => setShowCreateModal(false), []);
+  const handleTitleChange = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, title: e.target.value })), []);
+  const handleContentChange = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, content: e.target.value })), []);
+  const handleChannelChange = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, channel_id: e.target.value })), []);
+  const handleMentionChange = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, mention_role_id: e.target.value })), []);
+  const handleScheduleChange = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, schedule_time: e.target.value })), []);
+  const handleRepeatChange = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, repeat: e.target.value })), []);
+  const handleEmbedToggle = useCallback((e) => setNewAnnouncement(prev => ({ ...prev, embed: e.target.checked })), []);
+
   return (
     <div className="announcements-overlay" onClick={onClose}>
-      <div className="announcements-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="announcements-panel" onClick={handleStopPropagation}>
         <div className="announcements-header">
           <h2>📢 Duyurular</h2>
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="announcements-content">
-          <button className="create-announcement-btn" onClick={() => setShowCreateModal(true)}>
+          <button className="create-announcement-btn" onClick={handleShowCreateModal}>
             + Yeni Duyuru Oluştur
           </button>
 
@@ -181,32 +193,32 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
         </div>
 
         {showCreateModal && (
-          <div className="create-modal-overlay" onClick={() => setShowCreateModal(false)}>
-            <div className="create-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="create-modal-overlay" onClick={handleHideCreateModal}>
+            <div className="create-modal" onClick={handleStopPropagation}>
               <div className="modal-header">
                 <h3>Yeni Duyuru</h3>
-                <button className="close-btn" onClick={() => setShowCreateModal(false)}>×</button>
+                <button className="close-btn" onClick={handleHideCreateModal}>×</button>
               </div>
               <div className="modal-body">
                 <div className="form-group">
                   <label>Başlık *</label>
-                  <input value={newAnnouncement.title} onChange={(e) => setNewAnnouncement({...newAnnouncement, title: e.target.value})} />
+                  <input value={newAnnouncement.title} onChange={handleTitleChange} />
                 </div>
                 <div className="form-group">
                   <label>İçerik *</label>
-                  <textarea value={newAnnouncement.content} onChange={(e) => setNewAnnouncement({...newAnnouncement, content: e.target.value})} rows="4" />
+                  <textarea value={newAnnouncement.content} onChange={handleContentChange} rows="4" />
                 </div>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Kanal *</label>
-                    <select value={newAnnouncement.channel_id} onChange={(e) => setNewAnnouncement({...newAnnouncement, channel_id: e.target.value})}>
+                    <select value={newAnnouncement.channel_id} onChange={handleChannelChange}>
                       <option value="">Seçin</option>
                       {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
                   </div>
                   <div className="form-group">
                     <label>Bahset</label>
-                    <select value={newAnnouncement.mention_role_id} onChange={(e) => setNewAnnouncement({...newAnnouncement, mention_role_id: e.target.value})}>
+                    <select value={newAnnouncement.mention_role_id} onChange={handleMentionChange}>
                       <option value="">Rol yok</option>
                       {roles.map(r => <option key={r.id} value={r.id}>@{r.name}</option>)}
                     </select>
@@ -215,11 +227,11 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                 <div className="form-row">
                   <div className="form-group">
                     <label>Zamanlama</label>
-                    <input type="datetime-local" value={newAnnouncement.schedule_time} onChange={(e) => setNewAnnouncement({...newAnnouncement, schedule_time: e.target.value})} />
+                    <input type="datetime-local" value={newAnnouncement.schedule_time} onChange={handleScheduleChange} />
                   </div>
                   <div className="form-group">
                     <label>Tekrar</label>
-                    <select value={newAnnouncement.repeat} onChange={(e) => setNewAnnouncement({...newAnnouncement, repeat: e.target.value})}>
+                    <select value={newAnnouncement.repeat} onChange={handleRepeatChange}>
                       <option value="once">Bir kez</option>
                       <option value="daily">Günlük</option>
                       <option value="weekly">Haftalık</option>
@@ -229,13 +241,13 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
                 </div>
                 <div className="form-group">
                   <label className="checkbox-label">
-                    <input type="checkbox" checked={newAnnouncement.embed} onChange={(e) => setNewAnnouncement({...newAnnouncement, embed: e.target.checked})} />
+                    <input type="checkbox" checked={newAnnouncement.embed} onChange={handleEmbedToggle} />
                     <span>Embed olarak gönder</span>
                   </label>
                 </div>
               </div>
               <div className="modal-footer">
-                <button className="cancel-btn" onClick={() => setShowCreateModal(false)}>İptal</button>
+                <button className="cancel-btn" onClick={handleHideCreateModal}>İptal</button>
                 <button className="submit-btn" onClick={createAnnouncement}>📢 Oluştur</button>
               </div>
             </div>
@@ -246,5 +258,5 @@ const AnnouncementsPanel = ({ serverId, onClose }) => {
   );
 };
 
-export default AnnouncementsPanel;
+export default memo(AnnouncementsPanel);
 

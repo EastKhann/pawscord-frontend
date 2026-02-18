@@ -9,6 +9,7 @@ const INITIAL_WARNING = {
 };
 
 const AddWarningModal = ({ users, onAdd, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Uyarı Ekle' });
     const [newWarning, setNewWarning] = useState(INITIAL_WARNING);
 
     const handleAdd = async () => {
@@ -17,8 +18,8 @@ const AddWarningModal = ({ users, onAdd, onClose }) => {
     };
 
     return (
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h3 style={styles.modalTitle}>Add Warning</h3>
                     <button onClick={onClose} style={styles.modalClose}><FaTimes /></button>

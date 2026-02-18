@@ -45,20 +45,38 @@ const StatusPicker = ({ currentStatus = 'online', customStatus, onStatusChange, 
         setCustomText('');
     }, [onCustomStatusChange]);
 
+    const handleToggleCustom = useCallback(() => setShowCustom(prev => !prev), []);
+    const handleClearClick = useCallback((e) => { e.stopPropagation(); handleClearCustom(); }, [handleClearCustom]);
+    const handleCustomTextChange = useCallback((e) => setCustomText(e.target.value), []);
+    const handleExpireChange = useCallback((e) => setExpireAfter(e.target.value || null), []);
+    const handleEmojiCycle = useCallback(() => {
+        const emojis = ['😊', '🎮', '🎵', '💻', '🔥', '💤', '🎉', '❤️', '🚀', '📚'];
+        setCustomEmoji(prev => {
+            const idx = emojis.indexOf(prev);
+            return emojis[(idx + 1) % emojis.length];
+        });
+    }, []);
+    const handleMouseEnter = useCallback((e) => {
+        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)';
+    }, []);
+    const handleMouseLeave = useCallback((e) => {
+        e.currentTarget.style.backgroundColor = 'transparent';
+    }, []);
+
     return (
         <div style={S.container}>
             {/* Custom Status Section */}
             <button
                 type="button"
                 style={S.customBtn}
-                onClick={() => setShowCustom(!showCustom)}
+                onClick={handleToggleCustom}
             >
                 <FaSmile style={{ fontSize: 16, color: '#fee75c' }} />
                 <span>{customStatus?.text || 'Özel Durum Belirle'}</span>
                 {customStatus?.text && (
                     <FaTimes
                         style={{ fontSize: 12, color: '#b5bac1', marginLeft: 'auto' }}
-                        onClick={(e) => { e.stopPropagation(); handleClearCustom(); }}
+                        onClick={handleClearClick}
                     />
                 )}
             </button>
@@ -68,18 +86,14 @@ const StatusPicker = ({ currentStatus = 'online', customStatus, onStatusChange, 
                     <div style={S.customInput}>
                         <span
                             style={S.emojiPick}
-                            onClick={() => {
-                                const emojis = ['😊', '🎮', '🎵', '💻', '🔥', '💤', '🎉', '❤️', '🚀', '📚'];
-                                const idx = emojis.indexOf(customEmoji);
-                                setCustomEmoji(emojis[(idx + 1) % emojis.length]);
-                            }}
+                            onClick={handleEmojiCycle}
                         >
                             {customEmoji}
                         </span>
                         <input
                             type="text"
                             value={customText}
-                            onChange={e => setCustomText(e.target.value)}
+                            onChange={handleCustomTextChange}
                             placeholder="Durumunu ayarla..."
                             style={S.input}
                             maxLength={128}
@@ -91,7 +105,7 @@ const StatusPicker = ({ currentStatus = 'online', customStatus, onStatusChange, 
                         <select
                             style={S.select}
                             value={expireAfter || ''}
-                            onChange={e => setExpireAfter(e.target.value || null)}
+                            onChange={handleExpireChange}
                         >
                             {EXPIRE_OPTIONS.map(opt => (
                                 <option key={opt.label} value={opt.value || ''}>{opt.label}</option>
@@ -119,8 +133,8 @@ const StatusPicker = ({ currentStatus = 'online', customStatus, onStatusChange, 
                             backgroundColor: isActive ? 'rgba(88,101,242,0.1)' : 'transparent',
                         }}
                         onClick={() => handleStatusChange(s.key)}
-                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)'; }}
-                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                        onMouseEnter={!isActive ? handleMouseEnter : undefined}
+                        onMouseLeave={!isActive ? handleMouseLeave : undefined}
                     >
                         <Icon style={{ fontSize: 12, color: s.color }} />
                         <div style={S.statusInfo}>

@@ -1,6 +1,6 @@
 // frontend/src/components/Message/Message.js
 // Decomposed: useMessage + messageStyles + sub-components
-import { memo, lazy, Suspense } from 'react';
+import { memo, lazy, Suspense, useCallback } from 'react';
 import { FaChartLine } from 'react-icons/fa';
 import LazyImage from '../LazyImage';
 import useMessage from './useMessage';
@@ -31,20 +31,38 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
     localTranscription, localIsTranscribing, handleTranscribe, handleQuoteMessage,
   } = useMessage({ msg, currentUser, absoluteHostUrl, fetchWithAuth, onSetReply, onVisible, allUsers, getDeterministicAvatar });
 
+  // Memoized handlers
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => { setIsHovered(false); setShowReactionPicker(false); }, []);
+  const handleMessageClick = useCallback(() => { if (isSelectionMode) onToggleSelection(msg.id); }, [isSelectionMode, onToggleSelection, msg.id]);
+  const handleViewProfile = useCallback(() => onViewProfile(msg.username), [onViewProfile, msg.username]);
+  const handleAvatarClick = useCallback(() => onViewProfile(msg.username), [onViewProfile, msg.username]);
+  const handleReplyClick = useCallback(() => { if (msg.reply_to) onScrollToMessage(msg.reply_to.id); }, [msg.reply_to, onScrollToMessage]);
+  const handleShowReminder = useCallback(() => setShowReminderModal(true), []);
+  const handleShowThread = useCallback(() => setShowThreadModal(true), []);
+  const handleCloseReminder = useCallback(() => setShowReminderModal(false), []);
+  const handleCloseThread = useCallback(() => setShowThreadModal(false), []);
+  const handleShowReactionPicker = useCallback(() => setShowReactionPicker(true), []);
+  const handleCloseContextMenu = useCallback(() => setContextMenu(null), []);
+  const handleTicTacToeMove = useCallback((gid, idx) => {
+    fetchWithAuth(`${absoluteHostUrl}/api/games/xox/move/`, { method: 'POST', body: JSON.stringify({ game_id: gid, index: idx }) });
+  }, [fetchWithAuth, absoluteHostUrl]);
+  const handleShowChart = useCallback(() => onShowChart(signalCoin), [onShowChart, signalCoin]);
+
   return (
     <div ref={messageRef} style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : (isHovered ? 'rgba(4, 4, 5, 0.07)' : 'transparent'), cursor: isSelectionMode ? 'pointer' : 'default' }}
-      onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => { setIsHovered(false); setShowReactionPicker(false); }}
-      onContextMenu={handleContextMenu} id={`message-${msg.id}`} onClick={() => isSelectionMode && onToggleSelection(msg.id)}>
+      onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
+      onContextMenu={handleContextMenu} id={`message-${msg.id}`} onClick={handleMessageClick}>
 
-      <UserCardPopover user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }} onMessage={() => onViewProfile(msg.username)} onProfile={() => onViewProfile(msg.username)}>
+      <UserCardPopover user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }} onMessage={handleViewProfile} onProfile={handleViewProfile}>
         <div style={styles.avatarContainer}>
-          <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar} onClick={() => onViewProfile(msg.username)} placeholder={getDeterministicAvatar(msg.username)} />
+          <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar} onClick={handleAvatarClick} placeholder={getDeterministicAvatar(msg.username)} />
         </div>
       </UserCardPopover>
 
       <div style={styles.contentWrapper}>
         {msg.reply_to && (
-          <div style={styles.replyContainer} onClick={() => onScrollToMessage(msg.reply_to.id)}>
+          <div style={styles.replyContainer} onClick={handleReplyClick}>
             <div style={styles.replyLine} />
             <span style={{ fontWeight: 'bold', marginRight: 5 }}>@{msg.reply_to.username}</span>
             <span style={{ opacity: 0.7, fontSize: '0.9em' }}>{msg.reply_to.content ? msg.reply_to.content.substring(0, 50) + '...' : 'Bir dosya'}</span>
@@ -58,29 +76,29 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
             showReactionPicker={showReactionPicker} setShowReactionPicker={setShowReactionPicker}
             onToggleReaction={onToggleReaction} onSetReply={onSetReply} onStartEdit={onStartEdit} onDelete={onDelete}
             onTogglePin={onTogglePin} onStartForward={onStartForward} onToggleSelection={onToggleSelection}
-            onQuote={handleQuoteMessage} onShowReminderModal={() => setShowReminderModal(true)}
-            onShowThreadModal={() => setShowThreadModal(true)} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
+            onQuote={handleQuoteMessage} onShowReminderModal={handleShowReminder}
+            onShowThreadModal={handleShowThread} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
         )}
 
-        {showReminderModal && <Suspense fallback={null}><ReminderModal messageId={msg.id} messageContent={displayContent} onClose={() => setShowReminderModal(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
-        {showThreadModal && <Suspense fallback={null}><MessageThreads messageId={msg.id} onClose={() => setShowThreadModal(false)} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
+        {showReminderModal && <Suspense fallback={null}><ReminderModal messageId={msg.id} messageContent={displayContent} onClose={handleCloseReminder} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
+        {showThreadModal && <Suspense fallback={null}><MessageThreads messageId={msg.id} onClose={handleCloseThread} fetchWithAuth={fetchWithAuth} apiBaseUrl={absoluteHostUrl} /></Suspense>}
 
         <MessageContextMenu msg={msg} contextMenu={contextMenu} displayContent={displayContent} isMyMessage={isMyMessage}
           onSetReply={onSetReply} onStartEdit={onStartEdit} onDelete={onDelete} onTogglePin={onTogglePin}
-          onStartForward={onStartForward} onShowReactionPicker={() => setShowReactionPicker(true)}
-          onShowThreadModal={() => setShowThreadModal(true)} onShowReminderModal={() => setShowReminderModal(true)}
-          onClose={() => setContextMenu(null)} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
+          onStartForward={onStartForward} onShowReactionPicker={handleShowReactionPicker}
+          onShowThreadModal={handleShowThread} onShowReminderModal={handleShowReminder}
+          onClose={handleCloseContextMenu} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
 
         {msg.snippet_data?.type === 'game_xox' ? (
           <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
             <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
-              onMove={(gid, idx) => { fetchWithAuth(`${absoluteHostUrl}/api/games/xox/move/`, { method: 'POST', body: JSON.stringify({ game_id: gid, index: idx }) }); }} />
+              onMove={handleTicTacToeMove} />
           </Suspense>
         ) : (
           <MessageContent displayContent={displayContent} isMessageEncrypted={isMessageEncrypted} snippetData={msg.snippet_data} />
         )}
 
-        {signalCoin && <button onClick={() => onShowChart(signalCoin)} style={styles.chartBtn}><FaChartLine /> {signalCoin} Grafi{'ğ'}i</button>}
+        {signalCoin && <button onClick={handleShowChart} style={styles.chartBtn}><FaChartLine /> {signalCoin} Grafi{'ğ'}i</button>}
         {msg.link_preview_data && <LazyMount minHeight={80}><Suspense fallback={null}><LinkPreview data={msg.link_preview_data} /></Suspense></LazyMount>}
         <MessagePoll poll={msg.poll} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
         <MessageMedia msg={msg} finalImageUrl={finalImageUrl} finalFileUrl={finalFileUrl} onImageClick={onImageClick} onContentLoad={onContentLoad}

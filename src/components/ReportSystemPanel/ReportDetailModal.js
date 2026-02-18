@@ -1,13 +1,15 @@
 import { FaCheck, FaTimes, FaTrash, FaBan } from 'react-icons/fa';
 import confirmDialog from '../../utils/confirmDialog';
 import styles from './styles';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const ReportDetailModal = ({ report, onClose, onHandle, getReportBadgeColor, getSeverityColor }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!report, label: 'Rapor Detay' });
     if (!report) return null;
 
     return (
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h3 style={styles.modalTitle}>Report Details</h3>
                     <button onClick={onClose} style={styles.modalClose}>

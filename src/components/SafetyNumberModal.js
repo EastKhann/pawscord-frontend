@@ -4,6 +4,7 @@ import toast from '../utils/toast';
 import { FaShieldAlt, FaCheck, FaTimes, FaQrcode } from 'react-icons/fa';
 import { generateSafetyNumber } from '../utils/e2ee';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
+import useModalA11y from '../hooks/useModalA11y';
 
 /**
  * Safety Number Verification Modal
@@ -16,6 +17,7 @@ const SafetyNumberModal = ({
     fetchWithAuth,
     onClose
 }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Safety Number' });
     const [safetyNumber, setSafetyNumber] = useState(null);
     const [verified, setVerified] = useState(false);
     const [verifiedByMe, setVerifiedByMe] = useState(false);
@@ -63,8 +65,8 @@ const SafetyNumberModal = ({
 
     if (loading) {
         return (
-            <div style={styles.overlay} onClick={onClose}>
-                <div style={styles.modal} onClick={e => e.stopPropagation()}>
+            <div style={styles.overlay} {...overlayProps}>
+                <div style={styles.modal} {...dialogProps}>
                     <p style={styles.loading}>Yükleniyor...</p>
                 </div>
             </div>
@@ -72,8 +74,8 @@ const SafetyNumberModal = ({
     }
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <FaShieldAlt size={32} color={verified ? '#43b581' : '#faa61a'} />
                     <h2 style={styles.title}>Safety Number</h2>

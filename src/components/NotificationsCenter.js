@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import './NotificationsCenter.css';
 import { FaBell, FaTimes, FaCog, FaCheck, FaEnvelope, FaMobileAlt, FaBellSlash, FaFilter } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
@@ -18,6 +18,17 @@ const NotificationsCenter = ({ userId, onClose }) => {
     const [mentionsOnly, setMentionsOnly] = useState(false);
     const [dndEnabled, setDndEnabled] = useState(false);
     const [soundEnabled, setSoundEnabled] = useState(true);
+
+    const handleToggleSettings = useCallback(() => setShowSettings(prev => !prev), []);
+    const handleFilterAll = useCallback(() => setFilter('all'), []);
+    const handleFilterUnread = useCallback(() => setFilter('unread'), []);
+    const handleFilterMentions = useCallback(() => setFilter('mentions'), []);
+    const handleFilterServers = useCallback(() => setFilter('servers'), []);
+    const handlePushChange = useCallback((e) => setPushEnabled(e.target.checked), []);
+    const handleEmailChange = useCallback((e) => setEmailEnabled(e.target.checked), []);
+    const handleSoundChange = useCallback((e) => setSoundEnabled(e.target.checked), []);
+    const handleMentionsChange = useCallback((e) => setMentionsOnly(e.target.checked), []);
+    const handleDndChange = useCallback((e) => setDndEnabled(e.target.checked), []);
 
     useEffect(() => {
         fetchNotifications();
@@ -204,7 +215,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                         {unreadCount > 0 && <span className="unread-badge">{unreadCount} new</span>}
                     </div>
                     <div className="header-actions">
-                        <button onClick={() => setShowSettings(!showSettings)} className="btn-settings">
+                        <button onClick={handleToggleSettings} className="btn-settings">
                             <FaCog />
                         </button>
                         <button onClick={onClose} className="btn-close">
@@ -214,16 +225,16 @@ const NotificationsCenter = ({ userId, onClose }) => {
                 </div>
 
                 <div className="filter-bar">
-                    <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>
+                    <button className={filter === 'all' ? 'active' : ''} onClick={handleFilterAll}>
                         All
                     </button>
-                    <button className={filter === 'unread' ? 'active' : ''} onClick={() => setFilter('unread')}>
+                    <button className={filter === 'unread' ? 'active' : ''} onClick={handleFilterUnread}>
                         Unread
                     </button>
-                    <button className={filter === 'mentions' ? 'active' : ''} onClick={() => setFilter('mentions')}>
+                    <button className={filter === 'mentions' ? 'active' : ''} onClick={handleFilterMentions}>
                         Mentions
                     </button>
-                    <button className={filter === 'servers' ? 'active' : ''} onClick={() => setFilter('servers')}>
+                    <button className={filter === 'servers' ? 'active' : ''} onClick={handleFilterServers}>
                         Servers
                     </button>
                 </div>
@@ -231,7 +242,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                 {showSettings && (
                     <div className="settings-panel">
                         <h3>Notification Settings</h3>
-                        
+
                         <div className="setting-item">
                             <div className="setting-info">
                                 <FaMobileAlt />
@@ -244,7 +255,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                 <input
                                     type="checkbox"
                                     checked={pushEnabled}
-                                    onChange={(e) => setPushEnabled(e.target.checked)}
+                                    onChange={handlePushChange}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -262,7 +273,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                 <input
                                     type="checkbox"
                                     checked={emailEnabled}
-                                    onChange={(e) => setEmailEnabled(e.target.checked)}
+                                    onChange={handleEmailChange}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -280,7 +291,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                 <input
                                     type="checkbox"
                                     checked={soundEnabled}
-                                    onChange={(e) => setSoundEnabled(e.target.checked)}
+                                    onChange={handleSoundChange}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -298,7 +309,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                 <input
                                     type="checkbox"
                                     checked={mentionsOnly}
-                                    onChange={(e) => setMentionsOnly(e.target.checked)}
+                                    onChange={handleMentionsChange}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -316,7 +327,7 @@ const NotificationsCenter = ({ userId, onClose }) => {
                                 <input
                                     type="checkbox"
                                     checked={dndEnabled}
-                                    onChange={(e) => setDndEnabled(e.target.checked)}
+                                    onChange={handleDndChange}
                                 />
                                 <span className="toggle-slider"></span>
                             </label>
@@ -398,4 +409,4 @@ const NotificationsCenter = ({ userId, onClose }) => {
     );
 };
 
-export default NotificationsCenter;
+export default memo(NotificationsCenter);

@@ -1,6 +1,6 @@
 // frontend/src/FloatingVoiceIsland.js
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import Draggable from 'react-draggable';
 import { ResizableBox } from 'react-resizable';
 import 'react-resizable/css/styles.css';
@@ -43,6 +43,14 @@ const FloatingVoiceIsland = ({ islandState, onDrag, onResize, children, isMobile
 
     const currentWidth = isMinimized ? minimizedWidth : safeIslandState.width;
     const currentHeight = isMinimized ? minimizedHeight : safeIslandState.height;
+
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+    const handleDragStart = useCallback(() => setIsInteracting(true), []);
+    const handleDragStop = useCallback((e, data) => { setIsInteracting(false); onDrag(data); }, [onDrag]);
+    const handleResizeStart = useCallback((e) => { e.stopPropagation(); setIsInteracting(true); }, []);
+    const handleResizeStop = useCallback((e, data) => { e.stopPropagation(); setIsInteracting(false); if (onResize) onResize(data.size); }, [onResize]);
 
     return (
         <>
@@ -134,11 +142,8 @@ const FloatingVoiceIsland = ({ islandState, onDrag, onResize, children, isMobile
                 nodeRef={nodeRef}
                 handle=".drag-handle-modern"
                 position={{ x: safeIslandState.x || 0, y: safeIslandState.y || 0 }}
-                onStart={() => setIsInteracting(true)}
-                onStop={(e, data) => {
-                    setIsInteracting(false);
-                    onDrag(data);
-                }}
+                onStart={handleDragStart}
+                onStop={handleDragStop}
                 disabled={false}
                 bounds="parent"
             >
@@ -158,16 +163,16 @@ const FloatingVoiceIsland = ({ islandState, onDrag, onResize, children, isMobile
                                 width: minimizedWidth,
                                 height: minimizedHeight,
                             }}
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
                         >
                             <div className="drag-handle-modern" style={styles.minimizedDragHandle}>
                                 <span style={styles.minimizedIcon}>🎤</span>
                                 <span style={styles.minimizedText}>Voice Chat</span>
                                 <button
                                     onClick={handleMinimize}
-                                    onMouseDown={(e) => e.stopPropagation()}
-                                    onTouchStart={(e) => e.stopPropagation()}
+                                    onMouseDown={handleStopPropagation}
+                                    onTouchStart={handleStopPropagation}
                                     style={styles.expandButton}
                                     className="voice-btn-modern"
                                 >
@@ -182,17 +187,8 @@ const FloatingVoiceIsland = ({ islandState, onDrag, onResize, children, isMobile
                             height={currentHeight}
                             minConstraints={minConstraints}
                             maxConstraints={maxConstraints}
-                            onResizeStart={(e) => {
-                                e.stopPropagation();
-                                setIsInteracting(true);
-                            }}
-                            onResizeStop={(e, data) => {
-                                e.stopPropagation();
-                                setIsInteracting(false);
-                                if (onResize) {
-                                    onResize(data.size);
-                                }
-                            }}
+                            onResizeStart={handleResizeStart}
+                            onResizeStop={handleResizeStop}
                             style={{
                                 ...styles.islandContainer,
                                 animation: isHovered ? 'pulse-glow 2s infinite' : 'none',
@@ -204,8 +200,8 @@ const FloatingVoiceIsland = ({ islandState, onDrag, onResize, children, isMobile
                             <div
                                 className="drag-handle-modern"
                                 style={styles.dragHandle}
-                                onMouseEnter={() => setIsHovered(true)}
-                                onMouseLeave={() => setIsHovered(false)}
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
                             >
                                 <div style={styles.headerContent}>
                                     <div style={styles.headerLeft}>
@@ -215,17 +211,17 @@ const FloatingVoiceIsland = ({ islandState, onDrag, onResize, children, isMobile
                                     <div style={styles.headerRight}>
                                         {/* 🛠️ Custom Header Actions */}
                                         <div
-                                            onMouseDown={(e) => e.stopPropagation()}
-                                            onTouchStart={(e) => e.stopPropagation()}
-                                            onClick={(e) => e.stopPropagation()}
+                                            onMouseDown={handleStopPropagation}
+                                            onTouchStart={handleStopPropagation}
+                                            onClick={handleStopPropagation}
                                         >
                                             {headerActions && headerActions}
                                         </div>
 
                                         <button
                                             onClick={handleMinimize}
-                                            onMouseDown={(e) => e.stopPropagation()}
-                                            onTouchStart={(e) => e.stopPropagation()}
+                                            onMouseDown={handleStopPropagation}
+                                            onTouchStart={handleStopPropagation}
                                             style={styles.minimizeButton}
                                             className="voice-btn-modern"
                                             title="Minimize"

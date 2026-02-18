@@ -17,6 +17,7 @@ import LanguageTab from './UserSettingsModal/tabs/LanguageTab';
 import ActivityTab from './UserSettingsModal/tabs/ActivityTab';
 import DevicesTab from './UserSettingsModal/tabs/DevicesTab';
 import AdvancedTab from './UserSettingsModal/tabs/AdvancedTab';
+import useModalA11y from '../hooks/useModalA11y';
 
 const TAB_COMPONENTS = {
     account: AccountTab,
@@ -33,13 +34,8 @@ const TAB_COMPONENTS = {
 };
 
 const UserSettingsModal = ({ onClose, user }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kullanıcı Ayarları' });
     const [activeTab, setActiveTab] = useState('account');
-
-    useEffect(() => {
-        const handler = (e) => { if (e.key === 'Escape') onClose(); };
-        document.addEventListener('keydown', handler);
-        return () => document.removeEventListener('keydown', handler);
-    }, [onClose]);
 
     const ActiveComponent = TAB_COMPONENTS[activeTab] || AccountTab;
 
@@ -51,8 +47,8 @@ const UserSettingsModal = ({ onClose, user }) => {
     });
 
     return (
-        <div style={S.overlay} onClick={onClose}>
-            <div style={S.modal} onClick={e => e.stopPropagation()}>
+        <div style={S.overlay} {...overlayProps}>
+            <div style={S.modal} {...dialogProps}>
                 <div style={S.sidebar}>
                     <div style={S.sidebarScroll}>
                         {Object.entries(sections).map(([section, tabs]) => (

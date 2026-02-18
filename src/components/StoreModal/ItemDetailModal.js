@@ -1,12 +1,14 @@
 import React from 'react';
 import { FaTimes, FaCoins, FaGift } from 'react-icons/fa';
 import styles, { getRarityColor } from './storeModalStyles';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const ItemDetailModal = ({ item, balance, onClose, onPurchase }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!item, label: 'Ürün Detay' });
     if (!item) return null;
     return (
-        <div style={styles.detailOverlay} onClick={onClose}>
-            <div style={styles.detailModal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.detailOverlay} {...overlayProps}>
+            <div style={styles.detailModal} {...dialogProps}>
                 <button onClick={onClose} style={styles.detailClose}><FaTimes /></button>
                 {item.image ? (
                     <img src={item.image} alt={item.name} style={styles.detailImage} />

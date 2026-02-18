@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-toastify';
 import { ABSOLUTE_HOST_URL } from '../../config/api';
 
@@ -46,6 +46,70 @@ const AppModalsBatch1to8 = ({
     currentUserProfile, setCurrentUserProfile,
     setActiveChat,
 }) => {
+    // Memoize close handlers
+    const closeReactionAnalytics = useCallback(() => closeModal('reactionAnalytics'), [closeModal]);
+    const closeLinkClickTracking = useCallback(() => closeModal('linkClickTracking'), [closeModal]);
+    const closeJoinLeaveLogs = useCallback(() => closeModal('joinLeaveLogs'), [closeModal]);
+    const closeUserActivity = useCallback(() => closeModal('userActivity'), [closeModal]);
+    const closeNicknameHistory = useCallback(() => closeModal('nicknameHistory'), [closeModal]);
+    const closeFieldChangeTracking = useCallback(() => closeModal('fieldChangeTracking'), [closeModal]);
+    const closeInviteAnalytics = useCallback(() => closeModal('inviteAnalytics'), [closeModal]);
+    const closeContentScanner = useCallback(() => closeModal('contentScanner'), [closeModal]);
+    const closeEphemeralMessages = useCallback(() => closeModal('ephemeralMessages'), [closeModal]);
+    const closeTopicHistory = useCallback(() => closeModal('topicHistory'), [closeModal]);
+    const closeDrafts = useCallback(() => closeModal('drafts'), [closeModal]);
+    const closeServerNicknames = useCallback(() => closeModal('serverNicknames'), [closeModal]);
+    const closeServerBoost = useCallback(() => closeModal('serverBoost'), [closeModal]);
+    const closeRoomWebhooks = useCallback(() => closeModal('roomWebhooks'), [closeModal]);
+    const closeOAuthApps = useCallback(() => closeModal('oAuthApps'), [closeModal]);
+    const closeAutoResponders = useCallback(() => closeModal('autoResponders'), [closeModal]);
+    const closeSessionManagement = useCallback(() => closeModal('sessionManagement'), [closeModal]);
+    const closeGDPRExport = useCallback(() => closeModal('gDPRExport'), [closeModal]);
+    const closeDataRetention = useCallback(() => closeModal('dataRetention'), [closeModal]);
+    const closeTwoFactorSetup = useCallback(() => closeModal('twoFactorSetup'), [closeModal]);
+    const closeEnhancedPolls = useCallback(() => closeModal('enhancedPolls'), [closeModal]);
+    const closeVoiceTranscripts = useCallback(() => closeModal('voiceTranscripts'), [closeModal]);
+    const closeInviteExport = useCallback(() => closeModal('inviteExport'), [closeModal]);
+    const closeAdvancedSearch = useCallback(() => closeModal('advancedSearch'), [closeModal]);
+    const closeGrowthMetrics = useCallback(() => closeModal('growthMetrics'), [closeModal]);
+    const closeLinkPreview = useCallback(() => closeModal('linkPreview'), [closeModal]);
+    const closeInventory = useCallback(() => closeModal('inventory'), [closeModal]);
+    const closeWaitlist = useCallback(() => closeModal('waitlist'), [closeModal]);
+    const closeReferralRewards = useCallback(() => closeModal('referralRewards'), [closeModal]);
+    const closeMiniGames = useCallback(() => closeModal('miniGames'), [closeModal]);
+    const closeProjectCollaboration = useCallback(() => closeModal('projectCollaboration'), [closeModal]);
+    const closeAvatarStudio = useCallback(() => closeModal('avatarStudio'), [closeModal]);
+
+    const handle2FASuccess = useCallback(() => {
+        toast.success('2FA ba\u015Far\u0131yla etkinle\u015Ftirildi!');
+        closeModal('twoFactorSetup');
+    }, [closeModal]);
+
+    const handleDraftLoad = useCallback((draft) => {
+        if (draft.room) {
+            setActiveChat({ type: 'room', slug: draft.room });
+        }
+        closeModal('drafts');
+    }, [setActiveChat, closeModal]);
+
+    const handleSearchMessageClick = useCallback((msg) => {
+        if (msg.room) {
+            setActiveChat({ type: 'room', slug: msg.room });
+        }
+        closeModal('advancedSearch');
+    }, [setActiveChat, closeModal]);
+
+    const handleAvatarChange = useCallback((newAvatarUrl) => {
+        if (currentUserProfile) {
+            setCurrentUserProfile({ ...currentUserProfile, avatar_url: newAvatarUrl });
+        }
+        toast.success('\uD83C\uDFA8 Avatar g\u00fcncellendi!');
+    }, [currentUserProfile, setCurrentUserProfile]);
+
+    const serverId = useMemo(() =>
+        activeChat?.type === 'room' ? activeChat.server_id : null,
+        [activeChat?.type, activeChat?.server_id]);
+
     return (
         <>
             {/* 🚀 BATCH 1: Analytics & Tracking */}
@@ -55,7 +119,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         roomSlug={activeChat.slug}
-                        onClose={() => closeModal('reactionAnalytics')}
+                        onClose={closeReactionAnalytics}
                     />
                 </Suspense>
             )}
@@ -65,7 +129,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         roomSlug={activeChat.slug}
-                        onClose={() => closeModal('linkClickTracking')}
+                        onClose={closeLinkClickTracking}
                     />
                 </Suspense>
             )}
@@ -74,8 +138,8 @@ const AppModalsBatch1to8 = ({
                     <JoinLeaveLogsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('joinLeaveLogs')}
+                        serverId={serverId}
+                        onClose={closeJoinLeaveLogs}
                     />
                 </Suspense>
             )}
@@ -85,7 +149,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         username={username}
-                        onClose={() => closeModal('userActivity')}
+                        onClose={closeUserActivity}
                     />
                 </Suspense>
             )}
@@ -95,7 +159,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         username={username}
-                        onClose={() => closeModal('nicknameHistory')}
+                        onClose={closeNicknameHistory}
                     />
                 </Suspense>
             )}
@@ -104,7 +168,7 @@ const AppModalsBatch1to8 = ({
                     <FieldChangeTrackingPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('fieldChangeTracking')}
+                        onClose={closeFieldChangeTracking}
                     />
                 </Suspense>
             )}
@@ -113,8 +177,8 @@ const AppModalsBatch1to8 = ({
                     <InviteAnalyticsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('inviteAnalytics')}
+                        serverId={serverId}
+                        onClose={closeInviteAnalytics}
                     />
                 </Suspense>
             )}
@@ -124,7 +188,7 @@ const AppModalsBatch1to8 = ({
                     <ContentScannerPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('contentScanner')}
+                        onClose={closeContentScanner}
                     />
                 </Suspense>
             )}
@@ -134,7 +198,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         roomSlug={activeChat.slug}
-                        onClose={() => closeModal('ephemeralMessages')}
+                        onClose={closeEphemeralMessages}
                     />
                 </Suspense>
             )}
@@ -144,7 +208,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         roomSlug={activeChat.slug}
-                        onClose={() => closeModal('topicHistory')}
+                        onClose={closeTopicHistory}
                     />
                 </Suspense>
             )}
@@ -153,13 +217,8 @@ const AppModalsBatch1to8 = ({
                     <DraftsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('drafts')}
-                        onLoadDraft={(draft) => {
-                            if (draft.room) {
-                                setActiveChat({ type: 'room', slug: draft.room });
-                            }
-                            closeModal('drafts');
-                        }}
+                        onClose={closeDrafts}
+                        onLoadDraft={handleDraftLoad}
                     />
                 </Suspense>
             )}
@@ -168,8 +227,8 @@ const AppModalsBatch1to8 = ({
                     <ServerNicknamesPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('serverNicknames')}
+                        serverId={serverId}
+                        onClose={closeServerNicknames}
                     />
                 </Suspense>
             )}
@@ -179,9 +238,9 @@ const AppModalsBatch1to8 = ({
                     <ServerBoostPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
+                        serverId={serverId}
                         currentUsername={username}
-                        onClose={() => closeModal('serverBoost')}
+                        onClose={closeServerBoost}
                     />
                 </Suspense>
             )}
@@ -191,7 +250,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         roomSlug={activeChat.slug}
-                        onClose={() => closeModal('roomWebhooks')}
+                        onClose={closeRoomWebhooks}
                     />
                 </Suspense>
             )}
@@ -200,7 +259,7 @@ const AppModalsBatch1to8 = ({
                     <OAuthAppsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('oAuthApps')}
+                        onClose={closeOAuthApps}
                     />
                 </Suspense>
             )}
@@ -209,8 +268,8 @@ const AppModalsBatch1to8 = ({
                     <AutoRespondersPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('autoResponders')}
+                        serverId={serverId}
+                        onClose={closeAutoResponders}
                     />
                 </Suspense>
             )}
@@ -220,7 +279,7 @@ const AppModalsBatch1to8 = ({
                     <SessionManagementPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('sessionManagement')}
+                        onClose={closeSessionManagement}
                     />
                 </Suspense>
             )}
@@ -229,7 +288,7 @@ const AppModalsBatch1to8 = ({
                     <GDPRExportPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('gDPRExport')}
+                        onClose={closeGDPRExport}
                     />
                 </Suspense>
             )}
@@ -238,8 +297,8 @@ const AppModalsBatch1to8 = ({
                     <DataRetentionPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('dataRetention')}
+                        serverId={serverId}
+                        onClose={closeDataRetention}
                     />
                 </Suspense>
             )}
@@ -248,11 +307,8 @@ const AppModalsBatch1to8 = ({
                     <TwoFactorSetupWizard
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('twoFactorSetup')}
-                        onSuccess={() => {
-                            toast.success('2FA başarıyla etkinleştirildi!');
-                            closeModal('twoFactorSetup');
-                        }}
+                        onClose={closeTwoFactorSetup}
+                        onSuccess={handle2FASuccess}
                     />
                 </Suspense>
             )}
@@ -263,7 +319,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         roomSlug={activeChat.slug}
-                        onClose={() => closeModal('enhancedPolls')}
+                        onClose={closeEnhancedPolls}
                     />
                 </Suspense>
             )}
@@ -272,7 +328,7 @@ const AppModalsBatch1to8 = ({
                     <VoiceTranscriptsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('voiceTranscripts')}
+                        onClose={closeVoiceTranscripts}
                     />
                 </Suspense>
             )}
@@ -281,8 +337,8 @@ const AppModalsBatch1to8 = ({
                     <InviteExportPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('inviteExport')}
+                        serverId={serverId}
+                        onClose={closeInviteExport}
                     />
                 </Suspense>
             )}
@@ -292,13 +348,8 @@ const AppModalsBatch1to8 = ({
                     <AdvancedSearchPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('advancedSearch')}
-                        onMessageClick={(msg) => {
-                            if (msg.room) {
-                                setActiveChat({ type: 'room', slug: msg.room });
-                            }
-                            closeModal('advancedSearch');
-                        }}
+                        onClose={closeAdvancedSearch}
+                        onMessageClick={handleSearchMessageClick}
                     />
                 </Suspense>
             )}
@@ -307,8 +358,8 @@ const AppModalsBatch1to8 = ({
                     <GrowthMetricsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('growthMetrics')}
+                        serverId={serverId}
+                        onClose={closeGrowthMetrics}
                     />
                 </Suspense>
             )}
@@ -318,7 +369,7 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         url={null}
-                        onClose={() => closeModal('linkPreview')}
+                        onClose={closeLinkPreview}
                     />
                 </Suspense>
             )}
@@ -328,7 +379,7 @@ const AppModalsBatch1to8 = ({
                     <InventoryPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('inventory')}
+                        onClose={closeInventory}
                     />
                 </Suspense>
             )}
@@ -337,8 +388,8 @@ const AppModalsBatch1to8 = ({
                     <WaitlistPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat.server_id}
-                        onClose={() => closeModal('waitlist')}
+                        serverId={serverId}
+                        onClose={closeWaitlist}
                     />
                 </Suspense>
             )}
@@ -347,7 +398,7 @@ const AppModalsBatch1to8 = ({
                     <ReferralRewardsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('referralRewards')}
+                        onClose={closeReferralRewards}
                     />
                 </Suspense>
             )}
@@ -357,9 +408,9 @@ const AppModalsBatch1to8 = ({
                     <MiniGamesPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
+                        serverId={serverId}
                         currentUser={username}
-                        onClose={() => closeModal('miniGames')}
+                        onClose={closeMiniGames}
                     />
                 </Suspense>
             )}
@@ -368,9 +419,9 @@ const AppModalsBatch1to8 = ({
                     <ProjectCollaborationPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.server_id}
+                        serverId={serverId}
                         currentUser={username}
-                        onClose={() => closeModal('projectCollaboration')}
+                        onClose={closeProjectCollaboration}
                     />
                 </Suspense>
             )}
@@ -380,13 +431,8 @@ const AppModalsBatch1to8 = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         currentUser={username}
-                        onClose={() => closeModal('avatarStudio')}
-                        onAvatarChange={(newAvatarUrl) => {
-                            if (currentUserProfile) {
-                                setCurrentUserProfile({ ...currentUserProfile, avatar_url: newAvatarUrl });
-                            }
-                            toast.success('🎨 Avatar güncellendi!');
-                        }}
+                        onClose={closeAvatarStudio}
+                        onAvatarChange={handleAvatarChange}
                     />
                 </Suspense>
             )}
@@ -394,4 +440,4 @@ const AppModalsBatch1to8 = ({
     );
 };
 
-export default AppModalsBatch1to8;
+export default React.memo(AppModalsBatch1to8);

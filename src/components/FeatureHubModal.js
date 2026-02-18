@@ -1,10 +1,13 @@
 import React from 'react';
 import { useUIStore } from '../stores/useUIStore';
 import { FEATURE_SECTIONS, getHoverBg } from './FeatureHubModal/featureSections';
+import useModalA11y from '../hooks/useModalA11y';
 import styles from './FeatureHubModal/styles';
 
 const FeatureHubModal = () => {
     const { openModal, closeModal } = useUIStore();
+    const onClose = () => closeModal('featureHub');
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: true, label: 'Feature Hub' });
 
     const handleSelect = (modal) => {
         openModal(modal);
@@ -12,8 +15,8 @@ const FeatureHubModal = () => {
     };
 
     return (
-        <div style={styles.overlay} onClick={(e) => { if (e.target === e.currentTarget) closeModal('featureHub'); }}>
-            <div style={styles.container}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.container} {...dialogProps}>
                 <div style={styles.header}>
                     <h2 style={styles.title}>{'🚀'} Tüm Özellikler</h2>
                     <button onClick={() => closeModal('featureHub')} style={styles.closeBtn}>{'✕'}</button>

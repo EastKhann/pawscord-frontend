@@ -1,8 +1,10 @@
 // frontend/src/components/UserNotesModal.js
 import { useState, useEffect } from 'react';
 import { FaStickyNote, FaSave, FaTimes } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline = false }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kullanıcı Notları' });
     const [note, setNote] = useState('');
     const [color, setColor] = useState('yellow');
     const [saving, setSaving] = useState(false);
@@ -100,8 +102,8 @@ const UserNotesModal = ({ targetUser, apiBaseUrl, fetchWithAuth, onClose, inline
     }
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3 style={styles.title}>
                         <FaStickyNote /> {targetUser} Hakkında Not

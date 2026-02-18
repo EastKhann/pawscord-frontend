@@ -1,5 +1,5 @@
 // frontend/src/components/AIChatbotPanel.js
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import toast from '../utils/toast';
 import { FaRobot, FaPaperPlane, FaLightbulb, FaFileCode, FaShieldAlt, FaChartBar, FaMagic } from 'react-icons/fa';
 import './AIChatbotPanel.css';
@@ -45,7 +45,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
 
         const userMessage = input.trim();
         setInput('');
-        
+
         // Add user message to chat
         setMessages(prev => [...prev, { role: 'user', content: userMessage, timestamp: new Date() }]);
         setLoading(true);
@@ -60,7 +60,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             });
 
             const data = await response.json();
-            
+
             setMessages(prev => [...prev, {
                 role: 'assistant',
                 content: data.response,
@@ -117,7 +117,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             });
 
             const data = await response.json();
-            
+
             setMessages(prev => [...prev, {
                 role: 'assistant',
                 content: `📝 **Özet:**\n\n${data.summary}`,
@@ -146,7 +146,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             });
 
             const data = await response.json();
-            
+
             setMessages(prev => [...prev, {
                 role: 'assistant',
                 content: `🎓 **Açıklama:**\n\n${data.explanation}`,
@@ -175,7 +175,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             });
 
             const data = await response.json();
-            
+
             setMessages(prev => [...prev, {
                 role: 'assistant',
                 content: `\`\`\`${data.language}\n${data.code}\n\`\`\`\n\n${data.explanation || ''}`,
@@ -203,7 +203,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             });
 
             const data = await response.json();
-            
+
             toast.info(`🛡️ Moderasyon: ${data.is_safe ? '✅ Güvenli' : '⚠️ Uygunsuz'}\n${data.reason || ''}`);
         } catch (err) {
             console.error('Moderation error:', err);
@@ -212,6 +212,19 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
             setLoading(false);
         }
     };
+
+    // useCallback handlers
+    const handleSetTabChat = useCallback(() => setActiveTab('chat'), []);
+    const handleSetTabSmartReply = useCallback(() => setActiveTab('smart-reply'), []);
+    const handleSetTabSummarize = useCallback(() => setActiveTab('summarize'), []);
+    const handleSetTabCode = useCallback(() => setActiveTab('code'), []);
+    const handleInputChange = useCallback((e) => setInput(e.target.value), []);
+    const handleSuggestionCode = useCallback(() => setInput('JavaScript ile bir todo list nasıl yapılır?'), []);
+    const handleSuggestionExplain = useCallback(() => setInput('React hooks nedir?'), []);
+    const handleSuggestionChat = useCallback(() => setInput('Bugün hava nasıl?'), []);
+    const handleLastSmartReply = useCallback(() => handleSmartReply('last-message-id'), []);
+    const handleSummarizeLast = useCallback(() => handleSummarize(['msg1', 'msg2', 'msg3']), []);
+    const handleCodeFormSubmit = useCallback((e) => { e.preventDefault(); handleCodeGeneration(input); }, [input]);
 
     const renderQuotaBar = () => {
         const percentage = (quota.used / quota.limit) * 100;
@@ -224,8 +237,8 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                     <span>AI Kullanım: {quota.used} / {quota.limit}</span>
                 </div>
                 <div className="ai-quota-bar">
-                    <div 
-                        className="ai-quota-fill" 
+                    <div
+                        className="ai-quota-fill"
                         style={{ width: `${percentage}%`, backgroundColor: color }}
                     />
                 </div>
@@ -248,27 +261,27 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
 
             {/* Tabs */}
             <div className="ai-tabs">
-                <button 
+                <button
                     className={activeTab === 'chat' ? 'active' : ''}
-                    onClick={() => setActiveTab('chat')}
+                    onClick={handleSetTabChat}
                 >
                     <FaRobot /> Chat
                 </button>
-                <button 
+                <button
                     className={activeTab === 'smart-reply' ? 'active' : ''}
-                    onClick={() => setActiveTab('smart-reply')}
+                    onClick={handleSetTabSmartReply}
                 >
                     <FaLightbulb /> Smart Reply
                 </button>
-                <button 
+                <button
                     className={activeTab === 'summarize' ? 'active' : ''}
-                    onClick={() => setActiveTab('summarize')}
+                    onClick={handleSetTabSummarize}
                 >
                     <FaMagic /> Özetle
                 </button>
-                <button 
+                <button
                     className={activeTab === 'code' ? 'active' : ''}
-                    onClick={() => setActiveTab('code')}
+                    onClick={handleSetTabCode}
                 >
                     <FaFileCode /> Kod Oluştur
                 </button>
@@ -284,21 +297,21 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                                 <h4>AI Assistant'a Hoş Geldin!</h4>
                                 <p>Soru sor, kod yazdır, mesajları özetle veya açıklama iste.</p>
                                 <div className="ai-suggestions">
-                                    <button onClick={() => setInput('JavaScript ile bir todo list nasıl yapılır?')}>
+                                    <button onClick={handleSuggestionCode}>
                                         💻 Kod örneği iste
                                     </button>
-                                    <button onClick={() => setInput('React hooks nedir?')}>
+                                    <button onClick={handleSuggestionExplain}>
                                         🎓 Kavram açıkla
                                     </button>
-                                    <button onClick={() => setInput('Bugün hava nasıl?')}>
+                                    <button onClick={handleSuggestionChat}>
                                         💬 Sohbet et
                                     </button>
                                 </div>
                             </div>
                         ) : (
                             messages.map((msg, index) => (
-                                <div 
-                                    key={index} 
+                                <div
+                                    key={index}
                                     className={`ai-message ${msg.role} ${msg.error ? 'error' : ''}`}
                                 >
                                     <div className="ai-message-avatar">
@@ -308,14 +321,14 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                                         <div className="ai-message-header">
                                             <strong>{msg.role === 'user' ? username : 'AI Assistant'}</strong>
                                             <span className="ai-message-time">
-                                                {msg.timestamp.toLocaleTimeString('tr-TR', { 
-                                                    hour: '2-digit', 
-                                                    minute: '2-digit' 
+                                                {msg.timestamp.toLocaleTimeString('tr-TR', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
                                                 })}
                                             </span>
                                         </div>
                                         <div className="ai-message-text">
-                                            {msg.content.split('```').map((part, i) => 
+                                            {msg.content.split('```').map((part, i) =>
                                                 i % 2 === 0 ? (
                                                     <span key={i}>{part}</span>
                                                 ) : (
@@ -336,7 +349,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                         <input
                             type="text"
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={handleInputChange}
                             placeholder="AI'ya bir şey sor..."
                             disabled={loading}
                             className="ai-input"
@@ -356,8 +369,8 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                         <h4>Akıllı Cevap Önerileri</h4>
                         <p>Mesajlara otomatik yanıt önerileri</p>
                     </div>
-                    <button 
-                        onClick={() => handleSmartReply('last-message-id')}
+                    <button
+                        onClick={handleLastSmartReply}
                         disabled={loading}
                         className="ai-action-btn"
                     >
@@ -385,8 +398,8 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                         <h4>Mesaj Özetleme</h4>
                         <p>Uzun konuşmaları tek paragrafta özetle</p>
                     </div>
-                    <button 
-                        onClick={() => handleSummarize(['msg1', 'msg2', 'msg3'])}
+                    <button
+                        onClick={handleSummarizeLast}
                         disabled={loading}
                         className="ai-action-btn"
                     >
@@ -403,10 +416,10 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
                         <h4>Kod Üretimi</h4>
                         <p>AI ile kod yaz, GitHub Copilot gibi</p>
                     </div>
-                    <form onSubmit={(e) => { e.preventDefault(); handleCodeGeneration(input); }} className="ai-code-form">
+                    <form onSubmit={handleCodeFormSubmit} className="ai-code-form">
                         <textarea
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={handleInputChange}
                             placeholder="Ne yapmak istiyorsun? Örn: 'React'te bir sayaç komponenti yap'"
                             rows={4}
                             className="ai-code-textarea"
@@ -421,4 +434,4 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
     );
 };
 
-export default AIChatbotPanel;
+export default memo(AIChatbotPanel);

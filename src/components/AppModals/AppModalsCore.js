@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import LoadingSpinner from '../LoadingSpinner';
 import {
     ABSOLUTE_HOST_URL, API_BASE_URL, WS_PROTOCOL, API_HOST,
@@ -61,22 +61,123 @@ const AppModalsCore = ({
     logout, getDeterministicAvatar,
     handleSendSnippet, setActiveChat, setConversations,
 }) => {
+    // Memoize close handlers for frequently used modals
+    const closeProfilePanel = useCallback(() => closeModal('profilePanel'), [closeModal]);
+    const closeStore = useCallback(() => closeModal('store'), [closeModal]);
+    const closeAnalytics = useCallback(() => closeModal('analytics'), [closeModal]);
+    const closeAdminPanel = useCallback(() => closeModal('adminPanel'), [closeModal]);
+    const openAnalytics = useCallback(() => openModal('analytics'), [openModal]);
+    const openWebhooks = useCallback(() => openModal('webhooks'), [openModal]);
+    const openModTools = useCallback(() => openModal('modTools'), [openModal]);
+    const openAuditLogs = useCallback(() => openModal('auditLog'), [openModal]);
+    const openReports = useCallback(() => openModal('reportSystem'), [openModal]);
+    const openVanityURL = useCallback(() => openModal('vanityURL'), [openModal]);
+    const openAutoResponder = useCallback(() => openModal('autoResponder'), [openModal]);
+    const closePaymentPanel = useCallback(() => closeModal('paymentPanel'), [closeModal]);
+    const closeStoreModal = useCallback(() => closeModal('storeModal'), [closeModal]);
+    const closeDailyRewards = useCallback(() => closeModal('dailyRewards'), [closeModal]);
+    const closeAPIUsagePanel = useCallback(() => closeModal('aPIUsagePanel'), [closeModal]);
+    const closeExportJobsPanel = useCallback(() => closeModal('exportJobsPanel'), [closeModal]);
+    const closeScheduledAnnouncements = useCallback(() => closeModal('scheduledAnnouncements'), [closeModal]);
+    const closeConnectionsPanel = useCallback(() => closeModal('connectionsPanel'), [closeModal]);
+    const closePasswordSetupModal = useCallback(() => closeModal('passwordSetupModal'), [closeModal]);
+    const closeAutoModeration = useCallback(() => closeModal('autoModeration'), [closeModal]);
+    const closeRaidProtection = useCallback(() => closeModal('raidProtection'), [closeModal]);
+    const closeReportSystem = useCallback(() => closeModal('reportSystem'), [closeModal]);
+    const closeAuditLog = useCallback(() => closeModal('auditLog'), [closeModal]);
+    const closeUserWarnings = useCallback(() => closeModal('userWarnings'), [closeModal]);
+    const closeWebhooks = useCallback(() => closeModal('webhooks'), [closeModal]);
+    const closeVanityURL = useCallback(() => closeModal('vanityURL'), [closeModal]);
+    const closeBookmarks = useCallback(() => closeModal('bookmarks'), [closeModal]);
+    const closeReadLater = useCallback(() => closeModal('readLater'), [closeModal]);
+    const closeMentionsInbox = useCallback(() => closeModal('mentionsInbox'), [closeModal]);
+    const closeCustomStatus = useCallback(() => closeModal('customStatus'), [closeModal]);
+    const closeChannelPermissions = useCallback(() => closeModal('channelPermissions'), [closeModal]);
+    const closeCinema = useCallback(() => closeModal('cinema'), [closeModal]);
+    const closeSnippetModal = useCallback(() => closeModal('snippetModal'), [closeModal]);
+    const closeEncModal = useCallback(() => closeModal('encModal'), [closeModal]);
+    const closeDownloadModal = useCallback(() => closeModal('downloadModal'), [closeModal]);
+    const closeGroupModal = useCallback(() => closeModal('groupModal'), [closeModal]);
+    const closeWhiteboard = useCallback(() => closeModal('whiteboard'), [closeModal]);
+    const closeSoundboard = useCallback(() => closeModal('soundboard'), [closeModal]);
+    const closeDJ = useCallback(() => closeModal('dJ'), [closeModal]);
+    const closeGifPicker = useCallback(() => closeModal('gifPicker'), [closeModal]);
+    const closeStickerPicker = useCallback(() => closeModal('stickerPicker'), [closeModal]);
+    const closePollModal = useCallback(() => closeModal('pollModal'), [closeModal]);
+    const clearChartSymbol = useCallback(() => setChartSymbol(null), [setChartSymbol]);
+    const clearServerToEdit = useCallback(() => setServerToEdit(null), [setServerToEdit]);
+
+    const handleBookmarkMessageClick = useCallback((msg) => {
+        if (msg.room) {
+            setActiveChat({ type: 'room', slug: msg.room });
+        }
+        closeModal('bookmarks');
+    }, [setActiveChat, closeModal]);
+
+    const handleReadLaterMessageClick = useCallback((msg) => {
+        if (msg.room) {
+            setActiveChat({ type: 'room', slug: msg.room });
+        } else if (msg.conversation) {
+            setActiveChat({ type: 'dm', slug: msg.conversation });
+        }
+        closeModal('readLater');
+    }, [setActiveChat, closeModal]);
+
+    const handleMentionNavigate = useCallback((msg) => {
+        if (msg.room_id) {
+            setActiveChat({ type: 'room', id: msg.room_id });
+        }
+        closeModal('mentionsInbox');
+    }, [setActiveChat, closeModal]);
+
+    const handleStatusChange = useCallback((status) => {
+        if (currentUserProfile) {
+            setCurrentUserProfile(prev => ({ ...prev, customStatus: status }));
+        }
+    }, [currentUserProfile, setCurrentUserProfile]);
+
+    const handleSetEncKey = useCallback((key) => setEncryptionKey(currentKeyId, key), [setEncryptionKey, currentKeyId]);
+
+    const handleGroupCreated = useCallback((newConv) => {
+        setConversations(prev => [newConv, ...prev]);
+        setActiveChat('dm', newConv.id, 'Grup Sohbeti');
+    }, [setConversations, setActiveChat]);
+
+    const handleGifSelect = useCallback((url) => {
+        const full = url.startsWith('http') ? url : ABSOLUTE_HOST_URL + url;
+        sendMessage(full);
+        closeModal('gifPicker');
+    }, [sendMessage, closeModal]);
+
+    const handleStickerSelect = useCallback((url) => {
+        sendMessage(url);
+        closeModal('stickerPicker');
+    }, [sendMessage, closeModal]);
+
+    const whiteboardRoomSlug = useMemo(() =>
+        activeChat?.type === 'room' ? activeChat.id : `dm_${activeChat?.id}`,
+        [activeChat?.type, activeChat?.id]);
+
+    const serverId = useMemo(() =>
+        activeChat?.type === 'room' ? activeChat.server_id : null,
+        [activeChat?.type, activeChat?.server_id]);
+
     return (
         <>
             <Suspense fallback={<LoadingSpinner size="medium" text="Modal yükleniyor..." />}>
-                {modals.profilePanel && <UserProfilePanel user={currentUserProfile} onClose={() => closeModal('profilePanel')} onProfileUpdate={(updatedUser) => setCurrentUserProfile(updatedUser)} onLogout={logout} fetchWithAuth={fetchWithAuth} getDeterministicAvatar={getDeterministicAvatar} updateProfileUrl={UPDATE_PROFILE_URL} changeUsernameUrl={CHANGE_USERNAME_URL} soundSettings={soundSettings} onUpdateSoundSettings={setSoundSettings} onImageClick={setZoomedImage} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {modals.store && <PremiumStoreModal onClose={() => closeModal('store')} />}
-                {modals.analytics && <AdminAnalyticsPanel onClose={() => closeModal('analytics')} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
+                {modals.profilePanel && <UserProfilePanel user={currentUserProfile} onClose={closeProfilePanel} onProfileUpdate={(updatedUser) => setCurrentUserProfile(updatedUser)} onLogout={logout} fetchWithAuth={fetchWithAuth} getDeterministicAvatar={getDeterministicAvatar} updateProfileUrl={UPDATE_PROFILE_URL} changeUsernameUrl={CHANGE_USERNAME_URL} soundSettings={soundSettings} onUpdateSoundSettings={setSoundSettings} onImageClick={setZoomedImage} apiBaseUrl={ABSOLUTE_HOST_URL} />}
+                {modals.store && <PremiumStoreModal onClose={closeStore} />}
+                {modals.analytics && <AdminAnalyticsPanel onClose={closeAnalytics} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
                 {modals.adminPanel && (
                     <AdminPanelModal
-                        onClose={() => closeModal('adminPanel')}
-                        onOpenAnalytics={() => openModal('analytics')}
-                        onOpenWebhooks={() => openModal('webhooks')}
-                        onOpenModTools={() => openModal('modTools')}
-                        onOpenAuditLogs={() => openModal('auditLog')}
-                        onOpenReports={() => openModal('reportSystem')}
-                        onOpenVanityURL={() => openModal('vanityURL')}
-                        onOpenAutoResponder={() => openModal('autoResponder')}
+                        onClose={closeAdminPanel}
+                        onOpenAnalytics={openAnalytics}
+                        onOpenWebhooks={openWebhooks}
+                        onOpenModTools={openModTools}
+                        onOpenAuditLogs={openAuditLogs}
+                        onOpenReports={openReports}
+                        onOpenVanityURL={openVanityURL}
+                        onOpenAutoResponder={openAutoResponder}
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                     />
@@ -85,7 +186,7 @@ const AppModalsCore = ({
                     <PaymentPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('paymentPanel')}
+                        onClose={closePaymentPanel}
                         username={username}
                     />
                 )}
@@ -93,7 +194,7 @@ const AppModalsCore = ({
                     <StoreModal
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('storeModal')}
+                        onClose={closeStoreModal}
                         username={username}
                     />
                 )}
@@ -101,7 +202,7 @@ const AppModalsCore = ({
                     <DailyRewardsModal
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('dailyRewards')}
+                        onClose={closeDailyRewards}
                         username={username}
                     />
                 )}
@@ -109,7 +210,7 @@ const AppModalsCore = ({
                     <APIUsagePanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('aPIUsagePanel')}
+                        onClose={closeAPIUsagePanel}
                         username={username}
                     />
                 )}
@@ -117,7 +218,7 @@ const AppModalsCore = ({
                     <ExportJobsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('exportJobsPanel')}
+                        onClose={closeExportJobsPanel}
                         username={username}
                     />
                 )}
@@ -125,66 +226,66 @@ const AppModalsCore = ({
                     <ScheduledAnnouncementsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('scheduledAnnouncements')}
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
+                        onClose={closeScheduledAnnouncements}
+                        serverId={serverId}
                     />
                 )}
                 {modals.connectionsPanel && (
                     <ConnectionsPanel
-                        onClose={() => closeModal('connectionsPanel')}
+                        onClose={closeConnectionsPanel}
                     />
                 )}
                 {modals.passwordSetupModal && (
                     <PasswordSetupModal
-                        onClose={() => closeModal('passwordSetupModal')}
+                        onClose={closePasswordSetupModal}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                     />
                 )}
                 {/* 🛡️ MODERATION PANELS */}
                 {modals.autoModeration && (
                     <AutoModerationDashboard
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
+                        serverId={serverId}
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('autoModeration')}
+                        onClose={closeAutoModeration}
                     />
                 )}
                 {modals.raidProtection && (
                     <RaidProtectionPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
+                        serverId={serverId}
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('raidProtection')}
+                        onClose={closeRaidProtection}
                     />
                 )}
                 {modals.reportSystem && (
                     <ReportSystemPanel
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
+                        serverId={serverId}
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('reportSystem')}
+                        onClose={closeReportSystem}
                     />
                 )}
                 {modals.auditLog && (
                     <AuditLogPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('auditLog')}
+                        onClose={closeAuditLog}
                     />
                 )}
                 {modals.userWarnings && (
                     <UserWarningsPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('userWarnings')}
+                        onClose={closeUserWarnings}
                     />
                 )}
                 {modals.webhooks && (
                     <WebhooksPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        serverId={activeChat?.type === 'room' ? activeChat.server_id : null}
-                        onClose={() => closeModal('webhooks')}
+                        serverId={serverId}
+                        onClose={closeWebhooks}
                     />
                 )}
                 {modals.vanityURL && activeChat?.type === 'room' && activeChat.server_id && (
@@ -192,20 +293,15 @@ const AppModalsCore = ({
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
                         serverId={activeChat.server_id}
-                        onClose={() => closeModal('vanityURL')}
+                        onClose={closeVanityURL}
                     />
                 )}
                 {modals.bookmarks && (
                     <BookmarkPanel
                         fetchWithAuth={fetchWithAuth}
                         apiBaseUrl={ABSOLUTE_HOST_URL}
-                        onClose={() => closeModal('bookmarks')}
-                        onMessageClick={(msg) => {
-                            if (msg.room) {
-                                setActiveChat({ type: 'room', slug: msg.room });
-                            }
-                            closeModal('bookmarks');
-                        }}
+                        onClose={closeBookmarks}
+                        onMessageClick={handleBookmarkMessageClick}
                     />
                 )}
                 {modals.readLater && (
@@ -213,15 +309,8 @@ const AppModalsCore = ({
                         <ReadLaterPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
-                            onClose={() => closeModal('readLater')}
-                            onMessageClick={(msg) => {
-                                if (msg.room) {
-                                    setActiveChat({ type: 'room', slug: msg.room });
-                                } else if (msg.conversation) {
-                                    setActiveChat({ type: 'dm', slug: msg.conversation });
-                                }
-                                closeModal('readLater');
-                            }}
+                            onClose={closeReadLater}
+                            onMessageClick={handleReadLaterMessageClick}
                         />
                     </Suspense>
                 )}
@@ -229,14 +318,9 @@ const AppModalsCore = ({
                     <Suspense fallback={<div>Yükleniyor...</div>}>
                         <MentionsInboxPanel
                             isOpen={modals.mentionsInbox}
-                            onClose={() => closeModal('mentionsInbox')}
+                            onClose={closeMentionsInbox}
                             currentUsername={currentUserProfile?.username || username}
-                            onNavigateToMessage={(msg) => {
-                                if (msg.room_id) {
-                                    setActiveChat({ type: 'room', id: msg.room_id });
-                                }
-                                closeModal('mentionsInbox');
-                            }}
+                            onNavigateToMessage={handleMentionNavigate}
                         />
                     </Suspense>
                 )}
@@ -244,12 +328,8 @@ const AppModalsCore = ({
                     <Suspense fallback={<div>Yükleniyor...</div>}>
                         <CustomStatusModal
                             isOpen={modals.customStatus}
-                            onClose={() => closeModal('customStatus')}
-                            onStatusChange={(status) => {
-                                if (currentUserProfile) {
-                                    setCurrentUserProfile(prev => ({ ...prev, customStatus: status }));
-                                }
-                            }}
+                            onClose={closeCustomStatus}
+                            onStatusChange={handleStatusChange}
                         />
                     </Suspense>
                 )}
@@ -259,29 +339,29 @@ const AppModalsCore = ({
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
                             channelSlug={activeChat.slug}
-                            onClose={() => closeModal('channelPermissions')}
+                            onClose={closeChannelPermissions}
                         />
                     </Suspense>
                 )}
                 {/* Inline modals */}
-                {chartSymbol && <CryptoChartModal symbol={chartSymbol} onClose={() => setChartSymbol(null)} />}
-                {modals.cinema && <CinemaModal onClose={() => closeModal('cinema')} ws={ws} username={username} />}
-                {modals.snippetModal && <CodeSnippetModal onClose={() => closeModal('snippetModal')} onSend={handleSendSnippet} />}
-                {serverToEdit && <ServerSettingsModal onClose={() => setServerToEdit(null)} server={serverToEdit} currentUsername={username} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} serverMembers={serverMembers} />}
-                {modals.encModal && <EncryptionKeyModal onClose={() => closeModal('encModal')} onSetKey={(key) => setEncryptionKey(currentKeyId, key)} existingKey={encryptionKeys[currentKeyId]} />}
-                {modals.downloadModal && <DownloadModal onClose={() => closeModal('downloadModal')} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {modals.groupModal && <CreateGroupModal onClose={() => closeModal('groupModal')} friendsList={friendsList} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} onGroupCreated={(newConv) => { setConversations(prev => [newConv, ...prev]); setActiveChat('dm', newConv.id, 'Grup Sohbeti'); }} />}
+                {chartSymbol && <CryptoChartModal symbol={chartSymbol} onClose={clearChartSymbol} />}
+                {modals.cinema && <CinemaModal onClose={closeCinema} ws={ws} username={username} />}
+                {modals.snippetModal && <CodeSnippetModal onClose={closeSnippetModal} onSend={handleSendSnippet} />}
+                {serverToEdit && <ServerSettingsModal onClose={clearServerToEdit} server={serverToEdit} currentUsername={username} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} serverMembers={serverMembers} />}
+                {modals.encModal && <EncryptionKeyModal onClose={closeEncModal} onSetKey={handleSetEncKey} existingKey={encryptionKeys[currentKeyId]} />}
+                {modals.downloadModal && <DownloadModal onClose={closeDownloadModal} apiBaseUrl={ABSOLUTE_HOST_URL} />}
+                {modals.groupModal && <CreateGroupModal onClose={closeGroupModal} friendsList={friendsList} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} onGroupCreated={handleGroupCreated} />}
                 {modals.whiteboard && (activeChat.type === 'room' || activeChat.type === 'dm') && (
-                    <WhiteboardModal roomSlug={activeChat.type === 'room' ? activeChat.id : `dm_${activeChat.id}`} onClose={() => closeModal('whiteboard')} wsProtocol={WS_PROTOCOL} apiHost={API_HOST} />
+                    <WhiteboardModal roomSlug={whiteboardRoomSlug} onClose={closeWhiteboard} wsProtocol={WS_PROTOCOL} apiHost={API_HOST} />
                 )}
-                {modals.soundboard && <SoundboardModal onClose={() => closeModal('soundboard')} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} sendSignal={sendSignal} absoluteHostUrl={ABSOLUTE_HOST_URL} />}
-                {modals.dJ && <DJModal onClose={() => closeModal('dJ')} ws={ws} roomSlug={activeChat.id} />}
-                {modals.gifPicker && <GifPicker onSelect={(url) => { const full = url.startsWith('http') ? url : ABSOLUTE_HOST_URL + url; sendMessage(full); closeModal('gifPicker'); }} onClose={() => closeModal('gifPicker')} localGifListUrl={LOCAL_GIF_LIST_URL} absoluteHostUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />}
-                {modals.stickerPicker && <StickerPicker onClose={() => closeModal('stickerPicker')} onSelect={(url) => { sendMessage(url); closeModal('stickerPicker'); }} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {modals.pollModal && <PollCreateModal onClose={() => closeModal('pollModal')} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} activeRoomSlug={activeChat.id} />}
+                {modals.soundboard && <SoundboardModal onClose={closeSoundboard} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} sendSignal={sendSignal} absoluteHostUrl={ABSOLUTE_HOST_URL} />}
+                {modals.dJ && <DJModal onClose={closeDJ} ws={ws} roomSlug={activeChat.id} />}
+                {modals.gifPicker && <GifPicker onSelect={handleGifSelect} onClose={closeGifPicker} localGifListUrl={LOCAL_GIF_LIST_URL} absoluteHostUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />}
+                {modals.stickerPicker && <StickerPicker onClose={closeStickerPicker} onSelect={handleStickerSelect} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
+                {modals.pollModal && <PollCreateModal onClose={closePollModal} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} activeRoomSlug={activeChat.id} />}
             </Suspense>
         </>
     );
 };
 
-export default AppModalsCore;
+export default React.memo(AppModalsCore);

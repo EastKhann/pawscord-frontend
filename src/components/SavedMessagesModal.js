@@ -1,8 +1,10 @@
 // frontend/src/components/SavedMessagesModal.js
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaBookmark, FaStar, FaClock, FaTrash } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const SavedMessagesModal = ({ type = 'bookmarks', onClose, fetchWithAuth, apiBaseUrl, onScrollToMessage }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kaydedilen Mesajlar' });
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -63,8 +65,8 @@ const SavedMessagesModal = ({ type = 'bookmarks', onClose, fetchWithAuth, apiBas
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h2 style={styles.title}>
                         {getIcon()} {getTitle()}

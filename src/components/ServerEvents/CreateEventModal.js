@@ -5,6 +5,7 @@ import toast from '../../utils/toast';
 import { EVENT_TYPES } from './eventConstants';
 
 export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Etkinlik Oluştur' });
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -71,8 +72,8 @@ export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
     };
 
     return (
-        <div className="event-modal-overlay" onClick={onClose}>
-            <div className="event-modal" onClick={e => e.stopPropagation()}>
+        <div className="event-modal-overlay" {...overlayProps}>
+            <div className="event-modal" {...dialogProps}>
                 <div className="em-header">
                     <h2>{'📅'} Etkinlik Oluştur</h2>
                     <button className="em-close" onClick={onClose}><FaTimes /></button>

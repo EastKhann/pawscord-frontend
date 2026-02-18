@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import { FaHashtag, FaTimes } from 'react-icons/fa';
 import st, { injectInviteStyles } from './InviteModal/inviteModalStyles';
+import useModalA11y from '../hooks/useModalA11y';
 import useInviteLogic from './InviteModal/useInviteLogic';
 import FriendList from './InviteModal/FriendList';
 import LinkSection from './InviteModal/LinkSection';
@@ -8,11 +9,12 @@ import LinkSection from './InviteModal/LinkSection';
 injectInviteStyles();
 
 const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Davet Et' });
     const logic = useInviteLogic({ server, fetchWithAuth, apiBaseUrl, currentUser });
 
     return ReactDOM.createPortal(
-        <div style={st.overlay} onClick={onClose}>
-            <div style={st.modal} onClick={e => e.stopPropagation()}>
+        <div style={st.overlay} {...overlayProps}>
+            <div style={st.modal} {...dialogProps}>
                 <div style={st.header}>
                     <div>
                         <div style={st.headerRow}>

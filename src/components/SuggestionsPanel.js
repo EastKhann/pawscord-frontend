@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import './SuggestionsPanel.css';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../utils/apiEndpoints';
@@ -120,13 +120,27 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
     return badges[status] || badges.pending;
   };
 
-  const filteredSuggestions = suggestions.filter(s => 
+  const filteredSuggestions = suggestions.filter(s =>
     filter === 'all' || s.status === filter
   );
 
+  // 🎯 Performance: Memoized event handlers
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleEnabledChange = useCallback((e) => setConfig(prev => ({ ...prev, enabled: e.target.checked })), []);
+  const handleChannelIdChange = useCallback((e) => setConfig(prev => ({ ...prev, channel_id: e.target.value })), []);
+  const handleReviewChannelChange = useCallback((e) => setConfig(prev => ({ ...prev, review_channel_id: e.target.value })), []);
+  const handleUpvoteEmojiChange = useCallback((e) => setConfig(prev => ({ ...prev, upvote_emoji: e.target.value })), []);
+  const handleDownvoteEmojiChange = useCallback((e) => setConfig(prev => ({ ...prev, downvote_emoji: e.target.value })), []);
+  const handleMinVotesChange = useCallback((e) => setConfig(prev => ({ ...prev, min_votes_to_approve: parseInt(e.target.value) })), []);
+  const handleAutoApproveChange = useCallback((e) => setConfig(prev => ({ ...prev, auto_approve: e.target.checked })), []);
+  const handleFilterAll = useCallback(() => setFilter('all'), []);
+  const handleFilterPending = useCallback(() => setFilter('pending'), []);
+  const handleFilterApproved = useCallback(() => setFilter('approved'), []);
+  const handleFilterRejected = useCallback(() => setFilter('rejected'), []);
+
   return (
     <div className="suggestions-overlay" onClick={onClose}>
-      <div className="suggestions-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="suggestions-panel" onClick={handleStopPropagation}>
         <div className="suggestions-header">
           <h2>💡 Öneri Sistemi</h2>
           <button className="close-btn" onClick={onClose}>×</button>
@@ -144,7 +158,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                 <div className="section-header">
                   <h3>⚙️ Ayarlar</h3>
                   <label className="toggle-switch">
-                    <input type="checkbox" checked={config.enabled} onChange={(e) => setConfig({...config, enabled: e.target.checked})} />
+                    <input type="checkbox" checked={config.enabled} onChange={handleEnabledChange} />
                     <span className="toggle-slider"></span>
                   </label>
                 </div>
@@ -152,7 +166,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                 <div className="config-grid">
                   <div className="form-group">
                     <label>📢 Öneri Kanalı</label>
-                    <select value={config.channel_id} onChange={(e) => setConfig({...config, channel_id: e.target.value})}>
+                    <select value={config.channel_id} onChange={handleChannelIdChange}>
                       <option value="">Seçin</option>
                       {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
@@ -160,7 +174,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
 
                   <div className="form-group">
                     <label>📋 İnceleme Kanalı</label>
-                    <select value={config.review_channel_id} onChange={(e) => setConfig({...config, review_channel_id: e.target.value})}>
+                    <select value={config.review_channel_id} onChange={handleReviewChannelChange}>
                       <option value="">Seçin</option>
                       {channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}
                     </select>
@@ -168,22 +182,22 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
 
                   <div className="form-group">
                     <label>👍 Upvote Emoji</label>
-                    <input type="text" value={config.upvote_emoji} onChange={(e) => setConfig({...config, upvote_emoji: e.target.value})} />
+                    <input type="text" value={config.upvote_emoji} onChange={handleUpvoteEmojiChange} />
                   </div>
 
                   <div className="form-group">
                     <label>👎 Downvote Emoji</label>
-                    <input type="text" value={config.downvote_emoji} onChange={(e) => setConfig({...config, downvote_emoji: e.target.value})} />
+                    <input type="text" value={config.downvote_emoji} onChange={handleDownvoteEmojiChange} />
                   </div>
 
                   <div className="form-group">
                     <label>🎯 Otomatik Onay Eşiği</label>
-                    <input type="number" min="0" max="100" value={config.min_votes_to_approve} onChange={(e) => setConfig({...config, min_votes_to_approve: parseInt(e.target.value)})} />
+                    <input type="number" min="0" max="100" value={config.min_votes_to_approve} onChange={handleMinVotesChange} />
                   </div>
 
                   <div className="form-group">
                     <label className="checkbox-label">
-                      <input type="checkbox" checked={config.auto_approve} onChange={(e) => setConfig({...config, auto_approve: e.target.checked})} />
+                      <input type="checkbox" checked={config.auto_approve} onChange={handleAutoApproveChange} />
                       <span>Otomatik onaylama</span>
                     </label>
                   </div>
@@ -194,10 +208,10 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
 
               <div className="suggestions-section">
                 <div className="suggestions-filters">
-                  <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>Tümü ({suggestions.length})</button>
-                  <button className={filter === 'pending' ? 'active' : ''} onClick={() => setFilter('pending')}>Beklemede ({suggestions.filter(s => s.status === 'pending').length})</button>
-                  <button className={filter === 'approved' ? 'active' : ''} onClick={() => setFilter('approved')}>Onaylı ({suggestions.filter(s => s.status === 'approved').length})</button>
-                  <button className={filter === 'rejected' ? 'active' : ''} onClick={() => setFilter('rejected')}>Reddedildi ({suggestions.filter(s => s.status === 'rejected').length})</button>
+                  <button className={filter === 'all' ? 'active' : ''} onClick={handleFilterAll}>Tümü ({suggestions.length})</button>
+                  <button className={filter === 'pending' ? 'active' : ''} onClick={handleFilterPending}>Beklemede ({suggestions.filter(s => s.status === 'pending').length})</button>
+                  <button className={filter === 'approved' ? 'active' : ''} onClick={handleFilterApproved}>Onaylı ({suggestions.filter(s => s.status === 'approved').length})</button>
+                  <button className={filter === 'rejected' ? 'active' : ''} onClick={handleFilterRejected}>Reddedildi ({suggestions.filter(s => s.status === 'rejected').length})</button>
                 </div>
 
                 {filteredSuggestions.length === 0 ? (
@@ -216,7 +230,7 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
                               {suggestion.author_avatar ? <img src={suggestion.author_avatar} alt="" /> : <div className="default-avatar">👤</div>}
                               <span>{suggestion.author_name}</span>
                             </div>
-                            <span className="status-badge" style={{background: badge.color}}>
+                            <span className="status-badge" style={{ background: badge.color }}>
                               {badge.icon} {badge.text}
                             </span>
                           </div>
@@ -249,5 +263,5 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
   );
 };
 
-export default SuggestionsPanel;
+export default memo(SuggestionsPanel);
 

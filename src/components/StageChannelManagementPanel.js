@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import {
     FaMicrophone, FaTimes, FaPlus, FaPlay, FaStop, FaHandPaper,
     FaUserPlus, FaUserMinus, FaVolumeMute, FaVolumeUp, FaUsers,
@@ -121,10 +121,19 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
     const scheduledStages = stages.filter(s => s.status === 'scheduled');
     const pastStages = stages.filter(s => s.status === 'ended');
 
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleOpenCreateModal = useCallback(() => setShowCreateModal(true), []);
+    const handleCloseCreateModal = useCallback(() => setShowCreateModal(false), []);
+    const handleTabActive = useCallback(() => setActiveTab('active'), []);
+    const handleTabScheduled = useCallback(() => setActiveTab('scheduled'), []);
+    const handleTabPast = useCallback(() => setActiveTab('past'), []);
+    const handleEndActiveStage = useCallback(() => { if (activeStage) handleEndStage(activeStage.id); }, [activeStage]);
+    const handleStartActiveStage = useCallback(() => { if (activeStage) handleStartStage(activeStage.id); }, [activeStage]);
+
     if (loading) {
         return (
             <div className="stage-overlay" onClick={onClose}>
-                <div className="stage-panel" onClick={e => e.stopPropagation()}>
+                <div className="stage-panel" onClick={handleStopPropagation}>
                     <div className="loading">Loading stages...</div>
                 </div>
             </div>
@@ -133,7 +142,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
 
     return (
         <div className="stage-overlay" onClick={onClose}>
-            <div className="stage-panel" onClick={e => e.stopPropagation()}>
+            <div className="stage-panel" onClick={handleStopPropagation}>
                 <div className="panel-header">
                     <div className="header-info">
                         <h2>
@@ -143,7 +152,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                         <span className="subtitle">Manage stage events and speakers</span>
                     </div>
                     <div className="header-actions">
-                        <button className="create-btn" onClick={() => setShowCreateModal(true)}>
+                        <button className="create-btn" onClick={handleOpenCreateModal}>
                             <FaPlus /> Create Stage
                         </button>
                         <button className="close-btn" onClick={onClose}>
@@ -158,19 +167,19 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                         <div className="tabs">
                             <button
                                 className={activeTab === 'active' ? 'active' : ''}
-                                onClick={() => setActiveTab('active')}
+                                onClick={handleTabActive}
                             >
                                 Live ({liveStages.length})
                             </button>
                             <button
                                 className={activeTab === 'scheduled' ? 'active' : ''}
-                                onClick={() => setActiveTab('scheduled')}
+                                onClick={handleTabScheduled}
                             >
                                 Scheduled ({scheduledStages.length})
                             </button>
                             <button
                                 className={activeTab === 'past' ? 'active' : ''}
-                                onClick={() => setActiveTab('past')}
+                                onClick={handleTabPast}
                             >
                                 Past
                             </button>
@@ -239,7 +248,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                     </div>
                                     <button
                                         className="end-stage-btn"
-                                        onClick={() => handleEndStage(activeStage.id)}
+                                        onClick={handleEndActiveStage}
                                     >
                                         <FaStop /> End Stage
                                     </button>
@@ -349,7 +358,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                 </div>
                                 <button
                                     className="start-now-btn"
-                                    onClick={() => handleStartStage(activeStage.id)}
+                                    onClick={handleStartActiveStage}
                                 >
                                     <FaPlay /> Start Stage Now
                                 </button>
@@ -366,11 +375,11 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
 
                 {/* Create Modal */}
                 {showCreateModal && (
-                    <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
-                        <div className="create-modal" onClick={e => e.stopPropagation()}>
+                    <div className="modal-overlay" onClick={handleCloseCreateModal}>
+                        <div className="create-modal" onClick={handleStopPropagation}>
                             <div className="modal-header">
                                 <h3><FaMicrophone /> Create Stage</h3>
-                                <button onClick={() => setShowCreateModal(false)}><FaTimes /></button>
+                                <button onClick={handleCloseCreateModal}><FaTimes /></button>
                             </div>
                             <div className="modal-content">
                                 <div className="form-group">
@@ -396,7 +405,7 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
                                 </div>
                             </div>
                             <div className="modal-footer">
-                                <button className="cancel-modal" onClick={() => setShowCreateModal(false)}>
+                                <button className="cancel-modal" onClick={handleCloseCreateModal}>
                                     Cancel
                                 </button>
                                 <button className="create-modal-btn">
@@ -411,4 +420,4 @@ const StageChannelManagementPanel = ({ serverId, onClose, fetchWithAuth, apiBase
     );
 };
 
-export default StageChannelManagementPanel;
+export default memo(StageChannelManagementPanel);

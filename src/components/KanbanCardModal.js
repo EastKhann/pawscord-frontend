@@ -1,8 +1,10 @@
 
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCalendarAlt, FaTag, FaCheckSquare, FaUser, FaTrash, FaAlignLeft } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kanban Kart' });
     const [title, setTitle] = useState(card.content || '');
     const [description, setDescription] = useState(card.description || '');
     const [dueDate, setDueDate] = useState(card.due_date ? card.due_date.substring(0, 16) : ''); // datetime-local format
@@ -64,13 +66,13 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
             position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
             backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000,
             display: 'flex', justifyContent: 'center', alignItems: 'center'
-        }} onClick={onClose}>
+        }} {...overlayProps}>
             <div style={{
                 backgroundColor: '#313338', width: '600px', maxHeight: '90vh',
                 borderRadius: '8px', overflowY: 'auto', padding: '20px',
                 color: '#dbdee1', display: 'flex', flexDirection: 'column', gap: '20px',
                 position: 'relative'
-            }} onClick={e => e.stopPropagation()}>
+            }} {...dialogProps}>
 
                 {/* HEAD */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

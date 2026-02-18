@@ -1,5 +1,5 @@
 // frontend/src/components/ServerThemesPanel.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { FaTimes, FaPalette, FaPlus, FaCheck } from 'react-icons/fa';
 import toast from '../utils/toast';
 
@@ -20,6 +20,14 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
         accent_color: '#43b581'
     });
     const [loading, setLoading] = useState(true);
+
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleNameChange = useCallback((e) => setCustomTheme(prev => ({ ...prev, name: e.target.value })), []);
+    const handlePrimaryChange = useCallback((e) => setCustomTheme(prev => ({ ...prev, primary_color: e.target.value })), []);
+    const handleSecondaryChange = useCallback((e) => setCustomTheme(prev => ({ ...prev, secondary_color: e.target.value })), []);
+    const handleBgChange = useCallback((e) => setCustomTheme(prev => ({ ...prev, background_color: e.target.value })), []);
+    const handleTextColorChange = useCallback((e) => setCustomTheme(prev => ({ ...prev, text_color: e.target.value })), []);
+    const handleAccentChange = useCallback((e) => setCustomTheme(prev => ({ ...prev, accent_color: e.target.value })), []);
 
     const presetThemes = [
         {
@@ -147,7 +155,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
 
     return (
         <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div style={styles.modal} onClick={handleStopPropagation}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FaPalette style={{ color: '#5865f2' }} />
@@ -188,7 +196,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                 type="text"
                                 placeholder="Tema Adı"
                                 value={customTheme.name}
-                                onChange={(e) => setCustomTheme({ ...customTheme, name: e.target.value })}
+                                onChange={handleNameChange}
                                 style={styles.input}
                             />
                             <div style={styles.colorGrid}>
@@ -197,7 +205,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                     <input
                                         type="color"
                                         value={customTheme.primary_color}
-                                        onChange={(e) => setCustomTheme({ ...customTheme, primary_color: e.target.value })}
+                                        onChange={handlePrimaryChange}
                                         style={styles.colorInput}
                                     />
                                 </div>
@@ -206,7 +214,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                     <input
                                         type="color"
                                         value={customTheme.secondary_color}
-                                        onChange={(e) => setCustomTheme({ ...customTheme, secondary_color: e.target.value })}
+                                        onChange={handleSecondaryChange}
                                         style={styles.colorInput}
                                     />
                                 </div>
@@ -215,7 +223,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                     <input
                                         type="color"
                                         value={customTheme.background_color}
-                                        onChange={(e) => setCustomTheme({ ...customTheme, background_color: e.target.value })}
+                                        onChange={handleBgChange}
                                         style={styles.colorInput}
                                     />
                                 </div>
@@ -224,7 +232,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                     <input
                                         type="color"
                                         value={customTheme.text_color}
-                                        onChange={(e) => setCustomTheme({ ...customTheme, text_color: e.target.value })}
+                                        onChange={handleTextColorChange}
                                         style={styles.colorInput}
                                     />
                                 </div>
@@ -233,7 +241,7 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                                     <input
                                         type="color"
                                         value={customTheme.accent_color}
-                                        onChange={(e) => setCustomTheme({ ...customTheme, accent_color: e.target.value })}
+                                        onChange={handleAccentChange}
                                         style={styles.colorInput}
                                     />
                                 </div>
@@ -383,4 +391,4 @@ const styles = {
     }
 };
 
-export default ServerThemesPanel;
+export default memo(ServerThemesPanel);

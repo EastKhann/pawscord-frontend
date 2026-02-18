@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import {
     FaStar, FaTimes, FaPlus, FaEdit, FaTrash, FaGripVertical,
     FaGamepad, FaTrophy, FaPalette, FaLink, FaMusic, FaImage,
@@ -22,6 +22,14 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
         link_url: ''
     });
     const [dragging, setDragging] = useState(null);
+
+    const handleOverlayClick = useCallback((e) => e.target.className === 'showcase-overlay' && onClose(), [onClose]);
+    const handleOpenAddModal = useCallback(() => setShowAddModal(true), []);
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleFormInput = useCallback((e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    }, []);
 
     const showcaseTypes = [
         { key: 'game', label: 'Oyun', icon: <FaGamepad />, color: '#9c27b0' },
@@ -165,7 +173,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
     };
 
     return (
-        <div className="showcase-overlay" onClick={(e) => e.target.className === 'showcase-overlay' && onClose()}>
+        <div className="showcase-overlay" onClick={handleOverlayClick}>
             <div className="showcase-panel">
                 <div className="panel-header">
                     <h2><FaStar /> Profil Vitrini</h2>
@@ -185,7 +193,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                         <div className="empty-state">
                             <FaStar />
                             <p>Henüz vitrin öğesi yok</p>
-                            <button onClick={() => setShowAddModal(true)}>
+                            <button onClick={handleOpenAddModal}>
                                 <FaPlus /> İlk Öğeyi Ekle
                             </button>
                         </div>
@@ -243,7 +251,7 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                 {/* Add Button */}
                 {showcases.length < 6 && showcases.length > 0 && (
                     <div className="add-section">
-                        <button className="add-btn" onClick={() => setShowAddModal(true)}>
+                        <button className="add-btn" onClick={handleOpenAddModal}>
                             <FaPlus /> Yeni Öğe Ekle
                         </button>
                         <span className="remaining">{6 - showcases.length} slot kaldı</span>
@@ -252,8 +260,8 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
 
                 {/* Add/Edit Modal */}
                 {showAddModal && (
-                    <div className="modal-overlay" onClick={() => resetForm()}>
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                    <div className="modal-overlay" onClick={resetForm}>
+                        <div className="modal-content" onClick={handleStopPropagation}>
                             <h3>{editingItem ? 'Öğeyi Düzenle' : 'Yeni Vitrin Öğesi'}</h3>
 
                             <div className="form-group">
@@ -277,9 +285,10 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <label>Başlık *</label>
                                 <input
                                     type="text"
+                                    name="title"
                                     placeholder="Örn: Valorant"
                                     value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    onChange={handleFormInput}
                                 />
                             </div>
 
@@ -287,9 +296,10 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <label>Açıklama</label>
                                 <input
                                     type="text"
+                                    name="description"
                                     placeholder="Örn: Diamond 3 Rank"
                                     value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                    onChange={handleFormInput}
                                 />
                             </div>
 
@@ -297,9 +307,10 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <label>Görsel URL</label>
                                 <input
                                     type="text"
+                                    name="image_url"
                                     placeholder="https://..."
                                     value={formData.image_url}
-                                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                                    onChange={handleFormInput}
                                 />
                             </div>
 
@@ -307,9 +318,10 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
                                 <label>Link URL</label>
                                 <input
                                     type="text"
+                                    name="link_url"
                                     placeholder="https://..."
                                     value={formData.link_url}
-                                    onChange={(e) => setFormData({ ...formData, link_url: e.target.value })}
+                                    onChange={handleFormInput}
                                 />
                             </div>
 
@@ -327,4 +339,4 @@ const ProfileShowcasePanel = ({ userId, onClose, onUpdate, fetchWithAuth, apiBas
     );
 };
 
-export default ProfileShowcasePanel;
+export default memo(ProfileShowcasePanel);

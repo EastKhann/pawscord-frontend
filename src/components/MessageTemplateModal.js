@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FaTimes, FaPlus, FaTrash, FaCheck, FaStickyNote } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 import confirmDialog from '../utils/confirmDialog';
 
 const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, isAdmin }) => {
@@ -7,6 +8,7 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
     const [loading, setLoading] = useState(true);
     const [creating, setCreating] = useState(false);
     const [newTemplate, setNewTemplate] = useState({ name: '', content: '', is_global: false });
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: true, label: 'Message Templates' });
 
     useEffect(() => {
         loadTemplates();
@@ -58,8 +60,8 @@ const MessageTemplateModal = ({ onClose, onSelect, fetchWithAuth, apiBaseUrl, is
     };
 
     return (
-        <div style={overlayStyle}>
-            <div style={modalStyle}>
+        <div style={overlayStyle} {...overlayProps}>
+            <div style={modalStyle} {...dialogProps}>
                 {/* HEAD */}
                 <div style={headerStyle}>
                     <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>

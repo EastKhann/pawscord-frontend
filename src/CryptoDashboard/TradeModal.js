@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { LivePrice, formatPrice } from './helpers';
+import useModalA11y from '../hooks/useModalA11y';
 import styles from './styles';
 
 const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrade }) => {
@@ -20,6 +21,7 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
         return found ? parseFloat(portfolio.holdings[found]) : 0;
     };
     const userCoinHolding = findHolding();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: true, label: 'Trade Modal' });
 
     useEffect(() => {
         if (amount && !isNaN(parseFloat(amount))) {
@@ -45,8 +47,8 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
     };
 
     return (
-        <div style={styles.modalOverlay}>
-            <div style={styles.modalContent}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.modalContent} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h3>{mode === 'BUY' ? '🟢 Alış' : '🔴 Satış'}: {coin}</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>

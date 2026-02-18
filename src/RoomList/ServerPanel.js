@@ -1,5 +1,5 @@
 // frontend/src/RoomList/ServerPanel.js
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
     FaChevronDown, FaChevronRight, FaPlus, FaCog,
     FaVolumeUp, FaUserPlus
@@ -134,14 +134,24 @@ const CategorySection = React.memo(({
     const isCollapsed = collapsedCategories[cat.id];
     const isEditingThisCat = editingItemId === `cat-${cat.id}`;
 
+    // 🎯 Performance: Memoized handlers
+    const handleToggleCategory = useCallback(() => toggleCategory(cat.id), [toggleCategory, cat.id]);
+    const handleRenameCategorySubmit = useCallback((e) => handleRenameCategory(e, cat.id), [handleRenameCategory, cat.id]);
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleCategoryActionMenu = useCallback((e) => handleOpenActionMenu(e, 'category', cat.id, cat.name), [handleOpenActionMenu, cat.id, cat.name]);
+    const handleAddRoomClick = useCallback((e) => { e.stopPropagation(); setActiveCategoryIdForRoom(cat.id); }, [setActiveCategoryIdForRoom, cat.id]);
+    const handleCreateRoomSubmit = useCallback((e) => handleCreateRoom(e, cat.id), [handleCreateRoom, cat.id]);
+    const handleCancelAddRoom = useCallback(() => setActiveCategoryIdForRoom(null), [setActiveCategoryIdForRoom]);
+    const handleEditBlur = useCallback(() => setEditingItemId(null), [setEditingItemId]);
+
     return (
         <div style={{ marginBottom: 5 }}>
-            <div style={styles.categoryHeader} onClick={() => toggleCategory(cat.id)}>
+            <div style={styles.categoryHeader} onClick={handleToggleCategory}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {isCollapsed ? <FaChevronRight size={9} /> : <FaChevronDown size={9} />}
                     {isEditingThisCat ? (
-                        <form onSubmit={(e) => handleRenameCategory(e, cat.id)} onClick={e => e.stopPropagation()} style={{ marginLeft: 5 }}>
-                            <input autoFocus aria-label="Kategori adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
+                        <form onSubmit={handleRenameCategorySubmit} onClick={handleStopPropagation} style={{ marginLeft: 5 }}>
+                            <input autoFocus aria-label="Kategori adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={handleEditBlur} style={styles.inlineInput} />
                         </form>
                     ) : (
                         <span style={{ marginLeft: 5 }}>{cat.name}</span>
@@ -149,15 +159,15 @@ const CategorySection = React.memo(({
                 </div>
                 {isOwner && (
                     <div style={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>
-                        <button style={styles.iconBtn} onClick={(e) => handleOpenActionMenu(e, 'category', cat.id, cat.name)}><FaCog size={10} /></button>
-                        <button style={styles.iconBtn} onClick={(e) => { e.stopPropagation(); setActiveCategoryIdForRoom(cat.id); }}><FaPlus size={10} /></button>
+                        <button style={styles.iconBtn} onClick={handleCategoryActionMenu}><FaCog size={10} /></button>
+                        <button style={styles.iconBtn} onClick={handleAddRoomClick}><FaPlus size={10} /></button>
                     </div>
                 )}
             </div>
 
             {/* Kanal Ekleme Formu */}
             {activeCategoryIdForRoom === cat.id && (
-                <form onSubmit={(e) => handleCreateRoom(e, cat.id)} style={{ padding: '5px 10px' }}>
+                <form onSubmit={handleCreateRoomSubmit} style={{ padding: '5px 10px' }}>
                     <input autoFocus placeholder="Kanal Adı..." aria-label="Kanal adı" value={newRoomName} onChange={e => setNewRoomName(e.target.value)} style={styles.addRoomInput} />
                     <select value={newRoomType} onChange={e => setNewRoomType(e.target.value)} style={styles.channelTypeSelect}>
                         <option value="text">📝 Metin</option>
@@ -166,7 +176,7 @@ const CategorySection = React.memo(({
                     </select>
                     <div style={styles.addRoomControls}>
                         <button type="submit" style={styles.addRoomButton}>Ekle</button>
-                        <button type="button" onClick={() => setActiveCategoryIdForRoom(null)} style={{ ...styles.addRoomButton, background: '#da373c' }}>X</button>
+                        <button type="button" onClick={handleCancelAddRoom} style={{ ...styles.addRoomButton, background: '#da373c' }}>X</button>
                     </div>
                 </form>
             )}
@@ -230,6 +240,36 @@ const ChannelItem = React.memo(({
     const isEditingThisRoom = editingItemId === `room-${room.slug}`;
     const userCount = isVoice && activeVoiceUsers[room.slug] ? activeVoiceUsers[room.slug].length : 0;
 
+    // 🎯 Performance: Memoized handlers
+    const handleChannelClick = useCallback(() => { if (isVoice) joinVoiceChat(room.slug); else onRoomSelect(room.slug); }, [isVoice, joinVoiceChat, onRoomSelect, room.slug]);
+    const handleDragOver = useCallback((e) => { if (!isVoice) return; e.preventDefault(); e.dataTransfer.dropEffect = 'move'; setDropTargetChannel(room.slug); }, [isVoice, setDropTargetChannel, room.slug]);
+    const handleDragLeave = useCallback(() => { if (dropTargetChannel === room.slug) setDropTargetChannel(null); }, [dropTargetChannel, room.slug, setDropTargetChannel]);
+    const handleDrop = useCallback((e) => {
+        e.preventDefault(); setDropTargetChannel(null);
+        if (!isVoice || !isAdmin) return;
+        try {
+            const data = JSON.parse(e.dataTransfer.getData('application/json'));
+            if (data.username && data.fromChannel && data.fromChannel !== room.slug) {
+                handleMoveUserToChannel(data.username, data.fromChannel, room.slug);
+            }
+        } catch (err) { console.error('Drop error:', err); }
+    }, [isVoice, isAdmin, setDropTargetChannel, handleMoveUserToChannel, room.slug]);
+    const handleRenameSubmit = useCallback((e) => handleRenameRoom(e, room.slug), [handleRenameRoom, room.slug]);
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleEditBlur = useCallback(() => setEditingItemId(null), [setEditingItemId]);
+    const handleRoomActionMenu = useCallback((e) => handleOpenActionMenu(e, 'room', room.slug, room.name), [handleOpenActionMenu, room.slug, room.name]);
+    const handleUserAction = useCallback((action, username, targetChannel) => {
+        if (action === 'profile') onViewUserProfile?.(username);
+        else if (action === 'message' || action === 'dm') {
+            const conversation = conversations.find(c => c.participants.some(p => p.username === username));
+            if (conversation) onDMSelect(conversation.id, username);
+        }
+        else if (action === 'add_friend') handleAddFriend(username);
+        else if (action === 'remove_friend') handleRemoveFriend(username);
+        else if (action === 'move' && targetChannel) handleMoveUserToChannel(username, room.slug, targetChannel);
+        else if (action === 'kick') handleKickUserFromChannel(username, room.slug);
+    }, [onViewUserProfile, conversations, onDMSelect, handleAddFriend, handleRemoveFriend, handleMoveUserToChannel, handleKickUserFromChannel, room.slug]);
+
     return (
         <div className="channel-wrapper">
             <div
@@ -249,31 +289,18 @@ const ChannelItem = React.memo(({
                         border: '1px dashed rgba(88, 101, 242, 0.5)',
                     } : {})
                 }}
-                onClick={() => { if (isVoice) joinVoiceChat(room.slug); else onRoomSelect(room.slug); }}
-                onDragOver={(e) => {
-                    if (!isVoice) return;
-                    e.preventDefault(); e.dataTransfer.dropEffect = 'move';
-                    setDropTargetChannel(room.slug);
-                }}
-                onDragLeave={() => { if (dropTargetChannel === room.slug) setDropTargetChannel(null); }}
-                onDrop={(e) => {
-                    e.preventDefault(); setDropTargetChannel(null);
-                    if (!isVoice || !isAdmin) return;
-                    try {
-                        const data = JSON.parse(e.dataTransfer.getData('application/json'));
-                        if (data.username && data.fromChannel && data.fromChannel !== room.slug) {
-                            handleMoveUserToChannel(data.username, data.fromChannel, room.slug);
-                        }
-                    } catch (err) { console.error('Drop error:', err); }
-                }}
+                onClick={handleChannelClick}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
             >
                 <div style={styles.channelContent}>
                     {isVoice && <FaVolumeUp style={{ ...styles.voiceIcon, color: isActive ? '#43b581' : '#949ba4', transition: 'color 0.2s ease' }} />}
                     {!isVoice && <FaCog style={{ ...styles.hashtagIcon, fontSize: '0.9em' }} />}
 
                     {isEditingThisRoom ? (
-                        <form onSubmit={(e) => handleRenameRoom(e, room.slug)} onClick={e => e.stopPropagation()} style={{ flex: 1 }}>
-                            <input autoFocus aria-label="Kanal adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={() => setEditingItemId(null)} style={styles.inlineInput} />
+                        <form onSubmit={handleRenameSubmit} onClick={handleStopPropagation} style={{ flex: 1 }}>
+                            <input autoFocus aria-label="Kanal adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={handleEditBlur} style={styles.inlineInput} />
                         </form>
                     ) : (
                         <span style={{ ...styles.channelNameText, paddingLeft: '5px', fontWeight: isActive ? '600' : 'normal', flex: 1, display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -294,7 +321,7 @@ const ChannelItem = React.memo(({
 
                 {isOwner && !isEditingThisRoom && (
                     <div style={{ display: 'flex', gap: '3px', marginLeft: '5px' }}>
-                        <button style={styles.iconBtn} onClick={(e) => handleOpenActionMenu(e, 'room', room.slug, room.name)}><FaCog size={12} /></button>
+                        <button style={styles.iconBtn} onClick={handleRoomActionMenu}><FaCog size={12} /></button>
                     </div>
                 )}
                 {unread > 0 && <span style={styles.unreadBadge}>{unread}</span>}
@@ -316,17 +343,7 @@ const ChannelItem = React.memo(({
                         friendsList={friendsList}
                         getDeterministicAvatar={getDeterministicAvatar}
                         allUsers={allUsers}
-                        onUserAction={(action, username, targetChannel) => {
-                            if (action === 'profile') onViewUserProfile?.(username);
-                            else if (action === 'message' || action === 'dm') {
-                                const conversation = conversations.find(c => c.participants.some(p => p.username === username));
-                                if (conversation) onDMSelect(conversation.id, username);
-                            }
-                            else if (action === 'add_friend') handleAddFriend(username);
-                            else if (action === 'remove_friend') handleRemoveFriend(username);
-                            else if (action === 'move' && targetChannel) handleMoveUserToChannel(username, room.slug, targetChannel);
-                            else if (action === 'kick') handleKickUserFromChannel(username, room.slug);
-                        }}
+                        onUserAction={handleUserAction}
                     />
                 </div>
             )}

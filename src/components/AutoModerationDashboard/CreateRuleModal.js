@@ -1,9 +1,11 @@
 import styles from './styles';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const CreateRuleModal = ({ newRule, setNewRule, onClose, onCreateRule }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Moderasyon Kuralı Oluştur' });
     return (
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <h3 style={styles.modalTitle}>Create Moderation Rule</h3>
 
                 <div style={styles.formGroup}>

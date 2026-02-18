@@ -2,8 +2,10 @@ import React from 'react';
 import { FaTimes, FaVideo, FaStop, FaMicrophone, FaMicrophoneSlash, FaDesktop, FaUsers, FaEye } from 'react-icons/fa';
 import useLiveStream from './LiveStreamModal/useLiveStream';
 import { getStyles } from './LiveStreamModal/liveStreamStyles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const LiveStreamModal = ({ onClose, roomSlug, ws, token, isMobile }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Canlı Yayın' });
     const s = getStyles(isMobile);
     const stream = useLiveStream({ roomSlug, ws, onClose });
 

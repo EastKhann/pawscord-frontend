@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import styles from './styles';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Turnuva Detay' });
     const [bracket, setBracket] = useState(null);
 
     useEffect(() => {
@@ -61,8 +63,8 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
     };
 
     return (
-        <div style={styles.modalOverlay}>
-            <div style={{ ...styles.modal, maxWidth: '800px' }}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={{ ...styles.modal, maxWidth: '800px' }} {...dialogProps}>
                 <div style={styles.modalHeader}>
                     <h3 style={styles.modalTitle}>{tournament.name}</h3>
                     <button onClick={onClose} style={styles.modalClose}>

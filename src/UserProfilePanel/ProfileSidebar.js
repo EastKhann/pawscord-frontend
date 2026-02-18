@@ -1,3 +1,4 @@
+import React, { useCallback } from 'react';
 import profileStyles from './styles';
 
 /**
@@ -6,6 +7,8 @@ import profileStyles from './styles';
  */
 const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfile, onLogout, setShowLogoutModal }) => {
   const styles = profileStyles;
+  const handleNav = useCallback((tab, cat) => { setActiveTab(tab); setActiveCategory(cat); }, [setActiveTab, setActiveCategory]);
+  const handleLogout = useCallback(() => setShowLogoutModal(true), [setShowLogoutModal]);
 
   return (
     <div style={styles.sidebar} className="user-profile-sidebar">
@@ -14,28 +17,28 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'profile')}
-          onClick={() => { setActiveTab('profile'); setActiveCategory('account'); }}
+          onClick={() => handleNav('profile', 'account')}
         >
           Profil
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'badges')}
-          onClick={() => { setActiveTab('badges'); setActiveCategory('account'); }}
+          onClick={() => handleNav('badges', 'account')}
         >
           Rozetler & XP
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'inventory')}
-          onClick={() => { setActiveTab('inventory'); setActiveCategory('account'); }}
+          onClick={() => handleNav('inventory', 'account')}
         >
           Envanter
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'endorsements')}
-          onClick={() => { setActiveTab('endorsements'); setActiveCategory('account'); }}
+          onClick={() => handleNav('endorsements', 'account')}
         >
           Onaylar
         </button>
@@ -46,21 +49,21 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'security')}
-          onClick={() => { setActiveTab('security'); setActiveCategory('security'); }}
+          onClick={() => handleNav('security', 'security')}
         >
           Güvenlik
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'privacy')}
-          onClick={() => { setActiveTab('privacy'); setActiveCategory('security'); }}
+          onClick={() => handleNav('privacy', 'security')}
         >
           Gizlilik
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'gdpr')}
-          onClick={() => { setActiveTab('gdpr'); setActiveCategory('security'); }}
+          onClick={() => handleNav('gdpr', 'security')}
         >
           GDPR
         </button>
@@ -71,21 +74,21 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'friends')}
-          onClick={() => { setActiveTab('friends'); setActiveCategory('social'); }}
+          onClick={() => handleNav('friends', 'social')}
         >
           Arkadaşlar
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'activity')}
-          onClick={() => { setActiveTab('activity'); setActiveCategory('social'); }}
+          onClick={() => handleNav('activity', 'social')}
         >
           Aktivite
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'status')}
-          onClick={() => { setActiveTab('status'); setActiveCategory('social'); }}
+          onClick={() => handleNav('status', 'social')}
         >
           Özel Durum
         </button>
@@ -96,21 +99,21 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'appearance')}
-          onClick={() => { setActiveTab('appearance'); setActiveCategory('appearance'); }}
+          onClick={() => handleNav('appearance', 'appearance')}
         >
           Tema
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'sounds')}
-          onClick={() => { setActiveTab('sounds'); setActiveCategory('appearance'); }}
+          onClick={() => handleNav('sounds', 'appearance')}
         >
           Sesler
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'notifications')}
-          onClick={() => { setActiveTab('notifications'); setActiveCategory('appearance'); }}
+          onClick={() => handleNav('notifications', 'appearance')}
         >
           Bildirimler
         </button>
@@ -121,21 +124,21 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'drafts')}
-          onClick={() => { setActiveTab('drafts'); setActiveCategory('app'); }}
+          onClick={() => handleNav('drafts', 'app')}
         >
           Taslaklar
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'bookmarks')}
-          onClick={() => { setActiveTab('bookmarks'); setActiveCategory('app'); }}
+          onClick={() => handleNav('bookmarks', 'app')}
         >
           Yer İmleri
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'history')}
-          onClick={() => { setActiveTab('history'); setActiveCategory('app'); }}
+          onClick={() => handleNav('history', 'app')}
         >
           Geçmiş
         </button>
@@ -146,14 +149,14 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'premium')}
-          onClick={() => { setActiveTab('premium'); setActiveCategory('advanced'); }}
+          onClick={() => handleNav('premium', 'advanced')}
         >
           Premium
         </button>
         <button
           className="sidebar-btn"
           style={styles.sidebarBtn(activeTab === 'developer')}
-          onClick={() => { setActiveTab('developer'); setActiveCategory('advanced'); }}
+          onClick={() => handleNav('developer', 'advanced')}
         >
           Geliştirici
         </button>
@@ -179,7 +182,7 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
               cursor: 'pointer',
               transition: 'background 0.2s'
             }}
-            onClick={() => setShowLogoutModal(true)}
+            onClick={handleLogout}
             onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(240, 71, 71, 0.1)'}
             onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
@@ -191,4 +194,4 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
   );
 };
 
-export default ProfileSidebar;
+export default React.memo(ProfileSidebar);

@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { FaTimes, FaGamepad, FaPlay, FaTrophy, FaUsers, FaCoins, FaDice, FaBrain } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
-const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
+const MiniGamesPanel = memo(({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
     const [games, setGames] = useState([]);
     const [activeGame, setActiveGame] = useState(null);
     const [leaderboard, setLeaderboard] = useState([]);
@@ -34,7 +34,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
         }
     };
 
-    const createGame = async (gameType) => {
+    const createGame = useCallback(async (gameType) => {
         setLoading(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/games/create/`, {
@@ -53,7 +53,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [fetchWithAuth, apiBaseUrl, serverId]);
 
     const performAction = async (action, actionData = {}) => {
         if (!activeGame) return;
@@ -87,6 +87,10 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
         emoji_quiz: '😀', hangman: '🎯', memory_match: '🃏'
     };
 
+    const handleViewGames = useCallback(() => setView('games'), []);
+    const handleViewLeaderboard = useCallback(() => setView('leaderboard'), []);
+    const handleCreateGame = useCallback((gameId) => createGame(gameId), [createGame]);
+
     return (
         <div style={styles.overlay}>
             <div style={styles.modal}>
@@ -99,10 +103,10 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                 </div>
 
                 <div style={styles.tabs}>
-                    <button onClick={() => setView('games')} style={view === 'games' ? styles.activeTab : styles.tab}>
+                    <button onClick={handleViewGames} style={view === 'games' ? styles.activeTab : styles.tab}>
                         <FaDice /> Games
                     </button>
-                    <button onClick={() => setView('leaderboard')} style={view === 'leaderboard' ? styles.activeTab : styles.tab}>
+                    <button onClick={handleViewLeaderboard} style={view === 'leaderboard' ? styles.activeTab : styles.tab}>
                         <FaTrophy /> Leaderboard
                     </button>
                 </div>
@@ -120,7 +124,7 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                                         <span><FaCoins /> {game.reward_coins}</span>
                                     </div>
                                     <button
-                                        onClick={() => createGame(game.id)}
+                                        onClick={() => handleCreateGame(game.id)}
                                         style={styles.playButton}
                                         disabled={loading}
                                     >
@@ -157,10 +161,12 @@ const MiniGamesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
             </div>
         </div>
     );
-};
+});
+
+MiniGamesPanel.displayName = 'MiniGamesPanel';
 
 // Game Renderer Component
-const GameRenderer = ({ game, onAction }) => {
+const GameRenderer = memo(({ game, onAction }) => {
     const { game_type, state, players } = game;
 
     if (game_type === 'trivia') {
@@ -282,7 +288,9 @@ const GameRenderer = ({ game, onAction }) => {
             <p>Game is in progress...</p>
         </div>
     );
-};
+});
+
+GameRenderer.displayName = 'GameRenderer';
 
 const styles = {
     overlay: {

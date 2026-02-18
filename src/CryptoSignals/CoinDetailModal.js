@@ -4,8 +4,10 @@ import { FaBitcoin, FaExternalLinkAlt } from 'react-icons/fa';
 import { formatPrice, parsePnl } from './utils';
 import { SignalBadge, StatusBadge } from './components';
 import S from './styles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!selectedCoin, label: 'Coin Detay' });
     if (!selectedCoin) return null;
 
     const rows = selectedCoin.data;
@@ -23,8 +25,8 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
     const binanceUrl = `https://www.binance.com/en/futures/${selectedCoin.name.endsWith('USDT') ? selectedCoin.name : selectedCoin.name + 'USDT'}`;
 
     return (
-        <div style={S.modalOverlay} onClick={onClose}>
-            <div style={S.modal} onClick={e => e.stopPropagation()}>
+        <div style={S.modalOverlay} {...overlayProps}>
+            <div style={S.modal} {...dialogProps}>
                 <div style={S.modalHeader}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <FaBitcoin style={{ fontSize: 28, color: '#f0b232' }} />

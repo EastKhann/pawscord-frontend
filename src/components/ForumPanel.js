@@ -1,5 +1,5 @@
 // frontend/src/components/ForumPanel.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import toast from '../utils/toast';
 import './ForumPanel.css';
 
@@ -194,10 +194,23 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
     };
 
+    // 🎯 Performance: Memoized event handlers
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleBackToForums = useCallback(() => setSelectedForum(null), []);
+    const handleBackToPosts = useCallback(() => setSelectedPost(null), []);
+    const handleToggleCreatePost = useCallback(() => setShowCreatePost(prev => !prev), []);
+    const handleHideCreatePost = useCallback(() => setShowCreatePost(false), []);
+    const handleNewPostTitleChange = useCallback((e) => setNewPost(prev => ({ ...prev, title: e.target.value })), []);
+    const handleNewPostContentChange = useCallback((e) => setNewPost(prev => ({ ...prev, content: e.target.value })), []);
+    const handleReplyContentChange = useCallback((e) => setReplyContent(e.target.value), []);
+    const handleUpvoteSelected = useCallback(() => handleVote(selectedPost?.id, 'up'), [handleVote, selectedPost?.id]);
+    const handleDownvoteSelected = useCallback(() => handleVote(selectedPost?.id, 'down'), [handleVote, selectedPost?.id]);
+    const handleReplySelected = useCallback(() => handleReply(selectedPost?.id), [handleReply, selectedPost?.id]);
+
     if (loading) {
         return (
             <div className="forum-panel-overlay" onClick={onClose}>
-                <div className="forum-panel" onClick={e => e.stopPropagation()}>
+                <div className="forum-panel" onClick={handleStopPropagation}>
                     <div className="forum-loading">
                         <div className="spinner"></div>
                         <p>Yükleniyor...</p>
@@ -209,7 +222,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
     return (
         <div className="forum-panel-overlay" onClick={onClose}>
-            <div className="forum-panel" onClick={e => e.stopPropagation()}>
+            <div className="forum-panel" onClick={handleStopPropagation}>
                 <div className="forum-header">
                     <h2>💬 Forum</h2>
                     <button className="close-btn" onClick={onClose}>✕</button>
@@ -227,7 +240,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                         {forums.length > 0 ? (
                             <div className="forums-grid">
                                 {forums.map(forum => (
-                                    <div 
+                                    <div
                                         key={forum.id}
                                         className="forum-card"
                                         onClick={() => setSelectedForum(forum)}
@@ -250,13 +263,13 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                 ) : !selectedPost ? (
                     <div className="posts-view">
                         <div className="posts-header">
-                            <button className="back-btn" onClick={() => setSelectedForum(null)}>
+                            <button className="back-btn" onClick={handleBackToForums}>
                                 ← Geri
                             </button>
                             <h3>{selectedForum.name}</h3>
-                            <button 
+                            <button
                                 className="new-post-btn"
-                                onClick={() => setShowCreatePost(!showCreatePost)}
+                                onClick={handleToggleCreatePost}
                             >
                                 ➕ Yeni Gönderi
                             </button>
@@ -268,26 +281,26 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                     type="text"
                                     placeholder="Gönderi başlığı..."
                                     value={newPost.title}
-                                    onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+                                    onChange={handleNewPostTitleChange}
                                     maxLength={200}
                                 />
                                 <textarea
                                     placeholder="İçerik..."
                                     value={newPost.content}
-                                    onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+                                    onChange={handleNewPostContentChange}
                                     rows={6}
                                 />
                                 <div className="form-actions">
-                                    <button 
+                                    <button
                                         className="submit-btn"
                                         onClick={handleCreatePost}
                                         disabled={creating}
                                     >
                                         {creating ? '⏳ Gönderiliyor...' : '📤 Gönder'}
                                     </button>
-                                    <button 
+                                    <button
                                         className="cancel-btn"
-                                        onClick={() => setShowCreatePost(false)}
+                                        onClick={handleHideCreatePost}
                                     >
                                         İptal
                                     </button>
@@ -297,7 +310,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
 
                         <div className="posts-list">
                             {posts.map(post => (
-                                <div 
+                                <div
                                     key={post.id}
                                     className="post-item"
                                     onClick={() => setSelectedPost(post)}
@@ -314,7 +327,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                     <div className="post-content">
                                         <h4>{post.title}</h4>
                                         <p className="post-meta">
-                                            👤 {post.author} • ⏰ {new Date(post.created_at).toLocaleDateString('tr-TR')} 
+                                            👤 {post.author} • ⏰ {new Date(post.created_at).toLocaleDateString('tr-TR')}
                                             {post.is_solved && ' • ✅ Çözüldü'}
                                         </p>
                                         <p className="post-preview">{post.content?.substring(0, 150)}...</p>
@@ -335,16 +348,16 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                 ) : (
                     <div className="post-detail">
                         <div className="detail-header">
-                            <button className="back-btn" onClick={() => setSelectedPost(null)}>
+                            <button className="back-btn" onClick={handleBackToPosts}>
                                 ← Geri
                             </button>
                         </div>
 
                         <div className="post-main">
                             <div className="post-votes-vertical">
-                                <button onClick={() => handleVote(selectedPost.id, 'up')}>👍</button>
+                                <button onClick={handleUpvoteSelected}>👍</button>
                                 <span>{selectedPost.votes || 0}</span>
-                                <button onClick={() => handleVote(selectedPost.id, 'down')}>👎</button>
+                                <button onClick={handleDownvoteSelected}>👎</button>
                             </div>
 
                             <div className="post-body">
@@ -360,7 +373,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                             <h3>💬 Yanıtlar ({selectedPost.replies?.length || 0})</h3>
 
                             {(selectedPost.replies || []).map(reply => (
-                                <div 
+                                <div
                                     key={reply.id}
                                     className={`reply-item ${reply.id === selectedPost.solution_id ? 'solution' : ''}`}
                                 >
@@ -375,7 +388,7 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                     </div>
                                     <div className="reply-content">{reply.content}</div>
                                     {!selectedPost.solution_id && (
-                                        <button 
+                                        <button
                                             className="mark-solution-btn"
                                             onClick={() => handleMarkSolution(selectedPost.id, reply.id)}
                                         >
@@ -389,12 +402,12 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
                                 <textarea
                                     placeholder="Yanıtınızı yazın..."
                                     value={replyContent}
-                                    onChange={(e) => setReplyContent(e.target.value)}
+                                    onChange={handleReplyContentChange}
                                     rows={4}
                                 />
-                                <button 
+                                <button
                                     className="reply-submit-btn"
-                                    onClick={() => handleReply(selectedPost.id)}
+                                    onClick={handleReplySelected}
                                 >
                                     📤 Yanıtla
                                 </button>
@@ -407,4 +420,4 @@ const ForumPanel = ({ serverId, apiBaseUrl, onClose }) => {
     );
 };
 
-export default ForumPanel;
+export default memo(ForumPanel);

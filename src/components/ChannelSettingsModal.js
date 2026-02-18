@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { FaTimes, FaCog, FaShieldAlt, FaLink, FaHistory } from 'react-icons/fa';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';
+import useModalA11y from '../hooks/useModalA11y';
 import styles from './ChannelSettingsModal/styles';
 import GeneralTab from './ChannelSettingsModal/GeneralTab';
 import PermissionsTab from './ChannelSettingsModal/PermissionsTab';
@@ -13,6 +14,7 @@ import IntegrationsTab from './ChannelSettingsModal/IntegrationsTab';
 import AdvancedTab from './ChannelSettingsModal/AdvancedTab';
 
 const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBaseUrl }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kanal Ayarları' });
     const [activeTab, setActiveTab] = useState('general'); // 'general', 'permissions'
     const [name, setName] = useState(room.name);
     const [selectedRoles, setSelectedRoles] = useState(room.allowed_roles || []);
@@ -234,8 +236,8 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
     };
 
     const modalContent = (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 {/* HEADER - Profesyonel Görünüm */}
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>

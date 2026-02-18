@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaGamepad, FaHeadphones, FaEye, FaTwitch, FaTrophy, FaPen } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';
+import useModalA11y from '../hooks/useModalA11y';
 
 const STATUS_TYPES = [
     { key: 'custom', label: 'Özel', icon: '✨', color: '#5865F2', placeholder: 'Özel durumunu yaz...' },
@@ -23,6 +24,7 @@ const EXPIRY_OPTIONS = [
 ];
 
 const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Durumu Ayarla' });
     const [statusType, setStatusType] = useState('custom');
     const [emoji, setEmoji] = useState('✨');
     const [text, setText] = useState('');
@@ -112,8 +114,8 @@ const CustomStatusModal = ({ isOpen, onClose, onStatusChange }) => {
     const selectedType = STATUS_TYPES.find(t => t.key === statusType) || STATUS_TYPES[0];
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 {/* Header */}
                 <div style={styles.header}>
                     <h3 style={styles.title}>Durumunu Ayarla</h3>

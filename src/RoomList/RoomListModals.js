@@ -1,5 +1,5 @@
 // frontend/src/RoomList/RoomListModals.js
-import React from 'react';
+import React, { useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import InviteModal from '../components/InviteModal';
 import SavedMessagesModal from '../components/SavedMessagesModal';
@@ -60,16 +60,78 @@ const RoomListModals = ({
     // Channel Settings
     showChannelSettings, setShowChannelSettings, selectedRoom, setSelectedRoom
 }) => {
+    // Memoized handlers
+    const handleCloseDiscovery = useCallback(() => setShowDiscovery(false), [setShowDiscovery]);
+    const handleCloseInvite = useCallback(() => { setShowInviteModal(false); setInviteModalServer(null); }, [setShowInviteModal, setInviteModalServer]);
+    const handleCloseSaved = useCallback(() => setShowSavedMessages(null), [setShowSavedMessages]);
+    const handleCloseScheduled = useCallback(() => setShowScheduledMessages(false), [setShowScheduledMessages]);
+    const handleCloseWebhooks = useCallback(() => setShowWebhooks(false), [setShowWebhooks]);
+    const handleCloseModTools = useCallback(() => setShowModTools(false), [setShowModTools]);
+    const handleCloseQuickActions = useCallback(() => setShowQuickActions(false), [setShowQuickActions]);
+    const handleOpenWebhooks = useCallback(() => { setShowQuickActions(false); setShowWebhooks(true); }, [setShowQuickActions, setShowWebhooks]);
+    const handleOpenAuditLogs = useCallback(() => { setShowQuickActions(false); setShowAuditLogs(true); }, [setShowQuickActions, setShowAuditLogs]);
+    const handleOpenReports = useCallback(() => { setShowQuickActions(false); setShowReports(true); }, [setShowQuickActions, setShowReports]);
+    const handleOpenVanityURL = useCallback(() => { setShowQuickActions(false); setShowVanityURL(true); }, [setShowQuickActions, setShowVanityURL]);
+    const handleOpenAutoResponder = useCallback(() => { setShowQuickActions(false); setShowAutoResponder(true); }, [setShowQuickActions, setShowAutoResponder]);
+    const handleCloseAuditLogs = useCallback(() => setShowAuditLogs(false), [setShowAuditLogs]);
+    const handleCloseReports = useCallback(() => setShowReports(false), [setShowReports]);
+    const handleCloseVanityURL = useCallback(() => setShowVanityURL(false), [setShowVanityURL]);
+    const handleCloseAutoResponder = useCallback(() => setShowAutoResponder(false), [setShowAutoResponder]);
+    const handleCloseServerCtxMenu = useCallback(() => setServerContextMenu(null), [setServerContextMenu]);
+    const handleLeaveServerCtx = useCallback(() => handleLeaveServer(serverContextMenu?.server?.id), [handleLeaveServer, serverContextMenu]);
+    const handleServerSettings = useCallback(() => { onOpenServerSettings(serverContextMenu?.server); setServerContextMenu(null); }, [onOpenServerSettings, serverContextMenu, setServerContextMenu]);
+    const handleMuteServer = useCallback(() => {
+        const serverId = serverContextMenu?.server?.id;
+        setMutedServers(prev => { const u = [...prev, serverId]; localStorage.setItem('mutedServers', JSON.stringify(u)); return u; });
+        setServerContextMenu(null);
+    }, [serverContextMenu, setMutedServers, setServerContextMenu]);
+    const handleUnmuteServer = useCallback(() => {
+        const serverId = serverContextMenu?.server?.id;
+        setMutedServers(prev => { const u = prev.filter(id => id !== serverId); localStorage.setItem('mutedServers', JSON.stringify(u)); return u; });
+        setServerContextMenu(null);
+    }, [serverContextMenu, setMutedServers, setServerContextMenu]);
+    const handleMoveUp = useCallback(() => handleMoveServer(serverContextMenu?.server?.id, 'up'), [handleMoveServer, serverContextMenu]);
+    const handleMoveDown = useCallback(() => handleMoveServer(serverContextMenu?.server?.id, 'down'), [handleMoveServer, serverContextMenu]);
+    const handleCopyInvite = useCallback(() => handleCopyServerInvite(serverContextMenu?.server?.id), [handleCopyServerInvite, serverContextMenu]);
+    const handleChangeIcon = useCallback(() => { handleChangeServerIcon(serverContextMenu?.server?.id); setServerContextMenu(null); }, [handleChangeServerIcon, serverContextMenu, setServerContextMenu]);
+    const handleChangePrivacy = useCallback(() => { handleChangeServerPrivacy(serverContextMenu?.server?.id); setServerContextMenu(null); }, [handleChangeServerPrivacy, serverContextMenu, setServerContextMenu]);
+    const handleDeleteServer = useCallback(() => {
+        setDeleteServerModal({ server: serverContextMenu?.server, isOpen: true });
+        setServerContextMenu(null);
+    }, [serverContextMenu, setDeleteServerModal, setServerContextMenu]);
+    const handleCloseDeleteModal = useCallback(() => setDeleteServerModal(null), [setDeleteServerModal]);
+    const handleConfirmDelete = useCallback(async () => {
+        const serverId = deleteServerModal.server.id;
+        const serverName = deleteServerModal.server.name;
+        try {
+            const response = await fetchWithAuth(`${apiUrl}/servers/${serverId}/delete/`, { method: 'DELETE' });
+            if (response.ok) {
+                toast.success(`"${serverName}" sunucusu başarıyla silindi!`, 5000);
+                setSelectedServerId('home'); onWelcomeClick();
+            } else {
+                const error = await response.json();
+                toast.error(`Hata: ${error.error || 'Sunucu silinirken bir hata oluştu'}`);
+            }
+        } catch (error) {
+            toast.error('Sunucu silinirken bir hata oluştu. Lütfen tekrar deneyin.');
+        }
+    }, [deleteServerModal, fetchWithAuth, apiUrl, setSelectedServerId, onWelcomeClick]);
+    const handleCloseLeaveModal = useCallback(() => setLeaveServerModal(null), [setLeaveServerModal]);
+    const handleConfirmLeave = useCallback(async () => { await executeLeaveServer(leaveServerModal.server.id); }, [executeLeaveServer, leaveServerModal]);
+    const handleCloseInviteToServer = useCallback(() => setInviteToServerModal(null), [setInviteToServerModal]);
+    const handleCloseChannelSettings = useCallback(() => { setShowChannelSettings(false); setSelectedRoom(null); }, [setShowChannelSettings, setSelectedRoom]);
+    const handleUpdateChannelSettings = useCallback(() => { setShowChannelSettings(false); setSelectedRoom(null); }, [setShowChannelSettings, setSelectedRoom]);
+
     return (
         <>
             {/* Keşfet */}
-            <DiscoveryModal isOpen={showDiscovery} onClose={() => setShowDiscovery(false)}
+            <DiscoveryModal isOpen={showDiscovery} onClose={handleCloseDiscovery}
                 publicServers={publicServers} onJoinServer={handleJoinServer} onJoinViaCode={handleJoinViaCode} />
 
             {/* Davet Modal */}
             {showInviteModal && inviteModalServer && (
                 <InviteModal
-                    onClose={() => { setShowInviteModal(false); setInviteModalServer(null); }}
+                    onClose={handleCloseInvite}
                     server={inviteModalServer} fetchWithAuth={fetchWithAuth}
                     apiBaseUrl={apiUrl} currentUser={currentUsername}
                 />
@@ -77,61 +139,61 @@ const RoomListModals = ({
 
             {/* Saved Messages */}
             {showSavedMessages && createPortal(
-                <SavedMessagesModal type={showSavedMessages} onClose={() => setShowSavedMessages(null)}
+                <SavedMessagesModal type={showSavedMessages} onClose={handleCloseSaved}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Scheduled Messages */}
             {showScheduledMessages && createPortal(
                 <ScheduledMessageModal room={actualCurrentRoom} conversation={currentConversationId}
-                    onClose={() => setShowScheduledMessages(false)} fetchWithAuth={fetchWithAuth}
+                    onClose={handleCloseScheduled} fetchWithAuth={fetchWithAuth}
                     apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Webhooks */}
             {showWebhooks && createPortal(
-                <WebhookManager serverId={selectedServerId} onClose={() => setShowWebhooks(false)}
+                <WebhookManager serverId={selectedServerId} onClose={handleCloseWebhooks}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Mod Tools */}
             {showModTools && createPortal(
-                <ModeratorTools serverId={selectedServerId} onClose={() => setShowModTools(false)}
+                <ModeratorTools serverId={selectedServerId} onClose={handleCloseModTools}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Quick Actions */}
             {showQuickActions && createPortal(
-                <QuickActionsMenu onClose={() => setShowQuickActions(false)}
-                    onOpenWebhooks={() => { setShowQuickActions(false); setShowWebhooks(true); }}
-                    onOpenAuditLogs={() => { setShowQuickActions(false); setShowAuditLogs(true); }}
-                    onOpenReports={() => { setShowQuickActions(false); setShowReports(true); }}
-                    onOpenVanityURL={() => { setShowQuickActions(false); setShowVanityURL(true); }}
-                    onOpenAutoResponder={() => { setShowQuickActions(false); setShowAutoResponder(true); }}
+                <QuickActionsMenu onClose={handleCloseQuickActions}
+                    onOpenWebhooks={handleOpenWebhooks}
+                    onOpenAuditLogs={handleOpenAuditLogs}
+                    onOpenReports={handleOpenReports}
+                    onOpenVanityURL={handleOpenVanityURL}
+                    onOpenAutoResponder={handleOpenAutoResponder}
                 />, document.body
             )}
 
             {/* Audit Logs */}
             {showAuditLogs && createPortal(
-                <AuditLogViewer serverId={selectedServerId} onClose={() => setShowAuditLogs(false)}
+                <AuditLogViewer serverId={selectedServerId} onClose={handleCloseAuditLogs}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Reports */}
             {showReports && createPortal(
-                <ReportsViewer serverId={selectedServerId} onClose={() => setShowReports(false)}
+                <ReportsViewer serverId={selectedServerId} onClose={handleCloseReports}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Vanity URL */}
             {showVanityURL && createPortal(
-                <VanityURLManager serverId={selectedServerId} onClose={() => setShowVanityURL(false)}
+                <VanityURLManager serverId={selectedServerId} onClose={handleCloseVanityURL}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
             {/* Auto Responder */}
             {showAutoResponder && createPortal(
-                <AutoResponderManager serverId={selectedServerId} onClose={() => setShowAutoResponder(false)}
+                <AutoResponderManager serverId={selectedServerId} onClose={handleCloseAutoResponder}
                     fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />, document.body
             )}
 
@@ -140,28 +202,17 @@ const RoomListModals = ({
                 <ServerContextMenu
                     x={serverContextMenu.x} y={serverContextMenu.y}
                     server={serverContextMenu.server} isOwner={serverContextMenu.isOwner}
-                    onClose={() => setServerContextMenu(null)}
-                    onLeaveServer={() => handleLeaveServer(serverContextMenu.server.id)}
-                    onServerSettings={() => { onOpenServerSettings(serverContextMenu.server); setServerContextMenu(null); }}
-                    onMuteServer={() => {
-                        const serverId = serverContextMenu.server.id;
-                        setMutedServers(prev => { const u = [...prev, serverId]; localStorage.setItem('mutedServers', JSON.stringify(u)); return u; });
-                        setServerContextMenu(null);
-                    }}
-                    onUnmuteServer={() => {
-                        const serverId = serverContextMenu.server.id;
-                        setMutedServers(prev => { const u = prev.filter(id => id !== serverId); localStorage.setItem('mutedServers', JSON.stringify(u)); return u; });
-                        setServerContextMenu(null);
-                    }}
-                    onMoveUp={() => handleMoveServer(serverContextMenu.server.id, 'up')}
-                    onMoveDown={() => handleMoveServer(serverContextMenu.server.id, 'down')}
-                    onCopyInvite={() => handleCopyServerInvite(serverContextMenu.server.id)}
-                    onChangeIcon={() => { handleChangeServerIcon(serverContextMenu.server.id); setServerContextMenu(null); }}
-                    onChangePrivacy={() => { handleChangeServerPrivacy(serverContextMenu.server.id); setServerContextMenu(null); }}
-                    onDeleteServer={() => {
-                        setDeleteServerModal({ server: serverContextMenu.server, isOpen: true });
-                        setServerContextMenu(null);
-                    }}
+                    onClose={handleCloseServerCtxMenu}
+                    onLeaveServer={handleLeaveServerCtx}
+                    onServerSettings={handleServerSettings}
+                    onMuteServer={handleMuteServer}
+                    onUnmuteServer={handleUnmuteServer}
+                    onMoveUp={handleMoveUp}
+                    onMoveDown={handleMoveDown}
+                    onCopyInvite={handleCopyInvite}
+                    onChangeIcon={handleChangeIcon}
+                    onChangePrivacy={handleChangePrivacy}
+                    onDeleteServer={handleDeleteServer}
                     canMoveUp={servers && servers.findIndex(s => s.id === serverContextMenu.server.id) > 0}
                     canMoveDown={servers && servers.findIndex(s => s.id === serverContextMenu.server.id) < servers.length - 1}
                     isMuted={mutedServers.includes(serverContextMenu.server.id)}
@@ -182,23 +233,8 @@ const RoomListModals = ({
             {deleteServerModal?.isOpen && (
                 <ConfirmModal
                     isOpen={deleteServerModal.isOpen}
-                    onClose={() => setDeleteServerModal(null)}
-                    onConfirm={async () => {
-                        const serverId = deleteServerModal.server.id;
-                        const serverName = deleteServerModal.server.name;
-                        try {
-                            const response = await fetchWithAuth(`${apiUrl}/servers/${serverId}/delete/`, { method: 'DELETE' });
-                            if (response.ok) {
-                                toast.success(`"${serverName}" sunucusu başarıyla silindi!`, 5000);
-                                setSelectedServerId('home'); onWelcomeClick();
-                            } else {
-                                const error = await response.json();
-                                toast.error(`Hata: ${error.error || 'Sunucu silinirken bir hata oluştu'}`);
-                            }
-                        } catch (error) {
-                            toast.error('Sunucu silinirken bir hata oluştu. Lütfen tekrar deneyin.');
-                        }
-                    }}
+                    onClose={handleCloseDeleteModal}
+                    onConfirm={handleConfirmDelete}
                     title="⚠️ Sunucuyu Sil"
                     message={`"${deleteServerModal.server.name}" sunucusunu KALİCİ OLARAK silmek üzeresiniz!`}
                     confirmText="Sunucuyu Sil" cancelText="İptal" type="danger"
@@ -212,8 +248,8 @@ const RoomListModals = ({
             {leaveServerModal?.isOpen && (
                 <ConfirmModal
                     isOpen={leaveServerModal.isOpen}
-                    onClose={() => setLeaveServerModal(null)}
-                    onConfirm={async () => { await executeLeaveServer(leaveServerModal.server.id); }}
+                    onClose={handleCloseLeaveModal}
+                    onConfirm={handleConfirmLeave}
                     title="🚪 Sunucudan Ayrıl"
                     message={`"${leaveServerModal.server.name}" sunucusundan ayrılmak istediğinize emin misiniz?`}
                     confirmText="Ayrıl" cancelText="Vazgeç" type="warning"
@@ -223,7 +259,7 @@ const RoomListModals = ({
 
             {/* Invite to Server */}
             <InviteToServerModal inviteToServerModal={inviteToServerModal} servers={servers}
-                onSendInvite={handleSendServerInvite} onClose={() => setInviteToServerModal(null)} />
+                onSendInvite={handleSendServerInvite} onClose={handleCloseInviteToServer} />
 
             {/* Channel Settings */}
             {showChannelSettings && selectedRoom && (() => {
@@ -233,8 +269,8 @@ const RoomListModals = ({
                     <ChannelSettingsModal
                         room={selectedRoom} serverId={selectedRoom.server_id || selectedServerId}
                         serverRoles={serverRoles}
-                        onClose={() => { setShowChannelSettings(false); setSelectedRoom(null); }}
-                        onUpdate={() => { setShowChannelSettings(false); setSelectedRoom(null); }}
+                        onClose={handleCloseChannelSettings}
+                        onUpdate={handleUpdateChannelSettings}
                         fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl}
                     />
                 );

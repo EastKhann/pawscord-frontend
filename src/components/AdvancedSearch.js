@@ -1,11 +1,11 @@
 // components/AdvancedSearch.js
 // 🔍 Advanced Search Panel - Power User Feature
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { FaSearch, FaTimes, FaFilter, FaCalendar, FaUser, FaFile, FaHeart } from 'react-icons/fa';
 import './AdvancedSearch.css';
 
-const AdvancedSearch = ({
+const AdvancedSearch = memo(({
   messages = [],
   onClose,
   onSelectMessage,
@@ -131,7 +131,7 @@ const AdvancedSearch = ({
     onClose();
   };
 
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setFilters({
       user: '',
       dateFrom: '',
@@ -142,11 +142,22 @@ const AdvancedSearch = ({
       hasFile: false,
       hasImage: false
     });
-  };
+  }, []);
+
+  const handleStopPropagation = useCallback(e => e.stopPropagation(), []);
+  const handleSearchQueryChange = useCallback(e => setSearchQuery(e.target.value), []);
+  const handleClearSearch = useCallback(() => setSearchQuery(''), []);
+  const handleToggleFilters = useCallback(() => setShowFilters(prev => !prev), []);
+  const handleUserFilter = useCallback(e => setFilters(prev => ({ ...prev, user: e.target.value })), []);
+  const handleDateFromFilter = useCallback(e => setFilters(prev => ({ ...prev, dateFrom: e.target.value })), []);
+  const handleDateToFilter = useCallback(e => setFilters(prev => ({ ...prev, dateTo: e.target.value })), []);
+  const handleHasFileFilter = useCallback(e => setFilters(prev => ({ ...prev, hasFile: e.target.checked })), []);
+  const handleHasImageFilter = useCallback(e => setFilters(prev => ({ ...prev, hasImage: e.target.checked })), []);
+  const handleHasReactionFilter = useCallback(e => setFilters(prev => ({ ...prev, hasReaction: e.target.checked })), []);
 
   return (
     <div className="advanced-search-overlay" onClick={onClose}>
-      <div className="advanced-search-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="advanced-search-panel" onClick={handleStopPropagation}>
         {/* Header */}
         <div className="search-header">
           <h2>🔍 Gelişmiş Arama</h2>
@@ -162,7 +173,7 @@ const AdvancedSearch = ({
             type="text"
             placeholder="Mesajlarda ara... (Ctrl+F)"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchQueryChange}
             className="search-input"
             autoFocus
           />
@@ -170,7 +181,7 @@ const AdvancedSearch = ({
             <button
               type="button"
               className="clear-btn"
-              onClick={() => setSearchQuery('')}
+              onClick={handleClearSearch}
             >
               <FaTimes />
             </button>
@@ -181,7 +192,7 @@ const AdvancedSearch = ({
         <div className="filter-toggle">
           <button
             className={`filter-btn ${showFilters ? 'active' : ''}`}
-            onClick={() => setShowFilters(!showFilters)}
+            onClick={handleToggleFilters}
           >
             <FaFilter /> Filtreler
           </button>
@@ -200,7 +211,7 @@ const AdvancedSearch = ({
                 <FaUser /> Kullanıcı:
                 <select
                   value={filters.user}
-                  onChange={(e) => setFilters({...filters, user: e.target.value})}
+                  onChange={handleUserFilter}
                 >
                   <option value="">Tümü</option>
                   {[...new Set(messages.map(m => m.username))].map(user => (
@@ -214,7 +225,7 @@ const AdvancedSearch = ({
                 <input
                   type="date"
                   value={filters.dateFrom}
-                  onChange={(e) => setFilters({...filters, dateFrom: e.target.value})}
+                  onChange={handleDateFromFilter}
                 />
               </label>
 
@@ -223,7 +234,7 @@ const AdvancedSearch = ({
                 <input
                   type="date"
                   value={filters.dateTo}
-                  onChange={(e) => setFilters({...filters, dateTo: e.target.value})}
+                  onChange={handleDateToFilter}
                 />
               </label>
             </div>
@@ -233,7 +244,7 @@ const AdvancedSearch = ({
                 <input
                   type="checkbox"
                   checked={filters.hasFile}
-                  onChange={(e) => setFilters({...filters, hasFile: e.target.checked})}
+                  onChange={handleHasFileFilter}
                 />
                 <FaFile /> Dosya içerenler
               </label>
@@ -242,7 +253,7 @@ const AdvancedSearch = ({
                 <input
                   type="checkbox"
                   checked={filters.hasImage}
-                  onChange={(e) => setFilters({...filters, hasImage: e.target.checked})}
+                  onChange={handleHasImageFilter}
                 />
                 🖼️ Resim içerenler
               </label>
@@ -251,7 +262,7 @@ const AdvancedSearch = ({
                 <input
                   type="checkbox"
                   checked={filters.hasReaction}
-                  onChange={(e) => setFilters({...filters, hasReaction: e.target.checked})}
+                  onChange={handleHasReactionFilter}
                 />
                 <FaHeart /> Reaction alanlar
               </label>
@@ -332,7 +343,7 @@ const AdvancedSearch = ({
       </div>
     </div>
   );
-};
+});
 
 export default AdvancedSearch;
 

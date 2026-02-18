@@ -2,7 +2,7 @@
  * 💬 ChatArea — Main chat rendering section
  * Extracted from App.js: header, message list, drag overlay, input container
  */
-import React, { Suspense, memo } from 'react';
+import React, { Suspense, memo, useCallback, useMemo } from 'react';
 import { FaBell, FaUsers, FaSearch } from 'react-icons/fa';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ScrollToBottomButton from '../components/ScrollToBottomButton';
@@ -60,17 +60,112 @@ export default memo(function ChatArea({
     // Config
     ABSOLUTE_HOST_URL, fetchWithAuth,
 }) {
+    // Stable callback references
+    const handleDragOver = useCallback((e) => e.preventDefault(), []);
+    const handleOpenLeftSidebar = useCallback(() => setIsLeftSidebarVisible(true), [setIsLeftSidebarVisible]);
+    const handleBackToWelcome = useCallback(() => {
+        setActiveChat('welcome', 'welcome');
+        setIsLeftSidebarVisible(false);
+        setIsRightSidebarVisible(false);
+    }, [setActiveChat, setIsLeftSidebarVisible, setIsRightSidebarVisible]);
+    const handleSearchSubmit = useCallback((e) => messageHandlers.handleSearchMessages(e, debouncedSearchQuery), [messageHandlers, debouncedSearchQuery]);
+    const handleSearchChange = useCallback((e) => setSearchQuery(e.target.value), [setSearchQuery]);
+    const handleToggleNotifications = useCallback(() => toggleModal('notifications'), [toggleModal]);
+    const handleCloseNotifications = useCallback(() => closeModal('notifications'), [closeModal]);
+    const handleToggleToolbar = useCallback(() => toggleModal('toolbarMenu'), [toggleModal]);
+    const handleOpenRightSidebar = useCallback(() => setIsRightSidebarVisible(true), [setIsRightSidebarVisible]);
+    const handleToggleReaction = useCallback(() => { }, []);
+    const handleToggleSelection = useCallback((id) => {
+        setSelectedMessages(prev => { const s = new Set(prev); if (s.has(id)) s.delete(id); else s.add(id); return s; });
+    }, [setSelectedMessages]);
+    const handleViewProfile = useCallback((u) => setViewingProfile(allUsers.find(usr => usr.username === u)), [setViewingProfile, allUsers]);
+    const handleOpenGallery = useCallback((images, startIndex) => setGalleryData({ images, startIndex }), [setGalleryData]);
+    const handleScrollToBottom = useCallback(() => { scrollToBottom('smooth'); setShowScrollToBottom(false); }, [scrollToBottom, setShowScrollToBottom]);
+    const handleShowCodeSnippet = useCallback(() => openModal('snippetModal'), [openModal]);
+    const handleClearPendingFiles = useCallback(() => fileUpload.setPendingFilesFromDrop([]), [fileUpload]);
+
+    // Stable render callback for VirtualMessageList
+    const renderVirtualMessage = useCallback((msg, index) => (
+        <Message key={msg.id || msg.temp_id || index} msg={msg} currentUser={username}
+            absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
+            onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
+            allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
+            onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
+            onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
+            onToggleReaction={handleToggleReaction} onStartForward={setForwardingMessage}
+            isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
+            onToggleSelection={handleToggleSelection}
+            onScrollToMessage={messageHandlers.scrollToMessage}
+            onViewProfile={handleViewProfile}
+            onTogglePin={messageHandlers.handleTogglePin}
+            onVisible={messageHandlers.handleMessageVisible} />
+    ), [username, ABSOLUTE_HOST_URL, isAdmin, setZoomedImage, fetchWithAuth, allUsers,
+        getDeterministicAvatar, setChartSymbol, messageHandlers, setEditingMessage,
+        setReplyingTo, handleToggleReaction, setForwardingMessage, isSelectionMode,
+        selectedMessages, handleToggleSelection, handleViewProfile]);
+
+    // Memoized message list with gallery grouping
+    const renderedMessages = useMemo(() => {
+        const elements = [];
+        let i = 0;
+        while (i < optimizedMessages.length) {
+            const msg = optimizedMessages[i];
+            const key = msg.id || msg.temp_id || i;
+            const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
+            const showDateDivider = !prevMsg || (msg.timestamp && prevMsg.timestamp && new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString());
+            if (isImageOnlyMessage(msg)) {
+                const galleryMsgs = [msg];
+                let j = i + 1;
+                while (j < optimizedMessages.length && isImageOnlyMessage(optimizedMessages[j]) && optimizedMessages[j].username === msg.username && msg.timestamp && optimizedMessages[j].timestamp && Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000) { galleryMsgs.push(optimizedMessages[j]); j++; }
+                if (galleryMsgs.length >= 2) {
+                    elements.push(
+                        <React.Fragment key={`gallery-${galleryMsgs.map(m => m.id || m.temp_id).join('-')}`}>
+                            {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
+                            <ImageGalleryGroup messages={galleryMsgs} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
+                                onOpenGallery={handleOpenGallery} onViewProfile={handleViewProfile}
+                                onDelete={messageHandlers.handleDeleteMessage} allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
+                                fetchWithAuth={fetchWithAuth} onVisible={messageHandlers.handleMessageVisible} />
+                        </React.Fragment>
+                    );
+                    i = j; continue;
+                }
+            }
+            elements.push(
+                <React.Fragment key={key}>
+                    {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
+                    <Message msg={msg} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
+                        onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
+                        allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
+                        onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
+                        onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
+                        onToggleReaction={handleToggleReaction} onStartForward={setForwardingMessage}
+                        isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
+                        onToggleSelection={handleToggleSelection}
+                        onScrollToMessage={messageHandlers.scrollToMessage}
+                        onViewProfile={handleViewProfile}
+                        onTogglePin={messageHandlers.handleTogglePin}
+                        onVisible={messageHandlers.handleMessageVisible} />
+                </React.Fragment>
+            );
+            i++;
+        }
+        return elements;
+    }, [optimizedMessages, selectedMessages, isSelectionMode, username, ABSOLUTE_HOST_URL, isAdmin,
+        setZoomedImage, fetchWithAuth, allUsers, getDeterministicAvatar, setChartSymbol,
+        messageHandlers, setEditingMessage, setReplyingTo, handleToggleReaction, setForwardingMessage,
+        handleToggleSelection, handleViewProfile, handleOpenGallery]);
+
     return (
         <div style={{ ...styles.chatArea, position: 'relative', paddingTop: mobileWebPadding, boxSizing: 'border-box' }}
-            onDrop={fileUpload.handleChatDrop} onDragOver={(e) => e.preventDefault()}
+            onDrop={fileUpload.handleChatDrop} onDragOver={handleDragOver}
             onDragEnter={fileUpload.handleChatDragEnter} onDragLeave={fileUpload.handleChatDragLeave}>
 
             {/* CHAT HEADER */}
             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '8px' }}>
-                    {isMobile && !isLeftSidebarVisible && <button onClick={() => setIsLeftSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}>☰</button>}
+                    {isMobile && !isLeftSidebarVisible && <button onClick={handleOpenLeftSidebar} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}>☰</button>}
                     {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
-                        <button onClick={() => { setActiveChat('welcome', 'welcome'); setIsLeftSidebarVisible(false); setIsRightSidebarVisible(false); }} style={{ ...styles.mobileMenuButton, fontSize: '1.2em' }}>←</button>
+                        <button onClick={handleBackToWelcome} style={{ ...styles.mobileMenuButton, fontSize: '1.2em' }}>←</button>
                     )}
                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: isMobile ? '1em' : '1.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {activeChat.type === 'dm' ? `@ ${chatTitle}` : chatTitle}
@@ -78,21 +173,21 @@ export default memo(function ChatArea({
                     <div style={isConnected ? styles.connectionPillOnline : styles.connectionPillOffline}>{isConnected ? '✓' : '✗'}</div>
                 </div>
                 <div style={{ display: 'flex', gap: isMobile ? '5px' : '10px', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', position: 'relative' }}>
-                    <form onSubmit={(e) => messageHandlers.handleSearchMessages(e, debouncedSearchQuery)} style={styles.searchForm}>
-                        <input type="text" placeholder="Ara..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={styles.searchInput} ref={searchInputRef} />
+                    <form onSubmit={handleSearchSubmit} style={styles.searchForm}>
+                        <input type="text" placeholder="Ara..." value={searchQuery} onChange={handleSearchChange} style={styles.searchInput} ref={searchInputRef} />
                         <FaSearch style={styles.searchIcon} />
                     </form>
                     {!isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
-                    <button onClick={() => toggleModal('notifications')} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler"><FaBell /></button>
+                    <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler"><FaBell /></button>
                     {modals.notifications && (
                         <div style={{ position: 'absolute', top: '54px', right: '20px', zIndex: 1000 }}>
                             <Suspense fallback={<LoadingSpinner size="small" text="" />}>
-                                <NotificationDropdown currentUser={username} onClose={() => closeModal('notifications')} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />
+                                <NotificationDropdown currentUser={username} onClose={handleCloseNotifications} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />
                             </Suspense>
                         </div>
                     )}
                     <div className="toolbar-menu-container" style={{ position: 'relative' }}>
-                        <button onClick={() => toggleModal('toolbarMenu')} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla">⋮</button>
+                        <button onClick={handleToggleToolbar} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla">⋮</button>
                         {modals.toolbarMenu && (
                             <ToolbarMenu
                                 activeChat={activeChat} hasKey={hasKey} modals={modals}
@@ -105,7 +200,7 @@ export default memo(function ChatArea({
                             />
                         )}
                     </div>
-                    {isMobile && !isRightSidebarVisible && <button onClick={() => setIsRightSidebarVisible(true)} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}><FaUsers /></button>}
+                    {isMobile && !isRightSidebarVisible && <button onClick={handleOpenRightSidebar} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}><FaUsers /></button>}
                 </div>
             </div>
 
@@ -117,72 +212,10 @@ export default memo(function ChatArea({
                         <p style={styles.systemMessage}>Yükleniyor...</p>
                     ) : optimizedMessages.length > 50 ? (
                         <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
-                            renderMessage={(msg, index) => (
-                                <Message key={msg.id || msg.temp_id || index} msg={msg} currentUser={username}
-                                    absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                    onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
-                                    allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                    onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
-                                    onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                                    onToggleReaction={() => { }} onStartForward={setForwardingMessage}
-                                    isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
-                                    onToggleSelection={(id) => { const s = new Set(selectedMessages); if (s.has(id)) s.delete(id); else s.add(id); setSelectedMessages(s); }}
-                                    onScrollToMessage={messageHandlers.scrollToMessage}
-                                    onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                    onTogglePin={messageHandlers.handleTogglePin}
-                                    onVisible={messageHandlers.handleMessageVisible} />
-                            )} />
+                            renderMessage={renderVirtualMessage} />
                     ) : (
                         <>
-                            {(() => {
-                                const elements = [];
-                                let i = 0;
-                                while (i < optimizedMessages.length) {
-                                    const msg = optimizedMessages[i];
-                                    const key = msg.id || msg.temp_id || i;
-                                    const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
-                                    const showDateDivider = !prevMsg || (msg.timestamp && prevMsg.timestamp && new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString());
-
-                                    if (isImageOnlyMessage(msg)) {
-                                        const galleryMsgs = [msg];
-                                        let j = i + 1;
-                                        while (j < optimizedMessages.length && isImageOnlyMessage(optimizedMessages[j]) && optimizedMessages[j].username === msg.username && msg.timestamp && optimizedMessages[j].timestamp && Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000) { galleryMsgs.push(optimizedMessages[j]); j++; }
-                                        if (galleryMsgs.length >= 2) {
-                                            elements.push(
-                                                <React.Fragment key={`gallery-${galleryMsgs.map(m => m.id || m.temp_id).join('-')}`}>
-                                                    {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
-                                                    <ImageGalleryGroup messages={galleryMsgs} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                                        onOpenGallery={(images, startIndex) => setGalleryData({ images, startIndex })}
-                                                        onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                        onDelete={messageHandlers.handleDeleteMessage} allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                                        fetchWithAuth={fetchWithAuth} onVisible={messageHandlers.handleMessageVisible} />
-                                                </React.Fragment>
-                                            );
-                                            i = j; continue;
-                                        }
-                                    }
-
-                                    elements.push(
-                                        <React.Fragment key={key}>
-                                            {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
-                                            <Message msg={msg} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                                onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
-                                                allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                                onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
-                                                onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                                                onToggleReaction={() => { }} onStartForward={setForwardingMessage}
-                                                isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
-                                                onToggleSelection={(id) => { const s = new Set(selectedMessages); if (s.has(id)) s.delete(id); else s.add(id); setSelectedMessages(s); }}
-                                                onScrollToMessage={messageHandlers.scrollToMessage}
-                                                onViewProfile={(u) => setViewingProfile(allUsers.find(usr => usr.username === u))}
-                                                onTogglePin={messageHandlers.handleTogglePin}
-                                                onVisible={messageHandlers.handleMessageVisible} />
-                                        </React.Fragment>
-                                    );
-                                    i++;
-                                }
-                                return elements;
-                            })()}
+                            {renderedMessages}
                             <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
                         </>
                     )}
@@ -197,7 +230,7 @@ export default memo(function ChatArea({
                 </div>
             )}
 
-            {showScrollToBottom && <ScrollToBottomButton onClick={() => { scrollToBottom('smooth'); setShowScrollToBottom(false); }} unreadCount={0} />}
+            {showScrollToBottom && <ScrollToBottomButton onClick={handleScrollToBottom} unreadCount={0} />}
 
             <div style={{ ...styles.inputContainer, paddingBottom: isNative ? `calc(16px + ${safeAreaBottom})` : (isMobile ? '25px' : '16px') }}>
                 {fileUpload.isUploading && fileUpload.uploadProgress > 0 && (
@@ -212,11 +245,11 @@ export default memo(function ChatArea({
                 )}
                 <Suspense fallback={<div style={{ padding: '12px', color: '#72767d' }}>Yükleniyor...</div>}>
                     <MessageInput onSendMessage={messageHandlers.sendMessage} onFileUpload={fileUpload.uploadFile}
-                        onShowCodeSnippet={() => openModal('snippetModal')}
+                        onShowCodeSnippet={handleShowCodeSnippet}
                         placeholder={chatTitle ? `${chatTitle} kanalına mesaj gönder` : 'Mesaj yaz...'}
                         disabled={fileUpload.isUploading} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL}
                         activeChat={activeChat} pendingFilesFromDrop={fileUpload.pendingFilesFromDrop}
-                        onClearPendingFiles={() => fileUpload.setPendingFilesFromDrop([])} />
+                        onClearPendingFiles={handleClearPendingFiles} />
                 </Suspense>
             </div>
         </div>

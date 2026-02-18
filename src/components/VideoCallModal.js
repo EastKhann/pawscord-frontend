@@ -1,15 +1,17 @@
 import { FaVideo, FaVideoSlash, FaMicrophone, FaMicrophoneSlash, FaPhone, FaExpand, FaCompress, FaCog, FaTimes } from 'react-icons/fa';
 import useVideoCall, { formatDuration } from './VideoCallModal/useVideoCall';
+import useModalA11y from '../hooks/useModalA11y';
 import { styles } from './VideoCallModal/videoCallStyles';
 
 const VideoCallModal = ({ isOpen, onClose, targetUser, currentUser, localStream, remoteStream, onToggleVideo, onToggleMute, isVideoEnabled, isMuted, callDuration = 0, callStatus = 'connecting' }) => {
   const v = useVideoCall(isOpen, localStream, remoteStream);
+  const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Video Call' });
 
   if (!isOpen) return null;
 
   return (
-    <div style={styles.overlay}>
-      <div ref={v.containerRef} style={styles.container}>
+    <div style={styles.overlay} {...overlayProps}>
+      <div ref={v.containerRef} style={styles.container} {...dialogProps}>
         {/* Header */}
         <div style={styles.header}>
           <div style={styles.headerInfo}>

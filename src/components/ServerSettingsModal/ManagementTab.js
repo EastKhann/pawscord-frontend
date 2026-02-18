@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { FaVolumeUp, FaVolumeMute, FaEdit, FaImage, FaLock, FaGlobe, FaComments, FaFileAlt, FaTrash } from 'react-icons/fa';
 import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
 import styles from './styles';
 
-const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshServers, onClose }) => {
+const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshServers, onClose }) => {
     const [isMuted, setIsMuted] = useState(false);
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -144,6 +144,46 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
         }
     };
 
+    const handleServerNameChange = useCallback(e => setServerName(e.target.value), []);
+    const handleServerDescriptionChange = useCallback(e => setServerDescription(e.target.value), []);
+    const handleDefaultChannelChange = useCallback(e => setDefaultChannelSlug(e.target.value), []);
+    const handleDeleteConfirmationChange = useCallback(e => setDeleteConfirmation(e.target.value), []);
+    const handleInputFocus = useCallback(e => { e.target.style.borderColor = '#5865f2'; }, []);
+    const handleInputBlur = useCallback(e => { e.target.style.borderColor = '#40444b'; }, []);
+    const handleShowDeleteModal = useCallback(() => setShowDeleteModal(true), []);
+    const handleCancelDelete = useCallback(() => { setShowDeleteModal(false); setDeleteConfirmation(''); }, []);
+
+    const handleIconUpload = useCallback(() => {
+        const input = document.createElement('input');
+        input.type = 'file'; input.accept = 'image/*';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) { toast.warning('Dosya boyutu çok büyük! Maksimum 5MB olmalıdır.'); return; }
+            const formData = new FormData();
+            formData.append('icon', file);
+            try {
+                const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/icon/`, { method: 'POST', body: formData });
+                if (res.ok) { toast.success('Sunucu ikonu güncellendi!'); if (onRefreshServers) onRefreshServers(); }
+                else { const error = await res.json(); toast.error(`Hata: ${error.error || 'Bilinmeyen hata'}`); }
+            } catch (error) { console.error('❌ İkon yükleme hatası:', error); toast.error('İkon yüklenirken bir hata oluştu.'); }
+        };
+        input.click();
+    }, [fetchWithAuth, apiBaseUrl, server.id, onRefreshServers]);
+
+    const handlePrivacyToggle = useCallback(async () => {
+        const newPrivacy = !server.is_public;
+        const message = newPrivacy ? 'Sunucuyu herkese açık yapmak istediğinize emin misiniz?' : 'Sunucuyu özel yapmak istediğinize emin misiniz?';
+        if (!await confirmDialog(message)) return;
+        try {
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/privacy/`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ is_public: newPrivacy })
+            });
+            if (res.ok) { toast.success(`Sunucu ${newPrivacy ? 'herkese açık' : 'özel'} yapıldı!`); if (onRefreshServers) onRefreshServers(); }
+            else { const error = await res.json(); toast.error(`Hata: ${error.error || 'Bilinmeyen hata'}`); }
+        } catch (error) { console.error('❌ Gizlilik ayarı hatası:', error); toast.error('Gizlilik ayarı değiştirilirken bir hata oluştu.'); }
+    }, [server.is_public, fetchWithAuth, apiBaseUrl, server.id, onRefreshServers]);
+
     return (
         <div style={styles.managementTab}>
             <h3 style={styles.sectionTitle}>🔔 Bildirim Ayarları</h3>
@@ -176,10 +216,10 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
                         </div>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                             <input
-                                type="text" value={serverName} onChange={(e) => setServerName(e.target.value)} maxLength={100}
+                                type="text" value={serverName} onChange={handleServerNameChange} maxLength={100}
                                 style={{ padding: '10px 14px', backgroundColor: '#1e1f22', border: '1px solid #40444b', borderRadius: '8px', color: '#dcddde', fontSize: '14px', outline: 'none', width: '220px', transition: 'border-color 0.2s' }}
-                                onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
-                                onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                                onFocus={handleInputFocus}
+                                onBlur={handleInputBlur}
                                 placeholder="Sunucu adı..."
                             />
                             <button onClick={handleRenameServer} disabled={isRenamingServer || serverName.trim() === server.name}
@@ -196,11 +236,11 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
                             <div style={styles.settingDesc}>Sunucunuz hakkında kısa bir açıklama yazın</div>
                         </div>
                         <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                            <textarea value={serverDescription} onChange={(e) => setServerDescription(e.target.value)} maxLength={300}
+                            <textarea value={serverDescription} onChange={handleServerDescriptionChange} maxLength={300}
                                 placeholder="Bu sunucu hakkında bir açıklama yazın..."
                                 style={{ flex: 1, padding: '10px 14px', backgroundColor: '#1e1f22', border: '1px solid #40444b', borderRadius: '8px', color: '#dcddde', fontSize: '14px', outline: 'none', resize: 'vertical', minHeight: '60px', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
-                                onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
-                                onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                                onFocus={handleInputFocus}
+                                onBlur={handleInputBlur}
                             />
                             <button onClick={handleSaveDescription} disabled={isSavingDescription || serverDescription === (server.description || '')}
                                 style={{ ...styles.actionBtn, backgroundColor: serverDescription !== (server.description || '') ? '#5865f2' : '#4e5058', opacity: isSavingDescription || serverDescription === (server.description || '') ? 0.5 : 1, cursor: isSavingDescription || serverDescription === (server.description || '') ? 'not-allowed' : 'pointer', alignSelf: 'flex-start' }}>
@@ -218,23 +258,7 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
                             <div style={styles.settingLabel}><FaImage style={{ marginRight: '8px' }} />Sunucu İkonu</div>
                             <div style={styles.settingDesc}>Sunucunuzun profil resmini değiştirin (Maks 5MB)</div>
                         </div>
-                        <button onClick={() => {
-                            const input = document.createElement('input');
-                            input.type = 'file'; input.accept = 'image/*';
-                            input.onchange = async (e) => {
-                                const file = e.target.files[0];
-                                if (!file) return;
-                                if (file.size > 5 * 1024 * 1024) { toast.warning('Dosya boyutu çok büyük! Maksimum 5MB olmalıdır.'); return; }
-                                const formData = new FormData();
-                                formData.append('icon', file);
-                                try {
-                                    const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/icon/`, { method: 'POST', body: formData });
-                                    if (res.ok) { toast.success('Sunucu ikonu güncellendi!'); if (onRefreshServers) onRefreshServers(); }
-                                    else { const error = await res.json(); toast.error(`Hata: ${error.error || 'Bilinmeyen hata'}`); }
-                                } catch (error) { console.error('❌ İkon yükleme hatası:', error); toast.error('İkon yüklenirken bir hata oluştu.'); }
-                            };
-                            input.click();
-                        }} style={styles.actionBtn}>
+                        <button onClick={handleIconUpload} style={styles.actionBtn}>
                             <FaImage /> İkon Değiştir
                         </button>
                     </div>
@@ -250,18 +274,7 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
                                 {server.is_public ? 'Herkes bu sunucuyu bulabilir ve katılabilir.' : 'Sadece davet edilen kişiler katılabilir.'}
                             </div>
                         </div>
-                        <button onClick={async () => {
-                            const newPrivacy = !server.is_public;
-                            const message = newPrivacy ? 'Sunucuyu herkese açık yapmak istediğinize emin misiniz?' : 'Sunucuyu özel yapmak istediğinize emin misiniz?';
-                            if (!await confirmDialog(message)) return;
-                            try {
-                                const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/privacy/`, {
-                                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ is_public: newPrivacy })
-                                });
-                                if (res.ok) { toast.success(`Sunucu ${newPrivacy ? 'herkese açık' : 'özel'} yapıldı!`); if (onRefreshServers) onRefreshServers(); }
-                                else { const error = await res.json(); toast.error(`Hata: ${error.error || 'Bilinmeyen hata'}`); }
-                            } catch (error) { console.error('❌ Gizlilik ayarı hatası:', error); toast.error('Gizlilik ayarı değiştirilirken bir hata oluştu.'); }
-                        }} style={{ ...styles.actionBtn, backgroundColor: server.is_public ? '#ed4245' : '#43b581' }}>
+                        <button onClick={handlePrivacyToggle} style={{ ...styles.actionBtn, backgroundColor: server.is_public ? '#ed4245' : '#43b581' }}>
                             {server.is_public ? <FaLock /> : <FaGlobe />}
                             {server.is_public ? ' Özel Yap' : ' Herkese Açık Yap'}
                         </button>
@@ -274,7 +287,7 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
                             <div style={styles.settingDesc}>Kullanıcılar sunucuya girdiğinde ilk gösterilecek kanal</div>
                         </div>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                            <select value={defaultChannelSlug} onChange={(e) => setDefaultChannelSlug(e.target.value)}
+                            <select value={defaultChannelSlug} onChange={handleDefaultChannelChange}
                                 style={{ padding: '10px 14px', backgroundColor: '#1e1f22', border: '1px solid #40444b', borderRadius: '8px', color: '#dcddde', fontSize: '14px', outline: 'none', width: '220px', cursor: 'pointer' }}>
                                 <option value="">Otomatik (İlk metin kanalı)</option>
                                 {server.categories?.map(cat => cat.rooms?.filter(r => r.room_type !== 'voice' && r.channel_type !== 'voice').map(room => (
@@ -303,25 +316,25 @@ const ManagementTab = ({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefreshSe
                             {showDeleteModal && (
                                 <div style={styles.deleteConfirmation}>
                                     <p style={{ margin: '10px 0', color: '#dcddde' }}>Silmek için sunucu adını yazın: <strong>{server.name}</strong></p>
-                                    <input type="text" value={deleteConfirmation} onChange={(e) => setDeleteConfirmation(e.target.value)} placeholder={server.name} style={styles.confirmInput} />
+                                    <input type="text" value={deleteConfirmation} onChange={handleDeleteConfirmationChange} placeholder={server.name} style={styles.confirmInput} />
                                     <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                                         <button onClick={handleDeleteServer} disabled={deleteConfirmation !== server.name}
                                             style={{ ...styles.dangerBtn, opacity: deleteConfirmation !== server.name ? 0.5 : 1, cursor: deleteConfirmation !== server.name ? 'not-allowed' : 'pointer' }}>
                                             <FaTrash /> Sunucuyu KALİCİ OLARAK Sil
                                         </button>
-                                        <button onClick={() => { setShowDeleteModal(false); setDeleteConfirmation(''); }} style={styles.cancelBtn}>İptal</button>
+                                        <button onClick={handleCancelDelete} style={styles.cancelBtn}>İptal</button>
                                     </div>
                                 </div>
                             )}
                         </div>
                         {!showDeleteModal && (
-                            <button onClick={() => setShowDeleteModal(true)} style={styles.dangerBtn}><FaTrash /> Sunucuyu Sil</button>
+                            <button onClick={handleShowDeleteModal} style={styles.dangerBtn}><FaTrash /> Sunucuyu Sil</button>
                         )}
                     </div>
                 </>
             )}
         </div>
     );
-};
+});
 
 export default ManagementTab;

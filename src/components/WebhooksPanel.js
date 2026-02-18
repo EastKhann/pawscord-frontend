@@ -1,8 +1,18 @@
+import { useCallback, memo } from 'react';
 import useWebhooks from './WebhooksPanel/useWebhooks';
 import './WebhooksPanel.css';
 
 const WebhooksPanel = ({ serverId, onClose }) => {
   const w = useWebhooks(serverId);
+
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleStartCreating = useCallback(() => w.setCreating(true), [w.setCreating]);
+  const handleCancelCreating = useCallback(() => w.setCreating(false), [w.setCreating]);
+  const handleCancelEditing = useCallback(() => w.setEditingWebhook(null), [w.setEditingWebhook]);
+  const handleCloseLogs = useCallback(() => w.setViewingLogs(null), [w.setViewingLogs]);
+  const handleNameChange = useCallback((e) => w.setNewWebhook(prev => ({ ...prev, name: e.target.value })), [w.setNewWebhook]);
+  const handleChannelChange = useCallback((e) => w.setNewWebhook(prev => ({ ...prev, channel_id: e.target.value })), [w.setNewWebhook]);
+  const handleAvatarChange = useCallback((e) => w.setNewWebhook(prev => ({ ...prev, avatar_url: e.target.value })), [w.setNewWebhook]);
 
   if (w.loading) {
     return <div className="webhooks-overlay"><div className="webhooks-panel"><div className="loading-state"><div className="spinner" /><p>Webhooklar yükleniyor...</p></div></div></div>;
@@ -10,22 +20,22 @@ const WebhooksPanel = ({ serverId, onClose }) => {
 
   return (
     <div className="webhooks-overlay" onClick={onClose}>
-      <div className="webhooks-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="webhooks-panel" onClick={handleStopPropagation}>
         <div className="webhooks-header">
           <h2>{'🔗'} Webhook Yönetimi</h2>
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <div className="webhooks-content">
-          {!w.creating && <button className="create-webhook-btn" onClick={() => w.setCreating(true)}>{'➕'} Yeni Webhook Oluştur</button>}
+          {!w.creating && <button className="create-webhook-btn" onClick={handleStartCreating}>{'➕'} Yeni Webhook Oluştur</button>}
 
           {w.creating && (
             <div className="create-webhook-form">
               <h3>Yeni Webhook</h3>
-              <div className="form-group"><label>Webhook Adı *</label><input type="text" placeholder="Örn: GitHub Bot" value={w.newWebhook.name} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, name: e.target.value })} /></div>
-              <div className="form-group"><label>Kanal *</label><select value={w.newWebhook.channel_id} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, channel_id: e.target.value })}><option value="">Kanal seçin...</option>{w.channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}</select></div>
-              <div className="form-group"><label>Avatar URL (Opsiyonel)</label><input type="text" placeholder="https://example.com/avatar.png" value={w.newWebhook.avatar_url} onChange={(e) => w.setNewWebhook({ ...w.newWebhook, avatar_url: e.target.value })} /></div>
-              <div className="form-actions"><button className="cancel-btn" onClick={() => w.setCreating(false)}>İptal</button><button className="submit-btn" onClick={w.createWebhook}>Oluştur</button></div>
+              <div className="form-group"><label>Webhook Adı *</label><input type="text" placeholder="Örn: GitHub Bot" value={w.newWebhook.name} onChange={handleNameChange} /></div>
+              <div className="form-group"><label>Kanal *</label><select value={w.newWebhook.channel_id} onChange={handleChannelChange}><option value="">Kanal seçin...</option>{w.channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}</select></div>
+              <div className="form-group"><label>Avatar URL (Opsiyonel)</label><input type="text" placeholder="https://example.com/avatar.png" value={w.newWebhook.avatar_url} onChange={handleAvatarChange} /></div>
+              <div className="form-actions"><button className="cancel-btn" onClick={handleCancelCreating}>İptal</button><button className="submit-btn" onClick={w.createWebhook}>Oluştur</button></div>
             </div>
           )}
 
@@ -39,7 +49,7 @@ const WebhooksPanel = ({ serverId, onClose }) => {
                       <div className="form-group"><label>Kanal</label><select defaultValue={wh.channel_id} id={`edit-channel-${wh.id}`}>{w.channels.map(ch => <option key={ch.id} value={ch.id}>{ch.name}</option>)}</select></div>
                       <div className="form-group"><label>Avatar URL</label><input type="text" defaultValue={wh.avatar_url || ''} id={`edit-avatar-${wh.id}`} /></div>
                       <div className="form-actions">
-                        <button className="cancel-btn" onClick={() => w.setEditingWebhook(null)}>İptal</button>
+                        <button className="cancel-btn" onClick={handleCancelEditing}>İptal</button>
                         <button className="submit-btn" onClick={() => w.updateWebhook(wh.id, { name: document.getElementById(`edit-name-${wh.id}`).value, channel_id: document.getElementById(`edit-channel-${wh.id}`).value, avatar_url: document.getElementById(`edit-avatar-${wh.id}`).value })}>Kaydet</button>
                       </div>
                     </div>
@@ -77,9 +87,9 @@ const WebhooksPanel = ({ serverId, onClose }) => {
           )}
 
           {w.viewingLogs && (
-            <div className="logs-modal" onClick={() => w.setViewingLogs(null)}>
-              <div className="logs-content" onClick={(e) => e.stopPropagation()}>
-                <div className="logs-header"><h3>{'📊'} Webhook Logları</h3><button className="close-btn" onClick={() => w.setViewingLogs(null)}>×</button></div>
+            <div className="logs-modal" onClick={handleCloseLogs}>
+              <div className="logs-content" onClick={handleStopPropagation}>
+                <div className="logs-header"><h3>{'📊'} Webhook Logları</h3><button className="close-btn" onClick={handleCloseLogs}>×</button></div>
                 <div className="logs-list">
                   {w.logs.length > 0 ? w.logs.map((log, i) => (
                     <div key={i} className={`log-item ${log.status}`}>
@@ -99,4 +109,4 @@ const WebhooksPanel = ({ serverId, onClose }) => {
   );
 };
 
-export default WebhooksPanel;
+export default memo(WebhooksPanel);

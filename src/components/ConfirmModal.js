@@ -1,9 +1,10 @@
 // components/ConfirmModal.js
 // 🎯 Modern Confirmation Dialog - alert() ve confirm() yerine kullanılır
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { FaExclamationTriangle, FaTimes, FaTrash, FaCheck } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const ConfirmModal = ({
     isOpen,
@@ -21,30 +22,21 @@ const ConfirmModal = ({
 }) => {
     const [inputValue, setInputValue] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
+    const safeClose = useCallback(() => { if (!isProcessing) onClose(); }, [isProcessing, onClose]);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose: safeClose, isOpen, label: 'Onay' });
 
     useEffect(() => {
         if (isOpen) {
             setInputValue('');
             setIsProcessing(false);
-            // Body scroll'u engelle
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
         }
-
-        // ESC tuşu ile kapat
-        const handleEsc = (e) => {
-            if (e.key === 'Escape' && !isProcessing) {
-                onClose();
-            }
-        };
-
-        document.addEventListener('keydown', handleEsc);
         return () => {
-            document.removeEventListener('keydown', handleEsc);
             document.body.style.overflow = 'auto';
         };
-    }, [isOpen, onClose, isProcessing]);
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
@@ -61,12 +53,6 @@ const ConfirmModal = ({
             console.error('Confirm action failed:', error);
         } finally {
             setIsProcessing(false);
-        }
-    };
-
-    const handleBackdropClick = (e) => {
-        if (e.target === e.currentTarget && !isProcessing) {
-            onClose();
         }
     };
 
@@ -93,8 +79,8 @@ const ConfirmModal = ({
     const canConfirm = !requireTextConfirmation || inputValue === confirmationText;
 
     const modalContent = (
-        <div style={styles.overlay} onClick={handleBackdropClick}>
-            <div style={styles.modal}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 {/* Header */}
                 <div style={{ ...styles.header, background: config.gradient }}>
                     <div style={styles.headerIcon}>{config.icon}</div>

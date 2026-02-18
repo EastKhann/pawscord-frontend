@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug }) => {
     const [question, setQuestion] = useState('');
@@ -9,6 +10,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
     const [expiresIn, setExpiresIn] = useState('3600'); // Default 1 hour
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: true, label: 'Create Poll' });
 
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];
@@ -76,11 +78,11 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
         <div style={{
             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
             backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000
-        }}>
+        }} {...overlayProps}>
             <div style={{
                 backgroundColor: '#36393f', padding: '20px', borderRadius: '8px', width: '400px', maxWidth: '90%',
                 color: 'white', display: 'flex', flexDirection: 'column', gap: '15px'
-            }}>
+            }} {...dialogProps}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h3 style={{ margin: 0 }}>Anket Oluştur</h3>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer' }}>

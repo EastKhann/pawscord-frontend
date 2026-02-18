@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FaServer, FaUserFriends, FaTimes } from '../utils/iconOptimization';
 import { styles } from '../SidebarStyles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Sunucu Ekle' });
     const [isCreatingServer, setIsCreatingServer] = useState(false);
     const [newServerName, setNewServerName] = useState('');
     const [isNewServerPublic, setIsNewServerPublic] = useState(false);
@@ -44,8 +46,8 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => 
 
     // Seçim menüsü
     return createPortal(
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={styles.selectionModalContent} onClick={e => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={styles.selectionModalContent} {...dialogProps}>
                 <h3 style={{ color: 'white', margin: 0 }}>Ne Yapmak İstersin?</h3>
                 <button style={{ ...styles.selectionButton, backgroundColor: '#5865f2' }} onClick={() => { setIsCreatingServer(true); }}><FaServer /> Sunucu Oluştur</button>
                 <button style={{ ...styles.selectionButton, backgroundColor: '#23a559' }} onClick={() => { onClose(); if (onFriendsClick) onFriendsClick(); }}><FaUserFriends /> Arkadaş Ekle</button>

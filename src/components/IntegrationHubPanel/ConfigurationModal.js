@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { FaCog, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Entegrasyon Ayarları' });
     const [config, setConfig] = useState({
         notifications_enabled: true,
         notification_channel: '',
@@ -32,8 +34,8 @@ const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) =
     };
 
     return (
-        <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
-            <div className="config-modal">
+        <div className="modal-overlay" {...overlayProps}>
+            <div className="config-modal" {...dialogProps}>
                 <h3><FaCog /> {integration.name} Ayarları</h3>
 
                 <div className="config-section">

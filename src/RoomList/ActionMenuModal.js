@@ -1,13 +1,15 @@
 import React from 'react';
 import { FaCog, FaEdit, FaTrash } from '../utils/iconOptimization';
 import { styles } from '../SidebarStyles';
+import useModalA11y from '../hooks/useModalA11y';
 
 const ActionMenuModal = ({ actionMenu, onClose, onRename, onDelete, onSettings }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!actionMenu, label: 'Kanal Menüsü' });
     if (!actionMenu) return null;
 
     return (
-        <div style={styles.modalOverlay} onClick={onClose}>
-            <div style={{ ...styles.selectionModalContent, width: '250px' }} onClick={e => e.stopPropagation()}>
+        <div style={styles.modalOverlay} {...overlayProps}>
+            <div style={{ ...styles.selectionModalContent, width: '250px' }} {...dialogProps}>
                 <h4 style={{ color: 'white', marginTop: 0, borderBottom: '1px solid #4f545c', paddingBottom: 10 }}>{actionMenu.name}</h4>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

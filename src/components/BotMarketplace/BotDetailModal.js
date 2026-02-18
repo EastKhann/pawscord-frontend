@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
 import toast from '../../utils/toast';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const BotDetailModal = ({ bot, onClose, onInstall }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!bot, label: 'Bot Detay' });
     const [activeTab, setActiveTab] = useState('overview');
     const [showServerSelect, setShowServerSelect] = useState(false);
     const [servers, setServers] = useState([]);
@@ -62,8 +64,8 @@ const BotDetailModal = ({ bot, onClose, onInstall }) => {
     if (!bot) return null;
 
     return (
-        <div className="bot-modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-            <div className="bot-modal">
+        <div className="bot-modal-overlay" {...overlayProps}>
+            <div className="bot-modal" {...dialogProps}>
                 {/* Header */}
                 <div className="bot-modal-header" style={{ backgroundImage: bot.banner ? `url(${bot.banner})` : undefined }}>
                     <button className="modal-close" onClick={onClose}>{'×'}</button>

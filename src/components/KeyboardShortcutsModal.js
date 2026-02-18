@@ -1,6 +1,7 @@
 // frontend/src/components/KeyboardShortcutsModal.js
 import React from 'react';
 import { FaTimes, FaKeyboard } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const KEYBOARD_SHORTCUTS = [
     {
@@ -36,6 +37,7 @@ const KEYBOARD_SHORTCUTS = [
 ];
 
 const KeyboardShortcutsModal = ({ isOpen, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Klavye Kısayolları' });
     if (typeof isOpen !== 'undefined' && !isOpen) return null;
 
     const renderKey = (key) => {
@@ -48,8 +50,8 @@ const KeyboardShortcutsModal = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <div style={styles.headerTitle}>
                         <FaKeyboard style={styles.headerIcon} />

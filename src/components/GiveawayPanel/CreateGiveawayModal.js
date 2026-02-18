@@ -1,11 +1,13 @@
 import { DURATION_OPTIONS } from './useGiveaways';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const CreateGiveawayModal = ({ newGiveaway, setNewGiveaway, channels, roles, onCreate, onClose }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Çekiliş Oluştur' });
     const update = (field, value) => setNewGiveaway({ ...newGiveaway, [field]: value });
 
     return (
-        <div className="create-modal-overlay" onClick={onClose}>
-            <div className="create-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="create-modal-overlay" {...overlayProps}>
+            <div className="create-modal" {...dialogProps}>
                 <div className="modal-header">
                     <h3>Yeni {'Ç'}ekili{'ş'} Olu{'ş'}tur</h3>
                     <button className="close-btn" onClick={onClose}>{'×'}</button>

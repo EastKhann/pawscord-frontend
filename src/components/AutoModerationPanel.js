@@ -1,13 +1,13 @@
 // frontend/src/components/AutoModerationPanel.js
-import { useState, useEffect } from 'react';
-import { 
+import { useState, useEffect, useCallback, memo } from 'react';
+import {
     FaShieldAlt, FaBan, FaExclamationTriangle, FaRobot,
     FaPlus, FaEdit, FaTrash, FaToggleOn, FaToggleOff
 } from 'react-icons/fa';
 import toast from '../utils/toast';
 import './AutoModerationPanel.css';
 
-const AutoModerationPanel = ({ serverId, onClose }) => {
+const AutoModerationPanel = memo(({ serverId, onClose }) => {
     const [rules, setRules] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateRule, setShowCreateRule] = useState(false);
@@ -34,7 +34,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
                 setRules(data.rules || []);
@@ -134,24 +134,21 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
         });
     };
 
-    const addKeyword = (keyword) => {
-        if (keyword.trim() && !newRule.keywords.includes(keyword.trim())) {
-            setNewRule({
-                ...newRule,
-                keywords: [...newRule.keywords, keyword.trim()]
+    const addKeyword = useCallback((keyword) => {
+        if (keyword.trim()) {
+            setNewRule(prev => {
+                if (prev.keywords.includes(keyword.trim())) return prev;
+                return { ...prev, keywords: [...prev.keywords, keyword.trim()] };
             });
         }
-    };
+    }, []);
 
-    const removeKeyword = (keyword) => {
-        setNewRule({
-            ...newRule,
-            keywords: newRule.keywords.filter(k => k !== keyword)
-        });
-    };
+    const removeKeyword = useCallback((keyword) => {
+        setNewRule(prev => ({ ...prev, keywords: prev.keywords.filter(k => k !== keyword) }));
+    }, []);
 
     const getRuleIcon = (type) => {
-        switch(type) {
+        switch (type) {
             case 'spam': return <FaBan />;
             case 'profanity': return <FaExclamationTriangle />;
             case 'caps': return '🔤';
@@ -162,7 +159,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
     };
 
     const getActionColor = (action) => {
-        switch(action) {
+        switch (action) {
             case 'warn': return '#faa61a';
             case 'mute': return '#ff9500';
             case 'kick': return '#ff3b30';
@@ -171,9 +168,21 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
         }
     };
 
+    const handleStopPropagation = useCallback(e => e.stopPropagation(), []);
+    const handleShowCreateRule = useCallback(() => setShowCreateRule(true), []);
+    const handleHideCreateRule = useCallback(() => setShowCreateRule(false), []);
+    const handleNameChange = useCallback(e => setNewRule(prev => ({ ...prev, name: e.target.value })), []);
+    const handleTypeChange = useCallback(e => setNewRule(prev => ({ ...prev, type: e.target.value })), []);
+    const handleActionChange = useCallback(e => setNewRule(prev => ({ ...prev, action: e.target.value })), []);
+    const handleThresholdChange = useCallback(e => setNewRule(prev => ({ ...prev, threshold: parseInt(e.target.value) })), []);
+    const handleDurationChange = useCallback(e => setNewRule(prev => ({ ...prev, duration: parseInt(e.target.value) })), []);
+    const handleKeywordKeyPress = useCallback(e => {
+        if (e.key === 'Enter') { addKeyword(e.target.value); e.target.value = ''; }
+    }, [addKeyword]);
+
     return (
         <div className="auto-mod-panel-overlay" onClick={onClose}>
-            <div className="auto-mod-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="auto-mod-panel" onClick={handleStopPropagation}>
                 <div className="panel-header">
                     <FaRobot className="header-icon" />
                     <h2>Otomatik Moderasyon</h2>
@@ -181,7 +190,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                 </div>
 
                 <div className="panel-actions">
-                    <button className="btn-create" onClick={() => setShowCreateRule(true)}>
+                    <button className="btn-create" onClick={handleShowCreateRule}>
                         <FaPlus /> Yeni Kural
                     </button>
                 </div>
@@ -209,21 +218,21 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                             <span className="rule-type">{rule.type}</span>
                                         </div>
                                         <div className="rule-actions">
-                                            <button 
+                                            <button
                                                 className="action-btn toggle"
                                                 onClick={() => toggleRule(rule.id, !rule.enabled)}
                                                 title={rule.enabled ? 'Devre Dışı Bırak' : 'Etkinleştir'}
                                             >
                                                 {rule.enabled ? <FaToggleOn /> : <FaToggleOff />}
                                             </button>
-                                            <button 
+                                            <button
                                                 className="action-btn edit"
                                                 onClick={() => setEditingRule(rule)}
                                                 title="Düzenle"
                                             >
                                                 <FaEdit />
                                             </button>
-                                            <button 
+                                            <button
                                                 className="action-btn delete"
                                                 onClick={() => deleteRule(rule.id)}
                                                 title="Sil"
@@ -235,7 +244,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                     <div className="rule-details">
                                         <div className="detail-item">
                                             <span className="label">Aksiyon:</span>
-                                            <span 
+                                            <span
                                                 className="value action-badge"
                                                 style={{ backgroundColor: getActionColor(rule.action) }}
                                             >
@@ -269,13 +278,13 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                     <div className="rule-editor-modal">
                         <div className="rule-editor">
                             <h3>Yeni Kural Oluştur</h3>
-                            
+
                             <div className="form-group">
                                 <label>Kural Adı</label>
                                 <input
                                     type="text"
                                     value={newRule.name}
-                                    onChange={(e) => setNewRule({...newRule, name: e.target.value})}
+                                    onChange={handleNameChange}
                                     placeholder="Örn: Spam Engelleme"
                                 />
                             </div>
@@ -285,7 +294,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                     <label>Kural Tipi</label>
                                     <select
                                         value={newRule.type}
-                                        onChange={(e) => setNewRule({...newRule, type: e.target.value})}
+                                        onChange={handleTypeChange}
                                     >
                                         <option value="spam">Spam</option>
                                         <option value="profanity">Küfür</option>
@@ -299,7 +308,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                     <label>Aksiyon</label>
                                     <select
                                         value={newRule.action}
-                                        onChange={(e) => setNewRule({...newRule, action: e.target.value})}
+                                        onChange={handleActionChange}
                                     >
                                         <option value="warn">Uyar</option>
                                         <option value="mute">Sustur</option>
@@ -314,12 +323,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                 <input
                                     type="text"
                                     placeholder="Kelime girin ve Enter'a basın"
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
-                                            addKeyword(e.target.value);
-                                            e.target.value = '';
-                                        }
-                                    }}
+                                    onKeyPress={handleKeywordKeyPress}
                                 />
                                 <div className="keywords-list">
                                     {newRule.keywords.map((kw, i) => (
@@ -337,7 +341,7 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                     <input
                                         type="number"
                                         value={newRule.threshold}
-                                        onChange={(e) => setNewRule({...newRule, threshold: parseInt(e.target.value)})}
+                                        onChange={handleThresholdChange}
                                         min="1"
                                     />
                                 </div>
@@ -347,14 +351,14 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
                                     <input
                                         type="number"
                                         value={newRule.duration}
-                                        onChange={(e) => setNewRule({...newRule, duration: parseInt(e.target.value)})}
+                                        onChange={handleDurationChange}
                                         min="1"
                                     />
                                 </div>
                             </div>
 
                             <div className="modal-actions">
-                                <button className="btn-cancel" onClick={() => setShowCreateRule(false)}>
+                                <button className="btn-cancel" onClick={handleHideCreateRule}>
                                     İptal
                                 </button>
                                 <button className="btn-save" onClick={createRule}>
@@ -367,6 +371,6 @@ const AutoModerationPanel = ({ serverId, onClose }) => {
             </div>
         </div>
     );
-};
+});
 
 export default AutoModerationPanel;

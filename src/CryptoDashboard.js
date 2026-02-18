@@ -1,6 +1,7 @@
 // frontend/src/CryptoDashboard.js
 // v3.0 — Balance/Winrate Mode + 5 Tab — Decomposed Orchestrator
 
+import { useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft, FaBitcoin, FaSync, FaWallet, FaExchangeAlt, FaTimes, FaBug, FaChartLine, FaTrophy, FaFilter } from 'react-icons/fa';
 import useCryptoData from './CryptoDashboard/hooks/useCryptoData';
@@ -11,6 +12,16 @@ import styles from './CryptoDashboard/styles';
 
 const CryptoDashboard = () => {
     const api = useCryptoData();
+
+    const handleShowPortfolio = useCallback(() => api.setShowPortfolio(true), [api.setShowPortfolio]);
+    const handleClosePortfolio = useCallback(() => api.setShowPortfolio(false), [api.setShowPortfolio]);
+    const handleSearchChange = useCallback((e) => api.setSearchQuery(e.target.value), [api.setSearchQuery]);
+    const handleClearSearch = useCallback(() => api.setSearchQuery(''), [api.setSearchQuery]);
+    const handleBalanceMode = useCallback(() => api.setActiveMode('balance_mode'), [api.setActiveMode]);
+    const handleWinrateMode = useCallback(() => api.setActiveMode('winrate_mode'), [api.setActiveMode]);
+    const handlePrevPage = useCallback(() => api.setPage(p => Math.max(1, p - 1)), [api.setPage]);
+    const handleNextPage = useCallback(() => api.setPage(p => Math.min(api.totalPages, p + 1)), [api.setPage, api.totalPages]);
+    const handleCloseTradeModal = useCallback(() => api.setTradeData(null), [api.setTradeData]);
 
     const SortHeader = ({ field, children, style: extraStyle }) => (
         <th onClick={() => api.handleSort(field)} style={{
@@ -36,7 +47,7 @@ const CryptoDashboard = () => {
                     </h1>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                    <button onClick={() => api.setShowPortfolio(true)} style={styles.portfolioBtn}>
+                    <button onClick={handleShowPortfolio} style={styles.portfolioBtn}>
                         <FaWallet /> Cüzdan (${formatPrice(api.portfolio?.balance || '0')})
                     </button>
                     <button onClick={api.fetchData} style={styles.refreshButton}>
@@ -78,7 +89,7 @@ const CryptoDashboard = () => {
                     {/* MODE TOGGLE */}
                     <div style={styles.modeToggleContainer}>
                         <button
-                            onClick={() => api.setActiveMode('balance_mode')}
+                            onClick={handleBalanceMode}
                             style={{
                                 ...styles.modeToggleBtn,
                                 ...(api.activeMode === 'balance_mode' ? styles.modeToggleActive : {}),
@@ -89,7 +100,7 @@ const CryptoDashboard = () => {
                             {api.isMobile ? 'Balance' : '💰 Balance Sıralama'}
                         </button>
                         <button
-                            onClick={() => api.setActiveMode('winrate_mode')}
+                            onClick={handleWinrateMode}
                             style={{
                                 ...styles.modeToggleBtn,
                                 ...(api.activeMode === 'winrate_mode' ? styles.modeToggleActive : {}),
@@ -138,12 +149,12 @@ const CryptoDashboard = () => {
                             <input
                                 type="text"
                                 value={api.searchQuery}
-                                onChange={e => api.setSearchQuery(e.target.value)}
+                                onChange={handleSearchChange}
                                 placeholder="Coin ara... (BTC, ETH, SOL)"
                                 style={styles.searchInput}
                             />
                             {api.searchQuery && (
-                                <button onClick={() => api.setSearchQuery('')} style={styles.clearSearchBtn}><FaTimes /></button>
+                                <button onClick={handleClearSearch} style={styles.clearSearchBtn}><FaTimes /></button>
                             )}
                         </div>
                         <div style={styles.resultInfo}>
@@ -275,7 +286,7 @@ const CryptoDashboard = () => {
                     {api.totalPages > 1 && (
                         <div style={styles.pagination}>
                             <button
-                                onClick={() => api.setPage(p => Math.max(1, p - 1))}
+                                onClick={handlePrevPage}
                                 disabled={api.page === 1}
                                 style={{ ...styles.pageBtn, opacity: api.page === 1 ? 0.4 : 1 }}
                             >
@@ -303,7 +314,7 @@ const CryptoDashboard = () => {
                                 })}
                             </div>
                             <button
-                                onClick={() => api.setPage(p => Math.min(api.totalPages, p + 1))}
+                                onClick={handleNextPage}
                                 disabled={api.page === api.totalPages}
                                 style={{ ...styles.pageBtn, opacity: api.page === api.totalPages ? 0.4 : 1 }}
                             >
@@ -316,14 +327,14 @@ const CryptoDashboard = () => {
             )}
 
             {/* MODALS */}
-            {api.showPortfolio && <PortfolioModal portfolio={api.portfolio} onClose={() => api.setShowPortfolio(false)} />}
+            {api.showPortfolio && <PortfolioModal portfolio={api.portfolio} onClose={handleClosePortfolio} />}
             {api.tradeData && (
                 <TradeModal
                     coin={api.tradeData.coin}
                     initialPrice={api.tradeData.price}
                     livePrices={api.prices}
                     portfolio={api.portfolio}
-                    onClose={() => api.setTradeData(null)}
+                    onClose={handleCloseTradeModal}
                     onTrade={api.handleTrade}
                 />
             )}
@@ -331,4 +342,4 @@ const CryptoDashboard = () => {
     );
 };
 
-export default CryptoDashboard;
+export default memo(CryptoDashboard);

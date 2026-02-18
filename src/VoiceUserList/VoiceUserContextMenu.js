@@ -1,5 +1,5 @@
 // frontend/src/VoiceUserList/VoiceUserContextMenu.js
-import React from 'react';
+import React, { useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './styles';
 
@@ -20,6 +20,21 @@ const VoiceUserContextMenu = ({
 
     const volumeVal = remoteVolumes[userObj.username] || 100;
 
+    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+    const handleAvatarError = useCallback((e) => { e.target.onerror = null; e.target.src = getAvatar(userObj.username); }, [getAvatar, userObj.username]);
+    const handleVolumeSliderChange = useCallback((e) => handleVolumeChange(userObj.username, e), [handleVolumeChange, userObj.username]);
+    const handleProfileClick = useCallback(() => handleMenuAction('profile'), [handleMenuAction]);
+    const handleProfileKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('profile'), [handleMenuAction]);
+    const handleDmClick = useCallback(() => handleMenuAction('dm'), [handleMenuAction]);
+    const handleDmKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('dm'), [handleMenuAction]);
+    const handleAddFriendClick = useCallback(() => handleMenuAction('add_friend'), [handleMenuAction]);
+    const handleAddFriendKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('add_friend'), [handleMenuAction]);
+    const handleToggleMoveMenu = useCallback(() => setShowMoveMenu(prev => !prev), [setShowMoveMenu]);
+    const handleKickClick = useCallback(() => handleMenuAction('kick'), [handleMenuAction]);
+    const handleServerMuteClick = useCallback(() => handleMenuAction('server_mute'), [handleMenuAction]);
+    const handleServerDeafenClick = useCallback(() => handleMenuAction('server_deafen'), [handleMenuAction]);
+    const handleMuteLocalClick = useCallback(() => handleMenuAction('mute_local'), [handleMenuAction]);
+
     return ReactDOM.createPortal(
         <div
             style={{
@@ -29,13 +44,13 @@ const VoiceUserContextMenu = ({
                 position: 'fixed',
                 zIndex: 2147483647
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleStopPropagation}
         >
             {/* Header */}
             <div style={styles.menuHeader}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <img src={avatarUrl} alt={userObj.username}
-                        onError={(e) => { e.target.onerror = null; e.target.src = getAvatar(userObj.username); }}
+                        onError={handleAvatarError}
                         style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #5865f2', flexShrink: 0 }} />
                     <div>
                         <div style={{ fontWeight: '600', fontSize: '14px', color: '#fff' }}>{userObj.username}</div>
@@ -67,7 +82,7 @@ const VoiceUserContextMenu = ({
                     </div>
                     <div style={{ position: 'relative', height: '20px', display: 'flex', alignItems: 'center' }}>
                         <input type="range" min="0" max="200" value={volumeVal}
-                            onChange={(e) => handleVolumeChange(userObj.username, e)}
+                            onChange={handleVolumeSliderChange}
                             aria-label={`${userObj.username} ses seviyesi`}
                             className="voice-volume-slider"
                             style={{ width: '100%', height: '6px', cursor: 'pointer', WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none', background: 'transparent', outline: 'none', position: 'relative', zIndex: 2 }} />
@@ -81,15 +96,15 @@ const VoiceUserContextMenu = ({
 
             {/* Actions */}
             <div style={styles.menuSection} role="menu">
-                <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={() => handleMenuAction('profile')} onKeyDown={e => e.key === 'Enter' && handleMenuAction('profile')}>
+                <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={handleProfileClick} onKeyDown={handleProfileKeyDown}>
                     <span style={{ marginRight: '8px', opacity: 0.7 }}>{'👤'}</span> Profili G{'ö'}r{'ü'}nt{'ü'}le
                 </div>
-                <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={() => handleMenuAction('dm')} onKeyDown={e => e.key === 'Enter' && handleMenuAction('dm')}>
+                <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={handleDmClick} onKeyDown={handleDmKeyDown}>
                     <span style={{ marginRight: '8px', opacity: 0.7 }}>{'💬'}</span> {'Ö'}zelden Mesaj At
                 </div>
                 {userObj.username !== currentUsername &&
                     !friendsList.some(f => f.sender_username === userObj.username || f.receiver_username === userObj.username) && (
-                        <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={() => handleMenuAction('add_friend')} onKeyDown={e => e.key === 'Enter' && handleMenuAction('add_friend')}>
+                        <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={handleAddFriendClick} onKeyDown={handleAddFriendKeyDown}>
                             <span style={{ marginRight: '8px', opacity: 0.7 }}>{'➕'}</span> Arkada{'ş'} Ekle
                         </div>
                     )}
@@ -103,7 +118,7 @@ const VoiceUserContextMenu = ({
                         <div style={{ fontSize: '10px', color: '#72767d', padding: '6px 12px 4px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             Mod Ara{'ç'}lar{'ı'}
                         </div>
-                        <div className="user-context-menu-item" style={styles.menuItem} onClick={() => setShowMoveMenu(!showMoveMenu)}>
+                        <div className="user-context-menu-item" style={styles.menuItem} onClick={handleToggleMoveMenu}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                                 <span><span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔀'}</span>Ba{'ş'}ka Kanala Ta{'şı'}</span>
                                 <span style={{ fontSize: '10px', transform: showMoveMenu ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s', color: '#72767d' }}>{'›'}</span>
@@ -126,13 +141,13 @@ const VoiceUserContextMenu = ({
                             </div>
                         )}
 
-                        <div className="user-context-menu-item-danger" style={{ ...styles.menuItem, color: '#ed4245' }} onClick={() => handleMenuAction('kick')}>
+                        <div className="user-context-menu-item-danger" style={{ ...styles.menuItem, color: '#ed4245' }} onClick={handleKickClick}>
                             <span style={{ marginRight: '8px' }}>{'❌'}</span> Kanaldan At
                         </div>
-                        <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('server_mute')}>
+                        <div className="user-context-menu-item" style={styles.menuItem} onClick={handleServerMuteClick}>
                             <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔇'}</span> Sunucu Sustur
                         </div>
-                        <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('server_deafen')}>
+                        <div className="user-context-menu-item" style={styles.menuItem} onClick={handleServerDeafenClick}>
                             <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🙉'}</span> Sunucu Sa{'ğı'}rla{'ş'}t{'ı'}r
                         </div>
                     </div>
@@ -143,7 +158,7 @@ const VoiceUserContextMenu = ({
             {userObj.username !== currentUsername && (
                 <>
                     <div style={styles.menuDivider} />
-                    <div className="user-context-menu-item" style={styles.menuItem} onClick={() => handleMenuAction('mute_local')}>
+                    <div className="user-context-menu-item" style={styles.menuItem} onClick={handleMuteLocalClick}>
                         <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔇'}</span> Benim {'İç'}in Sessize Al
                     </div>
                 </>

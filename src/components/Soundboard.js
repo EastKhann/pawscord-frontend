@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import './Soundboard.css';
 import confirmDialog from '../utils/confirmDialog';
 
@@ -12,6 +12,14 @@ const Soundboard = ({ serverId, onClose }) => {
   const [volume, setVolume] = useState(0.7);
   const [searchQuery, setSearchQuery] = useState('');
   const audioRef = useRef(null);
+
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleSearchChange = useCallback((e) => setSearchQuery(e.target.value), []);
+  const handleVolumeChange = useCallback((e) => setVolume(parseFloat(e.target.value)), []);
+  const handleShowUpload = useCallback(() => setShowUploadModal(true), []);
+  const handleHideUpload = useCallback(() => setShowUploadModal(false), []);
+  const handleSoundNameChange = useCallback((e) => setSoundName(e.target.value), []);
+  const handleFileAreaClick = useCallback(() => document.getElementById('sound-file').click(), []);
 
   useEffect(() => {
     fetchSounds();
@@ -140,7 +148,7 @@ const Soundboard = ({ serverId, onClose }) => {
 
   return (
     <div className="soundboard-overlay" onClick={onClose}>
-      <div className="soundboard-modal" onClick={e => e.stopPropagation()}>
+      <div className="soundboard-modal" onClick={handleStopPropagation}>
         <div className="soundboard-header">
           <h2>🔊 Soundboard</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
@@ -155,7 +163,7 @@ const Soundboard = ({ serverId, onClose }) => {
                 type="text"
                 placeholder="Search sounds..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
                 className="search-input"
               />
             </div>
@@ -168,13 +176,13 @@ const Soundboard = ({ serverId, onClose }) => {
                 max="1"
                 step="0.1"
                 value={volume}
-                onChange={(e) => setVolume(parseFloat(e.target.value))}
+                onChange={handleVolumeChange}
                 className="volume-slider"
               />
               <span className="volume-value">{Math.round(volume * 100)}%</span>
             </div>
 
-            <button className="upload-sound-btn" onClick={() => setShowUploadModal(true)}>
+            <button className="upload-sound-btn" onClick={handleShowUpload}>
               ➕ Upload
             </button>
           </div>
@@ -223,8 +231,8 @@ const Soundboard = ({ serverId, onClose }) => {
 
         {/* Upload Modal */}
         {showUploadModal && (
-          <div className="upload-modal-overlay" onClick={() => setShowUploadModal(false)}>
-            <div className="upload-modal" onClick={e => e.stopPropagation()}>
+          <div className="upload-modal-overlay" onClick={handleHideUpload}>
+            <div className="upload-modal" onClick={handleStopPropagation}>
               <h3>➕ Upload Sound</h3>
 
               <div className="form-group">
@@ -232,7 +240,7 @@ const Soundboard = ({ serverId, onClose }) => {
                 <input
                   type="text"
                   value={soundName}
-                  onChange={(e) => setSoundName(e.target.value)}
+                  onChange={handleSoundNameChange}
                   placeholder="Airhorn"
                   maxLength={32}
                   className="sound-name-input"
@@ -241,7 +249,7 @@ const Soundboard = ({ serverId, onClose }) => {
 
               <div className="form-group">
                 <label>Audio File</label>
-                <div className="file-upload-area" onClick={() => document.getElementById('sound-file').click()}>
+                <div className="file-upload-area" onClick={handleFileAreaClick}>
                   {soundFile ? (
                     <div className="file-selected">
                       <div className="file-icon">🎵</div>
@@ -266,7 +274,7 @@ const Soundboard = ({ serverId, onClose }) => {
               </div>
 
               <div className="modal-actions">
-                <button className="cancel-btn" onClick={() => setShowUploadModal(false)}>
+                <button className="cancel-btn" onClick={handleHideUpload}>
                   Cancel
                 </button>
                 <button
@@ -285,4 +293,4 @@ const Soundboard = ({ serverId, onClose }) => {
   );
 };
 
-export default Soundboard;
+export default memo(Soundboard);

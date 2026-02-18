@@ -1,9 +1,41 @@
+import { useCallback, memo } from 'react';
 import { FaShieldAlt, FaUsers, FaExclamationTriangle, FaBan, FaRobot, FaCog, FaGavel, FaFileAlt, FaHistory, FaClock, FaUserSlash, FaTrash, FaBell, FaLock } from 'react-icons/fa';
 import confirmDialog from '../../utils/confirmDialog';
 import toast from '../../utils/toast';
 import styles from './styles';
 
-const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClose }) => {
+const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClose }) => {
+    const handleAutoModeration = useCallback(() => { onClose(); window.showAutoModeration?.(); }, [onClose]);
+    const handleRaidProtection = useCallback(() => { onClose(); window.showRaidProtection?.(); }, [onClose]);
+    const handleUserWarnings = useCallback(() => { onClose(); window.showUserWarnings?.(); }, [onClose]);
+    const handleReportSystem = useCallback(() => { onClose(); window.showReportSystem?.(); }, [onClose]);
+    const handleAuditLog = useCallback(() => { onClose(); window.showAuditLog?.(); }, [onClose]);
+    const handleSlowMode = useCallback(() => { onClose(); window.showSlowMode?.(); }, [onClose]);
+    const handleLockdown = useCallback(async () => {
+        if (!await confirmDialog('Sunucuyu kilitlemek istediğinize emin misiniz? Sadece yöneticiler mesaj yazabilir.')) return;
+        try {
+            await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ metadata: { ...server.metadata, lockdown: true } })
+            });
+            toast.success('🔒 Sunucu lockdown moduna alındı!');
+        } catch (e) { toast.error('İşlem başarısız'); }
+    }, [fetchWithAuth, apiBaseUrl, server]);
+    const handleClearMessages = useCallback(() => toast.info('🚧 Bu özellik yakında eklenecek'), []);
+    const handleDisableJoin = useCallback(async () => {
+        if (!await confirmDialog('Yeni üyelikleri durdurmak istediğinize emin misiniz?')) return;
+        try {
+            await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ metadata: { ...server.metadata, join_disabled: true } })
+            });
+            toast.success('🚫 Yeni üyelikler durduruldu!');
+        } catch (e) { toast.error('İşlem başarısız'); }
+    }, [fetchWithAuth, apiBaseUrl, server]);
+    const handleAnnouncement = useCallback(() => toast.info('🚧 Bu özellik yakında eklenecek'), []);
+
     return (
         <div style={styles.moderationTab}>
             {/* HEADER */}
@@ -73,7 +105,7 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                         <span style={styles.modCardFeature}>🔗 Link Koruması</span>
                         <span style={styles.modCardFeature}>💬 Toxic Algılama</span>
                     </div>
-                    <button style={styles.modCardBtn} onClick={() => { onClose(); window.showAutoModeration?.(); }}>
+                    <button style={styles.modCardBtn} onClick={handleAutoModeration}>
                         <FaCog /> Ayarları Yapılandır
                     </button>
                 </div>
@@ -95,7 +127,7 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                         <span style={styles.modCardFeature}>⏱️ Join Limiti</span>
                         <span style={styles.modCardFeature}>🛡️ Anti-Bot</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#ed4245' }} onClick={() => { onClose(); window.showRaidProtection?.(); }}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#ed4245' }} onClick={handleRaidProtection}>
                         <FaShieldAlt /> Korumayı Yönet
                     </button>
                 </div>
@@ -116,7 +148,7 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                         <span style={styles.modCardFeature}>🔇 Otomatik Mute</span>
                         <span style={styles.modCardFeature}>📝 Uyarı Geçmişi</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#faa61a' }} onClick={() => { onClose(); window.showUserWarnings?.(); }}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#faa61a' }} onClick={handleUserWarnings}>
                         <FaGavel /> Uyarıları Yönet
                     </button>
                 </div>
@@ -137,7 +169,7 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                         <span style={styles.modCardFeature}>✅ Çözüm Takibi</span>
                         <span style={styles.modCardFeature}>📊 İstatistikler</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#43b581' }} onClick={() => { onClose(); window.showReportSystem?.(); }}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#43b581' }} onClick={handleReportSystem}>
                         <FaFileAlt /> Raporları Görüntüle
                     </button>
                 </div>
@@ -158,7 +190,7 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                         <span style={styles.modCardFeature}>🔍 Filtreleme</span>
                         <span style={styles.modCardFeature}>📥 Dışa Aktar</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#7289da' }} onClick={() => { onClose(); window.showAuditLog?.(); }}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#7289da' }} onClick={handleAuditLog}>
                         <FaHistory /> Logları Görüntüle
                     </button>
                 </div>
@@ -179,7 +211,7 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                         <span style={styles.modCardFeature}>🔇 Timeout</span>
                         <span style={styles.modCardFeature}>⏰ Süre Yönetimi</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#99aab5' }} onClick={() => { onClose(); window.showSlowMode?.(); }}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#99aab5' }} onClick={handleSlowMode}>
                         <FaClock /> Ayarları Yapılandır
                     </button>
                 </div>
@@ -191,48 +223,23 @@ const ModerationTab = ({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClo
                     <FaGavel /> Hızlı Aksiyonlar
                 </h4>
                 <div style={styles.quickActionsGrid}>
-                    <button
-                        style={styles.quickActionBtn}
-                        onClick={async () => {
-                            if (!await confirmDialog('Sunucuyu kilitlemek istediğinize emin misiniz? Sadece yöneticiler mesaj yazabilir.')) return;
-                            try {
-                                await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ metadata: { ...server.metadata, lockdown: true } })
-                                });
-                                toast.success('🔒 Sunucu lockdown moduna alındı!');
-                            } catch (e) { toast.error('İşlem başarısız'); }
-                        }}
-                    >
+                    <button style={styles.quickActionBtn} onClick={handleLockdown}>
                         <FaLock /> Sunucuyu Kilitle
                     </button>
-                    <button style={styles.quickActionBtn} onClick={() => toast.info('🚧 Bu özellik yakında eklenecek')}>
+                    <button style={styles.quickActionBtn} onClick={handleClearMessages}>
                         <FaTrash /> Tüm Mesajları Temizle
                     </button>
-                    <button
-                        style={styles.quickActionBtn}
-                        onClick={async () => {
-                            if (!await confirmDialog('Yeni üyelikleri durdurmak istediğinize emin misiniz?')) return;
-                            try {
-                                await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
-                                    method: 'PATCH',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ metadata: { ...server.metadata, join_disabled: true } })
-                                });
-                                toast.success('🚫 Yeni üyelikler durduruldu!');
-                            } catch (e) { toast.error('İşlem başarısız'); }
-                        }}
-                    >
+                    <button style={styles.quickActionBtn} onClick={handleDisableJoin}>
                         <FaUserSlash /> Yeni Üyeliği Durdur
                     </button>
-                    <button style={styles.quickActionBtn} onClick={() => toast.info('🚧 Bu özellik yakında eklenecek')}>
+                    <button style={styles.quickActionBtn} onClick={handleAnnouncement}>
                         <FaBell /> Duyuru Gönder
                     </button>
                 </div>
             </div>
         </div>
     );
-};
+});
 
+ModerationTab.displayName = 'ModerationTab';
 export default ModerationTab;

@@ -2,8 +2,10 @@
 import { useState } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaClock } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const ScheduledMessageModal = ({ room, conversation, onClose, fetchWithAuth, apiBaseUrl }) => {
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Zamanlanmış Mesaj' });
     const [message, setMessage] = useState('');
     const [scheduledTime, setScheduledTime] = useState('');
     const [loading, setLoading] = useState(false);
@@ -53,8 +55,8 @@ const ScheduledMessageModal = ({ room, conversation, onClose, fetchWithAuth, api
     };
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3 style={styles.title}>
                         <FaClock /> Mesaj Planla

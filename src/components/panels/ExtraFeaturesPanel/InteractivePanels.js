@@ -1,6 +1,6 @@
 // ExtraFeaturesPanel/InteractivePanels.js
 // Panels 26-30: MemberLevels, WelcomeMessages, PrivacySettings, UserConnections, ActivityStatus
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { useAuth } from '../../../AuthContext';
 import toast from '../../../utils/toast';
 import { getApiBase } from '../../../utils/apiEndpoints';
@@ -8,7 +8,7 @@ import { getApiBase } from '../../../utils/apiEndpoints';
 const API_URL = getApiBase();
 
 // 26 MEMBER LEVELS
-export const MemberLevelsPanel = ({ serverId, onClose }) => {
+export const MemberLevelsPanel = memo(({ serverId, onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [leaderboard, setLeaderboard] = useState([]);
 
@@ -37,10 +37,12 @@ export const MemberLevelsPanel = ({ serverId, onClose }) => {
             </div>
         </div>
     );
-};
+});
+
+MemberLevelsPanel.displayName = 'MemberLevelsPanel';
 
 // 27 WELCOME MESSAGES
-export const WelcomeMessagesPanel = ({ serverId, onClose }) => {
+export const WelcomeMessagesPanel = memo(({ serverId, onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [config, setConfig] = useState({ enabled: false, message: 'Hoş geldin {user}! 🎉', dm_enabled: false, dm_message: '' });
 
@@ -58,29 +60,35 @@ export const WelcomeMessagesPanel = ({ serverId, onClose }) => {
         } catch (e) { toast.error('Hata oluştu'); }
     };
 
+    const handleEnabledChange = useCallback((e) => setConfig(prev => ({ ...prev, enabled: e.target.checked })), []);
+    const handleMessageChange = useCallback((e) => setConfig(prev => ({ ...prev, message: e.target.value })), []);
+    const handleDmEnabledChange = useCallback((e) => setConfig(prev => ({ ...prev, dm_enabled: e.target.checked })), []);
+
     return (
         <div className="feature-panel welcome-messages">
             <div className="panel-header"><h3>{'👋'} Hoşgeldin Mesajları</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="setting-row">
-                    <label><input type="checkbox" checked={config.enabled} onChange={(e) => setConfig({ ...config, enabled: e.target.checked })} /> Hoşgeldin mesajı aktif</label>
+                    <label><input type="checkbox" checked={config.enabled} onChange={handleEnabledChange} /> Hoşgeldin mesajı aktif</label>
                 </div>
                 <div className="setting-row">
                     <label>Mesaj:</label>
-                    <textarea value={config.message} onChange={(e) => setConfig({ ...config, message: e.target.value })} placeholder="Hoş geldin {user}!" />
+                    <textarea value={config.message} onChange={handleMessageChange} placeholder="Hoş geldin {user}!" />
                     <small>Kullanıcı adı için {'{user}'} yazın</small>
                 </div>
                 <div className="setting-row">
-                    <label><input type="checkbox" checked={config.dm_enabled} onChange={(e) => setConfig({ ...config, dm_enabled: e.target.checked })} /> DM ile de gönder</label>
+                    <label><input type="checkbox" checked={config.dm_enabled} onChange={handleDmEnabledChange} /> DM ile de gönder</label>
                 </div>
                 <button onClick={saveConfig} className="save-btn">Kaydet</button>
             </div>
         </div>
     );
-};
+});
+
+WelcomeMessagesPanel.displayName = 'WelcomeMessagesPanel';
 
 // 28 PRIVACY SETTINGS
-export const PrivacySettingsPanel = ({ onClose }) => {
+export const PrivacySettingsPanel = memo(({ onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [settings, setSettings] = useState({ show_online_status: true, allow_dms_from_strangers: true, show_current_activity: true, allow_friend_requests: true, show_servers: false, read_receipts: true });
 
@@ -98,7 +106,7 @@ export const PrivacySettingsPanel = ({ onClose }) => {
         } catch (e) { toast.error('Hata oluştu'); }
     };
 
-    const toggleSetting = (key) => { setSettings(prev => ({ ...prev, [key]: !prev[key] })); };
+    const toggleSetting = useCallback((key) => { setSettings(prev => ({ ...prev, [key]: !prev[key] })); }, []);
 
     return (
         <div className="feature-panel privacy-settings">
@@ -114,10 +122,12 @@ export const PrivacySettingsPanel = ({ onClose }) => {
             </div>
         </div>
     );
-};
+});
+
+PrivacySettingsPanel.displayName = 'PrivacySettingsPanel';
 
 // 29 USER CONNECTIONS
-export const UserConnectionsPanel = ({ onClose }) => {
+export const UserConnectionsPanel = memo(({ onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [connections, setConnections] = useState([]);
     const [platforms, setPlatforms] = useState({});
@@ -129,21 +139,21 @@ export const UserConnectionsPanel = ({ onClose }) => {
         catch (e) { console.error('Connections error:', e); }
     };
 
-    const connectPlatform = async (platform) => {
+    const connectPlatform = useCallback(async (platform) => {
         const username = prompt(`${platforms[platform]?.name} kullanıcı adınızı girin:`);
         if (!username) return;
         try {
             await fetchWithAuth(`${API_URL}/features/user-connections/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ platform, username }) });
             fetchConnections(); toast.success('Bağlantı eklendi!');
         } catch (e) { toast.error('Hata oluştu'); }
-    };
+    }, [fetchWithAuth]);
 
-    const disconnectPlatform = async (platform) => {
+    const disconnectPlatform = useCallback(async (platform) => {
         try {
             await fetchWithAuth(`${API_URL}/features/user-connections/`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ platform }) });
             fetchConnections(); toast.success('Bağlantı kaldırıldı!');
         } catch (e) { toast.error('Hata oluştu'); }
-    };
+    }, [fetchWithAuth]);
 
     const connectedPlatforms = connections.map(c => c.platform);
 
@@ -170,10 +180,12 @@ export const UserConnectionsPanel = ({ onClose }) => {
             </div>
         </div>
     );
-};
+});
+
+UserConnectionsPanel.displayName = 'UserConnectionsPanel';
 
 // 30 ACTIVITY STATUS
-export const ActivityStatusPanel = ({ onClose }) => {
+export const ActivityStatusPanel = memo(({ onClose }) => {
     const { fetchWithAuth } = useAuth();
     const [activity, setActivity] = useState({ type: 'none', name: '', details: '' });
 
@@ -198,21 +210,27 @@ export const ActivityStatusPanel = ({ onClose }) => {
         { id: 'streaming', label: 'Yayında', emoji: '🔴' }
     ];
 
+    const handleActivityType = useCallback((typeId) => setActivity(prev => ({ ...prev, type: typeId })), []);
+    const handleNameChange = useCallback((e) => setActivity(prev => ({ ...prev, name: e.target.value })), []);
+    const handleDetailsChange = useCallback((e) => setActivity(prev => ({ ...prev, details: e.target.value })), []);
+
     return (
         <div className="feature-panel activity-status">
             <div className="panel-header"><h3>{'🎮'} Aktivite Durumu</h3><button onClick={onClose} className="close-btn">{'✕'}</button></div>
             <div className="panel-content">
                 <div className="activity-types">
                     {activityTypes.map(type => (
-                        <button key={type.id} className={`type-btn ${activity.type === type.id ? 'active' : ''}`} onClick={() => setActivity({ ...activity, type: type.id })}>
+                        <button key={type.id} className={`type-btn ${activity.type === type.id ? 'active' : ''}`} onClick={() => handleActivityType(type.id)}>
                             <span>{type.emoji}</span><span>{type.label}</span>
                         </button>
                     ))}
                 </div>
-                <input value={activity.name} onChange={(e) => setActivity({ ...activity, name: e.target.value })} placeholder="Oyun / Müzik / Video adı..." />
-                <input value={activity.details} onChange={(e) => setActivity({ ...activity, details: e.target.value })} placeholder="Detaylar..." />
+                <input value={activity.name} onChange={handleNameChange} placeholder="Oyun / Müzik / Video adı..." />
+                <input value={activity.details} onChange={handleDetailsChange} placeholder="Detaylar..." />
                 <button onClick={updateActivity} className="save-btn">Kaydet</button>
             </div>
         </div>
     );
-};
+});
+
+ActivityStatusPanel.displayName = 'ActivityStatusPanel';

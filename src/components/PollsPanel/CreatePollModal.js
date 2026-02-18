@@ -1,8 +1,10 @@
 import { DURATION_OPTIONS } from './usePolls';
+import useModalA11y from '../../hooks/useModalA11y';
 
-const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, addOption, removeOption, updateOption }) => (
-  <div className="create-modal-overlay" onClick={onClose}>
-    <div className="create-modal" onClick={(e) => e.stopPropagation()}>
+const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, addOption, removeOption, updateOption }) => {
+  const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Anket Oluştur' });
+  return (<div className="create-modal-overlay" {...overlayProps}>
+    <div className="create-modal" {...dialogProps}>
       <div className="modal-header">
         <h3>Yeni Anket Olu{'ş'}tur</h3>
         <button className="close-btn" onClick={onClose}>{'×'}</button>
@@ -68,6 +70,7 @@ const CreatePollModal = ({ newPoll, setNewPoll, channels, onCreate, onClose, add
       </div>
     </div>
   </div>
-);
+  );
+}
 
 export default CreatePollModal;

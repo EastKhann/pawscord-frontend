@@ -1,3 +1,4 @@
+import { useCallback, memo } from 'react';
 import './AppearanceSettingsPanel.css';
 import useAppearanceSettings, { accentColors } from './AppearanceSettingsPanel/useAppearanceSettings';
 import SettingToggle from './AppearanceSettingsPanel/SettingToggle';
@@ -21,6 +22,17 @@ const ACCESSIBILITY_TOGGLES = [
 const AppearanceSettingsPanel = ({ onClose }) => {
   const { settings, loading, updateSetting, toggleSetting, resetToDefaults } = useAppearanceSettings();
 
+  // useCallback handlers
+  const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
+  const handleAccentColorChange = useCallback((e) => updateSetting('accent_color', e.target.value), [updateSetting]);
+  const handleSetCozyMode = useCallback(() => updateSetting('message_display_mode', 'cozy'), [updateSetting]);
+  const handleSetCompactMode = useCallback(() => updateSetting('message_display_mode', 'compact'), [updateSetting]);
+  const handleFontSizeChange = useCallback((e) => updateSetting('font_size', parseInt(e.target.value)), [updateSetting]);
+  const handleSpacingChange = useCallback((e) => updateSetting('message_group_spacing', e.target.value), [updateSetting]);
+  const handleSaturationChange = useCallback((e) => updateSetting('saturate_colors', parseInt(e.target.value)), [updateSetting]);
+  const handleLanguageChange = useCallback((e) => updateSetting('language', e.target.value), [updateSetting]);
+  const handleTimezoneChange = useCallback((e) => updateSetting('timezone', e.target.value), [updateSetting]);
+
   if (loading) {
     return (
       <div className="appearance-settings-overlay">
@@ -36,7 +48,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
 
   return (
     <div className="appearance-settings-overlay" onClick={onClose}>
-      <div className="appearance-settings-panel" onClick={(e) => e.stopPropagation()}>
+      <div className="appearance-settings-panel" onClick={handleStopPropagation}>
         {/* Header */}
         <div className="appearance-settings-header">
           <h2>🎨 Görünüm Ayarları</h2>
@@ -86,7 +98,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
               <input
                 type="color"
                 value={settings.accent_color}
-                onChange={(e) => updateSetting('accent_color', e.target.value)}
+                onChange={handleAccentColorChange}
                 className="custom-color-input"
                 title="Özel renk seç"
               />
@@ -105,11 +117,11 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 <div className="display-mode-selector">
                   <button
                     className={`mode-btn ${settings.message_display_mode === 'cozy' ? 'active' : ''}`}
-                    onClick={() => updateSetting('message_display_mode', 'cozy')}
+                    onClick={handleSetCozyMode}
                   >Rahat</button>
                   <button
                     className={`mode-btn ${settings.message_display_mode === 'compact' ? 'active' : ''}`}
-                    onClick={() => updateSetting('message_display_mode', 'compact')}
+                    onClick={handleSetCompactMode}
                   >Kompakt</button>
                 </div>
               </div>
@@ -122,7 +134,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 <input
                   type="range" min="12" max="20"
                   value={settings.font_size}
-                  onChange={(e) => updateSetting('font_size', parseInt(e.target.value))}
+                  onChange={handleFontSizeChange}
                   className="font-size-slider"
                 />
               </div>
@@ -134,7 +146,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 </div>
                 <select
                   value={settings.message_group_spacing}
-                  onChange={(e) => updateSetting('message_group_spacing', e.target.value)}
+                  onChange={handleSpacingChange}
                   className="spacing-select"
                 >
                   <option value="compact">Sıkışık</option>
@@ -183,7 +195,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 <input
                   type="range" min="0" max="200"
                   value={settings.saturate_colors}
-                  onChange={(e) => updateSetting('saturate_colors', parseInt(e.target.value))}
+                  onChange={handleSaturationChange}
                   className="saturation-slider"
                 />
               </div>
@@ -201,7 +213,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 </div>
                 <select
                   value={settings.language}
-                  onChange={(e) => updateSetting('language', e.target.value)}
+                  onChange={handleLanguageChange}
                   className="language-select"
                 >
                   <option value="tr">🇹🇷 Türkçe</option>
@@ -219,7 +231,7 @@ const AppearanceSettingsPanel = ({ onClose }) => {
                 </div>
                 <select
                   value={settings.timezone}
-                  onChange={(e) => updateSetting('timezone', e.target.value)}
+                  onChange={handleTimezoneChange}
                   className="timezone-select"
                 >
                   <option value="Europe/Istanbul">İstanbul (UTC+3)</option>
@@ -244,4 +256,4 @@ const AppearanceSettingsPanel = ({ onClose }) => {
   );
 };
 
-export default AppearanceSettingsPanel;
+export default memo(AppearanceSettingsPanel);

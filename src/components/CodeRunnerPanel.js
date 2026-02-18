@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import {
     FaCode, FaTimes, FaPlay, FaStop, FaCopy, FaTrash, FaDownload,
     FaHistory, FaSave, FaFolder, FaPlus, FaTerminal, FaClock,
@@ -205,13 +205,22 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
         }
     };
 
+    // useCallback handlers
+    const handleOverlayClick = useCallback((e) => { if (e.target.className.includes('code-runner-overlay')) onClose(); }, [onClose]);
+    const handleToggleFullscreen = useCallback(() => setIsFullscreen(prev => !prev), []);
+    const handleToggleHistory = useCallback(() => setShowHistory(prev => !prev), []);
+    const handleShowSaveModal = useCallback(() => setShowSaveModal(true), []);
+    const handleHideSaveModal = useCallback(() => setShowSaveModal(false), []);
+    const handleCodeChange = useCallback((e) => setCode(e.target.value), []);
+    const handleHideHistory = useCallback(() => setShowHistory(false), []);
+
     return (
-        <div className={`code-runner-overlay ${isFullscreen ? 'fullscreen' : ''}`} onClick={(e) => e.target.className.includes('code-runner-overlay') && onClose()}>
+        <div className={`code-runner-overlay ${isFullscreen ? 'fullscreen' : ''}`} onClick={handleOverlayClick}>
             <div className="code-runner-panel">
                 <div className="panel-header">
                     <h2><FaCode /> Kod Çalıştırıcı</h2>
                     <div className="header-actions">
-                        <button className="fullscreen-btn" onClick={() => setIsFullscreen(!isFullscreen)}>
+                        <button className="fullscreen-btn" onClick={handleToggleFullscreen}>
                             {isFullscreen ? <FaCompress /> : <FaExpand />}
                         </button>
                         <button className="close-btn" onClick={onClose}><FaTimes /></button>
@@ -233,10 +242,10 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                         ))}
                     </div>
                     <div className="toolbar-actions">
-                        <button className="action-btn" onClick={() => setShowHistory(!showHistory)}>
+                        <button className="action-btn" onClick={handleToggleHistory}>
                             <FaHistory /> Geçmiş
                         </button>
-                        <button className="action-btn" onClick={() => setShowSaveModal(true)}>
+                        <button className="action-btn" onClick={handleShowSaveModal}>
                             <FaSave /> Kaydet
                         </button>
                         <button className="action-btn clear" onClick={handleClearAll}>
@@ -254,7 +263,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                         <textarea
                             className="code-editor"
                             value={code}
-                            onChange={(e) => setCode(e.target.value)}
+                            onChange={handleCodeChange}
                             placeholder="Kodunuzu buraya yazın..."
                             spellCheck="false"
                         />
@@ -299,7 +308,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
                     <div className="history-sidebar">
                         <div className="sidebar-header">
                             <h3><FaHistory /> Geçmiş & Snippets</h3>
-                            <button onClick={() => setShowHistory(false)}><FaTimes /></button>
+                            <button onClick={handleHideHistory}><FaTimes /></button>
                         </div>
 
                         <div className="sidebar-section">
@@ -349,7 +358,7 @@ const CodeRunnerPanel = ({ serverId, channelId, onClose }) => {
 
                 {showSaveModal && (
                     <SaveSnippetModal
-                        onClose={() => setShowSaveModal(false)}
+                        onClose={handleHideSaveModal}
                         onSave={handleSaveSnippet}
                         language={language}
                     />
@@ -401,4 +410,4 @@ const SaveSnippetModal = ({ onClose, onSave, language }) => {
     );
 };
 
-export default CodeRunnerPanel;
+export default memo(CodeRunnerPanel);

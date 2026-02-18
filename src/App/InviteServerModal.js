@@ -5,11 +5,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import toast from '../utils/toast';
+import useModalA11y from '../hooks/useModalA11y';
 
 export default function InviteServerModal({
     inviteToServerUser, setInviteToServerUser,
     categories, fetchWithAuth, API_BASE_URL,
 }) {
+    const handleClose = () => setInviteToServerUser(null);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose: handleClose, isOpen: !!inviteToServerUser, label: 'Sunucuya Davet' });
     if (!inviteToServerUser) return null;
 
     return ReactDOM.createPortal(
@@ -21,9 +24,10 @@ export default function InviteServerModal({
                 zIndex: 999999
             }}
             onClick={() => setInviteToServerUser(null)}
+            {...overlayProps}
         >
             <div
-                onClick={(e) => e.stopPropagation()}
+                {...dialogProps}
                 style={{
                     backgroundColor: '#2b2d31', borderRadius: '12px',
                     width: '400px', maxHeight: '80vh', overflow: 'hidden',

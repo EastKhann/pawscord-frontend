@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { FaDesktop, FaStop, FaCog, FaTimes, FaExpand, FaCompress } from 'react-icons/fa';
+import useModalA11y from '../hooks/useModalA11y';
 
 const ScreenShareModal = ({
     isOpen,
@@ -20,6 +21,7 @@ const ScreenShareModal = ({
     const [quality, setQuality] = useState('1080p'); // 720p, 1080p
     const videoRef = useRef(null);
     const containerRef = useRef(null);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Screen Share' });
 
     // Set video stream
     useEffect(() => {
@@ -46,8 +48,8 @@ const ScreenShareModal = ({
     if (!isOpen) return null;
 
     return (
-        <div style={styles.overlay}>
-            <div ref={containerRef} style={styles.container}>
+        <div style={styles.overlay} {...overlayProps}>
+            <div ref={containerRef} style={styles.container} {...dialogProps}>
                 {/* Header */}
                 <div style={styles.header}>
                     <div style={styles.headerInfo}>
