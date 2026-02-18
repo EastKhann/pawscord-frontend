@@ -137,7 +137,7 @@ export default function useChatConnection({
                 }
                 chatReconnectAttempts.current++;
                 const delay = Math.min(2000 * Math.pow(1.5, chatReconnectAttempts.current - 1), 30000);
-                console.log(`🔄 [ChatWS] Reconnecting in ${Math.round(delay / 1000)}s (attempt ${chatReconnectAttempts.current}/${MAX_CHAT_RECONNECT})`);
+                console.info(`🔄 [ChatWS] Reconnecting in ${Math.round(delay / 1000)}s (attempt ${chatReconnectAttempts.current}/${MAX_CHAT_RECONNECT})`);
                 chatReconnectRef.current = setTimeout(() => {
                     if (!intentionalChatClose.current) connectWebSocket();
                 }, delay);

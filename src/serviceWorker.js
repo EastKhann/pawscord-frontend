@@ -25,7 +25,7 @@ export function register(config) {
             if (isLocalhost) {
                 checkValidServiceWorker(swUrl, config);
                 navigator.serviceWorker.ready.then(() => {
-                    console.log('🔧 Service Worker localhost modunda çalışıyor');
+                    console.info('🔧 Service Worker localhost modunda çalışıyor');
                 });
             } else {
                 registerValidSW(swUrl, config);
@@ -38,7 +38,7 @@ function registerValidSW(swUrl, config) {
     navigator.serviceWorker
         .register(swUrl)
         .then(registration => {
-            console.log('✅ Service Worker kaydedildi');
+            console.info('✅ Service Worker kaydedildi');
 
             registration.onupdatefound = () => {
                 const installingWorker = registration.installing;
@@ -49,13 +49,13 @@ function registerValidSW(swUrl, config) {
                 installingWorker.onstatechange = () => {
                     if (installingWorker.state === 'installed') {
                         if (navigator.serviceWorker.controller) {
-                            console.log('🔄 Yeni içerik mevcut, yenileme gerekli');
+                            console.info('🔄 Yeni içerik mevcut, yenileme gerekli');
 
                             if (config && config.onUpdate) {
                                 config.onUpdate(registration);
                             }
                         } else {
-                            console.log('✨ İçerik offline kullanım için cache\'lendi');
+                            console.info('✨ İçerik offline kullanım için cache\'lendi');
 
                             if (config && config.onSuccess) {
                                 config.onSuccess(registration);
@@ -90,7 +90,7 @@ function checkValidServiceWorker(swUrl, config) {
             }
         })
         .catch(() => {
-            console.log('📵 İnternet yok, offline modda çalışıyor');
+            console.info('📵 İnternet yok, offline modda çalışıyor');
         });
 }
 
@@ -99,7 +99,7 @@ export function unregister() {
         navigator.serviceWorker.ready
             .then(registration => {
                 registration.unregister();
-                console.log('🗑️ Service Worker kaldırıldı');
+                console.info('🗑️ Service Worker kaldırıldı');
             })
             .catch(error => {
                 console.error(error.message);

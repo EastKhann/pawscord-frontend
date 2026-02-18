@@ -94,7 +94,8 @@ export default function useServerHandlers({
             const LOGIN_URL = `${API_BASE_URL}/auth/login/`;
             const res = await fetch(LOGIN_URL, {
                 method: 'POST', body: JSON.stringify({ username: u, password: p }),
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'  // 🔒 Required: store httpOnly refresh_token cookie from response
             });
             const data = await res.json();
 

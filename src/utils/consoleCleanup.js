@@ -130,9 +130,9 @@ export const groupedLog = (group, message, ...args) => {
         logGroupTimer = setTimeout(() => {
             logGroups.forEach((logs, group) => {
                 if (logs.length > 1) {
-                    console.log(`📦 [${group}] ${logs.length} logs:`, logs);
+                    console.info(`📦 [${group}] ${logs.length} logs:`, logs);
                 } else if (logs.length === 1) {
-                    console.log(`[${group}]`, logs[0].message, ...logs[0].args);
+                    console.info(`[${group}]`, logs[0].message, ...logs[0].args);
                 }
             });
             logGroups.clear();
@@ -149,7 +149,7 @@ export const rateLimitedLog = (key, message, intervalMs = 1000) => {
     const lastLog = rateLimitedLogs.get(key);
 
     if (!lastLog || now - lastLog > intervalMs) {
-        console.log(message);
+        console.info(message);
         rateLimitedLogs.set(key, now);
     }
 };

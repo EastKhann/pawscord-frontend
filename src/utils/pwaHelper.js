@@ -17,7 +17,7 @@ export const registerServiceWorker = async () => {
     );
 
     if (isElectron) {
-        console.log('⚠️ [PWA] Service Worker disabled in Electron (file:// protocol)');
+        console.info('⚠️ [PWA] Service Worker disabled in Electron (file:// protocol)');
         return null;
     }
 
@@ -27,13 +27,13 @@ export const registerServiceWorker = async () => {
             const registrations = await navigator.serviceWorker.getRegistrations();
             for (const reg of registrations) {
                 if (reg.active && reg.active.scriptURL.includes('service-worker.js')) {
-                    console.log('🗑️ Eski service-worker.js unregister ediliyor...');
+                    console.info('🗑️ Eski service-worker.js unregister ediliyor...');
                     await reg.unregister();
                     // Eski cache'leri temizle
                     const cacheNames = await caches.keys();
                     for (const name of cacheNames) {
                         if (name.includes('pawscord-v')) {
-                            console.log('🗑️ Eski cache siliniyor:', name);
+                            console.info('🗑️ Eski cache siliniyor:', name);
                             await caches.delete(name);
                         }
                     }
@@ -44,18 +44,18 @@ export const registerServiceWorker = async () => {
             // Burada sadece update kontrolü yapıyoruz
             const registration = await navigator.serviceWorker.getRegistration('/');
             if (registration) {
-                console.log('✅ Service Worker active:', registration.scope);
+                console.info('✅ Service Worker active:', registration.scope);
 
                 // Update checker
                 registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
-                    console.log('🔄 New Service Worker installing...');
+                    console.info('🔄 New Service Worker installing...');
 
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                             // Yeni versiyon hazır — otomatik aktive et
                             newWorker.postMessage({ type: 'SKIP_WAITING' });
-                            console.log('🔄 Yeni SW aktive ediliyor, sayfa yenilenecek...');
+                            console.info('🔄 Yeni SW aktive ediliyor, sayfa yenilenecek...');
                             window.location.reload();
                         }
                     });
@@ -82,7 +82,7 @@ export const registerServiceWorker = async () => {
  */
 const showUpdateNotification = () => {
     // Toast bildirim gösterme - sadece updateAvailable state kullan
-    console.log('ℹ️ Yeni versiyon mevcut - UI güncelleme butonu aktif');
+    console.info('ℹ️ Yeni versiyon mevcut - UI güncelleme butonu aktif');
 };
 
 /**
@@ -102,12 +102,12 @@ export const setupInstallPrompt = () => {
             installButton.style.display = 'block';
         }
 
-        console.log('📱 PWA install prompt ready');
+        console.info('📱 PWA install prompt ready');
     });
 
     // Install başarılı olduğunda
     window.addEventListener('appinstalled', () => {
-        console.log('✅ PWA installed successfully');
+        console.info('✅ PWA installed successfully');
         deferredPrompt = null;
 
         // Analytics event
@@ -133,7 +133,7 @@ export const triggerInstallPrompt = async () => {
     deferredPrompt.prompt();
 
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User response to install prompt: ${outcome}`);
+    console.info(`User response to install prompt: ${outcome}`);
 
     deferredPrompt = null;
     return outcome === 'accepted';
@@ -145,7 +145,7 @@ export const triggerInstallPrompt = async () => {
  */
 export const setupNetworkMonitor = (onOnline, onOffline) => {
     const handleOnline = () => {
-        console.log('✅ Network: Online');
+        console.info('✅ Network: Online');
         if (onOnline) onOnline();
 
         // Banner göster
@@ -153,7 +153,7 @@ export const setupNetworkMonitor = (onOnline, onOffline) => {
     };
 
     const handleOffline = () => {
-        console.log('❌ Network: Offline');
+        console.info('❌ Network: Offline');
         if (onOffline) onOffline();
 
         // Banner göster
@@ -221,7 +221,7 @@ export const clearAllCaches = async () => {
     if ('caches' in window) {
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.log('🗑️ All caches cleared');
+        console.info('🗑️ All caches cleared');
         return true;
     }
     return false;
@@ -293,7 +293,7 @@ export const subscribeToPush = async (registration, vapidPublicKey) => {
             applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
         });
 
-        console.log('✅ Push subscription successful');
+        console.info('✅ Push subscription successful');
         return subscription;
     } catch (error) {
         console.error('❌ Push subscription failed:', error);

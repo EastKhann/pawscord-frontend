@@ -143,16 +143,6 @@ export const withPerformanceTracking = (Component, name) => {
     }
 
     return React.forwardRef((props, ref) => {
-        const renderCount = React.useRef(0);
-        renderCount.current++;
-
-        React.useEffect(() => {
-            console.log(`🔄 [Render] ${name || Component.name} mounted (render #${renderCount.current})`);
-            return () => {
-                console.log(`🗑️ [Unmount] ${name || Component.name}`);
-            };
-        }, []);
-
         return perfMonitor.measureRender(
             name || Component.name,
             () => <Component {...props} ref={ref} />
@@ -171,7 +161,7 @@ export const monitorWebVitals = () => {
         const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             const lastEntry = entries[entries.length - 1];
-            console.log('📊 [LCP] Largest Contentful Paint:', lastEntry.renderTime || lastEntry.loadTime);
+            console.info('📊 [LCP] Largest Contentful Paint:', lastEntry.renderTime || lastEntry.loadTime);
         });
         observer.observe({ entryTypes: ['largest-contentful-paint'] });
     } catch (e) {
@@ -184,7 +174,7 @@ export const monitorWebVitals = () => {
             const entries = list.getEntries();
             entries.forEach((entry) => {
                 const delay = entry.processingStart - entry.startTime;
-                console.log('📊 [FID] First Input Delay:', delay);
+                console.info('📊 [FID] First Input Delay:', delay);
             });
         });
         observer.observe({ entryTypes: ['first-input'] });
@@ -199,7 +189,7 @@ export const monitorWebVitals = () => {
             list.getEntries().forEach((entry) => {
                 if (!entry.hadRecentInput) {
                     clsScore += entry.value;
-                    console.log('📊 [CLS] Cumulative Layout Shift:', clsScore);
+                    console.info('📊 [CLS] Cumulative Layout Shift:', clsScore);
                 }
             });
         });
@@ -220,14 +210,14 @@ export const analyzeBundleSize = () => {
 
     console.group('📦 Bundle Analysis');
 
-    console.log('JavaScript Files:');
+    console.info('JavaScript Files:');
     scripts.forEach(script => {
-        console.log(`- ${script.src.split('/').pop()}`);
+        console.info(`- ${script.src.split('/').pop()}`);
     });
 
-    console.log('\nCSS Files:');
+    console.info('\nCSS Files:');
     styles.forEach(style => {
-        console.log(`- ${style.href.split('/').pop()}`);
+        console.info(`- ${style.href.split('/').pop()}`);
     });
 
     console.groupEnd();

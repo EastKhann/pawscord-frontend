@@ -373,7 +373,7 @@ export function useVoiceConnection({
                         return;
                     }
                     // Sunucu graceful shutdown — reconnect dene
-                    console.log('[VoiceWS] Normal close (1000) without intentional leave — attempting reconnect');
+                    console.info('[VoiceWS] Normal close (1000) without intentional leave — attempting reconnect');
                 }
 
                 // 2.5️⃣ Auth rejection (4001 = origin fail, 4003 = auth fail, 1006 = abnormal before accept)
