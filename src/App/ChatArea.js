@@ -208,7 +208,7 @@ export default memo(function ChatArea({
             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}
                 id="main-content" role="log" aria-live="polite" aria-relevant="additions">
                 <Suspense fallback={<p style={styles.systemMessage}>Mesajlar yükleniyor...</p>}>
-                    {messageHistoryLoading ? (
+                    {messageHistoryLoading && optimizedMessages.length === 0 ? (
                         <p style={styles.systemMessage}>Yükleniyor...</p>
                     ) : optimizedMessages.length > 200 ? (
                         <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}

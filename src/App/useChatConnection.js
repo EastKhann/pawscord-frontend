@@ -266,8 +266,8 @@ export default function useChatConnection({
             setHasMoreMessages(!!cached.hasMore);
             scrollToBottom('auto');
             connectWebSocket();
-            // Background re-fetch for freshness (don't show loading)
-            fetchMessageHistory(true);
+            // Background re-fetch for freshness — silent=true so no loading spinner
+            fetchMessageHistory(true, true);
         } else {
             setHasMoreMessages(true);
             connectWebSocket();

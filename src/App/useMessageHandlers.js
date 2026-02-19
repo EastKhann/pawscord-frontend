@@ -142,11 +142,11 @@ export default function useMessageHandlers({
     // 🚀 Cursor-based pagination — no offset needed, uses next cursor URL
     const nextCursorRef = useRef(null);
 
-    const fetchMessageHistory = useCallback(async (isInitial = true) => {
+    const fetchMessageHistory = useCallback(async (isInitial = true, silent = false) => {
         if (!activeChat.id) return;
         if (activeChat.type === 'voice') { setMessages([]); setHasMoreMessages(false); return; }
 
-        if (isInitial) setMessageHistoryLoading(true);
+        if (isInitial && !silent) setMessageHistoryLoading(true);
         const urlBase = activeChat.type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
 
@@ -192,7 +192,7 @@ export default function useMessageHandlers({
                 };
             }
         } catch (e) { console.error('❌ [fetchMessageHistory] Error:', e); }
-        if (isInitial) setMessageHistoryLoading(false);
+        if (isInitial && !silent) setMessageHistoryLoading(false);
     }, [activeChat, fetchWithAuth, scrollToBottom]);
 
     // --- 🗑️ DELETE MESSAGE ---
