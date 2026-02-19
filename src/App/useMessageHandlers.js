@@ -14,7 +14,7 @@ export default function useMessageHandlers({
     setEditingMessage, setHasDraftMessage, setDraftText, persistDraft,
     setStickyMessage, richTextRef, fetchWithAuth,
     currentUserProfile, getDeterministicAvatar,
-    historyCacheRef, setHasMoreMessages, setMessageHistoryOffset,
+    historyCacheRef, setHasMoreMessages,
     setIsSummaryLoading, setSummaryResult, setPinnedMessages,
     setConversations, setMessageHistoryLoading,
     openModal, closeModal,
@@ -139,7 +139,10 @@ export default function useMessageHandlers({
     }, [activeChat, username, ws, currentUserProfile, getDeterministicAvatar]);
 
     // --- 📋 FETCH MESSAGE HISTORY ---
-    const fetchMessageHistory = useCallback(async (isInitial = true, offset = 0) => {
+    // 🚀 Cursor-based pagination — no offset needed, uses next cursor URL
+    const nextCursorRef = useRef(null);
+
+    const fetchMessageHistory = useCallback(async (isInitial = true) => {
         if (!activeChat.id) return;
         if (activeChat.type === 'voice') { setMessages([]); setHasMoreMessages(false); return; }
 
@@ -148,32 +151,45 @@ export default function useMessageHandlers({
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
 
         try {
-            const res = await fetchWithAuth(`${urlBase}${activeChat.id}/?limit=50&offset=${offset}`);
+            // Initial: fresh URL. Pagination: use the cursor URL from previous response
+            const url = isInitial
+                ? `${urlBase}${activeChat.id}/?limit=75`
+                : nextCursorRef.current;
+
+            if (!url) { setHasMoreMessages(false); return; }
+
+            const res = await fetchWithAuth(url);
             if (res.ok) {
                 const data = await res.json();
                 const rawMessages = data.results || [];
                 const validMessages = rawMessages.filter(msg => msg && typeof msg === 'object' && (msg.id || msg.temp_id));
-                const newMsgs = validMessages.reverse();
+                const newMsgs = validMessages.reverse(); // API returns newest-first
+
+                // Store next cursor URL for pagination
+                nextCursorRef.current = data.next || null;
+                const hasMore = !!data.next;
+                setHasMoreMessages(hasMore);
 
                 let combinedMessages = newMsgs;
                 if (isInitial) {
                     setMessages(newMsgs);
-                    setTimeout(() => scrollToBottom('auto'), 100);
+                    setTimeout(() => scrollToBottom('auto'), 60);
                 } else {
+                    // Prepend older messages, deduplicate by id
                     setMessages(prev => {
-                        combinedMessages = [...newMsgs, ...prev];
+                        const existingIds = new Set(prev.map(m => m.id));
+                        const uniqueNew = newMsgs.filter(m => !existingIds.has(m.id));
+                        combinedMessages = [...uniqueNew, ...prev];
                         return combinedMessages;
                     });
                 }
 
-                const nextOffset = isInitial ? newMsgs.length : offset + newMsgs.length;
-                const hasMore = !!data.next;
-                setHasMoreMessages(hasMore);
-                if (!isInitial) setMessageHistoryOffset(nextOffset);
-
-                const cachedExisting = historyCacheRef.current[key]?.messages || [];
-                const cachedCombined = isInitial ? newMsgs : [...newMsgs, ...cachedExisting];
-                historyCacheRef.current[key] = { messages: combinedMessages || cachedCombined, offset: nextOffset, hasMore };
+                // Update cache
+                historyCacheRef.current[key] = {
+                    messages: combinedMessages,
+                    nextCursor: data.next,
+                    hasMore
+                };
             }
         } catch (e) { console.error('❌ [fetchMessageHistory] Error:', e); }
         if (isInitial) setMessageHistoryLoading(false);
@@ -215,7 +231,7 @@ export default function useMessageHandlers({
     const handleSearchMessages = useCallback(async (e, debouncedSearchQuery) => {
         e.preventDefault();
         if (!activeChat.id || !debouncedSearchQuery.trim()) {
-            if (!debouncedSearchQuery.trim()) fetchMessageHistory(true, 0);
+            if (!debouncedSearchQuery.trim()) fetchMessageHistory(true);
             return;
         }
         setMessageHistoryLoading(true);

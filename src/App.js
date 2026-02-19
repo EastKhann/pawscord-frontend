@@ -121,7 +121,6 @@ const AppContent = () => {
     const [currentTheme, setCurrentTheme] = useState('default');
     const [messageHistoryLoading, setMessageHistoryLoading] = useState(false);
     const [hasMoreMessages, setHasMoreMessages] = useState(true);
-    const [messageHistoryOffset, setMessageHistoryOffset] = useState(0);
     const [friendsList, setFriendsList] = useState([]);
     const [pendingFriendRequests, setPendingFriendRequests] = useState(0);
     const [serverOrder, setServerOrder] = useState([]);
@@ -197,7 +196,7 @@ const AppContent = () => {
         isMobile, activeChat, defaultAvatars, allUsers,
         categories, serverOrder, currentVoiceRoom,
         username, currentUserProfile, serverMembers,
-        hasMoreMessages, messageHistoryOffset,
+        hasMoreMessages,
         messagesEndRef, messageBoxRef,
         fetchMessageHistoryRef,
         fetchWithAuth,
@@ -225,7 +224,7 @@ const AppContent = () => {
         setEditingMessage, setHasDraftMessage, setDraftText, persistDraft,
         setStickyMessage, richTextRef, fetchWithAuth,
         currentUserProfile, getDeterministicAvatar,
-        historyCacheRef, setHasMoreMessages, setMessageHistoryOffset,
+        historyCacheRef, setHasMoreMessages,
         setIsSummaryLoading, setSummaryResult, setPinnedMessages,
         setConversations, setMessageHistoryLoading,
         openModal, closeModal,
@@ -235,7 +234,7 @@ const AppContent = () => {
     const { ws } = useChatConnection({
         activeChat, username, token, isAuthenticated, isInitialDataLoaded,
         fetchWithAuth, scrollToBottom, isNearBottom, setMessages,
-        setIsConnected, historyCacheRef, setHasMoreMessages, setMessageHistoryOffset,
+        setIsConnected, historyCacheRef, setHasMoreMessages,
         fetchMessageHistory: messageHandlers.fetchMessageHistory, setShowScrollToBottom,
         API_BASE_URL, API_HOST, WS_PROTOCOL,
         forwardToGlobalContext, setGlobalWsConnected,

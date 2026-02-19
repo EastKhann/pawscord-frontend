@@ -18,7 +18,7 @@ export default function useAppCallbacks({
     categories, serverOrder, currentVoiceRoom,
     username, currentUserProfile, serverMembers,
     // Pagination state
-    hasMoreMessages, messageHistoryOffset,
+    hasMoreMessages,
     // Refs
     messagesEndRef, messageBoxRef,
     fetchMessageHistoryRef,
@@ -55,7 +55,7 @@ export default function useAppCallbacks({
         ) {
             paginationLoadingRef.current = true;
             const prevHeight = el.scrollHeight;
-            fetchMessageHistoryRef.current(false, messageHistoryOffset).finally(() => {
+            fetchMessageHistoryRef.current(false).finally(() => {
                 // Preserve scroll position after prepending older messages
                 requestAnimationFrame(() => {
                     const newHeight = el.scrollHeight;
@@ -64,7 +64,7 @@ export default function useAppCallbacks({
                 });
             });
         }
-    }, [hasMoreMessages, messageHistoryOffset]);
+    }, [hasMoreMessages]);
 
     const throttledHandleMessageScroll = useThrottle(handleMessageScroll, 100);
 

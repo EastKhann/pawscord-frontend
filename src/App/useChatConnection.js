@@ -10,7 +10,7 @@ import { loadSavedTheme } from '../utils/ThemeManager';
 export default function useChatConnection({
     activeChat, username, token, isAuthenticated, isInitialDataLoaded,
     fetchWithAuth, scrollToBottom, isNearBottom, setMessages,
-    setIsConnected, historyCacheRef, setHasMoreMessages, setMessageHistoryOffset,
+    setIsConnected, historyCacheRef, setHasMoreMessages,
     fetchMessageHistory, setShowScrollToBottom,
     API_BASE_URL, API_HOST, WS_PROTOCOL,
     forwardToGlobalContext, setGlobalWsConnected,
@@ -260,17 +260,19 @@ export default function useChatConnection({
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
         const cached = historyCacheRef.current[key];
 
+        // 🚀 Cache-first: show cached messages instantly, then connect WS
         if (cached?.messages?.length > 0) {
             setMessages(cached.messages);
             setHasMoreMessages(!!cached.hasMore);
-            setMessageHistoryOffset(cached.offset || 0);
-            setTimeout(() => { if (!isCancelled) scrollToBottom('auto'); }, 50);
-            if (!isCancelled) connectWebSocket();
+            scrollToBottom('auto');
+            connectWebSocket();
+            // Background re-fetch for freshness (don't show loading)
+            fetchMessageHistory(true);
         } else {
-            setMessageHistoryOffset(0);
             setHasMoreMessages(true);
-            if (!isCancelled) connectWebSocket();
-            setTimeout(() => { if (!isCancelled) fetchMessageHistory(true, 0); }, 50);
+            connectWebSocket();
+            // No cache — fetch immediately (no delay)
+            if (!isCancelled) fetchMessageHistory(true);
         }
 
         return () => {
