@@ -2,7 +2,7 @@
  * 🐾 useAppCallbacks — Combined utility callbacks & computed values
  * Extracted from App.js: scroll, avatar, draft, navigation, computed memos
  */
-import { useCallback, useMemo, useEffect } from 'react';
+import { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useThrottle } from '../utils/performanceOptimization';
 import {
     MEDIA_BASE_URL, DRAFT_STORAGE_KEY, GET_OR_CREATE_CONVERSATION_URL,
@@ -17,8 +17,11 @@ export default function useAppCallbacks({
     isMobile, activeChat, defaultAvatars, allUsers,
     categories, serverOrder, currentVoiceRoom,
     username, currentUserProfile, serverMembers,
+    // Pagination state
+    hasMoreMessages, messageHistoryOffset,
     // Refs
     messagesEndRef, messageBoxRef,
+    fetchMessageHistoryRef,
     // Fetch
     fetchWithAuth,
 }) {
@@ -33,11 +36,35 @@ export default function useAppCallbacks({
         return (el.scrollHeight - el.scrollTop - el.clientHeight) < 160;
     }, []);
 
+    // Track whether a pagination fetch is already in-flight
+    const paginationLoadingRef = useRef(false);
+
     const handleMessageScroll = useCallback(() => {
         const el = messageBoxRef.current;
         if (!el) return;
+
+        // Show/hide scroll-to-bottom button
         setShowScrollToBottom((el.scrollHeight - el.scrollTop - el.clientHeight) > 160);
-    }, []);
+
+        // ─── INFINITE SCROLL: Load older messages when scrolled near top ───
+        if (
+            el.scrollTop < 200 &&
+            hasMoreMessages &&
+            !paginationLoadingRef.current &&
+            fetchMessageHistoryRef?.current
+        ) {
+            paginationLoadingRef.current = true;
+            const prevHeight = el.scrollHeight;
+            fetchMessageHistoryRef.current(false, messageHistoryOffset).finally(() => {
+                // Preserve scroll position after prepending older messages
+                requestAnimationFrame(() => {
+                    const newHeight = el.scrollHeight;
+                    el.scrollTop += (newHeight - prevHeight);
+                    paginationLoadingRef.current = false;
+                });
+            });
+        }
+    }, [hasMoreMessages, messageHistoryOffset]);
 
     const throttledHandleMessageScroll = useThrottle(handleMessageScroll, 100);
 

@@ -30,7 +30,7 @@ export default memo(function ChatArea({
     isRightSidebarVisible, setIsRightSidebarVisible,
     // Chat state
     activeChat, setActiveChat, chatTitle, isConnected,
-    optimizedMessages, messageHistoryLoading,
+    optimizedMessages, messageHistoryLoading, hasMoreMessages,
     showScrollToBottom, setShowScrollToBottom,
     // Search
     searchQuery, setSearchQuery, debouncedSearchQuery, searchInputRef,
@@ -210,11 +210,16 @@ export default memo(function ChatArea({
                 <Suspense fallback={<p style={styles.systemMessage}>Mesajlar yükleniyor...</p>}>
                     {messageHistoryLoading ? (
                         <p style={styles.systemMessage}>Yükleniyor...</p>
-                    ) : optimizedMessages.length > 50 ? (
+                    ) : optimizedMessages.length > 200 ? (
                         <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
                             renderMessage={renderVirtualMessage} />
                     ) : (
                         <>
+                            {hasMoreMessages && optimizedMessages.length > 0 && (
+                                <p style={{ ...styles.systemMessage, textAlign: 'center', padding: '8px 0', opacity: 0.6, fontSize: '0.85em' }}>
+                                    ⬆ Yukarı kaydırarak eski mesajları yükleyin
+                                </p>
+                            )}
                             {renderedMessages}
                             <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
                         </>

@@ -143,7 +143,7 @@ export default function useMessageHandlers({
         if (!activeChat.id) return;
         if (activeChat.type === 'voice') { setMessages([]); setHasMoreMessages(false); return; }
 
-        setMessageHistoryLoading(true);
+        if (isInitial) setMessageHistoryLoading(true);
         const urlBase = activeChat.type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
 
@@ -176,7 +176,7 @@ export default function useMessageHandlers({
                 historyCacheRef.current[key] = { messages: combinedMessages || cachedCombined, offset: nextOffset, hasMore };
             }
         } catch (e) { console.error('❌ [fetchMessageHistory] Error:', e); }
-        setMessageHistoryLoading(false);
+        if (isInitial) setMessageHistoryLoading(false);
     }, [activeChat, fetchWithAuth, scrollToBottom]);
 
     // --- 🗑️ DELETE MESSAGE ---

@@ -158,6 +158,7 @@ const AppContent = () => {
     const richTextRef = useRef(null);
     const fileInputRefNormal = useRef(null);
     const historyCacheRef = useRef({});
+    const fetchMessageHistoryRef = useRef(null); // Ref for pagination (breaks circular dep)
     const statusWsRef = useRef(null);
     const statusWsReconnectRef = useRef(null);
     const activeChatRef = useRef(activeChat);
@@ -196,7 +197,9 @@ const AppContent = () => {
         isMobile, activeChat, defaultAvatars, allUsers,
         categories, serverOrder, currentVoiceRoom,
         username, currentUserProfile, serverMembers,
+        hasMoreMessages, messageHistoryOffset,
         messagesEndRef, messageBoxRef,
+        fetchMessageHistoryRef,
         fetchWithAuth,
     });
 
@@ -248,6 +251,11 @@ const AppContent = () => {
     useEffect(() => {
         if (ws) sharedWsRef.current = ws.current;
     }, [ws]);
+
+    // Sync fetchMessageHistory ref for pagination in scroll handler
+    useEffect(() => {
+        fetchMessageHistoryRef.current = messageHandlers.fetchMessageHistory;
+    }, [messageHandlers.fetchMessageHistory]);
 
     const fileUpload = useFileUpload({
         activeChat, username, fetchWithAuth, scrollToBottom,
@@ -530,6 +538,7 @@ const AppContent = () => {
                             isRightSidebarVisible={isRightSidebarVisible} setIsRightSidebarVisible={setIsRightSidebarVisible}
                             activeChat={activeChat} setActiveChat={setActiveChat} chatTitle={chatTitle} isConnected={isConnected}
                             optimizedMessages={optimizedMessages} messageHistoryLoading={messageHistoryLoading}
+                            hasMoreMessages={hasMoreMessages}
                             showScrollToBottom={showScrollToBottom} setShowScrollToBottom={setShowScrollToBottom}
                             searchQuery={searchQuery} setSearchQuery={setSearchQuery} debouncedSearchQuery={debouncedSearchQuery} searchInputRef={searchInputRef}
                             isSelectionMode={isSelectionMode} selectedMessages={selectedMessages} setSelectedMessages={setSelectedMessages}
