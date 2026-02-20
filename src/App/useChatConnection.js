@@ -285,7 +285,9 @@ export default function useChatConnection({
                 ws.current = null;
             }
         };
-    }, [activeChat.id, activeChat.type, isInitialDataLoaded, connectWebSocket]);
+    }, [activeChat.id, activeChat.type, isInitialDataLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+    // NOTE: connectWebSocket excluded from deps — it changes when activeChat changes,
+    // which would cause double-fire. activeChat.id/type already cover reconnection needs.
 
     return { ws, connectWebSocket };
 }
