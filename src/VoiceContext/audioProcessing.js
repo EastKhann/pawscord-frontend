@@ -127,10 +127,12 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         // 1️⃣ NOISE GATE (Gürültü Kapısı) - SEVİYEYE GÖRE
         // Belli desibelin altındaki sesleri tamamen kes
         const noiseGateNode = audioContext.createGain();
+        noiseGateNode.gain.value = 1.0; // 🔥 FIX: Başlangıçta AÇIK — ses kesilmesin!
         let isGateOpen = true; // 🔥 Başlangıçta açık
         const GATE_THRESHOLD = settings.gateThreshold; // dB (seviyeye göre)
         const GATE_ATTACK = 0.005;  // Daha hızlı açılma
         const GATE_RELEASE = settings.gateRelease;  // Seviyeye göre
+        const GATE_FLOOR = 0.05; // 🔥 FIX: Minimum gain — tam 0'a düşürme, ses tamamen kesilmesin
 
         // 2️⃣ COMPRESSOR (Dinamik Sıkıştırma) - SEVİYEYE GÖRE
         // 🔥 CIZIRTIYI ÖNLE: Daha yumuşak sıkıştırma
@@ -203,8 +205,20 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
 
         // Noise Gate kontrolü (VAD tabanlı)
         const speechThreshold = settings.speechThreshold || 25; // 🔥 Seviyeye göre eşik
+        let gateGracePeriod = 100; // 🔥 FIX: İlk 100 frame (~3s) gate her zaman açık — öğrenme süresi
         const updateNoiseGate = () => {
             analyser.getByteFrequencyData(dataArray);
+
+            // 🔥 FIX: Grace period boyunca gate her zaman açık bırak (ses kesilmesin)
+            if (gateGracePeriod > 0) {
+                gateGracePeriod--;
+                if (!isGateOpen) {
+                    noiseGateNode.gain.setTargetAtTime(1.0, audioContext.currentTime, GATE_ATTACK);
+                    isGateOpen = true;
+                }
+                if (learningPhase || Math.random() < 0.01) learnNoiseProfile();
+                return;
+            }
 
             // Konuşma frekansları (300Hz - 3kHz) - daha geniş aralık
             const speechRange = dataArray.slice(8, 120);  // 🔥 Daha geniş frekans aralığı
@@ -220,9 +234,9 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
                     noiseGateNode.gain.setTargetAtTime(1.0, currentTime, GATE_ATTACK);
                     isGateOpen = true;
                 }
-            } else { // Sessizlik - 🔥 HIZLI KAPANIŞ
+            } else { // Sessizlik - 🔥 GATE_FLOOR'a düşür (tamamen kapama)
                 if (isGateOpen) {
-                    noiseGateNode.gain.setTargetAtTime(0.0, currentTime, GATE_RELEASE);
+                    noiseGateNode.gain.setTargetAtTime(GATE_FLOOR, currentTime, GATE_RELEASE);
                     isGateOpen = false;
                 }
             }

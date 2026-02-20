@@ -261,6 +261,15 @@ export function useSignalHandler({
                 }
                 return;
             } else {
+                // 🔥 FIX: Buffer ICE candidates for unknown peers instead of dropping them
+                if (type === 'candidate') {
+                    if (!iceCandidateBufferRef.current[senderUsername]) {
+                        iceCandidateBufferRef.current[senderUsername] = [];
+                    }
+                    iceCandidateBufferRef.current[senderUsername].push(new RTCIceCandidate(candidate));
+                    logger.signal(`Buffered candidate for ${senderUsername} (no PC yet)`);
+                    return;
+                }
                 console.warn(`[Signal] Ignored ${type} from ${senderUsername} (No PC)`);
                 return;
             }

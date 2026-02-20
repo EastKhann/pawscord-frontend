@@ -92,26 +92,51 @@ export function useWebRTC({
         if (track.kind === 'audio') {
             initializeAudio();
             try {
+                // 🔥 FIX: Remove existing audio element first to prevent duplicates
+                const existingEl = document.getElementById(`remote-audio-${partnerUsername}`);
+                if (existingEl) {
+                    existingEl.pause();
+                    existingEl.srcObject = null;
+                    existingEl.remove();
+                }
+
                 const audioEl = document.createElement('audio');
                 audioEl.id = `remote-audio-${partnerUsername}`;
                 audioEl.srcObject = new MediaStream([track]);
                 audioEl.autoplay = true;
                 audioEl.playsInline = true;
-
-                const existingEl = document.getElementById(`remote-audio-${partnerUsername}`);
-                if (existingEl) existingEl.remove();
+                // 🔥 FIX: volume 1.0 explicitly + not muted
+                audioEl.volume = 1.0;
+                audioEl.muted = false;
 
                 audioEl.style.display = 'none';
                 document.body.appendChild(audioEl);
 
-                audioEl.play().catch(err => {
-                    console.warn(`[Audio] Autoplay blocked for ${partnerUsername}:`, err.message);
-                    const resumeAudio = () => {
-                        audioEl.play().catch(() => { });
-                        document.removeEventListener('click', resumeAudio);
-                    };
-                    document.addEventListener('click', resumeAudio, { once: true });
-                });
+                // 🔥 FIX: More robust autoplay with multiple retry strategies
+                const playAudio = () => {
+                    if (!audioEl.parentNode) return; // Element was removed
+                    audioEl.play().catch(err => {
+                        console.warn(`[Audio] Autoplay blocked for ${partnerUsername}:`, err.message);
+                        // Strategy 1: Retry on any user interaction
+                        const resumeAudio = () => {
+                            audioEl.play().catch(() => { });
+                        };
+                        document.addEventListener('click', resumeAudio, { once: true });
+                        document.addEventListener('keydown', resumeAudio, { once: true });
+                        document.addEventListener('touchstart', resumeAudio, { once: true });
+                        // Strategy 2: Retry after short delay (browser may allow after initial block)
+                        setTimeout(() => {
+                            audioEl.play().catch(() => { });
+                        }, 1000);
+                    });
+                };
+                playAudio();
+
+                // 🔥 FIX: If track ends or is replaced, clean up
+                track.onended = () => {
+                    const el = document.getElementById(`remote-audio-${partnerUsername}`);
+                    if (el) { el.pause(); el.srcObject = null; el.remove(); }
+                };
             } catch (err) {
                 console.error(`[Audio] Failed to create audio element for ${partnerUsername}:`, err);
             }
@@ -127,23 +152,6 @@ export function useWebRTC({
         logger.webrtc(`Creating PC for ${partnerUsername} (Initiator: ${isInitiator})`);
         const pc = new RTCPeerConnection(RTC_CONFIGURATION);
         peerConnectionsRef.current[partnerUsername] = pc;
-
-        // Opus codec optimization
-        try {
-            const transceivers = pc.getTransceivers();
-            transceivers.forEach(transceiver => {
-                if (transceiver.sender?.track?.kind === 'audio') {
-                    const codecs = RTCRtpSender.getCapabilities('audio')?.codecs || [];
-                    const opusCodecs = codecs.filter(c => c.mimeType.toLowerCase().includes('opus'));
-                    const otherCodecs = codecs.filter(c => !c.mimeType.toLowerCase().includes('opus'));
-                    if (transceiver.setCodecPreferences && [...opusCodecs, ...otherCodecs].length > 0) {
-                        transceiver.setCodecPreferences([...opusCodecs, ...otherCodecs]);
-                    }
-                }
-            });
-        } catch (e) {
-            console.warn('[Codec] setCodecPreferences not supported:', e.message);
-        }
 
         if (typeof window !== 'undefined') {
             window.__pawscord_peer_connections__ = peerConnectionsRef.current;
@@ -161,10 +169,28 @@ export function useWebRTC({
 
         pc.ontrack = (event) => handleRemoteStream(partnerUsername, event);
 
+        // 🔥 FIX: Add local tracks FIRST
         if (localStreamRef.current) {
             localStreamRef.current.getTracks().forEach(track => {
                 pc.addTrack(track, localStreamRef.current);
             });
+        }
+
+        // 🔥 FIX: Opus codec optimization AFTER tracks are added (getTransceivers() needs tracks)
+        try {
+            const transceivers = pc.getTransceivers();
+            transceivers.forEach(transceiver => {
+                if (transceiver.sender?.track?.kind === 'audio') {
+                    const codecs = RTCRtpSender.getCapabilities('audio')?.codecs || [];
+                    const opusCodecs = codecs.filter(c => c.mimeType.toLowerCase().includes('opus'));
+                    const otherCodecs = codecs.filter(c => !c.mimeType.toLowerCase().includes('opus'));
+                    if (transceiver.setCodecPreferences && [...opusCodecs, ...otherCodecs].length > 0) {
+                        transceiver.setCodecPreferences([...opusCodecs, ...otherCodecs]);
+                    }
+                }
+            });
+        } catch (e) {
+            console.warn('[Codec] setCodecPreferences not supported:', e.message);
         }
 
         pc.oniceconnectionstatechange = () => {
