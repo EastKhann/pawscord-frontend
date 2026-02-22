@@ -235,7 +235,9 @@ const AppContent = () => {
         activeChat, username, token, isAuthenticated, isInitialDataLoaded,
         fetchWithAuth, scrollToBottom, isNearBottom, setMessages,
         setIsConnected, historyCacheRef, setHasMoreMessages,
-        fetchMessageHistory: messageHandlers.fetchMessageHistory, setShowScrollToBottom,
+        fetchMessageHistory: messageHandlers.fetchMessageHistory,
+        prefetchMessages: messageHandlers.prefetchMessages,
+        setShowScrollToBottom,
         API_BASE_URL, API_HOST, WS_PROTOCOL,
         forwardToGlobalContext, setGlobalWsConnected,
         setOnlineUsers, setVoiceUsersState, setAllUsers, setCurrentUserProfile,
@@ -427,6 +429,7 @@ const AppContent = () => {
                                 onFriendsClick={handleFriendsClick}
                                 onRoomSelect={handleRoomChange}
                                 onDMSelect={(id, targetUsername) => setActiveChat('dm', id, targetUsername)}
+                                onPrefetchChat={messageHandlers.prefetchMessages}
                                 onWelcomeClick={handleWelcomeClick}
                                 setIsLeftSidebarVisible={setIsLeftSidebarVisible}
                                 onProfileClick={handleProfileClick}

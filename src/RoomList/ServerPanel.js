@@ -1,5 +1,5 @@
 // frontend/src/RoomList/ServerPanel.js
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
     FaChevronDown, FaChevronRight, FaPlus, FaCog,
     FaVolumeUp, FaUserPlus
@@ -19,6 +19,7 @@ const ServerPanel = ({
     handleRenameCategory, handleRenameRoom,
     handleOpenActionMenu, handleCreateInvite,
     onOpenServerSettings, joinVoiceChat, onRoomSelect,
+    onPrefetchChat,
     safeUnreadCounts, onDMSelect, conversations,
     friendsList, getDeterministicAvatar, allUsers, isPttActive,
     remoteVolumes, setRemoteVolume, dropTargetChannel, setDropTargetChannel,
@@ -91,6 +92,7 @@ const ServerPanel = ({
                                 handleOpenActionMenu={handleOpenActionMenu}
                                 joinVoiceChat={joinVoiceChat}
                                 onRoomSelect={onRoomSelect}
+                                onPrefetchChat={onPrefetchChat}
                                 safeUnreadCounts={safeUnreadCounts}
                                 onDMSelect={onDMSelect}
                                 conversations={conversations}
@@ -125,6 +127,7 @@ const CategorySection = React.memo(({
     activeCategoryIdForRoom, setActiveCategoryIdForRoom,
     handleCreateRoom, handleRenameCategory, handleRenameRoom,
     handleOpenActionMenu, joinVoiceChat, onRoomSelect,
+    onPrefetchChat,
     safeUnreadCounts, onDMSelect, conversations,
     friendsList, getDeterministicAvatar, allUsers, isPttActive,
     remoteVolumes, setRemoteVolume, dropTargetChannel, setDropTargetChannel,
@@ -201,6 +204,7 @@ const CategorySection = React.memo(({
                     handleOpenActionMenu={handleOpenActionMenu}
                     joinVoiceChat={joinVoiceChat}
                     onRoomSelect={onRoomSelect}
+                    onPrefetchChat={onPrefetchChat}
                     safeUnreadCounts={safeUnreadCounts}
                     onDMSelect={onDMSelect}
                     conversations={conversations}
@@ -228,6 +232,7 @@ const ChannelItem = React.memo(({
     room, cat, server, isOwner, isAdmin, currentUsername, currentVoiceRoom,
     activeVoiceUsers, editingItemId, setEditingItemId, editName, setEditName,
     handleRenameRoom, handleOpenActionMenu, joinVoiceChat, onRoomSelect,
+    onPrefetchChat,
     safeUnreadCounts, onDMSelect, conversations,
     friendsList, getDeterministicAvatar, allUsers, isPttActive,
     remoteVolumes, setRemoteVolume, dropTargetChannel, setDropTargetChannel,
@@ -239,6 +244,16 @@ const ChannelItem = React.memo(({
     const isVoice = room.channel_type === 'voice';
     const isEditingThisRoom = editingItemId === `room-${room.slug}`;
     const userCount = isVoice && activeVoiceUsers[room.slug] ? activeVoiceUsers[room.slug].length : 0;
+    const hoverTimerRef = useRef(null);
+
+    // 🚀 Hover prefetch: 200ms debounce, sadece text kanalları için
+    const handlePointerEnter = useCallback(() => {
+        if (isVoice || !onPrefetchChat) return;
+        hoverTimerRef.current = setTimeout(() => onPrefetchChat('room', room.slug), 200);
+    }, [isVoice, onPrefetchChat, room.slug]);
+    const handlePointerLeave = useCallback(() => {
+        if (hoverTimerRef.current) { clearTimeout(hoverTimerRef.current); hoverTimerRef.current = null; }
+    }, []);
 
     // 🎯 Performance: Memoized handlers
     const handleChannelClick = useCallback(() => { if (isVoice) joinVoiceChat(room.slug); else onRoomSelect(room.slug); }, [isVoice, joinVoiceChat, onRoomSelect, room.slug]);
@@ -290,6 +305,8 @@ const ChannelItem = React.memo(({
                     } : {})
                 }}
                 onClick={handleChannelClick}
+                onPointerEnter={handlePointerEnter}
+                onPointerLeave={handlePointerLeave}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}

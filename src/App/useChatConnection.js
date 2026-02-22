@@ -11,7 +11,7 @@ export default function useChatConnection({
     activeChat, username, token, isAuthenticated, isInitialDataLoaded,
     fetchWithAuth, scrollToBottom, isNearBottom, setMessages,
     setIsConnected, historyCacheRef, setHasMoreMessages,
-    fetchMessageHistory, setShowScrollToBottom,
+    fetchMessageHistory, prefetchMessages, setShowScrollToBottom,
     API_BASE_URL, API_HOST, WS_PROTOCOL,
     forwardToGlobalContext, setGlobalWsConnected,
     setOnlineUsers, setVoiceUsersState, setAllUsers, setCurrentUserProfile,

@@ -23,7 +23,7 @@ import './RoomList/animations';
 const RoomList = ({
     onFriendsClick, onWelcomeClick, isAdmin, categories: servers = [],
     conversations = [], currentRoom, currentConversationId,
-    onRoomSelect, onDMSelect, joinVoiceChat, leaveVoiceChat,
+    onRoomSelect, onDMSelect, onPrefetchChat, joinVoiceChat, leaveVoiceChat,
     unreadCounts = {}, voiceUsers, currentUsername, currentUserProfile,
     currentVoiceRoom, remoteVolumes, setRemoteVolume, onProfileClick,
     onViewUserProfile, getDeterministicAvatar, isPttActive,
@@ -247,6 +247,7 @@ const RoomList = ({
                     <HomePanel
                         conversations={conversations} currentConversationId={currentConversationId}
                         currentUsername={currentUsername} onRoomSelect={onRoomSelect} onDMSelect={onDMSelect}
+                        onPrefetchChat={onPrefetchChat}
                         onFriendsClick={onFriendsClick} pendingFriendRequests={pendingFriendRequests}
                         safeUnreadCounts={safeUnreadCounts} onlineUsers={onlineUsers} allUsers={allUsers}
                         getAvatarUrl={getAvatarUrl} setDmContextMenu={setDmContextMenu}
@@ -271,6 +272,7 @@ const RoomList = ({
                         handleOpenActionMenu={handleOpenActionMenu} handleCreateInvite={handleCreateInvite}
                         onOpenServerSettings={onOpenServerSettings}
                         joinVoiceChat={joinVoiceChat} onRoomSelect={onRoomSelect}
+                        onPrefetchChat={onPrefetchChat}
                         safeUnreadCounts={safeUnreadCounts} onDMSelect={onDMSelect}
                         conversations={conversations} friendsList={friendsList}
                         getDeterministicAvatar={getDeterministicAvatar} allUsers={allUsers}

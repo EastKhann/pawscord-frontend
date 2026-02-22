@@ -331,6 +331,33 @@ export default function useMessageHandlers({
         }, 1500);
     }, [fetchWithAuth, username]);
 
+    // --- � PREFETCH MESSAGES (hover üzerinde ön belleğe al) ---
+    const prefetchInflightRef = useRef(new Set());
+    const prefetchMessages = useCallback(async (type, id) => {
+        if (!id) return;
+        const key = type === 'room' ? `room-${id}` : `dm-${id}`;
+        // Zaten cache'de varsa veya uçuşta ise atla
+        if (historyCacheRef.current[key]?.messages?.length > 0) return;
+        if (prefetchInflightRef.current.has(key)) return;
+        prefetchInflightRef.current.add(key);
+
+        try {
+            const urlBase = type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
+            const res = await fetchWithAuth(`${urlBase}${id}/?limit=50`);
+            if (res.ok) {
+                const data = await res.json();
+                const rawMessages = data.results || [];
+                const validMessages = rawMessages.filter(msg => msg && typeof msg === 'object' && (msg.id || msg.temp_id));
+                historyCacheRef.current[key] = {
+                    messages: validMessages.reverse(),
+                    nextCursor: data.next || null,
+                    hasMore: !!data.next
+                };
+            }
+        } catch (e) { /* prefetch hatası sessizce yutulur */ }
+        finally { prefetchInflightRef.current.delete(key); }
+    }, [fetchWithAuth, MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL]);
+
     // --- 📜 SCROLL TO MESSAGE ---
     const scrollToMessage = useCallback((msgId) => {
         const el = document.getElementById(`message-${msgId}`);
@@ -341,6 +368,7 @@ export default function useMessageHandlers({
         sendMessage,
         handleSendSnippet,
         fetchMessageHistory,
+        prefetchMessages,
         handleDeleteMessage,
         handleTogglePin,
         handleSearchMessages,

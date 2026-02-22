@@ -1,12 +1,12 @@
 // frontend/src/RoomList/HomePanel.js
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { FaUserFriends, FaRobot, FaChartLine } from '../utils/iconOptimization';
 import LazyImage from '../components/LazyImage';
 import { styles } from '../SidebarStyles';
 
 const HomePanel = ({
     conversations, currentConversationId, currentUsername,
-    onRoomSelect, onDMSelect, onFriendsClick, pendingFriendRequests,
+    onRoomSelect, onDMSelect, onPrefetchChat, onFriendsClick, pendingFriendRequests,
     safeUnreadCounts, onlineUsers, allUsers,
     getAvatarUrl, setDmContextMenu
 }) => {
@@ -58,6 +58,7 @@ const HomePanel = ({
                                 isActive={currentConversationId === conv.id}
                                 currentUsername={currentUsername}
                                 onDMSelect={onDMSelect}
+                                onPrefetchChat={onPrefetchChat}
                                 setDmContextMenu={setDmContextMenu}
                                 getAvatarUrl={getAvatarUrl}
                                 onlineUsers={onlineUsers}
@@ -74,10 +75,20 @@ const HomePanel = ({
 // DM Item sub-component
 const DMItem = ({
     conv, otherUser, unread, isActive, currentUsername,
-    onDMSelect, setDmContextMenu, getAvatarUrl, onlineUsers, allUsers
+    onDMSelect, onPrefetchChat, setDmContextMenu, getAvatarUrl, onlineUsers, allUsers
 }) => {
     const isOnline = onlineUsers.includes(otherUser.username);
     const statusColor = isOnline ? '#23a559' : '#80848e';
+    const hoverTimerRef = useRef(null);
+
+    // 🚀 Hover prefetch: 200ms debounce
+    const handlePointerEnter = useCallback(() => {
+        if (!onPrefetchChat) return;
+        hoverTimerRef.current = setTimeout(() => onPrefetchChat('dm', conv.id), 200);
+    }, [onPrefetchChat, conv.id]);
+    const handlePointerLeave = useCallback(() => {
+        if (hoverTimerRef.current) { clearTimeout(hoverTimerRef.current); hoverTimerRef.current = null; }
+    }, []);
 
     return (
         <div
@@ -87,6 +98,8 @@ const DMItem = ({
                 position: 'relative'
             }}
             onClick={() => onDMSelect(conv.id, otherUser.username)}
+            onPointerEnter={handlePointerEnter}
+            onPointerLeave={handlePointerLeave}
             onContextMenu={(e) => {
                 e.preventDefault();
                 setDmContextMenu({ x: e.clientX, y: e.clientY, conversation: conv });
