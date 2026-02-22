@@ -69,12 +69,15 @@ const UserVideoCard = React.memo(({
                 display: 'flex',
                 flexDirection: 'column',
             }}>
-            {/* Hidden audio element for remote user sound output */}
+            {/* 🔥 FIX: Audio is played via body-appended hidden <audio> in useWebRTC.
+                 This element is only for per-user volume control via data-username selector.
+                 Set muted to avoid double audio playback — volume control via GainNode. */}
             {!user.isLocal && stream && (
                 <audio
                     ref={audioRef}
                     autoPlay
                     playsInline
+                    muted
                     data-username={user.username}
                     style={{ display: 'none' }}
                 />

@@ -110,7 +110,11 @@ export const VoiceProvider = ({ children }) => {
     } = useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom });
 
     // 📊 Stats Monitoring Hook
-    const { connectionStats, startStatsMonitoring, stopStatsMonitoring } = useStatsMonitoring();
+    const { connectionStats, startStatsMonitoring: _rawStartStats, stopStatsMonitoring } = useStatsMonitoring();
+    // 🔥 FIX: Wrap startStatsMonitoring to automatically pass peerConnectionsRef
+    const startStatsMonitoring = useCallback(() => {
+        _rawStartStats(peerConnectionsRef);
+    }, [_rawStartStats, peerConnectionsRef]);
 
     // 📊 Audio Visualizer Hook
     const { audioVisualizerData, startVisualizer, stopVisualizer } = useAudioVisualizer({
@@ -189,7 +193,8 @@ export const VoiceProvider = ({ children }) => {
     // 🔥 Noise Control Hook
     const { toggleNoiseSuppression } = useNoiseControl({
         isNoiseSuppressionEnabled, setIsNoiseSuppressionEnabled,
-        localAudioStream, setLocalAudioStream, localStreamRef
+        localAudioStream, setLocalAudioStream, localStreamRef,
+        peerConnectionsRef
     });
 
     // 🔥 Push-to-Talk Hook
@@ -329,9 +334,22 @@ export const VoiceProvider = ({ children }) => {
                 voiceEffectNodesRef.current = null;
             }
 
-            // If effectType is null, remove effect
+            // If effectType is null, remove effect — restore original track to peers
             if (!effectType) {
                 setActiveVoiceEffect(null);
+                // Restore original audio track on all peer connections
+                if (localStreamRef.current) {
+                    const originalTrack = localStreamRef.current.getAudioTracks()[0];
+                    if (originalTrack && peerConnectionsRef.current) {
+                        for (const pc of Object.values(peerConnectionsRef.current)) {
+                            const audioSender = pc.getSenders().find(s => s.track?.kind === 'audio');
+                            if (audioSender) {
+                                try { await audioSender.replaceTrack(originalTrack); } catch (e) { console.warn('[VoiceEffect] replaceTrack restore failed:', e); }
+                            }
+                        }
+                    }
+                }
+                processedStreamRef.current = null;
                 return;
             }
 
@@ -345,12 +363,26 @@ export const VoiceProvider = ({ children }) => {
             setActiveVoiceEffect(effectType);
             setVoiceEffectIntensity(intensity);
 
+            // 🔥 FIX: Replace audio track on all peer connections so remote peers hear the effect
+            const processedTrack = outputStream.getAudioTracks()[0];
+            if (processedTrack && peerConnectionsRef.current) {
+                for (const [peerName, pc] of Object.entries(peerConnectionsRef.current)) {
+                    const audioSender = pc.getSenders().find(s => s.track?.kind === 'audio');
+                    if (audioSender) {
+                        try {
+                            await audioSender.replaceTrack(processedTrack);
+                        } catch (e) {
+                            console.warn(`[VoiceEffect] replaceTrack failed for ${peerName}:`, e);
+                        }
+                    }
+                }
+            }
 
         } catch (error) {
             console.error('[VoiceEffect] Error:', error);
             toast.error('Ses efekti uygulanamadı');
         }
-    }, [localAudioStream, isInVoice]);
+    }, [localAudioStream, isInVoice, peerConnectionsRef, localStreamRef]);
 
     // 💬 SEND REACTION
     const sendReaction = useCallback((emoji) => {

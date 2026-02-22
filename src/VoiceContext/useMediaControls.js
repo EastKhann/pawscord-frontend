@@ -46,15 +46,45 @@ export const useMediaControls = ({
     const toggleDeafened = useCallback(() => {
         setIsDeafened(prev => {
             const newDeafened = !prev;
+
+            // 🔥 FIX: Actually mute/unmute all remote audio elements
+            // Mute hidden body-appended audio elements
+            const remoteAudios = document.querySelectorAll('audio[id^="remote-audio-"]');
+            remoteAudios.forEach(audio => {
+                audio.muted = newDeafened;
+            });
+            // Mute UserVideoCard audio elements
+            const cardAudios = document.querySelectorAll('audio[data-username]');
+            cardAudios.forEach(audio => {
+                audio.muted = newDeafened;
+            });
+
             if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
                 voiceWsRef.current.send(JSON.stringify({
                     type: 'deaf_state',
                     is_deafened: newDeafened
                 }));
             }
+
+            // Also mute mic when deafening (Discord behavior)
+            if (newDeafened) {
+                if (localStreamRef.current) {
+                    localStreamRef.current.getAudioTracks().forEach(track => {
+                        track.enabled = false;
+                    });
+                }
+                setIsMuted(true);
+                if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
+                    voiceWsRef.current.send(JSON.stringify({
+                        type: 'mic_off_state',
+                        is_mic_off: true
+                    }));
+                }
+            }
+
             return newDeafened;
         });
-    }, [voiceWsRef, setIsDeafened]);
+    }, [voiceWsRef, setIsDeafened, setIsMuted, localStreamRef]);
 
     // --- CAMERA TOGGLE ---
     const toggleVideo = useCallback(async () => {

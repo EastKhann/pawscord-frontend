@@ -35,6 +35,24 @@ export function useSignalHandler({
     leaveVoiceRoomRef,
 }) {
     const handleSignalMessage = useCallback(async (data) => {
+        // 🔇 SERVER MUTED (moderator muted the user's mic)
+        if (data.type === 'server_muted') {
+            toast.warning(data.message || 'Mikrofonunuz moderatör tarafından kapatıldı', 5000);
+            // Force mute the local mic
+            if (localStreamRef.current) {
+                localStreamRef.current.getAudioTracks().forEach(track => {
+                    track.enabled = false;
+                });
+            }
+            setConnectedUsers(prev => prev.map(u => {
+                if (u.username === data.from) {
+                    return { ...u, isMuted: true };
+                }
+                return u;
+            }));
+            return;
+        }
+
         // 🧹 KICKED (Inactivity cleanup or mod action)
         if (data.type === 'kicked') {
             console.warn('🔴 [Voice] Kicked from channel:', data.reason, data.message);
@@ -75,14 +93,16 @@ export function useSignalHandler({
         // 💬 VOICE REACTION
         if (data.type === 'voice_reaction') {
             const senderUsername = data.from || data.username;
+            const reactionTimestamp = Date.now();
             setLastReaction({
                 username: senderUsername,
                 emoji: data.emoji,
-                timestamp: Date.now()
+                timestamp: reactionTimestamp
             });
             setTimeout(() => {
                 setLastReaction(prev => {
-                    if (prev && prev.timestamp === Date.now()) return null;
+                    // 🔥 FIX: Compare against the stored timestamp, not current Date.now()
+                    if (prev && prev.timestamp === reactionTimestamp) return null;
                     return prev;
                 });
             }, 3000);

@@ -6,7 +6,8 @@ import { useCallback } from 'react';
  */
 export function useNoiseControl({
     isNoiseSuppressionEnabled, setIsNoiseSuppressionEnabled,
-    localAudioStream, setLocalAudioStream, localStreamRef
+    localAudioStream, setLocalAudioStream, localStreamRef,
+    peerConnectionsRef
 }) {
     // 🔥 YENİ: Noise Suppression Toggle (fallback ile)
     // 🔥 GELİŞMİŞ GÜRÜLTÜ ENGELLEMESİ - Noise Gate ile birlikte
@@ -49,6 +50,20 @@ export function useNoiseControl({
                         const newStream = new MediaStream([track]);
                         setLocalAudioStream(newStream);
                         localStreamRef.current = newStream;
+
+                        // 🔥 FIX: Replace audio track on all peer connections
+                        if (peerConnectionsRef?.current) {
+                            for (const pc of Object.values(peerConnectionsRef.current)) {
+                                const audioSender = pc.getSenders().find(s => s.track?.kind === 'audio');
+                                if (audioSender) {
+                                    try {
+                                        await audioSender.replaceTrack(track);
+                                    } catch (replaceErr) {
+                                        console.warn('[Noise] replaceTrack failed:', replaceErr);
+                                    }
+                                }
+                            }
+                        }
                     } catch (e2) {
                         console.error('[Noise] Fallback failed:', e2);
                     }

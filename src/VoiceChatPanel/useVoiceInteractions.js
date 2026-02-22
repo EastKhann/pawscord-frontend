@@ -83,9 +83,12 @@ const useVoiceInteractions = ({ setContextMenu, setVolumeSettings }) => {
             }
         }));
 
-        // 🔥 İYİLEŞTİRME: Audio element'e anında uygula (GainNode ile >100% destek)
-        const audioElements = document.querySelectorAll(`audio[data-username="${targetUser.username}"]`);
-        audioElements.forEach(audio => {
+        // 🔥 FIX: Target both body-appended hidden audio AND UserVideoCard audio elements
+        const bodyAudio = document.getElementById(`remote-audio-${targetUser.username}`);
+        const cardAudios = document.querySelectorAll(`audio[data-username="${targetUser.username}"]`);
+        const allAudios = bodyAudio ? [bodyAudio, ...cardAudios] : [...cardAudios];
+
+        allAudios.forEach(audio => {
             if (volume <= 100) {
                 // Normal range — use native volume
                 audio.volume = volume / 100;

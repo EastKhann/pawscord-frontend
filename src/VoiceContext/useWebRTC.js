@@ -162,7 +162,7 @@ export function useWebRTC({
                 sendSignal({
                     type: 'candidate',
                     candidate: event.candidate,
-                    receiver_username: partnerUsername
+                    target: partnerUsername
                 });
             }
         };
