@@ -146,9 +146,22 @@ export default function useMessageHandlers({
         if (!activeChat.id) return;
         if (activeChat.type === 'voice') { setMessages([]); setHasMoreMessages(false); return; }
 
-        if (isInitial && !silent) setMessageHistoryLoading(true);
         const urlBase = activeChat.type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
+
+        // 🚀 PERF: Show cached messages instantly, then refresh in background
+        if (isInitial) {
+            const cached = historyCacheRef.current[key];
+            if (cached && cached.messages && cached.messages.length > 0) {
+                setMessages(cached.messages);
+                setHasMoreMessages(cached.hasMore !== false);
+                nextCursorRef.current = cached.nextCursor || null;
+                // Background refresh — don't show loading spinner
+                silent = true;
+            }
+        }
+
+        if (isInitial && !silent) setMessageHistoryLoading(true);
 
         try {
             // Initial: fresh URL. Pagination: use the cursor URL from previous response
