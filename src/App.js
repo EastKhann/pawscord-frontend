@@ -156,7 +156,18 @@ const AppContent = () => {
     const searchInputRef = useRef(null);
     const richTextRef = useRef(null);
     const fileInputRefNormal = useRef(null);
-    const historyCacheRef = useRef({});
+    const historyCacheRef = useRef(() => {
+        // 🚀 Restore message cache from sessionStorage on mount
+        try {
+            const saved = sessionStorage.getItem('pawscord_msg_cache');
+            if (saved) return JSON.parse(saved);
+        } catch (e) { /* corrupt data, ignore */ }
+        return {};
+    });
+    // Initialize the ref value if it's a function (lazy init)
+    if (typeof historyCacheRef.current === 'function') {
+        historyCacheRef.current = historyCacheRef.current();
+    }
     const fetchMessageHistoryRef = useRef(null); // Ref for pagination (breaks circular dep)
     const statusWsRef = useRef(null);
     const statusWsReconnectRef = useRef(null);

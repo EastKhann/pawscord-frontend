@@ -89,6 +89,9 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
 
 const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
     const audioRef = useRef(null);
+    const audioCtxRef = useRef(null);
+    const sourceRef = useRef(null);
+    const gainRef = useRef(null);
 
     useEffect(() => {
         if (stream) {
@@ -126,6 +129,22 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
         };
 
         attemptPlay();
+
+        // Cleanup GainNode chain on stream change
+        return () => {
+            if (sourceRef.current) {
+                try { sourceRef.current.disconnect(); } catch (e) { /* */ }
+                sourceRef.current = null;
+            }
+            if (gainRef.current) {
+                try { gainRef.current.disconnect(); } catch (e) { /* */ }
+                gainRef.current = null;
+            }
+            if (audioCtxRef.current) {
+                try { audioCtxRef.current.close(); } catch (e) { /* */ }
+                audioCtxRef.current = null;
+            }
+        };
     }, [stream, username, globalEnabled]);
 
     useEffect(() => {
@@ -133,9 +152,50 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
         if (!audio) return;
 
         const targetVolume = isMuted ? 0 : (volume / 100);
-        audio.volume = Math.max(0, Math.min(1, targetVolume));
+
+        if (targetVolume <= 1) {
+            // Normal range (0-100%): use native volume, bypass GainNode
+            audio.volume = Math.max(0, targetVolume);
+            if (gainRef.current) {
+                try { gainRef.current.gain.value = 1; } catch (e) { /* */ }
+            }
+        } else {
+            // >100% amplification: use Web Audio API GainNode
+            audio.volume = 1.0; // Max native volume
+            try {
+                if (!audioCtxRef.current) {
+                    const Ctx = window.AudioContext || window.webkitAudioContext;
+                    audioCtxRef.current = new Ctx();
+                    sourceRef.current = audioCtxRef.current.createMediaElementSource(audio);
+                    gainRef.current = audioCtxRef.current.createGain();
+                    sourceRef.current.connect(gainRef.current);
+                    gainRef.current.connect(audioCtxRef.current.destination);
+                }
+                if (audioCtxRef.current.state === 'suspended') {
+                    audioCtxRef.current.resume();
+                }
+                gainRef.current.gain.value = targetVolume; // e.g. 1.5 for 150%, 2.0 for 200%
+            } catch (e) {
+                logger.warn(`[AudioPlayer] GainNode amplification failed for ${username}:`, e);
+            }
+        }
         logger.log(`[AudioPlayer] ${username} volume set to ${Math.round(targetVolume * 100)}%`);
     }, [volume, isMuted, username]);
+
+    // Cleanup AudioContext on unmount
+    useEffect(() => {
+        return () => {
+            if (sourceRef.current) {
+                try { sourceRef.current.disconnect(); } catch (e) { /* */ }
+            }
+            if (gainRef.current) {
+                try { gainRef.current.disconnect(); } catch (e) { /* */ }
+            }
+            if (audioCtxRef.current) {
+                try { audioCtxRef.current.close(); } catch (e) { /* */ }
+            }
+        };
+    }, []);
 
     return (
         <audio

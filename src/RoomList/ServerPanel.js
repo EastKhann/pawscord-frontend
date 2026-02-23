@@ -1,5 +1,5 @@
 // frontend/src/RoomList/ServerPanel.js
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import {
     FaChevronDown, FaChevronRight, FaPlus, FaCog,
     FaVolumeUp, FaUserPlus
@@ -26,6 +26,25 @@ const ServerPanel = ({
     handleAddFriend, handleRemoveFriend, handleMoveUserToChannel, handleKickUserFromChannel,
     onViewUserProfile
 }) => {
+    // 🚀 Prefetch all text channels when user clicks a server
+    useEffect(() => {
+        if (!onPrefetchChat || !selectedServerId || !servers) return;
+        const server = servers.find(s => s.id === selectedServerId);
+        if (!server?.categories) return;
+        const textChannels = [];
+        for (const cat of server.categories) {
+            if (cat.rooms) {
+                for (const room of cat.rooms) {
+                    if (room.room_type !== 'voice') textChannels.push(room.slug);
+                }
+            }
+        }
+        // Stagger prefetch requests to avoid flooding (max 6, 150ms apart)
+        textChannels.slice(0, 6).forEach((slug, i) => {
+            setTimeout(() => onPrefetchChat('room', slug), i * 150);
+        });
+    }, [selectedServerId]); // eslint-disable-line react-hooks/exhaustive-deps
+
     if (!servers) return null;
 
     return (

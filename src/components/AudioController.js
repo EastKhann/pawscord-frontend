@@ -50,9 +50,35 @@ const AudioController = () => {
                 });
             }
 
-            // Apply volume
+            // Apply volume with >100% amplification via GainNode
             const volume = remoteVolumes[username] !== undefined ? remoteVolumes[username] / 100 : 1;
-            audioEl.volume = volume;
+
+            if (volume <= 1) {
+                // Normal range: use native volume
+                audioEl.volume = Math.max(0, volume);
+                if (audioEl._gainNode) {
+                    try { audioEl._gainNode.gain.value = 1; } catch (e) { /* */ }
+                }
+            } else {
+                // >100%: use Web Audio API GainNode for amplification
+                audioEl.volume = 1.0;
+                try {
+                    if (!audioEl._audioContext) {
+                        const Ctx = window.AudioContext || window.webkitAudioContext;
+                        audioEl._audioContext = new Ctx();
+                        audioEl._sourceNode = audioEl._audioContext.createMediaElementSource(audioEl);
+                        audioEl._gainNode = audioEl._audioContext.createGain();
+                        audioEl._sourceNode.connect(audioEl._gainNode);
+                        audioEl._gainNode.connect(audioEl._audioContext.destination);
+                    }
+                    if (audioEl._audioContext.state === 'suspended') {
+                        audioEl._audioContext.resume();
+                    }
+                    audioEl._gainNode.gain.value = volume; // e.g. 1.5 for 150%
+                } catch (e) {
+                    console.warn(`[AudioController] GainNode amplification failed for ${username}:`, e);
+                }
+            }
 
             // Apply mute state
             const isMuted = mutedUsers.has(username);
@@ -67,6 +93,10 @@ const AudioController = () => {
             Object.values(audioElementsRef.current).forEach(audioEl => {
                 audioEl.pause();
                 audioEl.srcObject = null;
+                // Cleanup Web Audio API GainNode chain
+                if (audioEl._sourceNode) { try { audioEl._sourceNode.disconnect(); } catch (e) { /* */ } }
+                if (audioEl._gainNode) { try { audioEl._gainNode.disconnect(); } catch (e) { /* */ } }
+                if (audioEl._audioContext) { try { audioEl._audioContext.close(); } catch (e) { /* */ } }
             });
             audioElementsRef.current = {};
         };

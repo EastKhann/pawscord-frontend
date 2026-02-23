@@ -8,6 +8,33 @@ import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';
 import { getTemporaryId } from '../config/api';
 
+// 🚀 Debounced sessionStorage persist — keeps last 8 channels cached across page refreshes
+let _persistTimer = null;
+function persistHistoryCache(cacheRef) {
+    clearTimeout(_persistTimer);
+    _persistTimer = setTimeout(() => {
+        try {
+            const cache = cacheRef.current;
+            const keys = Object.keys(cache);
+            // Keep only the 8 most recent entries to stay under sessionStorage limits
+            const recentKeys = keys.slice(-8);
+            const trimmed = {};
+            for (const k of recentKeys) {
+                const entry = cache[k];
+                if (entry?.messages?.length > 0) {
+                    // Store max 35 messages per channel to limit size
+                    trimmed[k] = {
+                        messages: entry.messages.slice(-35),
+                        hasMore: entry.hasMore,
+                        nextCursor: entry.nextCursor,
+                    };
+                }
+            }
+            sessionStorage.setItem('pawscord_msg_cache', JSON.stringify(trimmed));
+        } catch (e) { /* sessionStorage full or unavailable, silent fail */ }
+    }, 2000);
+}
+
 export default function useMessageHandlers({
     activeChat, username, token, ws,
     encryptionKeys, setMessages, scrollToBottom, isNearBottom,
@@ -166,7 +193,7 @@ export default function useMessageHandlers({
         try {
             // Initial: fresh URL. Pagination: use the cursor URL from previous response
             const url = isInitial
-                ? `${urlBase}${activeChat.id}/?limit=75`
+                ? `${urlBase}${activeChat.id}/?limit=35`
                 : nextCursorRef.current;
 
             if (!url) { setHasMoreMessages(false); return; }
@@ -203,6 +230,7 @@ export default function useMessageHandlers({
                     nextCursor: data.next,
                     hasMore
                 };
+                persistHistoryCache(historyCacheRef);
             }
         } catch (e) { console.error('❌ [fetchMessageHistory] Error:', e); }
         if (isInitial && !silent) setMessageHistoryLoading(false);
@@ -343,7 +371,7 @@ export default function useMessageHandlers({
 
         try {
             const urlBase = type === 'room' ? MESSAGE_HISTORY_ROOM_URL : MESSAGE_HISTORY_DM_URL;
-            const res = await fetchWithAuth(`${urlBase}${id}/?limit=50`);
+            const res = await fetchWithAuth(`${urlBase}${id}/?limit=30`);
             if (res.ok) {
                 const data = await res.json();
                 const rawMessages = data.results || [];
@@ -353,10 +381,22 @@ export default function useMessageHandlers({
                     nextCursor: data.next || null,
                     hasMore: !!data.next
                 };
+                persistHistoryCache(historyCacheRef);
             }
         } catch (e) { /* prefetch hatası sessizce yutulur */ }
         finally { prefetchInflightRef.current.delete(key); }
     }, [fetchWithAuth, MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL]);
+
+    // --- � PREFETCH ALL CHANNELS IN A SERVER (triggered on server click) ---
+    const prefetchServerChannels = useCallback((channels) => {
+        if (!channels || channels.length === 0) return;
+        // Only prefetch text channels, skip voice. Limit to 6 to avoid flooding.
+        const textChannels = channels.filter(ch => ch.room_type !== 'voice').slice(0, 6);
+        // Stagger requests to avoid network congestion: 0ms, 100ms, 200ms...
+        textChannels.forEach((ch, i) => {
+            setTimeout(() => prefetchMessages('room', ch.slug), i * 100);
+        });
+    }, [prefetchMessages]);
 
     // --- 📜 SCROLL TO MESSAGE ---
     const scrollToMessage = useCallback((msgId) => {
@@ -369,6 +409,7 @@ export default function useMessageHandlers({
         handleSendSnippet,
         fetchMessageHistory,
         prefetchMessages,
+        prefetchServerChannels,
         handleDeleteMessage,
         handleTogglePin,
         handleSearchMessages,

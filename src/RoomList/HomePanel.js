@@ -1,5 +1,5 @@
 // frontend/src/RoomList/HomePanel.js
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { FaUserFriends, FaRobot, FaChartLine } from '../utils/iconOptimization';
 import LazyImage from '../components/LazyImage';
 import { styles } from '../SidebarStyles';
@@ -10,6 +10,15 @@ const HomePanel = ({
     safeUnreadCounts, onlineUsers, allUsers,
     getAvatarUrl, setDmContextMenu
 }) => {
+    // 🚀 Prefetch top DM conversations when HomePanel mounts
+    useEffect(() => {
+        if (!onPrefetchChat || !conversations || conversations.length === 0) return;
+        // Prefetch first 4 DM conversations, staggered
+        conversations.slice(0, 4).forEach((conv, i) => {
+            setTimeout(() => onPrefetchChat('dm', conv.id), i * 150);
+        });
+    }, [conversations?.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <div style={styles.topSection}>
             <div style={styles.headerTitle}>Ana Sayfa</div>
