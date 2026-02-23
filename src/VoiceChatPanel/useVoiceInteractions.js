@@ -4,7 +4,7 @@
 import { useCallback } from 'react';
 import toast from '../utils/toast';
 
-const useVoiceInteractions = ({ setContextMenu, setVolumeSettings }) => {
+const useVoiceInteractions = ({ setContextMenu, setVolumeSettings, setRemoteVolume }) => {
     const handleSendMessage = useCallback(async (targetUser) => {
         window.location.hash = `#/dm/${targetUser.username}`;
     }, []);
@@ -83,37 +83,13 @@ const useVoiceInteractions = ({ setContextMenu, setVolumeSettings }) => {
             }
         }));
 
-        // 🔥 FIX: Target both body-appended hidden audio AND UserVideoCard audio elements
-        const bodyAudio = document.getElementById(`remote-audio-${targetUser.username}`);
-        const cardAudios = document.querySelectorAll(`audio[data-username="${targetUser.username}"]`);
-        const allAudios = bodyAudio ? [bodyAudio, ...cardAudios] : [...cardAudios];
-
-        allAudios.forEach(audio => {
-            if (volume <= 100) {
-                // Normal range — use native volume
-                audio.volume = volume / 100;
-                // Disconnect any existing GainNode
-                if (audio._gainNode) {
-                    try { audio._gainNode.gain.value = 1; } catch (e) { /* */ }
-                }
-            } else {
-                // >100% — use Web Audio API GainNode for amplification
-                audio.volume = 1.0; // Max native volume
-                try {
-                    if (!audio._audioContext) {
-                        audio._audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                        audio._sourceNode = audio._audioContext.createMediaElementSource(audio);
-                        audio._gainNode = audio._audioContext.createGain();
-                        audio._sourceNode.connect(audio._gainNode);
-                        audio._gainNode.connect(audio._audioContext.destination);
-                    }
-                    audio._gainNode.gain.value = volume / 100; // e.g., 1.5 for 150%, 2.0 for 200%
-                } catch (e) {
-                    console.warn('[Volume] GainNode amplification failed:', e);
-                }
-            }
-        });
-    }, [setVolumeSettings]);
+        // 🔥 FIX: Route through VoiceContext remoteVolumes state → VoiceAudioController
+        // This ensures the SINGLE AudioPlayer per user handles volume (with GainNode for >100%).
+        // Previously, this directly manipulated DOM audio elements, causing double-audio volume jumps.
+        if (setRemoteVolume) {
+            setRemoteVolume(targetUser.username, volume);
+        }
+    }, [setVolumeSettings, setRemoteVolume]);
 
     return {
         handleSendMessage,

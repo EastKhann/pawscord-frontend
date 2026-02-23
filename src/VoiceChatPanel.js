@@ -119,7 +119,7 @@ const VoiceChatPanel = ({
     const {
         handleSendMessage, handleAddFriend, handleBlock,
         handleViewProfile, handleMuteUser, handleAdjustVolume
-    } = useVoiceInteractions({ setContextMenu, setVolumeSettings });
+    } = useVoiceInteractions({ setContextMenu, setVolumeSettings, setRemoteVolume });
 
     // 🎯 Stable callback refs (performance)
     const handleContextMenu = useCallback((data) => setContextMenu(data), []);

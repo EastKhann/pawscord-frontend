@@ -105,9 +105,11 @@ export function useWebRTC({
                 audioEl.srcObject = new MediaStream([track]);
                 audioEl.autoplay = true;
                 audioEl.playsInline = true;
-                // 🔥 FIX: volume 1.0 explicitly + not muted
+                // 🔥 FIX: MUTED — this element is only for autoplay priming & DOM reference.
+                // Actual audio playback is handled by VoiceAudioController (which has GainNode support).
+                // Having both unmuted caused DOUBLE audio = 2-3x volume jump!
                 audioEl.volume = 1.0;
-                audioEl.muted = false;
+                audioEl.muted = true;
 
                 audioEl.style.display = 'none';
                 document.body.appendChild(audioEl);
