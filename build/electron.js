@@ -506,11 +506,26 @@ function createWindow() {
         // React'e bitti bilgisini gönder
         mainWindow.webContents.send('download-complete');
 
-        // 🔥 DOSYAYI OTOMATİK ÇALIŞTIR (Installer Açılır)
-        shell.openPath(filePath);
-
-        // İsteğe bağlı: Uygulamayı hemen kapat (Zaten installer kapatacak ama garanti olsun)
-        // setTimeout(() => app.quit(), 1000);
+        // 🔥 SILENT INSTALL: /S flag ile sessiz kurulum (Next butonuna basma yok)
+        const { execFile } = require('child_process');
+        console.log('🔧 Silent install başlatılıyor:', filePath);
+        try {
+          const installer = execFile(filePath, ['/S', '--force-run'], {
+            detached: true,
+            windowsHide: false
+          });
+          installer.unref(); // Ana process'ten ayır
+          console.log('✅ Installer başlatıldı, uygulama kapanıyor...');
+          // Installer'ın başlaması için kısa bekleme, sonra çık
+          setTimeout(() => {
+            app.quit();
+          }, 2000);
+        } catch (execErr) {
+          console.error('❌ Silent install başlatılamadı, fallback:', execErr);
+          // Fallback: normal açış
+          shell.openPath(filePath);
+          setTimeout(() => app.quit(), 3000);
+        }
       } else {
         console.log(`İndirme başarısız: ${state}`);
         mainWindow.webContents.send('download-error', state);

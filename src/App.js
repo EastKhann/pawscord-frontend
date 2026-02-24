@@ -315,8 +315,8 @@ const AppContent = () => {
         if (isElectron) {
             const { ipcRenderer } = window.require('electron');
             const handleProgress = (event, progress) => setDownloadProgress(Math.round(progress * 100));
-            const handleComplete = () => { setUpdateStatusText('Başlatılıyor...'); setDownloadProgress(100); setTimeout(() => setUpdateStatusText('Kapanıyor...'), 1500); };
-            const handleError = (event, error) => { setIsDownloading(false); };
+            const handleComplete = () => { setUpdateStatusText('Kurulum başlatılıyor...'); setDownloadProgress(100); setTimeout(() => { setUpdateStatusText('Uygulama kapanıyor...'); }, 1500); };
+            const handleError = (event, error) => { setIsDownloading(false); setUpdateStatusText(''); };
             ipcRenderer.on('download-progress', handleProgress);
             ipcRenderer.on('download-complete', handleComplete);
             ipcRenderer.on('download-error', handleError);

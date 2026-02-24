@@ -50,6 +50,7 @@ const useVoiceSettings = ({ channelId }) => {
     const analyserRef = useRef(null);
     const mediaStreamRef = useRef(null);
     const animationRef = useRef(null);
+    const gainNodeRef = useRef(null);
 
     const apiBaseUrl = getApiBase();
     const token = localStorage.getItem('access_token');
@@ -150,25 +151,52 @@ const useVoiceSettings = ({ channelId }) => {
 
     const startMicTest = async () => {
         try {
+            // 🔥 Mic test'te gürültü engelleme KAPALI — gerçek ses seviyesini göster
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
                     deviceId: settings.input_device !== 'default' ? settings.input_device : undefined,
-                    echoCancellation: settings.echo_cancellation,
-                    noiseSuppression: settings.noise_suppression,
-                    autoGainControl: settings.automatic_gain_control
+                    echoCancellation: false,
+                    noiseSuppression: false,
+                    autoGainControl: false
                 }
             });
             mediaStreamRef.current = stream;
             audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
             analyserRef.current = audioContextRef.current.createAnalyser();
+
+            // 🔥 Input volume boost (GainNode) — ref ile sakla, slider değişince güncellenecek
+            const gainNode = audioContextRef.current.createGain();
+            gainNode.gain.value = (settings.input_volume || 100) / 100;
+            gainNodeRef.current = gainNode;
+
             const source = audioContextRef.current.createMediaStreamSource(stream);
-            source.connect(analyserRef.current);
-            analyserRef.current.fftSize = 256;
-            const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+            source.connect(gainNode);
+            gainNode.connect(analyserRef.current);
+
+            // 🔥 Time-domain peak + RMS hybrid analiz
+            analyserRef.current.fftSize = 2048;
+            analyserRef.current.smoothingTimeConstant = 0.3;
+            const dataArray = new Uint8Array(analyserRef.current.fftSize);
+
             const updateLevel = () => {
-                analyserRef.current.getByteFrequencyData(dataArray);
-                const avg = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                setMicLevel(avg / 255 * 100);
+                analyserRef.current.getByteTimeDomainData(dataArray);
+                // RMS (Root Mean Square) — daha stabil ölçüm
+                let sumSquares = 0;
+                let peak = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    const amplitude = (dataArray[i] - 128) / 128; // -1 to +1
+                    sumSquares += amplitude * amplitude;
+                    const abs = Math.abs(amplitude);
+                    if (abs > peak) peak = abs;
+                }
+                const rms = Math.sqrt(sumSquares / dataArray.length);
+                // Hybrid: %70 RMS + %30 peak (RMS stabil, peak tepkisel)
+                const hybrid = rms * 0.7 + peak * 0.3;
+                // 🔥 Perceptual scaling (power curve 0.35)
+                // Normal konuşma hybrid ~0.02-0.15 → %40-70 gösterir
+                const scaled = Math.min(100, Math.pow(hybrid, 0.35) * 100);
+                // Smooth
+                setMicLevel(prev => prev * 0.2 + scaled * 0.8);
                 animationRef.current = requestAnimationFrame(updateLevel);
             };
             updateLevel();
@@ -179,10 +207,18 @@ const useVoiceSettings = ({ channelId }) => {
         }
     };
 
+    // 🔥 Volume slider değişince GainNode'u canlı güncelle
+    useEffect(() => {
+        if (gainNodeRef.current && isTesting) {
+            gainNodeRef.current.gain.value = (settings.input_volume || 100) / 100;
+        }
+    }, [settings.input_volume, isTesting]);
+
     const stopMicTest = () => {
         if (animationRef.current) cancelAnimationFrame(animationRef.current);
         if (mediaStreamRef.current) mediaStreamRef.current.getTracks().forEach(track => track.stop());
         if (audioContextRef.current) audioContextRef.current.close();
+        gainNodeRef.current = null;
         setIsTesting(false);
         setMicLevel(0);
     };

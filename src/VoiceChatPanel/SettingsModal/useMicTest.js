@@ -20,25 +20,40 @@ const useMicTest = () => {
 
         (async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // 🔥 Mic test: gürültü engelleme KAPALI — gerçek seviye
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+                });
                 testStreamRef.current = stream;
 
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 const audioContext = new AudioContext();
                 const analyser = audioContext.createAnalyser();
-                analyser.fftSize = 256;
-                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.4;
                 analyserRef.current = analyser;
 
                 const source = audioContext.createMediaStreamSource(stream);
                 source.connect(analyser);
 
-                const dataArray = new Uint8Array(analyser.frequencyBinCount);
+                // 🔥 Time-domain RMS+peak hybrid — perceptual scaling
+                const dataArray = new Uint8Array(analyser.fftSize);
 
                 const updateLevel = () => {
-                    analyser.getByteFrequencyData(dataArray);
-                    const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-                    setMicLevel(Math.min(100, average * 1.5));
+                    analyser.getByteTimeDomainData(dataArray);
+                    let sumSquares = 0;
+                    let peak = 0;
+                    for (let i = 0; i < dataArray.length; i++) {
+                        const amplitude = (dataArray[i] - 128) / 128;
+                        sumSquares += amplitude * amplitude;
+                        const abs = Math.abs(amplitude);
+                        if (abs > peak) peak = abs;
+                    }
+                    const rms = Math.sqrt(sumSquares / dataArray.length);
+                    const hybrid = rms * 0.7 + peak * 0.3;
+                    // Power curve: normal konuşma ~%40-70
+                    const scaled = Math.min(100, Math.pow(hybrid, 0.35) * 100);
+                    setMicLevel(prev => prev * 0.2 + scaled * 0.8);
                     animationRef.current = requestAnimationFrame(updateLevel);
                 };
 
