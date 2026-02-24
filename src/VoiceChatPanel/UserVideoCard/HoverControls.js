@@ -84,7 +84,7 @@ const HoverControls = ({ user, isPinned, onPin, onExpand, showFullControls, vide
                     <input
                         type="range"
                         min="0"
-                        max="200"
+                        max="400"
                         value={user.volume || 100}
                         onChange={(e) => {
                             e.stopPropagation();

@@ -3,10 +3,9 @@ import logger from './utils/logger';
 import toast from './utils/toast';
 
 const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
-    const [globalAudioEnabled, setGlobalAudioEnabled] = useState(() => {
-        const saved = localStorage.getItem('pawscord_audio_enabled');
-        return saved === 'true';
-    });
+    // 🔥 FIX: Always enabled — user already interacted to join voice channel.
+    // Old behavior required clicking "SES SİSTEMİNİ BAŞLAT" popup which was easily missed → silent audio.
+    const [globalAudioEnabled, setGlobalAudioEnabled] = useState(true);
 
     const enableAudioContext = useCallback(() => {
         try {
@@ -35,41 +34,6 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
 
     return (
         <>
-            {/* Ses başlatma butonu - sadece ilk kez gerekli */}
-            {!globalAudioEnabled && Object.keys(remoteStreams).length > 0 && (
-                <div style={{
-                    position: 'fixed',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    zIndex: 999999,
-                    backgroundColor: 'rgba(0,0,0,0.9)',
-                    padding: '20px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
-                }}>
-                    <button
-                        onClick={enableAudioContext}
-                        style={{
-                            padding: '12px 24px',
-                            backgroundColor: '#ff4757',
-                            color: 'white',
-                            fontWeight: 'bold',
-                            border: 'none',
-                            cursor: 'pointer',
-                            borderRadius: '6px',
-                            fontSize: '16px',
-                            transition: 'all 0.2s',
-                            boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
-                        }}
-                        onMouseOver={(e) => e.target.style.backgroundColor = '#ee5a6f'}
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#ff4757'}
-                    >
-                        🚨 SES SİSTEMİNİ BAŞLAT 🚨
-                    </button>
-                </div>
-            )}
-
             {/* Ses oynatıcıları - gizli (sadece arka planda çalışır) */}
             <div style={{ display: 'none' }}>
                 {Object.entries(remoteStreams).map(([username, stream]) => (
@@ -121,10 +85,20 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
                     return;
                 }
 
+                audio.muted = false;
+                audio.volume = 1.0;
                 await audio.play();
                 logger.log(`✅ [AudioPlayer] Successfully playing ${username}`);
             } catch (err) {
                 logger.warn(`[AudioPlayer] Autoplay blocked for ${username}:`, err);
+                // Retry on user interaction
+                const resumeAudio = () => {
+                    audio.play().catch(() => { });
+                };
+                document.addEventListener('click', resumeAudio, { once: true });
+                document.addEventListener('keydown', resumeAudio, { once: true });
+                // Also retry after short delay
+                setTimeout(() => { audio.play().catch(() => { }); }, 500);
             }
         };
 
