@@ -519,6 +519,11 @@ function createWindow() {
   });
 }
 
+// ✅ APP VERSION (Preload'dan çağrılıyor)
+ipcMain.handle('get-app-version', () => {
+  return app.getVersion();
+});
+
 // ✅ REACT'TEN GELEN 'İNDİR' EMRİNİ DİNLE
 ipcMain.on('start-download', (event, url) => {
   if (mainWindow) {

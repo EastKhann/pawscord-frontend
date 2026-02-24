@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import fs from 'fs'
 
+// Read version from package.json
+const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8'));
+const APP_VERSION = packageJson.version;
+
 // ELECTRON CONFIG - PWA DISABLED
 // Uses electron.html (no inline <style> blocks) to avoid Vite 7 html-proxy virtual module regression
 export default defineConfig({
@@ -76,6 +80,11 @@ export default defineConfig({
 
         minify: 'esbuild',
         target: 'esnext',
+    },
+
+    // Define global constants - VERSION
+    define: {
+        'import.meta.env.VITE_APP_VERSION': JSON.stringify(APP_VERSION),
     },
 
     server: {
