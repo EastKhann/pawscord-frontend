@@ -9,7 +9,7 @@ import ActionButton from '../ActionButton';
  * Renders action buttons and volume slider that appear on hover.
  * Supports pin, expand, fullscreen, and 0-200% volume control.
  */
-const HoverControls = ({ user, isPinned, onPin, onExpand, showFullControls, videoRef }) => {
+const HoverControls = ({ user, isPinned, onPin, onExpand, showFullControls, videoRef, cardRef }) => {
     return (
         <div style={{
             position: 'absolute',
@@ -45,11 +45,10 @@ const HoverControls = ({ user, isPinned, onPin, onExpand, showFullControls, vide
                 icon="🖥️"
                 onClick={(e) => {
                     e.stopPropagation();
-                    // 🔥 Fullscreen mode
-                    const videoElement = videoRef.current;
-                    if (videoElement) {
-                        const parentDiv = videoElement.parentElement?.parentElement;
-                        const element = parentDiv || videoElement;
+                    // 🔥 FIX: Use cardRef for fullscreen (the UserVideoCard root div)
+                    // so the fullscreen overlay with exit button is visible.
+                    const element = cardRef?.current || videoRef.current?.parentElement?.parentElement || videoRef.current;
+                    if (element) {
                         if (element.requestFullscreen) {
                             element.requestFullscreen();
                         } else if (element.webkitRequestFullscreen) {

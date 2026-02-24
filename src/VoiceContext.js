@@ -237,6 +237,7 @@ export const VoiceProvider = ({ children }) => {
         createPeerConnection,
         iceCandidateBufferRef,
         addLocalStreamsToPeer,
+        trackMetadataRef,
     } = useWebRTC({
         username,
         voiceWsRef,
@@ -260,6 +261,7 @@ export const VoiceProvider = ({ children }) => {
         sendSignal,
         iceCandidateBufferRef,
         addLocalStreamsToPeer,
+        trackMetadataRef,
         peerConnectionsRef,
         localStreamRef,
         localCameraStreamRef,

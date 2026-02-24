@@ -169,6 +169,13 @@ export const useMediaControls = ({
                             const offer = await pc.createOffer();
                             await pc.setLocalDescription(offer);
                             sendSignal({ type: 'offer', sdp: pc.localDescription, target: username });
+                            // 🔥 FIX: Send track metadata so receiver knows this is "camera"
+                            sendSignal({
+                                type: 'track_metadata',
+                                trackId: videoTrack.id,
+                                streamType: 'camera',
+                                target: username,
+                            });
                         } catch (e) { console.warn(`[Camera] Failed to add/renegotiate with ${username}:`, e); }
                     })());
                 }
@@ -293,6 +300,14 @@ export const useMediaControls = ({
                             const offer = await pc.createOffer();
                             await pc.setLocalDescription(offer);
                             sendSignal({ type: 'offer', sdp: pc.localDescription, target: username });
+                            // 🔥 FIX: Send track metadata so receiver knows this track is "screen"
+                            // track.contentHint does NOT transfer over WebRTC transport.
+                            sendSignal({
+                                type: 'track_metadata',
+                                trackId: screenTrack.id,
+                                streamType: 'screen',
+                                target: username,
+                            });
                         } catch (e) { console.error(`[Screen] Failed to add track to ${username}:`, e.message); }
                     })());
                 }

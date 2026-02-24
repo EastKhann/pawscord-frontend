@@ -18,6 +18,7 @@ export function useSignalHandler({
     sendSignal,
     iceCandidateBufferRef,
     addLocalStreamsToPeer,
+    trackMetadataRef,
     // Refs
     peerConnectionsRef,
     localStreamRef,
@@ -87,6 +88,16 @@ export function useSignalHandler({
                 }
                 return newStreams;
             });
+            return;
+        }
+
+        // 🔥 TRACK METADATA — sender tells us which trackId is "screen" vs "camera"
+        // This is needed because track.contentHint and track.label do NOT transfer over WebRTC.
+        if (data.type === 'track_metadata') {
+            if (trackMetadataRef && data.trackId && data.streamType) {
+                trackMetadataRef.current[data.trackId] = data.streamType;
+                logger.webrtc(`[TrackMetadata] ${data.from || 'peer'} trackId=${data.trackId} → ${data.streamType}`);
+            }
             return;
         }
 
@@ -298,8 +309,17 @@ export function useSignalHandler({
         try {
             if (type === 'offer') {
                 if (pc.signalingState !== 'stable') {
-                    console.warn(`[Signal] Ignoring offer from ${senderUsername}, already in state: ${pc.signalingState}`);
-                    return;
+                    // 🔥 FIX: Handle offer collision with rollback instead of dropping.
+                    // When both sides send offers simultaneously (e.g. camera + screen share),
+                    // the "polite" peer (alphabetically later username) rolls back and accepts.
+                    const isPolite = username > senderUsername; // lexicographic comparison
+                    if (isPolite) {
+                        logger.signal(`[Signal] Offer collision with ${senderUsername} — rolling back (polite peer)`);
+                        await pc.setLocalDescription({ type: 'rollback' });
+                    } else {
+                        logger.signal(`[Signal] Offer collision with ${senderUsername} — ignoring (impolite peer)`);
+                        return;
+                    }
                 }
 
                 await pc.setRemoteDescription(new RTCSessionDescription(sdp));

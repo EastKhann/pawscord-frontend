@@ -2,7 +2,7 @@
 // 📹 Voice chat video card - Orchestrator
 // Sub-components: useVideoAudio, VideoDisplay, UserOverlay, HoverControls
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import useVideoAudio from './UserVideoCard/useVideoAudio';
 import VideoDisplay from './UserVideoCard/VideoDisplay';
 import UserOverlay from './UserVideoCard/UserOverlay';
@@ -30,6 +30,35 @@ const UserVideoCard = React.memo(({
     const { videoRef, audioRef } = useVideoAudio(stream, user);
     const [showFullControls, setShowFullControls] = useState(false);
 
+    // 🔥 FIX: Native fullscreen overlay — exit button appears on mouse move
+    const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
+    const [showFsControls, setShowFsControls] = useState(false);
+    const fsTimerRef = useRef(null);
+    const cardRef = useRef(null);
+
+    useEffect(() => {
+        const handler = () => {
+            // Check if THIS card is the fullscreen element
+            const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+            setIsNativeFullscreen(fsEl && cardRef.current && cardRef.current.contains(fsEl) || fsEl === cardRef.current);
+            if (!fsEl) setShowFsControls(false);
+        };
+        document.addEventListener('fullscreenchange', handler);
+        document.addEventListener('webkitfullscreenchange', handler);
+        return () => {
+            document.removeEventListener('fullscreenchange', handler);
+            document.removeEventListener('webkitfullscreenchange', handler);
+            clearTimeout(fsTimerRef.current);
+        };
+    }, []);
+
+    const handleFsMouseMove = useCallback(() => {
+        if (!isNativeFullscreen) return;
+        setShowFsControls(true);
+        clearTimeout(fsTimerRef.current);
+        fsTimerRef.current = setTimeout(() => setShowFsControls(false), 3000);
+    }, [isNativeFullscreen]);
+
     const handleRightClick = useCallback((e) => {
         e.preventDefault();
         if (onContextMenu && user.username !== user.isLocal) {
@@ -51,10 +80,12 @@ const UserVideoCard = React.memo(({
 
     return (
         <div
+            ref={cardRef}
             onContextMenu={handleRightClick}
             onClick={handleClick}
             onMouseEnter={() => setShowFullControls(true)}
             onMouseLeave={() => setShowFullControls(false)}
+            onMouseMove={handleFsMouseMove}
             style={{
                 background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
                 borderRadius: '16px',
@@ -104,7 +135,55 @@ const UserVideoCard = React.memo(({
                 onExpand={onExpand}
                 showFullControls={showFullControls}
                 videoRef={videoRef}
+                cardRef={cardRef}
             />
+
+            {/* 🔥 FIX: Native fullscreen exit overlay — appears on mouse move */}
+            {isNativeFullscreen && showFsControls && (
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    padding: '16px 24px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)',
+                    zIndex: 9999,
+                    animation: 'fadeIn 0.2s ease',
+                    pointerEvents: 'auto',
+                }}>
+                    <span style={{ color: '#fff', fontSize: '14px', fontWeight: 600 }}>
+                        👤 {user.username} {user.streamType === 'screen' ? '🖥️ Ekran Paylaşımı' : ''}
+                    </span>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (document.exitFullscreen) document.exitFullscreen();
+                            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                        }}
+                        style={{
+                            background: 'rgba(255, 70, 70, 0.9)',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '8px 20px',
+                            color: '#fff',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            transition: 'background 0.2s',
+                        }}
+                        onMouseOver={(e) => e.target.style.background = 'rgba(255, 50, 50, 1)'}
+                        onMouseOut={(e) => e.target.style.background = 'rgba(255, 70, 70, 0.9)'}
+                    >
+                        ✕ Tam Ekrandan Çık
+                    </button>
+                </div>
+            )}
 
             <style>{`
                 div:hover .hover-actions {
@@ -122,6 +201,7 @@ const UserVideoCard = React.memo(({
         prevProps.user.isCameraOn === nextProps.user.isCameraOn &&
         prevProps.user.isScreenSharing === nextProps.user.isScreenSharing &&
         prevProps.user.isMuted === nextProps.user.isMuted &&
+        prevProps.user.volume === nextProps.user.volume &&
         prevProps.isActive === nextProps.isActive &&
         prevProps.isPinned === nextProps.isPinned &&
         prevProps.compact === nextProps.compact

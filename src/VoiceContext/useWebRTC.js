@@ -18,6 +18,9 @@ export function useWebRTC({
     initializeAudio,
 }) {
     const iceCandidateBufferRef = useRef({});
+    // 🔥 FIX: Track metadata map — sender signals which track IDs are "screen" vs "camera".
+    // track.label and track.contentHint do NOT transfer over WebRTC, so we use out-of-band signaling.
+    const trackMetadataRef = useRef({}); // { trackId: 'screen' | 'camera' }
 
     const sendSignal = useCallback((signal) => {
         if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
@@ -61,14 +64,20 @@ export function useWebRTC({
         const { track } = event;
         logger.webrtc(`Track Received from ${partnerUsername}:`, track.kind, track.id);
 
+        // 🔥 FIX: Check track metadata signaled by sender (primary detection method).
+        // track.label and track.contentHint do NOT survive WebRTC transport.
+        const signaledType = trackMetadataRef.current[track.id];
+
         const trackLabel = (track.label || '').toLowerCase();
-        const isScreenTrack =
-            trackLabel.includes('screen') ||
-            trackLabel.includes('window') ||
-            trackLabel.includes('monitor') ||
-            trackLabel.includes('display') ||
-            trackLabel.includes('tab') ||
-            track.contentHint === 'detail';
+        const isScreenTrack = signaledType === 'screen' ||
+            (!signaledType && (
+                trackLabel.includes('screen') ||
+                trackLabel.includes('window') ||
+                trackLabel.includes('monitor') ||
+                trackLabel.includes('display') ||
+                trackLabel.includes('tab') ||
+                track.contentHint === 'detail'
+            ));
 
         const streamKey = track.kind === 'video' && isScreenTrack
             ? `${partnerUsername}_screen`
@@ -295,5 +304,6 @@ export function useWebRTC({
         bufferIceCandidate,
         addLocalStreamsToPeer,
         iceCandidateBufferRef,
+        trackMetadataRef,
     };
 }
