@@ -1,17 +1,28 @@
-import { defineConfig } from 'vite'
+﻿import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import fs from 'fs'
 
-// 🔥 ELECTRON CONFIG - PWA DISABLED - REACT IN SINGLE CHUNK
+// ELECTRON CONFIG - PWA DISABLED
+// Uses electron.html (no inline <style> blocks) to avoid Vite 7 html-proxy virtual module regression
 export default defineConfig({
     base: './',
 
     plugins: [
-        // ⚡ React with automatic JSX runtime - classic mode to avoid Fragment issues
         react({
-            jsxRuntime: 'classic',
+            jsxRuntime: 'automatic',
         }),
-        // ⚠️ PWA DISABLED FOR ELECTRON
+        // Rename electron.html to index.html after build (Electron main loads index.html)
+        {
+            name: 'rename-electron-html',
+            closeBundle() {
+                const src = path.resolve(__dirname, 'build/electron.html');
+                const dst = path.resolve(__dirname, 'build/index.html');
+                if (fs.existsSync(src)) {
+                    fs.renameSync(src, dst);
+                }
+            },
+        },
     ],
 
     resolve: {
@@ -20,10 +31,13 @@ export default defineConfig({
         },
     },
 
+    // Same as web vite.config.ts: esbuild pre-processes ALL source JSX/TSX so
+    // vite:build-import-analysis gets plain JS (not JSX) and doesn't fail
     esbuild: {
-        loader: 'jsx',
-        include: /src\/.*\.jsx?$/,
+        loader: 'tsx',
+        include: /src\/.*\.[jt]sx?$/,
         exclude: [],
+        keepNames: true,
     },
 
     optimizeDeps: {
@@ -41,22 +55,10 @@ export default defineConfig({
         chunkSizeWarningLimit: 10000,
 
         rollupOptions: {
+            // Use electron.html (no inline <style>) to avoid Vite 7 html-proxy bug
+            // closeBundle plugin renames electron.html → index.html in output
+            input: path.resolve(__dirname, 'electron.html'),
             output: {
-                // 🚨 REACT TEK CHUNK'TA - Fragment hatası için
-                manualChunks: (id) => {
-                    // React ve react-dom MUTLAKA aynı chunk'ta olmalı
-                    if (id.includes('node_modules/react') ||
-                        id.includes('node_modules/react-dom') ||
-                        id.includes('node_modules/scheduler')) {
-                        return 'react-core';
-                    }
-                    // Büyük kütüphaneler ayrı
-                    if (id.includes('node_modules/recharts')) return 'recharts';
-                    if (id.includes('node_modules/hls.js')) return 'hls';
-                    if (id.includes('node_modules/dashjs')) return 'dashjs';
-                    if (id.includes('node_modules/@tiptap')) return 'tiptap';
-                    // Geri kalanlar vendor - circular dependency önlemek için tek chunk
-                },
                 assetFileNames: (assetInfo) => {
                     const info = assetInfo.name.split('.');
                     let extType = info[info.length - 1];
@@ -80,9 +82,5 @@ export default defineConfig({
         port: 5173,
         host: true,
         open: false,
-    },
-
-    define: {
-        APP_VERSION: JSON.stringify(process.env.npm_package_version || '1.0.0'),
     },
 })

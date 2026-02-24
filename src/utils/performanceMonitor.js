@@ -6,6 +6,8 @@
  * Development modda detaylı log, production'da minimal overhead
  */
 
+import React from 'react';
+
 class PerformanceMonitor {
     constructor() {
         this.metrics = new Map();

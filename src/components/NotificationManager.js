@@ -5,7 +5,7 @@
  * Web Notification API + Service Worker entegrasyonu
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 class NotificationManager {
     constructor() {
