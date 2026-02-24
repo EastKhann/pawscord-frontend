@@ -73,7 +73,7 @@ const useVoiceInteractions = ({ setContextMenu, setVolumeSettings, setRemoteVolu
     }, [setVolumeSettings]);
 
     const handleAdjustVolume = useCallback((targetUser, newVolume) => {
-        const volume = Math.max(0, Math.min(400, newVolume)); // 0-400% range
+        const volume = Math.max(0, Math.min(200, newVolume)); // 0-200% range
 
         setVolumeSettings(prev => ({
             ...prev,

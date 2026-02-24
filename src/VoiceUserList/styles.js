@@ -171,6 +171,9 @@ const styles = {
         alignItems: 'center',
         borderRadius: '4px',
         margin: '0 4px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     subMenu: {
         position: 'absolute',

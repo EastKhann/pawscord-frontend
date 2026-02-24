@@ -30,24 +30,37 @@ const useVideoAudio = (stream, user) => {
             if (audioTracks.length > 0) {
                 audioRef.current.srcObject = new MediaStream(audioTracks);
                 const volumePercent = user.volume || 100;
-                if (volumePercent <= 100) {
-                    audioRef.current.volume = Math.max(0, volumePercent / 100);
-                } else {
-                    // >100% — use Web Audio API GainNode for amplification
-                    audioRef.current.volume = 1.0;
+                const targetVolume = volumePercent / 100;
+                const audio = audioRef.current;
+
+                // 🔥 FIX: Once createMediaElementSource() is called, audio.volume has NO EFFECT.
+                // All volume must go through GainNode after that point.
+                if (audio._gainNode) {
+                    // GainNode chain already exists — route all volume through it
                     try {
-                        const audio = audioRef.current;
-                        if (!audio._audioContext) {
-                            audio._audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                            audio._sourceNode = audio._audioContext.createMediaElementSource(audio);
-                            audio._gainNode = audio._audioContext.createGain();
-                            audio._sourceNode.connect(audio._gainNode);
-                            audio._gainNode.connect(audio._audioContext.destination);
+                        if (audio._audioContext?.state === 'suspended') {
+                            audio._audioContext.resume();
                         }
-                        audio._gainNode.gain.value = volumePercent / 100;
+                        audio._gainNode.gain.value = Math.max(0, targetVolume);
+                    } catch (e) {
+                        console.warn('[Volume] GainNode volume set failed:', e);
+                    }
+                } else if (volumePercent > 100) {
+                    // >100% — create Web Audio API GainNode chain for amplification
+                    audio.volume = 1.0;
+                    try {
+                        audio._audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        audio._sourceNode = audio._audioContext.createMediaElementSource(audio);
+                        audio._gainNode = audio._audioContext.createGain();
+                        audio._sourceNode.connect(audio._gainNode);
+                        audio._gainNode.connect(audio._audioContext.destination);
+                        audio._gainNode.gain.value = targetVolume;
                     } catch (e) {
                         console.warn('[Volume] GainNode amplification failed:', e);
                     }
+                } else {
+                    // Normal range (0-100%): no GainNode yet, use native volume
+                    audio.volume = Math.max(0, targetVolume);
                 }
             }
         }

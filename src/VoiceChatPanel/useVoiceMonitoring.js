@@ -39,7 +39,12 @@ export default function useVoiceMonitoring({
     const [autoQualityEnabled, setAutoQualityEnabled] = useState(true);
 
     // Volume Normalization
-    const [volumeNormalization, setVolumeNormalization] = useState(true);
+    // 🔥 FIX: DISABLED by default — Effect #5 was calling createMediaElementSource() on audio elements
+    // every 2 seconds, permanently capturing them and then immediately closing the AudioContext.
+    // createMediaElementSource can only be called ONCE per element — subsequent calls throw.
+    // This destroyed audio routing for UserVideoCard elements and wasted AudioContext resources.
+    // The computed normalizedGains are never applied anywhere anyway.
+    const [volumeNormalization, setVolumeNormalization] = useState(false);
     const [userAudioLevels, setUserAudioLevels] = useState({}); // Track audio levels per user
     const [normalizedGains, setNormalizedGains] = useState({}); // Auto-adjusted gains
 

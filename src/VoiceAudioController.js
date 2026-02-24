@@ -104,21 +104,10 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
 
         attemptPlay();
 
-        // Cleanup GainNode chain on stream change
-        return () => {
-            if (sourceRef.current) {
-                try { sourceRef.current.disconnect(); } catch (e) { /* */ }
-                sourceRef.current = null;
-            }
-            if (gainRef.current) {
-                try { gainRef.current.disconnect(); } catch (e) { /* */ }
-                gainRef.current = null;
-            }
-            if (audioCtxRef.current) {
-                try { audioCtxRef.current.close(); } catch (e) { /* */ }
-                audioCtxRef.current = null;
-            }
-        };
+        // 🔥 FIX: Do NOT destroy GainNode chain on stream change!
+        // createMediaElementSource is bound to the <audio> element, not the stream.
+        // Changing srcObject still routes through the existing GainNode chain.
+        // The GainNode cleanup is handled by the unmount useEffect below.
     }, [stream, username, globalEnabled]);
 
     useEffect(() => {
@@ -127,31 +116,39 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
 
         const targetVolume = isMuted ? 0 : (volume / 100);
 
-        if (targetVolume <= 1) {
-            // Normal range (0-100%): use native volume, bypass GainNode
-            audio.volume = Math.max(0, targetVolume);
-            if (gainRef.current) {
-                try { gainRef.current.gain.value = 1; } catch (e) { /* */ }
-            }
-        } else {
-            // >100% amplification: use Web Audio API GainNode
-            audio.volume = 1.0; // Max native volume
+        // 🔥 FIX: Once createMediaElementSource() is called, audio.volume has NO EFFECT.
+        // All volume must go through GainNode after that point.
+        if (gainRef.current) {
+            // GainNode chain exists (from previous >100% setting) — route ALL volume through it.
             try {
-                if (!audioCtxRef.current) {
-                    const Ctx = window.AudioContext || window.webkitAudioContext;
-                    audioCtxRef.current = new Ctx();
-                    sourceRef.current = audioCtxRef.current.createMediaElementSource(audio);
-                    gainRef.current = audioCtxRef.current.createGain();
-                    sourceRef.current.connect(gainRef.current);
-                    gainRef.current.connect(audioCtxRef.current.destination);
+                if (audioCtxRef.current?.state === 'suspended') {
+                    audioCtxRef.current.resume();
                 }
+                gainRef.current.gain.value = Math.max(0, targetVolume);
+            } catch (e) {
+                logger.warn(`[AudioPlayer] GainNode volume set failed for ${username}:`, e);
+            }
+        } else if (targetVolume > 1) {
+            // >100% amplification: create Web Audio API GainNode chain
+            audio.volume = 1.0;
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                audioCtxRef.current = new Ctx();
+                sourceRef.current = audioCtxRef.current.createMediaElementSource(audio);
+                gainRef.current = audioCtxRef.current.createGain();
+                sourceRef.current.connect(gainRef.current);
+                gainRef.current.connect(audioCtxRef.current.destination);
+
                 if (audioCtxRef.current.state === 'suspended') {
                     audioCtxRef.current.resume();
                 }
-                gainRef.current.gain.value = targetVolume; // e.g. 1.5 for 150%, 2.0 for 200%
+                gainRef.current.gain.value = targetVolume;
             } catch (e) {
                 logger.warn(`[AudioPlayer] GainNode amplification failed for ${username}:`, e);
             }
+        } else {
+            // Normal range (0-100%): no GainNode yet, use native volume
+            audio.volume = Math.max(0, targetVolume);
         }
         logger.log(`[AudioPlayer] ${username} volume set to ${Math.round(targetVolume * 100)}%`);
     }, [volume, isMuted, username]);
