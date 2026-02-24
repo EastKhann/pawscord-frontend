@@ -3,6 +3,71 @@ import logger from '../utils/logger';
 import { RTC_CONFIGURATION } from './constants';
 
 /**
+ * 🔥 Opus SDP Bitrate Optimization
+ * Varsayılan Opus bitrate ~32kbps — sesli sohbet için yetersiz.
+ * SDP manipülasyonu ile 64kbps'ye çıkarıyoruz + FEC + DTX aktif.
+ */
+function optimizeOpusSdp(sdp) {
+    if (!sdp) return sdp;
+    // Opus codec satırını bul ve parametreleri ekle
+    return sdp.replace(
+        /a=fmtp:(\d+) (.+)/g,
+        (match, payloadType, params) => {
+            // Sadece Opus fmtp satırlarına uygula
+            if (!params.includes('minptime')) return match; // Opus hep minptime içerir
+
+            const newParams = [];
+            // Mevcut parametreleri koru
+            params.split(';').forEach(p => {
+                const key = p.trim().split('=')[0];
+                // Bu parametreleri biz ayarlayacağız, eski değerleri atla
+                if (!['maxaveragebitrate', 'stereo', 'sprop-stereo', 'useinbandfec', 'usedtx', 'maxplaybackrate', 'cbr'].includes(key)) {
+                    newParams.push(p.trim());
+                }
+            });
+
+            // 🔥 Profesyonel Opus ayarları
+            newParams.push('maxaveragebitrate=64000');   // 64kbps (varsayılan 32kbps'den 2x)
+            newParams.push('stereo=0');                  // Mono (sesli sohbet için yeterli, bandwidth tasarrufu)
+            newParams.push('sprop-stereo=0');
+            newParams.push('useinbandfec=1');             // 🔥 Forward Error Correction — paket kaybında ses korunur
+            newParams.push('usedtx=1');                  // 🔥 Discontinuous Transmission — sessizlikte bandwidth tasarrufu
+            newParams.push('maxplaybackrate=48000');      // 48kHz playback
+            newParams.push('cbr=0');                      // VBR (Variable Bit Rate) — daha verimli
+
+            return `a=fmtp:${payloadType} ${newParams.join(';')}`;
+        }
+    );
+}
+
+/**
+ * 🔥 Audio sender bitrate ayarla (SDP dışı yöntem — daha güvenilir)
+ */
+async function setAudioBitrate(pc, maxBitrate = 64000) {
+    try {
+        const senders = pc.getSenders();
+        const audioSender = senders.find(s => s.track?.kind === 'audio');
+        if (!audioSender) return;
+
+        const params = audioSender.getParameters();
+        if (!params.encodings || params.encodings.length === 0) {
+            params.encodings = [{}];
+        }
+        params.encodings[0].maxBitrate = maxBitrate;
+        // 🔥 Network priority'yi yüksek yap (ses öncelikli)
+        params.encodings[0].networkPriority = 'high';
+        params.encodings[0].priority = 'high';
+        await audioSender.setParameters(params);
+        logger.audio(`[Opus] Audio bitrate set to ${maxBitrate / 1000}kbps`);
+    } catch (e) {
+        console.warn('[Opus] setParameters failed:', e.message);
+    }
+}
+
+// 🔥 Export for use in useSignalHandler
+export { optimizeOpusSdp };
+
+/**
  * WebRTC Peer Connection yönetimi
  * createPeerConnection, handleRemoteStream, adjustBandwidth, sendSignal
  */
@@ -34,27 +99,38 @@ export function useWebRTC({
     const adjustBandwidth = useCallback((peerConnection, quality) => {
         try {
             const senders = peerConnection.getSenders();
-            const videoSender = senders.find(sender => sender.track?.kind === 'video');
-            if (!videoSender) return;
 
-            const parameters = videoSender.getParameters();
-            if (!parameters.encodings || parameters.encodings.length === 0) {
-                parameters.encodings = [{}];
+            // 🔥 Video bandwidth ayarla
+            const videoSender = senders.find(sender => sender.track?.kind === 'video');
+            if (videoSender) {
+                const parameters = videoSender.getParameters();
+                if (!parameters.encodings || parameters.encodings.length === 0) {
+                    parameters.encodings = [{}];
+                }
+
+                const qualitySettings = {
+                    low: { maxBitrate: 300000, maxFramerate: 15, audioBitrate: 32000 },
+                    medium: { maxBitrate: 800000, maxFramerate: 24, audioBitrate: 48000 },
+                    high: { maxBitrate: 2500000, maxFramerate: 30, audioBitrate: 64000 }
+                };
+
+                const settings = qualitySettings[quality] || qualitySettings.medium;
+                parameters.encodings[0].maxBitrate = settings.maxBitrate;
+                parameters.encodings[0].maxFramerate = settings.maxFramerate;
+
+                videoSender.setParameters(parameters).catch(err => {
+                    console.warn('[Bandwidth] Failed to set video parameters:', err);
+                });
+
+                // 🔥 Ağ kalitesine göre audio bitrate de ayarla
+                setAudioBitrate(peerConnection, settings.audioBitrate);
             }
 
-            const qualitySettings = {
-                low: { maxBitrate: 300000, maxFramerate: 15 },
-                medium: { maxBitrate: 800000, maxFramerate: 24 },
-                high: { maxBitrate: 2500000, maxFramerate: 30 }
-            };
-
-            const settings = qualitySettings[quality] || qualitySettings.medium;
-            parameters.encodings[0].maxBitrate = settings.maxBitrate;
-            parameters.encodings[0].maxFramerate = settings.maxFramerate;
-
-            videoSender.setParameters(parameters).catch(err => {
-                console.warn('[Bandwidth] Failed to set parameters:', err);
-            });
+            // 🔥 Video yoksa sadece audio bitrate ayarla
+            if (!videoSender) {
+                const audioBitrateMap = { low: 32000, medium: 48000, high: 64000 };
+                setAudioBitrate(peerConnection, audioBitrateMap[quality] || 64000);
+            }
         } catch (err) {
             console.warn('[Bandwidth] Error adjusting bandwidth:', err);
         }
@@ -187,22 +263,30 @@ export function useWebRTC({
             });
         }
 
-        // 🔥 FIX: Opus codec optimization AFTER tracks are added (getTransceivers() needs tracks)
+        // 🔥 Opus codec optimization AFTER tracks are added (getTransceivers() needs tracks)
         try {
             const transceivers = pc.getTransceivers();
             transceivers.forEach(transceiver => {
                 if (transceiver.sender?.track?.kind === 'audio') {
                     const codecs = RTCRtpSender.getCapabilities('audio')?.codecs || [];
+                    // 🔥 Opus codec'i en üste koy (öncelikli)
                     const opusCodecs = codecs.filter(c => c.mimeType.toLowerCase().includes('opus'));
                     const otherCodecs = codecs.filter(c => !c.mimeType.toLowerCase().includes('opus'));
                     if (transceiver.setCodecPreferences && [...opusCodecs, ...otherCodecs].length > 0) {
                         transceiver.setCodecPreferences([...opusCodecs, ...otherCodecs]);
                     }
                 }
+                // 🔥 Audio transceiver direction: sendrecv (çift yönlü)
+                if (transceiver.direction === 'sendonly' && transceiver.sender?.track?.kind === 'audio') {
+                    transceiver.direction = 'sendrecv';
+                }
             });
         } catch (e) {
             console.warn('[Codec] setCodecPreferences not supported:', e.message);
         }
+
+        // 🔥 Audio bitrate'i hemen ayarla (64kbps)
+        setAudioBitrate(pc, 64000);
 
         pc.oniceconnectionstatechange = () => {
             if (pc.iceConnectionState === 'failed') {
@@ -235,17 +319,32 @@ export function useWebRTC({
                 setIsReconnecting(false);
             } else if (pc.iceConnectionState === 'connected') {
                 setIsReconnecting(false);
+                // 🔥 Bağlantı kurulunca hemen audio bitrate optimize et
+                setAudioBitrate(pc, 64000);
+
+                // 🔥 2s sonra RTT ölç ve bandwidth ayarla
                 setTimeout(async () => {
                     try {
                         const stats = await pc.getStats();
+                        let bestRtt = Infinity;
+                        let packetLossRate = 0;
                         stats.forEach(report => {
                             if (report.type === 'candidate-pair' && report.state === 'succeeded') {
-                                const rtt = report.currentRoundTripTime * 1000;
-                                if (rtt > 500) adjustBandwidth(pc, 'low');
-                                else if (rtt > 300) adjustBandwidth(pc, 'medium');
-                                else adjustBandwidth(pc, 'high');
+                                bestRtt = Math.min(bestRtt, (report.currentRoundTripTime || 0) * 1000);
+                            }
+                            // 🔥 Paket kaybı oranını hesapla
+                            if (report.type === 'inbound-rtp' && report.kind === 'audio') {
+                                const total = (report.packetsReceived || 0) + (report.packetsLost || 0);
+                                if (total > 0) packetLossRate = (report.packetsLost || 0) / total;
                             }
                         });
+
+                        // 🔥 RTT + Paket kaybına göre kalite ayarla
+                        if (bestRtt > 500 || packetLossRate > 0.1) adjustBandwidth(pc, 'low');
+                        else if (bestRtt > 200 || packetLossRate > 0.05) adjustBandwidth(pc, 'medium');
+                        else adjustBandwidth(pc, 'high');
+
+                        logger.audio(`[QoS] ${partnerUsername}: RTT=${bestRtt.toFixed(0)}ms, Loss=${(packetLossRate * 100).toFixed(1)}%`);
                     } catch (err) {
                         console.warn('[Bandwidth] Failed to get stats:', err);
                     }

@@ -238,6 +238,7 @@ const VoiceChatPanel = ({
                                 activeSpeaker={activeSpeaker}
                                 getUserAvatar={getUserAvatar}
                                 setContextMenu={setContextMenu}
+                                connectionQuality={connectionQuality}
                                 isMobile={isMobile}
                             />
                         );

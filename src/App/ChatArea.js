@@ -178,6 +178,7 @@ export default memo(function ChatArea({
                         <FaSearch style={styles.searchIcon} />
                     </form>
                     {!isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
+                    {isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
                     <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler"><FaBell /></button>
                     {modals.notifications && (
                         <div style={{ position: 'absolute', top: '54px', right: '20px', zIndex: 1000 }}>
@@ -206,10 +207,17 @@ export default memo(function ChatArea({
 
             {/* MESSAGE LIST */}
             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}
-                id="main-content" role="log" aria-live="polite" aria-relevant="additions">
+                id="main-content" role="log" aria-live="polite" aria-relevant="additions" aria-label="Mesaj listesi">
                 <Suspense fallback={<p style={styles.systemMessage}>Mesajlar yükleniyor...</p>}>
                     {messageHistoryLoading && optimizedMessages.length === 0 ? (
                         <p style={styles.systemMessage}>Yükleniyor...</p>
+                    ) : optimizedMessages.length === 0 && !messageHistoryLoading ? (
+                        /* Empty state illustration */
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.5, userSelect: 'none' }}>
+                            <div style={{ fontSize: '64px', marginBottom: '16px' }}>💬</div>
+                            <div style={{ color: '#b9bbbe', fontSize: '1.2em', fontWeight: 600 }}>Henüz mesaj yok</div>
+                            <div style={{ color: '#72767d', fontSize: '0.9em', marginTop: '4px' }}>İlk mesajı sen gönder!</div>
+                        </div>
                     ) : optimizedMessages.length > 200 ? (
                         <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
                             renderMessage={renderVirtualMessage} />

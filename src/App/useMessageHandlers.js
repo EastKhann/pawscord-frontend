@@ -1,8 +1,8 @@
 /**
- * 📨 useMessageHandlers — Message sending, history, deletion, pinning, search
- * Extracted from App.js
+ * useMessageHandlers — Message sending, history, deletion, pinning, search
+ * 10/10 Edition: HTTP fallback + temp_id, retry, read receipt dedup, timer cleanup
  */
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { encryptMessage } from '../utils/encryption';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';
@@ -120,16 +120,27 @@ export default function useMessageHandlers({
                     ? `${API_BASE_URL}/messages/send_dm/`
                     : `${API_BASE_URL}/messages/send/`;
                 const httpPayload = activeChat.type === 'dm'
-                    ? { conversation_id: activeChat.id, content: finalContent }
-                    : { room: activeChat.id, content: finalContent };
+                    ? { conversation_id: activeChat.id, content: finalContent, temp_id: payload.temp_id }
+                    : { room: activeChat.id, content: finalContent, temp_id: payload.temp_id };
                 const response = await fetchWithAuth(endpoint, { method: 'POST', body: JSON.stringify(httpPayload) });
                 return response.ok;
             } catch (error) { return false; }
         };
 
+        // Send with retry (WS first, then HTTP with 1 retry)
         (async () => {
             const wsSent = await sendViaWebSocket();
-            if (!wsSent) await sendViaHTTP();
+            if (!wsSent) {
+                const httpOk = await sendViaHTTP();
+                if (!httpOk) {
+                    // 1 retry after 2 seconds
+                    await new Promise(r => setTimeout(r, 2000));
+                    const retryOk = await sendViaHTTP();
+                    if (!retryOk) {
+                        toast.error('Mesaj gönderilemedi. Lütfen tekrar deneyin.');
+                    }
+                }
+            }
         })();
 
         setMessages(prev => {
@@ -336,9 +347,13 @@ export default function useMessageHandlers({
         } catch (e) { console.error(e); toast.error('❌ Sunucuyla bağlantı hatası'); }
     }, [activeChat, fetchWithAuth]);
 
-    // --- ✅ READ RECEIPTS ---
+    // --- READ RECEIPTS (batched, with dedup + cleanup-safe timer) ---
     const handleMessageVisible = useCallback((messageId) => {
+        if (!messageId) return;
+        // Dedup: skip if already in buffer
+        if (readReceiptBufferRef.current.includes(messageId)) return;
         readReceiptBufferRef.current.push(messageId);
+
         if (readReceiptTimerRef.current) return;
         readReceiptTimerRef.current = setTimeout(async () => {
             const ids = [...new Set(readReceiptBufferRef.current)];
@@ -398,11 +413,30 @@ export default function useMessageHandlers({
         });
     }, [prefetchMessages]);
 
-    // --- 📜 SCROLL TO MESSAGE ---
+    // --- SCROLL TO MESSAGE ---
     const scrollToMessage = useCallback((msgId) => {
         const el = document.getElementById(`message-${msgId}`);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, []);
+
+    // --- CLEANUP: Flush pending read receipts on unmount ---
+    useEffect(() => {
+        return () => {
+            if (readReceiptTimerRef.current) {
+                clearTimeout(readReceiptTimerRef.current);
+                readReceiptTimerRef.current = null;
+            }
+            // Flush any remaining buffered IDs
+            const remaining = [...new Set(readReceiptBufferRef.current)];
+            readReceiptBufferRef.current = [];
+            if (remaining.length > 0) {
+                fetchWithAuth(`${API_BASE_URL}/messages/mark_read/`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message_ids: remaining })
+                }).catch(() => { /* best effort */ });
+            }
+        };
+    }, [fetchWithAuth]);
 
     return {
         sendMessage,

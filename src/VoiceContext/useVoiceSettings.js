@@ -108,6 +108,32 @@ export function useVoiceSettings() {
 
     const [isPTTActive, setIsPTTActive] = useState(false);
 
+    // 🔥 YENİ: Mikrofon ve hoparlör cihaz seçimi
+    const [inputDeviceId, setInputDeviceId] = useState(() => {
+        try { return localStorage.getItem('pawscord_input_device') || 'default'; }
+        catch { return 'default'; }
+    });
+    const [outputDeviceId, setOutputDeviceId] = useState(() => {
+        try { return localStorage.getItem('pawscord_output_device') || 'default'; }
+        catch { return 'default'; }
+    });
+
+    // 🔥 YENİ: Echo cancellation toggle (bazı kulaklıklarda gereksiz)
+    const [isEchoCancellationEnabled, setIsEchoCancellationEnabled] = useState(() => {
+        try {
+            const saved = localStorage.getItem('pawscord_echo_cancel');
+            return saved === null ? true : saved === 'true';
+        } catch { return true; }
+    });
+
+    // 🔥 YENİ: Auto gain control toggle
+    const [isAutoGainEnabled, setIsAutoGainEnabled] = useState(() => {
+        try {
+            const saved = localStorage.getItem('pawscord_auto_gain');
+            return saved === null ? true : saved === 'true';
+        } catch { return true; }
+    });
+
     // Ses Ayarlarını Kaydet
     useEffect(() => {
         localStorage.setItem('pawscord_user_volumes', JSON.stringify(remoteVolumes));
@@ -189,6 +215,30 @@ export function useVoiceSettings() {
         localStorage.setItem('pawscord_ptt_key', key);
     }, []);
 
+    // 🔥 YENİ: Mikrofon cihaz seçimi
+    const updateInputDevice = useCallback((deviceId) => {
+        setInputDeviceId(deviceId);
+        localStorage.setItem('pawscord_input_device', deviceId);
+    }, []);
+
+    // 🔥 YENİ: Hoparlör/kulaklık cihaz seçimi
+    const updateOutputDevice = useCallback((deviceId) => {
+        setOutputDeviceId(deviceId);
+        localStorage.setItem('pawscord_output_device', deviceId);
+    }, []);
+
+    // 🔥 YENİ: Echo cancellation toggle
+    const toggleEchoCancellation = useCallback((enabled) => {
+        setIsEchoCancellationEnabled(enabled);
+        localStorage.setItem('pawscord_echo_cancel', enabled.toString());
+    }, []);
+
+    // 🔥 YENİ: Auto gain control toggle
+    const toggleAutoGain = useCallback((enabled) => {
+        setIsAutoGainEnabled(enabled);
+        localStorage.setItem('pawscord_auto_gain', enabled.toString());
+    }, []);
+
     return {
         // State
         noiseGateThreshold,
@@ -212,6 +262,10 @@ export function useVoiceSettings() {
         pttKey,
         isPTTActive,
         setIsPTTActive,
+        inputDeviceId,
+        outputDeviceId,
+        isEchoCancellationEnabled,
+        isAutoGainEnabled,
         // Updaters
         setRemoteVolume,
         updateVadSensitivity,
@@ -223,5 +277,9 @@ export function useVoiceSettings() {
         updateNoiseGateThreshold,
         toggleVisualizer,
         updatePTTKey,
+        updateInputDevice,
+        updateOutputDevice,
+        toggleEchoCancellation,
+        toggleAutoGain,
     };
 }

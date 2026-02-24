@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import logger from '../utils/logger';
 import toast from '../utils/toast';
+import { optimizeOpusSdp } from './useWebRTC';
 
 /**
  * WebRTC Signal Message Handler
@@ -227,13 +228,15 @@ export function useSignalHandler({
 
                 try {
                     const offer = await pc.createOffer();
-                    await pc.setLocalDescription(offer);
+                    // 🔥 Opus SDP Optimization: 64kbps + FEC + DTX
+                    const optimizedOffer = { ...offer, sdp: optimizeOpusSdp(offer.sdp) };
+                    await pc.setLocalDescription(optimizedOffer);
                     sendSignal({
                         type: 'offer',
                         sdp: pc.localDescription,
                         target: senderUsername
                     });
-                    logger.signal(`Sent offer to ${senderUsername}`);
+                    logger.signal(`Sent optimized offer to ${senderUsername}`);
                 } catch (e) {
                     logger.error("Offer creation failed", e);
                     console.error(`❌ [user_joined] Failed to create/send offer to ${senderUsername}:`, e);
@@ -279,13 +282,14 @@ export function useSignalHandler({
 
                     try {
                         const offer = await newPC.createOffer();
-                        await newPC.setLocalDescription(offer);
+                        const optimizedOffer = { ...offer, sdp: optimizeOpusSdp(offer.sdp) };
+                        await newPC.setLocalDescription(optimizedOffer);
                         sendSignal({
                             type: 'offer',
                             sdp: newPC.localDescription,
                             target: senderUsername
                         });
-                        logger.signal(`Sent offer to ${senderUsername} after stream_update`);
+                        logger.signal(`Sent optimized offer to ${senderUsername} after stream_update`);
                     } catch (e) {
                         logger.error(`Failed to create offer for ${senderUsername}:`, e);
                     }
@@ -322,9 +326,13 @@ export function useSignalHandler({
                     }
                 }
 
-                await pc.setRemoteDescription(new RTCSessionDescription(sdp));
+                // 🔥 Gelen offer'daki Opus ayarlarını da optimize et
+                const optimizedRemoteSdp = { ...sdp, sdp: optimizeOpusSdp(sdp.sdp || sdp) };
+                await pc.setRemoteDescription(new RTCSessionDescription(optimizedRemoteSdp.type ? optimizedRemoteSdp : sdp));
                 const answer = await pc.createAnswer();
-                await pc.setLocalDescription(answer);
+                // 🔥 Answer SDP'yi de optimize et
+                const optimizedAnswer = { ...answer, sdp: optimizeOpusSdp(answer.sdp) };
+                await pc.setLocalDescription(optimizedAnswer);
                 sendSignal({
                     type: 'answer',
                     sdp: pc.localDescription,

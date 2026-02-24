@@ -258,10 +258,21 @@ export function useVoiceConnection({
                                 video: false
                             });
 
-                            setLocalAudioStream(fresh);
-                            localStreamRef.current = fresh;
+                            // 🔥 FIX: Mic watchdog'da da profesyonel filtreler uygula (eskiden düz stream gönderiyordu)
+                            let processedFresh = fresh;
+                            if (isNoiseSuppressionEnabled) {
+                                try {
+                                    processedFresh = applyProfessionalAudioFilters(fresh, globalAudioContextRef);
+                                    logger.audio('[Mic Watchdog] Professional filters reapplied to fresh stream');
+                                } catch (filterErr) {
+                                    console.warn('[Mic Watchdog] Filter reapply failed, using raw:', filterErr);
+                                }
+                            }
 
-                            const newTrack = fresh.getAudioTracks()[0];
+                            setLocalAudioStream(processedFresh);
+                            localStreamRef.current = processedFresh;
+
+                            const newTrack = processedFresh.getAudioTracks()[0];
                             Object.values(peerConnectionsRef.current).forEach((pc) => {
                                 pc.getSenders()
                                     .filter((s) => s.track?.kind === 'audio')

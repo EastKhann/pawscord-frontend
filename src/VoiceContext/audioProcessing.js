@@ -61,43 +61,47 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
         const level = voiceSettings.audio?.noiseSuppressionLevel || 'high';
 
-        // Seviyeye göre parametreler - 🔥 AGRESİF GÜRÜLTÜ ENGELLEMİE
+        // Seviyeye göre parametreler - � DENGELİ GÜRÜLTÜ ENGELLEMİE (ses seviyesi korunur)
         const levelSettings = {
             low: {
                 gateThreshold: -70,      // dB eşiği
-                compressorThreshold: -15,
+                compressorThreshold: -18,
                 compressorRatio: 2,
                 highPassFreq: 50,        // 50Hz altı kes (fan, AC sesi)
                 lowPassFreq: 14000,      // 14kHz üstü kes
                 gateRelease: 0.3,
-                speechThreshold: 20      // Konuşma algılama eşiği
+                speechThreshold: 18,     // Konuşma algılama eşiği
+                makeupGain: 1.3          // 🔥 Compressor sonrası telafi kazancı
             },
             medium: {
                 gateThreshold: -60,
                 compressorThreshold: -20,
-                compressorRatio: 3,
-                highPassFreq: 80,        // 80Hz altı kes
-                lowPassFreq: 12000,
+                compressorRatio: 2.5,    // 🔧 3'ten 2.5'e - daha az sıkıştırma
+                highPassFreq: 70,        // 🔧 80'den 70'e - daha fazla bas koruma
+                lowPassFreq: 13000,      // 🔧 12k'dan 13k'ya - daha fazla tiz koruma
                 gateRelease: 0.25,
-                speechThreshold: 25
+                speechThreshold: 22,     // 🔧 25'ten 22'ye - daha hassas algılama
+                makeupGain: 1.6          // 🔥 Compressor sonrası telafi kazancı
             },
             high: {
-                gateThreshold: -50,      // 🔥 Daha agresif
-                compressorThreshold: -25,
-                compressorRatio: 4,
-                highPassFreq: 100,       // 🔥 100Hz altı kes (daha agresif)
-                lowPassFreq: 10000,      // 🔥 10kHz üstü kes
+                gateThreshold: -50,
+                compressorThreshold: -24,
+                compressorRatio: 3,      // 🔧 4'ten 3'e - ses ezilmesin
+                highPassFreq: 85,        // 🔧 100'den 85'e - erkek ses fundamentalleri korunsun
+                lowPassFreq: 11000,      // 🔧 10k'dan 11k'ya - daha doğal ses
                 gateRelease: 0.2,
-                speechThreshold: 30      // 🔥 Daha yüksek eşik
+                speechThreshold: 28,     // 🔧 30'dan 28'e
+                makeupGain: 2.0          // 🔥 Compressor sonrası telafi kazancı
             },
             aggressive: {
-                gateThreshold: -45,      // 🔥 ÇOK agresif
-                compressorThreshold: -30,
-                compressorRatio: 6,
-                highPassFreq: 120,       // 🔥 120Hz altı kes
-                lowPassFreq: 8000,       // 🔥 8kHz üstü kes (tiz gürültüler)
+                gateThreshold: -45,
+                compressorThreshold: -28,
+                compressorRatio: 4,      // 🔧 6'dan 4'e - aşırı sıkıştırma önlenir
+                highPassFreq: 110,       // 🔧 120'den 110'a
+                lowPassFreq: 9000,       // 🔧 8k'dan 9k'ya
                 gateRelease: 0.15,
-                speechThreshold: 35      // 🔥 Yüksek eşik
+                speechThreshold: 33,     // 🔧 35'ten 33'e
+                makeupGain: 2.5          // 🔥 Compressor sonrası telafi kazancı
             }
         };
 
@@ -132,7 +136,7 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         const GATE_THRESHOLD = settings.gateThreshold; // dB (seviyeye göre)
         const GATE_ATTACK = 0.005;  // Daha hızlı açılma
         const GATE_RELEASE = settings.gateRelease;  // Seviyeye göre
-        const GATE_FLOOR = 0.05; // 🔥 FIX: Minimum gain — tam 0'a düşürme, ses tamamen kesilmesin
+        const GATE_FLOOR = 0.12; // 🔥 FIX: Minimum gain — 0.05'ten 0.12'ye, kısa sessizliklerde ses kaybolmasın
 
         // 2️⃣ COMPRESSOR (Dinamik Sıkıştırma) - SEVİYEYE GÖRE
         // 🔥 CIZIRTIYI ÖNLE: Daha yumuşak sıkıştırma
@@ -142,6 +146,12 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         compressor.ratio.value = Math.min(settings.compressorRatio, 4);  // 🔥 Max 4:1 ratio (cızırtı önler)
         compressor.attack.value = 0.003;       // 🔥 3ms - daha hızlı (click önler)
         compressor.release.value = 0.15;       // 🔥 150ms - daha kısa (pumping önler)
+
+        // 🔥 MAKEUP GAIN: Compressor kaybını telafi et — SES SEVİYESİ KORUNSUN!
+        // Profesyonel ses zincirinde compressor'dan sonra makeup gain ZORUNLUDUR.
+        // Bu olmadan giden ses çok düşük kalıyordu.
+        const makeupGainNode = audioContext.createGain();
+        makeupGainNode.gain.value = settings.makeupGain || 1.5;
 
         // 3️⃣ HIGH-PASS FILTER (Düşük Frekans Kesici) - SEVİYEYE GÖRE
         // Fan, AC, trafik seslerini filtrele
@@ -168,7 +178,15 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         deEsser.type = 'peaking';
         deEsser.frequency.value = 6000;        // 6kHz (sibilant bölgesi)
         deEsser.Q.value = 1;                   // Geniş bant
-        deEsser.gain.value = -3;               // 🔥 -3dB azaltma (cızırtı için)
+        deEsser.gain.value = -2;               // 🔧 -2dB azaltma (-3 çok agresifti, sesi kısıyordu)
+
+        // 🔥 7️⃣ PRESENCE BOOST — Ses netliği ve anlaşılırlığı artır
+        // 2-5kHz bölgesi insan sesinin en anlaşılır kısmıdır (konsonantlar)
+        const presenceBoost = audioContext.createBiquadFilter();
+        presenceBoost.type = 'peaking';
+        presenceBoost.frequency.value = 3000;   // 3kHz (konsonant enerji merkezi)
+        presenceBoost.Q.value = 0.8;            // Geniş bant (doğal ses)
+        presenceBoost.gain.value = 2;           // +2dB netlik artışı
 
         // 7️⃣ ADAPTIVE NOISE REDUCTION (Dinamik Gürültü Azaltma)
         // Sessiz anlarda gürültü profilini öğren ve çıkar
@@ -254,13 +272,15 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         const noiseGateInterval = setInterval(updateNoiseGate, 30);
 
         // 8️⃣ SİNYAL ZİNCİRİ (Signal Chain) - GÜNCELLENDİ
-        // source → highpass → notch(50Hz) → lowpass → deEsser → compressor → noise gate → destination
+        // source → highpass → notch(50Hz) → lowpass → deEsser → presenceBoost → compressor → makeupGain → noise gate → destination
         source.connect(highPassFilter);
         highPassFilter.connect(notchFilter);
         notchFilter.connect(lowPassFilter);
         lowPassFilter.connect(deEsser);
-        deEsser.connect(compressor);
-        compressor.connect(noiseGateNode);
+        deEsser.connect(presenceBoost);         // 🔥 De-esser → Presence Boost
+        presenceBoost.connect(compressor);      // 🔥 Presence Boost → Compressor
+        compressor.connect(makeupGainNode);     // 🔥 Compressor → Makeup Gain
+        makeupGainNode.connect(noiseGateNode);  // 🔥 Makeup Gain → Noise Gate
         noiseGateNode.connect(analyser);
 
         // Yeni stream oluştur

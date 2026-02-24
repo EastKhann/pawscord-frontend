@@ -51,11 +51,70 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
     );
 };
 
+// 🔥 BASE_GAIN: Incoming WebRTC audio is inherently weak (low signal level).
+// At 100% volume we apply 2.0× gain so the voice is clearly audible.
+// Volume range 0-200 maps to GainNode gain 0-4.0  (100% = 2.0, 200% = 4.0).
+// Reduced from 2.5 thanks to sender-side makeup gain fix.
+const BASE_GAIN = 2.0;
+
 const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
     const audioRef = useRef(null);
     const audioCtxRef = useRef(null);
     const sourceRef = useRef(null);
     const gainRef = useRef(null);
+    const compressorRef = useRef(null);
+    const limiterRef = useRef(null);
+    // Keep a ref to current volume so the GainNode can be initialised with
+    // the right value the first time it is created (stream useEffect).
+    const volumeRef = useRef(volume);
+    const isMutedRef = useRef(isMuted);
+    useEffect(() => { volumeRef.current = volume; }, [volume]);
+    useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
+
+    // Helper: create/ensure GainNode chain exists and return the gain node.
+    // 🔥 YENİ: Compressor + Limiter zinciri eklendi — alıcı tarafında ses normalizasyonu
+    const ensureGainChain = useCallback(() => {
+        const audio = audioRef.current;
+        if (!audio) return null;
+        if (gainRef.current) return gainRef.current;
+        try {
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            audioCtxRef.current = new Ctx({ latencyHint: 'interactive', sampleRate: 48000 });
+            sourceRef.current = audioCtxRef.current.createMediaElementSource(audio);
+
+            // 🔥 1. GAIN NODE — kullanıcı ses seviyesi kontrolü
+            gainRef.current = audioCtxRef.current.createGain();
+
+            // 🔥 2. COMPRESSOR — farklı kullanıcıların ses seviyelerini dengele
+            // Yüksek sesli kullanıcıları kıs, düşük seslileri yükselt
+            compressorRef.current = audioCtxRef.current.createDynamicsCompressor();
+            compressorRef.current.threshold.value = -20;  // -20dB üstünü sıkıştır
+            compressorRef.current.knee.value = 12;        // Yumuşak geçiş
+            compressorRef.current.ratio.value = 3;        // 3:1 sıkıştırma (yumuşak)
+            compressorRef.current.attack.value = 0.003;   // 3ms — hızlı tepki
+            compressorRef.current.release.value = 0.25;   // 250ms — doğal ses
+
+            // 🔥 3. LIMITER — clipping önleme (volume 200%'de distorsiyon olmasın)
+            limiterRef.current = audioCtxRef.current.createDynamicsCompressor();
+            limiterRef.current.threshold.value = -3;    // -3dB'de sert sınır
+            limiterRef.current.knee.value = 0;          // Sert diz (true limiter)
+            limiterRef.current.ratio.value = 20;        // 20:1 — neredeyse brick wall
+            limiterRef.current.attack.value = 0.001;    // 1ms — anında tepki
+            limiterRef.current.release.value = 0.1;     // 100ms release
+
+            // 🔥 Sinyal zinciri: source → gain → compressor → limiter → destination
+            sourceRef.current.connect(gainRef.current);
+            gainRef.current.connect(compressorRef.current);
+            compressorRef.current.connect(limiterRef.current);
+            limiterRef.current.connect(audioCtxRef.current.destination);
+
+            logger.audio(`[AudioPlayer] GainNode + Compressor + Limiter chain created for ${username}`);
+        } catch (e) {
+            logger.warn(`[AudioPlayer] GainNode creation failed for ${username}:`, e);
+            return null;
+        }
+        return gainRef.current;
+    }, [username]);
 
     useEffect(() => {
         if (stream) {
@@ -71,6 +130,8 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
         logger.log(`[AudioPlayer] Setting stream for ${username}`);
         audio.srcObject = stream;
         audio.muted = false;
+        // Always keep native volume at max — GainNode handles the actual level.
+        audio.volume = 1.0;
 
         const attemptPlay = async () => {
             if (!globalEnabled) {
@@ -86,71 +147,63 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
                 }
 
                 audio.muted = false;
-                audio.volume = 1.0;
                 await audio.play();
                 logger.log(`✅ [AudioPlayer] Successfully playing ${username}`);
+
+                // 🔥 FIX: Create GainNode chain immediately after play so we can
+                // apply BASE_GAIN boost to the weak incoming WebRTC signal.
+                const gainNode = ensureGainChain();
+                if (gainNode) {
+                    const targetGain = isMutedRef.current ? 0 : (volumeRef.current / 100) * BASE_GAIN;
+                    gainNode.gain.value = Math.max(0, targetGain);
+                    if (audioCtxRef.current?.state === 'suspended') {
+                        audioCtxRef.current.resume();
+                    }
+                }
             } catch (err) {
                 logger.warn(`[AudioPlayer] Autoplay blocked for ${username}:`, err);
-                // Retry on user interaction
-                const resumeAudio = () => {
-                    audio.play().catch(() => { });
-                };
+                const resumeAudio = () => { audio.play().catch(() => { }); };
                 document.addEventListener('click', resumeAudio, { once: true });
                 document.addEventListener('keydown', resumeAudio, { once: true });
-                // Also retry after short delay
                 setTimeout(() => { audio.play().catch(() => { }); }, 500);
             }
         };
 
         attemptPlay();
 
-        // 🔥 FIX: Do NOT destroy GainNode chain on stream change!
+        // 🔥 NOTE: Do NOT destroy GainNode chain on stream change.
         // createMediaElementSource is bound to the <audio> element, not the stream.
         // Changing srcObject still routes through the existing GainNode chain.
-        // The GainNode cleanup is handled by the unmount useEffect below.
-    }, [stream, username, globalEnabled]);
+        // GainNode cleanup is handled by the unmount useEffect below.
+    }, [stream, username, globalEnabled, ensureGainChain]);
 
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
 
-        const targetVolume = isMuted ? 0 : (volume / 100);
+        // Volume range 0-200 → gain 0 – (2 * BASE_GAIN)
+        // 100% → BASE_GAIN (2.0×), 200% → 2 * BASE_GAIN (4.0×)
+        // Limiter at -3dB prevents clipping even at 200%
+        const targetGain = isMuted ? 0 : (volume / 100) * BASE_GAIN;
 
-        // 🔥 FIX: Once createMediaElementSource() is called, audio.volume has NO EFFECT.
-        // All volume must go through GainNode after that point.
+        // 🔥 Always route through GainNode so we get the boost.
+        // If the chain doesn't exist yet (audio not started), it will be
+        // created in attemptPlay above; this effect will re-run if needed.
         if (gainRef.current) {
-            // GainNode chain exists (from previous >100% setting) — route ALL volume through it.
             try {
                 if (audioCtxRef.current?.state === 'suspended') {
                     audioCtxRef.current.resume();
                 }
-                gainRef.current.gain.value = Math.max(0, targetVolume);
+                gainRef.current.gain.value = Math.max(0, targetGain);
             } catch (e) {
                 logger.warn(`[AudioPlayer] GainNode volume set failed for ${username}:`, e);
             }
-        } else if (targetVolume > 1) {
-            // >100% amplification: create Web Audio API GainNode chain
-            audio.volume = 1.0;
-            try {
-                const Ctx = window.AudioContext || window.webkitAudioContext;
-                audioCtxRef.current = new Ctx();
-                sourceRef.current = audioCtxRef.current.createMediaElementSource(audio);
-                gainRef.current = audioCtxRef.current.createGain();
-                sourceRef.current.connect(gainRef.current);
-                gainRef.current.connect(audioCtxRef.current.destination);
-
-                if (audioCtxRef.current.state === 'suspended') {
-                    audioCtxRef.current.resume();
-                }
-                gainRef.current.gain.value = targetVolume;
-            } catch (e) {
-                logger.warn(`[AudioPlayer] GainNode amplification failed for ${username}:`, e);
-            }
         } else {
-            // Normal range (0-100%): no GainNode yet, use native volume
-            audio.volume = Math.max(0, targetVolume);
+            // GainNode not yet created (stream hasn't played yet) — fall back to
+            // native volume as a safety net (will be overridden once chain exists).
+            audio.volume = isMuted ? 0 : Math.min(1.0, (volume / 100));
         }
-        logger.log(`[AudioPlayer] ${username} volume set to ${Math.round(targetVolume * 100)}%`);
+        logger.log(`[AudioPlayer] ${username} gain=${targetGain.toFixed(2)} (vol=${volume}%)`);
     }, [volume, isMuted, username]);
 
     // Cleanup AudioContext on unmount
@@ -161,6 +214,12 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
             }
             if (gainRef.current) {
                 try { gainRef.current.disconnect(); } catch (e) { /* */ }
+            }
+            if (compressorRef.current) {
+                try { compressorRef.current.disconnect(); } catch (e) { /* */ }
+            }
+            if (limiterRef.current) {
+                try { limiterRef.current.disconnect(); } catch (e) { /* */ }
             }
             if (audioCtxRef.current) {
                 try { audioCtxRef.current.close(); } catch (e) { /* */ }

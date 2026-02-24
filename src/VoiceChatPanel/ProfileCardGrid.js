@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { getDeterministicAvatarFallback } from './avatarUtils';
+import ConnectionQualityIndicator from '../VoiceUserList/ConnectionQualityIndicator';
 
 const getGridLayout = (count, isMobile) => {
     if (isMobile) return { cols: 1, rows: count };
@@ -18,6 +19,7 @@ const ProfileCardGrid = React.memo(({
     activeSpeaker,
     getUserAvatar,
     setContextMenu,
+    connectionQuality = {},
     isMobile,
 }) => {
     const { cols, rows } = getGridLayout(combinedUsers.length, isMobile);
@@ -97,16 +99,31 @@ const ProfileCardGrid = React.memo(({
                         />
                     </div>
 
-                    {/* Username */}
+                    {/* Username + Connection Quality */}
                     <div style={{
-                        fontSize: '20px',
-                        fontWeight: '700',
-                        color: activeSpeaker === user.username ? '#dee0fc' : '#fff',
-                        textAlign: 'center',
-                        textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)',
-                        letterSpacing: '0.3px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
                     }}>
-                        {user.username}
+                        <div style={{
+                            fontSize: '20px',
+                            fontWeight: '700',
+                            color: activeSpeaker === user.username ? '#dee0fc' : '#fff',
+                            textAlign: 'center',
+                            textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)',
+                            letterSpacing: '0.3px',
+                        }}>
+                            {user.username}
+                        </div>
+                        {connectionQuality[user.username] && (
+                            <ConnectionQualityIndicator
+                                quality={connectionQuality[user.username].quality}
+                                rtt={connectionQuality[user.username].rtt}
+                                packetLossRate={connectionQuality[user.username].packetLoss}
+                                size={18}
+                            />
+                        )}
                     </div>
 
                     {/* Status badges */}

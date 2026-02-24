@@ -194,7 +194,7 @@ export const VoiceProvider = ({ children }) => {
     const { toggleNoiseSuppression } = useNoiseControl({
         isNoiseSuppressionEnabled, setIsNoiseSuppressionEnabled,
         localAudioStream, setLocalAudioStream, localStreamRef,
-        peerConnectionsRef
+        peerConnectionsRef, globalAudioContextRef
     });
 
     // 🔥 Push-to-Talk Hook

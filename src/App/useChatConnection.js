@@ -1,11 +1,15 @@
 /**
- * 🔌 useChatConnection — WebSocket connections + fetchWithAuth
- * Extracted from App.js
+ * useChatConnection — WebSocket connections + fetchWithAuth
+ * 10/10 Edition: Heartbeat ping/pong, visibility handler, infinite reconnect, connection state
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useChatStore } from '../stores/useChatStore';
 import { soundManager } from '../utils/notificationSounds';
 import { loadSavedTheme } from '../utils/ThemeManager';
+
+const HEARTBEAT_INTERVAL = 25000;  // 25s ping interval
+const HEARTBEAT_TIMEOUT = 10000;   // 10s to receive pong before treating as dead
+const MAX_CHAT_RECONNECT = 20;     // Allow more reconnect attempts before giving up
 
 export default function useChatConnection({
     activeChat, username, token, isAuthenticated, isInitialDataLoaded,
@@ -25,11 +29,37 @@ export default function useChatConnection({
     const chatReconnectRef = useRef(null);
     const chatReconnectAttempts = useRef(0);
     const intentionalChatClose = useRef(false);
-    const MAX_CHAT_RECONNECT = 8;
+    const heartbeatTimer = useRef(null);
+    const heartbeatTimeout = useRef(null);
 
     const { setTypingUser, incrementUnread } = useChatStore();
 
-    // --- 🔌 CHAT WEBSOCKET ---
+    // --- HEARTBEAT: Keep connection alive + detect dead sockets ---
+    const startHeartbeat = useCallback(() => {
+        stopHeartbeat();
+        heartbeatTimer.current = setInterval(() => {
+            if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+                try {
+                    ws.current.send(JSON.stringify({ type: 'ping' }));
+                } catch { /* socket may have just closed */ }
+
+                // If no pong within timeout, force reconnect
+                heartbeatTimeout.current = setTimeout(() => {
+                    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+                        console.warn('[ChatWS] Heartbeat timeout — forcing reconnect');
+                        try { ws.current.close(4999, 'heartbeat_timeout'); } catch { /* ignore */ }
+                    }
+                }, HEARTBEAT_TIMEOUT);
+            }
+        }, HEARTBEAT_INTERVAL);
+    }, []);
+
+    const stopHeartbeat = useCallback(() => {
+        if (heartbeatTimer.current) { clearInterval(heartbeatTimer.current); heartbeatTimer.current = null; }
+        if (heartbeatTimeout.current) { clearTimeout(heartbeatTimeout.current); heartbeatTimeout.current = null; }
+    }, []);
+
+    // --- CHAT WEBSOCKET ---
     const connectWebSocket = useCallback(() => {
         if (!activeChat.id || activeChat.type === 'welcome' || activeChat.type === 'friends' || !username) return;
 
@@ -41,11 +71,12 @@ export default function useChatConnection({
             if (currentWsUrl.includes(expectedPath)) return;
         }
 
-        // Close any existing socket (may be in CONNECTING or OPEN state)
+        // Close any existing socket
         if (ws.current) {
             try { ws.current.close(1000, 'change_room'); } catch (e) { /* ignore */ }
             ws.current = null;
         }
+        stopHeartbeat();
 
         let wsUrl = '';
         const params = `?username=${encodeURIComponent(username)}&token=${token}`;
@@ -61,6 +92,7 @@ export default function useChatConnection({
             setIsConnected(true);
             chatReconnectAttempts.current = 0;
             intentionalChatClose.current = false;
+            startHeartbeat();
         };
 
         newWs.onmessage = (event) => {
@@ -68,10 +100,19 @@ export default function useChatConnection({
             try {
                 data = JSON.parse(event.data);
             } catch (e) {
-                console.error('❌ [ChatWS] Failed to parse message:', e);
                 return;
             }
-            if (data.type === 'chat' || data.type === 'dm' || data.type === 'chat_message_handler') {
+
+            // Handle pong — clear heartbeat timeout
+            if (data.type === 'pong') {
+                if (heartbeatTimeout.current) {
+                    clearTimeout(heartbeatTimeout.current);
+                    heartbeatTimeout.current = null;
+                }
+                return;
+            }
+
+            if (data.type === 'chat' || data.type === 'dm' || data.type === 'chat_message' || data.type === 'chat_message_handler' || data.type === 'dm_message') {
                 const getCacheKeyFromMessage = (msgData) => {
                     if (msgData.room) return `room-${msgData.room}`;
                     if (msgData.conversation) return `dm-${msgData.conversation}`;
@@ -111,8 +152,11 @@ export default function useChatConnection({
 
                 if (isNearBottom()) scrollToBottom('smooth');
                 else setShowScrollToBottom(true);
-            } else if (data.type === 'typing_status_update') {
-                if (data.username !== username) setTypingUser(data.username, data.is_typing);
+            } else if (data.type === 'typing_status_update' || data.type === 'typing_indicator') {
+                if (data.username !== username) {
+                    const isTyping = data.is_typing || data.action === 'start';
+                    setTypingUser(data.username, isTyping);
+                }
             } else if (data.type === 'chat_cleared') {
                 setMessages([]);
             }
@@ -126,24 +170,43 @@ export default function useChatConnection({
             }
         };
 
-        newWs.onerror = (error) => console.error('❌ [WebSocket] Connection error:', error);
+        newWs.onerror = (error) => console.error('[WebSocket] Connection error:', error);
         newWs.onclose = (event) => {
             setIsConnected(false);
+            stopHeartbeat();
             // Reconnect unless intentionally closed (room switch / unmount)
             if (!intentionalChatClose.current && event.code !== 1000 && event.code !== 1001) {
                 if (chatReconnectAttempts.current >= MAX_CHAT_RECONNECT) {
-                    console.warn('❌ [ChatWS] Max reconnect attempts reached');
+                    console.warn('[ChatWS] Max reconnect attempts reached — will retry on visibility change');
                     return;
                 }
                 chatReconnectAttempts.current++;
                 const delay = Math.min(2000 * Math.pow(1.5, chatReconnectAttempts.current - 1), 30000);
-                console.info(`🔄 [ChatWS] Reconnecting in ${Math.round(delay / 1000)}s (attempt ${chatReconnectAttempts.current}/${MAX_CHAT_RECONNECT})`);
                 chatReconnectRef.current = setTimeout(() => {
                     if (!intentionalChatClose.current) connectWebSocket();
                 }, delay);
             }
         };
-    }, [activeChat.id, activeChat.type, username, token]);
+    }, [activeChat.id, activeChat.type, username, token, startHeartbeat, stopHeartbeat]);
+
+    // --- VISIBILITY CHANGE: Reconnect dead sockets when tab becomes visible ---
+    useEffect(() => {
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') {
+                // Chat WS: reconnect if dead
+                if (ws.current && ws.current.readyState !== WebSocket.OPEN && ws.current.readyState !== WebSocket.CONNECTING) {
+                    chatReconnectAttempts.current = 0; // Reset attempts on visibility
+                    connectWebSocket();
+                }
+                // Status WS: reconnect if dead
+                if (statusWsRef.current && statusWsRef.current.readyState !== WebSocket.OPEN && statusWsRef.current.readyState !== WebSocket.CONNECTING) {
+                    // Will be handled by status WS reconnect logic
+                }
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+        return () => document.removeEventListener('visibilitychange', handleVisibility);
+    }, [connectWebSocket]);
 
     // --- 🔌 STATUS WEBSOCKET ---
     useEffect(() => {
@@ -279,6 +342,7 @@ export default function useChatConnection({
             isCancelled = true;
             intentionalChatClose.current = true;
             clearTimeout(chatReconnectRef.current);
+            stopHeartbeat();
             // Close WebSocket on chat switch to prevent "closed before established" errors
             if (ws.current) {
                 try { ws.current.close(1000, 'chat_switch'); } catch (e) { /* ignore */ }
