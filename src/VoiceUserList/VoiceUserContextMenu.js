@@ -33,20 +33,13 @@ const VoiceUserContextMenu = ({
         setMenuPos({ left, top });
     }, [contextMenu, showMoveMenu]); // showMoveMenu degisince de yeniden hesapla
 
-    if (!contextMenu) return null;
-
-    const userObj = contextMenu.user;
-    let avatarUrl = userObj.avatar || userObj.avatarUrl;
-    if (!avatarUrl) {
-        const foundUser = allUsers.find(u => u.username === userObj.username);
-        avatarUrl = foundUser?.avatar || getAvatar(userObj.username);
-    }
-
-    const volumeVal = remoteVolumes[userObj.username] || 100;
+    // --- Hooks must be called unconditionally (before any early return) ---
+    const userObj = contextMenu?.user;
+    const volumeVal = userObj ? (remoteVolumes[userObj.username] || 100) : 100;
 
     const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
-    const handleAvatarError = useCallback((e) => { e.target.onerror = null; e.target.src = getAvatar(userObj.username); }, [getAvatar, userObj.username]);
-    const handleVolumeSliderChange = useCallback((e) => handleVolumeChange(userObj.username, e), [handleVolumeChange, userObj.username]);
+    const handleAvatarError = useCallback((e) => { e.target.onerror = null; e.target.src = getAvatar(userObj?.username); }, [getAvatar, userObj?.username]);
+    const handleVolumeSliderChange = useCallback((e) => handleVolumeChange(userObj?.username, e), [handleVolumeChange, userObj?.username]);
     const handleProfileClick = useCallback(() => handleMenuAction('profile'), [handleMenuAction]);
     const handleProfileKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('profile'), [handleMenuAction]);
     const handleDmClick = useCallback(() => handleMenuAction('dm'), [handleMenuAction]);
@@ -58,6 +51,15 @@ const VoiceUserContextMenu = ({
     const handleServerMuteClick = useCallback(() => handleMenuAction('server_mute'), [handleMenuAction]);
     const handleServerDeafenClick = useCallback(() => handleMenuAction('server_deafen'), [handleMenuAction]);
     const handleMuteLocalClick = useCallback(() => handleMenuAction('mute_local'), [handleMenuAction]);
+    // -----------------------------------------------------------------
+
+    if (!contextMenu || !userObj) return null;
+
+    let avatarUrl = userObj.avatar || userObj.avatarUrl;
+    if (!avatarUrl) {
+        const foundUser = allUsers.find(u => u.username === userObj.username);
+        avatarUrl = foundUser?.avatar || getAvatar(userObj.username);
+    }
 
     return ReactDOM.createPortal(
         <div
