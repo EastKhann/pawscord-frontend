@@ -61,7 +61,7 @@ export default function useChatConnection({
 
     // --- CHAT WEBSOCKET ---
     const connectWebSocket = useCallback(() => {
-        if (!activeChat.id || activeChat.type === 'welcome' || activeChat.type === 'friends' || !username) return;
+        if (!activeChat.id || activeChat.type === 'welcome' || activeChat.type === 'friends' || !username || !token) return;
 
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
             const currentWsUrl = ws.current.url;

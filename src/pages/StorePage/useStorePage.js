@@ -28,11 +28,16 @@ const useStorePage = () => {
 
   const API_URL = import.meta.env.VITE_API_URL || getApiBase().replace('/api', '');
 
-  useEffect(() => { fetchUserData(); fetchItems(); fetchInventory(); }, [activeCategory]);
+  useEffect(() => {
+    fetchItems();
+    if (token) { fetchUserData(); fetchInventory(); }
+  }, [activeCategory, token]);
 
   const fetchUserData = async () => {
+    if (!token) return;
     try {
       const r = await fetch(`${API_URL}/api/store/coins/balance/`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!r.ok) return;
       const d = await r.json(); setUserCoins(d.coins); setPremiumTier(d.premium_tier);
     } catch (e) { console.error('Error fetching user data:', e); }
   };
@@ -47,8 +52,10 @@ const useStorePage = () => {
   };
 
   const fetchInventory = async () => {
+    if (!token) return;
     try {
       const r = await fetch(`${API_URL}/api/store/inventory/`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!r.ok) return;
       const d = await r.json(); setInventory(d.results || d);
     } catch (e) { console.error('Error fetching inventory:', e); }
   };

@@ -1,24 +1,110 @@
 ﻿// frontend/src/VoiceChatPanel.js
 // 🎤 PROFESYONEL SESLİ SOHBET PANELİ - Discord/Zoom Tarzı
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { useVoice } from './VoiceContext';
 import { useAuth } from './AuthContext';
 import useResponsive from './hooks/useResponsive'; // 🔥 RESPONSIVE
-import UserContextMenu from './components/UserContextMenu';
 import VoiceSettingsPanel from './components/VoiceSettingsPanel'; // 🔥 YENİ: Gelişmiş Ses Ayarları
 
 // Extracted Sub-Components
 import MinimizedView from './VoiceChatPanel/MinimizedView';
 import useVoiceMonitoring from './VoiceChatPanel/useVoiceMonitoring';
-import useVoiceInteractions from './VoiceChatPanel/useVoiceInteractions';
 import useVoiceChatState from './VoiceChatPanel/useVoiceChatState';
 import FullscreenView from './VoiceChatPanel/FullscreenView';
 import GridView from './VoiceChatPanel/GridView';
 import ProfileCardGrid from './VoiceChatPanel/ProfileCardGrid';
 import VoiceHeader from './VoiceChatPanel/VoiceHeader';
+import ControlBar from './VoiceChatPanel/ControlBar';
 import EchoWarning from './VoiceChatPanel/EchoWarning';
 import './VoiceChatPanel/voicePanelStyles';
+
+/* ── Sesli sohbet frame sağ-tık menüsü (Add Friend YOK) ───────────── */
+const VoiceFrameMenu = ({ menu, currentUsername, remoteVolumes, setRemoteVolume, onClose }) => {
+    const menuRef = useRef(null);
+    const [pos, setPos] = useState({ left: -9999, top: -9999 });
+    const x = menu?.position?.x ?? menu?.x ?? 0;
+    const y = menu?.position?.y ?? menu?.y ?? 0;
+    const user = menu?.user;
+
+    useEffect(() => {
+        if (!menu || !menuRef.current) return;
+        const pad = 10;
+        const rect = menuRef.current.getBoundingClientRect();
+        let left = x;
+        let top = y;
+        if (left + rect.width > window.innerWidth - pad) left = window.innerWidth - rect.width - pad;
+        if (top + rect.height > window.innerHeight - pad) top = window.innerHeight - rect.height - pad;
+        setPos({ left: Math.max(pad, left), top: Math.max(pad, top) });
+    }, [menu, x, y]);
+
+    useEffect(() => {
+        if (!menu) return;
+        const handler = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) onClose(); };
+        window.addEventListener('mousedown', handler);
+        return () => window.removeEventListener('mousedown', handler);
+    }, [menu, onClose]);
+
+    if (!menu || !user) return null;
+
+    const isSelf = user.username === currentUsername;
+    const vol = remoteVolumes?.[user.username] ?? 100;
+
+    const menuItem = (icon, label, onClick, danger) => (
+        <div onClick={onClick} style={{
+            display: 'flex', alignItems: 'center', gap: '8px',
+            padding: '8px 14px', margin: '1px 4px', borderRadius: '4px',
+            cursor: 'pointer', fontSize: '13px', color: danger ? '#ed4245' : '#dcddde',
+            transition: 'background 0.1s',
+        }}
+            onMouseEnter={e => e.currentTarget.style.background = danger ? 'rgba(237,66,69,0.15)' : 'rgba(88,101,242,0.15)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+        >
+            <span style={{ fontSize: '15px', opacity: 0.75 }}>{icon}</span>
+            <span>{label}</span>
+        </div>
+    );
+
+    return ReactDOM.createPortal(
+        <div ref={menuRef} onClick={e => e.stopPropagation()} style={{
+            position: 'fixed', left: pos.left, top: pos.top, zIndex: 2147483647,
+            backgroundColor: '#111214', border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '8px', boxShadow: '0 12px 32px rgba(0,0,0,0.7)',
+            minWidth: '220px', maxWidth: '260px',
+            animation: 'contextMenuIn 0.12s ease-out',
+        }}>
+            {/* Başlık */}
+            <div style={{ padding: '10px 14px', background: '#1a1b1e', borderBottom: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px 8px 0 0' }}>
+                <div style={{ fontWeight: '600', fontSize: '14px', color: '#fff' }}>{user.username}</div>
+                {isSelf && <div style={{ fontSize: '11px', color: '#b9bbbe', marginTop: '2px' }}>Sensin</div>}
+            </div>
+
+            {/* Ses seviyesi slider (başkasıysa) */}
+            {!isSelf && setRemoteVolume && (
+                <div style={{ padding: '10px 14px 12px', background: '#16171a', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                        <span style={{ fontSize: '11px', color: '#8e9297', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔊 Ses Seviyesi</span>
+                        <span style={{ fontSize: '12px', fontWeight: '700', color: vol > 100 ? '#5865f2' : '#fff', background: 'rgba(255,255,255,0.1)', padding: '1px 7px', borderRadius: '10px' }}>{vol}%</span>
+                    </div>
+                    <input type="range" min="0" max="200" value={vol}
+                        onChange={e => setRemoteVolume(user.username, parseInt(e.target.value))}
+                        className="voice-volume-slider"
+                        style={{ width: '100%', cursor: 'pointer', accentColor: '#5865f2' }}
+                    />
+                </div>
+            )}
+
+            {/* Eylemler */}
+            <div style={{ padding: '4px 0 6px' }}>
+                {menuItem('👤', 'Profili Görüntüle', () => { window.location.hash = `#/profile/${user.username}`; onClose(); })}
+                {!isSelf && menuItem('💬', 'Özelden Mesaj At', () => { window.location.hash = `#/dm/${user.username}`; onClose(); })}
+                {!isSelf && menuItem('🔕', 'Benim İçin Sessize Al', () => { if (setRemoteVolume) setRemoteVolume(user.username, 0); onClose(); })}
+            </div>
+        </div>,
+        document.getElementById('portal-root') || document.body
+    );
+};
 
 const VoiceChatPanel = ({
     roomName,
@@ -115,13 +201,7 @@ const VoiceChatPanel = ({
 
     const userCount = combinedUsers.length;
 
-    // 🆕 CONTEXT MENU HANDLERS (extracted hook)
-    const {
-        handleSendMessage, handleAddFriend, handleBlock,
-        handleViewProfile, handleMuteUser, handleAdjustVolume
-    } = useVoiceInteractions({ setContextMenu, setVolumeSettings, setRemoteVolume });
-
-    // 🎯 Stable callback refs (performance)
+    //  Stable callback refs (performance)
     const handleContextMenu = useCallback((data) => setContextMenu(data), []);
     const handleBackFromFullscreen = useCallback(() => setExpandedUser(null), []);
     const handleDismissEcho = useCallback(() => setShowEchoWarning(false), []);
@@ -247,6 +327,26 @@ const VoiceChatPanel = ({
                 })()}
             </div>
 
+            {/* CONTROL BAR (mute / deafen / camera / settings) */}
+            <ControlBar
+                isMuted={isMuted}
+                isDeafened={isDeafened}
+                isCameraOn={isCameraOn}
+                isScreenSharing={isScreenSharing}
+                isSpatialAudio={isSpatialAudioEnabled}
+                isRecording={isRecording}
+                recordingDuration={recordingDuration}
+                onToggleMute={toggleMute}
+                onToggleDeafened={toggleDeafened}
+                onToggleCamera={toggleCamera}
+                onToggleScreenShare={toggleScreenShare}
+                onToggleSpatialAudio={toggleSpatialAudio}
+                onStartRecording={startRecording}
+                onStopRecording={stopRecording}
+                onLeave={leaveVoice}
+                onSettings={() => setIsSettingsOpen(true)}
+            />
+
             {/* ECHO WARNING */}
             {hasEchoRisk && showEchoWarning && (
                 <EchoWarning onDismiss={handleDismissEcho} />
@@ -260,20 +360,14 @@ const VoiceChatPanel = ({
                 />
             )}
 
-            {/* 🆕 CONTEXT MENU */}
+            {/* FRAME CONTEXT MENU (sağ tık — Add Friend yok) */}
             {contextMenu && (
-                <UserContextMenu
-                    user={contextMenu.user}
-                    position={contextMenu.position}
+                <VoiceFrameMenu
+                    menu={contextMenu}
+                    currentUsername={currentUser?.username}
+                    remoteVolumes={remoteVolumes}
+                    setRemoteVolume={setRemoteVolume}
                     onClose={handleCloseContextMenu}
-                    onSendMessage={handleSendMessage}
-                    onAddFriend={handleAddFriend}
-                    onBlock={handleBlock}
-                    onViewProfile={handleViewProfile}
-                    onMuteUser={handleMuteUser}
-                    onAdjustVolume={handleAdjustVolume}
-                    currentUser={currentUser}
-                    isInVoiceChat={true}
                 />
             )}
         </div>

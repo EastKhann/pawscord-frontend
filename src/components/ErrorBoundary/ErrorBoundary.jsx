@@ -17,7 +17,29 @@ class ErrorBoundary extends React.Component {
         };
     }
 
+    componentDidMount() {
+        // Clear chunk-reload flag so future deploys can trigger another auto-reload
+        sessionStorage.removeItem('chunk_reload_attempted');
+    }
+
     static getDerivedStateFromError(error) {
+        // Vite/Webpack chunk load failure → auto-reload once instead of showing error UI
+        const isChunkError =
+            error?.name === 'ChunkLoadError' ||
+            error?.message?.includes('dynamically imported module') ||
+            error?.message?.includes('Loading chunk') ||
+            error?.message?.includes('Failed to fetch');
+
+        if (isChunkError) {
+            const KEY = 'chunk_reload_attempted';
+            if (!sessionStorage.getItem(KEY)) {
+                sessionStorage.setItem(KEY, '1');
+                window.location.reload();
+                return { hasError: false }; // prevent render during reload
+            }
+            // Already reloaded once — fall through to error UI
+        }
+
         return { hasError: true };
     }
 

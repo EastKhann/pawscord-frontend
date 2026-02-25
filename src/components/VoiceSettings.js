@@ -59,7 +59,7 @@ const VoiceSettings = ({ userId, onClose }) => {
 
     const fetchSettings = async () => {
         try {
-            const data = await fetchWithAuth(`${getApiBase()}/voice/${userId}/settings/`);
+            const data = await fetchWithAuth(`${getApiBase()}/api/voice/${userId}/settings/`);
             setSettings(data);
             setSelectedInput(data.input_device || '');
             setSelectedOutput(data.output_device || '');
@@ -80,8 +80,8 @@ const VoiceSettings = ({ userId, onClose }) => {
 
     const updateSettings = async () => {
         try {
-            await fetchWithAuth(`${getApiBase()}/voice/${userId}/settings/update/`, {
-                method: 'PUT',
+            await fetchWithAuth(`${getApiBase()}/api/voice/${userId}/settings/update/`, {
+                method: 'POST',
                 body: JSON.stringify({
                     input_device: selectedInput,
                     output_device: selectedOutput,

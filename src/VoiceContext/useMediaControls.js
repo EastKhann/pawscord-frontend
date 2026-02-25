@@ -43,47 +43,47 @@ export const useMediaControls = ({
     }, [localStreamRef, voiceWsRef, setIsMuted]);
 
     // --- DEAFEN ---
+    // isDeafened'ın mevcut değerine bir ref ile erişiyoruz ki
+    // toggle fonksiyonu React state callback'i dışında çalışsın
+    const isDeafenedRef = useRef(false);
     const toggleDeafened = useCallback(() => {
-        setIsDeafened(prev => {
-            const newDeafened = !prev;
+        const newDeafened = !isDeafenedRef.current;
+        isDeafenedRef.current = newDeafened;
 
-            // 🔥 FIX: Actually mute/unmute all remote audio elements
-            // Mute hidden body-appended audio elements
-            const remoteAudios = document.querySelectorAll('audio[id^="remote-audio-"]');
-            remoteAudios.forEach(audio => {
-                audio.muted = newDeafened;
-            });
-            // Mute UserVideoCard audio elements
-            const cardAudios = document.querySelectorAll('audio[data-username]');
-            cardAudios.forEach(audio => {
-                audio.muted = newDeafened;
-            });
+        // Uzak ses elementlerini sustur / aç
+        document.querySelectorAll('audio[id^="remote-audio-"], audio[data-username]')
+            .forEach(audio => { audio.muted = newDeafened; });
 
+        // State güncelle
+        setIsDeafened(newDeafened);
+
+        // WebSocket sinyali
+        if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
+            voiceWsRef.current.send(JSON.stringify({
+                type: 'deaf_state',
+                is_deafened: newDeafened
+            }));
+        }
+
+        // Sağırlaştırırken mikrofonu da kapat (Discord davranışı)
+        if (newDeafened) {
+            if (localStreamRef.current) {
+                localStreamRef.current.getAudioTracks().forEach(track => {
+                    track.enabled = false;
+                });
+            }
+            // setIsMuted'ı state callback DIŞINDA çağır — güvenilir React güncelleme
+            setIsMuted(true);
             if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
                 voiceWsRef.current.send(JSON.stringify({
-                    type: 'deaf_state',
-                    is_deafened: newDeafened
+                    type: 'mic_off_state',
+                    is_mic_off: true
                 }));
             }
-
-            // Also mute mic when deafening (Discord behavior)
-            if (newDeafened) {
-                if (localStreamRef.current) {
-                    localStreamRef.current.getAudioTracks().forEach(track => {
-                        track.enabled = false;
-                    });
-                }
-                setIsMuted(true);
-                if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
-                    voiceWsRef.current.send(JSON.stringify({
-                        type: 'mic_off_state',
-                        is_mic_off: true
-                    }));
-                }
-            }
-
-            return newDeafened;
-        });
+        }
+        // Sağırlaştırmayı kaldırırken: mic kasıtlı mute kaldı,
+        // kullanıcı manuel açamazsa diye track'i isMuted durumuna göre ayarla
+        // (track.enabled zaten false — mute butonu ile açılacak, bu doğru davranış)
     }, [voiceWsRef, setIsDeafened, setIsMuted, localStreamRef]);
 
     // --- CAMERA TOGGLE ---

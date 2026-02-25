@@ -52,7 +52,7 @@ const useVoiceSettings = ({ channelId }) => {
     const animationRef = useRef(null);
     const gainNodeRef = useRef(null);
 
-    const apiBaseUrl = getApiBase();
+    const apiBaseUrl = getApiBase() + '/api';
     const token = localStorage.getItem('access_token');
 
     useEffect(() => {
