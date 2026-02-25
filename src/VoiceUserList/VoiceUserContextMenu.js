@@ -3,6 +3,54 @@ import React, { useCallback, useRef, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styles from './styles';
 
+/* ─── Küçük yardımcı bileşenler ─────────────────────────────────────── */
+
+const MenuItem = ({ className = 'user-context-menu-item', icon, label, onClick, danger, style: extraStyle }) => (
+    <div
+        role="menuitem"
+        tabIndex={0}
+        className={className}
+        onClick={onClick}
+        onKeyDown={(e) => e.key === 'Enter' && onClick?.(e)}
+        style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 12px',
+            margin: '1px 4px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '13px',
+            color: danger ? '#ed4245' : '#dcddde',
+            transition: 'background 0.1s, color 0.1s',
+            userSelect: 'none',
+            ...extraStyle,
+        }}
+    >
+        <span style={{ fontSize: '15px', lineHeight: 1, flexShrink: 0, opacity: danger ? 1 : 0.75 }}>{icon}</span>
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
+    </div>
+);
+
+const SectionLabel = ({ children }) => (
+    <div style={{
+        fontSize: '10px',
+        fontWeight: '700',
+        textTransform: 'uppercase',
+        letterSpacing: '0.6px',
+        color: '#72767d',
+        padding: '8px 12px 4px',
+    }}>
+        {children}
+    </div>
+);
+
+const Divider = () => (
+    <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.07)', margin: '4px 0' }} />
+);
+
+/* ─── Ana component ─────────────────────────────────────────────────── */
+
 const VoiceUserContextMenu = ({
     contextMenu, currentUsername, isAdmin, isClientInThisChannel,
     remoteVolumes, handleVolumeChange, handleMenuAction,
@@ -10,97 +58,111 @@ const VoiceUserContextMenu = ({
     getAvatar, allUsers, friendsList
 }) => {
     const menuRef = useRef(null);
-    const [menuPos, setMenuPos] = useState({ left: 0, top: 0 });
+    const [menuPos, setMenuPos] = useState({ left: -9999, top: -9999 });
 
-    // Dinamik pozisyon hesaplama: menu DOM'a mount olduktan sonra gercek boyutunu ol
+    // Pozisyon: ilk render'da gizle, mount sonra ölç & yerleştir
     useEffect(() => {
         if (!contextMenu || !menuRef.current) return;
-        const rect = menuRef.current.getBoundingClientRect();
         const pad = 10;
+        const rect = menuRef.current.getBoundingClientRect();
         let left = contextMenu.x;
         let top = contextMenu.y;
-        // Saga tasmamasi icin
-        if (left + rect.width > window.innerWidth - pad) {
-            left = window.innerWidth - rect.width - pad;
-        }
-        // Alta tasmamasi icin
-        if (top + rect.height > window.innerHeight - pad) {
-            top = window.innerHeight - rect.height - pad;
-        }
-        // Negatif deger olmamasi icin
+        if (left + rect.width > window.innerWidth - pad) left = window.innerWidth - rect.width - pad;
+        if (top + rect.height > window.innerHeight - pad) top = window.innerHeight - rect.height - pad;
         left = Math.max(pad, left);
         top = Math.max(pad, top);
         setMenuPos({ left, top });
-    }, [contextMenu, showMoveMenu]); // showMoveMenu degisince de yeniden hesapla
+    }, [contextMenu]); // showMoveMenu değişimde yeniden pozisyon HAREKETİNE gerek yok
 
-    // --- Hooks must be called unconditionally (before any early return) ---
+    // Hooks → her zaman koşulsuz çağrılmalı
     const userObj = contextMenu?.user;
-    const volumeVal = userObj ? (remoteVolumes[userObj.username] || 100) : 100;
+    const volumeVal = (userObj && remoteVolumes[userObj.username] != null) ? remoteVolumes[userObj.username] : 100;
+    const isSelf = userObj?.username === currentUsername;
+    const alreadyFriend = friendsList?.some(
+        f => f.sender_username === userObj?.username || f.receiver_username === userObj?.username
+    );
 
-    const handleStopPropagation = useCallback((e) => e.stopPropagation(), []);
-    const handleAvatarError = useCallback((e) => { e.target.onerror = null; e.target.src = getAvatar(userObj?.username); }, [getAvatar, userObj?.username]);
-    const handleVolumeSliderChange = useCallback((e) => handleVolumeChange(userObj?.username, e), [handleVolumeChange, userObj?.username]);
-    const handleProfileClick = useCallback(() => handleMenuAction('profile'), [handleMenuAction]);
-    const handleProfileKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('profile'), [handleMenuAction]);
-    const handleDmClick = useCallback(() => handleMenuAction('dm'), [handleMenuAction]);
-    const handleDmKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('dm'), [handleMenuAction]);
-    const handleAddFriendClick = useCallback(() => handleMenuAction('add_friend'), [handleMenuAction]);
-    const handleAddFriendKeyDown = useCallback((e) => e.key === 'Enter' && handleMenuAction('add_friend'), [handleMenuAction]);
-    const handleToggleMoveMenu = useCallback(() => setShowMoveMenu(prev => !prev), [setShowMoveMenu]);
-    const handleKickClick = useCallback(() => handleMenuAction('kick'), [handleMenuAction]);
-    const handleServerMuteClick = useCallback(() => handleMenuAction('server_mute'), [handleMenuAction]);
-    const handleServerDeafenClick = useCallback(() => handleMenuAction('server_deafen'), [handleMenuAction]);
-    const handleMuteLocalClick = useCallback(() => handleMenuAction('mute_local'), [handleMenuAction]);
-    // -----------------------------------------------------------------
+    const stopProp = useCallback((e) => e.stopPropagation(), []);
+    const onAvatarError = useCallback((e) => { e.target.onerror = null; e.target.src = getAvatar(userObj?.username); }, [getAvatar, userObj?.username]);
+    const onVolumeChange = useCallback((e) => handleVolumeChange(userObj?.username, e), [handleVolumeChange, userObj?.username]);
+    const onProfile = useCallback(() => handleMenuAction('profile'), [handleMenuAction]);
+    const onDm = useCallback(() => handleMenuAction('dm'), [handleMenuAction]);
+    const onAddFriend = useCallback(() => handleMenuAction('add_friend'), [handleMenuAction]);
+    const onToggleMove = useCallback(() => setShowMoveMenu(p => !p), [setShowMoveMenu]);
+    const onKick = useCallback(() => handleMenuAction('kick'), [handleMenuAction]);
+    const onServerMute = useCallback(() => handleMenuAction('server_mute'), [handleMenuAction]);
+    const onServerDeafen = useCallback(() => handleMenuAction('server_deafen'), [handleMenuAction]);
+    const onMuteLocal = useCallback(() => handleMenuAction('mute_local'), [handleMenuAction]);
 
     if (!contextMenu || !userObj) return null;
 
     let avatarUrl = userObj.avatar || userObj.avatarUrl;
     if (!avatarUrl) {
-        const foundUser = allUsers.find(u => u.username === userObj.username);
-        avatarUrl = foundUser?.avatar || getAvatar(userObj.username);
+        const found = allUsers?.find(u => u.username === userObj.username);
+        avatarUrl = found?.avatar || getAvatar(userObj.username);
     }
+
+    const otherChannels = voiceChannels?.filter(c => c.slug !== roomName) ?? [];
 
     return ReactDOM.createPortal(
         <div
             ref={menuRef}
+            role="menu"
+            onClick={stopProp}
             style={{
-                ...styles.contextMenu,
-                left: `${menuPos.left}px`,
-                top: `${menuPos.top}px`,
                 position: 'fixed',
+                left: menuPos.left,
+                top: menuPos.top,
                 zIndex: 2147483647,
+                backgroundColor: '#111214',
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderRadius: '8px',
+                boxShadow: '0 12px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4)',
+                minWidth: '240px',
+                maxWidth: '280px',
                 maxHeight: 'calc(100vh - 20px)',
                 overflowY: 'auto',
                 overflowX: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
+                animation: 'contextMenuIn 0.12s ease-out',
             }}
-            onClick={handleStopPropagation}
         >
-            {/* Header */}
-            <div style={{ ...styles.menuHeader, flexShrink: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <img src={avatarUrl} alt={userObj.username}
-                        onError={handleAvatarError}
-                        style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #5865f2', flexShrink: 0 }} />
-                    <div>
-                        <div style={{ fontWeight: '600', fontSize: '14px', color: '#fff' }}>{userObj.username}</div>
-                        {userObj.username === currentUsername && (
-                            <div style={{ fontSize: '11px', color: '#b9bbbe', marginTop: '1px' }}>Sensin</div>
-                        )}
-                    </div>
+            {/* ── Başlık (avatar + kullanıcı adı) ── */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '12px 12px 10px',
+                backgroundColor: '#1a1b1e',
+                borderBottom: '1px solid rgba(255,255,255,0.07)',
+                flexShrink: 0,
+            }}>
+                <img
+                    src={avatarUrl}
+                    alt={userObj.username}
+                    onError={onAvatarError}
+                    style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #5865f2', flexShrink: 0 }}
+                />
+                <div>
+                    <div style={{ fontWeight: '600', fontSize: '14px', color: '#fff', lineHeight: 1.2 }}>{userObj.username}</div>
+                    {isSelf && <div style={{ fontSize: '11px', color: '#b9bbbe', marginTop: '2px' }}>Sensin</div>}
                 </div>
             </div>
 
-            {/* Volume Slider */}
-            {isClientInThisChannel && userObj.username !== currentUsername && (
-                <div style={{ ...styles.volumeSection, flexShrink: 0 }}>
+            {/* ── Ses Seviyesi Slider (aynı kanalda, başkası) ── */}
+            {isClientInThisChannel && !isSelf && (
+                <div style={{
+                    padding: '10px 14px 12px',
+                    backgroundColor: '#16171a',
+                    borderBottom: '1px solid rgba(255,255,255,0.07)',
+                    flexShrink: 0,
+                }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <span style={{ fontSize: '12px', color: '#b9bbbe', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="#b9bbbe" />
-                                {volumeVal > 0 && <path d="M15.54 8.46a5 5 0 010 7.07" stroke="#b9bbbe" strokeWidth="1.5" strokeLinecap="round" />}
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', color: '#8e9297' }}>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor" />
+                                {volumeVal > 0 && <path d="M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />}
                                 {volumeVal > 100 && <path d="M19.07 4.93a10 10 0 010 14.14" stroke="#5865f2" strokeWidth="1.5" strokeLinecap="round" />}
                             </svg>
                             Ses Seviyesi
@@ -108,108 +170,141 @@ const VoiceUserContextMenu = ({
                         <span style={{
                             fontSize: '12px', fontWeight: '700',
                             color: volumeVal > 100 ? '#5865f2' : '#fff',
-                            background: volumeVal > 100 ? 'rgba(88,101,242,0.15)' : 'rgba(255,255,255,0.08)',
-                            padding: '2px 8px', borderRadius: '10px', minWidth: '42px', textAlign: 'center'
-                        }}>{volumeVal}%</span>
+                            background: volumeVal > 100 ? 'rgba(88,101,242,0.18)' : 'rgba(255,255,255,0.1)',
+                            padding: '2px 8px', borderRadius: '10px', minWidth: '44px', textAlign: 'center',
+                        }}>
+                            {volumeVal}%
+                        </span>
                     </div>
+                    {/* Track + thumb */}
                     <div style={{ position: 'relative', height: '20px', display: 'flex', alignItems: 'center' }}>
-                        <input type="range" min="0" max="200" value={volumeVal}
-                            onChange={handleVolumeSliderChange}
+                        <div style={{
+                            position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)',
+                            height: '4px', borderRadius: '2px', background: '#2a2b2e', overflow: 'visible',
+                        }}>
+                            <div style={{
+                                position: 'absolute', left: 0, top: 0, bottom: 0,
+                                width: `${Math.min((volumeVal / 200) * 100, 100)}%`,
+                                background: volumeVal > 100
+                                    ? 'linear-gradient(90deg, #5865f2, #7289da)'
+                                    : '#5865f2',
+                                borderRadius: '2px',
+                                transition: 'width 0.04s',
+                            }} />
+                        </div>
+                        <input
+                            type="range" min="0" max="200" value={volumeVal}
+                            onChange={onVolumeChange}
                             aria-label={`${userObj.username} ses seviyesi`}
                             className="voice-volume-slider"
-                            style={{ width: '100%', height: '6px', cursor: 'pointer', WebkitAppearance: 'none', MozAppearance: 'none', appearance: 'none', background: 'transparent', outline: 'none', position: 'relative', zIndex: 2 }} />
-                        <div style={{ position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', height: '6px', borderRadius: '3px', overflow: 'hidden', pointerEvents: 'none', zIndex: 1, background: '#1e1f22' }}>
-                            <div style={{ height: '100%', width: `${(volumeVal / 200) * 100}%`, background: volumeVal > 100 ? 'linear-gradient(90deg, #5865f2 50%, #7289da 100%)' : '#5865f2', borderRadius: '3px', transition: 'width 0.05s ease' }} />
-                        </div>
-                        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '2px', height: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '1px', pointerEvents: 'none', zIndex: 1 }} />
+                            style={{
+                                position: 'relative', zIndex: 2,
+                                width: '100%', margin: 0, padding: 0,
+                                height: '20px', cursor: 'pointer',
+                                WebkitAppearance: 'none', appearance: 'none',
+                                background: 'transparent', outline: 'none',
+                            }}
+                        />
                     </div>
                 </div>
             )}
 
-            {/* Scrollable Actions Area */}
-            <div style={{ overflowY: 'auto', overflowX: 'hidden', flex: 1, minHeight: 0 }}>
-                {/* Actions */}
-                <div style={styles.menuSection} role="menu">
-                    <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={handleProfileClick} onKeyDown={handleProfileKeyDown}>
-                        <span style={{ marginRight: '8px', opacity: 0.7 }}>{'👤'}</span> Profili G{'ö'}r{'ü'}nt{'ü'}le
-                    </div>
-                    <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={handleDmClick} onKeyDown={handleDmKeyDown}>
-                        <span style={{ marginRight: '8px', opacity: 0.7 }}>{'💬'}</span> {'Ö'}zelden Mesaj At
-                    </div>
-                    {userObj.username !== currentUsername &&
-                        !friendsList.some(f => f.sender_username === userObj.username || f.receiver_username === userObj.username) && (
-                            <div className="user-context-menu-item" role="menuitem" tabIndex={0} style={styles.menuItem} onClick={handleAddFriendClick} onKeyDown={handleAddFriendKeyDown}>
-                                <span style={{ marginRight: '8px', opacity: 0.7 }}>{'➕'}</span> Arkada{'ş'} Ekle
-                            </div>
-                        )}
-                </div>
-
-                {/* Admin Tools */}
-                {isAdmin && userObj.username !== currentUsername && (
-                    <>
-                        <div style={styles.menuDivider} />
-                        <div style={styles.menuSection}>
-                            <div style={{ fontSize: '10px', color: '#72767d', padding: '6px 12px 4px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                                Mod Ara{'ç'}lar{'ı'}
-                            </div>
-                            <div className="user-context-menu-item" style={styles.menuItem} onClick={handleToggleMoveMenu}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                                    <span><span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔀'}</span>Ba{'ş'}ka Kanala Ta{'şı'}</span>
-                                    <span style={{ fontSize: '12px', transform: showMoveMenu ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease', color: '#72767d' }}>{'▸'}</span>
-                                </div>
-                            </div>
-
-                            {showMoveMenu && voiceChannels?.length > 0 && (
-                                <div style={{
-                                    padding: '4px 0',
-                                    background: 'rgba(88, 101, 242, 0.06)',
-                                    borderLeft: '3px solid #5865f2',
-                                    margin: '2px 8px 2px 12px',
-                                    borderRadius: '0 4px 4px 0',
-                                    maxHeight: '160px',
-                                    overflowY: 'auto',
-                                }}>
-                                    {voiceChannels.filter(c => c.slug !== roomName).map(channel => (
-                                        <div key={channel.slug}
-                                            className="user-context-menu-item"
-                                            style={{ ...styles.menuItem, paddingLeft: '12px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 2px' }}
-                                            onClick={() => handleMenuAction('move', channel.slug)}>
-                                            <span style={{ color: '#5865f2', fontSize: '11px' }}>{'🔊'}</span> {channel.name}
-                                        </div>
-                                    ))}
-                                    {voiceChannels.filter(c => c.slug !== roomName).length === 0 && (
-                                        <div style={{ ...styles.menuItem, color: '#72767d', cursor: 'default', paddingLeft: '12px', fontSize: '12px' }}>
-                                            Ba{'ş'}ka kanal yok
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            <div className="user-context-menu-item-danger" style={{ ...styles.menuItem, color: '#ed4245' }} onClick={handleKickClick}>
-                                <span style={{ marginRight: '8px' }}>{'❌'}</span> Kanaldan At
-                            </div>
-                            <div className="user-context-menu-item" style={styles.menuItem} onClick={handleServerMuteClick}>
-                                <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔇'}</span> Sunucu Sustur
-                            </div>
-                            <div className="user-context-menu-item" style={styles.menuItem} onClick={handleServerDeafenClick}>
-                                <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🙉'}</span> Sunucu Sa{'ğı'}rla{'ş'}t{'ı'}r
-                            </div>
-                        </div>
-                    </>
-                )}
-
-                {/* Local Mute */}
-                {userObj.username !== currentUsername && (
-                    <>
-                        <div style={styles.menuDivider} />
-                        <div style={{ ...styles.menuSection, paddingBottom: '4px' }}>
-                            <div className="user-context-menu-item" style={styles.menuItem} onClick={handleMuteLocalClick}>
-                                <span style={{ marginRight: '8px', opacity: 0.7 }}>{'🔇'}</span> Benim {'İç'}in Sessize Al
-                            </div>
-                        </div>
-                    </>
+            {/* ── Genel Eylemler ── */}
+            <div style={{ padding: '4px 0' }}>
+                <MenuItem icon="👤" label="Profili Görüntüle" onClick={onProfile} />
+                <MenuItem icon="💬" label="Özelden Mesaj At" onClick={onDm} />
+                {!isSelf && !alreadyFriend && (
+                    <MenuItem icon="➕" label="Arkadaş Ekle" onClick={onAddFriend} />
                 )}
             </div>
+
+            {/* ── Mod Araçları (sadece admin, başkası) ── */}
+            {isAdmin && !isSelf && (
+                <>
+                    <Divider />
+                    <div style={{ padding: '4px 0' }}>
+                        <SectionLabel>Mod Araçları</SectionLabel>
+
+                        {/* Başka Kanala Taşı – accordion */}
+                        <div
+                            className="user-context-menu-item"
+                            role="menuitem"
+                            tabIndex={0}
+                            onClick={onToggleMove}
+                            onKeyDown={(e) => e.key === 'Enter' && onToggleMove()}
+                            style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                gap: '8px', padding: '8px 12px', margin: '1px 4px',
+                                borderRadius: '4px', cursor: 'pointer', fontSize: '13px',
+                                color: '#dcddde', transition: 'background 0.1s', userSelect: 'none',
+                            }}
+                        >
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '15px', opacity: 0.75 }}>🔀</span>
+                                Başka Kanala Taşı
+                            </span>
+                            <span style={{
+                                fontSize: '10px', color: '#72767d',
+                                transform: showMoveMenu ? 'rotate(90deg)' : 'none',
+                                transition: 'transform 0.18s ease',
+                                display: 'inline-block',
+                            }}>▶</span>
+                        </div>
+
+                        {/* Kanal listesi – accordion içeriği */}
+                        {showMoveMenu && (
+                            <div style={{
+                                margin: '2px 8px 4px 24px',
+                                borderLeft: '2px solid rgba(88,101,242,0.4)',
+                                borderRadius: '0 4px 4px 0',
+                                background: 'rgba(88,101,242,0.05)',
+                                maxHeight: '150px',
+                                overflowY: 'auto',
+                                overflowX: 'hidden',
+                                padding: '2px 0',
+                            }}>
+                                {otherChannels.length === 0 ? (
+                                    <div style={{ padding: '8px 12px', fontSize: '12px', color: '#72767d', cursor: 'default' }}>
+                                        Başka kanal yok
+                                    </div>
+                                ) : otherChannels.map(channel => (
+                                    <div
+                                        key={channel.slug}
+                                        className="user-context-menu-item"
+                                        role="menuitem"
+                                        tabIndex={0}
+                                        onClick={() => handleMenuAction('move', channel.slug)}
+                                        style={{
+                                            display: 'flex', alignItems: 'center', gap: '6px',
+                                            padding: '6px 12px', margin: '1px 4px',
+                                            borderRadius: '4px', cursor: 'pointer',
+                                            fontSize: '12px', color: '#b9bbbe',
+                                            transition: 'background 0.1s', userSelect: 'none',
+                                        }}
+                                    >
+                                        <span style={{ color: '#5865f2', fontSize: '13px' }}>🔊</span>
+                                        {channel.name}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        <MenuItem icon="🔇" label="Sunucu Sustur" onClick={onServerMute} />
+                        <MenuItem icon="🙉" label="Sunucu Sağırlaştır" onClick={onServerDeafen} />
+                        <MenuItem icon="❌" label="Kanaldan At" onClick={onKick} danger className="user-context-menu-item-danger" />
+                    </div>
+                </>
+            )}
+
+            {/* ── Yerel Sessize Al ── */}
+            {!isSelf && (
+                <>
+                    <Divider />
+                    <div style={{ padding: '4px 0 6px' }}>
+                        <MenuItem icon="🔕" label="Benim İçin Sessize Al" onClick={onMuteLocal} />
+                    </div>
+                </>
+            )}
         </div>,
         document.getElementById('portal-root') || document.body
     );
