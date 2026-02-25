@@ -8,20 +8,22 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './index.css';
 import App from './App';
-import VerifyEmailPage from './VerifyEmailPage';
-import InvitePage from './InvitePage';
 
 import lazyWithRetry from './utils/lazyWithRetry';
 
-// ⚡ OPTIMIZATION: Lazy load English learning pages (with retry)
+// ⚡ OPTIMIZATION: Lazy load verify/invite pages (rarely visited)
+const VerifyEmailPage = lazyWithRetry(() => import('./VerifyEmailPage'));
+const InvitePage = lazyWithRetry(() => import('./InvitePage'));
+
+// ⚡ OPTIMIZATION: Lazy load ALL feature pages (with retry)
 const EnglishHub = lazyWithRetry(() => import('./EnglishHub'));
 const GrammarQuizPage = lazyWithRetry(() => import('./GrammarQuizPage'));
 const EnglishLearningPage = lazyWithRetry(() => import('./EnglishLearningPage'));
-import EnglishVoicePractice from './EnglishVoicePractice';
-import PronunciationPage from './PronunciationPage';
+const EnglishVoicePractice = lazyWithRetry(() => import('./EnglishVoicePractice'));
+const PronunciationPage = lazyWithRetry(() => import('./PronunciationPage'));
 const CryptoDashboard = lazyWithRetry(() => import('./CryptoDashboard'));
 const CryptoSignals = lazyWithRetry(() => import('./CryptoSignals'));
-import SpotifyCallback from './SpotifyCallback';
+const SpotifyCallback = lazyWithRetry(() => import('./SpotifyCallback'));
 import reportWebVitals from './reportWebVitals';
 import { GlobalWebSocketProvider } from './GlobalWebSocketContext';
 import SignalNotification from './components/SignalNotification';
@@ -71,7 +73,7 @@ const WhitelistGuard = ({ children }) => {
     return children;
 };
 
-import { preloadCriticalChunks, prefetchNextChunks } from './utils/codeSplitting.config';
+import { preloadCriticalChunks, prefetchNextChunks, prefetchAdminChunks } from './utils/codeSplitting.config';
 
 // 🔐 Auth & Security Pages
 import AuthCallback from './AuthCallback';  // 🔐 Direct import for OAuth callback reliability
@@ -122,6 +124,14 @@ const RootApp = () => {
                     console.warn('prefetchNextChunks error', e);
                 }
             }, { timeout: 1500 }); // 1.5s timeout (eski: 2s)
+            // Admin chunk'ları daha geç prefetch et
+            window.requestIdleCallback(() => {
+                try {
+                    prefetchAdminChunks();
+                } catch (e) {
+                    console.warn('prefetchAdminChunks error', e);
+                }
+            }, { timeout: 5000 });
         } else {
             const fallbackTimer = setTimeout(() => {
                 try {
@@ -146,7 +156,11 @@ const RootApp = () => {
                             <Routes>
                                 {/* Email Verification */}
                                 <Route path="/verify/:token" element={
-                                    <PageWrapper><VerifyEmailPage /></PageWrapper>
+                                    <PageWrapper>
+                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                            <VerifyEmailPage />
+                                        </React.Suspense>
+                                    </PageWrapper>
                                 } />
 
                                 {/* 🔐 Auth & Security Routes */}
@@ -239,13 +253,19 @@ const RootApp = () => {
 
                                 {/* 🔗 Server Invite */}
                                 <Route path="/invite/:code" element={
-                                    <PageWrapper><InvitePage /></PageWrapper>
+                                    <PageWrapper>
+                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                            <InvitePage />
+                                        </React.Suspense>
+                                    </PageWrapper>
                                 } />
 
                                 {/* Spotify Callback */}
                                 <Route path="/spotify-callback" element={
                                     <PageWrapper>
-                                        <SpotifyCallback apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                            <SpotifyCallback apiBaseUrl={API_BASE_URL} />
+                                        </React.Suspense>
                                     </PageWrapper>
                                 } />
 
@@ -273,12 +293,16 @@ const RootApp = () => {
                                 } />
                                 <Route path="/eng-learn/voice" element={
                                     <PageWrapper>
-                                        <EnglishVoicePractice apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                            <EnglishVoicePractice apiBaseUrl={API_BASE_URL} />
+                                        </React.Suspense>
                                     </PageWrapper>
                                 } />
                                 <Route path="/eng-learn/pronunciation" element={
                                     <PageWrapper>
-                                        <PronunciationPage apiBaseUrl={API_BASE_URL} />
+                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                            <PronunciationPage apiBaseUrl={API_BASE_URL} />
+                                        </React.Suspense>
                                     </PageWrapper>
                                 } />
 

@@ -6,10 +6,18 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useChatStore } from '../stores/useChatStore';
 import { soundManager } from '../utils/notificationSounds';
 import { loadSavedTheme } from '../utils/ThemeManager';
+import { offlineQueue } from '../utils/offlineMessageQueue';
 
 const HEARTBEAT_INTERVAL = 25000;  // 25s ping interval
 const HEARTBEAT_TIMEOUT = 10000;   // 10s to receive pong before treating as dead
 const MAX_CHAT_RECONNECT = 20;     // Allow more reconnect attempts before giving up
+
+/** Add jitter to backoff delay to prevent thundering herd */
+function jitteredDelay(baseDelay, attempt, maxDelay = 30000) {
+    const expDelay = Math.min(baseDelay * Math.pow(1.5, attempt - 1), maxDelay);
+    const jitter = expDelay * (0.5 + Math.random() * 0.5); // 50-100% of calculated delay
+    return Math.round(jitter);
+}
 
 export default function useChatConnection({
     activeChat, username, token, isAuthenticated, isInitialDataLoaded,
@@ -93,6 +101,10 @@ export default function useChatConnection({
             chatReconnectAttempts.current = 0;
             intentionalChatClose.current = false;
             startHeartbeat();
+            // Flush any messages queued while offline
+            if (offlineQueue.hasPending) {
+                setTimeout(() => offlineQueue.flush(ws.current), 500);
+            }
         };
 
         newWs.onmessage = (event) => {
@@ -181,7 +193,7 @@ export default function useChatConnection({
                     return;
                 }
                 chatReconnectAttempts.current++;
-                const delay = Math.min(2000 * Math.pow(1.5, chatReconnectAttempts.current - 1), 30000);
+                const delay = jitteredDelay(2000, chatReconnectAttempts.current);
                 chatReconnectRef.current = setTimeout(() => {
                     if (!intentionalChatClose.current) connectWebSocket();
                 }, delay);
@@ -204,8 +216,32 @@ export default function useChatConnection({
                 }
             }
         };
+
+        // --- ONLINE/OFFLINE: Smart reconnect on network recovery ---
+        const handleOnline = () => {
+            console.info('[Network] Back online — reconnecting WebSockets');
+            chatReconnectAttempts.current = 0;
+            if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
+                connectWebSocket();
+            }
+        };
+
+        const handleOffline = () => {
+            console.warn('[Network] Went offline — pausing reconnection');
+            // Clear any pending reconnect timers while offline
+            clearTimeout(chatReconnectRef.current);
+            stopHeartbeat();
+        };
+
         document.addEventListener('visibilitychange', handleVisibility);
-        return () => document.removeEventListener('visibilitychange', handleVisibility);
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibility);
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
     }, [connectWebSocket]);
 
     // --- 🔌 STATUS WEBSOCKET ---
@@ -238,7 +274,7 @@ export default function useChatConnection({
                 if (!intentionalClose && event.code !== 1000 && event.code !== 1001) {
                     if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) return;
                     reconnectAttempts++;
-                    const delay = Math.min(5000 * Math.pow(2, reconnectAttempts - 1), 60000);
+                    const delay = jitteredDelay(5000, reconnectAttempts, 60000);
                     statusWsReconnectRef.current = setTimeout(() => {
                         if (!intentionalClose) {
                             const newSocket = createSocket();

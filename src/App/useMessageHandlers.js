@@ -7,6 +7,7 @@ import { encryptMessage } from '../utils/encryption';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';
 import { getTemporaryId } from '../config/api';
+import { offlineQueue } from '../utils/offlineMessageQueue';
 
 // 🚀 Debounced sessionStorage persist — keeps last 8 channels cached across page refreshes
 let _persistTimer = null;
@@ -127,7 +128,7 @@ export default function useMessageHandlers({
             } catch (error) { return false; }
         };
 
-        // Send with retry (WS first, then HTTP with 1 retry)
+        // Send with retry (WS first, then HTTP with 1 retry, then offline queue)
         (async () => {
             const wsSent = await sendViaWebSocket();
             if (!wsSent) {
@@ -137,7 +138,12 @@ export default function useMessageHandlers({
                     await new Promise(r => setTimeout(r, 2000));
                     const retryOk = await sendViaHTTP();
                     if (!retryOk) {
-                        toast.error('Mesaj gönderilemedi. Lütfen tekrar deneyin.');
+                        // Queue for later delivery when connection restores
+                        if (offlineQueue.enqueue(payload)) {
+                            toast.info('Mesaj çevrimdışı kuyruğa alındı. Bağlantı kurulunca gönderilecek.');
+                        } else {
+                            toast.error('Mesaj gönderilemedi. Lütfen tekrar deneyin.');
+                        }
                     }
                 }
             }

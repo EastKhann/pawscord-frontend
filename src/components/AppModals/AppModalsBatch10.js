@@ -26,4 +26,4 @@ const AppModalsBatch10 = (props) => {
     );
 };
 
-export default AppModalsBatch10;
+export default React.memo(AppModalsBatch10);

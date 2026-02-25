@@ -24,4 +24,4 @@ const AppModalsBatch11 = (props) => {
     );
 };
 
-export default AppModalsBatch11;
+export default React.memo(AppModalsBatch11);

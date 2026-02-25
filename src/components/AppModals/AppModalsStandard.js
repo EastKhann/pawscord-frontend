@@ -27,45 +27,45 @@ const AppModalsStandard = ({
 }) => {
     return (
         <>
-        {zoomedImage && <Suspense fallback={null}><ImageLightbox imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} /></Suspense>}
-        {galleryData && <Suspense fallback={null}><ImageLightbox images={galleryData.images} startIndex={galleryData.startIndex} onClose={() => setGalleryData(null)} /></Suspense>}
-        {modals.pinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => closeModal('pinned')} /></Suspense>}
-        {viewingProfile && <Suspense fallback={null}><UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} /></Suspense>}
-        {modals.themeStore && (
-            <Suspense fallback={<LoadingSpinner size="medium" text="Temalar yükleniyor..." />}>
-                <ThemeStoreModal
-                    onClose={() => closeModal('themeStore')}
-                    currentTheme={currentTheme}
-                    onThemeChange={setCurrentTheme}
-                />
-            </Suspense>
-        )}
-        {modals.summary && (
-            <Suspense fallback={<LoadingSpinner size="medium" text="Özet hazırlanıyor..." />}>
-                <SummaryModal
-                    roomSlug={activeChat.id}
-                    onClose={() => closeModal('summary')}
-                    fetchWithAuth={fetchWithAuth}
-                    apiBaseUrl={ABSOLUTE_HOST_URL}
-                />
-            </Suspense>
-        )}
-        {modals.templateModal && (
-            <Suspense fallback={<LoadingSpinner size="small" text="Şablonlar yükleniyor..." />}>
-                <MessageTemplateModal
-                    onClose={() => closeModal('templateModal')}
-                    onSelect={(content) => {
-                        richTextRef.current?.appendText?.(content);
-                        closeModal('templateModal');
-                    }}
-                    fetchWithAuth={fetchWithAuth}
-                    apiBaseUrl={ABSOLUTE_HOST_URL}
-                    isAdmin={isAdmin}
-                />
-            </Suspense>
-        )}
+            {zoomedImage && <Suspense fallback={null}><ImageLightbox imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} /></Suspense>}
+            {galleryData && <Suspense fallback={null}><ImageLightbox images={galleryData.images} startIndex={galleryData.startIndex} onClose={() => setGalleryData(null)} /></Suspense>}
+            {modals.pinned && <Suspense fallback={<LoadingSpinner size="small" text="Sabitlenmiş mesajlar yükleniyor..." />}><PinnedMessages messages={pinnedMessages} onClose={() => closeModal('pinned')} /></Suspense>}
+            {viewingProfile && <Suspense fallback={null}><UserProfileModal user={viewingProfile} onClose={() => setViewingProfile(null)} onStartDM={handleDMClick} onImageClick={setZoomedImage} getDeterministicAvatar={getDeterministicAvatar} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} currentUser={username} friendsList={friendsList} /></Suspense>}
+            {modals.themeStore && (
+                <Suspense fallback={<LoadingSpinner size="medium" text="Temalar yükleniyor..." />}>
+                    <ThemeStoreModal
+                        onClose={() => closeModal('themeStore')}
+                        currentTheme={currentTheme}
+                        onThemeChange={setCurrentTheme}
+                    />
+                </Suspense>
+            )}
+            {modals.summary && (
+                <Suspense fallback={<LoadingSpinner size="medium" text="Özet hazırlanıyor..." />}>
+                    <SummaryModal
+                        roomSlug={activeChat.id}
+                        onClose={() => closeModal('summary')}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                    />
+                </Suspense>
+            )}
+            {modals.templateModal && (
+                <Suspense fallback={<LoadingSpinner size="small" text="Şablonlar yükleniyor..." />}>
+                    <MessageTemplateModal
+                        onClose={() => closeModal('templateModal')}
+                        onSelect={(content) => {
+                            richTextRef.current?.appendText?.(content);
+                            closeModal('templateModal');
+                        }}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        isAdmin={isAdmin}
+                    />
+                </Suspense>
+            )}
         </>
     );
 };
 
-export default AppModalsStandard;
+export default React.memo(AppModalsStandard);

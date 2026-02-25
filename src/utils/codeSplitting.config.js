@@ -59,6 +59,21 @@ export const ComponentChunks = {
   poll: () => import('../components/PollCreateModal'),
   codeSnippet: () => import('../components/CodeSnippetModal'),
   messageTemplate: () => import('../components/MessageTemplateModal'),
+
+  // Admin & Moderation (frequently used by admins)
+  adminPanel: () => import('../components/AdminPanelModal'),
+  adminAnalytics: () => import('../components/AdminAnalyticsPanel'),
+  rolesManager: () => import('../components/RolesManager'),
+  auditLogs: () => import('../components/AuditLogsPanel'),
+
+  // User settings & profile
+  userSettings: () => import('../components/UserSettingsModal'),
+  channelSettings: () => import('../components/ChannelSettingsModal'),
+  inviteModal: () => import('../components/InviteModal'),
+
+  // Voice
+  voiceSettings: () => import('../components/VoiceSettingsPanel'),
+  screenShare: () => import('../components/ScreenShare'),
 };
 
 /**
@@ -71,6 +86,8 @@ export const preloadCriticalChunks = () => {
     ComponentChunks.userProfile,
     ComponentChunks.imageModal,
     ComponentChunks.serverSettings,
+    ComponentChunks.userSettings,
+    ComponentChunks.inviteModal,
   ];
   criticalChunks.forEach(chunk => {
     try { chunk(); } catch (e) { /* ignore */ }
@@ -87,8 +104,28 @@ export const prefetchNextChunks = () => {
     ComponentChunks.stickerPicker,
     ComponentChunks.poll,
     ComponentChunks.codeSnippet,
+    ComponentChunks.messageTemplate,
+    ComponentChunks.channelSettings,
+    ComponentChunks.voiceSettings,
+    ComponentChunks.soundboard,
   ];
   secondaryChunks.forEach(chunk => {
+    try { chunk(); } catch (e) { /* ignore */ }
+  });
+};
+
+/**
+ * Admin prefetch strategy
+ * Admin kullanıcıları için ek chunk'ları prefetch et
+ */
+export const prefetchAdminChunks = () => {
+  const adminChunks = [
+    ComponentChunks.adminPanel,
+    ComponentChunks.adminAnalytics,
+    ComponentChunks.rolesManager,
+    ComponentChunks.auditLogs,
+  ];
+  adminChunks.forEach(chunk => {
     try { chunk(); } catch (e) { /* ignore */ }
   });
 };
@@ -97,7 +134,8 @@ export default {
   RouteChunks,
   ComponentChunks,
   preloadCriticalChunks,
-  prefetchNextChunks
+  prefetchNextChunks,
+  prefetchAdminChunks
 };
 
 
