@@ -138,7 +138,7 @@ export default function useChatConnection({
                             const newMessages = [...prev];
                             newMessages[tempIndex] = data;
                             const cacheKey = getCacheKeyFromMessage(data);
-                            if (historyCacheRef.current[cacheKey]) historyCacheRef.current[cacheKey].messages = newMessages;
+                            if (historyCacheRef.current[cacheKey]) { historyCacheRef.current[cacheKey].messages = newMessages; historyCacheRef.current[cacheKey]._ts = Date.now(); }
                             return newMessages;
                         }
                     }
@@ -146,7 +146,7 @@ export default function useChatConnection({
 
                     const updatedMessages = [...prev, data];
                     const cacheKey = getCacheKeyFromMessage(data);
-                    if (historyCacheRef.current[cacheKey]) historyCacheRef.current[cacheKey].messages = updatedMessages;
+                    if (historyCacheRef.current[cacheKey]) { historyCacheRef.current[cacheKey].messages = updatedMessages; historyCacheRef.current[cacheKey]._ts = Date.now(); }
                     return updatedMessages;
                 });
 
@@ -365,8 +365,11 @@ export default function useChatConnection({
             setHasMoreMessages(!!cached.hasMore);
             scrollToBottom('auto');
             connectWebSocket();
-            // Background re-fetch for freshness — silent=true so no loading spinner
-            fetchMessageHistory(true, true);
+            // 🚀 PERF: Skip background re-fetch if cache is fresh (< 15 seconds old)
+            const cacheAge = cached._ts ? (Date.now() - cached._ts) : Infinity;
+            if (cacheAge > 15000) {
+                fetchMessageHistory(true, true);
+            }
         } else {
             setHasMoreMessages(true);
             connectWebSocket();

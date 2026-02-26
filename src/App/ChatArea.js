@@ -218,7 +218,7 @@ export default memo(function ChatArea({
                             <div style={{ color: '#b9bbbe', fontSize: '1.2em', fontWeight: 600 }}>Henüz mesaj yok</div>
                             <div style={{ color: '#72767d', fontSize: '0.9em', marginTop: '4px' }}>İlk mesajı sen gönder!</div>
                         </div>
-                    ) : optimizedMessages.length > 200 ? (
+                    ) : optimizedMessages.length > 50 ? (
                         <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
                             renderMessage={renderVirtualMessage} />
                     ) : (

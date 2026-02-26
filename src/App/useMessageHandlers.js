@@ -159,7 +159,10 @@ export default function useMessageHandlers({
             };
             const updatedMessages = [...prev, newMessage];
             const cacheKey = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
-            if (historyCacheRef.current[cacheKey]) historyCacheRef.current[cacheKey].messages = updatedMessages;
+            if (historyCacheRef.current[cacheKey]) {
+                historyCacheRef.current[cacheKey].messages = updatedMessages;
+                historyCacheRef.current[cacheKey]._ts = Date.now(); // keep cache fresh after send
+            }
             return updatedMessages;
         });
 
@@ -245,7 +248,8 @@ export default function useMessageHandlers({
                 historyCacheRef.current[key] = {
                     messages: combinedMessages,
                     nextCursor: data.next,
-                    hasMore
+                    hasMore,
+                    _ts: Date.now(), // freshness timestamp for cache-skip optimization
                 };
                 persistHistoryCache(historyCacheRef);
             }

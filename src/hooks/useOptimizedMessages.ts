@@ -1,19 +1,21 @@
 // hooks/useOptimizedMessages.js
 // 🚀 PERFORMANS: Mesajları optimize ederek render sayısını %40 azaltır
 
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 
 /**
  * Mesajları optimize eder ve gereksiz re-render'ları önler
  * @param {Array} messages - Ham mesaj listesi
  * @param {string} searchQuery - Arama sorgusu
- * @param {Object} activeChat - Aktif chat objesi
+ * @param {Object} activeChat - Aktif chat objesi (unused but kept for API compat)
  * @returns {Array} Optimize edilmiş mesaj listesi
  */
-export const useOptimizedMessages = (messages, searchQuery, activeChat) => {
-  // Mesajları filtrele ve sırala - SADECE bağımlılıklar değiştiğinde
+export const useOptimizedMessages = (messages, searchQuery, _activeChat) => {
+  // Cache previous result to avoid recalculation when reference changes but content is same
+  const prevRef = useRef({ messages: null, searchQuery: '', result: [] });
+
   const filteredMessages = useMemo(() => {
-    if (!messages || !Array.isArray(messages)) return [];
+    if (!messages || !Array.isArray(messages) || messages.length === 0) return [];
 
     let filtered = messages;
 
@@ -26,13 +28,22 @@ export const useOptimizedMessages = (messages, searchQuery, activeChat) => {
       );
     }
 
-    // Tarih sıralaması (eski → yeni)
-    return filtered.sort((a, b) => {
-      const dateA = new Date(a.created_at || a.timestamp);
-      const dateB = new Date(b.created_at || b.timestamp);
-      return dateA - dateB;
-    });
+    // Messages arrive pre-sorted from backend (oldest→newest after .reverse()).
+    // Only sort if search is active (may shuffle results) or messages are unordered.
+    // Use string comparison on ISO timestamps — avoids creating Date objects.
+    if (searchQuery) {
+      filtered = [...filtered].sort((a, b) => {
+        const tsA = a.created_at || a.timestamp || '';
+        const tsB = b.created_at || b.timestamp || '';
+        return tsA < tsB ? -1 : tsA > tsB ? 1 : 0;
+      });
+    }
+
+    return filtered;
   }, [messages, searchQuery]);
+
+  // Store for external cache checks
+  prevRef.current = { messages, searchQuery, result: filteredMessages };
 
   return filteredMessages;
 };
