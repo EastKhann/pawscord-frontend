@@ -38,6 +38,8 @@ const MessageInput = ({
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const [pendingFiles, setPendingFiles] = useState([]);
     const [cursorPos, setCursorPos] = useState(0);
+    const [urlPreview, setUrlPreview] = useState(null);
+    const urlPreviewDismissedRef = useRef(null);
 
     const {
         isRecording, isRecordingLocked, recordingTime, slideProgress, cancelProgress,
@@ -101,6 +103,44 @@ const MessageInput = ({
             setPendingFiles(prev => [...prev, ...pendingFilesFromDrop]);
         }
     }, [pendingFilesFromDrop, onClearPendingFiles]);
+
+    // ─── URL EMBED PREVIEW ──────────────────────────────────────────
+    useEffect(() => {
+        const URL_REGEX = /https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+/i;
+        const match = URL_REGEX.exec(debouncedMessage);
+
+        if (!match) { setUrlPreview(null); return; }
+
+        const url = match[0];
+        if (url === urlPreviewDismissedRef.current) return; // user dismissed this URL
+
+        let cancelled = false;
+        setUrlPreview({ url, loading: true, title: null, description: null, image: null });
+
+        const load = async () => {
+            try {
+                let title = null, description = null, image = null;
+
+                if (fetchWithAuth && apiBaseUrl) {
+                    const res = await fetchWithAuth(`${apiBaseUrl}/url-preview/?url=${encodeURIComponent(url)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        title = data.title;
+                        description = data.description;
+                        image = data.image;
+                    }
+                }
+
+                if (!cancelled) {
+                    const domain = new URL(url).hostname.replace(/^www\./, '');
+                    setUrlPreview({ url, loading: false, title: title || domain, description: description || null, image: image || null, domain });
+                }
+            } catch { if (!cancelled) setUrlPreview(null); }
+        };
+
+        load();
+        return () => { cancelled = true; };
+    }, [debouncedMessage, fetchWithAuth, apiBaseUrl]);
 
     const sendPendingFiles = useCallback(async (filesToSend) => {
         if (!filesToSend?.length) return;
@@ -185,6 +225,26 @@ const MessageInput = ({
             )}
 
             {draftSaved && !editingMessage && <div style={styles.draftSaved}>{'✅'} Taslak kaydedildi</div>}
+
+            {/* ─── URL EMBED PREVIEW ─── */}
+            {urlPreview && !urlPreview.loading && (
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '8px 12px', background: 'rgba(255,255,255,0.04)', borderLeft: '3px solid #5865f2', borderRadius: '4px', margin: '0 0 6px 0', position: 'relative' }}>
+                    {urlPreview.image && (
+                        <img src={urlPreview.image} alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 6, flexShrink: 0 }} onError={(e) => { e.target.style.display = 'none'; }} />
+                    )}
+                    {!urlPreview.image && (
+                        <img src={`https://www.google.com/s2/favicons?domain=${urlPreview.domain}&sz=32`} alt="" style={{ width: 24, height: 24, borderRadius: 4, flexShrink: 0, marginTop: 2 }} onError={(e) => { e.target.style.display = 'none'; }} />
+                    )}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontSize: 11, color: '#949ba4', marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{urlPreview.domain}</div>
+                        {urlPreview.title && <div style={{ fontSize: 13, fontWeight: 600, color: '#f2f3f5', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{urlPreview.title}</div>}
+                        {urlPreview.description && <div style={{ fontSize: 12, color: '#b5bac1', marginTop: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{urlPreview.description}</div>}
+                    </div>
+                    <button onClick={() => { urlPreviewDismissedRef.current = urlPreview.url; setUrlPreview(null); }}
+                        style={{ background: 'none', border: 'none', color: '#949ba4', cursor: 'pointer', padding: 4, fontSize: 16, lineHeight: 1, flexShrink: 0 }}
+                        title="Önizlemeyi kapat" aria-label="URL önizlemesini kapat">×</button>
+                </div>
+            )}
 
             <PendingFilesPreview pendingFiles={pendingFiles} setPendingFiles={setPendingFiles} removePendingFile={removePendingFile} />
 
