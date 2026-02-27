@@ -90,7 +90,7 @@ export const preloadCriticalChunks = () => {
     ComponentChunks.inviteModal,
   ];
   criticalChunks.forEach(chunk => {
-    try { chunk(); } catch (e) { /* ignore */ }
+    try { chunk().catch(() => { }); } catch (e) { /* ignore */ }
   });
 };
 
@@ -110,7 +110,7 @@ export const prefetchNextChunks = () => {
     ComponentChunks.soundboard,
   ];
   secondaryChunks.forEach(chunk => {
-    try { chunk(); } catch (e) { /* ignore */ }
+    try { chunk().catch(() => { }); } catch (e) { /* ignore */ }
   });
 };
 
@@ -126,7 +126,7 @@ export const prefetchAdminChunks = () => {
     ComponentChunks.auditLogs,
   ];
   adminChunks.forEach(chunk => {
-    try { chunk(); } catch (e) { /* ignore */ }
+    try { chunk().catch(() => { }); } catch (e) { /* ignore */ }
   });
 };
 

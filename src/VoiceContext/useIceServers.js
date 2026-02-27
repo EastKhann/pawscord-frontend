@@ -53,9 +53,8 @@ export function useIceServers({ token }) {
         }
     }, [token]);
 
-    useEffect(() => {
-        refreshIceServers();
-    }, [refreshIceServers]);
+    // 🔥 PERF: Don't fetch TURN on app mount — fetch lazily when joining voice.
+    // STUN-only (DEFAULT_ICE_SERVERS) works as fallback until then.
 
-    return { iceServers };
+    return { iceServers, refreshIceServers };
 }

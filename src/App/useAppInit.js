@@ -104,17 +104,10 @@ export default function useAppInit({
         fetchInit();
     }, [isAuthenticated, isInitialDataLoaded, fetchWithAuth]);
 
-    // --- 🔀 SERVER ORDER FALLBACK ---
-    useEffect(() => {
-        if (isInitialDataLoaded) return;
-        const fetchServerOrder = async () => {
-            try {
-                const res = await fetchWithAuth(`${API_BASE_URL}/user/server-order/`);
-                if (res.ok) { const data = await res.json(); setServerOrder(data.server_order || []); }
-            } catch (error) { console.error('Server order fetch error:', error); }
-        };
-        if (username) fetchServerOrder();
-    }, [username, fetchWithAuth, isInitialDataLoaded]);
+    // --- 🔀 SERVER ORDER ---
+    // Removed separate fallback fetch — combined /api/init/ already returns server_order.
+    // If init fails, the Promise.all fallback (above) handles everything except server_order,
+    // which is non-critical and will load from WS or next page load.
 
     // --- 📌 STICKY MESSAGES ---
     const [stickyMessage, setStickyMessage] = useState(null);

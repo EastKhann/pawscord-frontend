@@ -24,7 +24,7 @@ export function useVoiceConnection({
     iceCandidateBufferRef,
     joinVoiceRoomRef, leaveVoiceRoomRef,
     isNoiseSuppressionEnabled, isPTTMode,
-    iceServers, initializeAudio,
+    iceServers, refreshIceServers, initializeAudio,
     handleSignalMessage,
     setRemoteStreams, setConnectedUsers,
     setIsReconnecting,
@@ -156,6 +156,9 @@ export function useVoiceConnection({
         setCurrentRoom(roomSlug);
 
         try {
+            // 🔥 PERF: Lazy-fetch TURN credentials on voice join (not on app mount)
+            await refreshIceServers();
+
             if (iceServers && iceServers.length > 0) {
                 setRtcIceServers(iceServers);
             }

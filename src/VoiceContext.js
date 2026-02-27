@@ -84,8 +84,8 @@ export const VoiceProvider = ({ children }) => {
         updatePTTKey,
     } = useVoiceSettings();
 
-    // 🔧 ICE/TURN Servers Hook
-    const { iceServers } = useIceServers({ token });
+    // 🔧 ICE/TURN Servers Hook (lazy — fetches on voice join, not on mount)
+    const { iceServers, refreshIceServers } = useIceServers({ token });
     const [isReconnecting, setIsReconnecting] = useState(false);
 
     // Ref'ler
@@ -294,7 +294,7 @@ export const VoiceProvider = ({ children }) => {
         iceCandidateBufferRef,
         joinVoiceRoomRef, leaveVoiceRoomRef,
         isNoiseSuppressionEnabled, isPTTMode,
-        iceServers, initializeAudio,
+        iceServers, refreshIceServers, initializeAudio,
         handleSignalMessage,
         setRemoteStreams, setConnectedUsers,
         setIsReconnecting,

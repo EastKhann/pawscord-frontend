@@ -1,13 +1,13 @@
 // frontend/src/utils/lazyWithRetry.js
-// 🔄 Lazy load with auto-retry & reload on chunk failure
+// 🔄 Lazy load with auto-retry & cache-busting reload on chunk failure
 // Yeni deploy sonrası eski chunk'lar kaybolunca otomatik page reload yapar
 
 import React from 'react';
 
-const RELOAD_KEY = 'pawscord_chunk_reload';
-const RELOAD_COUNT_KEY = 'pawscord_chunk_reload_count';
-const RELOAD_COOLDOWN = 10000; // 10 saniye içinde tekrar reload yapma
-const MAX_RELOADS = 2; // Maksimum reload sayısı
+// 🔑 UNIFIED keys — ALL chunk error handlers must use these same keys
+export const CHUNK_RELOAD_KEY = 'pawscord_chunk_reload';
+export const CHUNK_RELOAD_COUNT_KEY = 'pawscord_chunk_reload_count';
+const MAX_RELOADS = 1; // 🔧 Only 1 reload — cache-busting URL ensures it works on first try
 
 /**
  * Chunk load hatası mı kontrol et
@@ -28,9 +28,9 @@ export function isChunkLoadError(error) {
 /**
  * React.lazy() wrapper — chunk yüklenemezse otomatik retry + reload
  * @param {Function} importFn - () => import('./Component')
- * @param {number} retries - Kaç kez retry denensin (default: 1)
+ * @param {number} retries - Kaç kez retry denensin (default: 2)
  */
-export function lazyWithRetry(importFn, retries = 1) {
+export function lazyWithRetry(importFn, retries = 2) {
     return React.lazy(() => {
         return new Promise((resolve, reject) => {
             const attempt = (retriesLeft) => {
@@ -40,7 +40,7 @@ export function lazyWithRetry(importFn, retries = 1) {
                         if (retriesLeft > 0 && isChunkLoadError(error)) {
                             console.warn(`⚠️ Chunk yükleme hatası, retry... (${retriesLeft} kalan)`);
                             // Cache-bust ile tekrar dene
-                            setTimeout(() => attempt(retriesLeft - 1), 500);
+                            setTimeout(() => attempt(retriesLeft - 1), 800);
                         } else if (isChunkLoadError(error)) {
                             // Tüm retry'lar bitti, page reload yap
                             handleChunkReload();
@@ -56,30 +56,38 @@ export function lazyWithRetry(importFn, retries = 1) {
 }
 
 /**
- * Chunk hatası sonrası güvenli reload
- * Sonsuz döngüyü önlemek için cooldown var
+ * Chunk hatası sonrası güvenli reload — cache-busting ile
+ * Sonsuz döngüyü önlemek için counter + cooldown var
  */
-function handleChunkReload() {
-    const lastReload = sessionStorage.getItem(RELOAD_KEY);
-    const reloadCount = parseInt(sessionStorage.getItem(RELOAD_COUNT_KEY) || '0', 10);
+export function handleChunkReload() {
+    const reloadCount = parseInt(sessionStorage.getItem(CHUNK_RELOAD_COUNT_KEY) || '0', 10);
+    const lastReload = sessionStorage.getItem(CHUNK_RELOAD_KEY);
     const now = Date.now();
 
     // 🛡️ Maksimum reload limiti — sonsuz döngü koruma
     if (reloadCount >= MAX_RELOADS) {
         console.error('❌ Chunk reload limiti aşıldı. Sonsuz döngü engellendi.');
         console.error('💡 Lütfen Ctrl+Shift+R ile sayfayı tamamen yenileyin.');
-        return;
+        return false;
     }
 
-    if (lastReload && (now - parseInt(lastReload, 10)) < RELOAD_COOLDOWN) {
+    // 🛡️ Cooldown — 15 saniye içinde tekrar reload yapma
+    if (lastReload && (now - parseInt(lastReload, 10)) < 15000) {
         console.error('❌ Chunk reload cooldown aktif — sonsuz döngü engellendi');
-        return;
+        return false;
     }
 
     console.warn(`🔄 Yeni versiyon algılandı, sayfa yenileniyor... (${reloadCount + 1}/${MAX_RELOADS})`);
-    sessionStorage.setItem(RELOAD_KEY, now.toString());
-    sessionStorage.setItem(RELOAD_COUNT_KEY, (reloadCount + 1).toString());
-    window.location.reload();
+    sessionStorage.setItem(CHUNK_RELOAD_KEY, now.toString());
+    sessionStorage.setItem(CHUNK_RELOAD_COUNT_KEY, (reloadCount + 1).toString());
+
+    // 🔧 Cache-busting reload: add timestamp query param to force fresh fetch
+    // window.location.reload() is a "soft" reload that reuses cached resources.
+    // With immutable cache headers on /static/, stale chunks would survive forever.
+    const url = new URL(window.location.href);
+    url.searchParams.set('_cr', now.toString());
+    window.location.replace(url.toString());
+    return true;
 }
 
 /**
@@ -88,8 +96,7 @@ function handleChunkReload() {
  */
 export function handleChunkErrorInBoundary(error) {
     if (isChunkLoadError(error)) {
-        handleChunkReload();
-        return true;
+        return handleChunkReload();
     }
     return false;
 }

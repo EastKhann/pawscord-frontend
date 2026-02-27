@@ -17,13 +17,8 @@ class ErrorBoundary extends React.Component {
         };
     }
 
-    componentDidMount() {
-        // Clear chunk-reload flag so future deploys can trigger another auto-reload
-        sessionStorage.removeItem('chunk_reload_attempted');
-    }
-
     static getDerivedStateFromError(error) {
-        // Vite/Webpack chunk load failure → auto-reload once instead of showing error UI
+        // Vite/Webpack chunk load failure → delegate to unified chunk reload handler
         const isChunkError =
             error?.name === 'ChunkLoadError' ||
             error?.message?.includes('dynamically imported module') ||
@@ -31,13 +26,21 @@ class ErrorBoundary extends React.Component {
             error?.message?.includes('Failed to fetch');
 
         if (isChunkError) {
-            const KEY = 'chunk_reload_attempted';
-            if (!sessionStorage.getItem(KEY)) {
-                sessionStorage.setItem(KEY, '1');
-                window.location.reload();
+            // 🔧 FIX: Use the SAME counter as lazyWithRetry (no separate key)
+            // This prevents ErrorBoundary from adding extra reloads on top of lazyWithRetry's limit
+            const CHUNK_RELOAD_COUNT_KEY = 'pawscord_chunk_reload_count';
+            const reloadCount = parseInt(sessionStorage.getItem(CHUNK_RELOAD_COUNT_KEY) || '0', 10);
+            if (reloadCount < 1) {
+                // Import would create a circular dep — inline the cache-busting reload
+                const now = Date.now();
+                sessionStorage.setItem('pawscord_chunk_reload', now.toString());
+                sessionStorage.setItem(CHUNK_RELOAD_COUNT_KEY, (reloadCount + 1).toString());
+                const url = new URL(window.location.href);
+                url.searchParams.set('_cr', now.toString());
+                window.location.replace(url.toString());
                 return { hasError: false }; // prevent render during reload
             }
-            // Already reloaded once — fall through to error UI
+            // Already reloaded — fall through to error UI
         }
 
         return { hasError: true };

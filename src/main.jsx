@@ -3,16 +3,6 @@
 // 🔇 Console cleanup — silences noisy logs in production, filters spam in dev
 import './utils/consoleCleanup';
 
-// 🔄 Global handler for unhandled chunk load errors (dynamic import failures)
-// Catches failures that slip through React ErrorBoundary (e.g., happening outside render)
-import { isChunkLoadError, handleChunkErrorInBoundary } from './utils/lazyWithRetry';
-window.addEventListener('unhandledrejection', (event) => {
-    if (event.reason && isChunkLoadError(event.reason)) {
-        event.preventDefault(); // Suppress the error from console
-        handleChunkErrorInBoundary(event.reason);
-    }
-});
-
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -57,6 +47,14 @@ const WhitelistGuard = ({ children }) => {
         // Zaten kontrol edildiyse token değişince tekrar kontrol etme
         if (checkedRef.current) return;
 
+        // 🔥 PERF: Check sessionStorage cache first to avoid extra /api/users/me/ call
+        const cached = sessionStorage.getItem('pawscord_whitelisted');
+        if (cached === 'true') {
+            setAllowed(true);
+            checkedRef.current = true;
+            return;
+        }
+
         (async () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/users/me/`, {
@@ -64,8 +62,10 @@ const WhitelistGuard = ({ children }) => {
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    setAllowed(!!data.is_whitelisted);
+                    const isWhitelisted = !!data.is_whitelisted;
+                    setAllowed(isWhitelisted);
                     checkedRef.current = true;
+                    if (isWhitelisted) sessionStorage.setItem('pawscord_whitelisted', 'true');
                 } else if (res.status === 401) {
                     // Token expired — don't set allowed=false yet, wait for refresh
                     console.warn('⚠️ [WhitelistGuard] 401 - waiting for token refresh');
@@ -347,43 +347,23 @@ const RootApp = () => {
     );
 };
 
-// 🔄 Global chunk load error handler (max 2 reload, sonsuz döngü koruması)
+// 🔄 UNIFIED chunk load error handler — single source of truth
+// Uses the same keys as lazyWithRetry + ErrorBoundary (no competing handlers)
+import { isChunkLoadError, handleChunkReload, CHUNK_RELOAD_COUNT_KEY } from './utils/lazyWithRetry';
 window.addEventListener('unhandledrejection', (event) => {
-    const msg = event?.reason?.message || '';
-    if (
-        msg.includes('Failed to fetch dynamically imported module') ||
-        msg.includes('Loading chunk') ||
-        msg.includes('ChunkLoadError')
-    ) {
-        const RELOAD_KEY = 'pawscord_chunk_reload';
-        const RELOAD_COUNT_KEY = 'pawscord_chunk_reload_count';
-        const lastReload = sessionStorage.getItem(RELOAD_KEY);
-        const reloadCount = parseInt(sessionStorage.getItem(RELOAD_COUNT_KEY) || '0', 10);
-        const now = Date.now();
-
-        // 🛡️ Maksimum 2 reload — sonra dur (sonsuz döngü koruması)
-        if (reloadCount >= 2) {
-            console.error('❌ Chunk reload limiti aşıldı (2/2). Sonsuz döngü engellendi.');
-            console.error('💡 Lütfen Ctrl+Shift+R ile sayfayı tamamen yenileyin.');
-            return;
-        }
-
-        if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
-            console.warn(`🔄 Chunk hatası yakalandı, sayfa yenileniyor... (${reloadCount + 1}/2)`);
-            sessionStorage.setItem(RELOAD_KEY, now.toString());
-            sessionStorage.setItem(RELOAD_COUNT_KEY, (reloadCount + 1).toString());
-            event.preventDefault();
-            window.location.reload();
-        }
+    if (event?.reason && isChunkLoadError(event.reason)) {
+        event.preventDefault();
+        handleChunkReload();
     }
 });
 
 // ✅ Başarılı yükleme sonrası reload sayacını sıfırla
+// 🔧 FIX: 30s wait (was 5s) — the old 5s timeout was racing with chunk errors,
+// clearing the counter between reload cycles and allowing infinite reloads
 window.addEventListener('load', () => {
-    // Sayfa başarıyla yüklendiyse 5 saniye sonra sayacı sıfırla
     setTimeout(() => {
-        sessionStorage.removeItem('pawscord_chunk_reload_count');
-    }, 5000);
+        sessionStorage.removeItem(CHUNK_RELOAD_COUNT_KEY);
+    }, 30000);
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
