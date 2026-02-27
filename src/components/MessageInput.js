@@ -258,7 +258,7 @@ const MessageInput = ({
                     showEmojiPicker={showEmojiPicker} showGifPicker={showGifPicker}
                 />
 
-                <MarkdownPreviewToggle text={message} isPreviewMode={showMarkdownPreview}
+                <MarkdownPreviewToggle text={message} show={showMarkdownPreview}
                     onToggle={() => setShowMarkdownPreview(prev => !prev)} />
 
                 <ChatAutocomplete message={message} cursorPosition={cursorPos}
