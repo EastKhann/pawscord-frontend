@@ -71,12 +71,13 @@ export default function useChatConnection({
     const connectWebSocket = useCallback(() => {
         if (!activeChat.id || activeChat.type === 'welcome' || activeChat.type === 'friends' || !username || !token) return;
 
-        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            const currentWsUrl = ws.current.url;
-            const expectedPath = activeChat.type === 'room'
-                ? `/ws/chat/${activeChat.id}/`
-                : `/ws/dm/${activeChat.id}/`;
-            if (currentWsUrl.includes(expectedPath)) return;
+        const expectedPath = activeChat.type === 'room'
+            ? `/ws/chat/${activeChat.id}/`
+            : `/ws/dm/${activeChat.id}/`;
+        // 🔧 FIX: Guard against duplicate sockets — also check CONNECTING state
+        // Prevents reconnect storm when React re-renders trigger effect cleanup + re-creation
+        if (ws.current && (ws.current.readyState === WebSocket.OPEN || ws.current.readyState === WebSocket.CONNECTING)) {
+            if (ws.current.url && ws.current.url.includes(expectedPath)) return;
         }
 
         // Close any existing socket
@@ -279,6 +280,13 @@ export default function useChatConnection({
         const MAX_RECONNECT_ATTEMPTS = 10;
 
         const createSocket = () => {
+            // 🔧 FIX: Guard — don't create duplicate status sockets (prevents reconnect storm)
+            if (statusWsRef.current &&
+                (statusWsRef.current.readyState === WebSocket.OPEN ||
+                    statusWsRef.current.readyState === WebSocket.CONNECTING)) {
+                return null;
+            }
+
             const tok = tokenRef.current || currentToken;
             const currentUser = usernameRef.current || username;
             // 🔧 SECURITY: Token via subprotocol instead of URL
@@ -411,11 +419,20 @@ export default function useChatConnection({
 
         return () => {
             isCancelled = true;
-            intentionalChatClose.current = true;
             clearTimeout(chatReconnectRef.current);
             stopHeartbeat();
-            // Close WebSocket on chat switch to prevent "closed before established" errors
-            if (ws.current) {
+
+            // 🔧 FIX: Only close WS if switching to a DIFFERENT channel.
+            // React re-renders (StrictMode, parent state changes) can re-fire this effect
+            // for the SAME channel, causing unnecessary disconnect → reconnect storms.
+            const currentUrl = ws.current?.url || '';
+            const expectedPath = activeChat.type === 'room'
+                ? `/ws/chat/${activeChat.id}/`
+                : `/ws/dm/${activeChat.id}/`;
+            const isSameChannel = currentUrl.includes(expectedPath);
+
+            if (ws.current && !isSameChannel) {
+                intentionalChatClose.current = true;
                 try { ws.current.close(1000, 'chat_switch'); } catch (e) { /* ignore */ }
                 ws.current = null;
             }
