@@ -159,7 +159,7 @@ export default function useChatConnection({
                 if (data.username !== username) {
                     try {
                         const isMention = data.content?.includes(`@${username}`) || data.mentions?.includes(username);
-                        const isDM = data.type === 'dm';
+                        const isDM = data.type === 'dm_message' || data.type === 'dm' || data.message_type === 'dm';
                         if (isMention) soundManager.play('mention');
                         else if (isDM) soundManager.play('dm');
                         else soundManager.play('message');
