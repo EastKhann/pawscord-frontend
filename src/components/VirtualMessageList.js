@@ -49,14 +49,18 @@ const Row = memo(({ index, style, data, isScrolling }) => {
         </div>
     );
 }, (prevProps, nextProps) => {
+    const prevMsg = prevProps.data.messages[prevProps.index];
+    const nextMsg = nextProps.data.messages[nextProps.index];
     return (
         prevProps.index === nextProps.index &&
         prevProps.style.top === nextProps.style.top &&
         prevProps.style.height === nextProps.style.height &&
         prevProps.isScrolling === nextProps.isScrolling &&
-        prevProps.data.messages[prevProps.index]?.id === nextProps.data.messages[nextProps.index]?.id &&
-        prevProps.data.messages[prevProps.index]?.content === nextProps.data.messages[nextProps.index]?.content &&
-        prevProps.data.messages[prevProps.index]?.reactions?.length === nextProps.data.messages[nextProps.index]?.reactions?.length
+        prevMsg?.id === nextMsg?.id &&
+        prevMsg?.content === nextMsg?.content &&
+        prevMsg?.is_edited === nextMsg?.is_edited &&
+        prevMsg?.is_pinned === nextMsg?.is_pinned &&
+        prevMsg?.reactions?.length === nextMsg?.reactions?.length
     );
 });
 
@@ -73,26 +77,51 @@ const VirtualMessageList = memo(({
     const listRef = useRef();
     const sizeMap = useRef({});
     const scrollOffsetRef = useRef(0);
+    const prevMessageCountRef = useRef(0);
+    const pendingResetRef = useRef(null);
+    const loadMoreTimerRef = useRef(null);
 
     const getItemSize = useCallback((index) => {
         return sizeMap.current[index] || estimatedItemSize;
     }, [estimatedItemSize]);
 
+    // Batched resetAfterIndex via rAF to avoid N resets from N image loads
     const setItemSize = useCallback((index, size) => {
         if (sizeMap.current[index] !== size) {
             sizeMap.current[index] = size;
-            if (listRef.current) {
-                listRef.current.resetAfterIndex(index, false);
+            // Track the minimum index that needs reset
+            if (pendingResetRef.current === null) {
+                pendingResetRef.current = index;
+                requestAnimationFrame(() => {
+                    const minIndex = pendingResetRef.current;
+                    pendingResetRef.current = null;
+                    if (listRef.current && minIndex !== null) {
+                        listRef.current.resetAfterIndex(minIndex, false);
+                    }
+                });
+            } else {
+                pendingResetRef.current = Math.min(pendingResetRef.current, index);
             }
         }
     }, []);
 
-    // Scroll to bottom on new messages
+    // Scroll to bottom ONLY for new messages appended at the end, not history prepend
     useEffect(() => {
-        if (scrollToBottom && listRef.current && messages.length > 0) {
-            requestAnimationFrame(() => {
-                listRef.current?.scrollToItem(messages.length - 1, 'end');
-            });
+        const prevCount = prevMessageCountRef.current;
+        const newCount = messages.length;
+        prevMessageCountRef.current = newCount;
+
+        // Only scroll if messages were appended (new count > old count)
+        // and it's either the initial load or messages were added at the end
+        if (scrollToBottom && listRef.current && newCount > 0) {
+            // If difference is small (1-3 new messages) or it's initial load, scroll
+            const diff = newCount - prevCount;
+            if (prevCount === 0 || (diff > 0 && diff <= 5)) {
+                requestAnimationFrame(() => {
+                    listRef.current?.scrollToItem(newCount - 1, 'end');
+                });
+            }
+            // If diff is large and negative or large positive (history load/prepend), don't scroll
         }
     }, [messages.length, scrollToBottom]);
 
@@ -103,10 +132,14 @@ const VirtualMessageList = memo(({
         }
     }, [messages.length]);
 
-    // Load-more detection: fire when user scrolls near the top
+    // Load-more detection with debounce: fire when user scrolls near the top
     const handleScroll = useCallback(({ scrollOffset }) => {
         scrollOffsetRef.current = scrollOffset;
         if (onLoadMore && scrollOffset < 200 && messages.length > 0) {
+            if (loadMoreTimerRef.current) return; // debounce active
+            loadMoreTimerRef.current = setTimeout(() => {
+                loadMoreTimerRef.current = null;
+            }, 500);
             onLoadMore();
         }
     }, [onLoadMore, messages.length]);
@@ -147,6 +180,7 @@ const VirtualMessageList = memo(({
 
 VirtualMessageList.displayName = 'VirtualMessageList';
 
-export default memo(VirtualMessageList);
+// 🔧 FIX: Removed double memo wrapper — memo(memo(Component)) does nothing extra
+export default VirtualMessageList;
 
 

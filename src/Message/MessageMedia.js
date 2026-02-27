@@ -79,7 +79,15 @@ const MessageMedia = ({
                         <VoiceMessagePlayer
                             audioUrl={fullFileUrl}
                             duration={msg.voice_duration || 0}
-                            onDownload={() => { const a = document.createElement('a'); a.href = fullFileUrl; a.download = msg.file_name || `voice-${Date.now()}.webm`; a.click(); }}
+                            onDownload={() => {
+                                // 🔧 FIX: Use proper download link instead of leaking DOM <a> elements
+                                const a = document.createElement('a');
+                                a.href = fullFileUrl;
+                                a.download = msg.file_name || `voice-${Date.now()}.webm`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                            }}
                         />
                         {localTranscription && (
                             <div style={styles.voiceTranscription}>
@@ -104,7 +112,7 @@ const MessageMedia = ({
                     return (
                         <Suspense fallback={null}>
                             <VoiceMessagePlayer audioUrl={finalFileUrl} duration={msg.voice_duration || 0}
-                                onDownload={() => { const a = document.createElement('a'); a.href = finalFileUrl; a.download = msg.file_name || `voice-${Date.now()}.webm`; a.click(); }} />
+                                onDownload={() => { const a = document.createElement('a'); a.href = finalFileUrl; a.download = msg.file_name || `voice-${Date.now()}.webm`; document.body.appendChild(a); a.click(); document.body.removeChild(a); }} />
                         </Suspense>
                     );
                 }
@@ -115,7 +123,7 @@ const MessageMedia = ({
                     return (
                         <Suspense fallback={null}>
                             <VoiceMessagePlayer audioUrl={finalFileUrl} duration={0}
-                                onDownload={() => { const a = document.createElement('a'); a.href = finalFileUrl; a.download = msg.file_name || `audio-${Date.now()}.${ext}`; a.click(); }} />
+                                onDownload={() => { const a = document.createElement('a'); a.href = finalFileUrl; a.download = msg.file_name || `audio-${Date.now()}.${ext}`; document.body.appendChild(a); a.click(); document.body.removeChild(a); }} />
                         </Suspense>
                     );
                 }
@@ -139,8 +147,8 @@ const MessageMedia = ({
                         <div style={styles.fileIcon}>
                             {['zip', 'rar', '7z', 'tar', 'gz'].includes(ext) ? '📦' :
                                 ['pdf'].includes(ext) ? '📄' : ['doc', 'docx'].includes(ext) ? '📝' :
-                                ['xls', 'xlsx'].includes(ext) ? '📊' : ['ppt', 'pptx'].includes(ext) ? '📽️' :
-                                ['txt'].includes(ext) ? '📃' : '📎'}
+                                    ['xls', 'xlsx'].includes(ext) ? '📊' : ['ppt', 'pptx'].includes(ext) ? '📽️' :
+                                        ['txt'].includes(ext) ? '📃' : '📎'}
                         </div>
                         <div style={styles.fileInfo}>
                             <div style={styles.fileName}>{msg.file_name || 'Dosya'}</div>

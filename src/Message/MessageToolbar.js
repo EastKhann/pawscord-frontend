@@ -10,6 +10,7 @@ import toast from '../utils/toast';
 const BookmarkButton = lazy(() => import('../components/BookmarkButton').then(m => ({ default: m.BookmarkButton })));
 const StarButton = lazy(() => import('../components/BookmarkButton').then(m => ({ default: m.StarButton })));
 const ReadLaterButton = lazy(() => import('../components/BookmarkButton').then(m => ({ default: m.ReadLaterButton })));
+const ReactionPicker = lazy(() => import('../ReactionPicker'));
 
 const MessageToolbar = ({
     msg, isMyMessage, isAdmin, currentPermissions,
@@ -19,8 +20,6 @@ const MessageToolbar = ({
     setShowReminderModal, setShowThreadModal,
     fetchWithAuth, absoluteHostUrl
 }) => {
-    const ReactionPicker = lazy(() => import('../ReactionPicker'));
-
     return (
         <div style={styles.messageActions}>
             {showReactionPicker && (

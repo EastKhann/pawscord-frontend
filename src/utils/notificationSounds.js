@@ -144,11 +144,13 @@ class NotificationSoundManager {
         const url = SOUND_URLS[eventType];
         if (url) {
             try {
+                // 🔧 FIX: Reuse cached Audio element instead of cloneNode (prevents DOM leak)
                 if (!this.audioCache[eventType]) {
                     this.audioCache[eventType] = new Audio(url);
                 }
-                const audio = this.audioCache[eventType].cloneNode();
+                const audio = this.audioCache[eventType];
                 audio.volume = this.volume;
+                audio.currentTime = 0; // Reset to start for re-play
                 await audio.play();
                 return;
             } catch (e) { /* fallback to tone */ }
@@ -156,6 +158,18 @@ class NotificationSoundManager {
 
         const tone = FALLBACK_TONES[eventType];
         if (tone) this._playTone(tone);
+    }
+
+    // 🔧 FIX: Cleanup method to release AudioContext and cached Audio elements
+    destroy() {
+        if (this.audioContext) {
+            this.audioContext.close().catch(() => { });
+            this.audioContext = null;
+        }
+        Object.keys(this.audioCache).forEach(key => {
+            this.audioCache[key].src = '';
+            delete this.audioCache[key];
+        });
     }
 
     // Resume audio context (must be called after user gesture)

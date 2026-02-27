@@ -87,13 +87,16 @@ export default function useChatConnection({
         stopHeartbeat();
 
         let wsUrl = '';
-        const params = `?username=${encodeURIComponent(username)}&token=${token}`;
+        // 🔧 SECURITY: Send only username in URL; pass token via WS subprotocol
+        // to avoid token leaking in server access logs, referrer headers, and browser history.
+        // Backend TokenAuthMiddleware also checks subprotocol for token (fallback: query param).
+        const params = `?username=${encodeURIComponent(username)}`;
         if (activeChat.type === 'room') wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/chat/${activeChat.id}/${params}`;
         else if (activeChat.type === 'dm') wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/dm/${activeChat.id}/${params}`;
 
         if (!wsUrl) return;
 
-        const newWs = new WebSocket(wsUrl);
+        const newWs = new WebSocket(wsUrl, [`token-${token}`]);
         ws.current = newWs;
 
         newWs.onopen = () => {
@@ -171,6 +174,23 @@ export default function useChatConnection({
                 }
             } else if (data.type === 'chat_cleared') {
                 setMessages([]);
+            } else if (data.type === 'message_deleted') {
+                // 🔧 Real-time message deletion — remove from state immediately
+                const deletedId = data.message_id;
+                if (deletedId) {
+                    setMessages(prev => prev.filter(msg => msg.id !== deletedId && String(msg.id) !== String(deletedId)));
+                }
+            } else if (data.type === 'message_updated') {
+                // 🔧 Real-time message edit — update content in-place
+                const editedId = data.message_id;
+                if (editedId) {
+                    setMessages(prev => prev.map(msg => {
+                        if (msg.id === editedId || String(msg.id) === String(editedId)) {
+                            return { ...msg, content: data.content, is_edited: true };
+                        }
+                        return msg;
+                    }));
+                }
             }
 
             if (data.message && data.message.startsWith('[ANNOUNCE] ')) {
@@ -261,10 +281,11 @@ export default function useChatConnection({
         const createSocket = () => {
             const tok = tokenRef.current || currentToken;
             const currentUser = usernameRef.current || username;
-            const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}&token=${tok}`;
+            // 🔧 SECURITY: Token via subprotocol instead of URL
+            const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}`;
 
             let socket;
-            try { socket = new WebSocket(url); } catch (err) { return null; }
+            try { socket = new WebSocket(url, [`token-${tok}`]); } catch (err) { return null; }
 
             socket.onopen = () => { setGlobalWsConnected(true); reconnectAttempts = 0; };
             socket.onerror = (error) => console.error('[StatusWS] WebSocket error:', error);
@@ -373,17 +394,17 @@ export default function useChatConnection({
         connectWebSocket();
 
         // 🚀 Fetch history: skip if cache is fresh, otherwise background refresh
+        // 🔧 FIX: Removed requestAnimationFrame — it's for paint scheduling, not network requests.
+        // Using queueMicrotask for immediate async execution without paint-wait delay.
         if (cached?.messages?.length > 0) {
             const cacheAge = cached._ts ? (Date.now() - cached._ts) : Infinity;
             if (cacheAge > 15000) {
-                // Background refresh — don't block UI
-                requestAnimationFrame(() => {
+                queueMicrotask(() => {
                     if (!isCancelled) fetchMessageHistory(true, true);
                 });
             }
         } else {
-            // No cache — fetch immediately but don't block WS connection
-            requestAnimationFrame(() => {
+            queueMicrotask(() => {
                 if (!isCancelled) fetchMessageHistory(true);
             });
         }

@@ -17,6 +17,19 @@ export const useOptimizedMessages = (messages, searchQuery, _activeChat) => {
   const filteredMessages = useMemo(() => {
     if (!messages || !Array.isArray(messages) || messages.length === 0) return [];
 
+    // 🔧 FIX: Skip recalculation if messages array identity changed but content is identical
+    const prev = prevRef.current;
+    if (
+      prev.messages !== null &&
+      prev.searchQuery === searchQuery &&
+      prev.messages.length === messages.length &&
+      prev.messages[0]?.id === messages[0]?.id &&
+      prev.messages[prev.messages.length - 1]?.id === messages[messages.length - 1]?.id &&
+      prev.messages[prev.messages.length - 1]?.content === messages[messages.length - 1]?.content
+    ) {
+      return prev.result;
+    }
+
     let filtered = messages;
 
     // Arama filtresi

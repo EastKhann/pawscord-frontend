@@ -133,20 +133,47 @@ export default function useFileUpload({
         if (showProgress) setIsUploading(false);
     }, [activeChat, fetchWithAuth]);
 
-    // --- 🎤 VOICE RECORDING ---
+    // --- 🎤 VOICE RECORDING (uses R2 multipart via uploadFile) ---
+    const recordingStartRef = useRef(null);
+
     const startVoiceRecording = useCallback(async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const options = { mimeType: 'audio/webm;codecs=opus' };
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) options.mimeType = 'audio/webm';
 
+            // 🔧 iOS Safari: prefer audio/mp4 if webm not supported
+            let mimeType = 'audio/webm;codecs=opus';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = 'audio/webm';
+                if (!MediaRecorder.isTypeSupported(mimeType)) {
+                    mimeType = 'audio/mp4'; // iOS Safari fallback
+                    if (!MediaRecorder.isTypeSupported(mimeType)) {
+                        mimeType = ''; // Let browser pick default
+                    }
+                }
+            }
+
+            const options = mimeType ? { mimeType } : {};
             mediaRecorderRef.current = new MediaRecorder(stream, options);
             audioChunksRef.current = [];
+            recordingStartRef.current = Date.now();
 
             mediaRecorderRef.current.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
             mediaRecorderRef.current.onstop = async () => {
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
-                await sendVoiceMessage(audioBlob);
+                const actualMime = mediaRecorderRef.current?.mimeType || mimeType || 'audio/webm';
+                const ext = actualMime.includes('mp4') ? 'mp4' : 'webm';
+                const audioBlob = new Blob(audioChunksRef.current, { type: actualMime });
+
+                // Calculate actual duration
+                const duration = recordingStartRef.current
+                    ? Math.round((Date.now() - recordingStartRef.current) / 1000)
+                    : 0;
+                recordingStartRef.current = null;
+
+                // 🔧 FIX: Use R2 multipart upload instead of legacy chunked endpoint
+                const fileName = `voice_${Date.now()}.${ext}`;
+                const voiceFile = new File([audioBlob], fileName, { type: actualMime });
+                await uploadFile(voiceFile, true, duration);
+
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -158,7 +185,7 @@ export default function useFileUpload({
             else if (error.name === 'NotFoundError') toast.warning('Mikrofon bulunamadı!');
             else toast.error('Mikrofon hatası: ' + error.message);
         }
-    }, []);
+    }, [uploadFile]);
 
     const stopVoiceRecording = useCallback(() => {
         if (mediaRecorderRef.current && isRecordingVoice) {
@@ -167,34 +194,17 @@ export default function useFileUpload({
         }
     }, [isRecordingVoice]);
 
-    const sendVoiceMessage = useCallback(async (audioBlob) => {
-        const fileName = `voice_${Date.now()}.webm`;
-        const uploadId = `upload_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        const formData = new FormData();
-        formData.append('chunk', audioBlob);
-        formData.append('upload_id', uploadId);
-        formData.append('chunk_index', '0');
-        formData.append('total_chunks', '1');
-        formData.append('file_name', fileName);
-        formData.append('is_voice_message', 'true');
-        if (activeChat.type === 'room') formData.append('room_slug', activeChat.id);
-        else if (activeChat.type === 'dm') formData.append('conversation_id', activeChat.id);
-
-        try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/messages/upload_file/`, { method: 'POST', body: formData });
-            if (!response.ok) throw new Error('Upload failed');
-        } catch (error) {
-            console.error('Error uploading voice message:', error);
-            toast.error('Ses mesajı gönderilemedi');
-        }
-    }, [activeChat, fetchWithAuth]);
-
     // --- 🖱️ DRAG & DROP ---
     const handleChatDrop = useCallback((e) => {
         e.preventDefault(); e.stopPropagation();
         dragCounterRef.current = 0;
         setIsDragging(false);
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            // 🔧 FIX: Revoke old blob URLs before creating new ones to prevent memory leak
+            setPendingFilesFromDrop(prev => {
+                prev.forEach(f => { if (f.previewUrl) URL.revokeObjectURL(f.previewUrl); });
+                return [];
+            });
             const files = Array.from(e.dataTransfer.files);
             const processedFiles = files.map(file => ({
                 id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,

@@ -109,9 +109,15 @@ class OfflineMessageQueue {
     /**
      * Register a callback to be called after flush
      * @param {Function} callback - (flushedCount) => void
+     * @returns {Function} unsubscribe function to prevent memory leaks
      */
     onFlush(callback) {
         this._flushCallbacks.push(callback);
+        // 🔧 FIX: Return unsubscribe function to prevent callback array leak
+        return () => {
+            const idx = this._flushCallbacks.indexOf(callback);
+            if (idx !== -1) this._flushCallbacks.splice(idx, 1);
+        };
     }
 
     /**

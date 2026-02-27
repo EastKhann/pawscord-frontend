@@ -342,8 +342,21 @@ const Message = ({
 };
 
 const areEqual = (prev, next) => {
-    const keys = ['msg', 'currentUser', 'isAdmin', 'isSelectionMode', 'isSelected'];
-    for (const k of keys) { if (prev[k] !== next[k]) return false; }
+    // Primary data props
+    if (prev.msg !== next.msg) return false;
+    if (prev.currentUser !== next.currentUser) return false;
+    if (prev.isAdmin !== next.isAdmin) return false;
+    if (prev.isSelectionMode !== next.isSelectionMode) return false;
+    if (prev.isSelected !== next.isSelected) return false;
+    // Handler props — referential equality; if parent re-creates them, re-render
+    if (prev.onDelete !== next.onDelete) return false;
+    if (prev.onStartEdit !== next.onStartEdit) return false;
+    if (prev.onToggleReaction !== next.onToggleReaction) return false;
+    if (prev.onTogglePin !== next.onTogglePin) return false;
+    if (prev.onSetReply !== next.onSetReply) return false;
+    if (prev.onViewProfile !== next.onViewProfile) return false;
+    if (prev.onStartForward !== next.onStartForward) return false;
+    if (prev.absoluteHostUrl !== next.absoluteHostUrl) return false;
     return true;
 };
 

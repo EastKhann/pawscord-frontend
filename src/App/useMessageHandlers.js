@@ -17,15 +17,14 @@ function persistHistoryCache(cacheRef) {
         try {
             const cache = cacheRef.current;
             const keys = Object.keys(cache);
-            // Keep only the 8 most recent entries to stay under sessionStorage limits
-            const recentKeys = keys.slice(-8);
+            // 🔧 FIX: Increased from 8×35 to 12×50 for better cache coverage
+            const recentKeys = keys.slice(-12);
             const trimmed = {};
             for (const k of recentKeys) {
                 const entry = cache[k];
                 if (entry?.messages?.length > 0) {
-                    // Store max 35 messages per channel to limit size
                     trimmed[k] = {
-                        messages: entry.messages.slice(-35),
+                        messages: entry.messages.slice(-50),
                         hasMore: entry.hasMore,
                         nextCursor: entry.nextCursor,
                     };
@@ -171,20 +170,37 @@ export default function useMessageHandlers({
         scrollToBottom('smooth');
     }, [activeChat, username, encryptionKeys, ws, fetchWithAuth, currentUserProfile, getDeterministicAvatar, persistDraft]);
 
-    // --- 💬 SEND SNIPPET ---
-    const handleSendSnippet = useCallback((data) => {
+    // --- 💬 SEND SNIPPET (🔧 FIX: Added WS check + HTTP fallback) ---
+    const handleSendSnippet = useCallback(async (data) => {
         const payload = {
             type: activeChat.type === 'room' ? 'chat_message' : 'dm_message',
             message: "", username, temp_id: getTemporaryId(), snippet_data: data,
             ...(activeChat.type === 'room' ? { room: activeChat.id } : { conversation: activeChat.id })
         };
-        ws.current?.send(JSON.stringify(payload));
+
+        let sent = false;
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+            try { ws.current.send(JSON.stringify(payload)); sent = true; } catch { /* fallback */ }
+        }
+        if (!sent) {
+            // HTTP fallback when WS is not available
+            try {
+                const endpoint = activeChat.type === 'dm'
+                    ? `${API_BASE_URL}/messages/send_dm/`
+                    : `${API_BASE_URL}/messages/send/`;
+                const httpPayload = activeChat.type === 'dm'
+                    ? { conversation_id: activeChat.id, content: '', temp_id: payload.temp_id, snippet_data: data }
+                    : { room: activeChat.id, content: '', temp_id: payload.temp_id, snippet_data: data };
+                await fetchWithAuth(endpoint, { method: 'POST', body: JSON.stringify(httpPayload) });
+            } catch (e) { toast.error('Snippet gönderilemedi'); }
+        }
+
         setMessages(prev => [...prev, {
             ...payload, timestamp: new Date().toISOString(), id: payload.temp_id,
             avatar: currentUserProfile?.avatar || getDeterministicAvatar(username)
         }]);
         closeModal('snippetModal');
-    }, [activeChat, username, ws, currentUserProfile, getDeterministicAvatar]);
+    }, [activeChat, username, ws, currentUserProfile, getDeterministicAvatar, fetchWithAuth, API_BASE_URL]);
 
     // --- 📋 FETCH MESSAGE HISTORY ---
     // 🚀 Cursor-based pagination — no offset needed, uses next cursor URL
@@ -276,10 +292,12 @@ export default function useMessageHandlers({
                 const isPinned = data.is_pinned ?? data.pinned ?? true;
                 setMessages(prev => prev.map(m => m.id === messageId ? { ...m, is_pinned: isPinned } : m));
                 if (isPinned) {
+                    // Add the pinned message to pinnedMessages panel
                     setPinnedMessages(prev => {
-                        const msg = prev.find(p => p.id === messageId);
-                        if (!msg) return prev; // will be added from messages state
-                        return prev;
+                        if (prev.find(p => p.id === messageId)) return prev;
+                        // Find the message from current messages state
+                        const pinnedMsg = data.message || { id: messageId, is_pinned: true };
+                        return [...prev, pinnedMsg];
                     });
                     toast.success('📌 Mesaj sabitlendi');
                 } else {
@@ -431,23 +449,38 @@ export default function useMessageHandlers({
     }, []);
 
     // --- CLEANUP: Flush pending read receipts on unmount ---
+    // 🔧 FIX: Use navigator.sendBeacon for unmount flush — doesn't depend on component lifecycle
+    // and works even when the page is being unloaded (unlike fetch which may be cancelled)
     useEffect(() => {
         return () => {
             if (readReceiptTimerRef.current) {
                 clearTimeout(readReceiptTimerRef.current);
                 readReceiptTimerRef.current = null;
             }
-            // Flush any remaining buffered IDs
             const remaining = [...new Set(readReceiptBufferRef.current)];
             readReceiptBufferRef.current = [];
             if (remaining.length > 0) {
-                fetchWithAuth(`${API_BASE_URL}/messages/mark_read/`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message_ids: remaining })
-                }).catch(() => { /* best effort */ });
+                // sendBeacon is fire-and-forget, survives page unload, and doesn't
+                // trigger state updates on unmounted components
+                try {
+                    const url = `${API_BASE_URL}/messages/mark_read/`;
+                    const blob = new Blob(
+                        [JSON.stringify({ message_ids: remaining })],
+                        { type: 'application/json' }
+                    );
+                    if (navigator.sendBeacon) {
+                        navigator.sendBeacon(url, blob);
+                    } else {
+                        // Fallback for older browsers — fire and forget
+                        fetchWithAuth(url, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message_ids: remaining })
+                        }).catch(() => { });
+                    }
+                } catch { /* best effort */ }
             }
         };
-    }, [fetchWithAuth]);
+    }, [fetchWithAuth, API_BASE_URL]);
 
     return {
         sendMessage,
