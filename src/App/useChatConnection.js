@@ -266,6 +266,10 @@ export default function useChatConnection({
     }, [connectWebSocket]);
 
     // --- 🔌 STATUS WEBSOCKET ---
+    // 🔧 FIX: Use a ref for intentionalClose so it survives across effect re-fires
+    // without creating stale closure problems
+    const statusIntentionalCloseRef = useRef(false);
+
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
 
@@ -275,7 +279,8 @@ export default function useChatConnection({
         const currentToken = tokenRef.current;
         if (!currentToken) return;
 
-        let intentionalClose = false;
+        // Reset — this effect is (re-)establishing the connection
+        statusIntentionalCloseRef.current = false;
         let reconnectAttempts = 0;
         const MAX_RECONNECT_ATTEMPTS = 10;
 
@@ -300,12 +305,12 @@ export default function useChatConnection({
 
             socket.onclose = (event) => {
                 setGlobalWsConnected(false);
-                if (!intentionalClose && event.code !== 1000 && event.code !== 1001) {
+                if (!statusIntentionalCloseRef.current && event.code !== 1000 && event.code !== 1001) {
                     if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) return;
                     reconnectAttempts++;
                     const delay = jitteredDelay(5000, reconnectAttempts, 60000);
                     statusWsReconnectRef.current = setTimeout(() => {
-                        if (!intentionalClose) {
+                        if (!statusIntentionalCloseRef.current) {
                             const newSocket = createSocket();
                             if (newSocket) statusWsRef.current = newSocket;
                         }
@@ -374,11 +379,22 @@ export default function useChatConnection({
         if (socket) statusWsRef.current = socket;
 
         return () => {
-            intentionalClose = true;
             clearTimeout(statusWsReconnectRef.current);
-            try { if (statusWsRef.current) statusWsRef.current.close(1000, 'Component unmount'); } catch (e) { /* Ignore */ }
+            // 🔧 FIX: Do NOT close the socket here — it persists across re-renders.
+            // The createSocket() guard prevents duplicates on effect re-fire.
+            // Socket is closed in the separate isAuthenticated watcher below.
         };
     }, [isAuthenticated, isInitialDataLoaded]);
+
+    // 🔧 FIX: Close status WS only on actual logout / component true unmount
+    useEffect(() => {
+        if (!isAuthenticated && statusWsRef.current) {
+            statusIntentionalCloseRef.current = true;
+            clearTimeout(statusWsReconnectRef.current);
+            try { statusWsRef.current.close(1000, 'Logout'); } catch (e) { /* ignore */ }
+            statusWsRef.current = null;
+        }
+    }, [isAuthenticated]);
 
     // --- 🔌 CONNECT ON ACTIVE CHAT CHANGE ---
     useEffect(() => {

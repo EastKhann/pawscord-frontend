@@ -1,312 +1,312 @@
 /**
  * 🚀 Lazy-loaded component imports for App.js
  * Extracted from App.js to reduce file size and improve readability.
- * All components use React.lazy() for code-splitting.
+ * All components use lazyWithRetry() for code-splitting with auto-retry on chunk failure.
  */
-import React from 'react';
+import { lazyWithRetry } from '../utils/lazyWithRetry';
 
 // ⚡ CORE: Message & Chat components
-export const Message = React.lazy(() => import('../Message'));
-export const VirtualMessageList = React.lazy(() => import('../components/VirtualMessageList'));
-export const MessageInput = React.lazy(() => import('../components/MessageInput'));
+export const Message = lazyWithRetry(() => import('../Message'));
+export const VirtualMessageList = lazyWithRetry(() => import('../components/VirtualMessageList'));
+export const MessageInput = lazyWithRetry(() => import('../components/MessageInput'));
 
 // ⚡ LAZY: Voice/Video components
-export const UserVideoContainer = React.lazy(() => import('../UserVideoContainer'));
-export const VoiceAudioController = React.lazy(() => import('../VoiceAudioController'));
-export const RichTextEditor = React.lazy(() => import('../components/RichTextEditor'));
-export const StickyMessageBanner = React.lazy(() => import('../components/StickyMessageBanner'));
+export const UserVideoContainer = lazyWithRetry(() => import('../UserVideoContainer'));
+export const VoiceAudioController = lazyWithRetry(() => import('../VoiceAudioController'));
+export const RichTextEditor = lazyWithRetry(() => import('../components/RichTextEditor'));
+export const StickyMessageBanner = lazyWithRetry(() => import('../components/StickyMessageBanner'));
 
 // ⚡ LAZY: Auth screens
-export const LoginPage = React.lazy(() => import('../LoginPage'));
-export const WelcomeScreen = React.lazy(() => import('../WelcomeScreen'));
+export const LoginPage = lazyWithRetry(() => import('../LoginPage'));
+export const WelcomeScreen = lazyWithRetry(() => import('../WelcomeScreen'));
 
 // ⚡ LAZY: Modal components
-export const ImageModal = React.lazy(() => import('../ImageModal'));
-export const UserProfileModal = React.lazy(() => import('../UserProfileModal'));
-export const PollCreateModal = React.lazy(() => import('../components/PollCreateModal'));
-export const CodeSnippetModal = React.lazy(() => import('../components/CodeSnippetModal'));
-export const AvatarCropper = React.lazy(() => import('../components/AvatarCropper'));
+export const ImageModal = lazyWithRetry(() => import('../ImageModal'));
+export const UserProfileModal = lazyWithRetry(() => import('../UserProfileModal'));
+export const PollCreateModal = lazyWithRetry(() => import('../components/PollCreateModal'));
+export const CodeSnippetModal = lazyWithRetry(() => import('../components/CodeSnippetModal'));
+export const AvatarCropper = lazyWithRetry(() => import('../components/AvatarCropper'));
 
 // --- Ağır Bileşenler (Lazy Load) ---
-export const CryptoChartModal = React.lazy(() => import('../CryptoChartModal'));
-export const CryptoStoreModal = React.lazy(() => import('../components/CryptoStoreModal'));
-export const PremiumStoreModal = React.lazy(() => import('../components/PremiumStoreModal'));
-export const WhiteboardModal = React.lazy(() => import('../components/WhiteboardModal'));
-export const SoundboardModal = React.lazy(() => import('../components/SoundboardModal'));
-export const KanbanBoard = React.lazy(() => import('../components/KanbanBoard'));
-export const SummaryModal = React.lazy(() => import('../SummaryModal'));
-export const MessageTemplateModal = React.lazy(() => import('../components/MessageTemplateModal'));
-export const CinemaModal = React.lazy(() => import('../CinemaModal'));
-export const StickerPicker = React.lazy(() => import('../StickerPicker'));
-export const GifPicker = React.lazy(() => import('../GifPicker'));
-export const DJModal = React.lazy(() => import('../components/DJModal'));
-export const ThemeStoreModal = React.lazy(() => import('../components/ThemeStoreModal'));
-export const EncryptionKeyModal = React.lazy(() => import('../components/EncryptionKeyModal'));
-export const DownloadModal = React.lazy(() => import('../components/DownloadModal'));
-export const ServerSettingsModal = React.lazy(() => import('../components/ServerSettingsModal'));
-export const CreateGroupModal = React.lazy(() => import('../components/CreateGroupModal'));
-export const AdminAnalyticsPanel = React.lazy(() => import('../components/AdminAnalyticsPanel'));
-export const AdminPanelModal = React.lazy(() => import('../components/AdminPanelModal'));
-export const WebhooksPanel = React.lazy(() => import('../components/WebhooksPanel'));
-export const VanityURLManager = React.lazy(() => import('../components/VanityURLManager'));
+export const CryptoChartModal = lazyWithRetry(() => import('../CryptoChartModal'));
+export const CryptoStoreModal = lazyWithRetry(() => import('../components/CryptoStoreModal'));
+export const PremiumStoreModal = lazyWithRetry(() => import('../components/PremiumStoreModal'));
+export const WhiteboardModal = lazyWithRetry(() => import('../components/WhiteboardModal'));
+export const SoundboardModal = lazyWithRetry(() => import('../components/SoundboardModal'));
+export const KanbanBoard = lazyWithRetry(() => import('../components/KanbanBoard'));
+export const SummaryModal = lazyWithRetry(() => import('../SummaryModal'));
+export const MessageTemplateModal = lazyWithRetry(() => import('../components/MessageTemplateModal'));
+export const CinemaModal = lazyWithRetry(() => import('../CinemaModal'));
+export const StickerPicker = lazyWithRetry(() => import('../StickerPicker'));
+export const GifPicker = lazyWithRetry(() => import('../GifPicker'));
+export const DJModal = lazyWithRetry(() => import('../components/DJModal'));
+export const ThemeStoreModal = lazyWithRetry(() => import('../components/ThemeStoreModal'));
+export const EncryptionKeyModal = lazyWithRetry(() => import('../components/EncryptionKeyModal'));
+export const DownloadModal = lazyWithRetry(() => import('../components/DownloadModal'));
+export const ServerSettingsModal = lazyWithRetry(() => import('../components/ServerSettingsModal'));
+export const CreateGroupModal = lazyWithRetry(() => import('../components/CreateGroupModal'));
+export const AdminAnalyticsPanel = lazyWithRetry(() => import('../components/AdminAnalyticsPanel'));
+export const AdminPanelModal = lazyWithRetry(() => import('../components/AdminPanelModal'));
+export const WebhooksPanel = lazyWithRetry(() => import('../components/WebhooksPanel'));
+export const VanityURLManager = lazyWithRetry(() => import('../components/VanityURLManager'));
 
 // 🛡️ MODERATION
-export const AutoModerationDashboard = React.lazy(() => import('../components/AutoModerationDashboard'));
-export const AutoModerationPanel = React.lazy(() => import('../components/AutoModerationPanel'));
-export const RaidProtectionPanel = React.lazy(() => import('../components/RaidProtectionPanel'));
-export const ReportSystemPanel = React.lazy(() => import('../components/ReportSystemPanel'));
-export const AuditLogPanel = React.lazy(() => import('../components/AuditLogPanel'));
-export const UserWarningsPanel = React.lazy(() => import('../components/UserWarningsPanel'));
+export const AutoModerationDashboard = lazyWithRetry(() => import('../components/AutoModerationDashboard'));
+export const AutoModerationPanel = lazyWithRetry(() => import('../components/AutoModerationPanel'));
+export const RaidProtectionPanel = lazyWithRetry(() => import('../components/RaidProtectionPanel'));
+export const ReportSystemPanel = lazyWithRetry(() => import('../components/ReportSystemPanel'));
+export const AuditLogPanel = lazyWithRetry(() => import('../components/AuditLogPanel'));
+export const UserWarningsPanel = lazyWithRetry(() => import('../components/UserWarningsPanel'));
 
 // 📚 FEATURE PANELS
-export const BookmarkPanel = React.lazy(() => import('../components/BookmarkPanel'));
-export const ReadLaterPanel = React.lazy(() => import('../components/ReadLaterPanel'));
-export const ChannelPermissionsPanel = React.lazy(() => import('../components/ChannelPermissionsPanel'));
-export const MessageThreadsPanel = React.lazy(() => import('../components/MessageThreadsPanel'));
-export const ModeratorNotesPanel = React.lazy(() => import('../components/ModeratorNotesPanel'));
-export const ServerRolesPanel = React.lazy(() => import('../components/ServerRolesPanel'));
-export const NotificationPreferencesPanel = React.lazy(() => import('../components/NotificationPreferencesPanel'));
-export const MessageOCRPanel = React.lazy(() => import('../components/MessageOCRPanel'));
-export const MassActionsPanel = React.lazy(() => import('../components/MassActionsPanel'));
-export const TimeoutMutePanel = React.lazy(() => import('../components/TimeoutMutePanel'));
-export const ServerThemesPanel = React.lazy(() => import('../components/ServerThemesPanel'));
-export const KeywordMutesPanel = React.lazy(() => import('../components/KeywordMutesPanel'));
-export const WelcomeTemplatesPanel = React.lazy(() => import('../components/WelcomeTemplatesPanel'));
-export const StickyMessagesPanel = React.lazy(() => import('../components/StickyMessagesPanel'));
-export const MessageTemplatesPanel = React.lazy(() => import('../components/MessageTemplatesPanel'));
-export const MessageExportPanel = React.lazy(() => import('../components/MessageExportPanel'));
-export const ArchivedRoomsPanel = React.lazy(() => import('../components/ArchivedRoomsPanel'));
-export const SlowModePanel = React.lazy(() => import('../components/SlowModePanel'));
-export const EmojiManagementPanel = React.lazy(() => import('../components/EmojiManagementPanel'));
-export const MentionsInboxPanel = React.lazy(() => import('../components/MentionsInboxPanel'));
-export const CustomStatusModal = React.lazy(() => import('../components/CustomStatusModal'));
+export const BookmarkPanel = lazyWithRetry(() => import('../components/BookmarkPanel'));
+export const ReadLaterPanel = lazyWithRetry(() => import('../components/ReadLaterPanel'));
+export const ChannelPermissionsPanel = lazyWithRetry(() => import('../components/ChannelPermissionsPanel'));
+export const MessageThreadsPanel = lazyWithRetry(() => import('../components/MessageThreadsPanel'));
+export const ModeratorNotesPanel = lazyWithRetry(() => import('../components/ModeratorNotesPanel'));
+export const ServerRolesPanel = lazyWithRetry(() => import('../components/ServerRolesPanel'));
+export const NotificationPreferencesPanel = lazyWithRetry(() => import('../components/NotificationPreferencesPanel'));
+export const MessageOCRPanel = lazyWithRetry(() => import('../components/MessageOCRPanel'));
+export const MassActionsPanel = lazyWithRetry(() => import('../components/MassActionsPanel'));
+export const TimeoutMutePanel = lazyWithRetry(() => import('../components/TimeoutMutePanel'));
+export const ServerThemesPanel = lazyWithRetry(() => import('../components/ServerThemesPanel'));
+export const KeywordMutesPanel = lazyWithRetry(() => import('../components/KeywordMutesPanel'));
+export const WelcomeTemplatesPanel = lazyWithRetry(() => import('../components/WelcomeTemplatesPanel'));
+export const StickyMessagesPanel = lazyWithRetry(() => import('../components/StickyMessagesPanel'));
+export const MessageTemplatesPanel = lazyWithRetry(() => import('../components/MessageTemplatesPanel'));
+export const MessageExportPanel = lazyWithRetry(() => import('../components/MessageExportPanel'));
+export const ArchivedRoomsPanel = lazyWithRetry(() => import('../components/ArchivedRoomsPanel'));
+export const SlowModePanel = lazyWithRetry(() => import('../components/SlowModePanel'));
+export const EmojiManagementPanel = lazyWithRetry(() => import('../components/EmojiManagementPanel'));
+export const MentionsInboxPanel = lazyWithRetry(() => import('../components/MentionsInboxPanel'));
+export const CustomStatusModal = lazyWithRetry(() => import('../components/CustomStatusModal'));
 
 // 🚀 BATCH 1: Analytics & Tracking
-export const ReactionAnalyticsPanel = React.lazy(() => import('../components/ReactionAnalyticsPanel'));
-export const LinkClickTrackingPanel = React.lazy(() => import('../components/LinkClickTrackingPanel'));
-export const JoinLeaveLogsPanel = React.lazy(() => import('../components/JoinLeaveLogsPanel'));
-export const UserActivityPanel = React.lazy(() => import('../components/UserActivityPanel'));
-export const NicknameHistoryPanel = React.lazy(() => import('../components/NicknameHistoryPanel'));
-export const FieldChangeTrackingPanel = React.lazy(() => import('../components/FieldChangeTrackingPanel'));
-export const InviteAnalyticsPanel = React.lazy(() => import('../components/InviteAnalyticsPanel'));
+export const ReactionAnalyticsPanel = lazyWithRetry(() => import('../components/ReactionAnalyticsPanel'));
+export const LinkClickTrackingPanel = lazyWithRetry(() => import('../components/LinkClickTrackingPanel'));
+export const JoinLeaveLogsPanel = lazyWithRetry(() => import('../components/JoinLeaveLogsPanel'));
+export const UserActivityPanel = lazyWithRetry(() => import('../components/UserActivityPanel'));
+export const NicknameHistoryPanel = lazyWithRetry(() => import('../components/NicknameHistoryPanel'));
+export const FieldChangeTrackingPanel = lazyWithRetry(() => import('../components/FieldChangeTrackingPanel'));
+export const InviteAnalyticsPanel = lazyWithRetry(() => import('../components/InviteAnalyticsPanel'));
 
 // 🚀 BATCH 2: Content & Moderation
-export const ContentScannerPanel = React.lazy(() => import('../components/ContentScannerPanel'));
-export const EphemeralMessagesPanel = React.lazy(() => import('../components/EphemeralMessagesPanel'));
-export const TopicHistoryPanel = React.lazy(() => import('../components/TopicHistoryPanel'));
-export const DraftsPanel = React.lazy(() => import('../components/DraftsPanel'));
-export const ServerNicknamesPanel = React.lazy(() => import('../components/ServerNicknamesPanel'));
+export const ContentScannerPanel = lazyWithRetry(() => import('../components/ContentScannerPanel'));
+export const EphemeralMessagesPanel = lazyWithRetry(() => import('../components/EphemeralMessagesPanel'));
+export const TopicHistoryPanel = lazyWithRetry(() => import('../components/TopicHistoryPanel'));
+export const DraftsPanel = lazyWithRetry(() => import('../components/DraftsPanel'));
+export const ServerNicknamesPanel = lazyWithRetry(() => import('../components/ServerNicknamesPanel'));
 
 // 🚀 BATCH 3: Server Features
-export const ServerBoostPanel = React.lazy(() => import('../components/ServerBoostPanel'));
-export const RoomWebhooksPanel = React.lazy(() => import('../components/RoomWebhooksPanel'));
-export const OAuthAppsPanel = React.lazy(() => import('../components/OAuthAppsPanel'));
-export const VanityURLPanel = React.lazy(() => import('../components/VanityURLPanel'));
-export const AutoRespondersPanel = React.lazy(() => import('../components/AutoRespondersPanel'));
+export const ServerBoostPanel = lazyWithRetry(() => import('../components/ServerBoostPanel'));
+export const RoomWebhooksPanel = lazyWithRetry(() => import('../components/RoomWebhooksPanel'));
+export const OAuthAppsPanel = lazyWithRetry(() => import('../components/OAuthAppsPanel'));
+export const VanityURLPanel = lazyWithRetry(() => import('../components/VanityURLPanel'));
+export const AutoRespondersPanel = lazyWithRetry(() => import('../components/AutoRespondersPanel'));
 
 // 🚀 BATCH 4: Security & Privacy
-export const SessionManagementPanel = React.lazy(() => import('../components/SessionManagementPanel'));
-export const GDPRExportPanel = React.lazy(() => import('../components/GDPRExportPanel'));
-export const DataRetentionPanel = React.lazy(() => import('../components/DataRetentionPanel'));
-export const TwoFactorSetupWizard = React.lazy(() => import('../components/TwoFactorSetupWizard'));
+export const SessionManagementPanel = lazyWithRetry(() => import('../components/SessionManagementPanel'));
+export const GDPRExportPanel = lazyWithRetry(() => import('../components/GDPRExportPanel'));
+export const DataRetentionPanel = lazyWithRetry(() => import('../components/DataRetentionPanel'));
+export const TwoFactorSetupWizard = lazyWithRetry(() => import('../components/TwoFactorSetupWizard'));
 
 // 🚀 BATCH 5: Communication
-export const EnhancedPollsPanel = React.lazy(() => import('../components/EnhancedPollsPanel'));
-export const VoiceTranscriptsPanel = React.lazy(() => import('../components/VoiceTranscriptsPanel'));
+export const EnhancedPollsPanel = lazyWithRetry(() => import('../components/EnhancedPollsPanel'));
+export const VoiceTranscriptsPanel = lazyWithRetry(() => import('../components/VoiceTranscriptsPanel'));
 
 // 💰 Payment & Engagement
-export const PaymentPanel = React.lazy(() => import('../components/PaymentPanel'));
-export const StoreModal = React.lazy(() => import('../components/StoreModal'));
-export const DailyRewardsModal = React.lazy(() => import('../components/DailyRewardsModal'));
-export const APIUsagePanel = React.lazy(() => import('../components/APIUsagePanel'));
-export const ExportJobsPanel = React.lazy(() => import('../components/ExportJobsPanel'));
-export const ScheduledAnnouncementsPanel = React.lazy(() => import('../components/ScheduledAnnouncementsPanel'));
-export const InviteExportPanel = React.lazy(() => import('../components/InviteExportPanel'));
+export const PaymentPanel = lazyWithRetry(() => import('../components/PaymentPanel'));
+export const StoreModal = lazyWithRetry(() => import('../components/StoreModal'));
+export const DailyRewardsModal = lazyWithRetry(() => import('../components/DailyRewardsModal'));
+export const APIUsagePanel = lazyWithRetry(() => import('../components/APIUsagePanel'));
+export const ExportJobsPanel = lazyWithRetry(() => import('../components/ExportJobsPanel'));
+export const ScheduledAnnouncementsPanel = lazyWithRetry(() => import('../components/ScheduledAnnouncementsPanel'));
+export const InviteExportPanel = lazyWithRetry(() => import('../components/InviteExportPanel'));
 
 // 🚀 BATCH 6: Advanced Search & Analytics
-export const AdvancedSearchPanel = React.lazy(() => import('../components/AdvancedSearchPanel'));
-export const GrowthMetricsPanel = React.lazy(() => import('../components/GrowthMetricsPanel'));
-export const LinkPreviewRenderer = React.lazy(() => import('../components/LinkPreviewRenderer'));
+export const AdvancedSearchPanel = lazyWithRetry(() => import('../components/AdvancedSearchPanel'));
+export const GrowthMetricsPanel = lazyWithRetry(() => import('../components/GrowthMetricsPanel'));
+export const LinkPreviewRenderer = lazyWithRetry(() => import('../components/LinkPreviewRenderer'));
 
 // 🚀 BATCH 7: Store & Gamification
-export const InventoryPanel = React.lazy(() => import('../components/InventoryPanel'));
-export const WaitlistPanel = React.lazy(() => import('../components/WaitlistPanel'));
-export const ReferralRewardsPanel = React.lazy(() => import('../components/ReferralRewardsPanel'));
+export const InventoryPanel = lazyWithRetry(() => import('../components/InventoryPanel'));
+export const WaitlistPanel = lazyWithRetry(() => import('../components/WaitlistPanel'));
+export const ReferralRewardsPanel = lazyWithRetry(() => import('../components/ReferralRewardsPanel'));
 
 // 🔐 Auth & Security Pages
-export const VerifyEmailPage = React.lazy(() => import('../pages/VerifyEmailPage'));
-export const ForgotPasswordPage = React.lazy(() => import('../pages/ForgotPasswordPage'));
-export const ResetPasswordPage = React.lazy(() => import('../pages/ResetPasswordPage'));
-export const TwoFactorLoginPage = React.lazy(() => import('../pages/TwoFactorLoginPage'));
-export const TwoFactorSetup = React.lazy(() => import('../components/TwoFactorSetup'));
-export const TwoFactorLogin = React.lazy(() => import('../components/TwoFactorLogin'));
+export const VerifyEmailPage = lazyWithRetry(() => import('../pages/VerifyEmailPage'));
+export const ForgotPasswordPage = lazyWithRetry(() => import('../pages/ForgotPasswordPage'));
+export const ResetPasswordPage = lazyWithRetry(() => import('../pages/ResetPasswordPage'));
+export const TwoFactorLoginPage = lazyWithRetry(() => import('../pages/TwoFactorLoginPage'));
+export const TwoFactorSetup = lazyWithRetry(() => import('../components/TwoFactorSetup'));
+export const TwoFactorLogin = lazyWithRetry(() => import('../components/TwoFactorLogin'));
 
 // 🔗 Vanity & Invite
-export const VanityInviteScreen = React.lazy(() => import('../components/VanityInviteScreen'));
-export const InviteCodeScreen = React.lazy(() => import('../components/InviteCodeScreen'));
-export const EmailVerification = React.lazy(() => import('../components/EmailVerification'));
+export const VanityInviteScreen = lazyWithRetry(() => import('../components/VanityInviteScreen'));
+export const InviteCodeScreen = lazyWithRetry(() => import('../components/InviteCodeScreen'));
+export const EmailVerification = lazyWithRetry(() => import('../components/EmailVerification'));
 
 // 📱 Mobile Components
-export const MobileNav = React.lazy(() => import('../components/MobileNav'));
-export const SwipeActions = React.lazy(() => import('../components/SwipeActions'));
-export const VoiceMessage = React.lazy(() => import('../components/VoiceMessage'));
+export const MobileNav = lazyWithRetry(() => import('../components/MobileNav'));
+export const SwipeActions = lazyWithRetry(() => import('../components/SwipeActions'));
+export const VoiceMessage = lazyWithRetry(() => import('../components/VoiceMessage'));
 
 // ⚡ Primary lazy components
-export const FriendsTab = React.lazy(() => import('../FriendsTab'));
-export const RoomList = React.lazy(() => import('../RoomList'));
-export const UserProfilePanel = React.lazy(() => import('../UserProfilePanel'));
-export const VoiceChatPanel = React.lazy(() => import('../VoiceChatPanel'));
-export const ChatUserList = React.lazy(() => import('../ChatUserList'));
-export const PinnedMessages = React.lazy(() => import('../PinnedMessages'));
-export const FloatingVoiceIsland = React.lazy(() => import('../FloatingVoiceIsland'));
-export const CinemaPlayer = React.lazy(() => import('../components/CinemaPlayer'));
-export const ConnectionsPanel = React.lazy(() => import('../components/ConnectionsPanel'));
-export const PasswordSetupModal = React.lazy(() => import('../components/PasswordSetupModal'));
-export const NotificationDropdown = React.lazy(() => import('../components/NotificationDropdown'));
+export const FriendsTab = lazyWithRetry(() => import('../FriendsTab'));
+export const RoomList = lazyWithRetry(() => import('../RoomList'));
+export const UserProfilePanel = lazyWithRetry(() => import('../UserProfilePanel'));
+export const VoiceChatPanel = lazyWithRetry(() => import('../VoiceChatPanel'));
+export const ChatUserList = lazyWithRetry(() => import('../ChatUserList'));
+export const PinnedMessages = lazyWithRetry(() => import('../PinnedMessages'));
+export const FloatingVoiceIsland = lazyWithRetry(() => import('../FloatingVoiceIsland'));
+export const CinemaPlayer = lazyWithRetry(() => import('../components/CinemaPlayer'));
+export const ConnectionsPanel = lazyWithRetry(() => import('../components/ConnectionsPanel'));
+export const PasswordSetupModal = lazyWithRetry(() => import('../components/PasswordSetupModal'));
+export const NotificationDropdown = lazyWithRetry(() => import('../components/NotificationDropdown'));
 
 // 📊 Analytics Panels
-export const ReactionStatsPanel = React.lazy(() => import('../components/panels/ReactionStatsPanel'));
-export const ServerHealthPanel = React.lazy(() => import('../components/panels/ServerHealthPanel'));
-export const ChannelAnalyticsPanel = React.lazy(() => import('../components/panels/ChannelAnalyticsPanel'));
-export const SmartSuggestionsPanel = React.lazy(() => import('../components/panels/SmartSuggestionsPanel'));
-export const UserPresenceInsightsPanel = React.lazy(() => import('../components/panels/UserPresenceInsightsPanel'));
+export const ReactionStatsPanel = lazyWithRetry(() => import('../components/panels/ReactionStatsPanel'));
+export const ServerHealthPanel = lazyWithRetry(() => import('../components/panels/ServerHealthPanel'));
+export const ChannelAnalyticsPanel = lazyWithRetry(() => import('../components/panels/ChannelAnalyticsPanel'));
+export const SmartSuggestionsPanel = lazyWithRetry(() => import('../components/panels/SmartSuggestionsPanel'));
+export const UserPresenceInsightsPanel = lazyWithRetry(() => import('../components/panels/UserPresenceInsightsPanel'));
 
 // UI Components
-export const UserFooter = React.lazy(() => import('../components/UserFooter'));
-export const UserContextMenu = React.lazy(() => import('../components/UserContextMenu'));
+export const UserFooter = lazyWithRetry(() => import('../components/UserFooter'));
+export const UserContextMenu = lazyWithRetry(() => import('../components/UserContextMenu'));
 
 // 🎮 BATCH 8: New Features
-export const MiniGamesPanel = React.lazy(() => import('../components/MiniGamesPanel'));
-export const ProjectCollaborationPanel = React.lazy(() => import('../components/ProjectCollaborationPanel'));
-export const AvatarStudioPanel = React.lazy(() => import('../components/AvatarStudioPanel'));
+export const MiniGamesPanel = lazyWithRetry(() => import('../components/MiniGamesPanel'));
+export const ProjectCollaborationPanel = lazyWithRetry(() => import('../components/ProjectCollaborationPanel'));
+export const AvatarStudioPanel = lazyWithRetry(() => import('../components/AvatarStudioPanel'));
 
 // 🔥 BATCH 9: Essential UX
-export const ImageLightbox = React.lazy(() => import('../components/ImageLightbox'));
-export const ChannelAboutPanel = React.lazy(() => import('../components/ChannelAboutPanel'));
-export const MessageSchedulePicker = React.lazy(() => import('../components/MessageSchedulePicker'));
+export const ImageLightbox = lazyWithRetry(() => import('../components/ImageLightbox'));
+export const ChannelAboutPanel = lazyWithRetry(() => import('../components/ChannelAboutPanel'));
+export const MessageSchedulePicker = lazyWithRetry(() => import('../components/MessageSchedulePicker'));
 
 // 🔥 BATCH 10: Core UX
-export const UserSettingsModal = React.lazy(() => import('../components/UserSettingsModal'));
-export const KeyboardShortcutsModal = React.lazy(() => import('../components/KeyboardShortcutsModal'));
-export const CommandPalette = React.lazy(() => import('../components/CommandPalette'));
-export const ServerDiscoveryPage = React.lazy(() => import('../components/ServerDiscoveryPage'));
-export const AppearanceSettingsPanel = React.lazy(() => import('../components/AppearanceSettingsPanel'));
-export const LanguageSelector = React.lazy(() => import('../components/LanguageSelector'));
-export const ChangelogPanel = React.lazy(() => import('../components/ChangelogPanel'));
-export const LogoutModal = React.lazy(() => import('../components/LogoutModal'));
-export const NotificationSoundSettings = React.lazy(() => import('../components/NotificationSoundSettings'));
-export const QuickSwitcher = React.lazy(() => import('../components/QuickSwitcher'));
+export const UserSettingsModal = lazyWithRetry(() => import('../components/UserSettingsModal'));
+export const KeyboardShortcutsModal = lazyWithRetry(() => import('../components/KeyboardShortcutsModal'));
+export const CommandPalette = lazyWithRetry(() => import('../components/CommandPalette'));
+export const ServerDiscoveryPage = lazyWithRetry(() => import('../components/ServerDiscoveryPage'));
+export const AppearanceSettingsPanel = lazyWithRetry(() => import('../components/AppearanceSettingsPanel'));
+export const LanguageSelector = lazyWithRetry(() => import('../components/LanguageSelector'));
+export const ChangelogPanel = lazyWithRetry(() => import('../components/ChangelogPanel'));
+export const LogoutModal = lazyWithRetry(() => import('../components/LogoutModal'));
+export const NotificationSoundSettings = lazyWithRetry(() => import('../components/NotificationSoundSettings'));
+export const QuickSwitcher = lazyWithRetry(() => import('../components/QuickSwitcher'));
 
 // Security & Account
-export const LoginHistory = React.lazy(() => import('../components/LoginHistory'));
-export const SecuritySettingsPanel = React.lazy(() => import('../components/SecuritySettingsPanel'));
-export const PrivacySettingsPanel = React.lazy(() => import('../components/PrivacySettingsPanel'));
-export const AccountDeletionModal = React.lazy(() => import('../components/AccountDeletionModal'));
-export const BlockListPanel = React.lazy(() => import('../components/BlockListPanel'));
-export const E2EESettingsPanel = React.lazy(() => import('../components/E2EESettingsPanel'));
+export const LoginHistory = lazyWithRetry(() => import('../components/LoginHistory'));
+export const SecuritySettingsPanel = lazyWithRetry(() => import('../components/SecuritySettingsPanel'));
+export const PrivacySettingsPanel = lazyWithRetry(() => import('../components/PrivacySettingsPanel'));
+export const AccountDeletionModal = lazyWithRetry(() => import('../components/AccountDeletionModal'));
+export const BlockListPanel = lazyWithRetry(() => import('../components/BlockListPanel'));
+export const E2EESettingsPanel = lazyWithRetry(() => import('../components/E2EESettingsPanel'));
 
 // Communication
-export const ThreadView = React.lazy(() => import('../components/ThreadView'));
-export const ScheduledMessagesPanel = React.lazy(() => import('../components/ScheduledMessagesPanel'));
-export const ReminderPanel = React.lazy(() => import('../components/ReminderPanel'));
-export const ForumPanel = React.lazy(() => import('../components/ForumPanel'));
-export const StageChannelPanel = React.lazy(() => import('../components/StageChannelPanel'));
-export const VideoCallModal = React.lazy(() => import('../components/VideoCallModal'));
-export const VoiceSettingsPanel = React.lazy(() => import('../components/VoiceSettingsPanel'));
-export const MessageSearchPanel = React.lazy(() => import('../components/MessageSearchPanel'));
-export const WatchTogether = React.lazy(() => import('../components/WatchTogether'));
+export const ThreadView = lazyWithRetry(() => import('../components/ThreadView'));
+export const ScheduledMessagesPanel = lazyWithRetry(() => import('../components/ScheduledMessagesPanel'));
+export const ReminderPanel = lazyWithRetry(() => import('../components/ReminderPanel'));
+export const ForumPanel = lazyWithRetry(() => import('../components/ForumPanel'));
+export const StageChannelPanel = lazyWithRetry(() => import('../components/StageChannelPanel'));
+export const VideoCallModal = lazyWithRetry(() => import('../components/VideoCallModal'));
+export const VoiceSettingsPanel = lazyWithRetry(() => import('../components/VoiceSettingsPanel'));
+export const MessageSearchPanel = lazyWithRetry(() => import('../components/MessageSearchPanel'));
+export const WatchTogether = lazyWithRetry(() => import('../components/WatchTogether'));
 
 // Server Management
-export const AutoRolesPanel = React.lazy(() => import('../components/AutoRolesPanel'));
-export const ReactionRolesPanel = React.lazy(() => import('../components/ReactionRolesPanel'));
-export const WelcomeMessagesPanel = React.lazy(() => import('../components/WelcomeMessagesPanel'));
-export const EventCalendar = React.lazy(() => import('../components/EventCalendar'));
-export const GiveawayPanel = React.lazy(() => import('../components/GiveawayPanel'));
-export const TicketSystemPanel = React.lazy(() => import('../components/TicketSystemPanel'));
-export const StarboardPanel = React.lazy(() => import('../components/StarboardPanel'));
-export const ServerBackupPanel = React.lazy(() => import('../components/ServerBackupPanel'));
-export const BanAppealsPanel = React.lazy(() => import('../components/BanAppealsPanel'));
-export const CustomCommandsPanel = React.lazy(() => import('../components/CustomCommandsPanel'));
-export const LevelingSystemPanel = React.lazy(() => import('../components/LevelingSystemPanel'));
-export const LiveStreamPanel = React.lazy(() => import('../components/LiveStreamPanel'));
+export const AutoRolesPanel = lazyWithRetry(() => import('../components/AutoRolesPanel'));
+export const ReactionRolesPanel = lazyWithRetry(() => import('../components/ReactionRolesPanel'));
+export const WelcomeMessagesPanel = lazyWithRetry(() => import('../components/WelcomeMessagesPanel'));
+export const EventCalendar = lazyWithRetry(() => import('../components/EventCalendar'));
+export const GiveawayPanel = lazyWithRetry(() => import('../components/GiveawayPanel'));
+export const TicketSystemPanel = lazyWithRetry(() => import('../components/TicketSystemPanel'));
+export const StarboardPanel = lazyWithRetry(() => import('../components/StarboardPanel'));
+export const ServerBackupPanel = lazyWithRetry(() => import('../components/ServerBackupPanel'));
+export const BanAppealsPanel = lazyWithRetry(() => import('../components/BanAppealsPanel'));
+export const CustomCommandsPanel = lazyWithRetry(() => import('../components/CustomCommandsPanel'));
+export const LevelingSystemPanel = lazyWithRetry(() => import('../components/LevelingSystemPanel'));
+export const LiveStreamPanel = lazyWithRetry(() => import('../components/LiveStreamPanel'));
 
 // Engagement & Social
-export const AchievementsPanel = React.lazy(() => import('../components/AchievementsPanel'));
-export const BirthdaySystemPanel = React.lazy(() => import('../components/BirthdaySystemPanel'));
-export const PremiumModal = React.lazy(() => import('../components/PremiumModal'));
-export const MusicPlayer = React.lazy(() => import('../components/MusicPlayer'));
-export const BotMarketplace = React.lazy(() => import('../components/BotMarketplace'));
-export const ProfileCustomization = React.lazy(() => import('../components/ProfileCustomization'));
-export const IntegrationHubPanel = React.lazy(() => import('../components/IntegrationHubPanel'));
-export const TournamentSystem = React.lazy(() => import('../components/TournamentSystem'));
+export const AchievementsPanel = lazyWithRetry(() => import('../components/AchievementsPanel'));
+export const BirthdaySystemPanel = lazyWithRetry(() => import('../components/BirthdaySystemPanel'));
+export const PremiumModal = lazyWithRetry(() => import('../components/PremiumModal'));
+export const MusicPlayer = lazyWithRetry(() => import('../components/MusicPlayer'));
+export const BotMarketplace = lazyWithRetry(() => import('../components/BotMarketplace'));
+export const ProfileCustomization = lazyWithRetry(() => import('../components/ProfileCustomization'));
+export const IntegrationHubPanel = lazyWithRetry(() => import('../components/IntegrationHubPanel'));
+export const TournamentSystem = lazyWithRetry(() => import('../components/TournamentSystem'));
 
 // Advanced Features
-export const HighlightsPanel = React.lazy(() => import('../components/HighlightsPanel'));
-export const CustomEmbedPanel = React.lazy(() => import('../components/CustomEmbedPanel'));
-export const SpotifyIntegrationPanel = React.lazy(() => import('../components/SpotifyIntegrationPanel'));
-export const ServerClonePanel = React.lazy(() => import('../components/ServerClonePanel'));
-export const WeeklyChallengesPanel = React.lazy(() => import('../components/WeeklyChallengesPanel'));
+export const HighlightsPanel = lazyWithRetry(() => import('../components/HighlightsPanel'));
+export const CustomEmbedPanel = lazyWithRetry(() => import('../components/CustomEmbedPanel'));
+export const SpotifyIntegrationPanel = lazyWithRetry(() => import('../components/SpotifyIntegrationPanel'));
+export const ServerClonePanel = lazyWithRetry(() => import('../components/ServerClonePanel'));
+export const WeeklyChallengesPanel = lazyWithRetry(() => import('../components/WeeklyChallengesPanel'));
 
 // 🔥 BATCH 11: Moderation & Admin
-export const ModeratorTools = React.lazy(() => import('../components/ModeratorTools'));
-export const AIModerationPanel = React.lazy(() => import('../components/AIModerationPanel'));
-export const SpamDetectionPanel = React.lazy(() => import('../components/SpamDetectionPanel'));
-export const AuditLogsPanel = React.lazy(() => import('../components/AuditLogsPanel'));
-export const BanHistoryPanel = React.lazy(() => import('../components/BanHistoryPanel'));
-export const ModerationLogsPanel = React.lazy(() => import('../components/ModerationLogsPanel'));
-export const RaidProtectionDashboard = React.lazy(() => import('../components/RaidProtectionDashboard'));
-export const SecurityAlertsPanel = React.lazy(() => import('../components/SecurityAlertsPanel'));
+export const ModeratorTools = lazyWithRetry(() => import('../components/ModeratorTools'));
+export const AIModerationPanel = lazyWithRetry(() => import('../components/AIModerationPanel'));
+export const SpamDetectionPanel = lazyWithRetry(() => import('../components/SpamDetectionPanel'));
+export const AuditLogsPanel = lazyWithRetry(() => import('../components/AuditLogsPanel'));
+export const BanHistoryPanel = lazyWithRetry(() => import('../components/BanHistoryPanel'));
+export const ModerationLogsPanel = lazyWithRetry(() => import('../components/ModerationLogsPanel'));
+export const RaidProtectionDashboard = lazyWithRetry(() => import('../components/RaidProtectionDashboard'));
+export const SecurityAlertsPanel = lazyWithRetry(() => import('../components/SecurityAlertsPanel'));
 
 // Communication & Messages
-export const BookmarksPanel = React.lazy(() => import('../components/BookmarksPanel'));
-export const GIFPickerPanel = React.lazy(() => import('../components/GIFPickerPanel'));
-export const PollCreator = React.lazy(() => import('../components/PollCreator'));
-export const StickersPanel = React.lazy(() => import('../components/StickersPanel'));
-export const SavedMessagesModal = React.lazy(() => import('../components/SavedMessagesModal'));
-export const NotificationsCenter = React.lazy(() => import('../components/NotificationsCenter'));
-export const MessageSummaryPanel = React.lazy(() => import('../components/MessageSummaryPanel'));
-export const TranslationPanel = React.lazy(() => import('../components/TranslationPanel'));
+export const BookmarksPanel = lazyWithRetry(() => import('../components/BookmarksPanel'));
+export const GIFPickerPanel = lazyWithRetry(() => import('../components/GIFPickerPanel'));
+export const PollCreator = lazyWithRetry(() => import('../components/PollCreator'));
+export const StickersPanel = lazyWithRetry(() => import('../components/StickersPanel'));
+export const SavedMessagesModal = lazyWithRetry(() => import('../components/SavedMessagesModal'));
+export const NotificationsCenter = lazyWithRetry(() => import('../components/NotificationsCenter'));
+export const MessageSummaryPanel = lazyWithRetry(() => import('../components/MessageSummaryPanel'));
+export const TranslationPanel = lazyWithRetry(() => import('../components/TranslationPanel'));
 
 // Server Management (Batch 11)
-export const ChannelSettingsModal = React.lazy(() => import('../components/ChannelSettingsModal'));
-export const InviteModal = React.lazy(() => import('../components/InviteModal'));
-export const ServerTemplates = React.lazy(() => import('../components/ServerTemplates'));
-export const ServerAnalyticsDashboard = React.lazy(() => import('../components/ServerAnalyticsDashboard'));
-export const RolesManager = React.lazy(() => import('../components/RolesManager'));
-export const WelcomeScreenEditor = React.lazy(() => import('../components/WelcomeScreenEditor'));
-export const CommunitySettingsPanel = React.lazy(() => import('../components/CommunitySettingsPanel'));
-export const InviteLinkManager = React.lazy(() => import('../components/InviteLinkManager'));
+export const ChannelSettingsModal = lazyWithRetry(() => import('../components/ChannelSettingsModal'));
+export const InviteModal = lazyWithRetry(() => import('../components/InviteModal'));
+export const ServerTemplates = lazyWithRetry(() => import('../components/ServerTemplates'));
+export const ServerAnalyticsDashboard = lazyWithRetry(() => import('../components/ServerAnalyticsDashboard'));
+export const RolesManager = lazyWithRetry(() => import('../components/RolesManager'));
+export const WelcomeScreenEditor = lazyWithRetry(() => import('../components/WelcomeScreenEditor'));
+export const CommunitySettingsPanel = lazyWithRetry(() => import('../components/CommunitySettingsPanel'));
+export const InviteLinkManager = lazyWithRetry(() => import('../components/InviteLinkManager'));
 
 // Bot & Developer
-export const BotBuilder = React.lazy(() => import('../components/BotBuilder'));
-export const BotDeveloperPortal = React.lazy(() => import('../components/BotDeveloperPortal'));
-export const WebhookManager = React.lazy(() => import('../components/WebhookManager'));
-export const APIKeysPanel = React.lazy(() => import('../components/APIKeysPanel'));
-export const SlashCommandsPanel = React.lazy(() => import('../components/SlashCommandsPanel'));
-export const CodeRunnerPanel = React.lazy(() => import('../components/CodeRunnerPanel'));
+export const BotBuilder = lazyWithRetry(() => import('../components/BotBuilder'));
+export const BotDeveloperPortal = lazyWithRetry(() => import('../components/BotDeveloperPortal'));
+export const WebhookManager = lazyWithRetry(() => import('../components/WebhookManager'));
+export const APIKeysPanel = lazyWithRetry(() => import('../components/APIKeysPanel'));
+export const SlashCommandsPanel = lazyWithRetry(() => import('../components/SlashCommandsPanel'));
+export const CodeRunnerPanel = lazyWithRetry(() => import('../components/CodeRunnerPanel'));
 
 // Profile & Social
-export const ProfileCard = React.lazy(() => import('../components/ProfileCard'));
-export const UserNotesModal = React.lazy(() => import('../components/UserNotesModal'));
-export const StatusPicker = React.lazy(() => import('../components/StatusPicker'));
-export const MutualsPanel = React.lazy(() => import('../components/MutualsPanel'));
-export const ProfileShowcasePanel = React.lazy(() => import('../components/ProfileShowcasePanel'));
-export const SessionManagerModal = React.lazy(() => import('../components/SessionManagerModal'));
+export const ProfileCard = lazyWithRetry(() => import('../components/ProfileCard'));
+export const UserNotesModal = lazyWithRetry(() => import('../components/UserNotesModal'));
+export const StatusPicker = lazyWithRetry(() => import('../components/StatusPicker'));
+export const MutualsPanel = lazyWithRetry(() => import('../components/MutualsPanel'));
+export const ProfileShowcasePanel = lazyWithRetry(() => import('../components/ProfileShowcasePanel'));
+export const SessionManagerModal = lazyWithRetry(() => import('../components/SessionManagerModal'));
 
 // Premium & Economy
-export const CoinStoreModal = React.lazy(() => import('../components/CoinStoreModal'));
-export const PremiumManagementPanel = React.lazy(() => import('../components/PremiumManagementPanel'));
-export const SubscriptionManager = React.lazy(() => import('../components/SubscriptionManager'));
-export const GiftPremiumPanel = React.lazy(() => import('../components/GiftPremiumPanel'));
-export const PremiumMarketplace = React.lazy(() => import('../components/PremiumMarketplace'));
-export const ThemeMarketplace = React.lazy(() => import('../components/ThemeMarketplace'));
+export const CoinStoreModal = lazyWithRetry(() => import('../components/CoinStoreModal'));
+export const PremiumManagementPanel = lazyWithRetry(() => import('../components/PremiumManagementPanel'));
+export const SubscriptionManager = lazyWithRetry(() => import('../components/SubscriptionManager'));
+export const GiftPremiumPanel = lazyWithRetry(() => import('../components/GiftPremiumPanel'));
+export const PremiumMarketplace = lazyWithRetry(() => import('../components/PremiumMarketplace'));
+export const ThemeMarketplace = lazyWithRetry(() => import('../components/ThemeMarketplace'));
 
 // Advanced
-export const AIChatbotPanel = React.lazy(() => import('../components/AIChatbotPanel'));
-export const CollaborativeCodeEditor = React.lazy(() => import('../components/CollaborativeCodeEditor'));
-export const ScreenShareModal = React.lazy(() => import('../components/ScreenShareModal'));
-export const LiveStreamModal = React.lazy(() => import('../components/LiveStreamModal'));
-export const AdvancedAnalyticsDashboard = React.lazy(() => import('../components/AdvancedAnalyticsDashboard'));
-export const FileManagerPanel = React.lazy(() => import('../components/FileManagerPanel'));
-export const ReportsPanel = React.lazy(() => import('../components/ReportsPanel'));
-export const ErrorReportingPanel = React.lazy(() => import('../components/ErrorReportingPanel'));
+export const AIChatbotPanel = lazyWithRetry(() => import('../components/AIChatbotPanel'));
+export const CollaborativeCodeEditor = lazyWithRetry(() => import('../components/CollaborativeCodeEditor'));
+export const ScreenShareModal = lazyWithRetry(() => import('../components/ScreenShareModal'));
+export const LiveStreamModal = lazyWithRetry(() => import('../components/LiveStreamModal'));
+export const AdvancedAnalyticsDashboard = lazyWithRetry(() => import('../components/AdvancedAnalyticsDashboard'));
+export const FileManagerPanel = lazyWithRetry(() => import('../components/FileManagerPanel'));
+export const ReportsPanel = lazyWithRetry(() => import('../components/ReportsPanel'));
+export const ErrorReportingPanel = lazyWithRetry(() => import('../components/ErrorReportingPanel'));

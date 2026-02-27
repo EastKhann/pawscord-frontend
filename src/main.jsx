@@ -3,6 +3,16 @@
 // 🔇 Console cleanup — silences noisy logs in production, filters spam in dev
 import './utils/consoleCleanup';
 
+// 🔄 Global handler for unhandled chunk load errors (dynamic import failures)
+// Catches failures that slip through React ErrorBoundary (e.g., happening outside render)
+import { isChunkLoadError, handleChunkErrorInBoundary } from './utils/lazyWithRetry';
+window.addEventListener('unhandledrejection', (event) => {
+    if (event.reason && isChunkLoadError(event.reason)) {
+        event.preventDefault(); // Suppress the error from console
+        handleChunkErrorInBoundary(event.reason);
+    }
+});
+
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
