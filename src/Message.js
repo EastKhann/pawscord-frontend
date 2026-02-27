@@ -25,7 +25,7 @@ const Message = ({
     onSetReply, onImageClick, absoluteHostUrl, onScrollToMessage, onVisible,
     messageEditHistoryUrl, onViewProfile, onStartForward, fetchWithAuth,
     isSelectionMode, isSelected, onToggleSelection, allUsers, getDeterministicAvatar, onShowChart,
-    onContentLoad
+    onContentLoad, isGrouped = false
 }) => {
     if (!msg || typeof msg !== 'object' || !msg.id) return null;
 
@@ -39,6 +39,11 @@ const Message = ({
     const [contextMenu, setContextMenu] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
     const [showReactionPicker, setShowReactionPicker] = useState(false);
+    const [swipeOffset, setSwipeOffset] = useState(0);
+
+    const touchStartXRef = useRef(0);
+    const touchStartYRef = useRef(0);
+    const swipingRef = useRef(false);
 
     const isMyMessage = msg.username === currentUser;
     const isAIMessage = ['Pawscord AI', 'PawPaw AI', '⚡ Signal Bot'].includes(msg.username);
@@ -167,16 +172,49 @@ const Message = ({
     return (
         <div ref={messageRef}
             className="chat-msg"
-            style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent', cursor: isSelectionMode ? 'pointer' : 'default' }}
+            style={{
+                ...(isGrouped ? styles.chatMessageGrouped : styles.chatMessage),
+                backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent',
+                cursor: isSelectionMode ? 'pointer' : 'default',
+                transform: swipeOffset > 0 ? `translateX(${Math.min(swipeOffset, 60)}px)` : 'none',
+                transition: swipeOffset === 0 ? 'transform 0.2s ease, background-color 0.1s ease' : 'background-color 0.1s ease',
+            }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => { setIsHovered(false); setShowReactionPicker(false); }}
             onContextMenu={handleContextMenu}
             id={`message-${msg.id}`}
             onClick={() => isSelectionMode && onToggleSelection(msg.id)}
+            onTouchStart={(e) => {
+                touchStartXRef.current = e.touches[0].clientX;
+                touchStartYRef.current = e.touches[0].clientY;
+                swipingRef.current = false;
+            }}
+            onTouchMove={(e) => {
+                const dx = e.touches[0].clientX - touchStartXRef.current;
+                const dy = Math.abs(e.touches[0].clientY - touchStartYRef.current);
+                if (!swipingRef.current && Math.abs(dx) > 10 && dy < 20) swipingRef.current = true;
+                if (swipingRef.current && dx > 0) setSwipeOffset(dx);
+            }}
+            onTouchEnd={() => {
+                if (swipeOffset > 50 && onSetReply) {
+                    // Faz 2.3: Haptic feedback on swipe-to-reply
+                    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(50);
+                    onSetReply(msg);
+                }
+                setSwipeOffset(0);
+                swipingRef.current = false;
+            }}
         >
             <div style={styles.avatarContainer}>
-                <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar}
-                    onClick={() => onViewProfile(msg.username)} placeholder={getDeterministicAvatar(msg.username)} />
+                {isGrouped ? (
+                    // Grouped: show tiny timestamp at avatar position on hover
+                    <span style={{ ...styles.groupedTimestamp, opacity: isHovered ? 1 : 0 }} aria-hidden="true">
+                        {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                    </span>
+                ) : (
+                    <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar}
+                        onClick={() => onViewProfile(msg.username)} placeholder={getDeterministicAvatar(msg.username)} />
+                )}
             </div>
 
             <div style={styles.contentWrapper}>
@@ -190,18 +228,21 @@ const Message = ({
                     </div>
                 )}
 
-                <div style={styles.messageHeader}>
-                    <strong style={{ cursor: 'pointer', color: msg.username === '⚡ Signal Bot' ? '#5865f2' : (isAdmin ? '#f0b232' : '#fff') }}
-                        onClick={() => onViewProfile(msg.username)}>
-                        {isAIMessage && '🤖 '} {msg.username}
-                    </strong>
-                    {msg.is_locked && <FaLock style={{ marginLeft: 8, color: '#f0b232', fontSize: '0.9em' }} title="Locked" />}
-                    <span style={styles.timestamp}>
-                        {formatTimestamp(msg.timestamp)}
-                        {msg.is_edited && <EditHistory messageId={msg.id} messageEditHistoryUrl={messageEditHistoryUrl} fetchWithAuth={fetchWithAuth} />}
-                        {msg.is_pinned && <FaThumbtack style={{ marginLeft: 5, color: '#f0b232', fontSize: '0.8em' }} />}
-                    </span>
-                </div>
+                {/* Only show header for non-grouped messages */}
+                {!isGrouped && (
+                    <div style={styles.messageHeader}>
+                        <strong style={{ cursor: 'pointer', color: msg.username === '\u26a1 Signal Bot' ? '#5865f2' : (isAdmin ? '#f0b232' : '#fff') }}
+                            onClick={() => onViewProfile(msg.username)}>
+                            {isAIMessage && '\ud83e\udd16 '} {msg.username}
+                        </strong>
+                        {msg.is_locked && <FaLock style={{ marginLeft: 8, color: '#f0b232', fontSize: '0.9em' }} title="Locked" />}
+                        <span style={styles.timestamp}>
+                            {formatTimestamp(msg.timestamp)}
+                            {msg.is_edited && <EditHistory messageId={msg.id} messageEditHistoryUrl={messageEditHistoryUrl} fetchWithAuth={fetchWithAuth} />}
+                            {msg.is_pinned && <FaThumbtack style={{ marginLeft: 5, color: '#f0b232', fontSize: '0.8em' }} />}
+                        </span>
+                    </div>
+                )}
 
                 {isHovered && !msg.temp_id && !isSelectionMode && (
                     <Suspense fallback={null}>
@@ -299,11 +340,19 @@ const Message = ({
                                 return <p style={{ margin: 0 }}>{kids.map((child, i) => {
                                     if (typeof child === 'string') {
                                         const parts = child.split(/(\|\|.*?\|\|)/g);
-                                        return parts.map((part, j) =>
-                                            (part.startsWith('||') && part.endsWith('||'))
-                                                ? <Suspense key={`${i}-${j}`} fallback={null}><Spoiler>{part.slice(2, -2)}</Spoiler></Suspense>
-                                                : part
-                                        );
+                                        return parts.map((part, j) => {
+                                            if (part.startsWith('||') && part.endsWith('||'))
+                                                return <Suspense key={`${i}-${j}`} fallback={null}><Spoiler>{part.slice(2, -2)}</Spoiler></Suspense>;
+                                            // ── Faz 2.2: @mention highlighting ──
+                                            const mentionParts = part.split(/(@\w+)/g);
+                                            return mentionParts.map((mp, k) =>
+                                                /^@\w+$/.test(mp)
+                                                    ? <span key={`${i}-${j}-${k}`}
+                                                        style={{ color: '#5865f2', background: 'rgba(88,101,242,0.15)', borderRadius: '3px', padding: '0 2px', fontWeight: 500, cursor: 'default' }}
+                                                        title={mp}>{mp}</span>
+                                                    : mp
+                                            );
+                                        });
                                     }
                                     return child;
                                 })}</p>;

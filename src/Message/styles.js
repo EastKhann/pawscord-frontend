@@ -14,6 +14,37 @@ const styles = {
         minHeight: '44px'
     },
 
+    // Grouped (continuation) message — no header, tighter padding
+    chatMessageGrouped: {
+        display: 'flex',
+        padding: '1px 48px 1px 72px',
+        marginBottom: '0',
+        position: 'relative',
+        transition: 'background-color 0.1s ease',
+        width: '100%',
+        boxSizing: 'border-box',
+        borderRadius: '0',
+        minHeight: '22px'
+    },
+
+    // Tiny timestamp shown on hover for grouped messages (at avatar position)
+    groupedTimestamp: {
+        position: 'absolute',
+        left: '0',
+        width: '56px',
+        textAlign: 'right',
+        fontSize: '0.65rem',
+        color: '#72767d',
+        fontFamily: "'gg sans', 'Noto Sans', sans-serif",
+        opacity: 0,
+        transition: 'opacity 0.1s ease',
+        lineHeight: '1.375rem',
+        paddingRight: '8px',
+        userSelect: 'none',
+        pointerEvents: 'none',
+        whiteSpace: 'nowrap',
+    },
+
     avatarContainer: {
         position: 'absolute',
         left: '16px',

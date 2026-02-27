@@ -16,11 +16,12 @@ function initToastContainer() {
         toastContainer.id = 'toast-container';
         toastContainer.style.cssText = `
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
+            top: auto;
             z-index: 999999;
             display: flex;
-            flex-direction: column;
+            flex-direction: column-reverse;
             gap: 10px;
             pointer-events: none;
         `;

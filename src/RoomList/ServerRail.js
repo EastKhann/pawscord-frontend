@@ -54,7 +54,10 @@ const ServerRail = ({
 
             {/* Server Icons */}
             {servers && servers.map((server, index) => {
-                const initials = server.name.substring(0, 2).toUpperCase();
+                const initials = (server.name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || server.name.substring(0, 2)).toUpperCase();
+                const _hash = server.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+                const _GRAD = [['#5865f2', '#7289da'], ['#3ba55d', '#57f287'], ['#ed4245', '#ff6b6b'], ['#faa81a', '#ffca28'], ['#9c59b6', '#c56bcf'], ['#00b0f4', '#00d4ff']];
+                const _g = _GRAD[_hash % _GRAD.length];
                 const isActive = selectedServerId === server.id;
                 const isDragging = draggedServerId === server.id;
                 const isDropTarget = dropTargetIndex === index && !isDragging;
@@ -107,11 +110,12 @@ const ServerRail = ({
                             onMouseDown={(e) => { e.currentTarget.style.cursor = 'grabbing'; e.currentTarget.style.transform = 'scale(0.95)'; }}
                             onMouseUp={(e) => { e.currentTarget.style.cursor = 'grab'; e.currentTarget.style.transform = 'scale(1)'; }}
                             title={server.name}
+                            data-tooltip={server.name}
                         >
                             {server.icon ? (
                                 <LazyImage src={server.icon} alt={server.name} style={{ width: '100%', height: '100%', borderRadius: 'inherit', objectFit: 'cover' }} />
                             ) : (
-                                <span style={{ fontWeight: 'bold', fontSize: '14px', color: 'white' }}>{initials}</span>
+                                <span className={`server-icon-initials${isActive ? ' active' : ''}`} style={{ background: `linear-gradient(135deg, ${_g[0]} 0%, ${_g[1]} 100%)`, fontSize: initials.length > 1 ? '14px' : '18px' }} aria-hidden="true">{initials}</span>
                             )}
                             {serverUnread > 0 && (
                                 <div style={styles.serverBadge}>{serverUnread > 99 ? '99+' : serverUnread}</div>

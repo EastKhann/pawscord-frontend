@@ -103,6 +103,21 @@
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ── Faz 3.1: Discord standard token aliases ── */
+    --dc-header-primary: #f2f3f5;
+    --dc-text-normal: #dbdee1;
+    --dc-background-primary: #313338;
+    --dc-background-secondary: #2b2d31;
+    --dc-background-tertiary: #232428;
+    --dc-background-accent: #1e1f22;
+    --dc-interactive-normal: #b5bac1;
+    --dc-interactive-hover: #dbdee1;
+    --dc-interactive-active: #fff;
+    --dc-blurple: #5865f2;
+    --dc-green: #23a559;
+    --dc-red: #da373c;
+    --dc-yellow: #f0b232;
 }
 
 /* ================================================ */
@@ -167,6 +182,81 @@
 
 .chat-msg {
     animation: msgSlideIn 0.15s ease-out;
+}
+
+/* ================================================ */
+/* ⚡ Faz 4.4: MICRO ANIMATIONS */
+/* ================================================ */
+
+/* Button press feedback */
+button:active:not(:disabled) {
+    transform: scale(0.96);
+    transition: transform 0.08s ease !important;
+}
+
+/* Faz 3.4: Modal / dialog fade-in */
+[role="dialog"],
+.modal-overlay,
+.modal-backdrop {
+    animation: modalFadeIn 0.18s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.97) translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Skeleton shimmer keyframe (used by MessageSkeleton component) */
+@keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(90deg, #2e3035 25%, #3a3d44 50%, #2e3035 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 4px;
+}
+
+/* Stagger list entrance animations */
+.stagger-list>*:nth-child(1) {
+    animation-delay: 0.03s;
+}
+
+.stagger-list>*:nth-child(2) {
+    animation-delay: 0.06s;
+}
+
+.stagger-list>*:nth-child(3) {
+    animation-delay: 0.09s;
+}
+
+.stagger-list>*:nth-child(4) {
+    animation-delay: 0.12s;
+}
+
+.stagger-list>*:nth-child(5) {
+    animation-delay: 0.15s;
+}
+
+/* Action button icon scale on hover */
+.action-button:hover svg,
+.action-button:hover {
+    transform: scale(1.12);
+    transition: transform 0.12s ease;
 }
 
 html,
@@ -1175,4 +1265,292 @@ div:hover>div>.delete-chat-btn {
 [class*="voicePanel"] {
     z-index: 9999 !important;
     /* Below portal */
+}
+
+/* ================================================ */
+/* ♿ Faz 4.3: ACCESSIBILITY */
+/* ================================================ */
+
+/* Keyboard focus ring: visible for keyboard, hidden for mouse */
+:focus-visible {
+    outline: 2px solid #5865f2 !important;
+    outline-offset: 2px !important;
+}
+
+:focus:not(:focus-visible) {
+    outline: none !important;
+}
+
+/* Screen reader only (visually hidden but announced) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Skip-to-content link (shows on keyboard focus) */
+.skip-to-content {
+    position: fixed;
+    top: -48px;
+    left: 8px;
+    z-index: 99999;
+    padding: 8px 16px;
+    background: #5865f2;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.15s ease;
+}
+
+.skip-to-content:focus {
+    top: 8px;
+}
+
+/* Reduced motion: respect user preference */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+    button {
+        forced-color-adjust: auto;
+    }
+
+    .chat-msg:hover {
+        border: 1px solid Highlight;
+    }
+
+    .status-online {
+        box-shadow: none !important;
+    }
+}
+
+/* ================================================ */
+/* 🎨 Faz 3.2: SIDEBAR STATUS PULSE ANIMATION */
+/* ================================================ */
+
+/* Online status dot ripple effect */
+.status-online {
+    position: relative;
+}
+
+.status-online::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: inherit;
+    animation: statusRipple 2.5s ease-out infinite;
+}
+
+@keyframes statusRipple {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    70% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+/* ================================================ */
+/* 💬 Faz 4.4: TOOLTIP FADE-IN (200ms delay)        */
+/* ================================================ */
+
+/* Usage: add data-tooltip="hint text" to any element */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #111214;
+    color: #dcddde;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition-delay: 0s;
+    z-index: 9999;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    transition-delay: 200ms;
+}
+
+/* ================================================ */
+/* 🔠 Faz 3.2: SERVER ICON INITIALS FALLBACK        */
+/* ================================================ */
+
+.server-icon-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    letter-spacing: 0.5px;
+    transition: border-radius 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.server-icon-initials:hover {
+    border-radius: 30%;
+    background: linear-gradient(135deg, #4752c4 0%, #5865f2 100%);
+}
+
+.server-icon-initials.active {
+    border-radius: 30%;
+}
+
+/* ================================================ */
+/* 👤 Faz 3.2: PROFILE HOVER POPUP ANIMATION        */
+/* ================================================ */
+
+@keyframes profilePopupIn {
+    from {
+        opacity: 0;
+        transform: translateY(calc(-50% + 6px));
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(-50%);
+    }
+}
+
+/* ================================================ */
+/* 🎙️ Faz 2.3: VOICE LOCK ANIMATION                */
+/* ================================================ */
+
+@keyframes lockBounce {
+    0% {
+        transform: scale(0.5) rotate(-20deg);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.25) rotate(6deg);
+        opacity: 1;
+    }
+
+    70% {
+        transform: scale(0.9) rotate(-3deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.voice-locked-enter {
+    animation: lockBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* ================================================ */
+/* 📥 Faz 4.1: PULL TO REFRESH INDICATOR            */
+/* ================================================ */
+
+@keyframes pullSpinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.pull-refresh-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #5865f2;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 0;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    transition: opacity 0.2s ease;
+}
+
+.pull-refresh-indicator .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(88, 101, 242, 0.25);
+    border-top-color: #5865f2;
+    border-radius: 50%;
+    animation: pullSpinner 0.7s linear infinite;
+}
+
+/* ================================================ */
+/* 📥 Faz 2.2: DROP ZONE ANIMATION                  */
+/* ================================================ */
+
+@keyframes dropZoneFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes dropIconBounce {
+    0% {
+        transform: scale(0.3) translateY(20px);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.15) translateY(-6px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
 }

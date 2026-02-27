@@ -1,10 +1,10 @@
 // frontend/src/components/MessageInput/VoiceRecordingUI.js
 import React from 'react';
-import { FaMicrophone, FaPaperPlane, FaTimes } from 'react-icons/fa';
+import { FaMicrophone, FaPaperPlane, FaTimes, FaTrash } from 'react-icons/fa';
 import styles from './styles';
 
 const VoiceRecordingUI = ({
-    isRecording, isRecordingLocked, recordingTime, slideProgress,
+    isRecording, isRecordingLocked, recordingTime, slideProgress, cancelProgress = 0,
     micButtonRef, handleMicMouseDown, handleMicTouchStart,
     stopRecording, cancelRecording, formatTime,
     handleSubmit, disabled, hasContent, pendingFilesCount
@@ -30,6 +30,16 @@ const VoiceRecordingUI = ({
     if (isRecording) {
         return (
             <div style={styles.recordingContainer} className="rec-container-glow">
+                {/* Cancel gesture indicator — trash icon on the left */}
+                <div style={{
+                    position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)',
+                    opacity: cancelProgress, transition: 'opacity 0.1s ease',
+                    color: cancelProgress > 0.7 ? '#ed4245' : '#72767d',
+                    fontSize: '18px', pointerEvents: 'none',
+                }}>
+                    <FaTrash />
+                </div>
+
                 <div style={styles.waveformBg} className="rec-waveform">
                     {[...Array(12)].map((_, i) => (
                         <div key={i} className="rec-wave-bar" style={{
@@ -70,7 +80,8 @@ const VoiceRecordingUI = ({
                     </div>
                 ) : (
                     <div style={styles.lockedActions}>
-                        <span style={styles.lockedBadge}>{'🔒'} Kilitlendi</span>
+                        {/* Faz 2.3: lock bounce animation on enter */}
+                        <span className="voice-locked-enter" style={styles.lockedBadge}>{'🔒'} Kilitlendi</span>
                         <button onClick={cancelRecording} style={styles.cancelRecButton} title="İptal">
                             <FaTimes /> {'İ'}ptal
                         </button>

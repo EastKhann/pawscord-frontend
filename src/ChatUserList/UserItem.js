@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { FaCrown } from 'react-icons/fa';
 import { styles } from './chatUserListStyles';
 
@@ -30,21 +30,101 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
     const statusColor = user.is_online ? '#43b581' : '#747f8d';
     const isOwner = user.role === 'owner';
     const isModerator = user.role === 'moderator' || user.role === 'mod';
+    // Faz 3.2: profile hover popup
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(); }
+    };
+    const handleMouseEnter = useCallback(() => setShowPopup(true), []);
+    const handleMouseLeave = useCallback(() => setShowPopup(false), []);
 
     return (
         <div
             style={{
                 ...styles.userItem,
+                position: 'relative',
                 opacity: user.is_online ? 1 : 0.5,
                 backgroundColor: isCurrentUser ? 'rgba(88, 101, 242, 0.1)' : 'transparent'
             }}
             onClick={onClick}
             onContextMenu={onContextMenu}
+            tabIndex={0}
+            role="listitem"
+            aria-label={`${user.display_name || user.username} — ${user.is_online ? 'çevrimici' : 'çevrimdışı'}`}
+            onKeyDown={handleKeyDown}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
         >
+            {/* ── Faz 3.2: Profile hover popup card ── */}
+            {showPopup && (
+                <div style={{
+                    position: 'absolute',
+                    right: 'calc(100% + 10px)',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 300,
+                    background: '#1e1f22',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '8px',
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.65)',
+                    padding: '0 0 14px 0',
+                    minWidth: '230px',
+                    pointerEvents: 'none',
+                    animation: 'profilePopupIn 0.12s ease',
+                    overflow: 'hidden',
+                }}>
+                    {/* Banner */}
+                    <div style={{ height: '48px', background: 'linear-gradient(135deg,#5865f2 0%,#7289da 100%)' }} />
+                    {/* Avatar */}
+                    <div style={{ padding: '0 14px' }}>
+                        <img src={user.avatar} alt={user.display_name || user.username}
+                            style={{ width: '56px', height: '56px', borderRadius: '50%', border: '4px solid #1e1f22', marginTop: '-28px', objectFit: 'cover', display: 'block' }} />
+                        <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <span style={{ color: '#f2f3f5', fontWeight: 700, fontSize: '15px', fontFamily: "'gg sans','Noto Sans',sans-serif" }}>
+                                {user.display_name || user.username}
+                            </span>
+                            {isOwner && <FaCrown size={11} color="#faa61a" title="Sunucu sahibi" />}
+                            {isModerator && !isOwner && <FaCrown size={11} color="#5865f2" title="Moderatör" />}
+                        </div>
+                        <div style={{ color: '#949ba4', fontSize: '12px', marginTop: '1px' }}>@{user.username}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px' }}>
+                            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: statusColor, flexShrink: 0 }} />
+                            <span style={{ color: '#b9bbbe', fontSize: '12px' }}>{user.is_online ? 'Çevrimiçi' : 'Çevrimdışı'}</span>
+                        </div>
+                        {user.custom_status && (
+                            <div style={{ color: '#b9bbbe', fontSize: '11px', marginTop: '6px', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '6px' }}>
+                                {user.custom_status}
+                            </div>
+                        )}
+                        {user.current_activity?.spotify && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '6px' }}>
+                                <span style={{ fontSize: '11px' }}>🎵</span>
+                                <span style={{ fontSize: '11px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
+                                    {user.current_activity.spotify.track || user.current_activity.spotify.name}
+                                </span>
+                            </div>
+                        )}
+                        {user.current_activity?.steam && !isIgnoredApp(user.current_activity.steam.game || user.current_activity.steam.name) && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '4px' }}>
+                                <span style={{ fontSize: '11px' }}>🎮</span>
+                                <span style={{ fontSize: '11px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
+                                    {user.current_activity.steam.game || user.current_activity.steam.name}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
             {/* AVATAR */}
             <div style={styles.avatarContainer}>
-                <img src={user.avatar} alt={user.username} style={styles.avatar} />
-                <div style={{ ...styles.statusDot, backgroundColor: statusColor }} />
+                <img src={user.avatar} alt={user.display_name || user.username} style={styles.avatar} />
+                {/* Faz 3.2: pulse animation class for online status dot */}
+                <div
+                    style={{ ...styles.statusDot, backgroundColor: statusColor }}
+                    className={user.is_online ? 'status-online' : ''}
+                    aria-hidden="true"
+                />
             </div>
 
             {/* USERNAME */}

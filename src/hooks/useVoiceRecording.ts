@@ -3,13 +3,16 @@
 import { useState, useRef, useEffect } from 'react';
 import toast from '../utils/toast';
 
-const LOCK_THRESHOLD = 80; // px upward slide to lock
+const LOCK_THRESHOLD = 140; // px upward slide to lock (higher = harder to accidentally lock)
+const LOCK_DELAY_MS = 500;  // ms after recording starts before lock gesture is active
+const CANCEL_THRESHOLD = 80; // px left slide to cancel
 
 const useVoiceRecording = (onFileUpload) => {
     const [isRecording, setIsRecording] = useState(false);
     const [isRecordingLocked, setIsRecordingLocked] = useState(false);
     const [recordingTime, setRecordingTime] = useState(0);
     const [slideProgress, setSlideProgress] = useState(0);
+    const [cancelProgress, setCancelProgress] = useState(0);
 
     const mediaRecorderRef = useRef(null);
     const recordingTimerRef = useRef(null);
@@ -17,6 +20,8 @@ const useVoiceRecording = (onFileUpload) => {
     const isRecordingRef = useRef(false);
     const isRecordingLockedRef = useRef(false);
     const touchStartYRef = useRef(0);
+    const touchStartXRef = useRef(0);
+    const recordingStartTimeRef = useRef(0);
 
     // Keep refs in sync with state (for document-level event listeners)
     useEffect(() => {
@@ -32,8 +37,23 @@ const useVoiceRecording = (onFileUpload) => {
 
         const handleDocMouseMove = (e) => {
             if (!isRecordingRef.current || isRecordingLockedRef.current) return;
+            if (Date.now() - recordingStartTimeRef.current < LOCK_DELAY_MS) return;
             const startY = touchStartYRef.current;
+            const startX = touchStartXRef.current;
             const deltaY = startY - e.clientY;
+            const deltaX = startX - e.clientX; // positive = moved left
+            // Cancel gesture takes priority over lock
+            if (deltaX > 0 && deltaX > Math.abs(deltaY)) {
+                const cp = Math.min(deltaX / CANCEL_THRESHOLD, 1);
+                setCancelProgress(cp);
+                setSlideProgress(0);
+                if (deltaX > CANCEL_THRESHOLD) {
+                    cancelRecording();
+                    setCancelProgress(0);
+                }
+                return;
+            }
+            setCancelProgress(0);
             const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
             setSlideProgress(progress);
             if (deltaY > LOCK_THRESHOLD) {
@@ -47,13 +67,29 @@ const useVoiceRecording = (onFileUpload) => {
             if (!isRecordingLockedRef.current) {
                 stopRecording();
             }
+            setCancelProgress(0);
         };
 
         const handleDocTouchMove = (e) => {
             if (!isRecordingRef.current || isRecordingLockedRef.current) return;
+            if (Date.now() - recordingStartTimeRef.current < LOCK_DELAY_MS) return;
             const currentY = e.touches[0].clientY;
+            const currentX = e.touches[0].clientX;
             const startY = touchStartYRef.current;
+            const startX = touchStartXRef.current;
             const deltaY = startY - currentY;
+            const deltaX = startX - currentX;
+            if (deltaX > 0 && deltaX > Math.abs(deltaY)) {
+                const cp = Math.min(deltaX / CANCEL_THRESHOLD, 1);
+                setCancelProgress(cp);
+                setSlideProgress(0);
+                if (deltaX > CANCEL_THRESHOLD) {
+                    cancelRecording();
+                    setCancelProgress(0);
+                }
+                return;
+            }
+            setCancelProgress(0);
             const progress = Math.min(Math.max(deltaY / LOCK_THRESHOLD, 0), 1);
             setSlideProgress(progress);
             if (deltaY > LOCK_THRESHOLD) {
@@ -101,6 +137,7 @@ const useVoiceRecording = (onFileUpload) => {
             mediaRecorderRef.current.start();
             setIsRecording(true);
             setRecordingTime(0);
+            recordingStartTimeRef.current = Date.now();
 
             recordingTimerRef.current = setInterval(() => {
                 setRecordingTime(t => t + 1);
@@ -126,6 +163,8 @@ const useVoiceRecording = (onFileUpload) => {
             mediaRecorderRef.current.onstop = null; // Prevent file upload
             mediaRecorderRef.current.stop();
             stream.getTracks().forEach(track => track.stop());
+            // Faz 2.3: Haptic feedback — cancel pattern
+            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([30, 50, 30]);
             setIsRecording(false);
             setIsRecordingLocked(false);
             clearInterval(recordingTimerRef.current);
@@ -135,15 +174,22 @@ const useVoiceRecording = (onFileUpload) => {
     const handleMicMouseDown = (e) => {
         e.preventDefault();
         touchStartYRef.current = e.clientY;
+        touchStartXRef.current = e.clientX;
         setSlideProgress(0);
+        setCancelProgress(0);
+        // Faz 2.3: Haptic feedback — short buzz on record start
+        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(20);
         startRecording();
     };
 
     const handleMicTouchStart = (e) => {
         e.preventDefault();
-        const startY = e.touches[0].clientY;
-        touchStartYRef.current = startY;
+        touchStartYRef.current = e.touches[0].clientY;
+        touchStartXRef.current = e.touches[0].clientX;
         setSlideProgress(0);
+        setCancelProgress(0);
+        // Faz 2.3: Haptic feedback — short buzz on record start
+        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(20);
         startRecording();
     };
 
@@ -158,6 +204,7 @@ const useVoiceRecording = (onFileUpload) => {
         isRecordingLocked,
         recordingTime,
         slideProgress,
+        cancelProgress,
         micButtonRef,
         handleMicMouseDown,
         handleMicTouchStart,

@@ -40,7 +40,7 @@ const MessageInput = ({
     const [cursorPos, setCursorPos] = useState(0);
 
     const {
-        isRecording, isRecordingLocked, recordingTime, slideProgress,
+        isRecording, isRecordingLocked, recordingTime, slideProgress, cancelProgress,
         micButtonRef, handleMicMouseDown, handleMicTouchStart,
         stopRecording, cancelRecording, formatTime,
     } = useVoiceRecording(onFileUpload);
@@ -244,6 +244,7 @@ const MessageInput = ({
                     <VoiceRecordingUI
                         isRecording={isRecording} isRecordingLocked={isRecordingLocked}
                         recordingTime={recordingTime} slideProgress={slideProgress}
+                        cancelProgress={cancelProgress}
                         micButtonRef={micButtonRef} handleMicMouseDown={handleMicMouseDown}
                         handleMicTouchStart={handleMicTouchStart}
                         stopRecording={stopRecording} cancelRecording={cancelRecording} formatTime={formatTime}

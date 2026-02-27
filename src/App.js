@@ -40,6 +40,7 @@ import LoadingSpinner from './components/LoadingSpinner';
 import AppModals from './components/AppModals';
 import SplashScreen from './SplashScreen';
 import ConnectionStatusBar from './components/ConnectionStatusBar';
+import MobileNav from './components/MobileNav';
 import { FaTimes, FaUsers } from 'react-icons/fa';
 
 // --- LAZY IMPORTS ---
@@ -178,6 +179,17 @@ const AppContent = () => {
     useEffect(() => { activeChatRef.current = activeChat; }, [activeChat]);
     useEffect(() => { tokenRef.current = token; }, [token]);
     useEffect(() => { usernameRef.current = username; }, [username]);
+
+    // ─── Faz 3.4: ESC closes the topmost open modal ───
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key !== 'Escape') return;
+            const openKey = Object.keys(modals).find(k => modals[k] === true);
+            if (openKey) closeModal(openKey);
+        };
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [modals, closeModal]);
 
     // ─── FETCH WITH AUTH ───
     const { fetchWithAuth } = useFetchWithAuth();
@@ -352,6 +364,23 @@ const AppContent = () => {
     const handleCloseInviteCode = useCallback(() => { setShowInviteCode(null); window.location.hash = '#/'; }, []);
     const handleSwitchToFriends = useCallback(() => { setActiveChat('friends', 'friends'); if (isMobile) setIsLeftSidebarVisible(false); }, [setActiveChat, isMobile]);
     const handleSwitchToAI = useCallback(() => handleRoomChange('ai'), [handleRoomChange]);
+
+    // ─── MOBILE BOTTOM NAV ───────────────────────────────────────────
+    const [mobileActiveTab, setMobileActiveTab] = useState('chats');
+    const handleMobileTabChange = useCallback((tab) => {
+        setMobileActiveTab(tab);
+        if (tab === 'chats') {
+            setIsLeftSidebarVisible(true);
+            setIsRightSidebarVisible(false);
+        } else if (tab === 'servers') {
+            setIsLeftSidebarVisible(true);
+            setIsRightSidebarVisible(false);
+        } else if (tab === 'friends') {
+            handleSwitchToFriends();
+        } else if (tab === 'profile') {
+            openModal('userProfile');
+        }
+    }, [handleSwitchToFriends, openModal, setIsLeftSidebarVisible, setIsRightSidebarVisible]);
 
     // ═══════════════════════════════════════════════════════════════
     // RENDER
@@ -647,6 +676,11 @@ const AppContent = () => {
             {/* ─── INVITE MODAL ─── */}
             <InviteServerModal inviteToServerUser={inviteToServerUser} setInviteToServerUser={setInviteToServerUser}
                 categories={categories} fetchWithAuth={fetchWithAuth} API_BASE_URL={API_BASE_URL} />
+
+            {/* ─── MOBILE BOTTOM NAV (iOS-style) ─── */}
+            {isMobile && (
+                <MobileNav activeTab={mobileActiveTab} onTabChange={handleMobileTabChange} />
+            )}
         </div>
     );
 };

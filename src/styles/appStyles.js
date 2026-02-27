@@ -51,7 +51,7 @@ export // --- STİLLER ---
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            backgroundColor: 'transparent',
+            backgroundColor: '#313338',
             minWidth: 0,
             height: '100%',
             overflow: 'hidden',
@@ -59,16 +59,15 @@ export // --- STİLLER ---
         },
 
         chatHeader: {
-            height: '52px',
-            minHeight: '52px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            height: '48px',
+            minHeight: '48px',
+            borderBottom: '1px solid rgba(0,0,0,0.24)',
             display: 'flex',
             alignItems: 'center',
             padding: '0 16px',
             flexShrink: 0,
-            backgroundColor: 'rgba(17, 18, 20, 0.85)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: '0 1px 0 rgba(0,0,0,0.25), 0 1px 4px rgba(0,0,0,0.15)',
+            backgroundColor: '#313338',
+            boxShadow: '0 1px 0 rgba(4,4,5,0.2), 0 1.5px 0 rgba(6,6,7,0.05), 0 2px 0 rgba(4,4,5,0.05)',
             zIndex: 10
         },
 
@@ -76,23 +75,22 @@ export // --- STİLLER ---
         messageBox: {
             flex: 1,
             overflowY: 'auto',
-            padding: '16px 4px 24px 4px',
+            padding: '16px 0 24px 0',
             display: 'flex',
             flexDirection: 'column',
-            gap: '2px',
+            gap: '0',
             scrollBehavior: 'smooth',
             minHeight: 0
         },
 
         // 7. INPUT ALANI (En altta sabit)
         inputContainer: {
-            padding: '0 16px 16px 16px',
+            padding: '0 16px 24px 16px',
             backgroundColor: 'transparent',
             position: 'relative',
             flexShrink: 0,
             minHeight: 'auto',
             zIndex: 20,
-            marginTop: '-8px'
         },
 
         inputForm: {

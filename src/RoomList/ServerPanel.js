@@ -1,7 +1,7 @@
 // frontend/src/RoomList/ServerPanel.js
 import React, { useCallback, useRef, useEffect } from 'react';
 import {
-    FaChevronDown, FaChevronRight, FaPlus, FaCog,
+    FaChevronDown, FaPlus, FaCog,
     FaVolumeUp, FaUserPlus
 } from '../utils/iconOptimization';
 import VoiceUserList from '../VoiceUserList';
@@ -168,9 +168,23 @@ const CategorySection = React.memo(({
 
     return (
         <div style={{ marginBottom: 5 }}>
-            <div style={styles.categoryHeader} onClick={handleToggleCategory}>
+            {/* Faz 3.2: Smooth chevron + Faz 4.3: aria-expanded */}
+            <div
+                style={styles.categoryHeader}
+                onClick={handleToggleCategory}
+                role="button"
+                tabIndex={0}
+                aria-expanded={!isCollapsed}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleToggleCategory()}
+            >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {isCollapsed ? <FaChevronRight size={9} /> : <FaChevronDown size={9} />}
+                    {/* Animated chevron — rotates instead of swapping icons */}
+                    <span style={{
+                        display: 'inline-flex', transition: 'transform 0.2s ease',
+                        transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)'
+                    }}>
+                        <FaChevronDown size={9} />
+                    </span>
                     {isEditingThisCat ? (
                         <form onSubmit={handleRenameCategorySubmit} onClick={handleStopPropagation} style={{ marginLeft: 5 }}>
                             <input autoFocus aria-label="Kategori adını düzenle" value={editName} onChange={e => setEditName(e.target.value)} onBlur={handleEditBlur} style={styles.inlineInput} />
@@ -181,8 +195,8 @@ const CategorySection = React.memo(({
                 </div>
                 {isOwner && (
                     <div style={{ marginLeft: 'auto', display: 'flex', gap: '5px' }}>
-                        <button style={styles.iconBtn} onClick={handleCategoryActionMenu}><FaCog size={10} /></button>
-                        <button style={styles.iconBtn} onClick={handleAddRoomClick}><FaPlus size={10} /></button>
+                        <button style={styles.iconBtn} onClick={handleCategoryActionMenu} aria-label="Kategori ayarları"><FaCog size={10} /></button>
+                        <button style={styles.iconBtn} onClick={handleAddRoomClick} aria-label="Kanal ekle"><FaPlus size={10} /></button>
                     </div>
                 )}
             </div>
@@ -203,45 +217,52 @@ const CategorySection = React.memo(({
                 </form>
             )}
 
-            {/* Kanallar */}
-            {!isCollapsed && cat.rooms && cat.rooms.map(room => (
-                <ChannelItem
-                    key={room.id}
-                    room={room}
-                    cat={cat}
-                    server={server}
-                    isOwner={isOwner}
-                    isAdmin={isAdmin}
-                    currentUsername={currentUsername}
-                    currentVoiceRoom={currentVoiceRoom}
-                    activeVoiceUsers={activeVoiceUsers}
-                    editingItemId={editingItemId}
-                    setEditingItemId={setEditingItemId}
-                    editName={editName}
-                    setEditName={setEditName}
-                    handleRenameRoom={handleRenameRoom}
-                    handleOpenActionMenu={handleOpenActionMenu}
-                    joinVoiceChat={joinVoiceChat}
-                    onRoomSelect={onRoomSelect}
-                    onPrefetchChat={onPrefetchChat}
-                    safeUnreadCounts={safeUnreadCounts}
-                    onDMSelect={onDMSelect}
-                    conversations={conversations}
-                    friendsList={friendsList}
-                    getDeterministicAvatar={getDeterministicAvatar}
-                    allUsers={allUsers}
-                    isPttActive={isPttActive}
-                    remoteVolumes={remoteVolumes}
-                    setRemoteVolume={setRemoteVolume}
-                    dropTargetChannel={dropTargetChannel}
-                    setDropTargetChannel={setDropTargetChannel}
-                    handleAddFriend={handleAddFriend}
-                    handleRemoveFriend={handleRemoveFriend}
-                    handleMoveUserToChannel={handleMoveUserToChannel}
-                    handleKickUserFromChannel={handleKickUserFromChannel}
-                    onViewUserProfile={onViewUserProfile}
-                />
-            ))}
+            {/* Faz 3.2: CSS animated channel list — always rendered, max-height transition */}
+            <div style={{
+                maxHeight: isCollapsed ? 0 : '2000px',
+                overflow: 'hidden',
+                opacity: isCollapsed ? 0 : 1,
+                transition: 'max-height 0.25s ease-out, opacity 0.18s ease',
+            }}>
+                {cat.rooms && cat.rooms.map(room => (
+                    <ChannelItem
+                        key={room.id}
+                        room={room}
+                        cat={cat}
+                        server={server}
+                        isOwner={isOwner}
+                        isAdmin={isAdmin}
+                        currentUsername={currentUsername}
+                        currentVoiceRoom={currentVoiceRoom}
+                        activeVoiceUsers={activeVoiceUsers}
+                        editingItemId={editingItemId}
+                        setEditingItemId={setEditingItemId}
+                        editName={editName}
+                        setEditName={setEditName}
+                        handleRenameRoom={handleRenameRoom}
+                        handleOpenActionMenu={handleOpenActionMenu}
+                        joinVoiceChat={joinVoiceChat}
+                        onRoomSelect={onRoomSelect}
+                        onPrefetchChat={onPrefetchChat}
+                        safeUnreadCounts={safeUnreadCounts}
+                        onDMSelect={onDMSelect}
+                        conversations={conversations}
+                        friendsList={friendsList}
+                        getDeterministicAvatar={getDeterministicAvatar}
+                        allUsers={allUsers}
+                        isPttActive={isPttActive}
+                        remoteVolumes={remoteVolumes}
+                        setRemoteVolume={setRemoteVolume}
+                        dropTargetChannel={dropTargetChannel}
+                        setDropTargetChannel={setDropTargetChannel}
+                        handleAddFriend={handleAddFriend}
+                        handleRemoveFriend={handleRemoveFriend}
+                        handleMoveUserToChannel={handleMoveUserToChannel}
+                        handleKickUserFromChannel={handleKickUserFromChannel}
+                        onViewUserProfile={onViewUserProfile}
+                    />
+                ))}
+            </div>
         </div>
     );
 });

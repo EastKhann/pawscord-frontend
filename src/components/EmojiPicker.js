@@ -5,7 +5,21 @@ import styles from './EmojiPicker/styles';
 // ─── localStorage helpers for Recents & Favorites ───
 const RECENTS_KEY = 'pawscord_recent_emojis';
 const FAVS_KEY = 'pawscord_favorite_emojis';
+const SKIN_TONE_KEY = 'pawscord_skin_tone';
 const MAX_RECENTS = 24;
+
+// ─── Skin tone modifiers ───
+const SKIN_TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'];
+const SKIN_TONE_COLORS = ['#ffd83d', '#ffe0b3', '#f5c47e', '#cc9141', '#8d5524', '#4a2912'];
+const SKIN_TONE_LABELS = ['Varsayılan', 'Açık', 'Orta-Açık', 'Orta', 'Orta-Koyu', 'Koyu'];
+// Emojis that support skin tone modifiers (hand gestures + person)
+const SKIN_TONE_EMOJIS = new Set([
+    '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙',
+    '👈', '👉', '👆', '🖕', '👇', '☝️', '👍', '👎', '✊', '👊', '🤛', '🤜', '👏',
+    '🙌', '👐', '🤲', '🤝', '🙏', '✍️', '💅', '🤳', '💪', '🫵', '🫶', '🫱', '🫲',
+]);
+const getSkinTone = () => { try { return localStorage.getItem(SKIN_TONE_KEY) || ''; } catch { return ''; } };
+const saveSkinTone = (t) => { try { localStorage.setItem(SKIN_TONE_KEY, t); } catch { } };
 
 const getRecents = () => {
     try { return JSON.parse(localStorage.getItem(RECENTS_KEY)) || []; }
@@ -49,6 +63,12 @@ const EmojiPicker = ({ onSelect }) => {
     const [recentEmojis, setRecentEmojis] = useState(getRecents());
     const [favoriteEmojis, setFavoriteEmojis] = useState(getFavorites());
     const [contextMenu, setContextMenu] = useState(null); // {emoji, x, y}
+    const [skinTone, setSkinTone] = useState(getSkinTone);
+
+    const handleSkinToneChange = useCallback((tone) => {
+        setSkinTone(tone);
+        saveSkinTone(tone);
+    }, []);
 
     // 🆕 Fetch trending emojis from API
     useEffect(() => {
@@ -78,10 +98,11 @@ const EmojiPicker = ({ onSelect }) => {
     }, [contextMenu]);
 
     const handleSelect = useCallback((emoji) => {
-        addRecent(emoji);
+        const finalEmoji = skinTone && SKIN_TONE_EMOJIS.has(emoji) ? emoji + skinTone : emoji;
+        addRecent(finalEmoji);
         setRecentEmojis(getRecents());
-        onSelect(emoji);
-    }, [onSelect]);
+        onSelect(finalEmoji);
+    }, [onSelect, skinTone]);
 
     const handleContextMenu = useCallback((e, emoji) => {
         e.preventDefault();
@@ -118,7 +139,31 @@ const EmojiPicker = ({ onSelect }) => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={styles.searchInput}
+                    aria-label="Emoji ara"
                 />
+            </div>
+
+            {/* Skin Tone Selector */}
+            <div style={{ display: 'flex', gap: 5, padding: '4px 12px 6px', alignItems: 'center', borderBottom: '1px solid #202225' }}>
+                <span style={{ fontSize: '11px', color: '#72767d', marginRight: 2, userSelect: 'none' }}>Cilt:</span>
+                {SKIN_TONES.map((tone, i) => (
+                    <button
+                        key={i}
+                        title={SKIN_TONE_LABELS[i]}
+                        onClick={() => handleSkinToneChange(tone)}
+                        aria-label={SKIN_TONE_LABELS[i]}
+                        aria-pressed={skinTone === tone}
+                        style={{
+                            width: 18, height: 18, borderRadius: '50%',
+                            border: skinTone === tone ? '2px solid #fff' : '2px solid transparent',
+                            backgroundColor: SKIN_TONE_COLORS[i],
+                            cursor: 'pointer', padding: 0,
+                            transition: 'transform 0.12s ease, box-shadow 0.12s ease',
+                            transform: skinTone === tone ? 'scale(1.25)' : 'scale(1)',
+                            boxShadow: skinTone === tone ? '0 0 0 3px rgba(88,101,242,0.5)' : 'none',
+                        }}
+                    />
+                ))}
             </div>
 
             {/* Category Tabs */}
