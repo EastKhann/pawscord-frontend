@@ -4,18 +4,20 @@
 const styles = {
     chatMessage: {
         display: 'flex',
-        padding: '8px 20px',
-        marginBottom: '2px',
+        padding: '4px 48px 4px 72px',
+        marginBottom: '0',
         position: 'relative',
         transition: 'background-color 0.1s ease',
         width: '100%',
         boxSizing: 'border-box',
-        borderRadius: '0'
+        borderRadius: '0',
+        minHeight: '44px'
     },
 
     avatarContainer: {
-        marginTop: '4px',
-        marginRight: '16px',
+        position: 'absolute',
+        left: '16px',
+        marginTop: '2px',
         flexShrink: 0
     },
     userAvatar: {
@@ -24,7 +26,7 @@ const styles = {
         borderRadius: '50%',
         objectFit: 'cover',
         cursor: 'pointer',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+        transition: 'opacity 0.15s ease',
     },
     messageHeader: {
         display: 'flex',
@@ -48,7 +50,7 @@ const styles = {
         fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     messageContent: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '1rem',
         lineHeight: '1.375rem',
         whiteSpace: 'pre-wrap',

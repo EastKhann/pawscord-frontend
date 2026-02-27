@@ -166,7 +166,8 @@ const Message = ({
 
     return (
         <div ref={messageRef}
-            style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : (isHovered ? 'rgba(4, 4, 5, 0.07)' : 'transparent'), cursor: isSelectionMode ? 'pointer' : 'default' }}
+            className="chat-msg"
+            style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent', cursor: isSelectionMode ? 'pointer' : 'default' }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => { setIsHovered(false); setShowReactionPicker(false); }}
             onContextMenu={handleContextMenu}

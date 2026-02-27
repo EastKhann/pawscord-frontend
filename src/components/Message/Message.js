@@ -50,7 +50,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
   const handleShowChart = useCallback(() => onShowChart(signalCoin), [onShowChart, signalCoin]);
 
   return (
-    <div ref={messageRef} style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : (isHovered ? 'rgba(4, 4, 5, 0.07)' : 'transparent'), cursor: isSelectionMode ? 'pointer' : 'default' }}
+    <div ref={messageRef} className="chat-msg" style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent', cursor: isSelectionMode ? 'pointer' : 'default' }}
       onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu} id={`message-${msg.id}`} onClick={handleMessageClick}>
 

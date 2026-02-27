@@ -213,10 +213,12 @@ export default memo(function ChatArea({
                         <p style={styles.systemMessage}>Yükleniyor...</p>
                     ) : optimizedMessages.length === 0 && !messageHistoryLoading ? (
                         /* Empty state illustration */
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', opacity: 0.5, userSelect: 'none' }}>
-                            <div style={{ fontSize: '64px', marginBottom: '16px' }}>💬</div>
-                            <div style={{ color: '#b9bbbe', fontSize: '1.2em', fontWeight: 600 }}>Henüz mesaj yok</div>
-                            <div style={{ color: '#72767d', fontSize: '0.9em', marginTop: '4px' }}>İlk mesajı sen gönder!</div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', userSelect: 'none', gap: '4px' }}>
+                            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(88,101,242,0.15) 0%, rgba(139,92,246,0.15) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
+                                <span style={{ fontSize: '36px' }}>🐾</span>
+                            </div>
+                            <div style={{ color: '#f2f3f5', fontSize: '1.3em', fontWeight: 700, fontFamily: "'gg sans', 'Noto Sans', sans-serif" }}>Sohbete hoş geldin!</div>
+                            <div style={{ color: '#949ba4', fontSize: '0.95em', fontWeight: 400, marginTop: '2px' }}>İlk mesajı göndererek sohbeti başlat 💬</div>
                         </div>
                     ) : optimizedMessages.length > 50 ? (
                         <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
