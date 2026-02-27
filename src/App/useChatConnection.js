@@ -135,6 +135,33 @@ export default function useChatConnection({
                     return activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
                 };
 
+                // ── GUARD: ignore messages that don't belong to the current active chat ──
+                const msgBelongsToActiveChat = (() => {
+                    const chat = activeChatRef.current;
+                    if (!chat || !chat.id) return true; // can't check, allow
+                    if (data.room && chat.type === 'room') {
+                        return String(data.room) === String(chat.id);
+                    }
+                    if (data.conversation != null && chat.type === 'dm') {
+                        return String(data.conversation) === String(chat.id);
+                    }
+                    // Message has no room/conversation field — allow (own temp_id replacement)
+                    return data.temp_id != null;
+                })();
+
+                if (!msgBelongsToActiveChat) {
+                    // Still update cache so history loads instantly when user navigates there
+                    const cacheKey = getCacheKeyFromMessage(data);
+                    if (data.id && historyCacheRef.current[cacheKey]) {
+                        const cached = historyCacheRef.current[cacheKey];
+                        if (cached.messages && !cached.messages.some(m => m.id === data.id)) {
+                            cached.messages = [...cached.messages, data];
+                            cached._ts = Date.now();
+                        }
+                    }
+                    return; // ← do NOT add to current visible messages
+                }
+
                 setMessages(prev => {
                     if (data.temp_id) {
                         const tempIndex = prev.findIndex(msg => msg.temp_id === data.temp_id);
