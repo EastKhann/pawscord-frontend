@@ -115,6 +115,26 @@ export default function useMessageHandlers({
             return false;
         };
 
+        const applyServerAck = (ackData) => {
+            if (!ackData || !payload.temp_id) return;
+            setMessages(prev => {
+                const idx = prev.findIndex(m => m.temp_id === payload.temp_id || m.id === payload.temp_id);
+                if (idx === -1) return prev;
+                const next = [...prev];
+                next[idx] = {
+                    ...next[idx],
+                    ...ackData,
+                    temp_id: payload.temp_id,
+                };
+                const cacheKey = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
+                if (historyCacheRef.current[cacheKey]) {
+                    historyCacheRef.current[cacheKey].messages = next;
+                    historyCacheRef.current[cacheKey]._ts = Date.now();
+                }
+                return next;
+            });
+        };
+
         const sendViaHTTP = async () => {
             try {
                 const endpoint = activeChat.type === 'dm'
@@ -124,20 +144,31 @@ export default function useMessageHandlers({
                     ? { conversation_id: activeChat.id, content: finalContent, temp_id: payload.temp_id }
                     : { room: activeChat.id, content: finalContent, temp_id: payload.temp_id };
                 const response = await fetchWithAuth(endpoint, { method: 'POST', body: JSON.stringify(httpPayload) });
-                return response.ok;
-            } catch (error) { return false; }
+                if (!response.ok) return { ok: false, data: null };
+                let data = null;
+                try { data = await response.json(); } catch { data = null; }
+                return { ok: true, data };
+            } catch (error) { return { ok: false, data: null }; }
         };
 
         // Send with retry (WS first, then HTTP with 1 retry, then offline queue)
         (async () => {
             const wsSent = await sendViaWebSocket();
             if (!wsSent) {
-                const httpOk = await sendViaHTTP();
-                if (!httpOk) {
+                const httpResult = await sendViaHTTP();
+                if (httpResult?.ok) {
+                    applyServerAck(httpResult.data);
+                    return;
+                }
+                if (!httpResult?.ok) {
                     // 🚀 PERF: Reduced retry delay from 2s to 500ms
                     await new Promise(r => setTimeout(r, 500));
-                    const retryOk = await sendViaHTTP();
-                    if (!retryOk) {
+                    const retryResult = await sendViaHTTP();
+                    if (retryResult?.ok) {
+                        applyServerAck(retryResult.data);
+                        return;
+                    }
+                    if (!retryResult?.ok) {
                         // Queue for later delivery when connection restores
                         if (offlineQueue.enqueue(payload)) {
                             toast.info('Mesaj çevrimdışı kuyruğa alındı. Bağlantı kurulunca gönderilecek.');
@@ -168,7 +199,7 @@ export default function useMessageHandlers({
 
         richTextRef.current?.clear?.();
         scrollToBottom('smooth');
-    }, [activeChat, username, encryptionKeys, ws, fetchWithAuth, currentUserProfile, getDeterministicAvatar, persistDraft]);
+    }, [activeChat, username, encryptionKeys, ws, fetchWithAuth, currentUserProfile, getDeterministicAvatar, persistDraft, setMessages, historyCacheRef]);
 
     // --- 💬 SEND SNIPPET (🔧 FIX: Added WS check + HTTP fallback) ---
     const handleSendSnippet = useCallback(async (data) => {

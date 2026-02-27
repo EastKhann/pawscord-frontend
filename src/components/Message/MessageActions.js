@@ -139,8 +139,8 @@ export const MessageActions = memo(({
 const styles = {
     messageActions: {
         position: 'absolute',
-        top: '-10px',
-        right: '10px',
+        top: '4px',
+        right: '12px',
         backgroundColor: '#313338',
         borderRadius: '8px',
         padding: '4px',
