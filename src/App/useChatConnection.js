@@ -219,6 +219,28 @@ export default function useChatConnection({
                         return msg;
                     }));
                 }
+            } else if (data.type === 'messages_read') {
+                const ids = Array.isArray(data.message_ids) ? data.message_ids.map(String) : [];
+                const reader = data.reader_username;
+                if (ids.length > 0 && reader) {
+                    setMessages(prev => prev.map(msg => {
+                        if (!ids.includes(String(msg.id))) return msg;
+                        const readBy = Array.isArray(msg.read_by) ? msg.read_by : [];
+                        if (readBy.includes(reader)) return msg;
+                        return { ...msg, read_by: [...readBy, reader] };
+                    }));
+                }
+            } else if (data.type === 'read_receipt') {
+                const messageId = data.message_id;
+                const reader = data.username;
+                if (messageId && reader) {
+                    setMessages(prev => prev.map(msg => {
+                        if (String(msg.id) !== String(messageId)) return msg;
+                        const readBy = Array.isArray(msg.read_by) ? msg.read_by : [];
+                        if (readBy.includes(reader)) return msg;
+                        return { ...msg, read_by: [...readBy, reader] };
+                    }));
+                }
             }
 
             if (data.message && data.message.startsWith('[ANNOUNCE] ')) {

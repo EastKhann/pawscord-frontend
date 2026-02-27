@@ -101,8 +101,8 @@ export default function useMessageHandlers({
         const jsonPayload = JSON.stringify(payload);
 
         const sendViaWebSocket = async () => {
-            // 🚀 PERF: Reduced wait from 3s to 1.5s — if WS isn't ready by then, use HTTP
-            const maxWait = 1500;
+            // 🚀 PERF: Keep wait very short — avoid perceivable send lag on flaky sockets
+            const maxWait = 250;
             const checkInterval = 50;
             let waited = 0;
             while (ws.current && ws.current.readyState === WebSocket.CONNECTING && waited < maxWait) {
