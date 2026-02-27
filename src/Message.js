@@ -256,6 +256,38 @@ const Message = ({
                     <div style={styles.messageContent}>
                         {isMessageEncrypted && <span style={{ color: '#43b581', marginRight: 5 }} title="Encrypted"><FaLock /></span>}
                         <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                            a({ href, children, ...props }) {
+                                const handleLinkClick = (e) => {
+                                    e.preventDefault();
+                                    const url = href;
+                                    // Electron: open in external browser
+                                    if (typeof window !== 'undefined' && typeof window.require === 'function') {
+                                        try {
+                                            const { shell } = window.require('electron');
+                                            shell.openExternal(url);
+                                            return;
+                                        } catch { /* fallback to window.open */ }
+                                    }
+                                    // Capacitor native: use Browser plugin
+                                    if (typeof window !== 'undefined' && window.Capacitor?.isNativePlatform?.()) {
+                                        try {
+                                            import('@capacitor/browser').then(({ Browser }) => {
+                                                Browser.open({ url });
+                                            }).catch(() => window.open(url, '_blank', 'noopener,noreferrer'));
+                                            return;
+                                        } catch { /* fallback */ }
+                                    }
+                                    // Browser: open in new tab
+                                    window.open(url, '_blank', 'noopener,noreferrer');
+                                };
+                                return (
+                                    <a href={href} onClick={handleLinkClick}
+                                        style={{ color: '#00aff4', textDecoration: 'underline', cursor: 'pointer', wordBreak: 'break-all' }}
+                                        title={href} rel="noopener noreferrer" {...props}>
+                                        {children}
+                                    </a>
+                                );
+                            },
                             code({ node, inline, className, children, ...props }) {
                                 return !inline
                                     ? <Suspense fallback={null}><CodeBlock language={className?.replace('language-', '')} value={children} /></Suspense>

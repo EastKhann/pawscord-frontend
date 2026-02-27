@@ -102,8 +102,9 @@ export default function useMessageHandlers({
         const jsonPayload = JSON.stringify(payload);
 
         const sendViaWebSocket = async () => {
-            const maxWait = 3000;
-            const checkInterval = 100;
+            // 🚀 PERF: Reduced wait from 3s to 1.5s — if WS isn't ready by then, use HTTP
+            const maxWait = 1500;
+            const checkInterval = 50;
             let waited = 0;
             while (ws.current && ws.current.readyState === WebSocket.CONNECTING && waited < maxWait) {
                 await new Promise(resolve => setTimeout(resolve, checkInterval));
@@ -134,8 +135,8 @@ export default function useMessageHandlers({
             if (!wsSent) {
                 const httpOk = await sendViaHTTP();
                 if (!httpOk) {
-                    // 1 retry after 2 seconds
-                    await new Promise(r => setTimeout(r, 2000));
+                    // 🚀 PERF: Reduced retry delay from 2s to 500ms
+                    await new Promise(r => setTimeout(r, 500));
                     const retryOk = await sendViaHTTP();
                     if (!retryOk) {
                         // Queue for later delivery when connection restores
