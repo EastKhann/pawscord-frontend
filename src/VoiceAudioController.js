@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import logger from './utils/logger';
 import toast from './utils/toast';
 
-const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
+const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers, isDeafened }) => {
     // 🔥 FIX: Always enabled — user already interacted to join voice channel.
     // Old behavior required clicking "SES SİSTEMİNİ BAŞLAT" popup which was easily missed → silent audio.
     const [globalAudioEnabled, setGlobalAudioEnabled] = useState(true);
@@ -43,6 +43,7 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
                         stream={stream}
                         volume={remoteVolumes[username] !== undefined ? remoteVolumes[username] : 100}
                         isMuted={mutedUsers ? mutedUsers.has(username) : false}
+                        isDeafened={!!isDeafened}
                         globalEnabled={globalAudioEnabled}
                     />
                 ))}
@@ -57,7 +58,7 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers }) => {
 // Reduced from 2.5 thanks to sender-side makeup gain fix.
 const BASE_GAIN = 2.0;
 
-const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
+const AudioPlayer = ({ username, stream, volume, isMuted, isDeafened, globalEnabled }) => {
     const audioRef = useRef(null);
     const audioCtxRef = useRef(null);
     const sourceRef = useRef(null);
@@ -69,7 +70,7 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
     const volumeRef = useRef(volume);
     const isMutedRef = useRef(isMuted);
     useEffect(() => { volumeRef.current = volume; }, [volume]);
-    useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
+    useEffect(() => { isMutedRef.current = isMuted || isDeafened; }, [isMuted, isDeafened]);
 
     // Helper: create/ensure GainNode chain exists and return the gain node.
     // 🔥 YENİ: Compressor + Limiter zinciri eklendi — alıcı tarafında ses normalizasyonu
@@ -184,7 +185,7 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
         // Volume range 0-200 → gain 0 – (2 * BASE_GAIN)
         // 100% → BASE_GAIN (2.0×), 200% → 2 * BASE_GAIN (4.0×)
         // Limiter at -3dB prevents clipping even at 200%
-        const targetGain = isMuted ? 0 : (volume / 100) * BASE_GAIN;
+        const targetGain = (isMuted || isDeafened) ? 0 : (volume / 100) * BASE_GAIN;
 
         // 🔥 Always route through GainNode so we get the boost.
         // If the chain doesn't exist yet (audio not started), it will be
@@ -201,10 +202,10 @@ const AudioPlayer = ({ username, stream, volume, isMuted, globalEnabled }) => {
         } else {
             // GainNode not yet created (stream hasn't played yet) — fall back to
             // native volume as a safety net (will be overridden once chain exists).
-            audio.volume = isMuted ? 0 : Math.min(1.0, (volume / 100));
+            audio.volume = (isMuted || isDeafened) ? 0 : Math.min(1.0, (volume / 100));
         }
         logger.log(`[AudioPlayer] ${username} gain=${targetGain.toFixed(2)} (vol=${volume}%)`);
-    }, [volume, isMuted, username]);
+    }, [volume, isMuted, isDeafened, username]);
 
     // Cleanup AudioContext on unmount
     useEffect(() => {

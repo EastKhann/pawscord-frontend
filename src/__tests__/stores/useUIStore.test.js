@@ -1,4 +1,4 @@
-// useUIStore Tests — Modal Management
+// useUIStore Tests — Modal Management + Selectors
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useUIStore } from '../../stores/useUIStore';
 
@@ -95,5 +95,80 @@ describe('useUIStore', () => {
             expect(state.modals.settings).toBe(false);
             expect(state.modals.userProfile).toBe(false);
         });
+    });
+});
+
+// ─── Selector Tests ──────────────────────────────────────────────────────────
+describe('useUIStore selectors', () => {
+    beforeEach(() => {
+        useUIStore.getState().closeAllModals();
+    });
+
+    it('useIsModalOpen returns false for closed modal', () => {
+        expect(useUIStore.getState().modals['settings'] ?? false).toBe(false);
+    });
+
+    it('useIsModalOpen returns true after openModal', () => {
+        useUIStore.getState().openModal('settings');
+        expect(useUIStore.getState().modals['settings']).toBe(true);
+    });
+
+    it('useTheme returns default dark theme', () => {
+        expect(useUIStore.getState().theme).toBe('dark');
+    });
+
+    it('setTheme updates theme', () => {
+        useUIStore.getState().setTheme('light');
+        expect(useUIStore.getState().theme).toBe('light');
+        useUIStore.getState().setTheme('dark'); // restore
+    });
+
+    it('useAccentColor returns default Discord purple', () => {
+        expect(useUIStore.getState().accentColor).toBe('#5865F2');
+    });
+
+    it('setAccentColor updates accent', () => {
+        useUIStore.getState().setAccentColor('#ff0000');
+        expect(useUIStore.getState().accentColor).toBe('#ff0000');
+        useUIStore.getState().setAccentColor('#5865F2'); // restore
+    });
+
+    it('useConnectionStatus starts as disconnected', () => {
+        expect(useUIStore.getState().connectionStatus).toBe('disconnected');
+    });
+
+    it('setConnectionStatus updates status and isConnected', () => {
+        useUIStore.getState().setConnectionStatus('connected');
+        expect(useUIStore.getState().connectionStatus).toBe('connected');
+        expect(useUIStore.getState().isConnected).toBe(true);
+        useUIStore.getState().setConnectionStatus('disconnected'); // restore
+    });
+
+    it('usePanelVisible returns true for default panels', () => {
+        expect(useUIStore.getState().panels['memberList']).toBe(true);
+    });
+
+    it('togglePanel flips panel visibility', () => {
+        useUIStore.getState().togglePanel('memberList');
+        expect(useUIStore.getState().panels['memberList']).toBe(false);
+        useUIStore.getState().togglePanel('memberList'); // restore
+    });
+
+    it('toast notifications can be added and removed', () => {
+        const { addNotification, removeNotification } = useUIStore.getState();
+        addNotification({ message: 'Test toast', type: 'success' });
+        const toasts = useUIStore.getState().toastNotifications;
+        expect(toasts.length).toBeGreaterThan(0);
+        const id = toasts[0].id;
+        removeNotification(id);
+        expect(useUIStore.getState().toastNotifications).toHaveLength(0);
+    });
+
+    it('clearNotifications empties the queue', () => {
+        const { addNotification, clearNotifications } = useUIStore.getState();
+        addNotification({ message: 'A' });
+        addNotification({ message: 'B' });
+        clearNotifications();
+        expect(useUIStore.getState().toastNotifications).toHaveLength(0);
     });
 });

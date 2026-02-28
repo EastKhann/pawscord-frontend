@@ -155,24 +155,66 @@ export function useWebRTC({
                 track.contentHint === 'detail'
             ));
 
-        const streamKey = track.kind === 'video' && isScreenTrack
-            ? `${partnerUsername}_screen`
-            : track.kind === 'video'
-                ? `${partnerUsername}_camera`
-                : partnerUsername;
+        const classifyAndStore = (isScreen) => {
+            const streamKey = track.kind === 'video' && isScreen
+                ? `${partnerUsername}_screen`
+                : track.kind === 'video'
+                    ? `${partnerUsername}_camera`
+                    : partnerUsername;
 
-        setRemoteStreams(prev => {
-            const currentStream = prev[streamKey];
-            if (currentStream) {
-                if (!currentStream.getTracks().some(t => t.id === track.id)) {
-                    currentStream.addTrack(track);
-                    const refreshedStream = new MediaStream(currentStream.getTracks());
-                    return { ...prev, [streamKey]: refreshedStream };
+            setRemoteStreams(prev => {
+                const currentStream = prev[streamKey];
+                if (currentStream) {
+                    if (!currentStream.getTracks().some(t => t.id === track.id)) {
+                        currentStream.addTrack(track);
+                        const refreshedStream = new MediaStream(currentStream.getTracks());
+                        return { ...prev, [streamKey]: refreshedStream };
+                    }
+                    return prev;
                 }
-                return prev;
-            }
-            return { ...prev, [streamKey]: new MediaStream([track]) };
-        });
+                return { ...prev, [streamKey]: new MediaStream([track]) };
+            });
+        };
+
+        classifyAndStore(isScreenTrack);
+
+        // 🔥 FIX: Race condition — track_metadata signal may arrive AFTER ontrack
+        // because metadata travels via WebSocket while ontrack fires via DTLS/SRTP.
+        // Re-check after a short delay to correct misclassified tracks.
+        if (track.kind === 'video' && !signaledType) {
+            setTimeout(() => {
+                const laterType = trackMetadataRef.current[track.id];
+                if (laterType && ((laterType === 'screen') !== isScreenTrack)) {
+                    logger.webrtc(`[TrackReclass] ${partnerUsername} track ${track.id} reclassified: ${isScreenTrack ? 'screen' : 'camera'} → ${laterType}`);
+                    // Reclassify: remove from wrong key, add to correct key
+                    const wrongKey = isScreenTrack ? `${partnerUsername}_screen` : `${partnerUsername}_camera`;
+                    const correctKey = laterType === 'screen' ? `${partnerUsername}_screen` : `${partnerUsername}_camera`;
+
+                    setRemoteStreams(prev => {
+                        const updated = { ...prev };
+                        // Remove from wrong key
+                        if (updated[wrongKey]) {
+                            const remainingTracks = updated[wrongKey].getTracks().filter(t => t.id !== track.id);
+                            if (remainingTracks.length === 0) {
+                                delete updated[wrongKey];
+                            } else {
+                                updated[wrongKey] = new MediaStream(remainingTracks);
+                            }
+                        }
+                        // Add to correct key
+                        if (updated[correctKey]) {
+                            if (!updated[correctKey].getTracks().some(t => t.id === track.id)) {
+                                updated[correctKey].addTrack(track);
+                                updated[correctKey] = new MediaStream(updated[correctKey].getTracks());
+                            }
+                        } else {
+                            updated[correctKey] = new MediaStream([track]);
+                        }
+                        return updated;
+                    });
+                }
+            }, 500); // 500ms — enough time for track_metadata to arrive via WS
+        }
 
         if (track.kind === 'audio') {
             initializeAudio();

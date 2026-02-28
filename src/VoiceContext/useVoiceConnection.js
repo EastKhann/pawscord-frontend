@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useEffect } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { WS_PROTOCOL, API_HOST } from '../utils/constants';
 import { setRtcIceServers } from './constants';
 import { applyProfessionalAudioFilters } from './audioProcessing';
@@ -30,15 +30,18 @@ export function useVoiceConnection({
     setIsReconnecting,
     stopRecording,
 }) {
-    // Internal reconnect state
-    const [wsReconnectAttempt, setWsReconnectAttempt] = useState(0);
-    const [wsReconnectDelay, setWsReconnectDelay] = useState(1000);
+    // Internal reconnect state — using refs to avoid stale closures in ws.onclose
+    const wsReconnectAttemptRef = useRef(0);
+    const wsReconnectDelayRef = useRef(1000);
 
-    // 🔥 FIX: Keep latest handleSignalMessage in a ref to avoid stale closures in WS onmessage
+    // 🔥 FIX: Keep latest values in refs to avoid stale closures in WS handlers
     const handleSignalMessageRef = useRef(handleSignalMessage);
     useEffect(() => {
         handleSignalMessageRef.current = handleSignalMessage;
     }, [handleSignalMessage]);
+
+    const isInVoiceRef = useRef(isInVoice);
+    useEffect(() => { isInVoiceRef.current = isInVoice; }, [isInVoice]);
 
     // Internal refs
     const isLeavingRef = useRef(false);
@@ -114,8 +117,8 @@ export function useVoiceConnection({
             wsHealthCheckIntervalRef.current = null;
         }
 
-        setWsReconnectAttempt(0);
-        setWsReconnectDelay(1000);
+        wsReconnectAttemptRef.current = 0;
+        wsReconnectDelayRef.current = 1000;
         setIsReconnecting(false);
 
         setTimeout(() => { isLeavingRef.current = false; }, 100);
@@ -331,8 +334,8 @@ export function useVoiceConnection({
 
                 if (isLeavingRef.current || isSwitchingRef.current) {
                     setIsReconnecting(false);
-                    setWsReconnectAttempt(0);
-                    setWsReconnectDelay(1000);
+                    wsReconnectAttemptRef.current = 0;
+                    wsReconnectDelayRef.current = 1000;
                     if (wsReconnectTimeoutRef.current) {
                         clearTimeout(wsReconnectTimeoutRef.current);
                         wsReconnectTimeoutRef.current = null;
@@ -351,40 +354,42 @@ export function useVoiceConnection({
                     return;
                 }
 
-                if (roomSlug && isInVoice) {
+                // 🔥 FIX: Use refs to avoid stale closure — isInVoice was captured
+                // at joinVoiceRoom call time (often false), but we need the CURRENT value
+                if (roomSlug && isInVoiceRef.current) {
                     const maxRetries = 10;
-                    const currentAttempt = wsReconnectAttempt + 1;
+                    const currentAttempt = wsReconnectAttemptRef.current + 1;
 
                     if (currentAttempt > maxRetries) {
                         console.error(`[VoiceWS] Max retry limit reached (${maxRetries}), giving up`);
                         toast.error(`Sesli sohbet bağlantısı ${maxRetries} denemeden sonra kurulamadı.`, 5000);
                         leaveVoiceRoom();
-                        setWsReconnectAttempt(0);
-                        setWsReconnectDelay(1000);
+                        wsReconnectAttemptRef.current = 0;
+                        wsReconnectDelayRef.current = 1000;
                         return;
                     }
 
-                    const delay = Math.min(wsReconnectDelay, 30000);
-                    console.warn(`[VoiceWS] 🔄 Unexpected disconnect (code: ${event.code})`);
+                    const delay = Math.min(wsReconnectDelayRef.current, 30000);
+                    console.warn(`[VoiceWS] 🔄 Unexpected disconnect (code: ${event.code}), attempt ${currentAttempt}/${maxRetries}`);
                     setIsReconnecting(true);
-                    setWsReconnectAttempt(currentAttempt);
+                    wsReconnectAttemptRef.current = currentAttempt;
 
                     if (wsReconnectTimeoutRef.current) clearTimeout(wsReconnectTimeoutRef.current);
 
                     wsReconnectTimeoutRef.current = setTimeout(() => {
                         if (!isLeavingRef.current && !isSwitchingRef.current && roomSlug) {
-                            setWsReconnectDelay(prev => Math.min(prev * 2, 30000));
+                            wsReconnectDelayRef.current = Math.min(wsReconnectDelayRef.current * 2, 30000);
                             joinVoiceRoom(roomSlug).then(() => {
-                                setWsReconnectAttempt(0);
-                                setWsReconnectDelay(1000);
+                                wsReconnectAttemptRef.current = 0;
+                                wsReconnectDelayRef.current = 1000;
                                 setIsReconnecting(false);
                             }).catch(err => {
                                 console.error('[VoiceWS] Reconnection failed:', err);
                             });
                         } else {
                             setIsReconnecting(false);
-                            setWsReconnectAttempt(0);
-                            setWsReconnectDelay(1000);
+                            wsReconnectAttemptRef.current = 0;
+                            wsReconnectDelayRef.current = 1000;
                         }
                     }, delay);
                 } else {

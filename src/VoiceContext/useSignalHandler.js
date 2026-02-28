@@ -171,6 +171,97 @@ export function useSignalHandler({
             return;
         }
 
+        // 🔊 SOUNDBOARD — Play remote sound effect
+        if (data.type === 'play_sound') {
+            const soundUrl = data.url;
+            const senderUsername = data.from || data.username;
+            if (soundUrl) {
+                try {
+                    const audio = new Audio(soundUrl);
+                    audio.volume = 0.5;
+                    audio.play().catch(e => console.warn('[Soundboard] Autoplay blocked:', e));
+                    logger.webrtc(`[Soundboard] Playing "${soundUrl}" from ${senderUsername}`);
+                } catch (e) {
+                    console.warn('[Soundboard] Failed to play remote sound:', e);
+                }
+            }
+            return;
+        }
+
+        // 🎵 DJ / MEDIA SYNC — Synchronize media playback
+        if (data.type === 'media_sync') {
+            const senderUsername = data.from || data.username;
+            setCinemaState(prev => {
+                const newState = { ...prev, syncedBy: senderUsername, timestamp: Date.now() };
+                switch (data.action) {
+                    case 'play_track':
+                        return { ...newState, isActive: true, url: data.url, title: data.title, playing: true, time: 0 };
+                    case 'pause':
+                        return { ...newState, playing: false, time: data.time || prev.time };
+                    case 'resume':
+                        return { ...newState, playing: true, time: data.time || prev.time };
+                    case 'seek':
+                        return { ...newState, time: data.time || 0 };
+                    case 'skip':
+                    case 'queue_update':
+                        return { ...newState, queue: data.queue || prev.queue };
+                    default:
+                        return newState;
+                }
+            });
+            return;
+        }
+
+        // 🎙️ RECORDING CONSENT — Notify users about recording
+        if (data.type === 'recording_state') {
+            const senderUsername = data.from || data.username;
+            if (data.is_recording) {
+                toast.warning(`🔴 ${senderUsername} görüşmeyi kayıt altına alıyor`, 5000);
+            } else {
+                toast.info(`⏹️ ${senderUsername} kaydı durdurdu`, 3000);
+            }
+            // Update connected users state to show recording indicator
+            setConnectedUsers(prev => prev.map(u =>
+                u.username === senderUsername ? { ...u, isRecording: data.is_recording } : u
+            ));
+            return;
+        }
+
+        // 🎤 STAGE CHANNEL — Real-time stage signals
+        if (data.type === 'stage_signal') {
+            const senderUsername = data.from || data.username;
+            const targetUsername = data.target;
+            const action = data.action;
+
+            if (action === 'request_speak') {
+                toast.info(`🙋 ${senderUsername} konuşma izni istiyor`, 3000);
+            } else if (action === 'grant_speak' && targetUsername === username) {
+                toast.success('🎤 Konuşma izni verildi! Mikrofonunuz açıldı.', 3000);
+                // Auto-unmute when granted speak permission
+                if (localStreamRef.current) {
+                    localStreamRef.current.getAudioTracks().forEach(track => { track.enabled = true; });
+                }
+            } else if (action === 'revoke_speak' && targetUsername === username) {
+                toast.warning('🔇 Konuşma izniniz alındı.', 3000);
+                if (localStreamRef.current) {
+                    localStreamRef.current.getAudioTracks().forEach(track => { track.enabled = false; });
+                }
+            } else if (action === 'end_stage') {
+                toast.info(`📢 ${senderUsername} sahneyi kapattı`, 3000);
+            }
+
+            // Propagate stage updates to parent (if listeners exist)
+            setConnectedUsers(prev => {
+                if (action === 'grant_speak') {
+                    return prev.map(u => u.username === targetUsername ? { ...u, isSpeaker: true } : u);
+                } else if (action === 'revoke_speak') {
+                    return prev.map(u => u.username === targetUsername ? { ...u, isSpeaker: false } : u);
+                }
+                return prev;
+            });
+            return;
+        }
+
         // 🔥 Current users list
         if (data.type === 'current_users') {
             setConnectedUsers(prev => {

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useMemo, useState } from 'react';
 
 const VideoPlayer = ({ stream, isMirrored, objectFit = 'cover', muted = false }) => {
     const videoRef = useRef(null);
+    const [isPiP, setIsPiP] = useState(false);
 
     useEffect(() => {
         if (videoRef.current && stream) {
@@ -24,14 +25,72 @@ const VideoPlayer = ({ stream, isMirrored, objectFit = 'cover', muted = false })
         };
     }, [stream]);
 
+    // 🔥 PiP state tracking
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        const onEnter = () => setIsPiP(true);
+        const onLeave = () => setIsPiP(false);
+        video.addEventListener('enterpictureinpicture', onEnter);
+        video.addEventListener('leavepictureinpicture', onLeave);
+        return () => {
+            video.removeEventListener('enterpictureinpicture', onEnter);
+            video.removeEventListener('leavepictureinpicture', onLeave);
+        };
+    }, []);
+
+    // 🔥 Picture-in-Picture toggle
+    const togglePiP = async (e) => {
+        e.stopPropagation();
+        const video = videoRef.current;
+        if (!video) return;
+        try {
+            if (document.pictureInPictureElement === video) {
+                await document.exitPictureInPicture();
+            } else if (document.pictureInPictureEnabled) {
+                await video.requestPictureInPicture();
+            }
+        } catch (err) {
+            console.warn('[PiP] Failed:', err.message);
+        }
+    };
+
     return (
-        <video
-            ref={videoRef}
-            style={{ ...styles.videoElement, transform: isMirrored ? 'scaleX(-1)' : 'none', objectFit }}
-            autoPlay
-            playsInline
-            muted={true} // 🔥 VoiceAudioController handles audio now
-        />
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <video
+                ref={videoRef}
+                style={{ ...styles.videoElement, transform: isMirrored ? 'scaleX(-1)' : 'none', objectFit }}
+                autoPlay
+                playsInline
+                muted={true} // 🔥 VoiceAudioController handles audio now
+            />
+            {/* 🔥 PiP Button — only show if browser supports it */}
+            {document.pictureInPictureEnabled && (
+                <button
+                    onClick={togglePiP}
+                    style={{
+                        position: 'absolute',
+                        top: '8px',
+                        left: '8px',
+                        backgroundColor: isPiP ? 'rgba(88, 101, 242, 0.9)' : 'rgba(0,0,0,0.6)',
+                        border: 'none',
+                        color: 'white',
+                        borderRadius: '4px',
+                        padding: '4px 7px',
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        zIndex: 15,
+                        opacity: 0.7,
+                        transition: 'opacity 0.2s',
+                    }}
+                    onMouseEnter={e => { e.target.style.opacity = '1'; }}
+                    onMouseLeave={e => { e.target.style.opacity = '0.7'; }}
+                    title={isPiP ? "PiP'den Çık" : "Pencere İçinde Pencere (PiP)"}
+                >
+                    {isPiP ? '📌' : '🖼️'}
+                </button>
+            )}
+        </div>
     );
 };
 

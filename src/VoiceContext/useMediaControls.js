@@ -50,11 +50,8 @@ export const useMediaControls = ({
         const newDeafened = !isDeafenedRef.current;
         isDeafenedRef.current = newDeafened;
 
-        // Uzak ses elementlerini sustur / aç
-        document.querySelectorAll('audio[id^="remote-audio-"], audio[data-username]')
-            .forEach(audio => { audio.muted = newDeafened; });
-
-        // State güncelle
+        // State güncelle — VoiceAudioController GainNode chain'i isDeafened prop'u
+        // üzerinden otomatik olarak gain=0 yaparak susturur
         setIsDeafened(newDeafened);
 
         // WebSocket sinyali

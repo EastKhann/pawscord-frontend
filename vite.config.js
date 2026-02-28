@@ -306,7 +306,10 @@ export default defineConfig({
     // ⚡ OPTIMIZATION: esbuild minification (faster than terser)
     minify: 'esbuild',
 
-    // ⚡ console.log drop artık top-level esbuild config'de (build.esbuildOptions geçersizdi)
+    // ⚡ Drop console.* and debugger statements in production builds
+    esbuildOptions: {
+      drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+    },
 
     // ⚡ OPTIMIZATION: CSS code splitting
     cssCodeSplit: true,

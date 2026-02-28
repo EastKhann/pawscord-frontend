@@ -16,16 +16,20 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
 
     switch (effectType) {
         case 'robot': {
-            // Robot voice: Ring modulator + waveshaper
+            // Robot voice: Ring modulator (AM synthesis) + waveshaper distortion
+            // 🔥 FIX: Oscillator now actually modulates the voice signal via GainNode
+            const modGain = audioContext.createGain();
             const oscillator = audioContext.createOscillator();
-            const gainOsc = audioContext.createGain();
             const waveshaper = audioContext.createWaveShaper();
 
             oscillator.type = 'sawtooth';
             oscillator.frequency.value = 50 + (normalizedIntensity * 100); // 50-150 Hz
-            gainOsc.gain.value = 0.3 + (normalizedIntensity * 0.4);
 
-            // Waveshaper curve for distortion
+            // Ring modulation: oscillator controls the gain of the voice
+            // This multiplies voice × oscillator = classic robot effect
+            modGain.gain.value = 0; // Will be driven by oscillator
+
+            // Waveshaper for metallic distortion
             const curve = new Float32Array(256);
             for (let i = 0; i < 256; i++) {
                 const x = (i / 128) - 1;
@@ -33,12 +37,26 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             }
             waveshaper.curve = curve;
 
-            oscillator.connect(gainOsc);
-            source.connect(waveshaper);
-            waveshaper.connect(destination);
+            // Dry/wet mix
+            const dryGain = audioContext.createGain();
+            const wetGain = audioContext.createGain();
+            dryGain.gain.value = 1 - (normalizedIntensity * 0.7);
+            wetGain.gain.value = 0.3 + (normalizedIntensity * 0.7);
+
+            // Voice → modGain (AM) → waveshaper → wet → destination
+            source.connect(modGain);
+            oscillator.connect(modGain.gain); // 🔥 Key: oscillator drives gain = ring modulation
+            modGain.connect(waveshaper);
+            waveshaper.connect(wetGain);
+            wetGain.connect(destination);
+
+            // Dry path for mixing
+            source.connect(dryGain);
+            dryGain.connect(destination);
+
             oscillator.start();
 
-            nodes.push(oscillator, gainOsc, waveshaper);
+            nodes.push(oscillator, modGain, waveshaper, dryGain, wetGain);
             break;
         }
 
@@ -67,40 +85,81 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
         }
 
         case 'deep': {
-            // Deep voice: Pitch shift down (using playbackRate trick)
-            const biquadFilter = audioContext.createBiquadFilter();
+            // Deep voice: Heavy bass boost + high-frequency cut + resonance
+            // 🔥 FIX: Multi-stage filtering for a convincingly deeper voice
+            const lowBoost = audioContext.createBiquadFilter();
+            const lowBoost2 = audioContext.createBiquadFilter();
+            const highCut = audioContext.createBiquadFilter();
             const gainNode = audioContext.createGain();
 
-            biquadFilter.type = 'lowshelf';
-            biquadFilter.frequency.value = 500;
-            biquadFilter.gain.value = 10 + (normalizedIntensity * 15); // Boost low frequencies
+            // Stage 1: Strong low-shelf boost
+            lowBoost.type = 'lowshelf';
+            lowBoost.frequency.value = 300;
+            lowBoost.gain.value = 12 + (normalizedIntensity * 18); // +12 to +30 dB
 
-            gainNode.gain.value = 1.2;
+            // Stage 2: Peaking bass resonance for "chest voice" feel
+            lowBoost2.type = 'peaking';
+            lowBoost2.frequency.value = 150 - (normalizedIntensity * 50); // 100-150 Hz
+            lowBoost2.Q.value = 1.5;
+            lowBoost2.gain.value = 6 + (normalizedIntensity * 10);
 
-            source.connect(biquadFilter);
-            biquadFilter.connect(gainNode);
+            // Stage 3: Cut high frequencies to remove "bright" quality
+            highCut.type = 'lowpass';
+            highCut.frequency.value = 3500 - (normalizedIntensity * 1500); // 2000-3500 Hz
+
+            // Slight volume boost to compensate
+            gainNode.gain.value = 1.0 + (normalizedIntensity * 0.3);
+
+            source.connect(lowBoost);
+            lowBoost.connect(lowBoost2);
+            lowBoost2.connect(highCut);
+            highCut.connect(gainNode);
             gainNode.connect(destination);
 
-            nodes.push(biquadFilter, gainNode);
+            nodes.push(lowBoost, lowBoost2, highCut, gainNode);
             break;
         }
 
         case 'high': {
-            // High/Chipmunk voice: Pitch shift up
-            const highFilter = audioContext.createBiquadFilter();
+            // High/Chipmunk voice: Treble boost + bass cut + formant emphasis
+            // 🔥 FIX: Multi-stage filtering for a convincingly higher voice
+            const highBoost = audioContext.createBiquadFilter();
+            const highBoost2 = audioContext.createBiquadFilter();
+            const bassCut = audioContext.createBiquadFilter();
+            const presenceBoost = audioContext.createBiquadFilter();
             const gainNode = audioContext.createGain();
 
-            highFilter.type = 'highshelf';
-            highFilter.frequency.value = 1000;
-            highFilter.gain.value = 8 + (normalizedIntensity * 12);
+            // Stage 1: High-shelf boost for brightness
+            highBoost.type = 'highshelf';
+            highBoost.frequency.value = 2000;
+            highBoost.gain.value = 10 + (normalizedIntensity * 15); // +10 to +25 dB
 
-            gainNode.gain.value = 0.9;
+            // Stage 2: Peaking at formant range to shift perceived pitch
+            highBoost2.type = 'peaking';
+            highBoost2.frequency.value = 3000 + (normalizedIntensity * 1000); // 3000-4000 Hz
+            highBoost2.Q.value = 2.0;
+            highBoost2.gain.value = 8 + (normalizedIntensity * 8);
 
-            source.connect(highFilter);
-            highFilter.connect(gainNode);
+            // Stage 3: Cut bass to remove "body" of voice
+            bassCut.type = 'highpass';
+            bassCut.frequency.value = 200 + (normalizedIntensity * 300); // 200-500 Hz
+
+            // Stage 4: Presence boost for clarity
+            presenceBoost.type = 'peaking';
+            presenceBoost.frequency.value = 5000;
+            presenceBoost.Q.value = 1.0;
+            presenceBoost.gain.value = 4 + (normalizedIntensity * 6);
+
+            gainNode.gain.value = 0.8; // Reduce slightly to avoid clipping
+
+            source.connect(bassCut);
+            bassCut.connect(highBoost);
+            highBoost.connect(highBoost2);
+            highBoost2.connect(presenceBoost);
+            presenceBoost.connect(gainNode);
             gainNode.connect(destination);
 
-            nodes.push(highFilter, gainNode);
+            nodes.push(highBoost, highBoost2, bassCut, presenceBoost, gainNode);
             break;
         }
 

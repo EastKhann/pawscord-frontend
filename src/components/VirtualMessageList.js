@@ -60,7 +60,9 @@ const Row = memo(({ index, style, data, isScrolling }) => {
         prevMsg?.content === nextMsg?.content &&
         prevMsg?.is_edited === nextMsg?.is_edited &&
         prevMsg?.is_pinned === nextMsg?.is_pinned &&
-        prevMsg?.reactions?.length === nextMsg?.reactions?.length
+        // 🔥 FIX: Compare reaction content, not just length — same count but different
+        // emojis/users would silently skip re-render with length-only check
+        JSON.stringify(prevMsg?.reactions) === JSON.stringify(nextMsg?.reactions)
     );
 });
 

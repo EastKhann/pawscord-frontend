@@ -201,7 +201,7 @@ const MessageInput = ({
     }, []);
 
     return (
-        <div style={styles.container} {...dragHandlers}>
+        <div style={styles.container} {...dragHandlers} role="form" aria-label="Mesaj gönderme alanı">
             {isDragging && (
                 <div style={styles.dragOverlay}><div style={styles.dragContent}>
                     <FaPaperclip style={{ fontSize: '48px' }} />
@@ -211,14 +211,14 @@ const MessageInput = ({
             )}
 
             {replyingTo && (
-                <div style={styles.replyPreview}><div style={styles.replyContent}>
+                <div style={styles.replyPreview} role="status" aria-label="Yanıtlanan mesaj"><div style={styles.replyContent}>
                     <strong>@{replyingTo.author}</strong>
                     <span>{replyingTo.content?.substring(0, 50)}...</span>
                 </div><button onClick={onCancelReply} style={styles.cancelButton}><FaTimes /></button></div>
             )}
 
             {editingMessage && (
-                <div style={styles.editPreview}>
+                <div style={styles.editPreview} role="status" aria-label="Mesaj düzenleniyor" id="edit-hint">
                     <span>{'📝'} Mesaj d$([char]0x00FC)zenleniyor</span>
                     <button onClick={onCancelEdit} style={styles.cancelButton}><FaTimes /></button>
                 </div>
@@ -270,6 +270,9 @@ const MessageInput = ({
                     }} />
 
                 <textarea ref={textareaRef} value={message}
+                    aria-label={editingMessage ? 'Mesaj düzenle' : replyingTo ? `${replyingTo.author} kullanıcısına yanıt yaz` : placeholder}
+                    aria-multiline="true"
+                    aria-describedby={editingMessage ? 'edit-hint' : undefined}
                     onChange={(e) => { setMessage(e.target.value); setCursorPos(e.target.selectionStart); }}
                     onKeyDown={handleKeyDown}
                     onSelect={(e) => setCursorPos(e.target.selectionStart)}
@@ -289,7 +292,7 @@ const MessageInput = ({
                     }}
                     placeholder={placeholder} style={styles.textarea} disabled={disabled} rows={1} />
 
-                <div style={styles.rightActions}>
+                <div style={styles.rightActions} role="toolbar" aria-label="Mesaj araçları">
                     {showEmojiPicker && <div style={styles.pickerWrapper}><EmojiPicker onSelect={handleEmojiSelect} /></div>}
                     {showGifPicker && (
                         <div style={styles.pickerWrapper}>

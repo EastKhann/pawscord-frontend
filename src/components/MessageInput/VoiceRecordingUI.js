@@ -19,9 +19,10 @@ const VoiceRecordingUI = ({
                 style={styles.micButton}
                 className="mic-button action-button"
                 title="Basılı tut — yukarı kaydır kilitle"
+                aria-label="Ses kaydı başlat (basılı tut)"
                 disabled={disabled}
             >
-                <FaMicrophone />
+                <FaMicrophone aria-hidden="true" />
             </button>
         );
     }
@@ -29,7 +30,7 @@ const VoiceRecordingUI = ({
     // Recording in progress
     if (isRecording) {
         return (
-            <div style={styles.recordingContainer} className="rec-container-glow">
+            <div style={styles.recordingContainer} className="rec-container-glow" role="status" aria-label={`Ses kaydediliyor: ${formatTime(recordingTime)}`}>
                 {/* Cancel gesture indicator — trash icon on the left */}
                 <div style={{
                     position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)',
@@ -100,9 +101,10 @@ const VoiceRecordingUI = ({
             onClick={handleSubmit}
             style={styles.sendButton}
             title="Gönder (Enter)"
+            aria-label="Mesaj gönder"
             disabled={disabled}
         >
-            <FaPaperPlane />
+            <FaPaperPlane aria-hidden="true" />
         </button>
     );
 };

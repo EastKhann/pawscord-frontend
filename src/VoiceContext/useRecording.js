@@ -1,12 +1,26 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import toast from '../utils/toast';
 
-export function useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom }) {
+// Maximum recording duration: 2 hours (in seconds)
+const MAX_RECORDING_DURATION = 7200;
+
+export function useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom, voiceWsRef, globalAudioContextRef }) {
     const [isRecording, setIsRecording] = useState(false);
     const [recordingDuration, setRecordingDuration] = useState(0);
     const recordingChunksRef = useRef([]);
     const mediaRecorderRef = useRef(null);
     const recordingIntervalRef = useRef(null);
+    const recordingAudioCtxRef = useRef(null);
+
+    // 🔥 Helper: Send recording_state consent signal to all users in voice channel
+    const sendRecordingState = useCallback((recording) => {
+        if (voiceWsRef?.current?.readyState === WebSocket.OPEN) {
+            voiceWsRef.current.send(JSON.stringify({
+                type: 'recording_state',
+                is_recording: recording
+            }));
+        }
+    }, [voiceWsRef]);
 
     // 🔥 YENİ: Start Recording
     const startRecording = useCallback(() => {
@@ -16,8 +30,18 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
         }
 
         try {
-            // Combine local and remote streams for recording
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            // 🔥 FIX: Reuse globalAudioContextRef if available, otherwise create one
+            let audioContext;
+            if (globalAudioContextRef?.current && globalAudioContextRef.current.state !== 'closed') {
+                audioContext = globalAudioContextRef.current;
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            } else {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+            }
+            recordingAudioCtxRef.current = audioContext;
+
             const destination = audioContext.createMediaStreamDestination();
 
             // Add local audio
@@ -66,23 +90,31 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
             setIsRecording(true);
             setRecordingDuration(0);
 
+            // 🔥 Broadcast consent signal — other users will see "🔴 X is recording"
+            sendRecordingState(true);
+
             // Start duration counter
             recordingIntervalRef.current = setInterval(() => {
-                setRecordingDuration(prev => prev + 1);
+                setRecordingDuration(prev => {
+                    const next = prev + 1;
+                    // 🔥 Auto-stop after max duration
+                    if (next >= MAX_RECORDING_DURATION) {
+                        toast.warning('Kayıt maksimum süreye ulaştı (2 saat). Otomatik durduruluyor.');
+                        // Schedule stop for next tick to avoid state mutation inside setState
+                        setTimeout(() => stopRecordingInternal(), 0);
+                    }
+                    return next;
+                });
             }, 1000);
 
         } catch (error) {
             console.error('[Recording] Start error:', error);
             toast.error('Kayıt başlatılamadı: ' + error.message);
         }
-    }, [isInVoice, isRecording, localAudioStream, remoteStreams, currentRoom]);
+    }, [isInVoice, isRecording, localAudioStream, remoteStreams, currentRoom, globalAudioContextRef, sendRecordingState]);
 
-    // 🔥 YENİ: Stop Recording
-    const stopRecording = useCallback(() => {
-        if (!isRecording) {
-            return;
-        }
-
+    // Internal stop logic (called from startRecording max duration timer and stopRecording)
+    const stopRecordingInternal = useCallback(() => {
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
             mediaRecorderRef.current.stop();
         }
@@ -95,7 +127,16 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
         mediaRecorderRef.current = null;
         setIsRecording(false);
         setRecordingDuration(0);
-    }, [isRecording]);
+
+        // 🔥 Broadcast recording stopped
+        sendRecordingState(false);
+    }, [sendRecordingState]);
+
+    // 🔥 YENİ: Stop Recording (public API)
+    const stopRecording = useCallback(() => {
+        if (!isRecording) return;
+        stopRecordingInternal();
+    }, [isRecording, stopRecordingInternal]);
 
     // 🔥 YENİ: Download Recording Manually
     const downloadRecording = useCallback(() => {
@@ -114,6 +155,15 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }, [currentRoom]);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (recordingIntervalRef.current) {
+                clearInterval(recordingIntervalRef.current);
+            }
+        };
+    }, []);
 
     return {
         isRecording,

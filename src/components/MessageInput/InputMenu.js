@@ -47,9 +47,12 @@ const InputMenu = ({
                         color: showMobileMenu ? '#5865f2' : '#b9bbbe'
                     }}
                     title="Seçenekler"
+                    aria-label="Mesaj seçenekleri menüsü"
+                    aria-expanded={showMobileMenu}
+                    aria-haspopup="menu"
                     disabled={disabled}
                 >
-                    <FaPlus />
+                    <FaPlus aria-hidden="true" />
                 </button>
                 <input
                     ref={fileInputRef}
@@ -58,21 +61,22 @@ const InputMenu = ({
                     style={{ display: 'none' }}
                     onChange={handleFileChange}
                     accept="image/*,video/*,audio/*,.pdf,.txt,.doc,.docx"
+                    aria-label="Dosya seç"
                 />
 
                 {showMobileMenu && (
-                    <div style={styles.mobileMenu} className="mobile-menu-container">
+                    <div style={styles.mobileMenu} className="mobile-menu-container" role="menu" aria-label="Mesaj seçenekleri">
                         <button onClick={() => menuAction(() => fileInputRef.current?.click())}
-                            style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled}>
-                            <FaPaperclip /><span>Dosya Ekle</span>
+                            style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled} role="menuitem">
+                            <FaPaperclip aria-hidden="true" /><span>Dosya Ekle</span>
                         </button>
                         <button onClick={() => menuAction(() => { setShowEmojiPicker(!showEmojiPicker); setShowGifPicker(false); })}
-                            style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled}>
-                            <FaSmile /><span>Emoji Ekle</span>
+                            style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled} role="menuitem">
+                            <FaSmile aria-hidden="true" /><span>Emoji Ekle</span>
                         </button>
                         <button onClick={() => menuAction(() => { setShowGifPicker(!showGifPicker); setShowEmojiPicker(false); })}
-                            style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled}>
-                            <FaImage /><span>GIF Ekle</span>
+                            style={styles.mobileMenuItem} className="mobile-menu-item" disabled={disabled} role="menuitem">
+                            <FaImage aria-hidden="true" /><span>GIF Ekle</span>
                         </button>
                         {onShowCodeSnippet && (
                             <button onClick={() => menuAction(onShowCodeSnippet)}

@@ -107,7 +107,7 @@ export const VoiceProvider = ({ children }) => {
     const {
         isRecording, recordingDuration,
         startRecording, stopRecording, downloadRecording,
-    } = useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom });
+    } = useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom, voiceWsRef, globalAudioContextRef });
 
     // 📊 Stats Monitoring Hook
     const { connectionStats, startStatsMonitoring: _rawStartStats, stopStatsMonitoring } = useStatsMonitoring();

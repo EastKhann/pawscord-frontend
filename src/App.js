@@ -419,6 +419,9 @@ const AppContent = () => {
     // --- MAIN APP ---
     return (
         <div style={{ ...styles.mainContainer }} className="dark-theme">
+            {/* Accessibility: Skip-to-content link for keyboard users */}
+            <a href="#main-chat-area" className="skip-to-content">Ana içeriğe atla</a>
+
             {showSplash && <SplashScreen animationState={animationState} />}
             {maintenanceMode && <MaintenanceBanner message={maintenanceMode.message} endTime={maintenanceMode.endTime} level={maintenanceMode.level} onDismiss={handleDismissMaintenance} />}
 
@@ -454,7 +457,7 @@ const AppContent = () => {
             <div style={styles.chatLayout}>
                 {/* ─── LEFT SIDEBAR ─── */}
                 {(!isMobile || isLeftSidebarVisible) && (
-                    <div style={{ ...styles.sidebarWrapper, ...(isMobile && styles.mobileSidebar), paddingTop: mobileWebPadding, paddingBottom: safeAreaBottom, height: '100%', boxSizing: 'border-box' }}>
+                    <nav style={{ ...styles.sidebarWrapper, ...(isMobile && styles.mobileSidebar), paddingTop: mobileWebPadding, paddingBottom: safeAreaBottom, height: '100%', boxSizing: 'border-box' }} aria-label="Kanal listesi">
                         {isMobile && (
                             <div style={styles.mobileSidebarHeader}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -518,11 +521,11 @@ const AppContent = () => {
                                 onServerSelect={handleServerSelect}
                             />
                         </SuspenseWithBoundary>
-                    </div>
+                    </nav>
                 )}
 
                 {/* ─── MAIN CONTENT ─── */}
-                <div style={styles.mainContent}>
+                <main id="main-chat-area" style={styles.mainContent} role="main" aria-label="Sohbet alanı">
                     <div style={{ position: 'absolute', top: 60, left: 0, right: 0, zIndex: 90 }}>
                         <Suspense fallback={null}>
                             <StickyMessageBanner message={stickyMessage?.message} type={stickyMessage?.type} onDismiss={() => setStickyMessage(null)} />
@@ -638,12 +641,12 @@ const AppContent = () => {
                             </SuspenseWithBoundary>
                         </div>
                     )}
-                </div>
+                </main>
 
                 {/* ─── VOICE CONTROLS ─── */}
                 {isInVoice && (
                     <Suspense fallback={null}>
-                        <VoiceAudioController remoteStreams={remoteStreams} remoteVolumes={remoteVolumes} mutedUsers={mutedUsers} />
+                        <VoiceAudioController remoteStreams={remoteStreams} remoteVolumes={remoteVolumes} mutedUsers={mutedUsers} isDeafened={isDeafened} />
                     </Suspense>
                 )}
 
