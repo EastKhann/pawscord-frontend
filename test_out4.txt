@@ -1,0 +1,6 @@
+ DEPRECATED  `test.poolOptions` was removed in Vitest 4. All previous `poolOptions` are now top-level options. Please, refer to the migration guide: https://vitest.dev/guide/migration#pool-rework
+
+ RUN  v4.0.18 C:/Users/Eastkhan/Software/JavaScript/PAWSCORD/frontend
+
+Terminate batch job (Y/N)? Terminate batch job (Y/N)? 
+^C

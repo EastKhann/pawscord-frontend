@@ -83,6 +83,7 @@ export function confirmDialog(options) {
 
         root.render(
             <div
+                role="presentation"
                 style={{
                     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
                     backgroundColor: 'rgba(0,0,0,0.7)',
@@ -92,6 +93,7 @@ export function confirmDialog(options) {
                     backdropFilter: 'blur(4px)',
                 }}
                 onClick={(e) => { if (e.target === e.currentTarget) cleanup(false); }}
+                onKeyDown={(e) => { if (e.key === 'Escape') cleanup(false); }}
             >
                 <style>{`
                     @keyframes confirmFadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -99,15 +101,19 @@ export function confirmDialog(options) {
                     .confirm-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
                     .confirm-btn:active { transform: translateY(0); }
                 `}</style>
-                <div style={{
-                    background: '#2b2d31',
-                    borderRadius: '16px',
-                    width: '420px',
-                    maxWidth: '90vw',
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
-                    overflow: 'hidden',
-                    animation: 'confirmSlideIn 0.25s ease-out',
-                }}>
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="confirm-dialog-title"
+                    style={{
+                        background: '#2b2d31',
+                        borderRadius: '16px',
+                        width: '420px',
+                        maxWidth: '90vw',
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
+                        overflow: 'hidden',
+                        animation: 'confirmSlideIn 0.25s ease-out',
+                    }}>
                     {/* Header */}
                     <div style={{
                         background: tc.gradient,
@@ -124,7 +130,7 @@ export function confirmDialog(options) {
                         }}>
                             {tc.icon}
                         </div>
-                        <h3 style={{
+                        <h3 id="confirm-dialog-title" style={{
                             margin: 0, color: '#fff', fontSize: '16px',
                             fontWeight: 600, flex: 1,
                         }}>

@@ -130,7 +130,7 @@ const EmojiPicker = ({ onSelect }) => {
         : allCategories[effectiveCategory] || [];
 
     return (
-        <div style={styles.container}>
+        <div style={styles.container} role="dialog" aria-label="Emoji seçici">
             {/* Search Bar */}
             <div style={styles.searchBar}>
                 <input
@@ -185,7 +185,7 @@ const EmojiPicker = ({ onSelect }) => {
             )}
 
             {/* Emoji Grid */}
-            <div style={styles.emojiGrid}>
+            <div style={styles.emojiGrid} role="grid" aria-label="Emojiler">
                 {filteredEmojis.map((emoji, index) => (
                     <button
                         key={`${emoji}-${index}`}
@@ -196,6 +196,8 @@ const EmojiPicker = ({ onSelect }) => {
                             ...(favoriteEmojis.includes(emoji) && effectiveCategory !== 'Favoriler ⭐' ? styles.favHighlight : {})
                         }}
                         title={favoriteEmojis.includes(emoji) ? `${emoji} ⭐` : emoji}
+                        aria-label={`Emoji ${emoji}`}
+                        role="gridcell"
                     >
                         {emoji}
                     </button>

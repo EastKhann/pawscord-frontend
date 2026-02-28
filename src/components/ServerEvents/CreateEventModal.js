@@ -3,6 +3,7 @@ import { FaTimes } from 'react-icons/fa';
 import { API_BASE_URL } from '../../utils/constants';
 import toast from '../../utils/toast';
 import { EVENT_TYPES } from './eventConstants';
+import useModalA11y from '../../hooks/useModalA11y';
 
 export const CreateEventModal = ({ serverId, onClose, onCreated }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Etkinlik Oluştur' });

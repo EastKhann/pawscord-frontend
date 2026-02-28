@@ -31,6 +31,9 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import PageWrapper from './components/PageWrapper';
 import { AuthProvider, useAuth } from './AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import RouteErrorBoundary from './components/RouteErrorBoundary';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoadingSkeleton from './components/LoadingSkeleton';
 
 // 🔐 Whitelist Guard — sadece is_whitelisted kullanıcılar erişebilir
 const WhitelistGuard = ({ children }) => {
@@ -281,11 +284,13 @@ const RootApp = () => {
 
                                 {/* İngilizce Modülleri */}
                                 <Route path="/eng-learn" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <EnglishHub />
-                                        </React.Suspense>
-                                    </PageWrapper>
+                                    <RouteErrorBoundary>
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<LoadingSkeleton label="Eğitim modülü yükleniyor..." />}>
+                                                <EnglishHub />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    </RouteErrorBoundary>
                                 } />
                                 <Route path="/eng-learn/vocab" element={
                                     <PageWrapper>
@@ -318,22 +323,28 @@ const RootApp = () => {
 
                                 {/* Kripto Sinyaller (Sadece Whitelist) */}
                                 <Route path="/crypto-analysis" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <WhitelistGuard>
-                                                <CryptoSignals />
-                                            </WhitelistGuard>
-                                        </React.Suspense>
-                                    </PageWrapper>
+                                    <RouteErrorBoundary>
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<LoadingSkeleton label="Kripto verileri yükleniyor..." />}>
+                                                <ProtectedRoute>
+                                                    <WhitelistGuard>
+                                                        <CryptoSignals />
+                                                    </WhitelistGuard>
+                                                </ProtectedRoute>
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    </RouteErrorBoundary>
                                 } />
 
                                 {/* Eski Crypto Dashboard (yedek) */}
                                 <Route path="/crypto-dashboard-old" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <CryptoDashboard />
-                                        </React.Suspense>
-                                    </PageWrapper>
+                                    <RouteErrorBoundary>
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<LoadingSkeleton />}>
+                                                <CryptoDashboard />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    </RouteErrorBoundary>
                                 } />
 
                                 {/* Ana Uygulama (Catch-All) */}

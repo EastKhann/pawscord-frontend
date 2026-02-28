@@ -20,8 +20,8 @@ const TypingIndicatorEnhanced = ({ typingUsers = [], currentUser }) => {
     }, [filtered]);
 
     return (
-        <div style={S.container}>
-            <div style={S.dots}>
+        <div style={S.container} role="status" aria-live="polite" aria-label={text}>
+            <div style={S.dots} aria-hidden="true">
                 <span style={{ ...S.dot, animationDelay: '0s' }} />
                 <span style={{ ...S.dot, animationDelay: '0.2s' }} />
                 <span style={{ ...S.dot, animationDelay: '0.4s' }} />

@@ -61,11 +61,13 @@
         "zustand": "^5.0.9"
     },
     "devDependencies": {
+        "@axe-core/react": "^4.10.1",
         "@fullhuman/postcss-purgecss": "^7.0.2",
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",
         "@testing-library/user-event": "^14.6.1",
         "@vitejs/plugin-react": "^5.1.2",
+        "axe-core": "^4.10.3",
         "concurrently": "^8.2.2",
         "cross-env": "^7.0.3",
         "electron": "^35.7.5",
@@ -109,6 +111,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
+        "test:a11y": "vitest run --reporter=verbose src/__tests__/a11y/",
         "test:ui": "vitest --ui",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
         "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",

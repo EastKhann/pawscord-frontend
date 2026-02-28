@@ -23,7 +23,7 @@ const ServerRail = ({
     const handleImgError = useCallback((e) => { e.target.style.display = 'none'; }, []);
 
     return (
-        <div style={styles.serverRail}>
+        <div style={styles.serverRail} role="navigation" aria-label="Sunucu listesi">
             {/* 🏠 Home Icon */}
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center', marginBottom: '8px' }}>
                 <div style={{
@@ -44,6 +44,11 @@ const ServerRail = ({
                     onMouseEnter={handleHomeHover}
                     onMouseLeave={handleHomeLeave}
                     title="Ana Sayfa"
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Ana Sayfa"
+                    aria-selected={selectedServerId === 'home'}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onHomeClick()}
                 >
                     <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord"
                         style={{ width: '32px', height: '32px', objectFit: 'contain' }}
@@ -53,86 +58,93 @@ const ServerRail = ({
             <div style={styles.separator} />
 
             {/* Server Icons */}
-            {servers && servers.map((server, index) => {
-                const initials = (server.name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || server.name.substring(0, 2)).toUpperCase();
-                const _hash = server.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-                const _GRAD = [['#5865f2', '#7289da'], ['#3ba55d', '#57f287'], ['#ed4245', '#ff6b6b'], ['#faa81a', '#ffca28'], ['#9c59b6', '#c56bcf'], ['#00b0f4', '#00d4ff']];
-                const _g = _GRAD[_hash % _GRAD.length];
-                const isActive = selectedServerId === server.id;
-                const isDragging = draggedServerId === server.id;
-                const isDropTarget = dropTargetIndex === index && !isDragging;
+            <div role="list" aria-label="Sunucular">
+                {servers && servers.map((server, index) => {
+                    const initials = (server.name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || server.name.substring(0, 2)).toUpperCase();
+                    const _hash = server.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+                    const _GRAD = [['#5865f2', '#7289da'], ['#3ba55d', '#57f287'], ['#ed4245', '#ff6b6b'], ['#faa81a', '#ffca28'], ['#9c59b6', '#c56bcf'], ['#00b0f4', '#00d4ff']];
+                    const _g = _GRAD[_hash % _GRAD.length];
+                    const isActive = selectedServerId === server.id;
+                    const isDragging = draggedServerId === server.id;
+                    const isDropTarget = dropTargetIndex === index && !isDragging;
 
-                const serverUnread = Object.keys(safeUnreadCounts)
-                    .filter(k => k.startsWith('room-') && server.categories?.some(cat => cat.rooms?.some(r => `room-${r.slug}` === k)))
-                    .reduce((sum, k) => sum + (safeUnreadCounts[k] || 0), 0);
+                    const serverUnread = Object.keys(safeUnreadCounts)
+                        .filter(k => k.startsWith('room-') && server.categories?.some(cat => cat.rooms?.some(r => `room-${r.slug}` === k)))
+                        .reduce((sum, k) => sum + (safeUnreadCounts[k] || 0), 0);
 
-                return (
-                    <div key={server.id} style={{
-                        position: 'relative', marginBottom: '8px', display: 'flex',
-                        alignItems: 'center', width: '100%', justifyContent: 'center'
-                    }}>
-                        {/* Active Pill */}
-                        <div style={{
-                            position: 'absolute', left: 0, width: '4px',
-                            height: isActive ? '40px' : (hoveredServerId === server.id ? '20px' : (serverUnread > 0 ? '8px' : '0px')),
-                            backgroundColor: '#fff', borderRadius: '0 4px 4px 0',
-                            transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                        }} />
-
-                        {/* Drop indicator (before) */}
-                        {isDropTarget && dropPosition === 'before' && (
+                    return (
+                        <div key={server.id} role="listitem" style={{
+                            position: 'relative', marginBottom: '8px', display: 'flex',
+                            alignItems: 'center', width: '100%', justifyContent: 'center'
+                        }}>
+                            {/* Active Pill */}
                             <div style={{
-                                position: 'absolute', top: '-4px', left: '50%', transform: 'translateX(-50%)',
-                                width: '40px', height: '3px', backgroundColor: '#43b581',
-                                borderRadius: '2px', zIndex: 1000, boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
+                                position: 'absolute', left: 0, width: '4px',
+                                height: isActive ? '40px' : (hoveredServerId === server.id ? '20px' : (serverUnread > 0 ? '8px' : '0px')),
+                                backgroundColor: '#fff', borderRadius: '0 4px 4px 0',
+                                transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                             }} />
-                        )}
 
-                        <div
-                            draggable={true}
-                            onDragStart={(e) => handleServerDragStartWrapper(e, server.id, index)}
-                            onDragOver={(e) => handleServerDragOverWrapper(e, index)}
-                            onDragEnd={handleServerDragEndWrapper}
-                            onDrop={(e) => handleServerDropWrapper(e, index)}
-                            style={{
-                                ...styles.serverIcon,
-                                backgroundColor: isActive ? '#5865f2' : (hoveredServerId === server.id ? '#5865f2' : '#313338'),
-                                borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
-                                cursor: isDragging ? 'grabbing' : 'grab',
-                                position: 'relative',
-                                transition: 'border-radius 0.3s ease, background-color 0.3s ease, opacity 0.2s ease, transform 0.1s ease',
-                                opacity: isDragging ? 0.4 : 1, marginBottom: 0
-                            }}
-                            onClick={() => handleServerClick(server)}
-                            onContextMenu={(e) => handleServerContextMenu(e, server)}
-                            onMouseEnter={() => setHoveredServerId(server.id)}
-                            onMouseLeave={() => setHoveredServerId(null)}
-                            onMouseDown={(e) => { e.currentTarget.style.cursor = 'grabbing'; e.currentTarget.style.transform = 'scale(0.95)'; }}
-                            onMouseUp={(e) => { e.currentTarget.style.cursor = 'grab'; e.currentTarget.style.transform = 'scale(1)'; }}
-                            title={server.name}
-                            data-tooltip={server.name}
-                        >
-                            {server.icon ? (
-                                <LazyImage src={server.icon} alt={server.name} style={{ width: '100%', height: '100%', borderRadius: 'inherit', objectFit: 'cover' }} />
-                            ) : (
-                                <span className={`server-icon-initials${isActive ? ' active' : ''}`} style={{ background: `linear-gradient(135deg, ${_g[0]} 0%, ${_g[1]} 100%)`, fontSize: initials.length > 1 ? '14px' : '18px' }} aria-hidden="true">{initials}</span>
+                            {/* Drop indicator (before) */}
+                            {isDropTarget && dropPosition === 'before' && (
+                                <div style={{
+                                    position: 'absolute', top: '-4px', left: '50%', transform: 'translateX(-50%)',
+                                    width: '40px', height: '3px', backgroundColor: '#43b581',
+                                    borderRadius: '2px', zIndex: 1000, boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
+                                }} />
                             )}
-                            {serverUnread > 0 && (
-                                <div style={styles.serverBadge}>{serverUnread > 99 ? '99+' : serverUnread}</div>
+
+                            <div
+                                draggable={true}
+                                onDragStart={(e) => handleServerDragStartWrapper(e, server.id, index)}
+                                onDragOver={(e) => handleServerDragOverWrapper(e, index)}
+                                onDragEnd={handleServerDragEndWrapper}
+                                onDrop={(e) => handleServerDropWrapper(e, index)}
+                                style={{
+                                    ...styles.serverIcon,
+                                    backgroundColor: isActive ? '#5865f2' : (hoveredServerId === server.id ? '#5865f2' : '#313338'),
+                                    borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
+                                    cursor: isDragging ? 'grabbing' : 'grab',
+                                    position: 'relative',
+                                    transition: 'border-radius 0.3s ease, background-color 0.3s ease, opacity 0.2s ease, transform 0.1s ease',
+                                    opacity: isDragging ? 0.4 : 1, marginBottom: 0
+                                }}
+                                onClick={() => handleServerClick(server)}
+                                onContextMenu={(e) => handleServerContextMenu(e, server)}
+                                onMouseEnter={() => setHoveredServerId(server.id)}
+                                onMouseLeave={() => setHoveredServerId(null)}
+                                onMouseDown={(e) => { e.currentTarget.style.cursor = 'grabbing'; e.currentTarget.style.transform = 'scale(0.95)'; }}
+                                onMouseUp={(e) => { e.currentTarget.style.cursor = 'grab'; e.currentTarget.style.transform = 'scale(1)'; }}
+                                title={server.name}
+                                data-tooltip={server.name}
+                                role="button"
+                                tabIndex={0}
+                                aria-label={server.name}
+                                aria-selected={isActive}
+                                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleServerClick(server)}
+                            >
+                                {server.icon ? (
+                                    <LazyImage src={server.icon} alt={server.name} style={{ width: '100%', height: '100%', borderRadius: 'inherit', objectFit: 'cover' }} />
+                                ) : (
+                                    <span className={`server-icon-initials${isActive ? ' active' : ''}`} style={{ background: `linear-gradient(135deg, ${_g[0]} 0%, ${_g[1]} 100%)`, fontSize: initials.length > 1 ? '14px' : '18px' }} aria-hidden="true">{initials}</span>
+                                )}
+                                {serverUnread > 0 && (
+                                    <div style={styles.serverBadge}>{serverUnread > 99 ? '99+' : serverUnread}</div>
+                                )}
+                            </div>
+
+                            {/* Drop indicator (after) */}
+                            {isDropTarget && dropPosition === 'after' && (
+                                <div style={{
+                                    position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)',
+                                    width: '40px', height: '3px', backgroundColor: '#43b581',
+                                    borderRadius: '2px', zIndex: 1000, boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
+                                }} />
                             )}
                         </div>
-
-                        {/* Drop indicator (after) */}
-                        {isDropTarget && dropPosition === 'after' && (
-                            <div style={{
-                                position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)',
-                                width: '40px', height: '3px', backgroundColor: '#43b581',
-                                borderRadius: '2px', zIndex: 1000, boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
-                            }} />
-                        )}
-                    </div>
-                );
-            })}
+                    );
+                })}
+            </div>
 
             {/* Discover */}
             <div
@@ -148,6 +160,10 @@ const ServerRail = ({
                 onMouseEnter={handleDiscoverHover}
                 onMouseLeave={handleDiscoverLeave}
                 title="Sunucu Keşfet"
+                role="button"
+                tabIndex={0}
+                aria-label="Sunucu Keşfet"
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onDiscoverClick()}
             >
                 <FaCompass size={24} />
             </div>
@@ -166,6 +182,10 @@ const ServerRail = ({
                 onMouseEnter={handleStoreHover}
                 onMouseLeave={handleStoreLeave}
                 title="Premium Mağaza"
+                role="button"
+                tabIndex={0}
+                aria-label="Premium Mağaza"
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onOpenStore()}
             >
                 🛒
             </div>
@@ -183,6 +203,10 @@ const ServerRail = ({
                 onMouseEnter={handleAddHover}
                 onMouseLeave={handleAddLeave}
                 title="Ekle"
+                role="button"
+                tabIndex={0}
+                aria-label="Sunucu ekle"
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onAddClick()}
             >
                 <FaPlus size={20} />
             </div>

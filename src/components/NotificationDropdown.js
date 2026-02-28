@@ -1,5 +1,5 @@
 // frontend/src/components/NotificationDropdown.js
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { FaBell, FaTimes, FaCheck, FaCheckDouble, FaTrash } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
 
@@ -125,7 +125,7 @@ const NotificationDropdown = ({
     const unreadCount = notifications.filter(n => !n.is_read).length;
 
     return (
-        <div ref={dropdownRef} style={styles.dropdown}>
+        <div ref={dropdownRef} style={styles.dropdown} role="dialog" aria-label="Bildirimler" aria-modal="false">
             {/* Header */}
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
@@ -135,7 +135,7 @@ const NotificationDropdown = ({
                         <span style={styles.badge}>{unreadCount}</span>
                     )}
                 </div>
-                <button onClick={onClose} style={styles.closeButton}>
+                <button onClick={onClose} style={styles.closeButton} aria-label="Bildirimleri kapat">
                     <FaTimes />
                 </button>
             </div>
@@ -148,14 +148,14 @@ const NotificationDropdown = ({
                             <FaCheckDouble /> Tümünü okundu işaretle
                         </button>
                     )}
-                    <button onClick={clearAll} style={{...styles.actionButton, color: '#ed4245'}}>
+                    <button onClick={clearAll} style={{ ...styles.actionButton, color: '#ed4245' }}>
                         <FaTrash /> Tümünü temizle
                     </button>
                 </div>
             )}
 
             {/* Notifications List */}
-            <div style={styles.list}>
+            <div style={styles.list} role="list" aria-label="Bildirim listesi">
                 {loading ? (
                     <div style={styles.loading}>Yükleniyor...</div>
                 ) : notifications.length === 0 ? (
@@ -173,6 +173,8 @@ const NotificationDropdown = ({
                                 backgroundColor: notification.is_read ? 'transparent' : 'rgba(88, 101, 242, 0.05)'
                             }}
                             onClick={() => !notification.is_read && markAsRead(notification.id)}
+                            role="listitem"
+                            aria-label={`${notification.message} — ${formatTime(notification.created_at)}${notification.is_read ? '' : ' (okunmamış)'}`}
                         >
                             <div style={styles.notificationIcon}>
                                 {getNotificationIcon(notification.notification_type)}
@@ -196,6 +198,7 @@ const NotificationDropdown = ({
                                         }}
                                         style={styles.iconButton}
                                         title="Okundu işaretle"
+                                        aria-label="Okundu işaretle"
                                     >
                                         <FaCheck />
                                     </button>
@@ -207,6 +210,7 @@ const NotificationDropdown = ({
                                     }}
                                     style={styles.iconButton}
                                     title="Sil"
+                                    aria-label="Bildirimi sil"
                                 >
                                     <FaTimes />
                                 </button>
@@ -390,7 +394,7 @@ styleSheet.textContent = `
 `;
 document.head.appendChild(styleSheet);
 
-export default NotificationDropdown;
+export default memo(NotificationDropdown);
 
 
 

@@ -223,7 +223,7 @@ const CategorySection = React.memo(({
                 overflow: 'hidden',
                 opacity: isCollapsed ? 0 : 1,
                 transition: 'max-height 0.25s ease-out, opacity 0.18s ease',
-            }}>
+            }} role="group" aria-label={`${cat.name} kanalları`}>
                 {cat.rooms && cat.rooms.map(room => (
                     <ChannelItem
                         key={room.id}
@@ -350,6 +350,11 @@ const ChannelItem = React.memo(({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                role="treeitem"
+                tabIndex={0}
+                aria-label={`${isVoice ? 'Sesli kanal' : 'Metin kanalı'}: ${room.name}`}
+                aria-current={isActive ? 'page' : undefined}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleChannelClick()}
             >
                 <div style={styles.channelContent}>
                     {isVoice && <FaVolumeUp style={{ ...styles.voiceIcon, color: isActive ? '#43b581' : '#949ba4', transition: 'color 0.2s ease' }} />}

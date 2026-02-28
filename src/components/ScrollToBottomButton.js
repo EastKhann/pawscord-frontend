@@ -14,9 +14,10 @@ const ScrollToBottomButton = ({ onClick, unreadCount = 0, visible = true }) => {
             style={S.fab}
             className="scroll-to-bottom-fab"
             title="En alta git"
+            aria-label={unreadCount > 0 ? `En alta git (${unreadCount > 99 ? '99+' : unreadCount} okunmamış mesaj)` : 'En alta git'}
         >
             {unreadCount > 0 && (
-                <div style={S.badge}>
+                <div style={S.badge} aria-hidden="true">
                     {unreadCount > 99 ? '99+' : unreadCount}
                 </div>
             )}

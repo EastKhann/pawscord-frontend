@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { FaTimes, FaPlus } from 'react-icons/fa';
 import styles from './styles';
+import useModalA11y from '../../hooks/useModalA11y';
 
 const INITIAL_WARNING = {
     user_id: '', reason: '', severity: 'medium',

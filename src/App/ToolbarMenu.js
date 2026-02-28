@@ -45,12 +45,13 @@ export default memo(function ToolbarMenu({
             backgroundColor: '#2f3136', borderRadius: '8px',
             boxShadow: '0 8px 16px rgba(0,0,0,0.4)', minWidth: '220px',
             zIndex: 1000, overflow: 'hidden', border: '1px solid #202225'
-        }}>
+        }} role="menu" aria-label="Sohbet araçları menüsü">
             {/* 🔐 Şifreleme (Sadece DM) */}
             {activeChat.type === 'dm' && (
                 <button onClick={handleEncModal}
                     style={{ ...menuItemStyle, color: hasKey ? '#43b581' : '#dcddde' }}
-                    onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, hasKey ? '#43b581' : '#dcddde')}>
+                    onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, hasKey ? '#43b581' : '#dcddde')}
+                    role="menuitem">
                     {hasKey ? <FaLock /> : <FaLock style={{ opacity: 0.5 }} />}
                     <span>{hasKey ? 'Şifreli' : 'Şifrele'}</span>
                 </button>
@@ -59,20 +60,23 @@ export default memo(function ToolbarMenu({
             {/* 📌 Sabitli Mesajlar */}
             <button onClick={handlePinned}
                 style={{ ...menuItemStyle, color: modals.pinned ? '#f5a524' : '#dcddde' }}
-                onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, modals.pinned ? '#f5a524' : '#dcddde')}>
+                onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, modals.pinned ? '#f5a524' : '#dcddde')}
+                role="menuitem">
                 <FaThumbtack /><span>Sabitli Mesajlar</span>
             </button>
 
             {/* 🔗 Link Kopyala */}
             <button onClick={handleCopy}
-                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                role="menuitem">
                 <FaLink /><span>Bağlantıyı Kopyala</span>
             </button>
 
             {/* 🔕 Sessize Al */}
             <button onClick={handleNotif}
                 style={{ ...menuItemStyle, color: soundSettings.notifications ? '#43b581' : '#f04747' }}
-                onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, soundSettings.notifications ? '#43b581' : '#f04747')}>
+                onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, soundSettings.notifications ? '#43b581' : '#f04747')}
+                role="menuitem">
                 {soundSettings.notifications ? <FaBell /> : <FaBellSlash />}
                 <span>{soundSettings.notifications ? 'Sessize Al' : 'Sesi Aç'}</span>
             </button>
@@ -81,13 +85,15 @@ export default memo(function ToolbarMenu({
 
             {/* 📬 Bahsedilmeler */}
             <button onClick={handleMentions}
-                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                role="menuitem">
                 <FaInbox /><span>Bahsedilmeler</span>
             </button>
 
             {/* 🎭 Durumunu Ayarla */}
             <button onClick={handleStatus}
-                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                role="menuitem">
                 <FaSmile /><span>Durumunu Ayarla</span>
             </button>
 
@@ -95,26 +101,30 @@ export default memo(function ToolbarMenu({
 
             {/* 🎬 Sinema */}
             <button onClick={handleCinema}
-                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                role="menuitem">
                 <FaFilm /><span>Sinema Modu</span>
             </button>
 
             {/* 🎵 DJ Modu */}
             <button onClick={handleDJ}
-                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                role="menuitem">
                 <FaCoffee /><span>DJ Modu</span>
             </button>
 
             {/* 🖍️ Beyaz Tahta */}
             <button onClick={handleWhiteboard}
-                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                role="menuitem">
                 <FaCode /><span>Beyaz Tahta</span>
             </button>
 
             {/* 🎤 Ses Efektleri */}
             {isInVoice && (
                 <button onClick={handleSoundboard}
-                    style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                    style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                    role="menuitem">
                     <FaMagic /><span>Ses Efektleri</span>
                 </button>
             )}
@@ -124,13 +134,15 @@ export default memo(function ToolbarMenu({
                 <>
                     <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
                     <button onClick={handleSummarizeClick}
-                        style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}>
+                        style={menuItemStyle} onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e)}
+                        role="menuitem">
                         <FaMagic /><span>Sohbeti Özetle</span>
                     </button>
                     <button onClick={handleClearChatClick}
                         style={{ ...menuItemStyle, color: '#f04747' }}
                         onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f04747'; e.currentTarget.style.color = '#ffffff'; }}
-                        onMouseLeave={(e) => hoverOff(e, '#f04747')}>
+                        onMouseLeave={(e) => hoverOff(e, '#f04747')}
+                        role="menuitem">
                         <FaBroom /><span>Sohbeti Temizle</span>
                     </button>
                     {username === 'admin' && activeChat.type === 'dm' && (
@@ -139,7 +151,8 @@ export default memo(function ToolbarMenu({
                             <button onClick={handleAdminDelete}
                                 style={{ ...menuItemStyle, color: '#ed4245', fontWeight: 'bold' }}
                                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#ed4245'; e.currentTarget.style.color = '#ffffff'; }}
-                                onMouseLeave={(e) => hoverOff(e, '#ed4245')} title="Admin: Konuşmayı kalıcı olarak sil">
+                                onMouseLeave={(e) => hoverOff(e, '#ed4245')} title="Admin: Konuşmayı kalıcı olarak sil"
+                                role="menuitem">
                                 <FaTrash /><span>⚠️ KALICI SİL (ADMİN)</span>
                             </button>
                         </>
@@ -151,7 +164,8 @@ export default memo(function ToolbarMenu({
             <div style={{ height: '1px', backgroundColor: '#40444b', margin: '4px 0' }} />
             <button onClick={handleFeatureHub}
                 style={{ ...menuItemStyle, color: '#5865f2', fontWeight: 'bold' }}
-                onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, '#5865f2')}>
+                onMouseEnter={hoverOn} onMouseLeave={(e) => hoverOff(e, '#5865f2')}
+                role="menuitem">
                 🚀<span>Tüm Özellikler</span>
             </button>
         </div>

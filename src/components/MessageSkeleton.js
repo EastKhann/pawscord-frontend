@@ -1,6 +1,6 @@
 // frontend/src/components/MessageSkeleton.js
 // Faz 2.4: Skeleton loading placeholders for chat messages (Discord-style)
-import React from 'react';
+import React, { memo } from 'react';
 
 const LINE_WIDTHS = ['72%', '55%', '80%', '48%', '65%', '40%', '70%'];
 
@@ -47,7 +47,7 @@ const lineStyle = (width) => ({
  * Single skeleton message row.
  * Uses .skeleton-shimmer CSS class from index.css (Faz 4.4 shimmer keyframe).
  */
-const SkeletonRow = ({ lineCount = 2, lineWidthIndex = 0 }) => (
+const SkeletonRow = memo(({ lineCount = 2, lineWidthIndex = 0 }) => (
     <div style={skeletonStyle}>
         {/* Avatar circle */}
         <div className="skeleton-shimmer" style={avatarStyle} />
@@ -67,7 +67,7 @@ const SkeletonRow = ({ lineCount = 2, lineWidthIndex = 0 }) => (
             ))}
         </div>
     </div>
-);
+));
 
 /**
  * MessageSkeleton — renders N skeleton message rows while messages are loading.

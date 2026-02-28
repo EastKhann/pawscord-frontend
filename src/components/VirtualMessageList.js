@@ -18,16 +18,19 @@ import { AutoSizer } from 'react-virtualized-auto-sizer';
 // Memoized Row
 const Row = memo(({ index, style, data, isScrolling }) => {
     const { messages, renderMessage, setItemSize, getItemSize } = data;
-    const rowRef = useRef();
+    const innerRef = useRef();
 
     useEffect(() => {
-        if (rowRef.current) {
-            const height = rowRef.current.getBoundingClientRect().height;
-            if (height !== getItemSize(index)) {
+        if (innerRef.current) {
+            // Measure the INNER div's natural height (not the outer div which
+            // has react-window's explicit height constraint).  This breaks the
+            // circular measurement that caused all items to stay at estimatedItemSize.
+            const height = innerRef.current.getBoundingClientRect().height;
+            if (height > 0 && Math.abs(height - getItemSize(index)) > 0.5) {
                 setItemSize(index, height);
             }
         }
-    }, [index, getItemSize, setItemSize]);
+    });  // Run after every render so dynamic content (images, embeds) is re-measured
 
     const message = messages[index];
     if (!message) return null;
@@ -44,8 +47,10 @@ const Row = memo(({ index, style, data, isScrolling }) => {
     }
 
     return (
-        <div style={style} ref={rowRef}>
-            {renderMessage(message, index)}
+        <div style={{ ...style, overflow: 'hidden' }}>
+            <div ref={innerRef}>
+                {renderMessage(message, index)}
+            </div>
         </div>
     );
 }, (prevProps, nextProps) => {
@@ -98,7 +103,10 @@ const VirtualMessageList = memo(({
                     const minIndex = pendingResetRef.current;
                     pendingResetRef.current = null;
                     if (listRef.current && minIndex !== null) {
-                        listRef.current.resetAfterIndex(minIndex, false);
+                        // 🔥 FIX: shouldForceUpdate MUST be true — without it, react-window
+                        // never re-renders to apply measured heights, leaving items at
+                        // their estimated positions → visible overlap / gaps.
+                        listRef.current.resetAfterIndex(minIndex, true);
                     }
                 });
             } else {

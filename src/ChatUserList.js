@@ -94,7 +94,7 @@ const ChatUserList = ({
       </div>
 
       {/* USER LIST */}
-      <div style={styles.userList}>
+      <div style={styles.userList} role="list" aria-label={isServer ? 'Sunucu üyeleri' : 'Arkadaş listesi'}>
         {totalCount === 0 ? (
           <div style={styles.emptyState}>
             <FaCircle size={24} color="#43b581" style={{ opacity: 0.3 }} />
