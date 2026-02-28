@@ -20,7 +20,7 @@ const TicTacToe = lazy(() => import('../TicTacToe'));
 const ReminderModal = lazy(() => import('../ReminderModal'));
 const MessageThreads = lazy(() => import('../MessageThreads'));
 
-const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleReaction, onTogglePin, onSetReply, onImageClick, absoluteHostUrl, onScrollToMessage, onVisible, messageEditHistoryUrl, onViewProfile, onStartForward, fetchWithAuth, isSelectionMode, isSelected, onToggleSelection, allUsers, getDeterministicAvatar, onShowChart, onContentLoad }) => {
+const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleReaction, onTogglePin, onSetReply, onImageClick, absoluteHostUrl, onScrollToMessage, onVisible, messageEditHistoryUrl, onViewProfile, onStartForward, fetchWithAuth, isSelectionMode, isSelected, onToggleSelection, allUsers, getDeterministicAvatar, onShowChart, onContentLoad, isGrouped }) => {
   const {
     messageRef, isMyMessage, isAIMessage, isHovered, setIsHovered,
     contextMenu, setContextMenu, handleContextMenu,
@@ -49,18 +49,24 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
   }, [fetchWithAuth, absoluteHostUrl]);
   const handleShowChart = useCallback(() => onShowChart(signalCoin), [onShowChart, signalCoin]);
 
+  const messageStyle = isGrouped
+    ? { ...styles.chatMessageGrouped, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent', cursor: isSelectionMode ? 'pointer' : 'default' }
+    : { ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent', cursor: isSelectionMode ? 'pointer' : 'default' };
+
   return (
     <div ref={messageRef} className="chat-msg" role="article"
       aria-label={`${msg.username}: ${(msg.content || '').replace(/[*_`~>]/g, '').substring(0, 200)}`}
-      style={{ ...styles.chatMessage, backgroundColor: isSelected ? 'rgba(88, 101, 242, 0.3)' : 'transparent', cursor: isSelectionMode ? 'pointer' : 'default' }}
+      style={messageStyle}
       onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
       onContextMenu={handleContextMenu} id={`message-${msg.id}`} onClick={handleMessageClick}>
 
-      <UserCardPopover user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }} onMessage={handleViewProfile} onProfile={handleViewProfile}>
-        <div style={styles.avatarContainer}>
-          <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar} onClick={handleAvatarClick} placeholder={getDeterministicAvatar(msg.username)} />
-        </div>
-      </UserCardPopover>
+      {!isGrouped && (
+        <UserCardPopover user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }} onMessage={handleViewProfile} onProfile={handleViewProfile}>
+          <div style={styles.avatarContainer}>
+            <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar} onClick={handleAvatarClick} placeholder={getDeterministicAvatar(msg.username)} />
+          </div>
+        </UserCardPopover>
+      )}
 
       <div style={styles.contentWrapper}>
         {msg.reply_to && (
@@ -71,7 +77,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           </div>
         )}
 
-        <MessageHeader msg={msg} isAdmin={isAdmin} isAIMessage={isAIMessage} onViewProfile={onViewProfile} messageEditHistoryUrl={messageEditHistoryUrl} fetchWithAuth={fetchWithAuth} />
+        {!isGrouped && <MessageHeader msg={msg} isAdmin={isAdmin} isAIMessage={isAIMessage} onViewProfile={onViewProfile} messageEditHistoryUrl={messageEditHistoryUrl} fetchWithAuth={fetchWithAuth} />}
 
         {isHovered && !msg.temp_id && !isSelectionMode && (
           <MessageActions msg={msg} isMyMessage={isMyMessage} isAdmin={isAdmin} currentPermissions={currentPermissions}
@@ -117,7 +123,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
 };
 
 const areEqual = (prev, next) => {
-  for (const k of ['msg', 'currentUser', 'isAdmin', 'isSelectionMode', 'isSelected']) {
+  for (const k of ['msg', 'currentUser', 'isAdmin', 'isSelectionMode', 'isSelected', 'isGrouped']) {
     if (prev[k] !== next[k]) return false;
   }
   return true;
