@@ -205,6 +205,14 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 // MOBILE: Capacitor Google Auth kullan
                 const googleUser = await GoogleAuth.signIn();
 
+                // 🔥 FIX: idToken null olabilir (forceCodeForRefreshToken=true iken)
+                const idToken = googleUser?.authentication?.idToken;
+                if (!idToken) {
+                    console.error('❌ [Google] idToken null! googleUser:', JSON.stringify(googleUser));
+                    setAuthError('Google token alınamadı. Lütfen tekrar deneyin.');
+                    return;
+                }
+
                 // Token'ı Backend'e Gönder (POST /auth/google/native/)
                 const url = `${API_BASE_URL}/auth/google/native/`;
 
@@ -214,7 +222,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify({ token: googleUser.authentication.idToken })
+                    body: JSON.stringify({ token: idToken })
                 });
 
 
@@ -232,8 +240,18 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
                 if (response.ok) {
                     if (data.access && data.refresh) {
+                        // 🔥 FIX: username'i de kaydet (diğer login flow'ları gibi)
+                        localStorage.removeItem('chat_username');
                         localStorage.setItem('access_token', data.access);
                         localStorage.setItem('refresh_token', data.refresh);
+                        if (data.username) {
+                            localStorage.setItem('chat_username', data.username);
+                        } else {
+                            try {
+                                const decoded = jwtDecode(data.access);
+                                localStorage.setItem('chat_username', decoded.username);
+                            } catch (e) { /* token decode failed, will be set on reload */ }
+                        }
                         window.location.reload();
                     } else {
                         console.error('❌ [Google] Tokens eksik:', data);

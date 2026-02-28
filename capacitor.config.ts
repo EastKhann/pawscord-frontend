@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Pawscord',
   webDir: 'build',
   server: {
-    androidScheme: 'http', // Yerel testler için 'http' daha sorunsuzdur.
+    androidScheme: 'https', // Production: https olmalı (Play Store build)
     cleartext: true,
     allowNavigation: [
       '192.168.68.53', // Senin IP adresini de izin verilenlere ekleyelim
@@ -25,7 +25,7 @@ const config: CapacitorConfig = {
       scopes: ['profile', 'email'],
       // Web Client ID'n buraya:
       serverClientId: '774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true,
+      forceCodeForRefreshToken: false, // true iken Android'de idToken null dönebilir!
     },
     PushNotifications: {
       presentationOptions: ['badge', 'sound', 'alert'],

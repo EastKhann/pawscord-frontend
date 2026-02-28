@@ -10,9 +10,12 @@
       "resizeOnFullScreen": true
     },
     "GoogleAuth": {
-      "scopes": ["profile", "email"],
+      "scopes": [
+        "profile",
+        "email"
+      ],
       "serverClientId": "774757987258-poa0elqqapnab8eud3tol3h2pilcqe71.apps.googleusercontent.com",
-      "forceCodeForRefreshToken": true
+      "forceCodeForRefreshToken": false
     },
     "SplashScreen": {
       "launchShowDuration": 2000,
