@@ -42,12 +42,12 @@
 }
 
 .view-btn:hover {
-    background: #36393f;
+    background: var(--bg-elevated, #36393f);
     color: #ffffff;
 }
 
 .view-btn.active {
-    background: #5865f2;
+    background: var(--color-primary, #5865f2);
     color: #ffffff;
 }
 
@@ -100,11 +100,11 @@
 }
 
 .category-btn:hover {
-    background: #36393f;
+    background: var(--bg-elevated, #36393f);
 }
 
 .category-btn.active {
-    background: #5865f2;
+    background: var(--color-primary, #5865f2);
     color: #ffffff;
 }
 

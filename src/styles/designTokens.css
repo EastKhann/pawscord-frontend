@@ -1,0 +1,272 @@
+/* =============================================
+ * PAWSCORD Design Tokens — CSS Custom Properties
+ * Generated from codebase analysis (2026-03-01)
+ *
+ * Usage:  color: var(--color-primary);
+ *         padding: var(--space-md);
+ *
+ * Import this file once in your root CSS or App entry:
+ *   @import './styles/designTokens.css';
+ * ============================================= */
+
+:root {
+    /* ─── BRAND / PRIMARY ─────────────────────── */
+    --color-primary: #5865f2;
+    --color-primary-hover: #4752c4;
+    --color-primary-light: #7289da;
+    --color-primary-soft: #5e81f4;
+
+    /* ─── ACCENT / PURPLE ─────────────────────── */
+    --color-accent: #8b5cf6;
+    --color-accent-alt: #6366f1;
+    --color-accent-gradient: #764ba2;
+    --color-accent-blue: #667eea;
+
+    /* ─── SUCCESS / GREEN ─────────────────────── */
+    --color-success: #43b581;
+    --color-success-alt: #23a559;
+    --color-success-bright: #57f287;
+    --color-success-muted: #3ba55d;
+    --color-success-dark: #2ecc71;
+    --color-success-modern: #10b981;
+    --color-spotify: #1db954;
+
+    /* ─── DANGER / RED ────────────────────────── */
+    --color-danger: #ed4245;
+    --color-danger-alt: #f04747;
+    --color-danger-bright: #ef4444;
+    --color-danger-dark: #da373c;
+    --color-danger-legacy: #e74c3c;
+    --color-danger-material: #f44336;
+    --color-danger-deep: #dc2626;
+    --color-danger-ios: #ff3b30;
+
+    /* ─── WARNING / YELLOW ────────────────────── */
+    --color-warning: #faa61a;
+    --color-warning-alt: #f0b232;
+    --color-warning-bright: #fbbf24;
+    --color-warning-amber: #f59e0b;
+    --color-warning-gold: #ffd700;
+    --color-warning-material: #ffc107;
+
+    /* ─── INFO / BLUE ─────────────────────────── */
+    --color-info: #3b82f6;
+    --color-info-light: #00b0f4;
+    --color-info-cyan: #22d3ee;
+    --color-info-teal: #00bcd4;
+    --color-info-classic: #3498db;
+    --color-info-material: #2196f3;
+    --color-info-sky: #00a8fc;
+
+    /* ─── PINK / FUCHSIA ──────────────────────── */
+    --color-pink: #eb459e;
+    --color-pink-modern: #ec4899;
+    --color-pink-legacy: #9b59b6;
+
+    /* ─── SPECIAL ─────────────────────────────── */
+    --color-neon-green: #00ff88;
+    --color-orange: #e67e22;
+
+    /* ─── BACKGROUND SHADES ───────────────────── */
+    --bg-deepest: #111113;
+    --bg-deep: #111214;
+    --bg-darkest: #1a1a1e;
+    --bg-darker: #1a1a2e;
+    --bg-tertiary: #202225;
+    --bg-primary: #1e1f22;
+    --bg-primary-alt: #1e1e2e;
+    --bg-secondary: #2b2d31;
+    --bg-secondary-alt: #2c2f33;
+    --bg-secondary-dark: #2a2a2e;
+    --bg-navy: #16213e;
+    --bg-modifier: #2f3136;
+    --bg-card: #313338;
+    --bg-elevated: #36393f;
+    --bg-input: #40444b;
+    --bg-hover: #3f4147;
+    --bg-input-alt: #383a40;
+    --bg-dark: #1f2023;
+    --bg-slate: #1f2937;
+
+    /* ─── TRANSPARENT MODIFIERS ───────────────── */
+    --bg-modifier-hover: rgba(79, 84, 92, 0.16);
+    --bg-modifier-active: rgba(79, 84, 92, 0.24);
+    --bg-white-subtle: rgba(255, 255, 255, 0.03);
+    --bg-white-faint: rgba(255, 255, 255, 0.05);
+    --bg-white-thin: rgba(255, 255, 255, 0.08);
+    --bg-white-light: rgba(255, 255, 255, 0.1);
+    --bg-white-medium: rgba(255, 255, 255, 0.2);
+    --bg-black-light: rgba(0, 0, 0, 0.2);
+    --bg-black-medium: rgba(0, 0, 0, 0.3);
+    --bg-black-heavy: rgba(0, 0, 0, 0.5);
+    --bg-black-overlay: rgba(0, 0, 0, 0.85);
+
+    /* ─── TEXT SHADES ─────────────────────────── */
+    --text-white: #ffffff;
+    --text-primary: #dcddde;
+    --text-secondary: #b9bbbe;
+    --text-normal: #b5bac1;
+    --text-normal-alt: #dbdee1;
+    --text-interactive: #99aab5;
+    --text-muted: #72767d;
+    --text-muted-alt: #949ba4;
+    --text-faint: #6b7280;
+    --text-faint-alt: #6c6d7d;
+    --text-disabled: #4e5058;
+    --text-subtle: #4f545c;
+    --text-gray: #9ca3af;
+    --text-light: #a0aec0;
+    --text-light-bg: #f2f3f5;
+    --text-light-alt: #e2e3ee;
+    --text-light-neutral: #e5e7eb;
+    --text-link: #00b0f4;
+
+    /* ─── STATUS INDICATORS ───────────────────── */
+    --status-online: #43b581;
+    --status-idle: #faa61a;
+    --status-dnd: #ed4245;
+    --status-offline: #747f8d;
+    --status-streaming: #6441a5;
+
+    /* ─── BORDER COLORS ───────────────────────── */
+    --border-default: rgba(255, 255, 255, 0.06);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-medium: rgba(255, 255, 255, 0.15);
+
+    /* ─── FOCUS RINGS ─────────────────────────── */
+    --focus-primary: rgba(88, 101, 242, 0.3);
+    --focus-accent: rgba(139, 92, 246, 0.3);
+    --focus-accent-light: rgba(139, 92, 246, 0.2);
+    --focus-accent-faint: rgba(139, 92, 246, 0.1);
+    --focus-danger: rgba(239, 68, 68, 0.2);
+
+    /* ─── SPACING ─────────────────────────────── */
+    --space-0: 0px;
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 20px;
+    --space-2xl: 24px;
+    --space-3xl: 32px;
+    --space-4xl: 40px;
+    --space-5xl: 48px;
+    --space-6xl: 64px;
+
+    /* ─── BORDER RADIUS ───────────────────────── */
+    --radius-none: 0px;
+    --radius-xs: 3px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-base: 8px;
+    --radius-lg: 10px;
+    --radius-xl: 12px;
+    --radius-2xl: 16px;
+    --radius-3xl: 20px;
+    --radius-full: 50%;
+    --radius-pill: 9999px;
+
+    /* ─── FONT SIZE ───────────────────────────── */
+    --font-2xs: 10px;
+    --font-xs: 11px;
+    --font-sm: 12px;
+    --font-md: 13px;
+    --font-base: 14px;
+    --font-lg: 15px;
+    --font-xl: 16px;
+    --font-2xl: 18px;
+    --font-3xl: 20px;
+    --font-4xl: 24px;
+    --font-5xl: 28px;
+    --font-6xl: 32px;
+    --font-title: 36px;
+    --font-hero: 48px;
+
+    /* ─── FONT WEIGHT ─────────────────────────── */
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* ─── FONT FAMILY ─────────────────────────── */
+    --font-sans: 'gg sans', 'Inter', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+
+    /* ─── LINE HEIGHT ─────────────────────────── */
+    --leading-tight: 1.1;
+    --leading-snug: 1.25;
+    --leading-normal: 1.375;
+    --leading-relaxed: 1.5;
+    --leading-loose: 1.75;
+
+    /* ─── BOX SHADOW ──────────────────────────── */
+    --shadow-none: none;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.5);
+    --shadow-glow-sm: 0 4px 15px rgba(139, 92, 246, 0.3);
+    --shadow-glow-md: 0 6px 20px rgba(139, 92, 246, 0.4);
+    --shadow-glow-lg: 0 8px 24px rgba(139, 92, 246, 0.3);
+    --shadow-glow-primary: 0 4px 12px rgba(88, 101, 242, 0.4);
+    --shadow-focus: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    --shadow-focus-thin: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    --shadow-modal: 0 0 0 1px rgba(32, 34, 37, 0.6), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+    --shadow-elevated: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+    /* ─── TRANSITIONS ─────────────────────────── */
+    --transition-fast: all 0.15s ease;
+    --transition-normal: all 0.2s ease;
+    --transition-slow: all 0.3s ease;
+    --transition-slower: all 0.5s ease;
+    --transition-bg-fast: background-color 0.2s ease;
+
+    /* ─── DURATION (raw values) ───────────────── */
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+    --duration-slower: 500ms;
+
+    /* ─── Z-INDEX ─────────────────────────────── */
+    --z-base: 1;
+    --z-above: 10;
+    --z-dropdown: 100;
+    --z-sticky: 500;
+    --z-overlay: 999;
+    --z-modal: 1000;
+    --z-modal-overlay: 999;
+    --z-popover: 1100;
+    --z-toast: 2000;
+    --z-tooltip: 9999;
+    --z-topmost: 10000;
+    --z-legacy: 999999;
+
+    /* ─── BREAKPOINTS (for reference, use in @media) ── */
+    --bp-xs: 320px;
+    --bp-sm: 480px;
+    --bp-md: 768px;
+    --bp-lg: 1024px;
+    --bp-xl: 1280px;
+    --bp-xxl: 1440px;
+
+    /* ─── LAYOUT ──────────────────────────────── */
+    --sidebar-width: 312px;
+    --server-list-width: 72px;
+    --member-list-width: 240px;
+    --header-height: 48px;
+    --input-min-height: 44px;
+    --max-content-width: 1200px;
+    --avatar-sm: 24px;
+    --avatar-md: 32px;
+    --avatar-lg: 40px;
+    --avatar-xl: 80px;
+    --avatar-xxl: 128px;
+
+    /* ─── EFFECTS ─────────────────────────────── */
+    --backdrop-blur: blur(10px);
+    --backdrop-blur-lg: blur(20px);
+    --bg-gradient-subtle: radial-gradient(circle at 50% 10%, rgba(88, 101, 242, 0.05) 0%, transparent 40%);
+}

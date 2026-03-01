@@ -464,7 +464,7 @@ const AppContent = () => {
                                     <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" style={{ width: '24px', height: '24px' }} onError={(e) => { e.target.style.display = 'none'; }} />
                                     <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }}>Pawscord</span>
                                 </div>
-                                <button onClick={handleCloseLeftSidebar} style={styles.closeSidebarButton}><FaTimes /></button>
+                                <button onClick={handleCloseLeftSidebar} style={styles.closeSidebarButton} aria-label="Close sidebar"><FaTimes /></button>
                             </div>
                         )}
                         <SuspenseWithBoundary fallback={<LoadingSpinner size="medium" text="Kanallar yükleniyor..." />} section="Kanal Listesi">
@@ -564,11 +564,12 @@ const AppContent = () => {
                         <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#2f3136' }}>
                             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    {isMobile && <button onClick={() => setActiveChat('welcome', 'welcome')} style={styles.mobileMenuButton}>←</button>}
+                                    {isMobile && <button onClick={() => setActiveChat('welcome', 'welcome')} style={styles.mobileMenuButton} aria-label="Go back">←</button>}
                                     <h2 style={{ margin: 0, fontSize: '1.2em' }}>🔊 {voiceRoomDisplayName}</h2>
                                 </div>
                                 <button onClick={() => { leaveChannel(); setActiveChat('welcome', 'welcome'); }}
-                                    style={{ background: '#ed4245', color: 'white', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontWeight: 'bold' }}>
+                                    style={{ background: '#ed4245', color: 'white', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontWeight: 'bold' }}
+                                    aria-label="Disconnect from voice channel">
                                     Bağlantıyı Kes
                                 </button>
                             </div>
@@ -615,7 +616,7 @@ const AppContent = () => {
                                             {activeChat.type === 'room' ? 'Sunucu Üyeleri' : 'Arkadaşlar'}
                                         </span>
                                     </div>
-                                    <button onClick={() => setIsRightSidebarVisible(false)} style={styles.closeSidebarButton}><FaTimes /></button>
+                                    <button onClick={() => setIsRightSidebarVisible(false)} style={styles.closeSidebarButton} aria-label="Close members panel"><FaTimes /></button>
                                 </div>
                             )}
                             <SuspenseWithBoundary fallback={<LoadingSpinner size="small" text="Kullanıcılar yükleniyor..." />} section="Kullanıcı Listesi">

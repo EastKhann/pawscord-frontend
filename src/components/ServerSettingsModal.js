@@ -19,6 +19,16 @@ import BansTab from './ServerSettingsModal/BansTab';
 import AuditLogTab from './ServerSettingsModal/AuditLogTab';
 import StatsTab from './ServerSettingsModal/StatsTab';
 
+/**
+ * @param {Object} props
+ * @param {Function} props.onClose - Close modal handler
+ * @param {Object} props.server - Server object being configured
+ * @param {string} props.currentUsername - Current user's username
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.apiBaseUrl - API base URL
+ * @param {Array} props.serverMembers - List of server members
+ * @param {Function} props.onRefreshServers - Callback to refresh server list
+ */
 const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, apiBaseUrl, serverMembers, onRefreshServers }) => {
 
     const [activeTab, setActiveTab] = useState('roles');
@@ -256,6 +266,8 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
         </div>
     );
 };
+
+ServerSettingsModal.displayName = 'ServerSettingsModal';
 
 export default ServerSettingsModal;
 

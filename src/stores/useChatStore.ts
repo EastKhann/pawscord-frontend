@@ -3,6 +3,7 @@
 
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { shallow } from 'zustand/shallow';
 import type { ChatStore } from '../types/store';
 
 // Simple ID generator
@@ -49,10 +50,14 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
 
     // --- ACTIONS ---
 
-    // Connection state for UI indicator
+    /** Update the WebSocket connection state indicator. */
     setConnectionState: (state: string) => set({ connectionState: state }),
 
-    // Chat switching — supports both object and positional formats
+    /**
+     * Switch to a different chat room or DM.
+     * Supports both object and positional argument formats.
+     * Resets unread count for the target chat.
+     */
     setActiveChat: (typeOrObj: any, id?: any, targetUser: any = null) => {
         let type: string, chatId: any, chatTargetUser: any;
 
@@ -80,7 +85,11 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
 
     // --- MESSAGE OPERATIONS ---
 
-    // Add single message with dedup (temp_id + id)
+    /**
+     * Add a single message with deduplication (temp_id + id).
+     * Replaces optimistic messages by temp_id match.
+     * @param {Object} message - Message object with id, content, username, etc.
+     */
     addMessage: (message: any) => set((state: any) => {
         if (!message || typeof message !== 'object' || !message.id) {
             console.warn('[Store] Invalid message rejected:', message);
@@ -100,7 +109,11 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
         return { messages: [...state.messages, message] };
     }),
 
-    // Batch add messages (e.g. for loading history). Deduplicates against existing.
+    /**
+     * Add multiple messages at once (e.g. loading history).
+     * Deduplicates against existing message IDs.
+     * @param {Array} newMsgs - Array of message objects to add
+     */
     addMessagesBatch: (newMsgs: any[]) => set((state: any) => {
         if (!Array.isArray(newMsgs) || newMsgs.length === 0) return state;
         const existingIds = new Set(state.messages.map((m: any) => m.id));
@@ -109,15 +122,20 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
         return { messages: [...state.messages, ...toAdd] };
     }),
 
+    /** Update a message by ID with partial updates. */
     updateMessage: (id: any, updates: any) => set((state: any) => ({
         messages: state.messages.map((m: any) => m.id === id ? { ...m, ...updates } : m)
     })),
 
+    /** Remove a message by ID. */
     removeMessage: (id: any) => set((state: any) => ({
         messages: state.messages.filter((m: any) => m.id !== id)
     })),
 
-    // Bulk set with validation
+    /**
+     * Bulk set messages with validation.
+     * Accepts an array or a function that receives current messages.
+     */
     setMessages: (newMessages: any) => set((state: any) => {
         const resolved = typeof newMessages === 'function' ? newMessages(state.messages) : newMessages;
         const validMessages = Array.isArray(resolved)
@@ -126,6 +144,7 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
         return { messages: validMessages };
     }),
 
+    /** Prepend older messages (history load), deduplicating against existing. */
     prependMessages: (oldMessages: any[]) => set((state: any) => {
         // Dedup against existing
         const existingIds = new Set(state.messages.map((m: any) => m.id));
@@ -134,6 +153,7 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
     }),
 
     // --- UNREAD (persistent) ---
+    /** Increment the unread count for a chat key and persist to localStorage. */
     incrementUnread: (key: string) => set((state: any) => {
         const newCounts = {
             ...state.unreadCounts,
@@ -144,15 +164,18 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
     }),
 
     // --- USER STATE ---
+    /** Update a specific user's online status. */
     updateUserStatus: (userId: any, status: any) => set((state: any) => ({
         onlineUsers: state.onlineUsers.map((u: any) =>
             (u.id || u.user_id) === userId ? { ...u, status } : u
         )
     })),
 
+    /** Replace the entire online users list. */
     setOnlineUsers: (users: any) => set({ onlineUsers: users }),
 
     // --- TYPING (with timestamps — auto-expire stale entries) ---
+    /** Set a user's typing status with auto-expiry timestamps. */
     setTypingUser: (username: string, isTyping: boolean) => set((state: any) => {
         let entries: TypingEntry[] = [...(state._typingEntries || [])];
         const now = Date.now();
@@ -194,6 +217,7 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
     })),
 
     // --- PERMISSIONS ---
+    /** Set current chat permissions (owner, manage channels, etc.). */
     setPermissions: (perms: any) => set({
         currentPermissions: perms || {
             is_owner: false,
@@ -202,6 +226,28 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
             can_manage_roles: false,
             can_ban_members: false
         }
+    }),
+
+    // --- RESET (for testing / logout) ---
+    /** Reset all chat state to initial values. */
+    reset: () => set({
+        messages: [],
+        encryptionKeys: {},
+        activeChat: { type: 'welcome', id: 'welcome', targetUser: null },
+        unreadCounts: {},
+        typingUsers: [],
+        _typingEntries: [],
+        onlineUsers: [],
+        voiceUsers: {},
+        currentPermissions: {
+            is_owner: false,
+            can_manage_channels: false,
+            can_delete_messages: false,
+            can_manage_roles: false,
+            can_ban_members: false
+        },
+        connectionState: 'disconnected',
+        selectedMessages: new Set(),
     }),
 }), { name: 'pawscord-chat-store' }));
 
@@ -215,4 +261,17 @@ export const useVoiceUsers = () => useChatStore((s) => s.voiceUsers);
 export const usePermissions = () => useChatStore((s) => s.currentPermissions);
 export const useConnectionState = () => useChatStore((s) => (s as any).connectionState);
 export const useUnreadCount = (key: string) => useChatStore((s) => s.unreadCounts[key] || 0);
+
+// --- DERIVED SELECTORS ---
+/** Select total unread count across all chats. */
+export const selectTotalUnreadCount = (state: ChatStore) =>
+    Object.values(state.unreadCounts || {}).reduce((sum, c) => sum + c, 0);
+/** Select whether the WebSocket is connected. */
+export const selectIsConnected = (state: any) => state.connectionState === 'connected';
+/** Select the current active messages array. */
+export const selectActiveMessages = (state: ChatStore) => state.messages;
+/** Select the active chat type. */
+export const selectActiveChatType = (state: ChatStore) => state.activeChat.type;
+/** Select the active chat ID. */
+export const selectActiveChatId = (state: ChatStore) => state.activeChat.id;
 

@@ -1,7 +1,19 @@
+import { memo, useCallback } from 'react';
 import { FaCog, FaDownload } from 'react-icons/fa';
 import { styles } from '../SidebarStyles';
 import { PRODUCTION_URL } from '../utils/constants';
 
+/**
+ * Sidebar footer showing the current user's avatar, username and friend code.
+ * Optionally displays an update-available notification banner.
+ * @param {Object} props
+ * @param {Object} [props.currentUserProfile] - User profile with avatar, friend_code, etc.
+ * @param {string} props.currentUsername - The logged-in user's display name
+ * @param {(username: string) => string} props.getDeterministicAvatar - Fallback avatar generator
+ * @param {() => void} props.onProfileClick - Opens the user settings/profile panel
+ * @param {boolean} [props.updateAvailable=false] - Whether an app update is available
+ * @param {() => void} [props.onUpdateClick] - Handler fired when the update banner is clicked
+ */
 const UserFooter = ({
     currentUserProfile,
     currentUsername,
@@ -104,5 +116,8 @@ const UserFooter = ({
     );
 };
 
-export default UserFooter;
+const MemoizedUserFooter = memo(UserFooter);
+MemoizedUserFooter.displayName = 'UserFooter';
+
+export default MemoizedUserFooter;
 

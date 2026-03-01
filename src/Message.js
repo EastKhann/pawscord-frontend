@@ -20,6 +20,22 @@ const TicTacToe = lazy(() => import('./components/TicTacToe'));
 const ReminderModal = lazy(() => import('./components/ReminderModal'));
 const MessageThreads = lazy(() => import('./components/MessageThreads'));
 
+/**
+ * @param {Object} props
+ * @param {Object} props.msg - Message object { id, content, username, image_url, ... }
+ * @param {string} props.currentUser - Current logged-in username
+ * @param {boolean} props.isAdmin - Whether current user is admin
+ * @param {Function} props.onDelete - Delete message handler
+ * @param {Function} props.onStartEdit - Start editing a message handler
+ * @param {Function} props.onToggleReaction - Toggle reaction on message
+ * @param {Function} props.onTogglePin - Toggle pin status on message
+ * @param {Function} props.onSetReply - Set message as reply target
+ * @param {Function} props.onImageClick - Handler when image in message is clicked
+ * @param {string} props.absoluteHostUrl - API base URL
+ * @param {Function} [props.onScrollToMessage] - Scroll to a referenced message
+ * @param {Function} [props.onVisible] - Callback when message becomes visible (read receipt)
+ * @param {boolean} [props.isGrouped=false] - Whether this message is grouped with previous
+ */
 const Message = ({
     msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleReaction, onTogglePin,
     onSetReply, onImageClick, absoluteHostUrl, onScrollToMessage, onVisible,
@@ -410,4 +426,8 @@ const areEqual = (prev, next) => {
     return true;
 };
 
-export default memo(Message, areEqual);
+const MemoizedMessage = memo(Message, areEqual);
+
+MemoizedMessage.displayName = 'Message';
+
+export default MemoizedMessage;

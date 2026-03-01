@@ -4,7 +4,12 @@
 
 import { memo } from 'react';
 
-const NewMessagesDivider = ({ count }) => {
+/**
+ * Visual divider showing how many new (unread) messages are below.
+ * @param {Object} props
+ * @param {number} [props.count=0] - Number of new unread messages
+ */
+const NewMessagesDivider = ({ count = 0 }) => {
     return (
         <div style={S.container}>
             <div style={S.line} />
@@ -39,4 +44,7 @@ const S = {
     },
 };
 
-export default memo(NewMessagesDivider);
+const MemoizedNewMessagesDivider = memo(NewMessagesDivider);
+MemoizedNewMessagesDivider.displayName = 'NewMessagesDivider';
+
+export default MemoizedNewMessagesDivider;

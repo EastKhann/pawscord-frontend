@@ -361,11 +361,29 @@ const RootApp = () => {
 // 🔄 UNIFIED chunk load error handler — single source of truth
 // Uses the same keys as lazyWithRetry + ErrorBoundary (no competing handlers)
 import { isChunkLoadError, handleChunkReload, CHUNK_RELOAD_COUNT_KEY } from './utils/lazyWithRetry';
+import ErrorReporter from './utils/errorReporter';
+
 window.addEventListener('unhandledrejection', (event) => {
     if (event?.reason && isChunkLoadError(event.reason)) {
         event.preventDefault();
         handleChunkReload();
+        return;
     }
+    // 📢 Report all other unhandled promise rejections
+    ErrorReporter.report(event?.reason || 'Unhandled promise rejection', {
+        type: 'unhandledrejection',
+        promise: String(event?.promise),
+    });
+});
+
+// 📢 Global error handler — catches uncaught exceptions
+window.addEventListener('error', (event) => {
+    ErrorReporter.report(event?.error || event?.message || 'Unknown error', {
+        type: 'uncaughtException',
+        filename: event?.filename,
+        lineno: event?.lineno,
+        colno: event?.colno,
+    });
 });
 
 // ✅ Başarılı yükleme sonrası reload sayacını sıfırla

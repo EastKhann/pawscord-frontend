@@ -4,6 +4,18 @@ import { FaCompass, FaPlus } from '../utils/iconOptimization';
 import LazyImage from '../components/LazyImage';
 import { styles } from '../SidebarStyles';
 
+/**
+ * @param {Object} props
+ * @param {Array} props.servers - List of server objects to display
+ * @param {string|number} props.selectedServerId - Currently selected server ID
+ * @param {string|number|null} props.hoveredServerId - Currently hovered server ID
+ * @param {Function} props.setHoveredServerId - Set hovered server ID
+ * @param {Object} props.safeUnreadCounts - Unread counts per room key
+ * @param {Function} props.onHomeClick - Handler for home button click
+ * @param {Function} props.handleServerClick - Handler for server icon click
+ * @param {Function} props.onDiscoverClick - Handler for discover button click
+ * @param {Function} props.onAddClick - Handler for add server button click
+ */
 const ServerRail = ({
     servers, selectedServerId, hoveredServerId, setHoveredServerId,
     safeUnreadCounts, draggedServerId, dropTargetIndex, dropPosition,
@@ -214,4 +226,8 @@ const ServerRail = ({
     );
 };
 
-export default React.memo(ServerRail);
+const MemoizedServerRail = React.memo(ServerRail);
+
+MemoizedServerRail.displayName = 'ServerRail';
+
+export default MemoizedServerRail;

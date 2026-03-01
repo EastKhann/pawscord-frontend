@@ -4,16 +4,16 @@
     left: 0;
     right: 0;
     height: 64px;
-    background: #1e1f22;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-primary, #1e1f22);
+    border-top: 1px solid var(--border-default, rgba(255, 255, 255, 0.06));
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0 8px;
-    z-index: 1000;
+    padding: 0 var(--space-sm, 8px);
+    z-index: var(--z-modal, 1000);
     box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: var(--backdrop-blur, blur(8px));
+    -webkit-backdrop-filter: var(--backdrop-blur, blur(8px));
 }
 
 .nav-tab {
@@ -22,13 +22,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    padding: var(--space-sm, 8px);
     background: none;
     border: none;
     cursor: pointer;
     position: relative;
-    transition: all 0.18s ease;
-    color: #949ba4;
+    transition: var(--transition-fast, all 0.18s ease);
+    color: var(--text-muted-alt, #949ba4);
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -65,7 +65,7 @@
     transform: translateX(-50%);
     width: 36px;
     height: 3px;
-    background: #5865f2;
+    background: var(--color-primary, #5865f2);
     border-radius: 2px 2px 0 0;
     box-shadow: 0 0 8px rgba(88, 101, 242, 0.6);
 }

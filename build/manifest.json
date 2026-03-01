@@ -28,12 +28,41 @@
     }
   ],
   "start_url": ".",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "theme_color": "#5865f2",
   "background_color": "#36393f",
   "description": "Modern chat and voice communication platform",
   "categories": [
     "social",
     "communication"
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Direct Messages",
+      "short_name": "DMs",
+      "url": "/?tab=dm",
+      "description": "Open direct messages",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Friends",
+      "short_name": "Friends",
+      "url": "/?tab=friends",
+      "description": "View your friends list",
+      "icons": [
+        {
+          "src": "logo192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
 }

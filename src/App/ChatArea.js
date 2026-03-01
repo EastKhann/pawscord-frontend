@@ -24,7 +24,21 @@ const isImageOnlyMessage = (msg) => {
     return (hasImage || hasFileImage) && !hasContent && !msg.poll && !msg.reply_to;
 };
 
-export default memo(function ChatArea({
+/**
+ * @param {Object} props
+ * @param {boolean} props.isMobile - Whether the app is in mobile view
+ * @param {boolean} props.isNative - Whether running in native (Capacitor) mode
+ * @param {Object} props.activeChat - Current active chat object { type, id, targetUser }
+ * @param {string} props.chatTitle - Display title of the active chat
+ * @param {boolean} props.isConnected - WebSocket connection status
+ * @param {Array} props.optimizedMessages - Memoized array of messages to render
+ * @param {boolean} props.messageHistoryLoading - Whether older messages are loading
+ * @param {Object} props.messageHandlers - Message send/edit/delete handlers
+ * @param {Object} props.fileUpload - File upload state and handlers
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.ABSOLUTE_HOST_URL - API base URL
+ */
+const ChatArea = memo(function ChatArea({
     // Layout
     isMobile, isNative, safeAreaBottom, mobileWebPadding,
     isLeftSidebarVisible, setIsLeftSidebarVisible,
@@ -263,7 +277,7 @@ export default memo(function ChatArea({
                     </form>
                     {!isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
                     {isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
-                    <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler"><FaBell /></button>
+                    <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler" aria-label="Notifications" aria-expanded={!!modals.notifications}><FaBell /></button>
                     {modals.notifications && (
                         <div style={{ position: 'absolute', top: '54px', right: '20px', zIndex: 1000 }}>
                             <Suspense fallback={<LoadingSpinner size="small" text="" />}>
@@ -272,7 +286,7 @@ export default memo(function ChatArea({
                         </div>
                     )}
                     <div className="toolbar-menu-container" style={{ position: 'relative' }}>
-                        <button onClick={handleToggleToolbar} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla">⋮</button>
+                        <button onClick={handleToggleToolbar} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla" aria-label="More options" aria-expanded={!!modals.toolbarMenu}>⋮</button>
                         {modals.toolbarMenu && (
                             <ToolbarMenu
                                 activeChat={activeChat} hasKey={hasKey} modals={modals}
@@ -285,7 +299,7 @@ export default memo(function ChatArea({
                             />
                         )}
                     </div>
-                    {isMobile && !isRightSidebarVisible && <button onClick={handleOpenRightSidebar} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}><FaUsers /></button>}
+                    {isMobile && !isRightSidebarVisible && <button onClick={handleOpenRightSidebar} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }} aria-label="Open members panel"><FaUsers /></button>}
                 </div>
             </div>
 
@@ -370,3 +384,7 @@ export default memo(function ChatArea({
         </div>
     );
 });
+
+ChatArea.displayName = 'ChatArea';
+
+export default ChatArea;

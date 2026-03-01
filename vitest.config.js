@@ -65,15 +65,10 @@ export default defineConfig({
         // Hook timeout
         hookTimeout: 10000,
 
-        // Parallel execution
+        // Parallel execution (Vitest 4+ top-level options)
         pool: 'threads',
-        poolOptions: {
-            threads: {
-                singleThread: false,
-                maxThreads: 4,
-                minThreads: 1
-            }
-        },
+        maxThreads: 4,
+        minThreads: 1,
 
         // Reporter
         reporters: ['verbose'],

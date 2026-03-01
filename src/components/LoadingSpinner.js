@@ -1,8 +1,14 @@
 // frontend/src/components/LoadingSpinner.js
 
+import { memo } from 'react';
+
 /**
- * 🌀 Modern Loading Spinner Component
- * Discord/Pawscord tarzı yükleme animasyonu
+ * 🌀 Modern loading spinner with Discord/Pawscord styling.
+ * Supports small, medium, and large sizes with optional fullscreen overlay.
+ * @param {Object} props
+ * @param {'small'|'medium'|'large'} [props.size='medium'] - Spinner size preset
+ * @param {string} [props.text='Yükleniyor...'] - Loading text displayed below spinner
+ * @param {boolean} [props.fullscreen=false] - Whether to render as a fullscreen overlay
  */
 const LoadingSpinner = ({ size = 'medium', text = 'Yükleniyor...', fullscreen = false }) => {
     const sizes = {
@@ -108,6 +114,9 @@ if (typeof document !== 'undefined') {
     }
 }
 
-export default LoadingSpinner;
+const MemoizedLoadingSpinner = memo(LoadingSpinner);
+MemoizedLoadingSpinner.displayName = 'LoadingSpinner';
+
+export default MemoizedLoadingSpinner;
 
 

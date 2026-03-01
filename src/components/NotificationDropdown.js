@@ -3,6 +3,13 @@ import { useState, useEffect, useRef, memo } from 'react';
 import { FaBell, FaTimes, FaCheck, FaCheckDouble, FaTrash } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
 
+/**
+ * @param {Object} props
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.apiBaseUrl - API base URL
+ * @param {Object} props.currentUser - Current user object
+ * @param {Function} props.onClose - Close dropdown handler
+ */
 const NotificationDropdown = ({
     fetchWithAuth,
     apiBaseUrl,
@@ -394,7 +401,11 @@ styleSheet.textContent = `
 `;
 document.head.appendChild(styleSheet);
 
-export default memo(NotificationDropdown);
+const MemoizedNotificationDropdown = memo(NotificationDropdown);
+
+MemoizedNotificationDropdown.displayName = 'NotificationDropdown';
+
+export default MemoizedNotificationDropdown;
 
 
 

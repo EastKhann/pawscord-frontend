@@ -33,6 +33,11 @@ const TAB_COMPONENTS = {
     advanced: AdvancedTab,
 };
 
+/**
+ * @param {Object} props
+ * @param {Function} props.onClose - Close modal handler
+ * @param {Object} props.user - Current user object with profile data
+ */
 const UserSettingsModal = ({ onClose, user }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Kullanıcı Ayarları' });
     const [activeTab, setActiveTab] = useState('account');
@@ -103,4 +108,8 @@ const UserSettingsModal = ({ onClose, user }) => {
     );
 };
 
-export default memo(UserSettingsModal);
+const MemoizedUserSettingsModal = memo(UserSettingsModal);
+
+MemoizedUserSettingsModal.displayName = 'UserSettingsModal';
+
+export default MemoizedUserSettingsModal;

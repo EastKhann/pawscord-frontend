@@ -297,8 +297,8 @@
 /* Editor Tabs */
 .editor-tabs {
     display: flex;
-    background: #36393f;
-    border-bottom: 1px solid #40444b;
+    background: var(--bg-elevated, #36393f);
+    border-bottom: 1px solid var(--bg-input, #40444b);
 }
 
 .editor-tabs button {
@@ -451,13 +451,13 @@
 .badge-option {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    background: #36393f;
-    border-radius: 8px;
+    gap: var(--space-md, 12px);
+    padding: var(--space-md, 12px);
+    background: var(--bg-elevated, #36393f);
+    border-radius: var(--radius-base, 8px);
     cursor: pointer;
     border: 2px solid transparent;
-    transition: all 0.2s;
+    transition: var(--transition-normal, all 0.2s);
     position: relative;
 }
 
@@ -507,9 +507,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
-    background: #36393f;
-    border-radius: 6px;
+    padding: 10px var(--space-md, 12px);
+    background: var(--bg-elevated, #36393f);
+    border-radius: var(--radius-md, 6px);
 }
 
 .link-icon {

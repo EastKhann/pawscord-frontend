@@ -5,6 +5,14 @@
 import { memo } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
+/**
+ * Floating action button to scroll to the bottom of the message list.
+ * Shows an optional unread badge count.
+ * @param {Object} props
+ * @param {() => void} props.onClick - Click handler to scroll to bottom
+ * @param {number} [props.unreadCount=0] - Number of unread messages to show in badge
+ * @param {boolean} [props.visible=true] - Whether the button is visible
+ */
 const ScrollToBottomButton = ({ onClick, unreadCount = 0, visible = true }) => {
     if (!visible) return null;
 
@@ -74,4 +82,7 @@ if (typeof document !== 'undefined') {
     }
 }
 
-export default memo(ScrollToBottomButton);
+const MemoizedScrollToBottomButton = memo(ScrollToBottomButton);
+MemoizedScrollToBottomButton.displayName = 'ScrollToBottomButton';
+
+export default MemoizedScrollToBottomButton;

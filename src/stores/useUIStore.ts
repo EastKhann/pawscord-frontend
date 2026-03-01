@@ -327,17 +327,37 @@ export const useUIStore = create<UIStore>()(
                 panels: { ...state.panels, [panelName]: !state.panels[panelName] }
             })),
 
+            /** Set the UI theme (dark/light). */
             setTheme: (theme) => set({ theme }),
+            /** Set the accent color for the UI. */
             setAccentColor: (color) => set({ accentColor: color }),
 
+            /** Toggle sidebar collapsed state. */
             toggleSidebar: () => set((state) => ({
                 sidebarCollapsed: !state.sidebarCollapsed
             })),
 
+            /** Set mobile sidebar open state. */
             setMobileSidebarOpen: (isOpen) => set({ mobileSidebarOpen: isOpen }),
 
+            /** Set the context menu position and data. */
             setContextMenu: (menu) => set({ contextMenu: menu }),
+            /** Clear and close the context menu. */
             clearContextMenu: () => set({ contextMenu: null }),
+
+            // --- RESET (for testing / logout) ---
+            /** Reset transient UI state (keeps theme/accent/sidebar preferences). */
+            resetTransient: () => set((state) => ({
+                modals: Object.keys(state.modals).reduce((acc, key) => { acc[key] = false; return acc; }, {} as any),
+                modalData: {},
+                isLoading: false,
+                globalError: null,
+                toastNotifications: [],
+                contextMenu: null,
+                mobileSidebarOpen: false,
+                isConnected: false,
+                connectionStatus: 'disconnected' as const,
+            })),
         }),
         {
             name: 'pawscord-ui-store',
@@ -350,3 +370,25 @@ export const useUIStore = create<UIStore>()(
         }
     ), { name: 'pawscord-ui-store' })
 );
+
+// --- SELECTORS (prevent unnecessary re-renders) ---
+/** Select the current theme. */
+export const selectTheme = (state: UIStore) => state.theme;
+/** Select the accent color. */
+export const selectAccentColor = (state: UIStore) => state.accentColor;
+/** Select whether a specific modal is open. */
+export const selectIsModalOpen = (modalName: string) => (state: UIStore) => !!state.modals[modalName];
+/** Select the connection status. */
+export const selectConnectionStatus = (state: UIStore) => (state as any).connectionStatus;
+/** Select the global loading state. */
+export const selectIsLoading = (state: UIStore) => (state as any).isLoading;
+/** Select the sidebar collapsed state. */
+export const selectSidebarCollapsed = (state: UIStore) => state.sidebarCollapsed;
+/** Select all toast notifications. */
+export const selectToastNotifications = (state: UIStore) => (state as any).toastNotifications;
+
+// Hook selectors
+export const useTheme = () => useUIStore((s) => s.theme);
+export const useAccentColor = () => useUIStore((s) => s.accentColor);
+export const useSidebarCollapsed = () => useUIStore((s) => s.sidebarCollapsed);
+export const useIsModalOpen = (name: string) => useUIStore((s) => !!s.modals[name]);

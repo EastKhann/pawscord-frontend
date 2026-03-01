@@ -79,7 +79,7 @@ const WelcomeScreen = ({
             {/* --- MOBİL HEADER --- */}
             {isMobile && (
                 <div style={styles.mobileHeader}>
-                    <button onClick={onOpenMenu} style={styles.menuButton} title="Menüyü Aç">
+                    <button onClick={onOpenMenu} style={styles.menuButton} title="Menüyü Aç" aria-label="Open menu">
                         <FaBars size={22} />
                     </button>
 
@@ -89,12 +89,12 @@ const WelcomeScreen = ({
                         <UpdateButtonComponent />
 
                         {shouldShowDownloadBtn && (
-                            <button onClick={() => setShowDownload(true)} style={{ ...styles.menuButton, padding: '6px' }}>
+                            <button onClick={() => setShowDownload(true)} style={{ ...styles.menuButton, padding: '6px' }} aria-label="Download app">
                                 <FaDownload size={16} />
                             </button>
                         )}
 
-                        <button onClick={onOpenRightMenu} style={styles.menuButton}>
+                        <button onClick={onOpenRightMenu} style={styles.menuButton} aria-label="Open members panel">
                             <FaUsers size={22} />
                         </button>
                     </div>

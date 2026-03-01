@@ -1,12 +1,21 @@
 // frontend/src/components/BookmarkButton.js
-import { useState } from 'react';
+import { useState, useCallback, memo } from 'react';
 import { FaBookmark, FaRegBookmark, FaStar, FaRegStar, FaClock } from 'react-icons/fa';
 
-export const BookmarkButton = ({ messageId, isBookmarked, fetchWithAuth, apiBaseUrl, onUpdate }) => {
+/**
+ * Toggle button for bookmarking a message.
+ * @param {Object} props
+ * @param {string|number} props.messageId - ID of the message to bookmark
+ * @param {boolean} [props.isBookmarked=false] - Initial bookmark state
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.apiBaseUrl - API base URL
+ * @param {(bookmarked: boolean) => void} [props.onUpdate] - Callback when bookmark state changes
+ */
+export const BookmarkButton = memo(({ messageId, isBookmarked = false, fetchWithAuth, apiBaseUrl, onUpdate }) => {
     const [bookmarked, setBookmarked] = useState(isBookmarked);
     const [loading, setLoading] = useState(false);
 
-    const handleToggle = async (e) => {
+    const handleToggle = useCallback(async (e) => {
         e.stopPropagation();
         if (loading) return;
 
@@ -27,7 +36,7 @@ export const BookmarkButton = ({ messageId, isBookmarked, fetchWithAuth, apiBase
         } finally {
             setLoading(false);
         }
-    };
+    }, [loading, messageId, fetchWithAuth, apiBaseUrl, onUpdate]);
 
     return (
         <button
@@ -49,13 +58,23 @@ export const BookmarkButton = ({ messageId, isBookmarked, fetchWithAuth, apiBase
             {bookmarked ? <FaBookmark /> : <FaRegBookmark />}
         </button>
     );
-};
+});
+BookmarkButton.displayName = 'BookmarkButton';
 
-export const StarButton = ({ messageId, isStarred, fetchWithAuth, apiBaseUrl, onUpdate }) => {
+/**
+ * Toggle button for starring a message.
+ * @param {Object} props
+ * @param {string|number} props.messageId - ID of the message to star
+ * @param {boolean} [props.isStarred=false] - Initial starred state
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.apiBaseUrl - API base URL
+ * @param {(starred: boolean) => void} [props.onUpdate] - Callback when star state changes
+ */
+export const StarButton = memo(({ messageId, isStarred = false, fetchWithAuth, apiBaseUrl, onUpdate }) => {
     const [starred, setStarred] = useState(isStarred);
     const [loading, setLoading] = useState(false);
 
-    const handleToggle = async (e) => {
+    const handleToggle = useCallback(async (e) => {
         e.stopPropagation();
         if (loading) return;
 
@@ -76,7 +95,7 @@ export const StarButton = ({ messageId, isStarred, fetchWithAuth, apiBaseUrl, on
         } finally {
             setLoading(false);
         }
-    };
+    }, [loading, messageId, fetchWithAuth, apiBaseUrl, onUpdate]);
 
     return (
         <button
@@ -98,13 +117,23 @@ export const StarButton = ({ messageId, isStarred, fetchWithAuth, apiBaseUrl, on
             {starred ? <FaStar /> : <FaRegStar />}
         </button>
     );
-};
+});
+StarButton.displayName = 'StarButton';
 
-export const ReadLaterButton = ({ messageId, isReadLater, fetchWithAuth, apiBaseUrl, onUpdate }) => {
+/**
+ * Toggle button for marking a message as "read later".
+ * @param {Object} props
+ * @param {string|number} props.messageId - ID of the message
+ * @param {boolean} [props.isReadLater=false] - Initial read-later state
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.apiBaseUrl - API base URL
+ * @param {(readLater: boolean) => void} [props.onUpdate] - Callback when read-later state changes
+ */
+export const ReadLaterButton = memo(({ messageId, isReadLater = false, fetchWithAuth, apiBaseUrl, onUpdate }) => {
     const [readLater, setReadLater] = useState(isReadLater);
     const [loading, setLoading] = useState(false);
 
-    const handleToggle = async (e) => {
+    const handleToggle = useCallback(async (e) => {
         e.stopPropagation();
         if (loading) return;
 
@@ -125,7 +154,7 @@ export const ReadLaterButton = ({ messageId, isReadLater, fetchWithAuth, apiBase
         } finally {
             setLoading(false);
         }
-    };
+    }, [loading, messageId, fetchWithAuth, apiBaseUrl, onUpdate]);
 
     return (
         <button
@@ -147,6 +176,7 @@ export const ReadLaterButton = ({ messageId, isReadLater, fetchWithAuth, apiBase
             <FaClock />
         </button>
     );
-};
+});
+ReadLaterButton.displayName = 'ReadLaterButton';
 
 

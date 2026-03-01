@@ -8,6 +8,14 @@ import LinkSection from './InviteModal/LinkSection';
 
 injectInviteStyles();
 
+/**
+ * @param {Object} props
+ * @param {Function} props.onClose - Close modal handler
+ * @param {Object} props.server - Server object to invite to
+ * @param {Function} props.fetchWithAuth - Authenticated fetch wrapper
+ * @param {string} props.apiBaseUrl - API base URL
+ * @param {Object} props.currentUser - Current user object
+ */
 const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Davet Et' });
     const logic = useInviteLogic({ server, fetchWithAuth, apiBaseUrl, currentUser });
@@ -32,5 +40,7 @@ const InviteModal = ({ onClose, server, fetchWithAuth, apiBaseUrl, currentUser }
         document.body
     );
 };
+
+InviteModal.displayName = 'InviteModal';
 
 export default InviteModal;

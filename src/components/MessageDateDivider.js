@@ -4,6 +4,11 @@
 
 import { memo } from 'react';
 
+/**
+ * Format a date string into a human-readable Turkish date label.
+ * @param {string} dateStr - ISO date string
+ * @returns {string} Localized date label (e.g. "Bugün", "Dün", "Pazartesi")
+ */
 const formatDateLabel = (dateStr) => {
     const date = new Date(dateStr);
     const now = new Date();
@@ -23,6 +28,12 @@ const formatDateLabel = (dateStr) => {
     return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
 };
 
+/**
+ * Date separator between message groups.
+ * Displays localized Turkish date labels (Bugün, Dün, day names, full date).
+ * @param {Object} props
+ * @param {string} props.date - ISO date string for the divider
+ */
 const MessageDateDivider = ({ date }) => {
     return (
         <div style={S.container}>
@@ -57,4 +68,7 @@ const S = {
     },
 };
 
-export default memo(MessageDateDivider);
+const MemoizedMessageDateDivider = memo(MessageDateDivider);
+MemoizedMessageDateDivider.displayName = 'MessageDateDivider';
+
+export default MemoizedMessageDateDivider;

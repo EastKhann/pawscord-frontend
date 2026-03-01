@@ -5,6 +5,10 @@
 import { useState, useEffect, memo, useCallback } from 'react';
 import { FaWifi, FaExclamationTriangle, FaSync } from 'react-icons/fa';
 
+/**
+ * Top-mounted status bar that indicates network connectivity.
+ * Automatically shows when connection is lost and fades out after reconnection.
+ */
 const ConnectionStatusBar = () => {
     const [status, setStatus] = useState('online'); // online | offline | reconnecting
     const [visible, setVisible] = useState(false);
@@ -113,4 +117,7 @@ if (typeof document !== 'undefined') {
     }
 }
 
-export default memo(ConnectionStatusBar);
+const MemoizedConnectionStatusBar = memo(ConnectionStatusBar);
+MemoizedConnectionStatusBar.displayName = 'ConnectionStatusBar';
+
+export default MemoizedConnectionStatusBar;

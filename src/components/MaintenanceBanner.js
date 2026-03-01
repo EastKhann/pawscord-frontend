@@ -1,9 +1,18 @@
 // components/MaintenanceBanner.js
 // 🔧 Maintenance Mode Banner
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { FaTimes, FaTools } from 'react-icons/fa';
 
+/**
+ * Fixed-position banner displayed during scheduled maintenance windows.
+ * Shows a countdown timer and auto-refreshes when maintenance ends.
+ * @param {Object} props
+ * @param {string} props.message - Maintenance message text
+ * @param {string} [props.endTime] - ISO date string for when maintenance ends
+ * @param {'info'|'warning'|'critical'} [props.level='info'] - Severity level controlling banner color
+ * @param {() => void} [props.onDismiss] - Callback to dismiss the banner
+ */
 const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
     const [timeLeft, setTimeLeft] = useState('');
 
@@ -60,8 +69,8 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
                 <div>
                     <div style={{ color: color.text, fontWeight: 'bold' }}>
                         {level === 'critical' ? '🚨 Critical Maintenance' :
-                         level === 'warning' ? '⚠️ Scheduled Maintenance' :
-                         'ℹ️ Maintenance Notice'}
+                            level === 'warning' ? '⚠️ Scheduled Maintenance' :
+                                'ℹ️ Maintenance Notice'}
                     </div>
                     <div style={{ color: '#dcddde', fontSize: '14px', marginTop: '2px' }}>
                         {message}
@@ -91,7 +100,10 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
     );
 };
 
-export default MaintenanceBanner;
+const MemoizedMaintenanceBanner = memo(MaintenanceBanner);
+MemoizedMaintenanceBanner.displayName = 'MaintenanceBanner';
+
+export default MemoizedMaintenanceBanner;
 
 
 

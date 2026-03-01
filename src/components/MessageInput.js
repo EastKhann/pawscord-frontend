@@ -20,6 +20,23 @@ import InputMenu from './MessageInput/InputMenu';
 import VoiceRecordingUI from './MessageInput/VoiceRecordingUI';
 import useMessageDraft from './MessageInput/hooks/useMessageDraft';
 
+/**
+ * @param {Object} props
+ * @param {Function} props.onSendMessage - Handler to send a message
+ * @param {Function} props.onFileUpload - Handler to upload a file attachment
+ * @param {Function} [props.onShowCodeSnippet=null] - Handler to open code snippet modal
+ * @param {string} [props.placeholder='Mesaj yaz...'] - Input placeholder text
+ * @param {Object} [props.editingMessage=null] - Message being edited, or null
+ * @param {Function} [props.onCancelEdit=null] - Cancel edit handler
+ * @param {Object} [props.replyingTo=null] - Message being replied to, or null
+ * @param {Function} [props.onCancelReply=null] - Cancel reply handler
+ * @param {boolean} [props.disabled=false] - Whether input is disabled
+ * @param {Object} [props.activeChat=null] - Current active chat { type, id }
+ * @param {Function} [props.fetchWithAuth=null] - Authenticated fetch wrapper
+ * @param {string} [props.apiBaseUrl=''] - API base URL
+ * @param {Array} [props.pendingFilesFromDrop=[]] - Files dropped from drag-and-drop
+ * @param {Function} [props.onClearPendingFiles=null] - Clear dropped files handler
+ */
 const MessageInput = ({
     onSendMessage, onFileUpload, onShowCodeSnippet = null,
     placeholder = "Mesaj yaz...", editingMessage = null, onCancelEdit = null,
@@ -214,13 +231,13 @@ const MessageInput = ({
                 <div style={styles.replyPreview} role="status" aria-label="Yanıtlanan mesaj"><div style={styles.replyContent}>
                     <strong>@{replyingTo.author}</strong>
                     <span>{replyingTo.content?.substring(0, 50)}...</span>
-                </div><button onClick={onCancelReply} style={styles.cancelButton}><FaTimes /></button></div>
+                </div><button onClick={onCancelReply} style={styles.cancelButton} aria-label="Cancel reply"><FaTimes /></button></div>
             )}
 
             {editingMessage && (
                 <div style={styles.editPreview} role="status" aria-label="Mesaj düzenleniyor" id="edit-hint">
                     <span>{'📝'} Mesaj d$([char]0x00FC)zenleniyor</span>
-                    <button onClick={onCancelEdit} style={styles.cancelButton}><FaTimes /></button>
+                    <button onClick={onCancelEdit} style={styles.cancelButton} aria-label="Cancel edit"><FaTimes /></button>
                 </div>
             )}
 
@@ -327,10 +344,14 @@ const MessageInput = ({
     );
 };
 
-export default React.memo(MessageInput, (prevProps, nextProps) => {
+const MemoizedMessageInput = React.memo(MessageInput, (prevProps, nextProps) => {
     return prevProps.disabled === nextProps.disabled &&
         prevProps.placeholder === nextProps.placeholder &&
         prevProps.editingMessage?.id === nextProps.editingMessage?.id &&
         prevProps.replyingTo?.id === nextProps.replyingTo?.id &&
         prevProps.activeChat?.id === nextProps.activeChat?.id;
 });
+
+MemoizedMessageInput.displayName = 'MessageInput';
+
+export default MemoizedMessageInput;
