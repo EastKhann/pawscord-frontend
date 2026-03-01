@@ -7,7 +7,7 @@ const IGNORED_APPS = new Set([
     'fps monitor', 'msi afterburner', 'rivatuner', 'fraps', 'nvidia geforce experience',
     'amd radeon software', 'obs', 'obs studio', 'streamlabs', 'xsplit', 'nvidia shadowplay',
     'movavi video suite', 'movavi', 'camtasia', 'bandicam', 'soundpad', 'voicemod',
-    'discord overlay', 'teamspeak', 'mumble', 'overwolf', 'razer cortex',
+    'teamspeak', 'mumble', 'overwolf', 'razer cortex',
     'steam', 'epic games launcher', 'origin', 'uplay', 'battle.net', 'gog galaxy',
     'ea app', 'xbox app', 'microsoft store',
 ]);

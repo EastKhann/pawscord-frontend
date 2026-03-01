@@ -5,7 +5,7 @@ import toast from '../utils/toast';
 
 /**
  * 🔐 Channel Permissions Panel
- * Kanal bazlı rol izinleri (Discord-style overrides)
+ * Kanal bazlı rol izinleri (override sistemi)
  * 
  * Features:
  * - Per-channel permission matrix

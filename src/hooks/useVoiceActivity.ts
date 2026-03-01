@@ -1,5 +1,5 @@
 // hooks/useVoiceActivity.js
-// 🎤 Voice Activity Detection Hook - Discord-style speaking indicator
+// 🎤 Voice Activity Detection Hook - Pawscord speaking indicator
 
 import { useState, useEffect, useRef } from 'react';
 

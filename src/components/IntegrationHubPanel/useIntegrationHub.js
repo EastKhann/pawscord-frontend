@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
     FaPlug, FaGithub, FaSpotify, FaTwitch, FaYoutube,
-    FaDiscord, FaSlack, FaGoogle, FaTwitter,
+    FaSlack, FaGoogle, FaTwitter,
     FaCode, FaMusic, FaGamepad, FaCloud
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -12,7 +12,6 @@ export const integrationIcons = {
     spotify: FaSpotify,
     twitch: FaTwitch,
     youtube: FaYoutube,
-    discord: FaDiscord,
     slack: FaSlack,
     google: FaGoogle,
     twitter: FaTwitter
@@ -23,7 +22,6 @@ export const integrationColors = {
     spotify: '#1db954',
     twitch: '#9146ff',
     youtube: '#ff0000',
-    discord: '#5865f2',
     slack: '#4a154b',
     google: '#4285f4',
     twitter: '#1da1f2'

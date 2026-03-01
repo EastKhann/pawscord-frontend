@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { FaSpotify, FaSteam, FaPlaystation, FaXbox, FaTwitch, FaDiscord, FaGamepad, FaLink, FaUnlink, FaCheckCircle, FaExclamationCircle, FaSpinner, FaMusic, FaYoutube, FaGithub, FaTwitter, FaTimes } from 'react-icons/fa';
+import { FaSpotify, FaSteam, FaPlaystation, FaXbox, FaTwitch, FaGamepad, FaLink, FaUnlink, FaCheckCircle, FaExclamationCircle, FaSpinner, FaMusic, FaYoutube, FaGithub, FaTwitter, FaTimes } from 'react-icons/fa';
 import { SiEpicgames, SiBattledotnet, SiRiotgames, SiOrigin } from 'react-icons/si';
 import { useAuth } from '../AuthContext';
 import toast from '../utils/toast';
@@ -73,15 +73,6 @@ const ConnectionsPanel = ({ onClose }) => {
             oauth: true,
             features: ['Channel', 'Subscribers', 'Videos']
         },
-        {
-            id: 'discord',
-            name: 'Discord',
-            icon: FaDiscord,
-            color: '#5865F2',
-            description: 'Discord hesabını bağla (migration)',
-            oauth: true,
-            features: ['Profile', 'Friends Import']
-        }
         // Yakında eklenecek platformlar:
         // PlayStation, Epic Games, Battle.net, Riot Games, Twitter
     ];
@@ -338,7 +329,7 @@ const ConnectionsPanel = ({ onClose }) => {
                                 <FaLink /> Sosyal Medya
                             </h3>
                             <div className="platforms-grid">
-                                {platforms.filter(p => ['discord', 'twitter', 'github'].includes(p.id)).map(renderPlatform)}
+                                {platforms.filter(p => ['twitter', 'github'].includes(p.id)).map(renderPlatform)}
                             </div>
                         </div>
                     </div>

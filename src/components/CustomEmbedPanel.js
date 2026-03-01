@@ -271,7 +271,7 @@ const CustomEmbedPanel = ({ serverId, onClose }) => {
 
               <div className="embed-preview">
                 <h3>Önizleme</h3>
-                <div className="discord-embed" style={{ borderLeftColor: currentEmbed.color }}>
+                <div className="pawscord-embed" style={{ borderLeftColor: currentEmbed.color }}>
                   {currentEmbed.author_name && (
                     <div className="embed-author">
                       {currentEmbed.author_icon && <img src={currentEmbed.author_icon} alt="" />}

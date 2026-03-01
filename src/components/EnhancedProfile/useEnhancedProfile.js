@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
     FaTwitter, FaGithub, FaInstagram, FaYoutube, FaTwitch, FaSpotify, FaSteam,
-    FaGlobe, FaDiscord
+    FaGlobe
 } from 'react-icons/fa';
 import { API_BASE_URL } from '../../utils/constants';
 import toast from '../../utils/toast';
@@ -15,7 +15,6 @@ export const SOCIAL_ICONS = {
     spotify: { icon: FaSpotify, color: '#1DB954', label: 'Spotify' },
     steam: { icon: FaSteam, color: '#00adee', label: 'Steam' },
     website: { icon: FaGlobe, color: '#666', label: 'Website' },
-    discord: { icon: FaDiscord, color: '#5865F2', label: 'Discord' },
 };
 
 const useEnhancedProfile = (userId, isOwn) => {

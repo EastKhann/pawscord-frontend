@@ -13,7 +13,7 @@ export const tokens = {
     // Extracted from 8,000+ color references across 138 CSS files
     colors: {
         // Brand / Primary
-        primary: '#5865f2',  // 1020 refs — Discord blurple
+        primary: '#5865f2',  // 1020 refs — Pawscord brand blue
         primaryHover: '#4752c4',  //   59 refs
         primaryLight: '#7289da',  //   61 refs — legacy blurple
         primarySoft: '#5e81f4',  //   19 refs
@@ -34,7 +34,7 @@ export const tokens = {
         spotify: '#1db954',  //   34 refs
 
         // Danger / Red
-        danger: '#ed4245',  //  158 refs — Discord red
+        danger: '#ed4245',  //  158 refs — danger red
         dangerAlt: '#f04747',  //  185 refs — legacy red
         dangerBright: '#ef4444',  //   76 refs — tailwind red-500
         dangerDark: '#da373c',  //  112 refs
@@ -44,7 +44,7 @@ export const tokens = {
         dangerIos: '#ff3b30',  //   53 refs
 
         // Warning / Yellow-Orange
-        warning: '#faa61a',  //  175 refs — Discord yellow
+        warning: '#faa61a',  //  175 refs — warning yellow
         warningAlt: '#f0b232',  //   78 refs
         warningBright: '#fbbf24',  //   44 refs
         warningAmber: '#f59e0b',  //   66 refs
@@ -61,7 +61,7 @@ export const tokens = {
         infoSky: '#00a8fc',  //   16 refs
 
         // Pink / Fuchsia
-        pink: '#eb459e',  //   17 refs — Discord pink
+        pink: '#eb459e',  //   17 refs — accent pink
         pinkModern: '#ec4899',  //   20 refs
         pinkLegacy: '#9b59b6',  //   52 refs — purple-pink
 
@@ -75,7 +75,7 @@ export const tokens = {
         bgDeep: '#111214',  //   19 refs
         bgDarkest: '#1a1a1e',  //   16 refs
         bgDarker: '#1a1a2e',  //   95 refs — blue-tinted dark
-        bgTertiary: '#202225',  //  169 refs — Discord tertiary
+        bgTertiary: '#202225',  //  169 refs — tertiary background
         bgPrimary: '#1e1f22',  //  292 refs — main app background
         bgPrimaryAlt: '#1e1e2e',  //   16 refs — catppuccin-style
         bgSecondary: '#2b2d31',  //  270 refs — sidebar/panels

@@ -1,5 +1,5 @@
 // frontend/src/components/ChannelSettingsModal.js
-// 🔥 FULL DISCORD-STYLE CHANNEL SETTINGS WITH ADVANCED PERMISSIONS
+// 🔥 FULL PAWSCORD CHANNEL SETTINGS WITH ADVANCED PERMISSIONS
 
 import { useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';

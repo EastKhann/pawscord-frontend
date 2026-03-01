@@ -1,5 +1,5 @@
 // frontend/src/components/MessageSkeleton.js
-// Faz 2.4: Skeleton loading placeholders for chat messages (Discord-style)
+// Faz 2.4: Skeleton loading placeholders for chat messages
 import React, { memo } from 'react';
 
 const LINE_WIDTHS = ['72%', '55%', '80%', '48%', '65%', '40%', '70%'];

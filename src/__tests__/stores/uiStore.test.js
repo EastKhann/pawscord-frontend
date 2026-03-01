@@ -42,7 +42,7 @@ describe('useUIStore – Comprehensive', () => {
             expect(useUIStore.getState().theme).toBe('dark');
         });
 
-        it('accentColor should default to Discord purple', () => {
+        it('accentColor should default to Pawscord purple', () => {
             expect(useUIStore.getState().accentColor).toBe('#5865F2');
         });
 
