@@ -1,7 +1,7 @@
 // frontend/src/WelcomeScreen.js
 
 import React, { useState, useCallback } from 'react';
-import { FaBars, FaGamepad, FaUserFriends, FaCompass, FaMagic, FaUsers, FaDownload, FaCheck } from 'react-icons/fa';
+import { FaBars, FaGamepad, FaUserFriends, FaCompass, FaMagic, FaUsers, FaDownload, FaCheck, FaHashtag, FaAt } from 'react-icons/fa';
 import DownloadModal from './components/DownloadModal';
 import { Capacitor } from '@capacitor/core';
 import { getApiBase } from './utils/apiEndpoints';
@@ -19,7 +19,10 @@ const WelcomeScreen = ({
     // 🔥 YENİ: Navigasyon Fonksiyonları
     onSwitchToFriends,
     onSwitchToAI,
-    onSwitchToCinema
+    onSwitchToCinema,
+    // 🕐 Son Açılanlar
+    recentItems = [],
+    onNavigateToItem,
 }) => {
 
     const [showDownload, setShowDownload] = useState(false);
@@ -137,10 +140,32 @@ const WelcomeScreen = ({
                     </p>
                 </div>
 
+                {/* --- SON AÇILANLAR --- */}
+                {recentItems.length > 0 && (
+                    <div style={styles.recentSection}>
+                        <p style={styles.recentTitle}>Son Açılanlar</p>
+                        <div style={styles.recentList}>
+                            {recentItems.map((item) => (
+                                <button
+                                    key={`${item.type}-${item.id}`}
+                                    style={styles.recentItem}
+                                    onClick={() => onNavigateToItem && onNavigateToItem(item)}
+                                    title={item.label}
+                                >
+                                    <span style={styles.recentIcon}>
+                                        {item.type === 'room' ? <FaHashtag size={13} /> : <FaAt size={13} />}
+                                    </span>
+                                    <span style={styles.recentLabel}>{item.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 <div style={styles.cardsGrid}>
 
                     {/* 1. ARKADAŞLAR KARTI (Doğru çalışıyor) */}
-                    <div style={styles.card} role="button" tabIndex={0} onClick={onSwitchToFriends} onKeyDown={e => e.key === 'Enter' && onSwitchToFriends()} aria-label="Arkadaşların">
+                    <div style={styles.card} className="welcome-card" role="button" tabIndex={0} onClick={onSwitchToFriends} onKeyDown={e => e.key === 'Enter' && onSwitchToFriends()} aria-label="Arkadaşların">
                         <div style={{ ...styles.iconBox, background: 'rgba(88, 101, 242, 0.15)', color: '#5865f2' }}>
                             <FaUserFriends size={isMobile ? 20 : 24} />
                         </div>
@@ -149,7 +174,7 @@ const WelcomeScreen = ({
                     </div>
 
                     {/* 2. SUNUCULAR KARTI */}
-                    <div style={styles.card} role="button" tabIndex={0} onClick={onOpenMenu} onKeyDown={e => e.key === 'Enter' && onOpenMenu()} aria-label="Sunucular">
+                    <div style={styles.card} className="welcome-card" role="button" tabIndex={0} onClick={onOpenMenu} onKeyDown={e => e.key === 'Enter' && onOpenMenu()} aria-label="Sunucular">
                         <div style={{ ...styles.iconBox, background: 'rgba(35, 165, 89, 0.15)', color: '#23a559' }}>
                             <FaCompass size={isMobile ? 20 : 24} />
                         </div>
@@ -158,7 +183,7 @@ const WelcomeScreen = ({
                     </div>
 
                     {/* 3. AKTİVİTELER KARTI (Düzeltme: onClick eklendi) */}
-                    <div style={styles.card} role="button" tabIndex={0} onClick={onSwitchToCinema} onKeyDown={e => e.key === 'Enter' && onSwitchToCinema()} aria-label="Aktiviteler">
+                    <div style={styles.card} className="welcome-card" role="button" tabIndex={0} onClick={onSwitchToCinema} onKeyDown={e => e.key === 'Enter' && onSwitchToCinema()} aria-label="Aktiviteler">
                         <div style={{ ...styles.iconBox, background: 'rgba(240, 178, 50, 0.15)', color: '#f0b232' }}>
                             <FaGamepad size={isMobile ? 20 : 24} />
                         </div>
@@ -167,7 +192,7 @@ const WelcomeScreen = ({
                     </div>
 
                     {/* 4. YAPAY ZEKA KARTI (Doğru çalışıyor) */}
-                    <div style={styles.card} role="button" tabIndex={0} onClick={onSwitchToAI} onKeyDown={e => e.key === 'Enter' && onSwitchToAI()} aria-label="Yapay Zeka">
+                    <div style={styles.card} className="welcome-card" role="button" tabIndex={0} onClick={onSwitchToAI} onKeyDown={e => e.key === 'Enter' && onSwitchToAI()} aria-label="Yapay Zeka">
                         <div style={{ ...styles.iconBox, background: 'rgba(235, 69, 158, 0.15)', color: '#eb459e' }}>
                             <FaMagic size={isMobile ? 20 : 24} />
                         </div>
@@ -191,7 +216,7 @@ const styles = {
         width: '100%',
         height: '100%',
         backgroundColor: '#313338',
-        color: '#fff',
+        color: '#dbdee1',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -202,37 +227,38 @@ const styles = {
         top: 0, left: 0, width: '100%',
         backgroundColor: '#2b2d31',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 15px',
+        padding: '0 12px',
         boxSizing: 'border-box',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+        boxShadow: '0 1px 0 rgba(0,0,0,0.3)',
         zIndex: 50,
-        borderBottom: '1px solid #1f2023',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
         paddingTop: 'env(safe-area-inset-top)',
-        height: 'calc(55px + env(safe-area-inset-top))'
+        height: 'calc(52px + env(safe-area-inset-top))'
     },
     menuButton: {
         background: 'none',
         border: 'none',
-        color: '#dbdee1',
+        color: '#b5bac1',
         cursor: 'pointer',
-        padding: '10px',
+        padding: '8px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        borderRadius: '4px'
     },
     headerTitle: {
-        fontWeight: 'bold',
-        fontSize: '1.1em',
-        letterSpacing: '1px',
-        color: '#fff'
+        fontWeight: '700',
+        fontSize: '15px',
+        letterSpacing: '0.2px',
+        color: '#f2f3f5'
     },
     desktopTopRight: {
         position: 'absolute',
-        top: '20px',
-        right: '20px',
+        top: '16px',
+        right: '16px',
         zIndex: 60,
         display: 'flex',
-        gap: '10px',
+        gap: '8px',
         alignItems: 'center'
     },
     headerUpdateBtn: {
@@ -240,19 +266,20 @@ const styles = {
         color: '#000',
         border: 'none',
         padding: '6px 12px',
-        borderRadius: '20px',
+        borderRadius: '16px',
         cursor: 'pointer',
-        fontWeight: 'bold',
+        fontWeight: '700',
+        fontSize: '12px',
         display: 'flex',
         alignItems: 'center',
-        animation: 'pulse 2s infinite',
-        boxShadow: '0 0 10px rgba(240, 178, 50, 0.4)'
+        gap: '5px',
+        boxShadow: '0 2px 8px rgba(240, 178, 50, 0.4)'
     },
     headerProgressContainer: {
-        width: '100px',
-        height: '24px',
-        backgroundColor: '#202225',
-        borderRadius: '12px',
+        width: '96px',
+        height: '22px',
+        backgroundColor: '#2b2d31',
+        borderRadius: '11px',
         position: 'relative',
         overflow: 'hidden',
         border: '1px solid #f0b232',
@@ -265,7 +292,7 @@ const styles = {
         left: 0,
         top: 0,
         height: '100%',
-        backgroundColor: '#f0b232',
+        backgroundColor: 'rgba(240, 178, 50, 0.5)',
         transition: 'width 0.2s ease'
     },
     headerProgressText: {
@@ -273,40 +300,52 @@ const styles = {
         zIndex: 2,
         fontSize: '11px',
         fontWeight: 'bold',
-        color: '#fff',
-        textShadow: '0 1px 2px black'
+        color: '#fff'
     },
     desktopDownloadBtn: {
         backgroundColor: '#23a559',
         color: 'white',
         border: 'none',
-        padding: '10px 20px',
-        borderRadius: '20px',
-        fontWeight: 'bold',
+        padding: '8px 18px',
+        borderRadius: '16px',
+        fontWeight: '600',
+        fontSize: '13px',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-        transition: 'transform 0.2s'
+        gap: '6px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
+        transition: 'background-color 0.15s ease'
     },
-    scrollContent: { flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box', WebkitOverflowScrolling: 'touch' },
-    heroSection: { textAlign: 'center', marginBottom: '30px', maxWidth: '600px', animation: 'fadeIn 0.8s ease-out', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' },
-    logo: { width: '100px', height: '100px', marginBottom: '15px', filter: 'drop-shadow(0 0 15px rgba(88, 101, 242, 0.4))' },
-    logoMobile: { width: '80px', height: '80px', marginBottom: '10px', filter: 'drop-shadow(0 0 15px rgba(88, 101, 242, 0.4))' },
-    title: { fontSize: '2.2em', fontWeight: '800', marginBottom: '5px', background: 'linear-gradient(90deg, #5865f2, #9b59b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: 0 },
-    titleMobile: { fontSize: '1.8em', fontWeight: '800', marginBottom: '5px', background: 'linear-gradient(90deg, #5865f2, #9b59b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: 0 },
-    subtitle: { color: '#b5bac1', fontSize: '0.95em', lineHeight: '1.4', marginTop: '10px' },
-    cardsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', width: '100%', maxWidth: '500px', marginBottom: '20px' },
-    // 🔥 GÜNCELLEME: Card stiline cursor pointer eklendi
-    card: { backgroundColor: '#2b2d31', padding: '15px', borderRadius: '16px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 4px 8px rgba(0,0,0,0.15)', border: '1px solid #232428', minHeight: '140px', cursor: 'pointer', transition: 'transform 0.1s' },
-    iconBox: { width: '45px', height: '45px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' },
-    cardTitle: { margin: '0 0 5px 0', fontSize: '0.95em', color: '#dbdee1', fontWeight: '600' },
-    cardDesc: { margin: 0, fontSize: '0.75em', color: '#949ba4', lineHeight: '1.3' },
-    footer: { marginTop: 'auto', color: '#5e6064', fontSize: '0.75em', textAlign: 'center', paddingTop: '20px' }
+    scrollContent: { flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box', WebkitOverflowScrolling: 'touch' },
+    heroSection: { textAlign: 'center', marginBottom: '28px', maxWidth: '520px', animation: 'fadeIn 0.6s ease-out', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' },
+    logo: { width: '88px', height: '88px', marginBottom: '16px', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))' },
+    logoMobile: { width: '72px', height: '72px', marginBottom: '12px', filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))' },
+    title: { fontSize: '2em', fontWeight: '800', color: '#f2f3f5', margin: 0, letterSpacing: '-0.5px' },
+    titleMobile: { fontSize: '1.6em', fontWeight: '800', color: '#f2f3f5', margin: 0, letterSpacing: '-0.3px' },
+    subtitle: { color: '#949ba4', fontSize: '0.9em', lineHeight: '1.5', marginTop: '8px', maxWidth: '360px' },
+    cardsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', width: '100%', maxWidth: '480px', marginBottom: '20px' },
+    recentSection: { width: '100%', maxWidth: '480px', marginBottom: '16px' },
+    recentTitle: { fontSize: '0.7em', fontWeight: '700', color: '#949ba4', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 8px 2px' },
+    recentList: { display: 'flex', flexWrap: 'wrap', gap: '6px' },
+    recentItem: { display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#2b2d31', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer', color: '#dbdee1', fontSize: '0.82em', fontWeight: '500', transition: 'background-color 0.12s ease', maxWidth: '180px' },
+    recentIcon: { color: '#949ba4', flexShrink: 0 },
+    recentLabel: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+    card: { backgroundColor: '#2b2d31', padding: '16px 14px', borderRadius: '8px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.05)', minHeight: '130px', cursor: 'pointer', transition: 'background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease' },
+    iconBox: { width: '42px', height: '42px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' },
+    cardTitle: { margin: '0 0 4px 0', fontSize: '0.9em', color: '#dbdee1', fontWeight: '600' },
+    cardDesc: { margin: 0, fontSize: '0.75em', color: '#949ba4', lineHeight: '1.4' },
+    footer: { marginTop: 'auto', color: '#4e5058', fontSize: '0.72em', textAlign: 'center', paddingTop: '16px', letterSpacing: '0.3px' }
 };
 
 const styleSheet = document.createElement("style");
-styleSheet.innerText = `@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.9; } 100% { transform: scale(1); opacity: 1; } } @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } } .card:active { transform: scale(0.98); }`;
+styleSheet.innerText = `
+  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.85; } 100% { opacity: 1; } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .welcome-card:hover { background-color: #313338 !important; transform: translateY(-2px) !important; box-shadow: 0 6px 16px rgba(0,0,0,0.35) !important; }
+  .welcome-card:active { transform: scale(0.98) !important; }
+  button[title]:hover { background-color: #383a40 !important; }
+`;
 document.head.appendChild(styleSheet);
 
 export default React.memo(WelcomeScreen);

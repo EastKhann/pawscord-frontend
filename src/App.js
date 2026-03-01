@@ -19,6 +19,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback, Suspense } from 'react';
 import './index.css';
 import './styles/modern-theme.css';
+import './App.css'; // 🎨 Professional design tokens — overrides legacy purple palette
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import SuspenseWithBoundary from './components/SuspenseWithBoundary';
 
@@ -150,6 +151,10 @@ const AppContent = () => {
     const [chartSymbol, setChartSymbol] = useState(null);
     const [hasDraftMessage, setHasDraftMessage] = useState(false);
     const [draftText, setDraftText] = useState('');
+    const [recentNavItems, setRecentNavItems] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('pawscord_recent_nav') || '[]'); }
+        catch (e) { return []; }
+    });
 
     // ─── REFS ───
     const messagesEndRef = useRef(null);
@@ -179,6 +184,24 @@ const AppContent = () => {
     useEffect(() => { activeChatRef.current = activeChat; }, [activeChat]);
     useEffect(() => { tokenRef.current = token; }, [token]);
     useEffect(() => { usernameRef.current = username; }, [username]);
+
+    // ─── Recent navigation tracker ───
+    useEffect(() => {
+        const { type, id } = activeChat || {};
+        if (!type || type === 'welcome' || type === 'friends' || type === 'voice') return;
+        if (!id) return;
+        // chatTitle may be empty during first render — just use id as fallback
+        const label = chatTitle || String(id);
+        const item = { type, id, label, ts: Date.now() };
+        try {
+            const stored = JSON.parse(localStorage.getItem('pawscord_recent_nav') || '[]');
+            const filtered = stored.filter(x => !(x.type === type && String(x.id) === String(id)));
+            const updated = [item, ...filtered].slice(0, 6);
+            localStorage.setItem('pawscord_recent_nav', JSON.stringify(updated));
+            setRecentNavItems(updated);
+        } catch (e) { }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeChat?.type, activeChat?.id, chatTitle]);
 
     // ─── Faz 3.4: ESC closes the topmost open modal ───
     useEffect(() => {
@@ -364,6 +387,11 @@ const AppContent = () => {
     const handleCloseInviteCode = useCallback(() => { setShowInviteCode(null); window.location.hash = '#/'; }, []);
     const handleSwitchToFriends = useCallback(() => { setActiveChat('friends', 'friends'); if (isMobile) setIsLeftSidebarVisible(false); }, [setActiveChat, isMobile]);
     const handleSwitchToAI = useCallback(() => handleRoomChange('ai'), [handleRoomChange]);
+    const handleNavigateToRecent = useCallback((item) => {
+        if (item.type === 'room') handleRoomChange(item.id);
+        else if (item.type === 'dm') setActiveChat('dm', item.id, item.label);
+        if (isMobile) setIsLeftSidebarVisible(false);
+    }, [handleRoomChange, setActiveChat, isMobile]);
 
     // ─── MOBILE BOTTOM NAV ───────────────────────────────────────────
     const [mobileActiveTab, setMobileActiveTab] = useState('chats');
@@ -550,7 +578,9 @@ const AppContent = () => {
                                     onStartUpdate={handleStartUpdate}
                                     onSwitchToFriends={handleSwitchToFriends}
                                     onSwitchToAI={handleSwitchToAI}
-                                    onSwitchToCinema={handleOpenCinema} />
+                                    onSwitchToCinema={handleOpenCinema}
+                                    recentItems={recentNavItems}
+                                    onNavigateToItem={handleNavigateToRecent} />
                             </Suspense>
                         </div>
                     ) : activeRoomType === 'kanban' ? (
