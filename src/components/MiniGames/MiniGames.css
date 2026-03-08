@@ -1,7 +1,7 @@
 /* Mini Games Styles */
 
 .mini-games-container {
-    background: var(--bg-primary, #36393f);
+    background: var(--bg-primary, #17191c);
     border-radius: 8px;
     padding: 20px;
     max-width: 500px;
@@ -18,15 +18,15 @@
 .games-header h2 {
     margin: 0;
     font-size: 20px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .back-btn {
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border: none;
     border-radius: 4px;
     padding: 8px 16px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     cursor: pointer;
     margin-bottom: 16px;
     transition: background 0.15s;
@@ -49,7 +49,7 @@
     align-items: center;
     gap: 8px;
     padding: 24px 16px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -68,12 +68,12 @@
 .game-name {
     font-size: 16px;
     font-weight: 600;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .game-desc {
     font-size: 12px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     text-align: center;
 }
 
@@ -88,22 +88,22 @@
 .game-header h3 {
     margin: 0;
     font-size: 18px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .opponent,
 .lives {
     font-size: 14px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .game-status {
     text-align: center;
     padding: 8px;
     margin-bottom: 16px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border-radius: 6px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
 }
 
@@ -140,7 +140,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border: none;
     border-radius: 8px;
     font-size: 48px;
@@ -162,7 +162,7 @@
 }
 
 .tictactoe-cell.O {
-    color: #ed4245;
+    color: #f23f42;
 }
 
 .tictactoe-cell.winning {
@@ -187,8 +187,8 @@
     font-family: monospace;
     font-size: 14px;
     line-height: 1.3;
-    color: var(--text-normal, #dcddde);
-    background: var(--bg-secondary, #2f3136);
+    color: var(--text-normal, #dbdee1);
+    background: var(--bg-secondary, #111214);
     padding: 16px;
     border-radius: 8px;
     text-align: center;
@@ -202,15 +202,15 @@
     font-weight: bold;
     letter-spacing: 4px;
     margin-bottom: 16px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .word-display .won {
-    color: #57f287;
+    color: #23a559;
 }
 
 .revealed-word {
-    color: #ed4245;
+    color: #f23f42;
 }
 
 .game-result {
@@ -218,7 +218,7 @@
     font-size: 20px;
     padding: 12px;
     margin-bottom: 16px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border-radius: 8px;
 }
 
@@ -232,10 +232,10 @@
 
 .key {
     padding: 10px 4px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border: none;
     border-radius: 4px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -252,19 +252,19 @@
 }
 
 .key.correct {
-    background: #57f287;
+    background: #23a559;
     color: black;
 }
 
 .key.wrong {
-    background: #ed4245;
+    background: #f23f42;
     color: white;
 }
 
 /* TRIVIA */
 .trivia-progress {
     font-size: 14px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .score-display {
@@ -276,12 +276,12 @@
 }
 
 .trivia-question {
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 16px;
     font-size: 16px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     text-align: center;
     line-height: 1.5;
 }
@@ -294,10 +294,10 @@
 
 .trivia-option {
     padding: 14px 16px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border: 2px solid transparent;
     border-radius: 8px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     cursor: pointer;
     transition: all 0.15s;
@@ -315,12 +315,12 @@
 
 .trivia-option.correct {
     background: rgba(87, 242, 135, 0.2);
-    border-color: #57f287;
+    border-color: #23a559;
 }
 
 .trivia-option.wrong {
     background: rgba(237, 66, 69, 0.2);
-    border-color: #ed4245;
+    border-color: #f23f42;
 }
 
 .trivia-option:disabled {
@@ -334,9 +334,9 @@
 }
 
 .trivia-result h3 {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 16px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .final-score {
@@ -354,11 +354,11 @@
 }
 
 .score-total {
-    font-size: 24px;
-    color: var(--text-muted, #72767d);
+    font-size: 20px;
+    color: var(--text-muted, #949ba4);
 }
 
 .trivia-result p {
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     margin-bottom: 24px;
 }

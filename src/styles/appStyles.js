@@ -1,4 +1,4 @@
-// frontend/src/styles/appStyles.js
+﻿// frontend/src/styles/appStyles.js
 // Extracted from App.js for cleaner architecture
 // =============================================
 
@@ -9,8 +9,8 @@ export // --- STİLLER ---
             display: 'flex',
             width: '100%',
             height: '100dvh',
-            backgroundColor: '#1E1F22', // Deep dark base
-            backgroundImage: 'radial-gradient(circle at 50% 10%, rgba(88, 101, 242, 0.05) 0%, transparent 40%)', // Subtle glow
+            backgroundColor: '#0b0e1b', // Deep navy blue base
+            backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(88, 101, 242, 0.18) 0%, rgba(59, 91, 219, 0.06) 35%, transparent 65%)', // Blue ambient glow
             color: 'white',
             overflow: 'hidden',
             fontFamily: "'Inter', sans-serif"
@@ -27,13 +27,14 @@ export // --- STİLLER ---
         // 3. SOL MENÜ (Sidebar)
         sidebarWrapper: {
             width: '312px',
-            backgroundColor: 'rgba(30, 31, 34, 0.6)',
-            backdropFilter: 'blur(10px)',
+            backgroundColor: 'rgba(9, 12, 28, 0.82)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
             display: 'flex',
             flexDirection: 'row',
             flexShrink: 0,
             height: '100%',
-            borderRight: '1px solid rgba(255,255,255,0.05)'
+            borderRight: '1px solid rgba(88, 101, 242, 0.1)'
         },
 
         // 4. SAĞ TARAFTAKİ ANA İÇERİK
@@ -51,7 +52,7 @@ export // --- STİLLER ---
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            backgroundColor: '#313338',
+            backgroundColor: '#121928',
             minWidth: 0,
             height: '100%',
             overflow: 'hidden',
@@ -66,8 +67,8 @@ export // --- STİLLER ---
             alignItems: 'center',
             padding: '0 16px',
             flexShrink: 0,
-            backgroundColor: '#313338',
-            boxShadow: '0 1px 0 rgba(4,4,5,0.2), 0 1.5px 0 rgba(6,6,7,0.05), 0 2px 0 rgba(4,4,5,0.05)',
+            backgroundColor: '#121928',
+            boxShadow: '0 1px 0 rgba(4,4,5,0.25), 0 1.5px 0 rgba(20,30,60,0.15), 0 2px 0 rgba(4,4,5,0.08)',
             zIndex: 10
         },
 
@@ -95,7 +96,7 @@ export // --- STİLLER ---
 
         inputForm: {
             display: 'flex',
-            backgroundColor: '#383a40',
+            backgroundColor: '#182135',
             borderRadius: '8px',
             padding: '0 12px',
             alignItems: 'flex-end',
@@ -109,11 +110,12 @@ export // --- STİLLER ---
         // ... Diğer stiller (Modernize)
         chatUserListPanel: {
             width: '240px',
-            backgroundColor: 'rgba(30, 31, 34, 0.6)',
-            borderLeft: '1px solid rgba(255,255,255,0.08)',
+            backgroundColor: 'rgba(9, 12, 28, 0.82)',
+            borderLeft: '1px solid rgba(88, 101, 242, 0.12)',
             flexShrink: 0,
             height: '100%',
-            backdropFilter: 'blur(10px)'
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)'
         },
         mobileSidebar: { position: 'fixed', zIndex: 100, top: 0, bottom: 0, left: 0, width: '85vw', maxWidth: '350px', boxShadow: '5px 0 15px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column' },
         mobileRightSidebar: { position: 'fixed', zIndex: 100, top: 0, bottom: 0, right: 0, width: '85vw', maxWidth: '300px', boxShadow: '-5px 0 15px rgba(0,0,0,0.5)', display: 'flex', flexDirection: 'column' },
@@ -135,7 +137,7 @@ export // --- STİLLER ---
         iconButton: {
             background: 'none',
             border: 'none',
-            color: '#b9bbbe',
+            color: '#b5bac1',
             fontSize: '1.3em',
             cursor: 'pointer',
             padding: '6px',
@@ -145,7 +147,7 @@ export // --- STİLLER ---
             transition: 'all 0.2s',
             ':hover': { backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff' }
         },
-        micButton: { background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.3em', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center', transition: 'color 0.2s' },
+        micButton: { background: 'none', border: 'none', color: '#b5bac1', fontSize: '1.3em', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center', transition: 'color 0.2s' },
         sendButton: {
             backgroundColor: '#5865f2',
             border: 'none',
@@ -174,7 +176,7 @@ export // --- STİLLER ---
             marginRight: '8px',
             border: '1px solid rgba(255,255,255,0.05)'
         },
-        searchInput: { backgroundColor: 'transparent', border: 'none', color: '#dcddde', fontSize: '0.9em', width: '140px', outline: 'none' },
+        searchInput: { backgroundColor: 'transparent', border: 'none', color: '#dbdee1', fontSize: '0.9em', width: '140px', outline: 'none' },
         searchIcon: { color: '#949ba4', fontSize: '0.8em', cursor: 'pointer' },
         typingIndicator: { color: '#dbdee1', fontSize: '0.85em', maxWidth: '180px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 'bold' },
 
@@ -191,15 +193,15 @@ export // --- STİLLER ---
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '10px 15px',
-            backgroundColor: '#202225',
-            borderBottom: '1px solid #111214',
+            backgroundColor: '#0b0e1b',
+            borderBottom: '1px solid #0e1222',
             minHeight: '54px',
             flexShrink: 0
         },
         closeSidebarButton: {
             background: 'none',
             border: 'none',
-            color: '#b9bbbe',
+            color: '#b5bac1',
             fontSize: '22px',
             cursor: 'pointer',
             padding: '8px',
@@ -216,7 +218,7 @@ export // --- STİLLER ---
             padding: '10px 16px',
             background: 'transparent',
             border: 'none',
-            color: '#dcddde',
+            color: '#dbdee1',
             textAlign: 'left',
             cursor: 'pointer',
             display: 'flex',

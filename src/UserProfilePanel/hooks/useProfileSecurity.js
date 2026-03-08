@@ -71,8 +71,8 @@ const useProfileSecurity = () => {
         if (passwordData.new_password !== passwordData.confirm_password) {
             toast.error('Yeni şifreler eşleşmiyor!'); return;
         }
-        if (passwordData.new_password.length < 8) {
-            toast.error('Şifre en az 8 karakter olmalıdır!'); return;
+        if (passwordData.new_password.length < 12) {
+            toast.error('Şifre en az 12 karakter olmalıdır!'); return;
         }
         try {
             setLoading(l => ({ ...l, changePassword: true }));
@@ -83,7 +83,12 @@ const useProfileSecurity = () => {
             setPasswordData({ old_password: '', new_password: '', confirm_password: '' });
             if (!hasPassword) setHasPassword(true);
         } catch (err) {
-            toast.error('Şifre değiştirme başarısız: ' + (err.response?.data?.error || 'Eski şifre yanlış olabilir'));
+            const details = err.response?.data?.details;
+            if (details && Array.isArray(details) && details.length > 0) {
+                toast.error('Şifre gereksinimleri:\n• ' + details.join('\n• '));
+            } else {
+                toast.error('Şifre değiştirme başarısız: ' + (err.response?.data?.error || 'Eski şifre yanlış olabilir'));
+            }
         } finally { setLoading(l => ({ ...l, changePassword: false })); }
     };
 

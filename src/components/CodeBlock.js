@@ -1,4 +1,4 @@
-// frontend/src/components/CodeBlock.js
+﻿// frontend/src/components/CodeBlock.js
 // ⚡ OPTIMIZED: PrismLight kullanarak sadece gerekli dilleri yükler (~100KB vs 1.79MB)
 
 import { useState, Suspense, lazy, memo } from 'react';
@@ -155,10 +155,10 @@ const CodeBlock = ({ language, value, children }) => {
 };
 
 const styles = {
-    container: { marginTop: '8px', marginBottom: '8px', borderRadius: '8px', border: '1px solid #202225', overflow: 'hidden', backgroundColor: '#1e1f22' },
-    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 10px', backgroundColor: '#202225', color: '#b9bbbe', fontSize: '0.8em', fontWeight: 'bold', fontFamily: 'monospace' },
+    container: { marginTop: '8px', marginBottom: '8px', borderRadius: '8px', border: '1px solid #0b0e1b', overflow: 'hidden', backgroundColor: '#0d0e10' },
+    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 10px', backgroundColor: '#0d0e10', color: '#b5bac1', fontSize: '0.8em', fontWeight: 'bold', fontFamily: 'monospace' },
     language: { textTransform: 'uppercase' },
-    copyButton: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer' },
+    copyButton: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer' },
 
     // Yeni Run Butonu Stili
     runButton: {
@@ -168,11 +168,11 @@ const styles = {
     },
 
     codeWrapper: { overflow: 'hidden', transition: 'max-height 0.3s' },
-    expandButton: { width: '100%', padding: '8px', backgroundColor: '#2f3136', border: 'none', borderTop: '1px solid #202225', color: '#dbdee1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' },
+    expandButton: { width: '100%', padding: '8px', backgroundColor: '#111214', border: 'none', borderTop: '1px solid #0b0e1b', color: '#dbdee1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' },
 
     // Output Stilleri
-    outputContainer: { borderTop: '1px solid #40444b', backgroundColor: '#000' },
-    outputHeader: { padding: '5px 10px', fontSize: '0.75em', color: '#99aab5', backgroundColor: '#111' },
+    outputContainer: { borderTop: '1px solid #182135', backgroundColor: '#000' },
+    outputHeader: { padding: '5px 10px', fontSize: '0.75em', color: '#949ba4', backgroundColor: '#111' },
     outputBody: { padding: '10px', color: '#0f0', fontFamily: 'monospace', margin: 0, whiteSpace: 'pre-wrap', fontSize: '0.9em' }
 };
 

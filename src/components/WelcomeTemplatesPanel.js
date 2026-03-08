@@ -1,4 +1,4 @@
-// frontend/src/components/WelcomeTemplatesPanel.js
+﻿// frontend/src/components/WelcomeTemplatesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaEnvelope, FaSave, FaEye } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -103,7 +103,7 @@ const WelcomeTemplatesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose })
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaEnvelope style={{ color: '#43b581' }} />
+                        <FaEnvelope style={{ color: '#23a559' }} />
                         <h2 style={{ margin: 0 }}>Hoşgeldin Mesajları</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -256,14 +256,14 @@ const styles = {
     label: {
         display: 'block',
         marginBottom: '8px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         fontWeight: '600'
     },
     select: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -288,7 +288,7 @@ const styles = {
     textarea: {
         width: '100%',
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -297,7 +297,7 @@ const styles = {
         marginBottom: '10px'
     },
     previewBtn: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         color: '#fff',
         border: 'none',
         padding: '8px 16px',
@@ -314,7 +314,7 @@ const styles = {
     },
     saveBtn: {
         width: '100%',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '12px',

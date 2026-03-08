@@ -7,7 +7,7 @@ const UsersTab = ({ stats }) => (
         <div style={styles.statsGrid}>
             <StatCard icon={<FaUsers />} label="Toplam Kullanıcı" value={stats.total_users || 0} color="#5865f2" />
             <StatCard icon={<FaUserPlus />} label="Online" value={stats.online_users || 0} color="#23a559" />
-            <StatCard icon={<FaUserMinus />} label="Offline" value={(stats.total_users - stats.online_users) || 0} color="#747f8d" />
+            <StatCard icon={<FaUserMinus />} label="Offline" value={(stats.total_users - stats.online_users) || 0} color="#80848e" />
         </div>
 
         {stats.top_users && stats.top_users.length > 0 && (

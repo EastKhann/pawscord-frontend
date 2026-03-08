@@ -1,4 +1,4 @@
-// frontend/src/components/NotificationDropdown.js
+﻿// frontend/src/components/NotificationDropdown.js
 import { useState, useEffect, useRef, memo } from 'react';
 import { FaBell, FaTimes, FaCheck, FaCheckDouble, FaTrash } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
@@ -155,7 +155,7 @@ const NotificationDropdown = ({
                             <FaCheckDouble /> Tümünü okundu işaretle
                         </button>
                     )}
-                    <button onClick={clearAll} style={{ ...styles.actionButton, color: '#ed4245' }}>
+                    <button onClick={clearAll} style={{ ...styles.actionButton, color: '#f23f42' }}>
                         <FaTrash /> Tümünü temizle
                     </button>
                 </div>
@@ -239,7 +239,7 @@ const styles = {
         width: '420px',
         maxWidth: '90vw',
         maxHeight: '600px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
         zIndex: 10000,
@@ -249,11 +249,11 @@ const styles = {
     },
     header: {
         padding: '16px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
     },
     headerLeft: {
         display: 'flex',
@@ -268,7 +268,7 @@ const styles = {
         fontWeight: '600',
     },
     badge: {
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         color: '#fff',
         fontSize: '0.75em',
         fontWeight: 'bold',
@@ -280,7 +280,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.2em',
         padding: '4px',
@@ -293,13 +293,13 @@ const styles = {
         padding: '12px',
         display: 'flex',
         gap: '8px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         flexWrap: 'wrap',
     },
     actionButton: {
         background: 'none',
-        border: '1px solid #40444b',
-        color: '#b9bbbe',
+        border: '1px solid #182135',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '0.85em',
         padding: '6px 12px',
@@ -317,12 +317,12 @@ const styles = {
     loading: {
         padding: '40px',
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     empty: {
         padding: '40px 20px',
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     emptyIcon: {
         fontSize: '3em',
@@ -331,14 +331,14 @@ const styles = {
     },
     emptySubtext: {
         fontSize: '0.85em',
-        color: '#72767d',
+        color: '#949ba4',
         marginTop: '8px',
     },
     notificationItem: {
         padding: '12px 16px',
         display: 'flex',
         gap: '12px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         cursor: 'pointer',
         transition: 'background-color 0.15s',
     },
@@ -357,7 +357,7 @@ const styles = {
         marginBottom: '4px',
     },
     notificationTime: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.75em',
     },
     notificationActions: {
@@ -368,7 +368,7 @@ const styles = {
     iconButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '0.9em',
         padding: '4px',

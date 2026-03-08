@@ -1,4 +1,4 @@
-// frontend/src/components/WebhookManager.js
+﻿// frontend/src/components/WebhookManager.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaPlus, FaTrash, FaCopy } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -145,7 +145,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '600px',
@@ -158,7 +158,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -168,7 +168,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.5em'
     },
@@ -193,7 +193,7 @@ const styles = {
         marginBottom: '15px'
     },
     createForm: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '15px',
         borderRadius: '8px',
         marginBottom: '15px'
@@ -202,7 +202,7 @@ const styles = {
         width: '100%',
         padding: '10px',
         marginBottom: '10px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         border: '1px solid #5865f2',
         borderRadius: '4px',
         color: 'white'
@@ -220,7 +220,7 @@ const styles = {
     cancelButton: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: 'white',
@@ -229,12 +229,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     webhookList: {
@@ -243,7 +243,7 @@ const styles = {
         gap: '10px'
     },
     webhookItem: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '15px',
         borderRadius: '8px',
         display: 'flex',
@@ -256,11 +256,11 @@ const styles = {
         marginBottom: '5px'
     },
     webhookUrl: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '0.85em'
     },
     deleteButton: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         padding: '8px 12px',
         borderRadius: '4px',

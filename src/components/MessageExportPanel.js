@@ -1,4 +1,4 @@
-// frontend/src/components/MessageExportPanel.js
+﻿// frontend/src/components/MessageExportPanel.js
 import { useState } from 'react';
 import { FaTimes, FaDownload, FaFileExport, FaCalendar } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -95,7 +95,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaFileExport style={{ color: '#43b581' }} />
+                        <FaFileExport style={{ color: '#23a559' }} />
                         <h2 style={{ margin: 0 }}>Sohbet Geçmişini Dışa Aktar</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -116,7 +116,7 @@ const MessageExportPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =>
                                             onClick={() => setFormat(fmt.value)}
                                             style={{
                                                 ...styles.formatBtn,
-                                                backgroundColor: format === fmt.value ? '#5865f2' : '#2c2f33'
+                                                backgroundColor: format === fmt.value ? '#5865f2' : '#111214'
                                             }}
                                         >
                                             <span style={{ fontSize: '24px' }}>{fmt.icon}</span>
@@ -247,7 +247,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         marginBottom: '12px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '15px',
         fontWeight: '600'
     },
@@ -278,7 +278,7 @@ const styles = {
     dateInput: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -294,7 +294,7 @@ const styles = {
     progress: {
         textAlign: 'center',
         padding: '30px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px'
     },
     progressSpinner: {
@@ -315,7 +315,7 @@ const styles = {
         marginBottom: '20px'
     },
     downloadBtn: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '15px 30px',
@@ -336,7 +336,7 @@ const styles = {
     },
     cancelBtn: {
         flex: 1,
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         color: '#fff',
         border: 'none',
         padding: '12px',
@@ -347,7 +347,7 @@ const styles = {
     },
     exportBtn: {
         flex: 1,
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '12px',

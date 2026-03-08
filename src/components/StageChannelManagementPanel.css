@@ -1,4 +1,4 @@
-.stage-overlay {
+﻿.stage-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,8 +13,8 @@
 }
 
 .stage-panel {
-    background: linear-gradient(145deg, #1e1e2e 0%, #16161f 100%);
-    border-radius: 20px;
+    background: linear-gradient(145deg, #0d0e10 0%, #16161f 100%);
+    border-radius: 12px;
     width: 95%;
     max-width: 1200px;
     max-height: 90vh;
@@ -27,7 +27,7 @@
 
 /* Header */
 .stage-panel .panel-header {
-    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 50%, #6c3483 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #8e44ad 50%, #6c3483 100%);
     padding: 20px 25px;
     display: flex;
     justify-content: space-between;
@@ -160,7 +160,7 @@
 
 .stage-item.selected {
     background: rgba(155, 89, 182, 0.25);
-    border-color: #9b59b6;
+    border-color: #5865f2;
     box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
 }
 
@@ -177,7 +177,7 @@
     font-weight: 700;
     text-transform: uppercase;
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 12px;
     margin-bottom: 8px;
 }
 
@@ -204,13 +204,13 @@
 
     50% {
         opacity: 0.5;
-        transform: scale(1.2);
+        transform: scale(1.05);
     }
 }
 
 .stage-status.scheduled {
     background: rgba(155, 89, 182, 0.2);
-    color: #9b59b6;
+    color: #5865f2;
 }
 
 .stage-status.ended {
@@ -255,7 +255,7 @@
 }
 
 .stage-item .start-btn:hover {
-    background: #9b59b6;
+    background: #5865f2;
 }
 
 /* Stage Details */
@@ -373,7 +373,7 @@
 .speaker-avatar {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    background: linear-gradient(135deg, #5865f2, #8e44ad);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -389,7 +389,7 @@
     right: -2px;
     color: #f1c40f;
     font-size: 0.7rem;
-    background: #1e1e2e;
+    background: #0b0e1b;
     border-radius: 50%;
     padding: 2px;
 }
@@ -466,7 +466,7 @@
 .hand-raise-item .user-avatar {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #9b59b6, #6c3483);
+    background: linear-gradient(135deg, #5865f2, #6c3483);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -562,7 +562,7 @@
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    color: #9b59b6;
+    color: #5865f2;
     margin-bottom: 20px;
 }
 
@@ -587,7 +587,7 @@
 }
 
 .start-now-btn {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    background: linear-gradient(135deg, #5865f2, #8e44ad);
     color: white;
     border: none;
     padding: 14px 28px;
@@ -643,7 +643,7 @@
 }
 
 .create-modal {
-    background: linear-gradient(145deg, #1e1e2e 0%, #16161f 100%);
+    background: linear-gradient(145deg, #0d0e10 0%, #16161f 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 500px;
@@ -714,7 +714,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #9b59b6;
+    border-color: #5865f2;
     box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
 }
 
@@ -752,7 +752,7 @@
 }
 
 .modal-footer .create-modal-btn {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    background: linear-gradient(135deg, #5865f2, #8e44ad);
     color: white;
     border: none;
     padding: 10px 22px;

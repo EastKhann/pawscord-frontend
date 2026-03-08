@@ -72,7 +72,7 @@ const VoiceUserList = ({
         e.dataTransfer.setData('application/json', JSON.stringify({ username: userObj.username, fromChannel: roomName }));
         e.dataTransfer.effectAllowed = 'move';
         const ghost = document.createElement('div');
-        ghost.style.cssText = 'position:fixed;top:-1000px;background:linear-gradient(135deg,#5865f2,#7289da);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(88,101,242,0.6);display:flex;align-items:center;gap:8px;z-index:99999;';
+        ghost.style.cssText = 'position:fixed;top:-1000px;background:linear-gradient(135deg,#5865f2,#5865f2);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(88,101,242,0.6);display:flex;align-items:center;gap:8px;z-index:99999;';
         ghost.textContent = '🔀 ' + userObj.username;
         document.body.appendChild(ghost);
         e.dataTransfer.setDragImage(ghost, 60, 20);

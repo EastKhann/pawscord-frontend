@@ -1,4 +1,4 @@
-/* ════════════════════════════════════════════════════════════════════════════════
+﻿/* ════════════════════════════════════════════════════════════════════════════════
    🎮 PAWSCORD - Game Presence & Rich Presence Styles
    ════════════════════════════════════════════════════════════════════════════════ */
 
@@ -15,7 +15,7 @@
     border-radius: 12px;
     border-left: 3px solid;
     font-size: 12px;
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .activity-badge-small {
@@ -48,12 +48,12 @@
     background: linear-gradient(145deg, #1e2746, #1a2238);
     border-radius: 8px;
     overflow: hidden;
-    border-left: 4px solid #43b581;
+    border-left: 4px solid #23a559;
     max-width: 300px;
 }
 
 .rich-presence-playing {
-    border-left-color: #43b581;
+    border-left-color: #23a559;
 }
 
 .rich-presence-streaming {
@@ -69,7 +69,7 @@
 }
 
 .rich-presence-competing {
-    border-left-color: #faa61a;
+    border-left-color: #f0b232;
 }
 
 .rp-header {
@@ -81,7 +81,7 @@
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
-    color: #72767d;
+    color: #949ba4;
     letter-spacing: 0.5px;
 }
 
@@ -138,7 +138,7 @@
 .rp-details,
 .rp-state {
     font-size: 12px;
-    color: #b9bbbe;
+    color: #b5bac1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -150,7 +150,7 @@
     align-items: center;
     gap: 6px;
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
     margin-top: 4px;
 }
 
@@ -167,7 +167,7 @@
     justify-content: center;
     gap: 6px;
     padding: 8px 12px;
-    background: #4f545c;
+    background: #4e5058;
     border-radius: 4px;
     color: #fff;
     font-size: 12px;
@@ -177,7 +177,7 @@
 }
 
 .rp-button:hover {
-    background: #5d6269;
+    background: #4e5058;
 }
 
 .rp-button svg {
@@ -276,7 +276,7 @@
    ════════════════════════════════════════════════════════════════════════════════ */
 
 .custom-status-input {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 8px;
     padding: 16px;
     max-width: 350px;
@@ -300,8 +300,8 @@
 .csi-emoji-input {
     width: 50px;
     padding: 10px;
-    background: #202225;
-    border: 1px solid #40444b;
+    background: #0b0e1b;
+    border: 1px solid #182135;
     border-radius: 4px;
     color: #fff;
     text-align: center;
@@ -311,8 +311,8 @@
 .csi-text-input {
     flex: 1;
     padding: 10px 12px;
-    background: #202225;
-    border: 1px solid #40444b;
+    background: #0b0e1b;
+    border: 1px solid #182135;
     border-radius: 4px;
     color: #fff;
     font-size: 14px;
@@ -333,7 +333,7 @@
 .csi-emoji-suggestions button {
     width: 32px;
     height: 32px;
-    background: #202225;
+    background: #0b0e1b;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -342,7 +342,7 @@
 }
 
 .csi-emoji-suggestions button:hover {
-    background: #40444b;
+    background: #182135;
 }
 
 .csi-expires {
@@ -353,15 +353,15 @@
 }
 
 .csi-expires label {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
 }
 
 .csi-expires select {
     flex: 1;
     padding: 8px 12px;
-    background: #202225;
-    border: 1px solid #40444b;
+    background: #0b0e1b;
+    border: 1px solid #182135;
     border-radius: 4px;
     color: #fff;
     font-size: 13px;
@@ -397,7 +397,7 @@
    ════════════════════════════════════════════════════════════════════════════════ */
 
 .playtime-stats {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 8px;
     overflow: hidden;
     max-width: 350px;
@@ -419,7 +419,7 @@
 
 .ps-total {
     font-size: 12px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .ps-games {
@@ -443,11 +443,11 @@
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background: #202225;
+    background: #0b0e1b;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #72767d;
+    color: #949ba4;
     overflow: hidden;
 }
 
@@ -475,12 +475,12 @@
 .ps-game-time {
     display: block;
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .ps-game-sessions {
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .playtime-loading,
@@ -490,7 +490,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
-    color: #72767d;
+    color: #949ba4;
     gap: 12px;
 }
 
@@ -523,7 +523,7 @@
 
 .gp-cs-text {
     font-size: 13px;
-    color: #b9bbbe;
+    color: #b5bac1;
 }
 
 .gp-activities {
@@ -535,12 +535,12 @@
 .gp-no-activity {
     padding: 16px;
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     font-size: 13px;
 }
 
 .game-presence-loading {
     padding: 20px;
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
 }

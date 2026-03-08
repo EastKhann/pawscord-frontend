@@ -32,12 +32,12 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                 {/* Stats */}
                 <div style={styles.statsGrid}>
                     <div style={styles.statCard}>
-                        <FaExclamationTriangle style={{ ...styles.statIcon, color: '#f04747' }} />
+                        <FaExclamationTriangle style={{ ...styles.statIcon, color: '#f23f42' }} />
                         <div style={styles.statValue}>{stats.total_violations}</div>
                         <div style={styles.statLabel}>Total Violations</div>
                     </div>
                     <div style={styles.statCard}>
-                        <FaBan style={{ ...styles.statIcon, color: '#ed4245' }} />
+                        <FaBan style={{ ...styles.statIcon, color: '#f23f42' }} />
                         <div style={styles.statValue}>{stats.auto_deleted}</div>
                         <div style={styles.statLabel}>Auto-Deleted</div>
                     </div>
@@ -47,7 +47,7 @@ const AutoModerationDashboard = ({ serverId, fetchWithAuth, apiBaseUrl, onClose 
                         <div style={styles.statLabel}>Warnings</div>
                     </div>
                     <div style={styles.statCard}>
-                        <FaCheck style={{ ...styles.statIcon, color: '#43b581' }} />
+                        <FaCheck style={{ ...styles.statIcon, color: '#23a559' }} />
                         <div style={styles.statValue}>{rules.filter(r => r.is_enabled).length}</div>
                         <div style={styles.statLabel}>Active Rules</div>
                     </div>

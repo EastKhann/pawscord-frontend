@@ -1,4 +1,4 @@
-// frontend/src/RoomList/RoomListModals.js
+﻿// frontend/src/RoomList/RoomListModals.js
 import React, { useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import InviteModal from '../components/InviteModal';
@@ -14,7 +14,7 @@ import AutoResponderManager from '../components/AutoResponderManager';
 import ServerContextMenu from '../components/ServerContextMenu';
 import ChannelSettingsModal from '../components/ChannelSettingsModal';
 import ConfirmModal from '../components/ConfirmModal';
-import DiscoveryModal from './DiscoveryModal';
+// DiscoveryModal removed — JoinServerModal in RoomList.js is the replacement
 import InviteToServerModal from './InviteToServerModal';
 import toast from '../utils/toast';
 
@@ -124,9 +124,6 @@ const RoomListModals = ({
 
     return (
         <>
-            {/* Keşfet */}
-            <DiscoveryModal isOpen={showDiscovery} onClose={handleCloseDiscovery}
-                publicServers={publicServers} onJoinServer={handleJoinServer} onJoinViaCode={handleJoinViaCode} />
 
             {/* Davet Modal */}
             {showInviteModal && inviteModalServer && (
@@ -296,28 +293,28 @@ const DMContextMenuPortal = ({
         },
         { icon: '🎫', label: 'Sunucuya Davet Et', color: '#5865f2', onClick: () => handleInviteToServer(otherUser.username) },
         { icon: '📌', label: 'Konuşmayı Sabitle', color: '#dbdee1', divider: true, onClick: () => handlePinConversation(dmContextMenu.conversation.id) },
-        { icon: '🔇', label: 'Sessize Al', color: '#b9bbbe', onClick: () => handleMuteUser(otherUser.username, dmContextMenu.conversation.id) },
-        { icon: '👁️‍🗨️', label: 'Konuşmayı Gizle', color: '#b9bbbe', divider: true, onClick: () => handleHideDM(dmContextMenu.conversation.id) },
+        { icon: '🔇', label: 'Sessize Al', color: '#b5bac1', onClick: () => handleMuteUser(otherUser.username, dmContextMenu.conversation.id) },
+        { icon: '👁️‍🗨️', label: 'Konuşmayı Gizle', color: '#b5bac1', divider: true, onClick: () => handleHideDM(dmContextMenu.conversation.id) },
         { icon: '🗑️', label: 'Konuşmayı Temizle', color: '#f23f42', onClick: () => handleClearDM(dmContextMenu.conversation.id) },
-        { icon: '🚫', label: 'Kullanıcıyı Engelle', color: '#ed4245', onClick: () => handleBlockUser(otherUser.username) }
+        { icon: '🚫', label: 'Kullanıcıyı Engelle', color: '#f23f42', onClick: () => handleBlockUser(otherUser.username) }
     ];
 
     return createPortal(
         <div onClick={(e) => e.stopPropagation()} style={{
             position: 'fixed', top: dmContextMenu.y, left: dmContextMenu.x,
-            backgroundColor: '#111214', border: '1px solid #2b2d31', borderRadius: '8px',
+            backgroundColor: '#111214', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px',
             minWidth: '220px', boxShadow: '0 8px 24px rgba(0,0,0,0.4), 0 0 1px rgba(0,0,0,0.5)',
             zIndex: 999999, overflow: 'hidden', animation: 'contextMenuSlide 0.1s ease-out'
         }}>
             {/* User Header */}
-            <div style={{ padding: '12px', backgroundColor: '#1e1f22', borderBottom: '1px solid #2b2d31', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ padding: '12px', backgroundColor: '#0d0e10', borderBottom: '1px solid #0e1222', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <img src={getAvatarUrl(otherUser.avatar, otherUser.username)}
                     style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} alt="" />
                 <div style={{ flex: 1, overflow: 'hidden' }}>
                     <div style={{ color: '#f2f3f5', fontSize: '14px', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {otherUser.username}
                     </div>
-                    <div style={{ color: '#b9bbbe', fontSize: '12px', marginTop: '2px' }}>
+                    <div style={{ color: '#b5bac1', fontSize: '12px', marginTop: '2px' }}>
                         {onlineUsers.includes(otherUser.username) ? '🟢 Çevrimiçi' : '⚫ Çevrimdışı'}
                     </div>
                 </div>
@@ -332,7 +329,7 @@ const DMContextMenuPortal = ({
                         gap: '10px', transition: 'all 0.1s ease', backgroundColor: 'transparent'
                     }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = item.color === '#f23f42' || item.color === '#ed4245'
+                            e.currentTarget.style.backgroundColor = item.color === '#f23f42' || item.color === '#f23f42'
                                 ? 'rgba(237, 66, 69, 0.15)' : 'rgba(88, 101, 242, 0.1)';
                             e.currentTarget.style.paddingLeft = '16px';
                         }}
@@ -341,7 +338,7 @@ const DMContextMenuPortal = ({
                         <span style={{ fontSize: '16px', width: '20px', textAlign: 'center' }}>{item.icon}</span>
                         <span style={{ flex: 1 }}>{item.label}</span>
                     </div>
-                    {item.divider && <div style={{ height: '1px', backgroundColor: '#2b2d31', margin: '4px 8px' }} />}
+                    {item.divider && <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', margin: '4px 8px' }} />}
                 </React.Fragment>
             ))}
         </div>,

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { ABSOLUTE_HOST_URL } from '../../utils/constants';
 import profileStyles from '../styles';
 
@@ -70,7 +70,7 @@ const ProfileTab = ({
                 style={{ display: 'none' }}
                 onChange={handleAvatarUpload}
               />
-              <p style={{ color: '#b9bbbe', fontSize: '12px', marginTop: '8px' }}>
+              <p style={{ color: '#b5bac1', fontSize: '12px', marginTop: '8px' }}>
                 Max 5MB • PNG, JPG, GIF
               </p>
             </div>
@@ -107,7 +107,7 @@ const ProfileTab = ({
                 {loading.resendEmail ? '⏳' : '✉️ Doğrula'}
               </button>
             )}
-            {emailVerified && <span style={{ color: '#43b581', fontSize: '20px' }}>✅</span>}
+            {emailVerified && <span style={{ color: '#23a559', fontSize: '20px' }}>✅</span>}
           </div>
         </div>
 
@@ -179,7 +179,7 @@ const ProfileTab = ({
                     border: formData.avatar_url === avatar.url ? '3px solid #5865f2' : '2px solid rgba(255,255,255,0.1)',
                     transition: 'all 0.3s',
                     boxShadow: formData.avatar_url === avatar.url ? '0 0 15px rgba(88, 101, 242, 0.5)' : 'none',
-                    backgroundColor: '#2f3136', // Placeholder background while loading
+                    backgroundColor: '#111214', // Placeholder background while loading
                   }}
                   onClick={() => selectDefaultAvatar(avatar)}
                 >
@@ -211,7 +211,7 @@ const ProfileTab = ({
         <div style={{
           marginBottom: '20px',
           padding: '16px',
-          background: 'linear-gradient(135deg, #5865f2 0%, #7289da 100%)',
+          background: 'linear-gradient(135deg, #5865f2 0%, #5865f2 100%)',
           borderRadius: '8px',
           display: 'flex',
           alignItems: 'center',

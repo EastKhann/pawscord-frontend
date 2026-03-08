@@ -1,4 +1,4 @@
-// frontend/src/components/Message/MessageContent.js
+﻿// frontend/src/components/Message/MessageContent.js
 // 📝 MESSAGE CONTENT - Text, Markdown, Code blocks
 
 import React, { memo, lazy, Suspense } from 'react';
@@ -36,7 +36,7 @@ export const MessageContent = memo(({
     return (
         <div style={styles.messageContent}>
             {isMessageEncrypted && (
-                <span style={{ color: '#43b581', marginRight: 5 }} title="Uçtan Uca Şifreli">
+                <span style={{ color: '#23a559', marginRight: 5 }} title="Uçtan Uca Şifreli">
                     <FaLock />
                 </span>
             )}
@@ -87,7 +87,7 @@ const styles = {
         fontWeight: '400'
     },
     inlineCode: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '2px 4px',
         borderRadius: '3px',
         fontFamily: "'Consolas', monospace",
@@ -102,7 +102,7 @@ const styles = {
     },
     snippetHeader: {
         padding: '8px 12px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -119,7 +119,7 @@ const styles = {
     },
     loadingCode: {
         padding: '12px',
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.9em'
     }
 };

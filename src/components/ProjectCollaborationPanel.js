@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+﻿import { useState, useEffect, useCallback, memo } from 'react';
 import { FaTimes, FaProjectDiagram, FaPlus, FaFile, FaFolder, FaUsers, FaEdit, FaClock, FaComment, FaDownload, FaHistory } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -39,6 +39,7 @@ const ProjectCollaborationPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverI
     const fetchProjects = async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/projects/?server_id=${serverId}`);
+            if (!res.ok) return;
             const data = await res.json();
             setProjects(data.projects || []);
         } catch (error) {
@@ -368,20 +369,20 @@ const styles = {
         justifyContent: 'center', alignItems: 'center', zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2f3136', borderRadius: '12px', width: '800px',
+        backgroundColor: '#111214', borderRadius: '12px', width: '800px',
         maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column'
     },
     header: {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '20px', borderBottom: '1px solid #40444b'
+        padding: '20px', borderBottom: '1px solid #182135'
     },
     headerLeft: { display: 'flex', alignItems: 'center' },
     title: { margin: 0, color: '#fff', fontSize: '20px' },
-    closeButton: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', fontSize: '20px' },
-    breadcrumbs: { display: 'flex', alignItems: 'center', padding: '10px 20px', gap: '8px', background: '#36393f' },
+    closeButton: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', fontSize: '20px' },
+    breadcrumbs: { display: 'flex', alignItems: 'center', padding: '10px 20px', gap: '8px', background: '#17191c' },
     breadcrumb: { background: 'none', border: 'none', color: '#5865f2', cursor: 'pointer', fontSize: '14px' },
-    breadcrumbSep: { color: '#72767d' },
-    breadcrumbActive: { color: '#dcddde', fontSize: '14px' },
+    breadcrumbSep: { color: '#949ba4' },
+    breadcrumbActive: { color: '#dbdee1', fontSize: '14px' },
     content: { padding: '20px', overflowY: 'auto', flex: 1 },
     createProjectBtn: {
         background: '#5865f2', border: 'none', color: '#fff', padding: '10px 20px',
@@ -390,47 +391,47 @@ const styles = {
     },
     projectsGrid: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px' },
     projectCard: {
-        background: '#40444b', borderRadius: '10px', padding: '20px', cursor: 'pointer',
+        background: '#1e2024', borderRadius: '10px', padding: '20px', cursor: 'pointer',
         transition: 'transform 0.2s', ':hover': { transform: 'translateY(-2px)' }
     },
-    projectIcon: { color: '#faa61a', fontSize: '30px', marginBottom: '10px' },
+    projectIcon: { color: '#f0b232', fontSize: '30px', marginBottom: '10px' },
     projectName: { color: '#fff', margin: '0 0 8px', fontSize: '16px' },
-    projectDesc: { color: '#b9bbbe', fontSize: '13px', marginBottom: '15px' },
-    projectStats: { display: 'flex', gap: '15px', color: '#72767d', fontSize: '12px' },
-    emptyText: { color: '#72767d', textAlign: 'center', padding: '40px', gridColumn: '1 / -1' },
+    projectDesc: { color: '#b5bac1', fontSize: '13px', marginBottom: '15px' },
+    projectStats: { display: 'flex', gap: '15px', color: '#949ba4', fontSize: '12px' },
+    emptyText: { color: '#949ba4', textAlign: 'center', padding: '40px', gridColumn: '1 / -1' },
     createForm: { maxWidth: '500px', margin: '0 auto' },
     formTitle: { color: '#fff', marginBottom: '20px' },
-    input: { width: '100%', background: '#40444b', border: 'none', color: '#fff', padding: '12px', borderRadius: '6px', marginBottom: '15px' },
-    textarea: { width: '100%', background: '#40444b', border: 'none', color: '#fff', padding: '12px', borderRadius: '6px', marginBottom: '15px', minHeight: '100px', resize: 'vertical' },
+    input: { width: '100%', background: '#1e2024', border: 'none', color: '#fff', padding: '12px', borderRadius: '6px', marginBottom: '15px' },
+    textarea: { width: '100%', background: '#1e2024', border: 'none', color: '#fff', padding: '12px', borderRadius: '6px', marginBottom: '15px', minHeight: '100px', resize: 'vertical' },
     formActions: { display: 'flex', justifyContent: 'flex-end', gap: '10px' },
-    cancelBtn: { background: '#40444b', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '6px', cursor: 'pointer' },
+    cancelBtn: { background: '#1e2024', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '6px', cursor: 'pointer' },
     submitBtn: { background: '#5865f2', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '6px', cursor: 'pointer' },
     projectDetail: { display: 'flex', flexDirection: 'column', gap: '25px' },
     projectHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
     projectTitle: { color: '#fff', margin: '0 0 5px', fontSize: '24px' },
-    projectDescription: { color: '#b9bbbe', margin: 0 },
-    newDocBtn: { background: '#57f287', border: 'none', color: '#000', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' },
+    projectDescription: { color: '#b5bac1', margin: 0 },
+    newDocBtn: { background: '#23a559', border: 'none', color: '#000', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' },
     documentsSection: {},
-    sectionTitle: { color: '#b9bbbe', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', marginBottom: '10px' },
+    sectionTitle: { color: '#b5bac1', fontSize: '12px', fontWeight: '600', textTransform: 'uppercase', marginBottom: '10px' },
     documentsList: { display: 'flex', flexDirection: 'column', gap: '8px' },
-    documentCard: { display: 'flex', alignItems: 'center', gap: '12px', background: '#40444b', padding: '12px 15px', borderRadius: '8px', cursor: 'pointer' },
+    documentCard: { display: 'flex', alignItems: 'center', gap: '12px', background: '#1e2024', padding: '12px 15px', borderRadius: '8px', cursor: 'pointer' },
     docIcon: { color: '#5865f2', fontSize: '20px' },
     docInfo: { flex: 1 },
     docTitle: { color: '#fff', margin: 0, fontSize: '14px' },
-    docMeta: { color: '#72767d', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' },
+    docMeta: { color: '#949ba4', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' },
     membersSection: {},
     membersList: { display: 'flex', flexWrap: 'wrap', gap: '10px' },
-    memberBadge: { display: 'flex', alignItems: 'center', gap: '8px', background: '#40444b', padding: '8px 12px', borderRadius: '20px' },
+    memberBadge: { display: 'flex', alignItems: 'center', gap: '8px', background: '#1e2024', padding: '8px 12px', borderRadius: '20px' },
     memberAvatar: { width: '24px', height: '24px', borderRadius: '50%', background: '#5865f2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px' },
-    memberRole: { color: '#72767d', fontSize: '11px', background: '#36393f', padding: '2px 6px', borderRadius: '4px' },
+    memberRole: { color: '#949ba4', fontSize: '11px', background: '#17191c', padding: '2px 6px', borderRadius: '4px' },
     documentEditor: { display: 'flex', flexDirection: 'column', height: 'calc(85vh - 180px)' },
     editorHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' },
     docTitleInput: { background: 'transparent', border: 'none', color: '#fff', fontSize: '24px', fontWeight: 'bold', flex: 1 },
     editorActions: { display: 'flex', gap: '10px' },
-    saveBtn: { background: '#57f287', border: 'none', color: '#000', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' },
-    historyBtn: { background: '#40444b', border: 'none', color: '#fff', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' },
-    editor: { flex: 1, background: '#40444b', border: 'none', color: '#dcddde', padding: '20px', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6', resize: 'none' },
-    editorFooter: { display: 'flex', justifyContent: 'space-between', padding: '10px 0', color: '#72767d', fontSize: '12px' }
+    saveBtn: { background: '#23a559', border: 'none', color: '#000', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' },
+    historyBtn: { background: '#1e2024', border: 'none', color: '#fff', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' },
+    editor: { flex: 1, background: '#1e2024', border: 'none', color: '#dbdee1', padding: '20px', borderRadius: '8px', fontSize: '14px', lineHeight: '1.6', resize: 'none' },
+    editorFooter: { display: 'flex', justifyContent: 'space-between', padding: '10px 0', color: '#949ba4', fontSize: '12px' }
 };
 
 export default memo(ProjectCollaborationPanel);

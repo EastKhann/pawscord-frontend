@@ -23,8 +23,8 @@ const VoiceHeader = React.memo(({
             width: '10px',
             height: '10px',
             borderRadius: '50%',
-            background: '#43b581',
-            boxShadow: '0 0 12px #43b581',
+            background: '#23a559',
+            boxShadow: '0 0 12px #23a559',
             animation: 'pulse 2s infinite',
         }} />
         <h2 style={{
@@ -55,11 +55,11 @@ const VoiceHeader = React.memo(({
             {networkQuality === 'poor' && (
                 <div style={{
                     background: 'rgba(240, 71, 71, 0.2)',
-                    border: '1px solid #f04747',
+                    border: '1px solid #f23f42',
                     borderRadius: '6px',
                     padding: '4px 8px',
                     fontSize: '12px',
-                    color: '#f04747',
+                    color: '#f23f42',
                     fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',
@@ -71,11 +71,11 @@ const VoiceHeader = React.memo(({
             {networkQuality === 'excellent' && networkType !== 'unknown' && (
                 <div style={{
                     background: 'rgba(67, 181, 129, 0.2)',
-                    border: '1px solid #43b581',
+                    border: '1px solid #23a559',
                     borderRadius: '6px',
                     padding: '4px 8px',
                     fontSize: '12px',
-                    color: '#43b581',
+                    color: '#23a559',
                     fontWeight: '600',
                     display: 'flex',
                     alignItems: 'center',

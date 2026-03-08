@@ -259,20 +259,20 @@ const styles = {
     // 🎨 MAIN CONTAINER - Glassmorphism Design
     islandContainer: {
         background: 'linear-gradient(135deg, rgba(30, 31, 34, 0.95), rgba(35, 36, 40, 0.95))',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
         borderRadius: '16px',
         boxShadow: '0 8px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(88, 101, 242, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        border: '1px solid rgba(88, 101, 242, 0.3)',
+        border: '1px solid rgba(255, 255, 255, 0.07)',
     },
 
     // 🎯 MINIMIZED CONTAINER
     minimizedContainer: {
         background: 'linear-gradient(135deg, rgba(30, 31, 34, 0.98), rgba(35, 36, 40, 0.98))',
-        backdropFilter: 'blur(15px)',
+        backdropFilter: 'blur(48px) saturate(180%)',
         borderRadius: '25px',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(88, 101, 242, 0.25)',
         border: '1px solid rgba(88, 101, 242, 0.4)',
@@ -304,14 +304,16 @@ const styles = {
     },
 
     expandButton: {
-        background: 'rgba(88, 101, 242, 0.2)',
-        border: '1px solid rgba(88, 101, 242, 0.4)',
-        borderRadius: '8px',
+        background: 'linear-gradient(135deg, #5865f2, #4752c4)',
+        border: 'none',
+        borderRadius: '13px',
         padding: '6px 10px',
         cursor: 'pointer',
         fontSize: '14px',
         transition: 'all 0.2s ease',
         outline: 'none',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
+        color: '#fff',
     },
 
     // 🎨 MODERN DRAG HANDLE

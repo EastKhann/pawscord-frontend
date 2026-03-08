@@ -1,4 +1,4 @@
-// frontend/src/VoiceChatPanel/ProfileCardGrid.js
+﻿// frontend/src/VoiceChatPanel/ProfileCardGrid.js
 // 🎨 Profile card grid — shown when no active streams (voice-only users)
 
 import React from 'react';
@@ -76,7 +76,7 @@ const ProfileCardGrid = React.memo(({
                         height: '140px',
                         borderRadius: '50%',
                         overflow: 'hidden',
-                        border: `5px solid ${activeSpeaker === user.username ? '#5865f2' : '#40444b'}`,
+                        border: `5px solid ${activeSpeaker === user.username ? '#5865f2' : '#1e2024'}`,
                         boxShadow: activeSpeaker === user.username
                             ? '0 8px 24px rgba(88, 101, 242, 0.6), inset 0 0 20px rgba(88, 101, 242, 0.2)'
                             : '0 4px 12px rgba(0, 0, 0, 0.4)',

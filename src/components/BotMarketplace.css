@@ -1,9 +1,9 @@
-/* 🤖 BOT MARKETPLACE STYLES */
+﻿/* 🤖 BOT MARKETPLACE STYLES */
 
 .bot-marketplace {
-    background: #2f3136;
+    background: #0e1222;
     min-height: 100vh;
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .marketplace-loading {
@@ -13,13 +13,13 @@
     justify-content: center;
     height: 60vh;
     gap: 16px;
-    color: #b9bbbe;
+    color: #b5bac1;
 }
 
 .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #40444b;
+    border: 3px solid #182135;
     border-top-color: #5865F2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -33,7 +33,7 @@
 
 /* Header */
 .marketplace-header {
-    background: linear-gradient(135deg, #5865F2, #7289da);
+    background: linear-gradient(135deg, #5865F2, #5865f2);
     padding: 32px;
     display: flex;
     justify-content: space-between;
@@ -59,18 +59,18 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
 }
 
 /* Filters */
 .marketplace-filters {
-    background: #36393f;
+    background: #121928;
     padding: 16px 24px;
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
-    border-bottom: 1px solid #40444b;
+    border-bottom: 1px solid #182135;
 }
 
 .search-box {
@@ -82,7 +82,7 @@
 .search-box input {
     width: 100%;
     padding: 10px 40px 10px 16px;
-    background: #202225;
+    background: #0b0e1b;
     border: none;
     border-radius: 6px;
     color: #fff;
@@ -90,7 +90,7 @@
 }
 
 .search-box input::placeholder {
-    color: #72767d;
+    color: #949ba4;
 }
 
 .search-icon {
@@ -108,7 +108,7 @@
 
 .filter-group select {
     padding: 10px 16px;
-    background: #202225;
+    background: #0b0e1b;
     border: none;
     border-radius: 6px;
     color: #fff;
@@ -155,7 +155,7 @@ section h2 {
 
 /* Bot Card */
 .bot-card {
-    background: #36393f;
+    background: #121928;
     border-radius: 8px;
     padding: 16px;
     display: flex;
@@ -166,7 +166,7 @@ section h2 {
 }
 
 .bot-card:hover {
-    background: #40444b;
+    background: #182135;
     border-color: #5865F2;
     transform: translateY(-2px);
 }
@@ -196,7 +196,7 @@ section h2 {
     align-items: center;
     justify-content: center;
     font-size: 12px;
-    border: 2px solid #36393f;
+    border: 2px solid #121928;
 }
 
 .bot-info {
@@ -224,7 +224,7 @@ section h2 {
 .bot-description {
     margin: 0 0 10px 0;
     font-size: 13px;
-    color: #b9bbbe;
+    color: #b5bac1;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -235,7 +235,7 @@ section h2 {
     display: flex;
     gap: 12px;
     font-size: 12px;
-    color: #72767d;
+    color: #949ba4;
     margin-bottom: 8px;
 }
 
@@ -260,8 +260,8 @@ section h2 {
 }
 
 .tag {
-    background: #40444b;
-    color: #b9bbbe;
+    background: #182135;
+    color: #b5bac1;
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 11px;
@@ -271,7 +271,7 @@ section h2 {
 .no-results {
     text-align: center;
     padding: 60px 20px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* Pagination */
@@ -293,13 +293,13 @@ section h2 {
 }
 
 .pagination button:disabled {
-    background: #40444b;
-    color: #72767d;
+    background: #182135;
+    color: #949ba4;
     cursor: not-allowed;
 }
 
 .pagination span {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
 }
 
@@ -316,7 +316,7 @@ section h2 {
 }
 
 .bot-modal {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 12px;
     width: 100%;
     max-width: 700px;
@@ -327,7 +327,7 @@ section h2 {
 }
 
 .bot-modal-header {
-    background: linear-gradient(135deg, #5865F2, #7289da);
+    background: linear-gradient(135deg, #5865F2, #5865f2);
     padding: 24px;
     position: relative;
     background-size: cover;
@@ -386,7 +386,7 @@ section h2 {
 .verified {
     font-size: 12px;
     background: rgba(87, 242, 135, 0.2);
-    color: #57F287;
+    color: #23a559;
     padding: 4px 12px;
     border-radius: 12px;
 }
@@ -405,7 +405,7 @@ section h2 {
 }
 
 .add-bot-btn {
-    background: #57F287;
+    background: #23a559;
     color: #000;
     border: none;
     padding: 12px 24px;
@@ -423,8 +423,8 @@ section h2 {
 /* Modal Tabs */
 .bot-modal-tabs {
     display: flex;
-    background: #36393f;
-    border-bottom: 1px solid #40444b;
+    background: #121928;
+    border-bottom: 1px solid #182135;
 }
 
 .bot-modal-tabs button {
@@ -432,7 +432,7 @@ section h2 {
     padding: 12px;
     background: transparent;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     cursor: pointer;
     border-bottom: 2px solid transparent;
@@ -460,7 +460,7 @@ section h2 {
 .reviews-tab h3 {
     margin: 0 0 12px 0;
     font-size: 14px;
-    color: #b9bbbe;
+    color: #b5bac1;
     text-transform: uppercase;
 }
 
@@ -472,7 +472,7 @@ section h2 {
 }
 
 .description-content {
-    color: #dcddde;
+    color: #dbdee1;
     line-height: 1.6;
     white-space: pre-wrap;
 }
@@ -484,7 +484,7 @@ section h2 {
 }
 
 .feature-item {
-    background: #36393f;
+    background: #121928;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 13px;
@@ -498,7 +498,7 @@ section h2 {
 
 .links-list a {
     padding: 8px 16px;
-    background: #36393f;
+    background: #121928;
     color: #5865F2;
     text-decoration: none;
     border-radius: 4px;
@@ -507,7 +507,7 @@ section h2 {
 }
 
 .links-list a:hover {
-    background: #40444b;
+    background: #182135;
 }
 
 .developer-info {
@@ -535,7 +535,7 @@ section h2 {
 }
 
 .command-item {
-    background: #36393f;
+    background: #121928;
     padding: 12px;
     border-radius: 6px;
 }
@@ -550,13 +550,13 @@ section h2 {
 
 .command-desc {
     margin: 0 0 6px 0;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
 }
 
 .command-usage {
     display: block;
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     font-family: monospace;
 }
@@ -569,7 +569,7 @@ section h2 {
 }
 
 .review-item {
-    background: #36393f;
+    background: #121928;
     padding: 16px;
     border-radius: 8px;
 }
@@ -599,20 +599,20 @@ section h2 {
 
 .review-content {
     margin: 0 0 8px 0;
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     line-height: 1.5;
 }
 
 .review-date {
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .no-data {
     text-align: center;
     padding: 40px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* Server Select Modal */
@@ -627,7 +627,7 @@ section h2 {
 }
 
 .server-select-modal {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 8px;
     padding: 24px;
     width: 90%;
@@ -641,7 +641,7 @@ section h2 {
 
 .server-select-modal p {
     margin: 0 0 16px 0;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
 }
 
@@ -662,7 +662,7 @@ section h2 {
 }
 
 .server-item:hover {
-    background: #40444b;
+    background: #182135;
 }
 
 .server-item.selected {
@@ -682,13 +682,13 @@ section h2 {
 
 .member-count {
     font-size: 12px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .no-servers {
     text-align: center;
     padding: 20px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .server-select-actions {
@@ -700,8 +700,8 @@ section h2 {
 .cancel-btn {
     padding: 10px 20px;
     background: transparent;
-    border: 1px solid #40444b;
-    color: #b9bbbe;
+    border: 1px solid #182135;
+    color: #b5bac1;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -716,8 +716,8 @@ section h2 {
 }
 
 .install-btn:disabled {
-    background: #40444b;
-    color: #72767d;
+    background: #182135;
+    color: #949ba4;
     cursor: not-allowed;
 }
 

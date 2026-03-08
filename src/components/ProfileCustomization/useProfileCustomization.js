@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import toast from '../../utils/toast';
 
 const DEFAULT_CUSTOMIZATION = {
   banner_url: '', banner_color: '#5865f2', theme_color: '#5865f2',
-  accent_color: '#5865f2', bio_text: '', bio_background_color: '#2b2d31',
+  accent_color: '#5865f2', bio_text: '', bio_background_color: '#111214',
   show_badges: true, show_activity: true
 };
 

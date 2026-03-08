@@ -1,8 +1,8 @@
-.gif-picker-panel {
-    background: #2f3136;
+﻿.gif-picker-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
@@ -14,12 +14,12 @@
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .gif-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -32,9 +32,9 @@
 }
 
 .view-btn {
-    background: #40444b;
+    background: #182135;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
@@ -42,7 +42,7 @@
 }
 
 .view-btn:hover {
-    background: var(--bg-elevated, #36393f);
+    background: var(--bg-elevated, #17191c);
     color: #ffffff;
 }
 
@@ -61,14 +61,14 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #72767d;
+    color: #949ba4;
 }
 
 .search-input {
     width: 100%;
-    background: #40444b;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #182135;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 12px 12px 12px 40px;
     border-radius: 4px;
     font-size: 14px;
@@ -88,9 +88,9 @@
 }
 
 .category-btn {
-    background: #40444b;
+    background: #182135;
     border: none;
-    color: #dcddde;
+    color: #dbdee1;
     padding: 8px 16px;
     border-radius: 16px;
     cursor: pointer;
@@ -100,7 +100,7 @@
 }
 
 .category-btn:hover {
-    background: var(--bg-elevated, #36393f);
+    background: var(--bg-elevated, #17191c);
 }
 
 .category-btn.active {
@@ -128,19 +128,19 @@
 
 .gif-loading {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 40px;
 }
 
 .empty-gifs {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 60px 20px;
 }
 
 .empty-icon {
     font-size: 64px;
-    color: #40444b;
+    color: #1e2024;
     margin-bottom: 15px;
 }
 
@@ -198,11 +198,11 @@
 
 .fav-btn:hover {
     background: #5865f2;
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .fav-btn.favorited {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
 }
 
@@ -211,11 +211,11 @@
 }
 
 .gif-grid::-webkit-scrollbar-track {
-    background: #2f3136;
+    background: #0e1222;
 }
 
 .gif-grid::-webkit-scrollbar-thumb {
-    background: #202225;
+    background: #0b0e1b;
     border-radius: 4px;
 }
 
@@ -224,10 +224,10 @@
 }
 
 .gif-categories::-webkit-scrollbar-track {
-    background: #2f3136;
+    background: #0e1222;
 }
 
 .gif-categories::-webkit-scrollbar-thumb {
-    background: #40444b;
+    background: #182135;
     border-radius: 3px;
 }

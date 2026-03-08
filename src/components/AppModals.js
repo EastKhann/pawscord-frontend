@@ -19,7 +19,11 @@ const AppModals = (props) => {
     const shared = { ...props, modals, openModal, closeModal, toggleModal };
 
     // Only render Suspense wrappers when at least one modal from that batch is open
-    const hasAnyModal = Object.values(modals).some(Boolean);
+    // 🔥 FIX: viewingProfile, zoomedImage, galleryData are props (not in modals store)
+    // but they also trigger modals inside AppModalsStandard — must be checked here too
+    const hasAnyModal = Object.values(modals).some(Boolean)
+        || props.viewingProfile || props.zoomedImage || props.galleryData
+        || props.serverToEdit || props.chartSymbol;
     if (!hasAnyModal) return null;
 
     return (

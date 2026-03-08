@@ -19,7 +19,7 @@ const LeaderboardSection = ({ leaderboard, resetUserXP }) => (
               <div className="user-info">
                 <span className="username">{user.username}</span>
                 <div className="xp-bar-container">
-                  <div className="xp-bar" style={{ width: `${Math.min(progress, 100)}%`, background: `linear-gradient(90deg, #5865f2, #7289da)` }} />
+                  <div className="xp-bar" style={{ width: `${Math.min(progress, 100)}%`, background: `linear-gradient(90deg, #5865f2, #5865f2)` }} />
                 </div>
                 <span className="xp-text">Seviye {level} {'•'} {user.xp} XP</span>
               </div>

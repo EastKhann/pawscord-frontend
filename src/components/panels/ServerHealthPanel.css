@@ -28,7 +28,7 @@
 
 .server-health-panel {
     background: linear-gradient(145deg, #0f172a, #1e293b);
-    border-radius: 20px;
+    border-radius: 12px;
     width: 95%;
     max-width: 1000px;
     max-height: 90vh;
@@ -75,7 +75,7 @@
     gap: 8px;
     padding: 6px 14px;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.85rem;
     color: white;
     margin-top: 8px;
@@ -362,7 +362,7 @@
 }
 
 .alert-stat.error svg {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 .alert-stat.warning {

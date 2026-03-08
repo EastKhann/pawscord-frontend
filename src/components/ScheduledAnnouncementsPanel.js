@@ -31,9 +31,9 @@ const ScheduledAnnouncementsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serve
                         <div style={styles.loading}>Loading...</div>
                     ) : a.announcements.length === 0 ? (
                         <div style={styles.empty}>
-                            <FaBullhorn style={{ fontSize: '48px', color: '#99aab5', marginBottom: '16px' }} />
+                            <FaBullhorn style={{ fontSize: '48px', color: '#949ba4', marginBottom: '16px' }} />
                             <p>No scheduled announcements</p>
-                            <p style={{ fontSize: '14px', color: '#99aab5' }}>Schedule your first announcement to get started</p>
+                            <p style={{ fontSize: '14px', color: '#949ba4' }}>Schedule your first announcement to get started</p>
                         </div>
                     ) : (
                         <div style={styles.announcementsList}>

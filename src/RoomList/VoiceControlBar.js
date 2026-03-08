@@ -1,4 +1,4 @@
-// frontend/src/RoomList/VoiceControlBar.js
+﻿// frontend/src/RoomList/VoiceControlBar.js
 import React from 'react';
 import {
     FaMicrophone, FaMicrophoneSlash, FaHeadphones,
@@ -14,7 +14,7 @@ const VoiceControlBar = ({
 }) => {
     if (!isInVoice && !isConnecting) return null;
 
-    const ctrlBtn = (active, activeColor = '#23a559', inactiveColor = '#2b2d31') => ({
+    const ctrlBtn = (active, activeColor = '#23a559', inactiveColor = '#111214') => ({
         flex: 1,
         background: active ? activeColor : inactiveColor,
         border: 'none', color: 'white', padding: '8px', borderRadius: '4px',
@@ -24,8 +24,8 @@ const VoiceControlBar = ({
 
     return (
         <div style={{
-            padding: '8px', backgroundColor: '#232428',
-            borderTop: '1px solid #1e1f22', borderBottom: '1px solid #1e1f22'
+            padding: '8px', backgroundColor: '#0b0e1b',
+            borderTop: '1px solid #0b0e1b', borderBottom: '1px solid #0b0e1b'
         }}>
             {/* Avatar ve Kanal Bilgisi */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', padding: '0 4px' }}>
@@ -42,7 +42,7 @@ const VoiceControlBar = ({
                     <div style={{
                         position: 'absolute', bottom: '-2px', right: '-2px',
                         width: '16px', height: '16px', borderRadius: '50%',
-                        backgroundColor: isMuted ? '#f04747' : '#23a559',
+                        backgroundColor: isMuted ? '#f23f42' : '#23a559',
                         border: '2px solid #232428', display: 'flex',
                         alignItems: 'center', justifyContent: 'center', fontSize: '8px'
                     }}>
@@ -53,7 +53,7 @@ const VoiceControlBar = ({
                     <div style={{ color: isConnecting ? '#eba61e' : '#23a559', fontWeight: 'bold', fontSize: '0.8em' }}>
                         {isConnecting ? 'Bağlanılıyor...' : 'Ses Bağlandı'}
                     </div>
-                    <div style={{ fontSize: '0.7em', color: '#b9bbbe', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '0.7em', color: '#b5bac1', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {voiceRoomDisplayName} / Genel
                     </div>
                 </div>

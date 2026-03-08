@@ -1,4 +1,4 @@
-// frontend/src/components/TicTacToe.js
+﻿// frontend/src/components/TicTacToe.js
 
 
 const TicTacToe = ({ gameData, onMove, currentUser }) => {
@@ -26,7 +26,7 @@ const TicTacToe = ({ gameData, onMove, currentUser }) => {
                         key={i}
                         style={{
                             ...styles.cell,
-                            color: cell === 'X' ? '#f04747' : '#5865f2'
+                            color: cell === 'X' ? '#f23f42' : '#5865f2'
                         }}
                         onClick={() => handleClick(i)}
                         disabled={!!cell || !!winner}
@@ -40,10 +40,10 @@ const TicTacToe = ({ gameData, onMove, currentUser }) => {
 };
 
 const styles = {
-    container: { backgroundColor: '#2f3136', padding: '10px', borderRadius: '8px', maxWidth: '200px', margin: '10px 0' },
+    container: { backgroundColor: '#111214', padding: '10px', borderRadius: '8px', maxWidth: '200px', margin: '10px 0' },
     header: { display: 'flex', justifyContent: 'space-between', fontSize: '0.8em', marginBottom: '5px', color:'#ccc' },
     board: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '5px' },
-    cell: { width: '50px', height: '50px', fontSize: '1.5em', fontWeight:'bold', backgroundColor: '#202225', border: 'none', borderRadius: '4px', cursor: 'pointer' }
+    cell: { width: '50px', height: '50px', fontSize: '1.5em', fontWeight:'bold', backgroundColor: '#0d0e10', border: 'none', borderRadius: '4px', cursor: 'pointer' }
 };
 
 export default TicTacToe;

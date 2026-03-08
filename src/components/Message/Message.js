@@ -98,7 +98,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           onClose={handleCloseContextMenu} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
 
         {msg.snippet_data?.type === 'game_xox' ? (
-          <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
+          <Suspense fallback={<div style={{ padding: '12px', color: '#b5bac1' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
             <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
               onMove={handleTicTacToeMove} />
           </Suspense>

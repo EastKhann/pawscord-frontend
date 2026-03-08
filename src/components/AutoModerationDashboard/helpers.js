@@ -46,6 +46,6 @@ export const getActionStyle = (action) => ({
     borderRadius: '4px',
     fontSize: '12px',
     fontWeight: '600',
-    backgroundColor: action === 'ban' ? '#ed4245' : action === 'timeout' ? '#f0b132' : '#5865f2',
+    backgroundColor: action === 'ban' ? '#f23f42' : action === 'timeout' ? '#f0b132' : '#5865f2',
     color: '#fff'
 });

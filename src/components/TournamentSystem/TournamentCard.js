@@ -13,7 +13,7 @@ const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) =>
                 <div style={styles.tournamentName}>{tournament.name}</div>
                 <div style={{
                     ...styles.statusBadge,
-                    backgroundColor: isActive ? '#3ba55d' : isCompleted ? '#72767d' : '#faa61a'
+                    backgroundColor: isActive ? '#3ba55d' : isCompleted ? '#949ba4' : '#f0b232'
                 }}>
                     {tournament.status}
                 </div>

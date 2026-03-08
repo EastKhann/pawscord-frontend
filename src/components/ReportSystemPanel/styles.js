@@ -1,4 +1,4 @@
-const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -13,7 +13,7 @@ const styles = {
         backdropFilter: 'blur(5px)'
     },
     panel: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         width: '90%',
         maxWidth: '1000px',
@@ -28,7 +28,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     headerLeft: {
         display: 'flex',
@@ -48,7 +48,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '24px',
         padding: '8px'
@@ -58,10 +58,10 @@ const styles = {
         gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
         gap: '16px',
         padding: '20px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     statCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
         textAlign: 'center'
@@ -78,12 +78,12 @@ const styles = {
     },
     statLabel: {
         fontSize: '13px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     filters: {
         padding: '16px 20px',
-        borderBottom: '1px solid #1e1f22',
-        backgroundColor: '#1e1f22'
+        borderBottom: '1px solid #0b0e1b',
+        backgroundColor: '#0d0e10'
     },
     filterGroup: {
         display: 'flex',
@@ -91,12 +91,12 @@ const styles = {
         gap: '12px'
     },
     filterIcon: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '16px'
     },
     filterSelect: {
-        backgroundColor: '#2b2d31',
-        border: '1px solid #1e1f22',
+        backgroundColor: '#111214',
+        border: '1px solid #0b0e1b',
         borderRadius: '6px',
         padding: '8px 12px',
         color: '#fff',
@@ -110,13 +110,13 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px',
         fontSize: '14px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '60px'
     },
     emptyIcon: {
@@ -125,14 +125,14 @@ const styles = {
         opacity: 0.5
     },
     reportCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
         marginBottom: '12px',
         cursor: 'pointer',
         transition: 'background-color 0.2s',
         ':hover': {
-            backgroundColor: '#2b2d31'
+            backgroundColor: '#111214'
         }
     },
     reportHeader: {
@@ -156,7 +156,7 @@ const styles = {
         marginBottom: '4px'
     },
     reportMeta: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '13px',
         display: 'flex',
         gap: '8px'
@@ -177,22 +177,22 @@ const styles = {
         paddingLeft: '32px'
     },
     reportText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         margin: '0 0 12px 0'
     },
     reportedContent: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '12px',
         borderRadius: '6px',
-        borderLeft: '3px solid #ed4245',
+        borderLeft: '3px solid #f23f42',
         marginBottom: '12px'
     },
     reportedUser: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px'
     },
     modalOverlay: {
@@ -208,7 +208,7 @@ const styles = {
         zIndex: 10001
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         width: '90%',
         maxWidth: '600px',
@@ -222,7 +222,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     modalTitle: {
         margin: 0,
@@ -233,7 +233,7 @@ const styles = {
     modalClose: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '20px'
     },
@@ -247,7 +247,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '12px 0',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         color: '#fff',
         fontSize: '14px'
     },
@@ -255,16 +255,16 @@ const styles = {
         marginTop: '20px'
     },
     detailText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         marginTop: '8px',
         lineHeight: '1.5'
     },
     messageBox: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         padding: '12px',
         borderRadius: '6px',
-        borderLeft: '3px solid #ed4245',
+        borderLeft: '3px solid #f23f42',
         color: '#fff',
         fontSize: '14px',
         marginTop: '8px'
@@ -273,12 +273,12 @@ const styles = {
         display: 'flex',
         gap: '12px',
         padding: '16px 20px',
-        borderTop: '1px solid #1e1f22',
+        borderTop: '1px solid #0b0e1b',
         flexWrap: 'wrap'
     },
     actionBtn: {
         flex: 1,
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         borderRadius: '6px',

@@ -1,4 +1,4 @@
-/* Integration Hub Panel Styles */
+﻿/* Integration Hub Panel Styles */
 
 .integration-hub-overlay {
     position: fixed;
@@ -15,7 +15,7 @@
 }
 
 .integration-hub-panel {
-    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    background: linear-gradient(145deg, #0d0e10, #0d0e10);
     border-radius: 16px;
     width: 100%;
     max-width: 900px;
@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(88, 166, 255, 0.2);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
 
@@ -266,7 +266,7 @@
 
 .action-btn.config:hover {
     background: #ffce54;
-    color: #1a1a2e;
+    color: #0d0e10;
 }
 
 .action-btn.disconnect,
@@ -508,7 +508,7 @@
 
 .webhook-modal,
 .config-modal {
-    background: linear-gradient(145deg, #1e1e32, #1a1a2e);
+    background: linear-gradient(145deg, #1e1e32, #0d0e10);
     border-radius: 16px;
     padding: 25px;
     width: 100%;
@@ -553,7 +553,7 @@
 }
 
 .form-group select option {
-    background: #1a1a2e;
+    background: #0b0e1b;
 }
 
 .config-section {

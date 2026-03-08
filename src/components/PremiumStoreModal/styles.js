@@ -13,7 +13,7 @@ const styles = {
         padding: '20px',
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '16px',
         width: '90%',
         maxWidth: '1200px',
@@ -43,7 +43,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '24px',
         cursor: 'pointer',
         padding: '8px',
@@ -58,7 +58,7 @@ const styles = {
     tab: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '12px 20px',
         cursor: 'pointer',
         fontSize: '14px',
@@ -90,7 +90,7 @@ const styles = {
         gap: '20px',
     },
     planCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '12px',
         padding: '20px',
         border: '2px solid transparent',
@@ -137,14 +137,14 @@ const styles = {
         fontWeight: 'bold',
     },
     currency: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
     },
     featuresList: {
         marginBottom: '20px',
     },
     feature: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         padding: '8px 0',
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
@@ -190,7 +190,7 @@ const styles = {
         gap: '16px',
     },
     storeItem: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '12px',
         padding: '20px',
         textAlign: 'center',
@@ -208,7 +208,7 @@ const styles = {
         fontWeight: 'bold',
     },
     itemDescription: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px',
         margin: '0 0 12px 0',
     },
@@ -231,7 +231,7 @@ const styles = {
         transition: 'all 0.2s',
     },
     boostDescription: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         marginBottom: '24px',
     },
@@ -242,7 +242,7 @@ const styles = {
         marginBottom: '24px',
     },
     boostTier: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '12px',
         padding: '20px',
         border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -282,7 +282,7 @@ const styles = {
         fontSize: '32px',
     },
     boostSubtitle: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '15px',
         margin: 0,
     },
@@ -293,7 +293,7 @@ const styles = {
         marginBottom: '30px',
     },
     boostTierCard: {
-        background: 'linear-gradient(145deg, #2b2d31, #1e1f22)',
+        background: 'linear-gradient(145deg, #111214, #0d0e10)',
         borderRadius: '16px',
         padding: '25px 20px',
         border: '2px solid',
@@ -324,7 +324,7 @@ const styles = {
         margin: '0 0 5px 0',
     },
     tierRequirement: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '13px',
         margin: '0 0 15px 0',
     },
@@ -335,7 +335,7 @@ const styles = {
         textAlign: 'left',
     },
     tierFeature: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '13px',
         padding: '6px 0',
         display: 'flex',

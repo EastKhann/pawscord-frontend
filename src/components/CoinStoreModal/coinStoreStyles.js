@@ -46,10 +46,10 @@ export const styles = {
     marginBottom: '8px'
   },
   coinIcon: { fontSize: '36px', color: '#ffd700', filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.5))' },
-  balanceText: { fontSize: '14px', color: '#b9bbbe', marginTop: '4px' },
+  balanceText: { fontSize: '14px', color: '#b5bac1', marginTop: '4px' },
   balanceAmount: { color: '#ffd700', fontWeight: 'bold', fontSize: '16px', textShadow: '0 0 10px rgba(255, 215, 0, 0.3)' },
   closeBtn: {
-    color: '#b9bbbe',
+    color: '#b5bac1',
     background: 'rgba(255, 255, 255, 0.05)',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '12px',
@@ -73,7 +73,7 @@ export const styles = {
     border: '1px solid rgba(255, 255, 255, 0.1)',
     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)'
   },
-  infoList: { fontSize: '14px', color: '#dcddde', display: 'flex', flexDirection: 'column', gap: '12px' },
+  infoList: { fontSize: '14px', color: '#dbdee1', display: 'flex', flexDirection: 'column', gap: '12px' },
   infoItem: { display: 'flex', alignItems: 'flex-start', gap: '10px' }
 };
 
@@ -86,8 +86,8 @@ export const ANIMATIONS_CSS = `
 `;
 
 export const INFO_ITEMS = [
-  { icon: '✓', color: '#57f287', text: "Coin'ler hesabınıza anında eklenir" },
-  { icon: '✓', color: '#57f287', text: 'Güvenli ödeme Stripe ile korunuyor' },
-  { icon: '✓', color: '#57f287', text: "Bonus coin'ler belirli paketlere dahildir" },
-  { icon: '⚠', color: '#faa61a', text: 'Test modunda çalışıyor - gerçek ödeme alınmıyor', small: true }
+  { icon: '✓', color: '#23a559', text: "Coin'ler hesabınıza anında eklenir" },
+  { icon: '✓', color: '#23a559', text: 'Güvenli ödeme Stripe ile korunuyor' },
+  { icon: '✓', color: '#23a559', text: "Bonus coin'ler belirli paketlere dahildir" },
+  { icon: '⚠', color: '#f0b232', text: 'Test modunda çalışıyor - gerçek ödeme alınmıyor', small: true }
 ];

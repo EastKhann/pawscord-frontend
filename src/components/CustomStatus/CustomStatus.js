@@ -216,9 +216,9 @@ export const StatusBadge = ({ status, size = 'medium' }) => {
 export const StatusIndicator = ({ status, onlineStatus = 'online' }) => {
     const statusColors = {
         online: '#3ba55c',
-        idle: '#faa61a',
-        dnd: '#ed4245',
-        offline: '#747f8d'
+        idle: '#f0b232',
+        dnd: '#f23f42',
+        offline: '#80848e'
     };
 
     return (

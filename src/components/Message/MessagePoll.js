@@ -25,7 +25,7 @@ export const MessagePoll = memo(({
     return (
         <div style={styles.pollContainer}>
             <h4 style={{ marginTop: 0, marginBottom: 10 }}>{poll.question}</h4>
-            <div style={{ fontSize: '0.8em', color: '#b9bbbe', marginBottom: 8 }}>
+            <div style={{ fontSize: '0.8em', color: '#b5bac1', marginBottom: 8 }}>
                 {poll.allow_multiple_votes ? 'Çoklu Seçim' : 'Tek Seçim'} • {poll.total_votes || 0} Oy
             </div>
 
@@ -66,7 +66,7 @@ export const MessagePoll = memo(({
             })}
 
             {poll.expires_at && (
-                <div style={{ fontSize: '0.75em', color: '#72767d', marginTop: 5 }}>
+                <div style={{ fontSize: '0.75em', color: '#949ba4', marginTop: 5 }}>
                     Bitiş: {new Date(poll.expires_at).toLocaleString()}
                 </div>
             )}

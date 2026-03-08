@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaGamepad } from 'react-icons/fa';
 import SettingSection from '../components/SettingSection';
 import ToggleSwitch from '../components/ToggleSwitch';
@@ -22,7 +22,7 @@ const ActivityTab = () => {
                 <ToggleSwitch label="Özel durum mesajını göster" value={showStatus} onChange={createToggle('pawscord_show_status', setShowStatus)} />
             </SettingSection>
             <SettingSection title="Oyun Algılama">
-                <div style={{ padding: 16, backgroundColor: '#1e1f22', borderRadius: 8 }}>
+                <div style={{ padding: 16, backgroundColor: '#0d0e10', borderRadius: 8 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                         <FaGamepad style={{ color: '#5865f2', fontSize: 24 }} />
                         <div>

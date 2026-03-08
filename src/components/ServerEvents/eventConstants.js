@@ -14,12 +14,12 @@ export const EVENT_ICONS = {
 export const EVENT_COLORS = {
     voice: '#5e81f4',
     stage: '#9146ff',
-    external: '#43b581',
-    game: '#faa61a',
-    watch: '#f04747',
+    external: '#23a559',
+    game: '#f0b232',
+    watch: '#f23f42',
     tournament: '#ffc107',
-    meetup: '#7289da',
-    other: '#99aab5',
+    meetup: '#5865f2',
+    other: '#949ba4',
 };
 
 export const EVENT_TYPES = [

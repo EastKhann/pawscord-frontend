@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaSteam, FaSpotify, FaInstagram, FaTwitter, FaXbox, FaPlaystation, FaGithub } from 'react-icons/fa';
 import SettingSection from '../components/SettingSection';
 
@@ -38,7 +38,7 @@ const ConnectionsTab = () => {
                         return (
                             <div key={c.id} style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                padding: '12px 16px', backgroundColor: '#1e1f22', borderRadius: 8,
+                                padding: '12px 16px', backgroundColor: '#0d0e10', borderRadius: 8,
                                 border: isConnected ? `1px solid ${c.color}44` : '1px solid transparent',
                             }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

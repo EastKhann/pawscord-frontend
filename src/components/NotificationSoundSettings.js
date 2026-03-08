@@ -1,4 +1,4 @@
-// frontend/src/components/NotificationSoundSettings.js
+﻿// frontend/src/components/NotificationSoundSettings.js
 // 🔥 FEATURE 50: Notification sound settings UI
 // Configure notification sounds per event type
 
@@ -159,7 +159,7 @@ const NotificationSoundSettings = ({ settings, onSave }) => {
                                     disabled={!masterEnabled}
                                 >
                                     {es.enabled ? (
-                                        <FaToggleOn style={{ fontSize: 18, color: '#57f287' }} />
+                                        <FaToggleOn style={{ fontSize: 18, color: '#23a559' }} />
                                     ) : (
                                         <FaToggleOff style={{ fontSize: 18, color: '#4e5058' }} />
                                     )}
@@ -184,7 +184,7 @@ const S = {
     },
     title: { fontSize: 16, fontWeight: 700, color: '#f2f3f5', margin: 0 },
     masterSection: {
-        padding: 14, backgroundColor: '#2b2d31', borderRadius: 8,
+        padding: 14, backgroundColor: '#111214', borderRadius: 8,
         marginBottom: 16,
     },
     masterRow: {
@@ -198,7 +198,7 @@ const S = {
     },
     slider: {
         width: 120, height: 4, appearance: 'none',
-        backgroundColor: '#1e1f22', borderRadius: 2,
+        backgroundColor: '#0d0e10', borderRadius: 2,
         outline: 'none', cursor: 'pointer',
     },
     volumeValue: {
@@ -213,26 +213,26 @@ const S = {
     },
     eventItem: {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '10px 12px', backgroundColor: '#2b2d31', borderRadius: 6,
+        padding: '10px 12px', backgroundColor: '#111214', borderRadius: 6,
         transition: 'opacity 0.2s',
     },
     eventInfo: {
         display: 'flex', alignItems: 'center', gap: 8, minWidth: 120,
     },
     eventLabel: {
-        fontSize: 14, color: '#dcddde', fontWeight: 500,
+        fontSize: 14, color: '#dbdee1', fontWeight: 500,
     },
     eventControls: {
         display: 'flex', alignItems: 'center', gap: 8,
     },
     soundSelect: {
-        backgroundColor: '#1e1f22', border: 'none', borderRadius: 4,
-        color: '#dcddde', fontSize: 12, padding: '4px 8px', outline: 'none',
+        backgroundColor: '#0d0e10', border: 'none', borderRadius: 4,
+        color: '#dbdee1', fontSize: 12, padding: '4px 8px', outline: 'none',
         minWidth: 90,
     },
     miniSlider: {
         width: 60, height: 3, appearance: 'none',
-        backgroundColor: '#1e1f22', borderRadius: 2,
+        backgroundColor: '#0d0e10', borderRadius: 2,
         outline: 'none', cursor: 'pointer',
     },
     playBtn: {

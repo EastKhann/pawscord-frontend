@@ -80,7 +80,7 @@ const UsersTab = ({
                             </thead>
                             <tbody>
                                 {users.map(user => (
-                                    <tr key={user.id} style={{ backgroundColor: user.is_admin ? '#1a1a2e20' : 'transparent' }}>
+                                    <tr key={user.id} style={{ backgroundColor: user.is_admin ? '#0d0e1020' : 'transparent' }}>
                                         <td style={styles.td}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                                 <div style={{
@@ -131,7 +131,7 @@ const UsersTab = ({
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                                                 {user.is_staff && <span style={styles.badge('#e74c3c')}>👑</span>}
                                                 {user.is_premium && <span style={styles.badge('#ffd700')}>⭐</span>}
-                                                {user.is_whitelisted && <span style={styles.badge('#9b59b6')}>💎</span>}
+                                                {user.is_whitelisted && <span style={styles.badge('#5865f2')}>💎</span>}
                                                 {user.has_spotify && <span style={styles.badge('#1db954')}>🎵</span>}
                                                 {!user.is_staff && !user.is_premium && !user.is_whitelisted && <span style={styles.badge('#6b7280')}>Free</span>}
                                             </div>

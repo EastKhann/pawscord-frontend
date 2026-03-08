@@ -87,7 +87,7 @@ export default function useAppCallbacks({
     }, [defaultAvatars]);
 
     const getRealUserAvatar = useCallback((targetUsername) => {
-        const userObj = allUsers.find(u => u.username === targetUsername);
+        const userObj = Array.isArray(allUsers) ? allUsers.find(u => u.username === targetUsername) : null;
         if (userObj && userObj.avatar && typeof userObj.avatar === 'string') {
             if (userObj.avatar.startsWith('http') || userObj.avatar.startsWith('blob:')) return userObj.avatar;
             let avatarPath = userObj.avatar;
@@ -160,7 +160,7 @@ export default function useAppCallbacks({
 
     // ─── COMPUTED VALUES ───
     const sortedServers = useMemo(() => {
-        if (!categories || categories.length === 0) return [];
+        if (!Array.isArray(categories) || categories.length === 0) return [];
         if (!serverOrder || serverOrder.length === 0) return categories;
         const ordered = [], unordered = [];
         serverOrder.forEach(id => { const s = categories.find(c => c.id === id); if (s) ordered.push(s); });
@@ -169,13 +169,13 @@ export default function useAppCallbacks({
     }, [categories, serverOrder]);
 
     const resolveRoomName = useCallback((slug) => {
-        if (!slug || !categories) return slug || '';
+        if (!slug || !Array.isArray(categories)) return slug || '';
         for (const server of categories) {
-            if (server.categories) {
-                for (const cat of server.categories) {
-                    const foundRoom = cat.rooms?.find(r => r.slug === slug);
-                    if (foundRoom) return String(foundRoom.name);
-                }
+            if (!server || !server.categories) continue;
+            for (const cat of server.categories) {
+                if (!cat || !cat.rooms) continue;
+                const foundRoom = cat.rooms.find(r => r && r.slug === slug);
+                if (foundRoom) return String(foundRoom.name);
             }
         }
         return String(slug).replace(/-\d+-\d+$/, '');
@@ -192,13 +192,13 @@ export default function useAppCallbacks({
     }, [currentVoiceRoom, resolveRoomName]);
 
     const activeRoomType = useMemo(() => {
-        if (activeChat.type !== 'room' || !categories) return 'text';
+        if (activeChat.type !== 'room' || !Array.isArray(categories)) return 'text';
         for (const srv of categories) {
-            if (srv.categories) {
-                for (const cat of srv.categories) {
-                    const room = cat.rooms?.find(r => r.slug === activeChat.id);
-                    if (room) return room.channel_type;
-                }
+            if (!srv || !srv.categories) continue;
+            for (const cat of srv.categories) {
+                if (!cat || !cat.rooms) continue;
+                const room = cat.rooms.find(r => r && r.slug === activeChat.id);
+                if (room) return room.channel_type;
             }
         }
         return 'text';
@@ -207,9 +207,9 @@ export default function useAppCallbacks({
     const isAdmin = username === 'Eastkhan' || username === 'PawPaw' || currentUserProfile?.role === 'admin';
 
     const currentUserPermissions = useMemo(() => {
-        const currentServer = categories?.find(c => c.id === activeChat?.serverId);
+        const currentServer = Array.isArray(categories) ? categories.find(c => c.id === activeChat?.serverId) : null;
         const isServerOwner = currentServer?.owner === username || currentServer?.created_by === username;
-        const isMod = serverMembers?.find(m => m.username === username)?.role === 'moderator';
+        const isMod = Array.isArray(serverMembers) ? serverMembers.find(m => m.username === username)?.role === 'moderator' : false;
         return {
             isAdmin, isServerOwner, isModerator: isMod,
             canKick: isAdmin || isServerOwner || isMod, canBan: isAdmin || isServerOwner,

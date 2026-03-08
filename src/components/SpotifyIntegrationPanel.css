@@ -1,8 +1,8 @@
-.spotify-panel {
-    background: #2f3136;
+﻿.spotify-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     max-width: 600px;
     margin: 0 auto;
 }
@@ -10,12 +10,12 @@
 .spotify-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .spotify-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -28,7 +28,7 @@
 }
 
 .spotify-error {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     padding: 12px;
     border-radius: 4px;
@@ -71,7 +71,7 @@
 }
 
 .spotify-connect p {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 16px;
     margin-bottom: 30px;
 }
@@ -93,7 +93,7 @@
 }
 
 .connect-btn:hover {
-    background: #1ed760;
+    background: #23a559;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(29, 185, 84, 0.4);
 }
@@ -119,7 +119,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
 }
 
@@ -137,7 +137,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #40444b;
+    background: #182135;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -155,7 +155,7 @@
 }
 
 .disconnect-btn {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     border: none;
     padding: 8px 16px;
@@ -179,7 +179,7 @@
 }
 
 .activity-toggle {
-    background: #40444b;
+    background: #182135;
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -200,7 +200,7 @@
 .toggle-slider {
     width: 44px;
     height: 24px;
-    background: #72767d;
+    background: #949ba4;
     border-radius: 12px;
     position: relative;
     transition: background 0.2s;
@@ -227,14 +227,14 @@
 }
 
 .toggle-text {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     font-weight: 500;
 }
 
 /* Current Track */
 .current-track {
-    background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+    background: linear-gradient(135deg, #1DB954 0%, #23a559 100%);
     border-radius: 12px;
     padding: 20px;
     color: #ffffff;
@@ -295,7 +295,7 @@
 }
 
 .track-status {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .playing-icon {
@@ -335,12 +335,12 @@
 .no-track {
     text-align: center;
     padding: 60px 20px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .no-track-icon {
     font-size: 64px;
-    color: #40444b;
+    color: #1e2024;
     margin-bottom: 15px;
 }
 

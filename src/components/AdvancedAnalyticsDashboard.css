@@ -1,4 +1,4 @@
-/* AdvancedAnalyticsDashboard.css */
+﻿/* AdvancedAnalyticsDashboard.css */
 .analytics-overlay {
     position: fixed;
     top: 0;
@@ -14,7 +14,7 @@
 }
 
 .analytics-panel {
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 12px;
     width: 95%;
     max-width: 1200px;
@@ -30,8 +30,8 @@
     align-items: center;
     gap: 16px;
     padding: 16px 20px;
-    background: linear-gradient(135deg, #5865f2, #8b5cf6);
-    border-bottom: 1px solid #3f4147;
+    background: linear-gradient(135deg, #5865f2, #5865f2);
+    border-bottom: 1px solid #182135;
 }
 
 .analytics-header h2 {
@@ -147,13 +147,13 @@
     align-items: center;
     justify-content: center;
     height: 300px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #3f4147;
+    border: 3px solid #182135;
     border-top-color: #5865f2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -169,7 +169,7 @@
 }
 
 .overview-card {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -202,8 +202,8 @@
 }
 
 .card-icon.voice {
-    background: rgba(139, 92, 246, 0.2);
-    color: #8b5cf6;
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
 }
 
 .card-content {
@@ -219,7 +219,7 @@
 }
 
 .card-label {
-    color: #72767d;
+    color: #949ba4;
     font-size: 13px;
     margin-top: 4px;
 }
@@ -233,7 +233,7 @@
 }
 
 .card-detail {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     margin-top: 8px;
 }
@@ -247,7 +247,7 @@
 }
 
 .chart-card {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     overflow: hidden;
 }
@@ -261,7 +261,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px;
-    border-bottom: 1px solid #2b2d31;
+    border-bottom: 1px solid #0e1222;
 }
 
 .chart-header h3 {
@@ -274,7 +274,7 @@
 }
 
 .chart-info {
-    color: #72767d;
+    color: #949ba4;
     font-size: 11px;
     display: flex;
     align-items: center;
@@ -325,7 +325,7 @@
     left: 50%;
     transform: translateX(-50%);
     font-size: 9px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .no-data {
@@ -333,7 +333,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    color: #72767d;
+    color: #949ba4;
     font-size: 13px;
 }
 
@@ -346,14 +346,14 @@
 }
 
 .list-card {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     overflow: hidden;
 }
 
 .list-header {
     padding: 16px;
-    border-bottom: 1px solid #2b2d31;
+    border-bottom: 1px solid #0e1222;
 }
 
 .list-header h3 {
@@ -381,11 +381,11 @@
 }
 
 .list-item:hover {
-    background: #2b2d31;
+    background: #0e1222;
 }
 
 .rank {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     font-weight: 600;
     width: 20px;
@@ -413,7 +413,7 @@
 .bar-container {
     width: 100px;
     height: 6px;
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 3px;
     overflow: hidden;
 }
@@ -430,7 +430,7 @@
 }
 
 .value {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     min-width: 60px;
     text-align: right;
@@ -449,12 +449,12 @@
     align-items: center;
     gap: 6px;
     padding: 12px;
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 8px;
 }
 
 .emoji {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .count {
@@ -465,7 +465,7 @@
 
 /* Links Section */
 .links-section {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     padding: 16px;
 }
@@ -488,13 +488,13 @@
     grid-template-columns: 1fr 100px 100px;
     gap: 12px;
     padding: 10px 12px;
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 6px;
     margin-bottom: 8px;
 }
 
 .table-header span {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -505,7 +505,7 @@
     grid-template-columns: 1fr 100px 100px;
     gap: 12px;
     padding: 10px 12px;
-    border-bottom: 1px solid #2b2d31;
+    border-bottom: 1px solid #0e1222;
 }
 
 .table-row:last-child {

@@ -14,7 +14,7 @@ const BadgesTab = ({ achievements, badges, calculateXPProgress, storeBalance, us
             <span style={{ color: '#fff', fontSize: '16px', fontWeight: '600' }}>
               Seviye {userStats.level}
             </span>
-            <span style={{ color: '#b9bbbe', fontSize: '14px' }}>
+            <span style={{ color: '#b5bac1', fontSize: '14px' }}>
               {userStats.xp} / {userStats.next_level_xp} XP
             </span>
           </div>
@@ -31,7 +31,7 @@ const BadgesTab = ({ achievements, badges, calculateXPProgress, storeBalance, us
         <h4 style={{ color: '#fff', marginBottom: '16px' }}>🎖️ Kazanılan Rozetler</h4>
 
         {badges.length === 0 && (
-          <p style={{ color: '#b9bbbe' }}>Henüz rozet kazanılmadı. Daha fazla aktivite gösterin!</p>
+          <p style={{ color: '#b5bac1' }}>Henüz rozet kazanılmadı. Daha fazla aktivite gösterin!</p>
         )}
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -47,7 +47,7 @@ const BadgesTab = ({ achievements, badges, calculateXPProgress, storeBalance, us
         <h3 style={styles.sectionTitle}>🎯 Başarılar (Achievements)</h3>
 
         {achievements.length === 0 && (
-          <p style={{ color: '#b9bbbe' }}>Henüz başarı kazanılmadı.</p>
+          <p style={{ color: '#b5bac1' }}>Henüz başarı kazanılmadı.</p>
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginTop: '16px' }}>
@@ -70,9 +70,9 @@ const BadgesTab = ({ achievements, badges, calculateXPProgress, storeBalance, us
                 <div style={{ flex: 1 }}>
                   <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>
                     {achievement.name}
-                    {achievement.completed && <span style={{ marginLeft: '8px', color: '#43b581' }}>✅</span>}
+                    {achievement.completed && <span style={{ marginLeft: '8px', color: '#23a559' }}>✅</span>}
                   </h4>
-                  <p style={{ color: '#b9bbbe', margin: '4px 0 0 0', fontSize: '12px' }}>
+                  <p style={{ color: '#b5bac1', margin: '4px 0 0 0', fontSize: '12px' }}>
                     {achievement.description}
                   </p>
                 </div>
@@ -82,7 +82,7 @@ const BadgesTab = ({ achievements, badges, calculateXPProgress, storeBalance, us
                   <div style={{ ...styles.progressBar, height: '6px' }}>
                     <div style={styles.progressFill((achievement.progress / achievement.target) * 100)} />
                   </div>
-                  <p style={{ color: '#b9bbbe', fontSize: '11px', marginTop: '4px' }}>
+                  <p style={{ color: '#b5bac1', fontSize: '11px', marginTop: '4px' }}>
                     {achievement.progress} / {achievement.target}
                   </p>
                 </div>

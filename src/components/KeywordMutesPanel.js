@@ -1,4 +1,4 @@
-// frontend/src/components/KeywordMutesPanel.js
+﻿// frontend/src/components/KeywordMutesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaFilter, FaPlus, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -83,7 +83,7 @@ const KeywordMutesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaFilter style={{ color: '#f04747' }} />
+                        <FaFilter style={{ color: '#f23f42' }} />
                         <h2 style={{ margin: 0 }}>Kelime Filtreleri</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -188,14 +188,14 @@ const styles = {
     input: {
         flex: 1,
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
         fontSize: '14px'
     },
     addBtn: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '12px 20px',
@@ -222,7 +222,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px'
     },
     keywordText: {
@@ -232,7 +232,7 @@ const styles = {
         flex: 1
     },
     removeBtn: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '8px 12px',

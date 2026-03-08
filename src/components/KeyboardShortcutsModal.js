@@ -1,4 +1,4 @@
-// frontend/src/components/KeyboardShortcutsModal.js
+﻿// frontend/src/components/KeyboardShortcutsModal.js
 import React from 'react';
 import { FaTimes, FaKeyboard } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
@@ -114,7 +114,7 @@ const styles = {
         animation: 'fadeIn 0.2s ease',
     },
     modal: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '800px',
@@ -129,8 +129,8 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px 24px',
-        borderBottom: '1px solid #202225',
-        backgroundColor: '#2f3136',
+        borderBottom: '1px solid #0b0e1b',
+        backgroundColor: '#111214',
     },
     headerTitle: {
         display: 'flex',
@@ -145,7 +145,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '24px',
         cursor: 'pointer',
         padding: '4px',
@@ -177,7 +177,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '12px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         transition: 'background 0.2s',
     },
@@ -190,10 +190,10 @@ const styles = {
     key: {
         display: 'inline-block',
         padding: '4px 8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         border: '1px solid #404040',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '13px',
         fontWeight: 'bold',
         fontFamily: 'monospace',
@@ -202,23 +202,23 @@ const styles = {
         textAlign: 'center',
     },
     plus: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '12px',
         fontWeight: 'bold',
     },
     shortcutDescription: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         flex: 1,
         textAlign: 'right',
     },
     footer: {
         padding: '16px 24px',
-        borderTop: '1px solid #202225',
-        backgroundColor: '#2f3136',
+        borderTop: '1px solid #0b0e1b',
+        backgroundColor: '#111214',
     },
     footerText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px',
         margin: 0,
         textAlign: 'center',

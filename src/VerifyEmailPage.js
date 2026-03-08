@@ -65,8 +65,8 @@ const VerifyEmailPage = () => {
                 {/* 2. BAŞARILI DURUMU */}
                 {status === 'success' && (
                     <div style={styles.content}>
-                        <FaCheckCircle size={60} color="#43b581" style={{ marginBottom: 20 }} />
-                        <h2 style={{ ...styles.title, color: '#43b581' }}>Tebrikler! 🎉</h2>
+                        <FaCheckCircle size={60} color="#23a559" style={{ marginBottom: 20 }} />
+                        <h2 style={{ ...styles.title, color: '#23a559' }}>Tebrikler! 🎉</h2>
                         <p style={styles.text}>{message}</p>
                         <p style={styles.subText}>Artık Pawscord'a tam erişim sağlayabilirsin.</p>
 
@@ -82,8 +82,8 @@ const VerifyEmailPage = () => {
                 {/* 3. HATA DURUMU */}
                 {status === 'error' && (
                     <div style={styles.content}>
-                        <FaTimesCircle size={60} color="#f04747" style={{ marginBottom: 20 }} />
-                        <h2 style={{ ...styles.title, color: '#f04747' }}>Hata Oluştu</h2>
+                        <FaTimesCircle size={60} color="#f23f42" style={{ marginBottom: 20 }} />
+                        <h2 style={{ ...styles.title, color: '#f23f42' }}>Hata Oluştu</h2>
                         <p style={styles.text}>{message}</p>
 
                         <button
@@ -106,19 +106,22 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100dvh',
-        backgroundColor: '#1e1f22', // Pawscord koyu tema
+        background: 'radial-gradient(ellipse at 15% 20%, rgba(88,101,242,0.16) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(124,58,237,0.10) 0%, transparent 48%), #0d0e10',
         fontFamily: "'Poppins', sans-serif",
         padding: '20px'
     },
     card: {
-        backgroundColor: '#2b2d31',
-        padding: '40px',
-        borderRadius: '12px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-        maxWidth: '400px',
+        background: 'rgba(30, 31, 35, 0.88)',
+        backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
+        borderRadius: '22px',
+        padding: '44px 40px',
+        maxWidth: '420px',
         width: '100%',
         textAlign: 'center',
-        border: '1px solid #1f2023'
+        border: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.06)',
+        animation: 'authCardIn 0.5s cubic-bezier(0.22,1,0.36,1)'
     },
     content: {
         display: 'flex',
@@ -128,41 +131,44 @@ const styles = {
     title: {
         margin: '0 0 10px 0',
         color: '#fff',
-        fontSize: '1.8em'
+        fontSize: '1.8em',
+        fontWeight: 700
     },
     text: {
-        color: '#dbdee1',
-        fontSize: '1.1em',
+        color: '#b5bac1',
+        fontSize: '1.05em',
         margin: '0 0 20px 0',
-        lineHeight: '1.5'
+        lineHeight: '1.6'
     },
     subText: {
-        color: '#949ba4',
+        color: '#80848e',
         fontSize: '0.9em',
         marginBottom: '30px'
     },
     primaryButton: {
-        backgroundColor: '#5865f2',
+        background: 'linear-gradient(135deg, #5865f2 0%, #4549c4 100%)',
         color: 'white',
         border: 'none',
-        padding: '12px 30px',
-        borderRadius: '5px',
+        padding: '13px 30px',
+        borderRadius: '13px',
         fontSize: '1em',
         fontWeight: 'bold',
         cursor: 'pointer',
-        transition: 'background-color 0.2s',
-        width: '100%'
+        transition: 'opacity 0.2s, transform 0.15s',
+        width: '100%',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
     },
     secondaryButton: {
-        backgroundColor: '#4f545c',
-        color: 'white',
-        border: 'none',
-        padding: '12px 30px',
-        borderRadius: '5px',
+        background: 'rgba(255,255,255,0.07)',
+        color: '#b5bac1',
+        border: '1px solid rgba(255,255,255,0.10)',
+        padding: '13px 30px',
+        borderRadius: '13px',
         fontSize: '1em',
         fontWeight: 'bold',
         cursor: 'pointer',
-        width: '100%'
+        width: '100%',
+        transition: 'background 0.2s'
     }
 };
 

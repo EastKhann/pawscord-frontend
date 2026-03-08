@@ -1,4 +1,4 @@
-// frontend/src/components/EmojiPicker.js
+﻿// frontend/src/components/EmojiPicker.js
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from './EmojiPicker/styles';
 
@@ -148,8 +148,8 @@ const EmojiPicker = ({ onSelect }) => {
             </div>
 
             {/* Skin Tone Selector */}
-            <div style={{ display: 'flex', gap: 5, padding: '4px 12px 6px', alignItems: 'center', borderBottom: '1px solid #202225' }}>
-                <span style={{ fontSize: '11px', color: '#72767d', marginRight: 2, userSelect: 'none' }}>Cilt:</span>
+            <div style={{ display: 'flex', gap: 5, padding: '4px 12px 6px', alignItems: 'center', borderBottom: '1px solid #0b0e1b' }}>
+                <span style={{ fontSize: '11px', color: '#949ba4', marginRight: 2, userSelect: 'none' }}>Cilt:</span>
                 {SKIN_TONES.map((tone, i) => (
                     <button
                         key={i}

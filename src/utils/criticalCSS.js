@@ -17,8 +17,8 @@ export const CRITICAL_CSS = `
 
 body {
     font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #1e1f22;
-    color: #dcddde;
+    background-color: #0b0e1b;
+    color: #dbdee1;
     overflow: hidden;
 }
 
@@ -29,7 +29,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: #1e1f22;
+    background: #0b0e1b;
     display: flex;
     align-items: center;
     justify-center: center;
@@ -39,7 +39,7 @@ body {
 .spinner {
     width: 50px;
     height: 50px;
-    border: 4px solid #40444b;
+    border: 4px solid #182135;
     border-top-color: #5865f2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -65,7 +65,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: 240px;
-    background: #2b2d31;
+    background: #0e1222;
     flex-shrink: 0;
 }
 
@@ -74,22 +74,22 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: #313338;
+    background: #121928;
 }
 
 /* Message Input - Critical */
 .message-input-container {
     padding: 16px;
-    background: #383a40;
+    background: #182135;
 }
 
 .message-input {
     width: 100%;
     padding: 12px;
-    background: #40444b;
+    background: #182135;
     border: none;
     border-radius: 8px;
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 15px;
     outline: none;
 }
@@ -123,7 +123,7 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-    background: #2b2d31;
+    background: #0e1222;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -19,7 +19,7 @@
 
 .refresh-btn {
     padding: 10px 20px;
-    background: #667eea;
+    background: #5865f2;
     color: white;
     border: none;
     border-radius: 8px;
@@ -55,7 +55,7 @@
 .metric-value {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #667eea;
+    color: #5865f2;
     margin-bottom: 5px;
 }
 
@@ -75,12 +75,12 @@
 }
 
 .metric-change.negative {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 /* Growth Rate Banner */
 .growth-rate-banner {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     color: white;
     padding: 30px;
     border-radius: 12px;
@@ -196,7 +196,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(to right, #667eea, #764ba2);
+    background: linear-gradient(to right, #5865f2, #4752c4);
     transition: width 0.5s ease;
     display: flex;
     align-items: center;

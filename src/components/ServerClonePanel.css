@@ -13,7 +13,7 @@
 }
 
 .serverclone-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 550px;
@@ -21,7 +21,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(33, 150, 243, 0.3);
+    box-shadow: 0 8px 32px rgba(33, 150, 243, 0.3);
     border: 1px solid rgba(33, 150, 243, 0.3);
 }
 
@@ -235,7 +235,7 @@
     gap: 6px;
     background: rgba(255, 255, 255, 0.05);
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: 12px;
     color: #aaa;
     font-size: 0.8rem;
 }

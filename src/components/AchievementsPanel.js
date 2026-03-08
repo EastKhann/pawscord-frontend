@@ -79,7 +79,7 @@ const AchievementsPanel = ({ apiBaseUrl, username, onClose }) => {
         const colors = {
             'common': '#95a5a6',
             'uncommon': '#3498db',
-            'rare': '#9b59b6',
+            'rare': '#5865f2',
             'epic': '#e74c3c',
             'legendary': '#f39c12'
         };

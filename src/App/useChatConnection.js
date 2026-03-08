@@ -32,6 +32,7 @@ export default function useChatConnection({
     statusWsRef, statusWsReconnectRef,
     logout, refreshAccessToken,
     setCurrentTheme,
+    notifyMessage = null,
 }) {
     const ws = useRef(null);
     const chatReconnectRef = useRef(null);
@@ -407,7 +408,19 @@ export default function useChatConnection({
                         const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
                         const chat = activeChatRef.current;
                         const currentKey = chat.type === 'room' ? `room-${chat.id}` : `dm-${chat.id}`;
-                        if (key !== currentKey) incrementUnread(key);
+                        if (key !== currentKey) {
+                            incrementUnread(key);
+                            // 🔔 Desktop push notification
+                            if (notifyMessage) {
+                                notifyMessage({
+                                    senderUsername: data.username,
+                                    roomName: data.room_name || data.room_slug,
+                                    content: data.preview || data.content || '',
+                                    roomSlug: data.room_slug || null,
+                                    dmId: data.conversation_id || null,
+                                });
+                            }
+                        }
                     }
                     if (data.type === 'server_structure_update') {
                         if (data.categories && Array.isArray(data.categories)) {

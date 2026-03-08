@@ -58,7 +58,7 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
             break;
         case 'error':
             icon = '❌';
-            bgColor = '#ef4444';
+            bgColor = '#f23f42';
             break;
         case 'warning':
             icon = '⚠️';

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaLaptop, FaMobile, FaTablet, FaTrash, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -168,7 +168,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -182,7 +182,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -192,15 +192,15 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     sessionCount: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     revokeAllButton: {
         padding: '8px 16px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -215,12 +215,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     sessionsList: {
@@ -229,7 +229,7 @@ const styles = {
         gap: '16px',
     },
     sessionCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -237,7 +237,7 @@ const styles = {
         alignItems: 'flex-start',
     },
     currentSession: {
-        border: '2px solid #43b581',
+        border: '2px solid #23a559',
     },
     sessionIcon: {
         minWidth: '40px',
@@ -260,7 +260,7 @@ const styles = {
     currentBadge: {
         fontSize: '11px',
         padding: '4px 8px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         borderRadius: '4px',
         fontWeight: '600',
     },
@@ -271,14 +271,14 @@ const styles = {
     },
     detailItem: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
         display: 'flex',
         alignItems: 'center',
     },
     revokeButton: {
         background: 'none',
         border: 'none',
-        color: '#f04747',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '18px',
         padding: '8px',

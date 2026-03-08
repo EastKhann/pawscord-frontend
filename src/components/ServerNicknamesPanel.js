@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaUser, FaHistory } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -163,7 +163,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -177,20 +177,20 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     toolbar: {
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     searchInput: {
         width: '100%',
         padding: '10px 12px',
-        backgroundColor: '#2c2f33',
-        border: '1px solid #2c2f33',
+        backgroundColor: '#111214',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
         color: '#ffffff',
         fontSize: '14px',
@@ -202,12 +202,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     nicknamesList: {
@@ -216,7 +216,7 @@ const styles = {
         gap: '10px',
     },
     nicknameCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -234,7 +234,7 @@ const styles = {
     },
     currentNickname: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     nicknameValue: {
         color: '#5865f2',
@@ -256,7 +256,7 @@ const styles = {
     },
     clearButton: {
         padding: '6px 12px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',

@@ -1,4 +1,4 @@
-﻿// frontend/src/VoiceChatPanel.js
+// frontend/src/VoiceChatPanel.js
 // 🎤 PROFESYONEL SESLİ SOHBET PANELİ - Discord/Zoom Tarzı
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -54,8 +54,8 @@ const VoiceFrameMenu = ({ menu, currentUsername, remoteVolumes, setRemoteVolume,
     const menuItem = (icon, label, onClick, danger) => (
         <div onClick={onClick} style={{
             display: 'flex', alignItems: 'center', gap: '8px',
-            padding: '8px 14px', margin: '1px 4px', borderRadius: '4px',
-            cursor: 'pointer', fontSize: '13px', color: danger ? '#ed4245' : '#dcddde',
+            padding: '8px 14px', margin: '1px 4px', borderRadius: '8px',
+            cursor: 'pointer', fontSize: '13px', color: danger ? '#f23f42' : '#dbdee1',
             transition: 'background 0.1s',
         }}
             onMouseEnter={e => e.currentTarget.style.background = danger ? 'rgba(237,66,69,0.15)' : 'rgba(88,101,242,0.15)'}
@@ -69,22 +69,24 @@ const VoiceFrameMenu = ({ menu, currentUsername, remoteVolumes, setRemoteVolume,
     return ReactDOM.createPortal(
         <div ref={menuRef} onClick={e => e.stopPropagation()} style={{
             position: 'fixed', left: pos.left, top: pos.top, zIndex: 2147483647,
-            backgroundColor: '#111214', border: '1px solid rgba(255,255,255,0.08)',
+            backgroundColor: 'rgba(30, 31, 35, 0.92)', backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.08)',
             borderRadius: '8px', boxShadow: '0 12px 32px rgba(0,0,0,0.7)',
             minWidth: '220px', maxWidth: '260px',
             animation: 'contextMenuIn 0.12s ease-out',
         }}>
             {/* Başlık */}
-            <div style={{ padding: '10px 14px', background: '#1a1b1e', borderBottom: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px 8px 0 0' }}>
+            <div style={{ padding: '10px 14px', background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)', borderRadius: '8px 8px 0 0' }}>
                 <div style={{ fontWeight: '600', fontSize: '14px', color: '#fff' }}>{user.username}</div>
-                {isSelf && <div style={{ fontSize: '11px', color: '#b9bbbe', marginTop: '2px' }}>Sensin</div>}
+                {isSelf && <div style={{ fontSize: '11px', color: '#b5bac1', marginTop: '2px' }}>Sensin</div>}
             </div>
 
             {/* Ses seviyesi slider (başkasıysa) */}
             {!isSelf && setRemoteVolume && (
-                <div style={{ padding: '10px 14px 12px', background: '#16171a', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                <div style={{ padding: '10px 14px 12px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                        <span style={{ fontSize: '11px', color: '#8e9297', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔊 Ses Seviyesi</span>
+                        <span style={{ fontSize: '11px', color: '#80848e', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔊 Ses Seviyesi</span>
                         <span style={{ fontSize: '12px', fontWeight: '700', color: vol > 100 ? '#5865f2' : '#fff', background: 'rgba(255,255,255,0.1)', padding: '1px 7px', borderRadius: '10px' }}>{vol}%</span>
                     </div>
                     <input type="range" min="0" max="200" value={vol}
@@ -261,7 +263,7 @@ const VoiceChatPanel = ({
         <div style={{
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(135deg, #1e1e1e 0%, #2c2c2c 100%)',
+            background: 'linear-gradient(135deg, #0d0e10 0%, #111214 100%)',
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',

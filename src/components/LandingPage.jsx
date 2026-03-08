@@ -1,10 +1,12 @@
 // Landing Page for Pre-Launch Waitlist
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import toast from '../utils/toast';
 import './LandingPage.css';
 
 export default function LandingPage() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -38,10 +40,10 @@ export default function LandingPage() {
                 <div className="container">
                     <div className="hero-content">
                         <h1 className="hero-title">
-                            Discord Alternative That <span className="highlight">Respects Your Privacy</span>
+                            {t('landing.heroTitle')} <span className="highlight">{t('landing.heroHighlight')}</span>
                         </h1>
                         <p className="hero-subtitle">
-                            Real-time chat, voice channels, 100MB uploads. No tracking. No ads. 100% open source.
+                            {t('landing.heroSubtitle')}
                         </p>
 
                         {/* Waitlist Form */}
@@ -49,27 +51,27 @@ export default function LandingPage() {
                             <form className="waitlist-form" onSubmit={handleSubmit}>
                                 <input
                                     type="email"
-                                    placeholder="Enter your email"
+                                    placeholder={t('landing.emailPlaceholder')}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     className="waitlist-input"
                                 />
                                 <button type="submit" disabled={loading} className="waitlist-btn">
-                                    {loading ? 'Joining...' : 'Join Waitlist'}
+                                    {loading ? t('landing.joining') : t('landing.joinWaitlist')}
                                 </button>
                             </form>
                         ) : (
                             <div className="success-message">
-                                <h3>🎉 You're on the list!</h3>
-                                <p>We'll notify you when we launch on January 22.</p>
-                                <p className="referral-hint">Check your email for your VIP referral link!</p>
+                                <h3>🎉 {t('landing.onTheList')}</h3>
+                                <p>{t('landing.notifyLaunch')}</p>
+                                <p className="referral-hint">{t('landing.checkEmail')}</p>
                             </div>
                         )}
 
                         {error && <p className="error-message">{error}</p>}
 
-                        <p className="launch-date">🚀 Launching January 22, 2026 • Join 500+ beta testers</p>
+                        <p className="launch-date">🚀 {t('landing.launchDate')}</p>
                     </div>
 
                     <div className="hero-image">
@@ -81,43 +83,43 @@ export default function LandingPage() {
             {/* Features Grid */}
             <section className="features">
                 <div className="container">
-                    <h2 className="section-title">Why Pawscord?</h2>
+                    <h2 className="section-title">{t('landing.whyPawscord')}</h2>
 
                     <div className="features-grid">
                         <div className="feature-card">
                             <div className="feature-icon">🔒</div>
-                            <h3>Privacy First</h3>
-                            <p>No data mining. No tracking. GDPR compliant. Your conversations stay yours.</p>
+                            <h3>{t('landing.privacyFirst')}</h3>
+                            <p>{t('landing.privacyDesc')}</p>
                         </div>
 
                         <div className="feature-card">
                             <div className="feature-icon">⚡</div>
-                            <h3>Real-Time Chat</h3>
-                            <p>WebSocket-powered instant messaging. Sub-second message delivery.</p>
+                            <h3>{t('landing.realTimeChat')}</h3>
+                            <p>{t('landing.realtimeDesc')}</p>
                         </div>
 
                         <div className="feature-card">
                             <div className="feature-icon">🎤</div>
-                            <h3>Voice Channels</h3>
-                            <p>Crystal-clear WebRTC voice chat. Up to 4K quality for premium users.</p>
+                            <h3>{t('landing.voiceChannels')}</h3>
+                            <p>{t('landing.voiceDesc')}</p>
                         </div>
 
                         <div className="feature-card">
                             <div className="feature-icon">📁</div>
-                            <h3>100MB Uploads</h3>
-                            <p>4x larger than Discord. Share videos, presentations, anything.</p>
+                            <h3>{t('landing.uploads')}</h3>
+                            <p>{t('landing.uploadsDesc')}</p>
                         </div>
 
                         <div className="feature-card">
                             <div className="feature-icon">📱</div>
-                            <h3>Cross-Platform</h3>
-                            <p>Web, Android APK, Windows EXE. iOS app coming February.</p>
+                            <h3>{t('landing.crossPlatform')}</h3>
+                            <p>{t('landing.crossDesc')}</p>
                         </div>
 
                         <div className="feature-card">
                             <div className="feature-icon">💎</div>
-                            <h3>Premium Features</h3>
-                            <p>Starting at $4.99/mo. Custom emojis, unlimited uploads, priority support.</p>
+                            <h3>{t('landing.premiumFeatures')}</h3>
+                            <p>{t('landing.premiumDesc')}</p>
                         </div>
                     </div>
                 </div>
@@ -126,7 +128,7 @@ export default function LandingPage() {
             {/* Screenshots */}
             <section className="screenshots">
                 <div className="container">
-                    <h2 className="section-title">See It In Action</h2>
+                    <h2 className="section-title">{t('landing.seeInAction')}</h2>
                     <div className="screenshots-grid">
                         <img src="/static/images/screenshot-chat.png" alt="Chat Interface" />
                         <img src="/static/images/screenshot-voice.png" alt="Voice Channels" />
@@ -162,8 +164,8 @@ export default function LandingPage() {
             {/* CTA Section */}
             <section className="cta">
                 <div className="container">
-                    <h2>Ready to Join?</h2>
-                    <p>Be part of the first 1,000 users. Get 3 months free premium.</p>
+                    <h2>{t('landing.readyToJoin')}</h2>
+                    <p>{t('landing.firstUsers')}</p>
                     {!success && (
                         <form className="waitlist-form" onSubmit={handleSubmit}>
                             <input
@@ -175,7 +177,7 @@ export default function LandingPage() {
                                 className="waitlist-input"
                             />
                             <button type="submit" disabled={loading} className="waitlist-btn">
-                                {loading ? 'Joining...' : 'Get Early Access'}
+                                {loading ? t('landing.joining') : t('landing.getEarlyAccess')}
                             </button>
                         </form>
                     )}
@@ -191,7 +193,7 @@ export default function LandingPage() {
                         <a href="/terms">Terms of Service</a>
                         <a href="mailto:hello@pawscord.com">Contact</a>
                     </div>
-                    <p className="copyright">© 2026 Pawscord. Built with ❤️ for privacy.</p>
+                    <p className="copyright">{t('landing.copyright')}</p>
                 </div>
             </footer>
         </div>

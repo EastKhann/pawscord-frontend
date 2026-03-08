@@ -5,8 +5,8 @@ import useModalA11y from '../hooks/useModalA11y';
 
 const getRewardIcon = (type) => {
   switch (type) {
-    case 'coins': return <FaCoins style={{ color: '#faa61a' }} />;
-    case 'premium': return <FaCrown style={{ color: '#f04747' }} />;
+    case 'coins': return <FaCoins style={{ color: '#f0b232' }} />;
+    case 'premium': return <FaCrown style={{ color: '#f23f42' }} />;
     default: return <FaGift style={{ color: '#5865f2' }} />;
   }
 };
@@ -19,7 +19,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     <div style={styles.overlay} {...overlayProps}>
       <div style={styles.modal} {...dialogProps}>
         <div style={styles.header}>
-          <div style={styles.headerLeft}><FaGift style={{ fontSize: '24px', color: '#43b581' }} /><h2 style={{ margin: 0, fontSize: '20px' }}>Daily Rewards</h2></div>
+          <div style={styles.headerLeft}><FaGift style={{ fontSize: '24px', color: '#23a559' }} /><h2 style={{ margin: 0, fontSize: '20px' }}>Daily Rewards</h2></div>
           <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>
         </div>
 
@@ -27,7 +27,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
           {loading ? <div style={styles.loading}>Loading...</div> : (
             <>
               <div style={styles.streakCard}>
-                <FaFire style={{ fontSize: '48px', color: '#f04747' }} />
+                <FaFire style={{ fontSize: '48px', color: '#f23f42' }} />
                 <div style={styles.streakInfo}><div style={styles.streakNumber}>{streak}</div><div style={styles.streakLabel}>Day Streak</div></div>
               </div>
 
@@ -44,7 +44,7 @@ const DailyRewardsModal = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
 
               {!canClaim && lastClaimed && (
                 <div style={styles.alreadyClaimed}>
-                  <FaCheckCircle style={{ color: '#43b581', fontSize: '48px' }} /><h3>Already Claimed!</h3><p>Come back tomorrow for your next reward</p>
+                  <FaCheckCircle style={{ color: '#23a559', fontSize: '48px' }} /><h3>Already Claimed!</h3><p>Come back tomorrow for your next reward</p>
                   <div style={styles.nextRewardTime}>Next reward in: {calculateTimeUntilNextReward(lastClaimed)}</div>
                 </div>
               )}

@@ -77,9 +77,9 @@ function BanAppealsPanel({ apiBaseUrl, fetchWithAuth }) {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pending: { icon: <FaHistory />, color: '#faa61a', text: 'Pending' },
-      approved: { icon: <FaCheckCircle />, color: '#43b581', text: 'Approved' },
-      rejected: { icon: <FaTimesCircle />, color: '#f04747', text: 'Rejected' }
+      pending: { icon: <FaHistory />, color: '#f0b232', text: 'Pending' },
+      approved: { icon: <FaCheckCircle />, color: '#23a559', text: 'Approved' },
+      rejected: { icon: <FaTimesCircle />, color: '#f23f42', text: 'Rejected' }
     };
     return badges[status] || badges.pending;
   };

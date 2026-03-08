@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+﻿import { memo, useCallback } from 'react';
 import { FaCog, FaDownload } from 'react-icons/fa';
 import { styles } from '../SidebarStyles';
 import { PRODUCTION_URL } from '../utils/constants';
@@ -83,7 +83,7 @@ const UserFooter = ({
                             e.target.src = getDeterministicAvatar(currentUsername);
                         }}
                     />
-                    {/* Online Noktası */}
+                    {/* Online Dot */}
                     <div style={{
                         position: 'absolute',
                         bottom: '2px',
@@ -92,7 +92,8 @@ const UserFooter = ({
                         height: '10px',
                         backgroundColor: '#23a559',
                         borderRadius: '50%',
-                        border: '2px solid #232428'
+                        border: '2px solid #0b0e1b',
+                        boxShadow: '0 0 6px rgba(35,165,89,0.5)'
                     }}></div>
                 </div>
 

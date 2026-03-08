@@ -16,7 +16,7 @@ const MessageContextMenu = ({
 
     const menuItem = (icon, label, onClick, danger) => (
         <div className="context-menu-item"
-            style={{ ...styles.contextMenuItem, ...(danger ? { color: '#ed4245' } : {}) }}
+            style={{ ...styles.contextMenuItem, ...(danger ? { color: '#f23f42' } : {}) }}
             onClick={onClick}
         >
             {icon} {label}

@@ -250,14 +250,14 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15), transparent 50%), radial-gradient(ellipse at bottom, rgba(118, 75, 162, 0.15), transparent 50%)',
+        background: 'radial-gradient(ellipse at top, rgba(88, 101, 242, 0.15), transparent 50%), radial-gradient(ellipse at bottom, rgba(118, 75, 162, 0.15), transparent 50%)',
         pointerEvents: 'none',
         zIndex: 0
     },
     card: {
         background: 'var(--glass-bg)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
         padding: '48px',
         borderRadius: 'var(--radius-2xl)',
         textAlign: 'center',
@@ -291,8 +291,8 @@ const styles = {
         borderRadius: '50%',
         marginBottom: '24px',
         objectFit: 'cover',
-        border: '4px solid var(--glass-border)',
-        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+        border: '2px solid var(--glass-border)',
+        boxShadow: '0 0 0 4px rgba(88,101,242,0.15), 0 8px 24px rgba(0,0,0,0.3)',
         transition: 'var(--transition-normal)'
     },
     serverName: {
@@ -345,14 +345,14 @@ const styles = {
         color: 'white',
         border: 'none',
         padding: '16px 32px',
-        borderRadius: 'var(--radius-md)',
+        borderRadius: '13px',
         cursor: 'pointer',
         fontSize: '16px',
         fontWeight: 700,
         marginTop: '16px',
         width: '100%',
         transition: 'var(--transition-normal)',
-        boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
+        boxShadow: '0 4px 0 rgba(59,69,199,0.8), 0 8px 24px rgba(88,101,242,0.40)',
         position: 'relative',
         overflow: 'hidden'
     },
@@ -400,25 +400,29 @@ const styles = {
         fontStyle: 'italic'
     },
     homeButton: {
-        background: 'var(--bg-elevated)',
+        background: 'rgba(255,255,255,0.06)',
         color: 'var(--text-primary)',
-        border: '1px solid var(--glass-border)',
+        border: '1px solid rgba(255,255,255,0.10)',
         padding: '14px 28px',
-        borderRadius: 'var(--radius-md)',
+        borderRadius: '13px',
         cursor: 'pointer',
         fontSize: '15px',
         fontWeight: 600,
         marginTop: '24px',
-        transition: 'var(--transition-normal)'
+        transition: 'var(--transition-normal)',
+        backdropFilter: 'blur(12px)'
     }
 };
 
-// Add keyframes for spinner animation
 const styleSheet = document.createElement("style");
 styleSheet.textContent = `
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+    @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.92) translateY(12px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
     }
 `;
 document.head.appendChild(styleSheet);

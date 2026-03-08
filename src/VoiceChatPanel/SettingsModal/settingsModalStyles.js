@@ -10,7 +10,7 @@ export const styles = {
     padding: '20px',
   },
   panel: {
-    background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
+    background: 'linear-gradient(135deg, #111214 0%, #0d0e10 100%)',
     borderRadius: '16px',
     maxWidth: '500px',
     width: '90%',
@@ -68,7 +68,7 @@ export const styles = {
   },
   select: {
     width: '100%', padding: '10px',
-    background: '#2b2d31',
+    background: '#111214',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '8px',
     color: '#fff', fontSize: '14px', cursor: 'pointer',
@@ -95,7 +95,7 @@ export const styles = {
   },
   testBtn: (isTesting) => ({
     width: '100%', padding: '10px',
-    background: isTesting ? '#43b581' : '#5865f2',
+    background: isTesting ? '#23a559' : '#5865f2',
     border: 'none', borderRadius: '8px',
     color: '#fff', fontSize: '14px', fontWeight: 600,
     cursor: 'pointer', marginBottom: '12px',

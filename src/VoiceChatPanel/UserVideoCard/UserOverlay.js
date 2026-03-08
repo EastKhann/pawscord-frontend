@@ -32,21 +32,21 @@ const UserOverlay = ({ user, isActive, connectionQuality }) => {
                     <div style={{
                         width: '3px',
                         height: '12px',
-                        background: '#43b581',
+                        background: '#23a559',
                         borderRadius: '2px',
                         animation: 'wave1 0.6s ease-in-out infinite',
                     }} />
                     <div style={{
                         width: '3px',
                         height: '16px',
-                        background: '#43b581',
+                        background: '#23a559',
                         borderRadius: '2px',
                         animation: 'wave2 0.6s ease-in-out infinite 0.1s',
                     }} />
                     <div style={{
                         width: '3px',
                         height: '12px',
-                        background: '#43b581',
+                        background: '#23a559',
                         borderRadius: '2px',
                         animation: 'wave3 0.6s ease-in-out infinite 0.2s',
                     }} />

@@ -9,7 +9,7 @@ const AppearanceTab = ({ applyTheme, availableLanguages, currentTheme, language,
       <div style={styles.card}>
         <h3 style={styles.sectionTitle}>🎨 Temalar</h3>
 
-        <p style={{ color: '#b9bbbe', marginBottom: '16px' }}>
+        <p style={{ color: '#b5bac1', marginBottom: '16px' }}>
           Profil temanızı seçin ve görünümünüzü kişiselleştirin.
         </p>
 
@@ -54,7 +54,7 @@ const AppearanceTab = ({ applyTheme, availableLanguages, currentTheme, language,
       <div style={styles.card}>
         <h3 style={styles.sectionTitle}>🌍 Dil Tercihi</h3>
 
-        <p style={{ color: '#b9bbbe', marginBottom: '16px' }}>
+        <p style={{ color: '#b5bac1', marginBottom: '16px' }}>
           Uygulama dilini seçin. Mesajlar otomatik çevrilecektir.
         </p>
 
@@ -64,7 +64,7 @@ const AppearanceTab = ({ applyTheme, availableLanguages, currentTheme, language,
               key={lang.code}
               style={{
                 padding: '16px',
-                background: language === lang.code ? 'linear-gradient(135deg, #5865f2 0%, #7289da 100%)' : 'rgba(255, 255, 255, 0.05)',
+                background: language === lang.code ? 'linear-gradient(135deg, #5865f2 0%, #5865f2 100%)' : 'rgba(255, 255, 255, 0.05)',
                 borderRadius: '12px',
                 cursor: 'pointer',
                 textAlign: 'center',
@@ -80,7 +80,7 @@ const AppearanceTab = ({ applyTheme, availableLanguages, currentTheme, language,
         </div>
 
         {availableLanguages.length === 0 && (
-          <p style={{ color: '#b9bbbe' }}>Diller yükleniyor...</p>
+          <p style={{ color: '#b5bac1' }}>Diller yükleniyor...</p>
         )}
       </div>
     </>

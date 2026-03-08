@@ -93,7 +93,7 @@ export const MessageActions = memo(({
 
             {/* ─── OVERFLOW "MORE" MENU ─── */}
             <div ref={moreRef} style={{ position: 'relative' }}>
-                <button onClick={() => setShowMore(v => !v)} style={{ ...styles.actionButton, color: showMore ? '#5865f2' : '#b9bbbe' }} title="Daha fazla">
+                <button onClick={() => setShowMore(v => !v)} style={{ ...styles.actionButton, color: showMore ? '#5865f2' : '#b5bac1' }} title="Daha fazla">
                     <FaEllipsisH />
                 </button>
 
@@ -131,7 +131,7 @@ export const MessageActions = memo(({
                             </button>
                         )}
                         {!isMyMessage && (
-                            <button onClick={() => { handleReport(); closeMore(); }} style={{ ...styles.menuItem, color: '#ed4245' }}>
+                            <button onClick={() => { handleReport(); closeMore(); }} style={{ ...styles.menuItem, color: '#f23f42' }}>
                                 <FaExclamationTriangle style={styles.menuIcon} /><span>Rapor Et</span>
                             </button>
                         )}
@@ -147,7 +147,7 @@ const styles = {
         position: 'absolute',
         top: '4px',
         right: '12px',
-        backgroundColor: '#313338',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         padding: '2px 4px',
         display: 'flex',
@@ -159,7 +159,7 @@ const styles = {
     actionButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '14px',
         padding: '5px',
@@ -172,8 +172,8 @@ const styles = {
         bottom: '100%',
         right: 0,
         marginBottom: '6px',
-        backgroundColor: '#2b2d31',
-        border: '1px solid rgba(255,255,255,0.1)',
+        backgroundColor: '#17191c',
+        border: '1px solid rgba(255,255,255,0.08)',
         borderRadius: '8px',
         padding: '6px',
         minWidth: '160px',
@@ -191,7 +191,7 @@ const styles = {
         backgroundColor: 'transparent',
         border: 'none',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '13px',
         cursor: 'pointer',
         transition: 'background 0.15s',

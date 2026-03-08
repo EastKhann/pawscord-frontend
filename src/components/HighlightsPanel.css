@@ -14,12 +14,12 @@
 }
 
 .highlights-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    border-radius: 12px;
     width: 90%;
     max-width: 900px;
     max-height: 90vh;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
     display: flex;
     flex-direction: column;
     animation: slideUp .3s ease;
@@ -49,7 +49,7 @@
     height: 36px;
     border-radius: 50%;
     color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -90,7 +90,7 @@
 }
 
 .loading-state p {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 15px
 }
 
@@ -136,7 +136,7 @@
     right: 0;
     bottom: 0;
     background: rgba(255, 255, 255, .1);
-    border-radius: 34px;
+    border-radius: 12px;
     transition: all .3s ease;
     border: 1px solid rgba(255, 255, 255, .2)
 }
@@ -218,7 +218,7 @@ input:checked+.toggle-slider:before {
 .keyword-tag {
     background: rgba(251, 191, 36, .2);
     border: 1px solid rgba(251, 191, 36, .3);
-    border-radius: 20px;
+    border-radius: 12px;
     padding: 8px 16px;
     display: flex;
     align-items: center;
@@ -248,7 +248,7 @@ input:checked+.toggle-slider:before {
 }
 
 .keyword-tag button:hover {
-    transform: scale(1.2)
+    transform: scale(1.05)
 }
 
 .config-options {
@@ -261,7 +261,7 @@ input:checked+.toggle-slider:before {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 14px;
     font-weight: 600
 }
@@ -284,7 +284,7 @@ input:checked+.toggle-slider:before {
 }
 
 .checkbox-label span {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 14px
 }
 
@@ -315,7 +315,7 @@ input:checked+.toggle-slider:before {
     background: rgba(239, 68, 68, .2);
     border: 1px solid rgba(239, 68, 68, .3);
     border-radius: 8px;
-    color: #ef4444;
+    color: #f23f42;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -339,7 +339,7 @@ input:checked+.toggle-slider:before {
 }
 
 .empty-state p {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 18px;
     font-weight: 600
 }
@@ -406,18 +406,18 @@ input:checked+.toggle-slider:before {
 }
 
 .channel-name {
-    color: #6c6d7d;
+    color: #949ba4;
     font-size: 13px
 }
 
 .highlight-time {
-    color: #6c6d7d;
+    color: #949ba4;
     font-size: 13px
 }
 
 .highlight-content p {
     margin: 0;
-    color: #e2e3ee;
+    color: #dbdee1;
     line-height: 1.6;
     font-size: 14px
 }

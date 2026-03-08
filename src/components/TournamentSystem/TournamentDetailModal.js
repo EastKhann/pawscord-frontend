@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import styles from './styles';
 import useModalA11y from '../../hooks/useModalA11y';
@@ -40,8 +40,8 @@ const TournamentDetailModal = ({ tournament, onClose, fetchWithAuth, apiBaseUrl 
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {rounds[rk].map(match => (
-                                <div key={match.id} style={{ backgroundColor: '#1e1f22', borderRadius: '8px', overflow: 'hidden', border: match.status === 'completed' ? '1px solid #23a559' : '1px solid #3f4147' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: match.winner && match.winner === match.participant1?.user_id ? 'rgba(35,165,89,0.1)' : 'transparent', borderBottom: '1px solid #2b2d31' }}>
+                                <div key={match.id} style={{ backgroundColor: '#0d0e10', borderRadius: '8px', overflow: 'hidden', border: match.status === 'completed' ? '1px solid #23a559' : '1px solid #182135' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', backgroundColor: match.winner && match.winner === match.participant1?.user_id ? 'rgba(35,165,89,0.1)' : 'transparent', borderBottom: '1px solid #0e1222' }}>
                                         <span style={{ color: '#dbdee1', fontSize: '0.85em', fontWeight: match.winner === match.participant1?.user_id ? 700 : 400 }}>
                                             {match.participant1?.username || 'TBD'}
                                         </span>

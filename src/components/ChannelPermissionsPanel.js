@@ -1,4 +1,4 @@
-// frontend/src/components/ChannelPermissionsPanel.js
+﻿// frontend/src/components/ChannelPermissionsPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaLock, FaUnlock, FaSave, FaTrash, FaUserShield } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -114,9 +114,9 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
     };
 
     const getPermissionIcon = (value) => {
-        if (value === true) return { icon: '✅', color: '#43b581', text: 'İzin Ver' };
-        if (value === false) return { icon: '❌', color: '#ed4245', text: 'Reddet' };
-        return { icon: '➖', color: '#99aab5', text: 'Varsayılan' };
+        if (value === true) return { icon: '✅', color: '#23a559', text: 'İzin Ver' };
+        if (value === false) return { icon: '❌', color: '#f23f42', text: 'Reddet' };
+        return { icon: '➖', color: '#949ba4', text: 'Varsayılan' };
     };
 
     return (
@@ -125,7 +125,7 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                 {/* Header */}
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaLock style={{ color: '#faa61a' }} />
+                        <FaLock style={{ color: '#f0b232' }} />
                         <h2 style={{ margin: 0 }}>Kanal İzinleri</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -194,15 +194,15 @@ const ChannelPermissionsPanel = ({ fetchWithAuth, apiBaseUrl, channelSlug, onClo
                 <div style={styles.footer}>
                     <div style={styles.legend}>
                         <div style={styles.legendItem}>
-                            <span style={{ color: '#43b581', fontSize: '18px' }}>✅</span>
+                            <span style={{ color: '#23a559', fontSize: '18px' }}>✅</span>
                             <span>İzin Ver</span>
                         </div>
                         <div style={styles.legendItem}>
-                            <span style={{ color: '#ed4245', fontSize: '18px' }}>❌</span>
+                            <span style={{ color: '#f23f42', fontSize: '18px' }}>❌</span>
                             <span>Reddet</span>
                         </div>
                         <div style={styles.legendItem}>
-                            <span style={{ color: '#99aab5', fontSize: '18px' }}>➖</span>
+                            <span style={{ color: '#949ba4', fontSize: '18px' }}>➖</span>
                             <span>Varsayılan</span>
                         </div>
                     </div>
@@ -272,7 +272,7 @@ const styles = {
         padding: '12px',
         fontWeight: '600',
         textAlign: 'center',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px'
     },
     roleTag: {
@@ -290,7 +290,7 @@ const styles = {
     },
     permissionName: {
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         display: 'flex',
         alignItems: 'center',
@@ -298,7 +298,7 @@ const styles = {
     },
     permissionCell: {
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         display: 'flex',
         alignItems: 'center',

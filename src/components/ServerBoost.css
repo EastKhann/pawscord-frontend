@@ -14,31 +14,31 @@
 }
 
 .boost-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 1100px;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
     overflow: hidden;
 }
 
 .boost-header {
     padding: 24px;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(88, 101, 242, 0.2);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(139, 92, 246, 0.05);
+    background: rgba(88, 101, 242, 0.05);
 }
 
 .boost-header h2 {
     margin: 0;
-    font-size: 24px;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    font-size: 20px;
+    background: linear-gradient(135deg, #5865f2, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -47,7 +47,7 @@
 .close-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #ef4444;
+    color: #f23f42;
     width: 36px;
     height: 36px;
     border-radius: 8px;
@@ -58,7 +58,7 @@
 
 .close-btn:hover {
     background: rgba(239, 68, 68, 0.2);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .boost-content {
@@ -69,8 +69,8 @@
 
 /* Status Card */
 .boost-status-card {
-    background: rgba(139, 92, 246, 0.1);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.1);
+    border: 2px solid rgba(88, 101, 242, 0.3);
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
@@ -111,11 +111,11 @@
 }
 
 .tier-number.tier-2 {
-    color: #8b5cf6;
+    color: #5865f2;
 }
 
 .tier-number.tier-3 {
-    background: linear-gradient(135deg, #8b5cf6, #ec4899, #f59e0b);
+    background: linear-gradient(135deg, #5865f2, #ec4899, #f59e0b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -128,7 +128,7 @@
     background: rgba(255, 255, 255, 0.05);
     padding: 12px 20px;
     border-radius: 12px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
 }
 
 .boost-icon {
@@ -136,7 +136,7 @@
 }
 
 .boost-number {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #ffffff;
 }
@@ -159,27 +159,27 @@
     background: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     overflow: hidden;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #8b5cf6, #ec4899);
+    background: linear-gradient(90deg, #5865f2, #ec4899);
     border-radius: 6px;
     transition: width 0.5s ease;
-    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
 }
 
 .max-tier-badge {
     margin-top: 16px;
     text-align: center;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    background: linear-gradient(135deg, #5865f2, #ec4899);
     color: white;
     padding: 12px;
     border-radius: 8px;
     font-weight: 600;
     font-size: 16px;
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 16px rgba(88, 101, 242, 0.4);
 }
 
 /* Boost Action */
@@ -189,7 +189,7 @@
 }
 
 .boost-server-btn {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    background: linear-gradient(135deg, #5865f2, #7c3aed);
     border: none;
     color: white;
     padding: 16px 48px;
@@ -198,12 +198,12 @@
     font-size: 18px;
     font-weight: 700;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
 }
 
 .boost-server-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 12px 32px rgba(88, 101, 242, 0.5);
 }
 
 .boost-hint {
@@ -222,20 +222,20 @@
 
 .tier-card {
     background: rgba(255, 255, 255, 0.03);
-    border: 2px solid rgba(139, 92, 246, 0.2);
+    border: 2px solid rgba(88, 101, 242, 0.2);
     border-radius: 12px;
     padding: 20px;
     transition: all 0.3s ease;
 }
 
 .tier-card.unlocked {
-    border-color: rgba(139, 92, 246, 0.5);
-    background: rgba(139, 92, 246, 0.05);
+    border-color: rgba(88, 101, 242, 0.5);
+    background: rgba(88, 101, 242, 0.05);
 }
 
 .tier-card.unlocked:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
 }
 
 .tier-card.locked {
@@ -248,7 +248,7 @@
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(88, 101, 242, 0.2);
 }
 
 .tier-badge {
@@ -265,13 +265,13 @@
 }
 
 .tier-badge.tier-2 {
-    background: rgba(139, 92, 246, 0.2);
-    color: #8b5cf6;
-    border: 1px solid rgba(139, 92, 246, 0.4);
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
+    border: 1px solid rgba(88, 101, 242, 0.4);
 }
 
 .tier-badge.tier-3 {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(236, 72, 153, 0.2));
     color: #f59e0b;
     border: 1px solid rgba(245, 158, 11, 0.4);
 }
@@ -290,7 +290,7 @@
 
 .perk-item {
     font-size: 13px;
-    color: #e2e3ee;
+    color: #dbdee1;
     line-height: 1.5;
     display: flex;
     align-items: flex-start;
@@ -302,7 +302,7 @@
     background: rgba(255, 255, 255, 0.03);
     border-radius: 12px;
     padding: 20px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(88, 101, 242, 0.2);
 }
 
 .boost-history-section h3 {
@@ -335,7 +335,7 @@
 
 .history-item {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(88, 101, 242, 0.2);
     border-radius: 10px;
     padding: 12px;
     display: flex;
@@ -346,7 +346,7 @@
 
 .history-item:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(139, 92, 246, 0.4);
+    border-color: rgba(88, 101, 242, 0.4);
 }
 
 .history-avatar {
@@ -354,7 +354,7 @@
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 2px solid rgba(88, 101, 242, 0.3);
     flex-shrink: 0;
 }
 
@@ -377,7 +377,7 @@
 .remove-boost-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #ef4444;
+    color: #f23f42;
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -407,12 +407,12 @@
 }
 
 .boost-confirm-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     padding: 32px;
     width: 90%;
     max-width: 450px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
     text-align: center;
 }
@@ -424,8 +424,8 @@
 
 .boost-confirm-modal h3 {
     margin: 0 0 16px 0;
-    font-size: 24px;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    font-size: 20px;
+    background: linear-gradient(135deg, #5865f2, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -439,8 +439,8 @@
 }
 
 .next-tier-preview {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 10px;
     padding: 16px;
     margin-bottom: 24px;
@@ -450,7 +450,7 @@
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: #8b5cf6;
+    color: #5865f2;
 }
 
 .modal-actions {
@@ -482,19 +482,19 @@
 }
 
 .confirm-boost-btn {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    background: linear-gradient(135deg, #5865f2, #7c3aed);
     color: white;
 }
 
 .confirm-boost-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.4);
 }
 
 .loading-spinner {
     text-align: center;
     padding: 60px;
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 16px;
 }
 
@@ -557,7 +557,7 @@
     }
 
     .tier-number {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .boost-number {
@@ -600,7 +600,7 @@
 
 @media (max-width: 480px) {
     .boost-icon {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .boost-count {

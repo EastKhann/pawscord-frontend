@@ -1,4 +1,4 @@
-// frontend/src/components/UserContextMenu.js
+﻿// frontend/src/components/UserContextMenu.js
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import ReactDOM from 'react-dom'; // 🔥 Portal için
 import { FaUser, FaComments, FaVolumeUp, FaArrowRight, FaBan, FaUserShield, FaVolumeMute, FaEyeSlash, FaTrash, FaThumbtack } from 'react-icons/fa';
@@ -130,9 +130,8 @@ const UserContextMenu = ({
     const adjustedX = Math.min(x, window.innerWidth - 220);
     const adjustedY = Math.min(y, window.innerHeight - 300);
 
-    // 🔥 Portal root element
-    const portalRoot = document.getElementById('portal-root');
-    if (!portalRoot) return null;
+    // 🔥 Portal root element — fall back to document.body if portal-root div doesn't exist
+    const portalRoot = document.getElementById('portal-root') || document.body;
 
     // 🔥 PORTAL İLE RENDER - DOM'un en üstünde olacak!
     return ReactDOM.createPortal(
@@ -369,14 +368,14 @@ const UserContextMenu = ({
 
 const styles = {
     menu: {
-        background: '#2b2d31',
+        background: '#111214',
         borderRadius: '4px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
         minWidth: '200px',
         padding: '6px 0',
         color: '#dbdee1',
         fontSize: '14px',
-        border: '1px solid #1e1f22',
+        border: '1px solid #0b0e1b',
         // position ve zIndex inline style'da tanımlı
     },
     menuItem: {
@@ -395,18 +394,18 @@ const styles = {
         alignItems: 'center',
         gap: '10px',
         transition: 'background 0.1s',
-        color: '#ed4245',
+        color: '#f23f42',
         position: 'relative',
     },
     separator: {
         height: '1px',
-        background: '#1e1f22',
+        background: '#0d0e10',
         margin: '6px 0',
     },
     sectionTitle: {
         fontSize: '11px',
         textTransform: 'uppercase',
-        color: '#72767d',
+        color: '#949ba4',
         padding: '6px 12px 4px',
         fontWeight: '600',
     },
@@ -414,12 +413,12 @@ const styles = {
         position: 'absolute',
         left: '100%',
         top: 0,
-        background: '#2b2d31',
+        background: '#111214',
         borderRadius: '4px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
         minWidth: '180px',
         padding: '6px 0',
-        border: '1px solid #1e1f22',
+        border: '1px solid #0b0e1b',
         marginLeft: '4px',
     },
     submenuItem: {

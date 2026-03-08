@@ -18,7 +18,7 @@ const GDPRTab = ({ exportRequested, gdprExports, requestGDPRExport }) => {
         <h4 style={{ color: '#fff', margin: '0 0 8px 0', fontSize: '14px' }}>
           ℹ️ Veri Dışa Aktarma Hakkı
         </h4>
-        <p style={{ color: '#b9bbbe', margin: 0, fontSize: '13px' }}>
+        <p style={{ color: '#b5bac1', margin: 0, fontSize: '13px' }}>
           GDPR (Genel Veri Koruma Yönetmeliği) kapsamında tüm kişisel verilerinizi dışa aktarabilirsiniz.
           Bu işlem, mesajlar, profil bilgileri, aktiviteler ve daha fazlasını içerir.
         </p>
@@ -52,7 +52,7 @@ const GDPRTab = ({ exportRequested, gdprExports, requestGDPRExport }) => {
                     {exp.status === 'completed' && '✅ Tamamlandı'}
                     {exp.status === 'failed' && '❌ Başarısız'}
                   </p>
-                  <p style={{ color: '#b9bbbe', margin: '4px 0 0 0', fontSize: '12px' }}>
+                  <p style={{ color: '#b5bac1', margin: '4px 0 0 0', fontSize: '12px' }}>
                     {new Date(exp.created_at).toLocaleString('tr-TR')}
                   </p>
                 </div>

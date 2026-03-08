@@ -1,4 +1,4 @@
-// frontend/src/components/ErrorBoundary/EnhancedErrorBoundary.js
+﻿// frontend/src/components/ErrorBoundary/EnhancedErrorBoundary.js
 // 🛡️ ENHANCED ERROR BOUNDARY with Recovery & Reporting
 
 import { Component, createContext, useContext } from 'react';
@@ -171,7 +171,7 @@ class EnhancedErrorBoundary extends Component {
                 <div style={styles[level]?.container || styles.page.container}>
                     <div style={styles.content}>
                         <div style={styles.iconWrapper}>
-                            <FaExclamationTriangle size={level === 'component' ? 24 : 48} color="#f04747" />
+                            <FaExclamationTriangle size={level === 'component' ? 24 : 48} color="#f23f42" />
                         </div>
 
                         <h2 style={styles.title}>
@@ -275,7 +275,7 @@ const styles = {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            backgroundColor: '#36393f',
+            backgroundColor: '#17191c',
             padding: '20px',
         },
     },
@@ -285,7 +285,7 @@ const styles = {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '40px 20px',
-            backgroundColor: '#2f3136',
+            backgroundColor: '#111214',
             borderRadius: '8px',
             margin: '20px 0',
         },
@@ -304,7 +304,7 @@ const styles = {
     content: {
         textAlign: 'center',
         maxWidth: '500px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     iconWrapper: {
         marginBottom: '20px',
@@ -318,13 +318,13 @@ const styles = {
     message: {
         margin: '0 0 20px 0',
         fontSize: '14px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         lineHeight: '1.5',
     },
     recoveryInfo: {
         margin: '0 0 16px 0',
         fontSize: '12px',
-        color: '#72767d',
+        color: '#949ba4',
     },
     actions: {
         display: 'flex',
@@ -352,7 +352,7 @@ const styles = {
         alignItems: 'center',
         gap: '8px',
         padding: '10px 20px',
-        backgroundColor: '#4f545c',
+        backgroundColor: '#4e5058',
         color: '#fff',
         border: 'none',
         borderRadius: '4px',
@@ -366,8 +366,8 @@ const styles = {
         gap: '8px',
         padding: '10px 20px',
         backgroundColor: 'transparent',
-        color: '#b9bbbe',
-        border: '1px solid #4f545c',
+        color: '#b5bac1',
+        border: '1px solid #4e5058',
         borderRadius: '4px',
         fontSize: '14px',
         cursor: 'pointer',
@@ -376,7 +376,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         padding: '10px 16px',
-        color: '#43b581',
+        color: '#23a559',
         fontSize: '14px',
     },
     devInfo: {
@@ -389,8 +389,8 @@ const styles = {
         gap: '8px',
         padding: '8px 12px',
         backgroundColor: 'transparent',
-        color: '#72767d',
-        border: '1px solid #40444b',
+        color: '#949ba4',
+        border: '1px solid #182135',
         borderRadius: '4px',
         fontSize: '12px',
         cursor: 'pointer',
@@ -399,7 +399,7 @@ const styles = {
     },
     details: {
         marginTop: '12px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '4px',
         padding: '12px',
         maxHeight: '300px',
@@ -414,7 +414,7 @@ const styles = {
         backgroundColor: '#18191c',
         borderRadius: '4px',
         fontSize: '11px',
-        color: '#ed4245',
+        color: '#f23f42',
         overflow: 'auto',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-all',

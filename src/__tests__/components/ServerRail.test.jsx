@@ -1,4 +1,4 @@
-// frontend/src/__tests__/components/ServerRail.test.jsx
+﻿// frontend/src/__tests__/components/ServerRail.test.jsx
 // 🧪 ServerRail Component Tests
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -32,13 +32,13 @@ const MockServerRail = ({
                 onMouseLeave={() => setHoveredServerId(null)}
                 style={{
                     borderRadius: selectedServerId === 'home' || hoveredServerId === 'home' ? '16px' : '50%',
-                    backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#313338',
+                    backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#17191c',
                 }}
             >
                 <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" data-testid="home-logo" />
             </div>
 
-            <div data-testid="separator" style={{ height: '2px', background: '#36393f', margin: '8px 12px' }} />
+            <div data-testid="separator" style={{ height: '2px', background: '#17191c', margin: '8px 12px' }} />
 
             {/* Server List */}
             <div role="list" aria-label="Sunucular" data-testid="server-list">
@@ -75,7 +75,7 @@ const MockServerRail = ({
                                 onMouseEnter={() => setHoveredServerId(server.id)}
                                 onMouseLeave={() => setHoveredServerId(null)}
                                 style={{
-                                    backgroundColor: isActive ? '#5865f2' : '#313338',
+                                    backgroundColor: isActive ? '#5865f2' : '#17191c',
                                     borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
                                 }}
                             >

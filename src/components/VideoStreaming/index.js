@@ -74,7 +74,7 @@ const VideoPlaceholder = memo(({ onClick, thumbnail, duration }) => (
         )}
         <span style={{
             marginTop: '12px',
-            color: '#b9bbbe',
+            color: '#b5bac1',
             fontSize: '14px',
             zIndex: 1
         }}>
@@ -104,7 +104,7 @@ const VideoLoadingSpinner = memo(() => (
             borderRadius: '50%',
             animation: 'spin 1s linear infinite'
         }} />
-        <span style={{ color: '#b9bbbe', marginTop: '12px', fontSize: '14px' }}>
+        <span style={{ color: '#b5bac1', marginTop: '12px', fontSize: '14px' }}>
             Video yükleniyor...
         </span>
         <style>{`

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaUsers, FaLink, FaCheckCircle } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -166,7 +166,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -180,19 +180,19 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     referralSection: {
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
-        backgroundColor: '#2c2f33',
+        borderBottom: '1px solid #0e1222',
+        backgroundColor: '#111214',
     },
     referralLabel: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
     },
     referralCode: {
@@ -212,7 +212,7 @@ const styles = {
     },
     referralHint: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         fontStyle: 'italic',
     },
     content: {
@@ -222,12 +222,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     entriesList: {
@@ -236,7 +236,7 @@ const styles = {
         gap: '12px',
     },
     entryCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -263,11 +263,11 @@ const styles = {
     },
     entryMeta: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '8px',
     },
     referralsCount: {
-        color: '#43b581',
+        color: '#23a559',
         fontWeight: '600',
     },
     approvedBadge: {
@@ -275,7 +275,7 @@ const styles = {
         alignItems: 'center',
         gap: '6px',
         padding: '4px 10px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         borderRadius: '4px',
         fontSize: '12px',
         color: '#ffffff',
@@ -286,7 +286,7 @@ const styles = {
         alignItems: 'center',
         gap: '6px',
         padding: '4px 10px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         borderRadius: '4px',
         fontSize: '12px',
         color: '#ffffff',
@@ -298,7 +298,7 @@ const styles = {
     },
     approveButton: {
         padding: '8px 16px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -308,7 +308,7 @@ const styles = {
     },
     rejectButton: {
         padding: '8px 16px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',

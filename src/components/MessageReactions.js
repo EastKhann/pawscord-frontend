@@ -1,4 +1,4 @@
-// frontend/src/components/MessageReactions.js
+﻿// frontend/src/components/MessageReactions.js
 import React, { useState, useCallback, useMemo } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
@@ -145,7 +145,7 @@ const styles = {
         cursor: 'pointer',
         transition: 'all 0.2s',
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     reactionButtonActive: {
         backgroundColor: 'rgba(88, 101, 242, 0.25)',
@@ -159,7 +159,7 @@ const styles = {
     count: {
         fontSize: '11px',
         fontWeight: '600',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     addButton: {
         display: 'flex',
@@ -172,7 +172,7 @@ const styles = {
         borderRadius: '50%',
         cursor: 'pointer',
         transition: 'all 0.2s',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     quickPicker: {
         position: 'absolute',
@@ -182,7 +182,7 @@ const styles = {
         display: 'flex',
         gap: '4px',
         padding: '8px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         borderRadius: '8px',
         boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',

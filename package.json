@@ -63,6 +63,7 @@
     "devDependencies": {
         "@axe-core/react": "^4.10.1",
         "@fullhuman/postcss-purgecss": "^7.0.2",
+        "@playwright/test": "^1.58.2",
         "@testing-library/jest-dom": "^6.9.1",
         "@testing-library/react": "^16.3.2",
         "@testing-library/user-event": "^14.6.1",
@@ -86,7 +87,8 @@
         "vite": "^7.3.1",
         "vite-plugin-pwa": "^1.2.0",
         "vitest": "^4.0.18",
-        "wait-on": "^7.2.0"
+        "wait-on": "^7.2.0",
+        "wrangler": "^4.0.0"
     },
     "scripts": {
         "start": "vite",
@@ -94,6 +96,8 @@
         "build": "vite build",
         "build:android": "vite build --config vite.config.android.js",
         "build:prod": "cross-env VITE_ENV=production vite build && node scripts/verify-build.js",
+        "build:pages": "cross-env VITE_ENV=production VITE_BASE_PATH=/ VITE_OUT_DIR=dist vite build --mode production",
+        "deploy:pages": "npm run build:pages && wrangler pages deploy dist --project-name=pawscord --commit-dirty=true",
         "verify": "node scripts/verify-build.js",
         "preview": "vite preview",
         "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -116,7 +120,10 @@
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
         "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
         "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
-        "lint:fix": "eslint src/ --ext .js,.jsx,.ts,.tsx --fix"
+        "lint:fix": "eslint src/ --ext .js,.jsx,.ts,.tsx --fix",
+        "test:e2e": "playwright test",
+        "test:e2e:ui": "playwright test --ui",
+        "test:e2e:report": "playwright show-report"
     },
     "build": {
         "appId": "com.dogukan.pawscord",

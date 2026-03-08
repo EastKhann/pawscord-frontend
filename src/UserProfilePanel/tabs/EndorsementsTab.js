@@ -12,7 +12,7 @@ const EndorsementsTab = ({ endorsements }) => {
         <div style={{ padding: '48px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px' }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>⭐</div>
           <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Henüz onay yok</h4>
-          <p style={{ color: '#b9bbbe', margin: 0 }}>Diğer kullanıcılar sizi onayladığında burada görünecek</p>
+          <p style={{ color: '#b5bac1', margin: 0 }}>Diğer kullanıcılar sizi onayladığında burada görünecek</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -34,13 +34,13 @@ const EndorsementsTab = ({ endorsements }) => {
                 />
                 <div style={{ flex: 1 }}>
                   <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>{endorsement.endorser_name}</h4>
-                  <span style={{ color: '#b9bbbe', fontSize: '12px' }}>
+                  <span style={{ color: '#b5bac1', fontSize: '12px' }}>
                     {new Date(endorsement.created_at).toLocaleString('tr-TR')}
                   </span>
                 </div>
               </div>
               {endorsement.message && (
-                <p style={{ color: '#dcddde', margin: 0, fontSize: '14px', fontStyle: 'italic' }}>
+                <p style={{ color: '#dbdee1', margin: 0, fontSize: '14px', fontStyle: 'italic' }}>
                   "{endorsement.message}"
                 </p>
               )}

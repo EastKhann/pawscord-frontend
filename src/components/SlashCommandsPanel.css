@@ -1,8 +1,8 @@
-.slash-commands-panel {
-    background: #2f3136;
+﻿.slash-commands-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     max-width: 1000px;
     margin: 0 auto;
 }
@@ -10,12 +10,12 @@
 .commands-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .commands-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -23,7 +23,7 @@
 }
 
 .command-executor {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -37,16 +37,16 @@
 }
 
 .terminal-icon {
-    color: #43b581;
-    font-size: 24px;
+    color: #23a559;
+    font-size: 20px;
     flex-shrink: 0;
 }
 
 .command-input {
     flex: 1;
-    background: #2f3136;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #0e1222;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 15px;
     border-radius: 4px;
     font-size: 16px;
@@ -56,11 +56,11 @@
 
 .command-input:focus {
     outline: none;
-    border-color: #43b581;
+    border-color: #23a559;
 }
 
 .execute-btn {
-    background: #43b581;
+    background: #23a559;
     color: #ffffff;
     border: none;
     padding: 15px 24px;
@@ -90,12 +90,12 @@
 
 .command-result.success {
     background: rgba(67, 181, 129, 0.1);
-    border-left-color: #43b581;
+    border-left-color: #23a559;
 }
 
 .command-result.error {
     background: rgba(240, 71, 71, 0.1);
-    border-left-color: #f04747;
+    border-left-color: #f23f42;
 }
 
 .result-header {
@@ -105,14 +105,14 @@
 }
 
 .result-output {
-    color: #dcddde;
+    color: #dbdee1;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     line-height: 1.6;
 }
 
 .command-params {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -130,22 +130,22 @@
 
 .param-input label {
     display: block;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 6px;
 }
 
 .required {
-    color: #f04747;
+    color: #f23f42;
     font-weight: 700;
 }
 
 .param-field {
     width: 100%;
-    background: #2f3136;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #0e1222;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 10px;
     border-radius: 4px;
     font-size: 14px;
@@ -157,7 +157,7 @@
 }
 
 .commands-list {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -174,7 +174,7 @@
 
 .loading {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 40px;
 }
 
@@ -185,7 +185,7 @@
 }
 
 .command-card {
-    background: #2f3136;
+    background: #0e1222;
     padding: 15px;
     border-radius: 8px;
     border-left: 4px solid;
@@ -194,13 +194,13 @@
 }
 
 .command-card:hover {
-    background: #36393f;
+    background: #121928;
     transform: translateX(5px);
 }
 
 .command-card.selected {
-    background: #36393f;
-    box-shadow: 0 0 0 2px #43b581;
+    background: #121928;
+    box-shadow: 0 0 0 2px #23a559;
 }
 
 .command-header {
@@ -212,7 +212,7 @@
 }
 
 .command-name {
-    color: #43b581;
+    color: #23a559;
     font-size: 16px;
     font-weight: 700;
     font-family: 'Courier New', monospace;
@@ -227,26 +227,26 @@
 }
 
 .command-description {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 8px;
 }
 
 .command-usage {
-    background: #40444b;
+    background: #182135;
     padding: 8px;
     border-radius: 4px;
 }
 
 .command-usage code {
-    color: #dcddde;
+    color: #dbdee1;
     font-family: 'Courier New', monospace;
     font-size: 13px;
 }
 
 .command-history {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
 }
@@ -262,13 +262,13 @@
 
 .empty-history {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 40px 20px;
 }
 
 .empty-icon {
     font-size: 64px;
-    color: #40444b;
+    color: #1e2024;
     margin-bottom: 15px;
 }
 
@@ -289,12 +289,12 @@
 
 .history-item.success {
     background: rgba(67, 181, 129, 0.1);
-    border-left-color: #43b581;
+    border-left-color: #23a559;
 }
 
 .history-item.error {
     background: rgba(240, 71, 71, 0.1);
-    border-left-color: #f04747;
+    border-left-color: #f23f42;
 }
 
 .history-command {
@@ -307,6 +307,6 @@
 }
 
 .history-time {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
 }

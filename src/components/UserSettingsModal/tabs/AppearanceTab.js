@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaCheck } from 'react-icons/fa';
 import SettingSection from '../components/SettingSection';
 import ToggleSwitch from '../components/ToggleSwitch';
@@ -17,7 +17,7 @@ const AppearanceTab = () => {
                         <button key={t} type="button" onClick={() => setTheme(t)} style={{
                             ...S.themeBtn,
                             borderColor: theme === t ? '#5865f2' : 'rgba(255,255,255,0.1)',
-                            backgroundColor: t === 'dark' ? '#36393f' : t === 'light' ? '#fff' : '#000',
+                            backgroundColor: t === 'dark' ? '#17191c' : t === 'light' ? '#fff' : '#000',
                         }}>
                             <span style={{ color: t === 'light' ? '#000' : '#fff', fontSize: 12, fontWeight: 600 }}>
                                 {t === 'dark' ? 'Koyu' : t === 'light' ? 'Açık' : 'AMOLED'}

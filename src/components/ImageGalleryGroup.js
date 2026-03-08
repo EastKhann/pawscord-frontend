@@ -95,7 +95,7 @@ const ImageGalleryGroup = React.memo(({ messages, currentUser, absoluteHostUrl, 
                     }} onClick={() => onViewProfile(firstMsg.username)}>
                         {firstMsg.username}
                     </strong>
-                    <span style={{ color: '#72767d', fontSize: '0.75em' }}>{timeStr}</span>
+                    <span style={{ color: '#949ba4', fontSize: '0.75em' }}>{timeStr}</span>
                     {totalCount > 1 && (
                         <span style={{ color: '#5865f2', fontSize: '0.72em', fontWeight: 600 }}>
                             📷 {totalCount} fotoğraf

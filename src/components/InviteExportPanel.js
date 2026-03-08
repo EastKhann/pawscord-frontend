@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaDownload, FaFilter } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -160,11 +160,11 @@ const InviteExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => 
                                         </div>
                                         <div style={styles.inviteStatus}>
                                             {invite.revoked ? (
-                                                <span style={{ ...styles.statusBadge, backgroundColor: '#f04747' }}>Revoked</span>
+                                                <span style={{ ...styles.statusBadge, backgroundColor: '#f23f42' }}>Revoked</span>
                                             ) : invite.is_expired ? (
-                                                <span style={{ ...styles.statusBadge, backgroundColor: '#99aab5' }}>Expired</span>
+                                                <span style={{ ...styles.statusBadge, backgroundColor: '#949ba4' }}>Expired</span>
                                             ) : (
-                                                <span style={{ ...styles.statusBadge, backgroundColor: '#43b581' }}>Active</span>
+                                                <span style={{ ...styles.statusBadge, backgroundColor: '#23a559' }}>Active</span>
                                             )}
                                         </div>
                                     </div>
@@ -206,7 +206,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -220,14 +220,14 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     toolbar: {
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -244,7 +244,7 @@ const styles = {
     },
     checkboxLabel: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     exportButtons: {
         display: 'flex',
@@ -252,7 +252,7 @@ const styles = {
     },
     exportButton: {
         padding: '8px 16px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -268,12 +268,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     summary: {
@@ -283,7 +283,7 @@ const styles = {
         marginBottom: '24px',
     },
     summaryItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         textAlign: 'center',
@@ -296,7 +296,7 @@ const styles = {
     },
     summaryLabel: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     invitesList: {
         display: 'flex',
@@ -304,7 +304,7 @@ const styles = {
         gap: '10px',
     },
     inviteCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -325,10 +325,10 @@ const styles = {
     },
     inviteDetail: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     inviteValue: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontWeight: '500',
     },
     inviteStatus: {

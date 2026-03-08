@@ -1,4 +1,4 @@
-// frontend/src/components/FileManagerPanel.js
+﻿// frontend/src/components/FileManagerPanel.js
 import React, { useState, useEffect } from 'react';
 import { FaFolder, FaFile, FaImage, FaVideo, FaFileArchive, FaDownload, FaSearch } from 'react-icons/fa';
 
@@ -152,7 +152,7 @@ const FileCard = ({ file, formatSize }) => {
 const styles = {
     container: {
         padding: '20px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px'
     },
     header: {
@@ -161,7 +161,7 @@ const styles = {
         alignItems: 'center',
         marginBottom: '20px',
         paddingBottom: '15px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     title: {
         color: '#fff',
@@ -172,7 +172,7 @@ const styles = {
         gap: '10px'
     },
     stats: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '13px'
     },
     search: {
@@ -184,13 +184,13 @@ const styles = {
         left: '12px',
         top: '50%',
         transform: 'translateY(-50%)',
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '14px'
     },
     searchInput: {
         width: '100%',
         padding: '10px 10px 10px 36px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         border: '1px solid #4e5058',
         borderRadius: '6px',
         color: '#fff',
@@ -204,10 +204,10 @@ const styles = {
     },
     categoryButton: {
         padding: '8px 16px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         border: '1px solid #4e5058',
         borderRadius: '6px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
@@ -235,12 +235,12 @@ const styles = {
     loading: {
         textAlign: 'center',
         padding: '40px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     emptyIcon: {
         fontSize: '64px',
@@ -252,7 +252,7 @@ const styles = {
         alignItems: 'center',
         gap: '12px',
         padding: '12px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '6px',
         border: '1px solid transparent',
         transition: 'border-color 0.2s'
@@ -273,7 +273,7 @@ const styles = {
         textOverflow: 'ellipsis'
     },
     fileMeta: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px',
         marginTop: '4px'
     },

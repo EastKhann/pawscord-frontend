@@ -1,4 +1,4 @@
-const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -13,7 +13,7 @@ const styles = {
         backdropFilter: 'blur(5px)'
     },
     panel: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         width: '90%',
         maxWidth: '1000px',
@@ -28,7 +28,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     headerLeft: {
         display: 'flex',
@@ -48,7 +48,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '24px',
         padding: '8px',
@@ -59,10 +59,10 @@ const styles = {
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '16px',
         padding: '20px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     statCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
         textAlign: 'center'
@@ -79,11 +79,11 @@ const styles = {
     },
     statLabel: {
         fontSize: '14px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     section: {
         padding: '20px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         overflowY: 'auto'
     },
     sectionHeader: {
@@ -116,12 +116,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px',
         fontSize: '14px'
     },
@@ -131,7 +131,7 @@ const styles = {
         gap: '12px'
     },
     ruleCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px'
     },
@@ -167,14 +167,14 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: '#72767d',
+        backgroundColor: '#949ba4',
         transition: '0.3s',
         borderRadius: '24px'
     },
     deleteBtn: {
         background: 'none',
         border: 'none',
-        color: '#ed4245',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '18px',
         padding: '4px'
@@ -190,7 +190,7 @@ const styles = {
         fontSize: '14px'
     },
     ruleLabel: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontWeight: '500'
     },
     ruleValue: {
@@ -205,7 +205,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '6px',
         padding: '12px'
     },
@@ -221,7 +221,7 @@ const styles = {
         marginBottom: '4px'
     },
     logMeta: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px'
     },
     logAction: {
@@ -240,7 +240,7 @@ const styles = {
         zIndex: 10001
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         padding: '24px',
         width: '90%',
@@ -256,15 +256,15 @@ const styles = {
     },
     label: {
         display: 'block',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         marginBottom: '8px',
         fontWeight: '500'
     },
     select: {
         width: '100%',
-        backgroundColor: '#1e1f22',
-        border: '1px solid #1e1f22',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #0b0e1b',
         borderRadius: '6px',
         padding: '10px',
         color: '#fff',
@@ -272,8 +272,8 @@ const styles = {
     },
     input: {
         width: '100%',
-        backgroundColor: '#1e1f22',
-        border: '1px solid #1e1f22',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #0b0e1b',
         borderRadius: '6px',
         padding: '10px',
         color: '#fff',

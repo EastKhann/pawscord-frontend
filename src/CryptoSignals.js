@@ -1,4 +1,4 @@
-// frontend/src/CryptoSignals.js
+﻿// frontend/src/CryptoSignals.js
 import { useCallback, memo } from 'react';
 import { FaArrowLeft, FaSync, FaBitcoin, FaClock, FaChartLine, FaTrophy, FaFilter, FaTimes, FaExternalLinkAlt, FaSortAmountDown, FaSortAmountUp, FaWallet } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -32,7 +32,7 @@ const CryptoSignals = () => {
     const SortHeader = ({ field, children, style: extra }) => (
         <th onClick={() => handleSort(field)} style={{
             ...S.th, cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap',
-            color: sortBy === field ? '#f0b232' : '#b9bbbe', ...extra
+            color: sortBy === field ? '#f0b232' : '#b5bac1', ...extra
         }}>
             {children} {sortBy === field && (sortDir === 'asc' ? <FaSortAmountUp style={{ fontSize: '0.7em' }} /> : <FaSortAmountDown style={{ fontSize: '0.7em' }} />)}
         </th>
@@ -90,7 +90,7 @@ const CryptoSignals = () => {
                 { key: 'winrate_mode', icon: <FaTrophy />, label: isMobile ? 'Winrate' : '🏆 Winrate Sıralama', color: '#23a559' }
                 ].map(m => (
                     <button key={m.key} onClick={() => setActiveMode(m.key)}
-                        style={{ ...S.modeBtn, ...(activeMode === m.key ? S.modeBtnActive : {}), borderColor: activeMode === m.key ? m.color : '#40444b' }}>
+                        style={{ ...S.modeBtn, ...(activeMode === m.key ? S.modeBtnActive : {}), borderColor: activeMode === m.key ? m.color : '#1e2024' }}>
                         {m.icon} {m.label}
                     </button>
                 ))}
@@ -174,14 +174,15 @@ const CryptoSignals = () => {
                     {Object.entries(coinGroups).map(([coin, rows]) => {
                         const goodRows = isPositionsTab ? rows.filter(r => r.ters_sinyal !== true) : rows.filter(r => parsePnl(r.pnl_percent) > 0);
                         const badRows = isPositionsTab ? rows.filter(r => r.ters_sinyal === true) : rows.filter(r => parsePnl(r.pnl_percent) < 0);
-                        const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
-                        const bestWr = Math.max(...rows.map(r => parseFloat(String(r.win_rate || '0').replace('%', ''))));
+                        const avgPnl = rows.length ? rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length : 0;
+                        // Use reduce instead of Math.max(...spread) to avoid call stack issues with large arrays
+                        const bestWr = rows.reduce((m, r) => Math.max(m, parseFloat(String(r.win_rate || '0').replace('%', '')) || 0), 0);
                         const firstRow = rows[0] || {};
                         return (
                             <div key={coin} style={S.coinCard}
                                 onClick={() => setSelectedCoin({ name: coin, data: rows })}
-                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = '#f0b232'; }}
-                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#2f3136'; }}>
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = 'rgba(240,178,50,0.5)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.4), 0 0 0 1px rgba(240,178,50,0.2)'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)'; }}>
                                 <div style={S.cardHeader}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                         <span style={S.cardCoinName}>{coin.replace('USDT', '')}</span>
@@ -243,7 +244,7 @@ const CryptoSignals = () => {
                                             <td style={S.td}><SignalBadge value={item.signal || item.sinyal_yonu || '-'} /></td>
                                             {isPositionsTab && <td style={S.td}><SignalBadge value={item.pozisyon_yonu || '-'} /></td>}
                                             {isPositionsTab && <td style={S.td}><span style={{ fontSize: '0.8em', fontWeight: 600, color: item.ters_sinyal ? '#da373c' : '#23a559' }}>{item.ters_sinyal ? '⚠️ Ters' : '✅ Uyumlu'}</span></td>}
-                                            <td style={{ ...S.td, color: '#b9bbbe', fontSize: '0.85em' }}>${formatPrice(item.entry_price)}</td>
+                                            <td style={{ ...S.td, color: '#b5bac1', fontSize: '0.85em' }}>${formatPrice(item.entry_price)}</td>
                                             <td style={{ ...S.td, color: '#dbdee1', fontSize: '0.85em' }}>${formatPrice(item.current_price)}</td>
                                             <td style={{ ...S.td, color: pnlColor(item.pnl_percent), fontWeight: 700 }}>{item.pnl_percent || '-'}</td>
                                             <td style={{ ...S.td, fontWeight: 600, color: parseFloat(String(item.win_rate || '0').replace('%', '')) >= 50 ? '#23a559' : '#da373c' }}>{item.win_rate || '-'}</td>

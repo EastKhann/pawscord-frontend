@@ -82,9 +82,9 @@ const ErrorReportingPanel = ({ apiBaseUrl, onClose }) => {
     const getSeverityColor = (severity) => {
         const colors = {
             'low': '#3b82f6',
-            'medium': '#faa61a',
+            'medium': '#f0b232',
             'high': '#ff6b61',
-            'critical': '#ff3b30'
+            'critical': '#f23f42'
         };
         return colors[severity] || colors.medium;
     };

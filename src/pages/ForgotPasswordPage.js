@@ -46,7 +46,7 @@ const ForgotPasswordPage = ({ apiBaseUrl }) => {
         return (
             <div style={styles.container}>
                 <div style={styles.card}>
-                    <FaCheckCircle style={{...styles.icon, color: '#23a559'}} />
+                    <FaCheckCircle style={{ ...styles.icon, color: '#23a559' }} />
                     <h2 style={styles.title}>Email Gönderildi!</h2>
                     <p style={styles.text}>
                         Eğer <strong>{email}</strong> adresine kayıtlı bir hesap varsa,
@@ -124,46 +124,58 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1e1f22',
+        background: 'radial-gradient(ellipse at 15% 20%, rgba(88,101,242,0.16) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(124,58,237,0.10) 0%, transparent 48%), #0d0e10',
         padding: '20px'
     },
     card: {
-        backgroundColor: '#2b2d31',
-        borderRadius: '12px',
-        padding: '40px',
+        background: 'rgba(30, 31, 35, 0.88)',
+        backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
+        borderRadius: '22px',
+        padding: '44px 40px',
         maxWidth: '500px',
         width: '100%',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-        position: 'relative'
+        border: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.06)',
+        position: 'relative',
+        animation: 'authCardIn 0.5s cubic-bezier(0.22,1,0.36,1)'
     },
     backButton: {
         position: 'absolute',
         top: '20px',
         left: '20px',
-        background: 'none',
-        border: 'none',
-        color: '#b9bbbe',
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        borderRadius: '10px',
+        color: '#b5bac1',
         cursor: 'pointer',
-        fontSize: '16px',
+        fontSize: '14px',
+        fontWeight: '500',
+        padding: '6px 12px',
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        transition: 'color 0.2s'
+        transition: 'all 0.2s'
     },
     icon: {
         fontSize: '64px',
         color: '#5865f2',
         display: 'block',
-        margin: '0 auto 20px'
+        margin: '0 auto 20px',
+        filter: 'drop-shadow(0 4px 20px rgba(88,101,242,0.55))'
     },
     title: {
-        color: '#fff',
+        background: 'linear-gradient(135deg, #ffffff 30%, #9ba5ff)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
         fontSize: '28px',
+        fontWeight: '800',
         textAlign: 'center',
         margin: '0 0 10px 0'
     },
     text: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '16px',
         textAlign: 'center',
         marginBottom: '30px'
@@ -174,9 +186,9 @@ const styles = {
         gap: '15px'
     },
     input: {
-        backgroundColor: '#1e1f22',
-        border: '1px solid #1e1f22',
-        borderRadius: '6px',
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        borderRadius: '10px',
         padding: '12px',
         color: '#fff',
         fontSize: '16px',
@@ -192,32 +204,35 @@ const styles = {
         textAlign: 'center'
     },
     submitButton: {
-        backgroundColor: '#5865f2',
+        background: 'linear-gradient(135deg, #5865f2 0%, #4549c4 100%)',
         color: '#fff',
         border: 'none',
-        borderRadius: '6px',
-        padding: '12px',
+        borderRadius: '13px',
+        padding: '13px',
         fontSize: '16px',
         fontWeight: 'bold',
         cursor: 'pointer',
-        transition: 'background-color 0.2s'
+        transition: 'opacity 0.2s, transform 0.15s',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
     },
     button: {
-        backgroundColor: '#5865f2',
+        background: 'linear-gradient(135deg, #5865f2 0%, #4549c4 100%)',
         color: '#fff',
         border: 'none',
-        borderRadius: '6px',
-        padding: '12px 32px',
+        borderRadius: '13px',
+        padding: '13px 32px',
         fontSize: '16px',
         fontWeight: 'bold',
         cursor: 'pointer',
         marginTop: '20px',
         display: 'block',
-        width: '100%'
+        width: '100%',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
     },
     info: {
-        backgroundColor: '#1e1f22',
-        borderRadius: '8px',
+        background: 'rgba(88,101,242,0.07)',
+        border: '1px solid rgba(88,101,242,0.20)',
+        borderRadius: '12px',
         padding: '15px',
         marginTop: '20px'
     },
@@ -228,13 +243,13 @@ const styles = {
         margin: '0 0 10px 0'
     },
     infoText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         textAlign: 'center',
         margin: '10px 0'
     },
     infoList: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         margin: 0,
         paddingLeft: '20px'

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
 const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
@@ -51,12 +51,12 @@ const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
     return (
         <div style={{
             position: 'fixed', right: 0, top: 0, bottom: 0, width: '420px',
-            background: '#36393f', boxShadow: '-2px 0 8px rgba(0,0,0,0.4)',
+            background: '#17191c', boxShadow: '-2px 0 8px rgba(0,0,0,0.4)',
             zIndex: 100, display: 'flex', flexDirection: 'column'
         }}>
             {/* Header */}
             <div style={{
-                padding: '16px', borderBottom: '1px solid #202225',
+                padding: '16px', borderBottom: '1px solid #0b0e1b',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center'
             }}>
                 <h3 style={{ margin: 0, color: '#fff' }}>💬 Thread</h3>
@@ -67,15 +67,15 @@ const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
             </div>
 
             {/* Parent Message */}
-            <div style={{ padding: '16px', background: '#2f3136', borderBottom: '1px solid #202225' }}>
+            <div style={{ padding: '16px', background: '#111214', borderBottom: '1px solid #0b0e1b' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                     <strong style={{ color: '#fff' }}>{parentMessage.username || parentMessage.sender?.username}</strong>
-                    <span style={{ marginLeft: '8px', fontSize: '12px', color: '#72767d' }}>
+                    <span style={{ marginLeft: '8px', fontSize: '12px', color: '#949ba4' }}>
                         {new Date(parentMessage.timestamp).toLocaleString('tr-TR')}
                     </span>
                 </div>
-                <p style={{ margin: 0, color: '#dcddde' }}>{parentMessage.content}</p>
-                <small style={{ color: '#72767d', fontSize: '12px' }}>
+                <p style={{ margin: 0, color: '#dbdee1' }}>{parentMessage.content}</p>
+                <small style={{ color: '#949ba4', fontSize: '12px' }}>
                     {replies.length} yanıt
                 </small>
             </div>
@@ -94,22 +94,22 @@ const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
                     replies.map(reply => (
                         <div key={reply.id} style={{
                             marginBottom: '16px', padding: '12px',
-                            background: '#40444b', borderRadius: '8px'
+                            background: '#1e2024', borderRadius: '8px'
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                                 <strong style={{ color: '#fff' }}>{reply.username || reply.sender?.username}</strong>
-                                <span style={{ marginLeft: '8px', fontSize: '12px', color: '#72767d' }}>
+                                <span style={{ marginLeft: '8px', fontSize: '12px', color: '#949ba4' }}>
                                     {new Date(reply.timestamp).toLocaleString('tr-TR')}
                                 </span>
                             </div>
-                            <p style={{ margin: 0, color: '#dcddde' }}>{reply.content}</p>
+                            <p style={{ margin: 0, color: '#dbdee1' }}>{reply.content}</p>
                         </div>
                     ))
                 )}
             </div>
 
             {/* Reply Input */}
-            <div style={{ padding: '16px', borderTop: '1px solid #202225' }}>
+            <div style={{ padding: '16px', borderTop: '1px solid #0b0e1b' }}>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <input
                         type="text"
@@ -118,7 +118,7 @@ const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
                         onChange={(e) => setNewReply(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendReply()}
                         style={{
-                            flex: 1, padding: '10px', background: '#40444b',
+                            flex: 1, padding: '10px', background: '#1e2024',
                             border: 'none', borderRadius: '6px', color: '#fff'
                         }}
                     />
@@ -126,7 +126,7 @@ const ThreadView = ({ parentMessage, onClose, apiBaseUrl, token }) => {
                         onClick={handleSendReply}
                         disabled={!newReply.trim()}
                         style={{
-                            padding: '10px 20px', background: newReply.trim() ? '#5865f2' : '#4f545c',
+                            padding: '10px 20px', background: newReply.trim() ? '#5865f2' : '#4e5058',
                             border: 'none', borderRadius: '6px', color: '#fff',
                             cursor: newReply.trim() ? 'pointer' : 'not-allowed',
                             fontWeight: 600

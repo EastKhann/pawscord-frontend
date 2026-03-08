@@ -1,4 +1,4 @@
-// components/JoinLeaveLogs.js
+﻿// components/JoinLeaveLogs.js
 // 📊 Server Join/Leave Activity Logs
 
 import { useState, useEffect } from 'react';
@@ -41,12 +41,12 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         });
     };
 
-    if (loading) return <div style={{ padding: '20px', color: '#b9bbbe' }}>Loading logs...</div>;
+    if (loading) return <div style={{ padding: '20px', color: '#b5bac1' }}>Loading logs...</div>;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h4 style={{ margin: 0, color: '#dcddde' }}>Member Activity</h4>
+                <h4 style={{ margin: 0, color: '#dbdee1' }}>Member Activity</h4>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     {['all', 'joins', 'leaves'].map(f => (
                         <button
@@ -54,7 +54,7 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                             onClick={() => setFilter(f)}
                             style={{
                                 padding: '6px 12px',
-                                backgroundColor: filter === f ? '#5865f2' : '#2f3136',
+                                backgroundColor: filter === f ? '#5865f2' : '#111214',
                                 color: 'white',
                                 border: 'none',
                                 borderRadius: '4px',
@@ -73,8 +73,8 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 <div style={{
                     padding: '40px',
                     textAlign: 'center',
-                    color: '#72767d',
-                    backgroundColor: '#2f3136',
+                    color: '#949ba4',
+                    backgroundColor: '#111214',
                     borderRadius: '8px'
                 }}>
                     No activity logs
@@ -86,9 +86,9 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                             key={idx}
                             style={{
                                 padding: '12px',
-                                backgroundColor: '#2f3136',
+                                backgroundColor: '#111214',
                                 borderRadius: '6px',
-                                borderLeft: `3px solid ${log.action === 'join' ? '#43b581' : '#f04747'}`,
+                                borderLeft: `3px solid ${log.action === 'join' ? '#23a559' : '#f23f42'}`,
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '12px'
@@ -98,7 +98,7 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                                 width: '36px',
                                 height: '36px',
                                 borderRadius: '50%',
-                                backgroundColor: log.action === 'join' ? '#43b581' : '#f04747',
+                                backgroundColor: log.action === 'join' ? '#23a559' : '#f23f42',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -109,14 +109,14 @@ const JoinLeaveLogs = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                                 {log.action === 'join' ? <FaUserPlus /> : <FaUserMinus />}
                             </div>
                             <div style={{ flex: 1 }}>
-                                <div style={{ color: '#dcddde', fontWeight: '500' }}>
+                                <div style={{ color: '#dbdee1', fontWeight: '500' }}>
                                     {log.username}
                                 </div>
-                                <div style={{ color: '#b9bbbe', fontSize: '13px' }}>
+                                <div style={{ color: '#b5bac1', fontSize: '13px' }}>
                                     {log.action === 'join' ? 'Joined the server' : 'Left the server'}
                                 </div>
                             </div>
-                            <div style={{ color: '#72767d', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <div style={{ color: '#949ba4', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <FaClock />
                                 {formatTime(log.timestamp)}
                             </div>

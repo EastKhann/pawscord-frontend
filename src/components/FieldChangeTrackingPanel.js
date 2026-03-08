@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaHistory, FaDownload } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -98,12 +98,12 @@ const FieldChangeTrackingPanel = ({ fetchWithAuth, apiBaseUrl, onClose, entityTy
                                     <div style={styles.changeValues}>
                                         <div style={styles.oldValue}>
                                             <div style={styles.valueLabel}>Old:</div>
-                                            <div style={styles.value}>{change.old_value || <em style={{ color: '#99aab5' }}>empty</em>}</div>
+                                            <div style={styles.value}>{change.old_value || <em style={{ color: '#949ba4' }}>empty</em>}</div>
                                         </div>
                                         <div style={styles.arrow}>→</div>
                                         <div style={styles.newValue}>
                                             <div style={styles.valueLabel}>New:</div>
-                                            <div style={styles.value}>{change.new_value || <em style={{ color: '#99aab5' }}>empty</em>}</div>
+                                            <div style={styles.value}>{change.new_value || <em style={{ color: '#949ba4' }}>empty</em>}</div>
                                         </div>
                                     </div>
                                     <div style={styles.changeMeta}>
@@ -147,7 +147,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -161,7 +161,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -170,13 +170,13 @@ const styles = {
         display: 'flex',
         gap: '12px',
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     filterSelect: {
         flex: 1,
         padding: '8px 12px',
-        backgroundColor: '#2c2f33',
-        border: '1px solid #2c2f33',
+        backgroundColor: '#111214',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
         color: '#ffffff',
         fontSize: '14px',
@@ -199,12 +199,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     changesList: {
@@ -213,7 +213,7 @@ const styles = {
         gap: '16px',
     },
     changeCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
     },
@@ -244,7 +244,7 @@ const styles = {
     },
     valueLabel: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '4px',
     },
     value: {
@@ -254,7 +254,7 @@ const styles = {
     },
     changeMeta: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     username: {
         color: '#5865f2',

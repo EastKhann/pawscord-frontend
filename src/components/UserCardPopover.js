@@ -1,4 +1,4 @@
-// frontend/src/components/UserCardPopover.js
+﻿// frontend/src/components/UserCardPopover.js
 // 👤 FEATURE 7: User Card Popover
 // Hover on username/avatar to see mini profile card
 
@@ -188,12 +188,12 @@ const S = {
     },
     avatar: {
         width: 64, height: 64, borderRadius: '50%',
-        border: '4px solid #111214', objectFit: 'cover',
+        border: '4px solid #0e1222', objectFit: 'cover',
     },
     statusDot: {
         position: 'absolute', bottom: 2, right: 2,
         width: 16, height: 16, borderRadius: '50%',
-        border: '3px solid #111214',
+        border: '3px solid #0e1222',
     },
     body: { padding: '12px 16px 16px' },
     nameRow: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 },
@@ -215,7 +215,7 @@ const S = {
     rolesWrap: { display: 'flex', flexWrap: 'wrap', gap: 4 },
     roleBadge: {
         display: 'flex', alignItems: 'center', gap: 4,
-        fontSize: 11, color: '#dcddde', border: '1px solid',
+        fontSize: 11, color: '#dbdee1', border: '1px solid',
         borderRadius: 4, padding: '2px 6px', backgroundColor: 'rgba(255,255,255,0.03)',
     },
     roleDot: { width: 8, height: 8, borderRadius: '50%', flexShrink: 0 },
@@ -228,7 +228,7 @@ const S = {
         transition: 'background 0.15s',
     },
     actionBtnSec: {
-        flex: 1, padding: '8px 0', backgroundColor: 'rgba(255,255,255,0.06)', color: '#dcddde',
+        flex: 1, padding: '8px 0', backgroundColor: 'rgba(255,255,255,0.06)', color: '#dbdee1',
         border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600,
         transition: 'background 0.15s',
     },

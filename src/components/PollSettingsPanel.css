@@ -13,8 +13,8 @@
 }
 
 .poll-settings-panel {
-    background: linear-gradient(145deg, #1e1e2e 0%, #16161f 100%);
-    border-radius: 20px;
+    background: linear-gradient(145deg, #0d0e10 0%, #16161f 100%);
+    border-radius: 12px;
     width: 95%;
     max-width: 1000px;
     max-height: 90vh;
@@ -431,7 +431,7 @@
 
 .status-badge {
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -463,7 +463,7 @@
 
     50% {
         opacity: 0.5;
-        transform: scale(1.2);
+        transform: scale(1.05);
     }
 }
 

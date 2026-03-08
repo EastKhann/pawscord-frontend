@@ -47,7 +47,7 @@ const ServerRail = ({
                 <div
                     style={{
                         ...styles.serverIcon,
-                        backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#313338',
+                        backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#1a1c1f',
                         borderRadius: selectedServerId === 'home' || hoveredServerId === 'home' ? '16px' : '50%',
                         width: '48px', height: '48px', marginBottom: 0,
                         transition: 'border-radius 0.3s ease, background-color 0.3s ease'
@@ -72,16 +72,17 @@ const ServerRail = ({
             {/* Server Icons */}
             <div role="list" aria-label="Sunucular">
                 {servers && servers.map((server, index) => {
-                    const initials = (server.name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || server.name.substring(0, 2)).toUpperCase();
-                    const _hash = server.name.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
-                    const _GRAD = [['#5865f2', '#7289da'], ['#3ba55d', '#57f287'], ['#ed4245', '#ff6b6b'], ['#faa81a', '#ffca28'], ['#9c59b6', '#c56bcf'], ['#00b0f4', '#00d4ff']];
+                    const serverName = server.name || '';
+                    const initials = (serverName.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || serverName.substring(0, 2) || '??').toUpperCase();
+                    const _hash = serverName.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+                    const _GRAD = [['#5865f2', '#5865f2'], ['#3ba55d', '#23a559'], ['#f23f42', '#ff6b6b'], ['#faa81a', '#ffca28'], ['#9c59b6', '#c56bcf'], ['#00b0f4', '#00d4ff']];
                     const _g = _GRAD[_hash % _GRAD.length];
                     const isActive = selectedServerId === server.id;
                     const isDragging = draggedServerId === server.id;
                     const isDropTarget = dropTargetIndex === index && !isDragging;
 
                     const serverUnread = Object.keys(safeUnreadCounts)
-                        .filter(k => k.startsWith('room-') && server.categories?.some(cat => cat.rooms?.some(r => `room-${r.slug}` === k)))
+                        .filter(k => k.startsWith('room-') && server.categories?.some(cat => cat && cat.rooms?.some(r => r && `room-${r.slug}` === k)))
                         .reduce((sum, k) => sum + (safeUnreadCounts[k] || 0), 0);
 
                     return (
@@ -101,7 +102,7 @@ const ServerRail = ({
                             {isDropTarget && dropPosition === 'before' && (
                                 <div style={{
                                     position: 'absolute', top: '-4px', left: '50%', transform: 'translateX(-50%)',
-                                    width: '40px', height: '3px', backgroundColor: '#43b581',
+                                    width: '40px', height: '3px', backgroundColor: '#23a559',
                                     borderRadius: '2px', zIndex: 1000, boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
                                 }} />
                             )}
@@ -114,7 +115,7 @@ const ServerRail = ({
                                 onDrop={(e) => handleServerDropWrapper(e, index)}
                                 style={{
                                     ...styles.serverIcon,
-                                    backgroundColor: isActive ? '#5865f2' : (hoveredServerId === server.id ? '#5865f2' : '#313338'),
+                                    backgroundColor: isActive ? '#5865f2' : (hoveredServerId === server.id ? '#5865f2' : '#1a1c1f'),
                                     borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
                                     cursor: isDragging ? 'grabbing' : 'grab',
                                     position: 'relative',
@@ -149,7 +150,7 @@ const ServerRail = ({
                             {isDropTarget && dropPosition === 'after' && (
                                 <div style={{
                                     position: 'absolute', bottom: '-4px', left: '50%', transform: 'translateX(-50%)',
-                                    width: '40px', height: '3px', backgroundColor: '#43b581',
+                                    width: '40px', height: '3px', backgroundColor: '#23a559',
                                     borderRadius: '2px', zIndex: 1000, boxShadow: '0 0 8px rgba(67, 181, 129, 0.6)'
                                 }} />
                             )}
@@ -162,7 +163,7 @@ const ServerRail = ({
             <div
                 style={{
                     ...styles.serverIcon,
-                    backgroundColor: hoveredServerId === 'discover' ? '#23a559' : '#313338',
+                    backgroundColor: hoveredServerId === 'discover' ? '#23a559' : '#1a1c1f',
                     color: hoveredServerId === 'discover' ? 'white' : '#23a559',
                     marginTop: '10px',
                     borderRadius: hoveredServerId === 'discover' ? '16px' : '50%',
@@ -184,7 +185,7 @@ const ServerRail = ({
             <div
                 style={{
                     ...styles.serverIcon,
-                    background: hoveredServerId === 'store' ? 'linear-gradient(135deg, #F1C40F 0%, #F39C12 100%)' : '#313338',
+                    background: hoveredServerId === 'store' ? 'linear-gradient(135deg, #F1C40F 0%, #F39C12 100%)' : '#1a1c1f',
                     color: hoveredServerId === 'store' ? '#000' : '#F1C40F',
                     fontWeight: 'bold', cursor: 'pointer',
                     borderRadius: hoveredServerId === 'store' ? '16px' : '50%',
@@ -206,7 +207,7 @@ const ServerRail = ({
             <div
                 style={{
                     ...styles.serverIcon,
-                    backgroundColor: hoveredServerId === 'add' ? '#23a559' : '#313338',
+                    backgroundColor: hoveredServerId === 'add' ? '#23a559' : '#1a1c1f',
                     color: hoveredServerId === 'add' ? 'white' : '#23a559',
                     borderRadius: hoveredServerId === 'add' ? '16px' : '50%',
                     transition: 'border-radius 0.3s ease, background-color 0.3s ease, color 0.3s ease'

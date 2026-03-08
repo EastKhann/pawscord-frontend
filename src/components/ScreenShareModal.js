@@ -1,4 +1,4 @@
-// frontend/src/components/ScreenShareModal.js
+﻿// frontend/src/components/ScreenShareModal.js
 
 /**
  * 🖥️ Screen Share Modal
@@ -160,7 +160,7 @@ const styles = {
         width: '90%',
         maxWidth: '1200px',
         height: '90%',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         display: 'flex',
         flexDirection: 'column',
@@ -172,8 +172,8 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '16px 24px',
-        backgroundColor: '#2f3136',
-        borderBottom: '1px solid #1e1f22'
+        backgroundColor: '#111214',
+        borderBottom: '1px solid #0b0e1b'
     },
     headerInfo: {
         display: 'flex',
@@ -191,7 +191,7 @@ const styles = {
     },
     badge: {
         fontSize: '13px',
-        color: '#f04747',
+        color: '#f23f42',
         backgroundColor: 'rgba(240, 71, 71, 0.1)',
         padding: '4px 12px',
         borderRadius: '12px'
@@ -203,14 +203,14 @@ const styles = {
     headerButton: {
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '18px',
         cursor: 'pointer',
         padding: '8px',
         borderRadius: '4px'
     },
     closeButton: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         color: '#fff',
         fontSize: '18px',
@@ -237,7 +237,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '16px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     placeholderIcon: {
         fontSize: '64px',
@@ -259,13 +259,13 @@ const styles = {
     },
     controls: {
         padding: '24px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
     },
     stopButton: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '12px 32px',
@@ -281,7 +281,7 @@ const styles = {
         textAlign: 'center'
     },
     infoText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px'
     },
     participants: {
@@ -295,7 +295,7 @@ const styles = {
     },
     participantsTitle: {
         fontSize: '12px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontWeight: 'bold',
         display: 'block',
         marginBottom: '8px'
@@ -324,7 +324,7 @@ const styles = {
     },
     participantName: {
         fontSize: '13px',
-        color: '#dcddde'
+        color: '#dbdee1'
     }
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import './VoiceSettings.css';
 import { FaMicrophone, FaTimes, FaHeadphones, FaVolumeUp, FaVideo, FaCog, FaExclamationTriangle } from 'react-icons/fa';
 import { getApiBase } from '../utils/apiEndpoints';
@@ -26,7 +26,7 @@ const VoiceSettings = ({ userId, onClose }) => {
         fetchSettings();
     }, [userId]);
 
-    const fetchWithAuth = async (url, options = {}) => {
+    const fetchWithAuth = useCallback(async (url, options = {}) => {
         const token = localStorage.getItem('access_token');
         const response = await fetch(url, {
             ...options,
@@ -38,9 +38,9 @@ const VoiceSettings = ({ userId, onClose }) => {
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         return await response.json();
-    };
+    }, []);
 
-    const fetchDevices = async () => {
+    const fetchDevices = useCallback(async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
             const allDevices = await navigator.mediaDevices.enumerateDevices();
@@ -55,9 +55,9 @@ const VoiceSettings = ({ userId, onClose }) => {
         } catch (error) {
             console.error('Device enumeration error:', error);
         }
-    };
+    }, []);
 
-    const fetchSettings = async () => {
+    const fetchSettings = useCallback(async () => {
         try {
             const data = await fetchWithAuth(`${getApiBase()}/api/voice/${userId}/settings/`);
             setSettings(data);
@@ -76,9 +76,9 @@ const VoiceSettings = ({ userId, onClose }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [userId, fetchWithAuth]);
 
-    const updateSettings = async () => {
+    const updateSettings = useCallback(async () => {
         try {
             await fetchWithAuth(`${getApiBase()}/api/voice/${userId}/settings/update/`, {
                 method: 'POST',
@@ -100,7 +100,7 @@ const VoiceSettings = ({ userId, onClose }) => {
             console.error('Settings update error:', error);
             showToast('Failed to update settings', 'error');
         }
-    };
+    }, [userId, selectedInput, selectedOutput, selectedVideo, inputVolume, outputVolume, noiseSupression, echoCancellation, autoGainControl, videoQuality, frameRate, fetchWithAuth]);
 
     const testMicrophone = async () => {
         setTesting(true);
@@ -144,10 +144,10 @@ const VoiceSettings = ({ userId, onClose }) => {
         }
     };
 
-    const stopTesting = () => {
+    const stopTesting = useCallback(() => {
         setTesting(false);
         setInputLevel(0);
-    };
+    }, []);
 
     const resetToDefaults = async () => {
         if (!await confirmDialog('Are you sure you want to reset all voice settings to defaults?')) return;
@@ -341,14 +341,14 @@ const VoiceSettings = ({ userId, onClose }) => {
                                             vs.audio.noiseSuppressionLevel = e.target.value;
                                             localStorage.setItem('voice_settings', JSON.stringify(vs));
                                         }}
-                                        style={{ width: '100%', padding: '8px', borderRadius: '6px', background: '#2f3136', color: '#fff', border: '1px solid #40444b' }}
+                                        style={{ width: '100%', padding: '8px', borderRadius: '6px', background: '#111214', color: '#fff', border: '1px solid #182135' }}
                                     >
                                         <option value="low">Low (Best Voice Quality)</option>
                                         <option value="medium">Medium (Balanced)</option>
                                         <option value="high">High (More Noise Reduction)</option>
                                         <option value="aggressive">Aggressive (Maximum Noise Reduction)</option>
                                     </select>
-                                    <small style={{ color: '#72767d', fontSize: '12px', marginTop: '5px', display: 'block' }}>
+                                    <small style={{ color: '#949ba4', fontSize: '12px', marginTop: '5px', display: 'block' }}>
                                         💡 If you hear crackling, try "Low" or "Medium"
                                     </small>
                                 </div>
@@ -411,4 +411,4 @@ const VoiceSettings = ({ userId, onClose }) => {
     );
 };
 
-export default VoiceSettings;
+export default memo(VoiceSettings);

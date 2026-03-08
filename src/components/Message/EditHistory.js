@@ -1,4 +1,4 @@
-// frontend/src/components/Message/EditHistory.js
+﻿// frontend/src/components/Message/EditHistory.js
 // 📜 EDIT HISTORY - Shows message edit history dropdown
 
 import { useState, useEffect, useRef, memo } from 'react';
@@ -61,7 +61,7 @@ export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAu
 const styles = {
     editedLabel: {
         fontSize: '0.7em',
-        color: '#72767d',
+        color: '#949ba4',
         cursor: 'pointer',
         textDecoration: 'underline'
     },
@@ -70,8 +70,8 @@ const styles = {
         top: '100%',
         left: 0,
         width: '280px',
-        backgroundColor: '#1e1f22',
-        border: '1px solid #111214',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #0e1222',
         borderRadius: '8px',
         padding: '12px',
         zIndex: 100,
@@ -81,15 +81,15 @@ const styles = {
         margin: '0 0 10px 0',
         fontSize: '0.9em',
         color: '#fff',
-        borderBottom: '1px solid #2f3136',
+        borderBottom: '1px solid #0e1222',
         paddingBottom: '8px'
     },
     historyItem: {
         marginBottom: '12px',
         fontSize: '0.85em',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         paddingBottom: '8px',
-        borderBottom: '1px solid #2b2d31'
+        borderBottom: '1px solid #0e1222'
     }
 };
 

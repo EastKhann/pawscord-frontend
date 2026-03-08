@@ -19,11 +19,11 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
     const loadScheduledAnnouncements = async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/announcements/scheduled/`);
+            if (!response.ok) return;
             const data = await response.json();
             setAnnouncements(data.announcements || []);
         } catch (error) {
             console.error('Failed to load scheduled announcements:', error);
-            toast.error('Failed to load announcements');
         } finally {
             setLoading(false);
         }
@@ -93,9 +93,9 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
         const now = new Date();
         const scheduled = new Date(scheduledAt);
         const diffHours = (scheduled - now) / (1000 * 60 * 60);
-        if (diffHours < 0) return '#f04747';
-        if (diffHours < 24) return '#faa61a';
-        return '#43b581';
+        if (diffHours < 0) return '#f23f42';
+        if (diffHours < 24) return '#f0b232';
+        return '#23a559';
     };
 
     return {

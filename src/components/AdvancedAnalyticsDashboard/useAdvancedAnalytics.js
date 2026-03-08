@@ -16,7 +16,7 @@ export const formatNumber = (num) => {
 export const getGrowthIndicator = (value) => {
   if (value > 0) return { icon: FaArrowUp, color: '#23a559', text: `+${value}%` };
   if (value < 0) return { icon: FaArrowDown, color: '#da373c', text: `${value}%` };
-  return { icon: FaMinus, color: '#72767d', text: '0%' };
+  return { icon: FaMinus, color: '#949ba4', text: '0%' };
 };
 
 export const renderSimpleChart = (data, color = '#5865f2', height = 60) => {

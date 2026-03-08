@@ -1,4 +1,4 @@
-/* ════════════════════════════════════════════════════════════════════════════════
+﻿/* ════════════════════════════════════════════════════════════════════════════════
    📅 PAWSCORD - Server Events & Calendar Styles
    ════════════════════════════════════════════════════════════════════════════════ */
 
@@ -27,7 +27,7 @@
 }
 
 .se-title svg {
-    font-size: 24px;
+    font-size: 20px;
     color: #5e81f4;
 }
 
@@ -44,7 +44,7 @@
 
 .se-view-toggle {
     display: flex;
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -53,7 +53,7 @@
     padding: 8px 16px;
     background: transparent;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s;
@@ -93,7 +93,7 @@
 }
 
 .event-card {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 12px;
     overflow: hidden;
     transition: transform 0.2s;
@@ -108,7 +108,7 @@
 }
 
 .event-card.ongoing {
-    border: 2px solid #43b581;
+    border: 2px solid #23a559;
 }
 
 .ec-cover {
@@ -127,7 +127,7 @@
     top: 12px;
     right: 12px;
     padding: 4px 10px;
-    background: #f04747;
+    background: #f23f42;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 700;
@@ -172,7 +172,7 @@
 
 .ec-date {
     font-size: 12px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .ec-name {
@@ -189,7 +189,7 @@
 .ec-description {
     margin: 0 0 12px;
     font-size: 14px;
-    color: #b9bbbe;
+    color: #b5bac1;
     line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -210,7 +210,7 @@
     align-items: center;
     gap: 6px;
     font-size: 13px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .ec-footer {
@@ -226,7 +226,7 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .ec-actions {
@@ -242,7 +242,7 @@
     background: rgba(255, 255, 255, 0.08);
     border: none;
     border-radius: 6px;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
     cursor: pointer;
     transition: all 0.2s;
@@ -263,7 +263,7 @@
 }
 
 .rsvp-btn.active {
-    background: #43b581;
+    background: #23a559;
     color: #fff;
 }
 
@@ -276,7 +276,7 @@
     align-items: center;
     gap: 10px;
     padding: 10px 12px;
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
     border-left: 3px solid;
     cursor: pointer;
@@ -284,7 +284,7 @@
 }
 
 .event-card-compact:hover {
-    background: #36393f;
+    background: #121928;
 }
 
 .event-card-compact.past {
@@ -299,7 +299,7 @@
 .ecc-name {
     flex: 1;
     font-size: 14px;
-    color: #dcddde;
+    color: #dbdee1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -307,7 +307,7 @@
 
 .ecc-time {
     font-size: 12px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════════
@@ -315,7 +315,7 @@
    ════════════════════════════════════════════════════════════════════════════════ */
 
 .calendar-view {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 12px;
     padding: 20px;
 }
@@ -339,7 +339,7 @@
     background: rgba(255, 255, 255, 0.08);
     border: none;
     border-radius: 50%;
-    color: #b9bbbe;
+    color: #b5bac1;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -363,7 +363,7 @@
     text-align: center;
     font-size: 12px;
     font-weight: 600;
-    color: #72767d;
+    color: #949ba4;
     padding: 8px 0;
 }
 
@@ -403,7 +403,7 @@
 
 .cv-day-number {
     font-size: 14px;
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .cv-day.today .cv-day-number {
@@ -427,7 +427,7 @@
 
 .cv-more {
     font-size: 10px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .cv-selected-events {
@@ -439,7 +439,7 @@
 .cv-selected-events h4 {
     margin: 0 0 12px;
     font-size: 14px;
-    color: #b9bbbe;
+    color: #b5bac1;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════════
@@ -461,7 +461,7 @@
 }
 
 .event-modal {
-    background: #36393f;
+    background: #121928;
     border-radius: 12px;
     width: 100%;
     max-width: 500px;
@@ -488,7 +488,7 @@
     height: 32px;
     background: transparent;
     border: none;
-    color: #72767d;
+    color: #949ba4;
     cursor: pointer;
     border-radius: 4px;
     display: flex;
@@ -514,7 +514,7 @@
     margin-bottom: 6px;
     font-size: 12px;
     font-weight: 600;
-    color: #b9bbbe;
+    color: #b5bac1;
     text-transform: uppercase;
 }
 
@@ -523,10 +523,10 @@
 .em-field textarea {
     width: 100%;
     padding: 10px 12px;
-    background: #202225;
+    background: #0b0e1b;
     border: 1px solid #040405;
     border-radius: 4px;
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
 }
 
@@ -562,7 +562,7 @@
     padding: 10px 20px;
     background: transparent;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     cursor: pointer;
 }
@@ -607,12 +607,12 @@
 
 .se-empty svg {
     font-size: 48px;
-    color: #72767d;
+    color: #949ba4;
     margin-bottom: 16px;
 }
 
 .se-empty p {
-    color: #72767d;
+    color: #949ba4;
     margin: 0 0 20px;
 }
 
@@ -631,7 +631,7 @@
     align-items: center;
     justify-content: center;
     padding: 60px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════════

@@ -1,83 +1,120 @@
-// frontend/src/PronunciationPage.js
+﻿// frontend/src/PronunciationPage.js
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { FaMicrophone, FaArrowLeft, FaVolumeUp, FaForward, FaRedo } from 'react-icons/fa';
+import { FaMicrophone, FaArrowLeft, FaVolumeUp, FaForward, FaFire, FaStar } from 'react-icons/fa';
 import { useAuth } from './AuthContext';
 import toast from './utils/toast';
-
-// 👇 YENİ LİSTEYİ IMPORT EDİYORUZ
 import { pronunciationList } from './data/pronunciationList';
+
+const DIFF_COLOR = { Kolay: '#23a559', Orta: '#f0b232', Zor: '#f23f42', Efsane: '#eb459e' };
+
+// Animated score arc (SVG half-circle)
+const ScoreArc = ({ score }) => {
+    const r = 36, circ = Math.PI * r;
+    const pct = Math.min(score, 100) / 100;
+    const color = score >= 80 ? '#23a559' : score >= 50 ? '#f0b232' : '#f23f42';
+    return (
+        <div style={{ position: 'relative', width: 90, height: 52, marginTop: 4 }}>
+            <svg width="90" height="52" viewBox="0 0 90 52">
+                <path d="M 9 46 A 36 36 0 0 1 81 46" fill="none" stroke="#2e3035" strokeWidth="8" strokeLinecap="round" />
+                <path d="M 9 46 A 36 36 0 0 1 81 46" fill="none" stroke={color} strokeWidth="8" strokeLinecap="round"
+                    strokeDasharray={circ} strokeDashoffset={circ * (1 - pct)}
+                    style={{ transition: 'stroke-dashoffset 0.6s ease, stroke 0.3s' }} />
+            </svg>
+            <span style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', fontWeight: 800, fontSize: '1.1em', color }}>{score}</span>
+        </div>
+    );
+};
 
 const PronunciationPage = ({ apiBaseUrl }) => {
     const { token } = useAuth();
 
-    // State'ler
     const [currentCard, setCurrentCard] = useState(null);
     const [isRecording, setIsRecording] = useState(false);
     const [processing, setProcessing] = useState(false);
-    const [status, setStatus] = useState('idle'); // idle, success, error
-    const [feedbackMsg, setFeedbackMsg] = useState("");
+    const [status, setStatus] = useState('idle');
+    const [feedbackMsg, setFeedbackMsg] = useState('');
     const [score, setScore] = useState(0);
+    const [totalScore, setTotalScore] = useState(0);
+    const [streak, setStreak] = useState(0);
+    const [waveData, setWaveData] = useState(Array(24).fill(2));
 
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
+    const analyserRef = useRef(null);
+    const animFrameRef = useRef(null);
+    const streamRef = useRef(null);
 
-    // İlk açılışta rastgele kelime seç
-    useEffect(() => {
-        pickRandomCard();
-    }, []);
+    useEffect(() => { pickRandomCard(); }, []);
 
     const pickRandomCard = () => {
-        // 👇 IMPORT ETTİĞİMİZ LİSTEYİ KULLANIYORUZ
-        const randomIndex = Math.floor(Math.random() * pronunciationList.length);
-        setCurrentCard(pronunciationList[randomIndex]);
+        const idx = Math.floor(Math.random() * pronunciationList.length);
+        setCurrentCard(pronunciationList[idx]);
         setStatus('idle');
-        setFeedbackMsg("");
+        setFeedbackMsg('');
+        setScore(0);
     };
 
-    // ... (Geri kalan tüm fonksiyonlar ve return kısmı AYNEN kalacak, bir değişiklik yok) ...
+    const drawWave = useCallback(() => {
+        if (!analyserRef.current) return;
+        const data = new Uint8Array(analyserRef.current.frequencyBinCount);
+        analyserRef.current.getByteFrequencyData(data);
+        const bars = 24;
+        const step = Math.floor(data.length / bars);
+        setWaveData(Array.from({ length: bars }, (_, i) => Math.max(3, Math.round((data[i * step] / 255) * 44))));
+        animFrameRef.current = requestAnimationFrame(drawWave);
+    }, []);
+
+    const stopStream = () => {
+        cancelAnimationFrame(animFrameRef.current);
+        analyserRef.current = null;
+        setWaveData(Array(24).fill(2));
+        if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null; }
+    };
 
     const playPronunciation = async () => {
         if (!currentCard) return;
         try {
             const res = await fetch(`${apiBaseUrl}/eng-learn/speak-text/`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ text: currentCard.text })
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: currentCard.text }),
             });
             if (res.ok) {
                 const data = await res.json();
-                const audio = new Audio(`data:audio/mp3;base64,${data.audio_base64}`);
-                audio.play();
+                new Audio(`data:audio/mp3;base64,${data.audio_base64}`).play();
             }
-        } catch (e) { console.error(e); }
+        } catch { /* silent */ }
     };
 
     const startRecording = async () => {
-        setFeedbackMsg("");
+        setFeedbackMsg('');
         setStatus('recording');
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            streamRef.current = stream;
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const source = audioCtx.createMediaStreamSource(stream);
+            const analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 128;
+            source.connect(analyser);
+            analyserRef.current = analyser;
+            animFrameRef.current = requestAnimationFrame(drawWave);
             mediaRecorderRef.current = new MediaRecorder(stream);
             audioChunksRef.current = [];
-
-            mediaRecorderRef.current.ondataavailable = (e) => {
-                if (e.data.size > 0) audioChunksRef.current.push(e.data);
-            };
+            mediaRecorderRef.current.ondataavailable = (e) => { if (e.data.size > 0) audioChunksRef.current.push(e.data); };
             mediaRecorderRef.current.onstop = handleStop;
             mediaRecorderRef.current.start();
             setIsRecording(true);
-        } catch (err) {
-            toast.error("❌ Mikrofon izni gerekli!");
+        } catch {
+            toast.error('Mikrofon izni gerekli!');
             setStatus('idle');
         }
     };
 
     const stopRecording = () => {
+        stopStream();
         if (mediaRecorderRef.current && isRecording) {
             mediaRecorderRef.current.stop();
             setIsRecording(false);
@@ -90,152 +127,208 @@ const PronunciationPage = ({ apiBaseUrl }) => {
         const formData = new FormData();
         formData.append('audio', audioBlob, 'voice.webm');
         formData.append('target_text', currentCard.text);
-
         try {
             const res = await fetch(`${apiBaseUrl}/eng-learn/check-pronunciation/`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
-                body: formData
+                body: formData,
             });
-
             const data = await res.json();
-
+            const points = data.is_correct ? 100 : 40;
+            setScore(points);
+            setTotalScore(s => s + (data.is_correct ? 1 : 0));
             if (data.is_correct) {
                 setStatus('success');
-                setFeedbackMsg(`Harika! 🎉 (${data.spoken_text})`);
-                setScore(s => s + 1);
+                setFeedbackMsg(`Mükemmel! \uD83C\uDF89 "${data.spoken_text}"`);
+                setStreak(s => s + 1);
+                try {
+                    const cur = parseInt(localStorage.getItem('eng_xp') || '0');
+                    localStorage.setItem('eng_xp', cur + 8);
+                } catch { /* ignore */ }
             } else {
                 setStatus('error');
-                setFeedbackMsg(`Algılanan: "${data.spoken_text || '???'}" - Tekrar dene!`);
+                setFeedbackMsg(`Algılanan: "${data.spoken_text || '???'}" — Tekrar dene!`);
+                setStreak(0);
             }
-        } catch (e) {
-            console.error(e);
-            setFeedbackMsg("Sunucu hatası.");
+        } catch {
+            setFeedbackMsg('Sunucu hatası.');
             setStatus('error');
         } finally {
             setProcessing(false);
         }
     };
 
-    if (!currentCard) return <div style={styles.container}>Yükleniyor...</div>;
+    if (!currentCard) return <div style={S.container}>Yükleniyor...</div>;
+
+    const diffColor = DIFF_COLOR[currentCard.difficulty] || '#949ba4';
+    const cardGlow = status === 'success' ? '0 0 40px rgba(35,165,89,0.35)' : status === 'error' ? '0 0 40px rgba(242,63,66,0.3)' : '0 8px 32px rgba(0,0,0,0.5)';
+    const cardBorder = status === 'success' ? '#23a559' : status === 'error' ? '#f23f42' : '#2e3035';
 
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
-                <Link to="/eng-learn" style={styles.backBtn}><FaArrowLeft /> Çıkış</Link>
-                <div style={styles.scoreBadge}>Skor: {score}</div>
+        <div style={S.container}>
+            <style>{`
+                @keyframes pulse { 0%,100%{transform:scale(1);opacity:.5} 50%{transform:scale(1.35);opacity:.1} }
+                @keyframes successPop { 0%{transform:scale(0.8);opacity:0} 60%{transform:scale(1.06)} 100%{transform:scale(1);opacity:1} }
+            `}</style>
+
+            <div style={S.header}>
+                <Link to="/eng-learn" style={S.backBtn}><FaArrowLeft /> \u00c7\u0131k\u0131\u015f</Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    {streak >= 2 && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(240,99,32,0.18)', border: '1px solid #f06320', borderRadius: 20, padding: '4px 12px' }}>
+                            <FaFire color="#f06320" size={13} />
+                            <span style={{ color: '#f06320', fontWeight: 700, fontSize: '0.85em' }}>{streak} Seri</span>
+                        </div>
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(240,178,50,0.15)', border: '1px solid #f0b232', borderRadius: 20, padding: '4px 12px' }}>
+                        <FaStar color="#f0b232" size={12} />
+                        <span style={{ color: '#f0b232', fontWeight: 700, fontSize: '0.85em' }}>{totalScore} Do\u011fru</span>
+                    </div>
+                </div>
             </div>
 
-            <div style={styles.mainContent}>
-
-                <div style={{
-                    ...styles.card,
-                    borderColor: status === 'success' ? '#43b581' : (status === 'error' ? '#f04747' : 'transparent'),
-                    boxShadow: status === 'success' ? '0 0 30px rgba(67, 181, 129, 0.3)' : (status === 'error' ? '0 0 30px rgba(240, 71, 71, 0.3)' : '0 10px 30px rgba(0,0,0,0.3)')
-                }}>
-                    {/* Zorluk Rozetinin Rengi Dinamik Olsun */}
-                    <span style={{
-                        ...styles.difficulty,
-                        backgroundColor: currentCard.difficulty === 'Efsane' ? '#eb459e' : (currentCard.difficulty === 'Zor' ? '#f04747' : '#202225'),
-                        color: currentCard.difficulty === 'Efsane' || currentCard.difficulty === 'Zor' ? 'white' : '#949ba4'
-                    }}>
+            <div style={S.mainContent}>
+                <div style={{ ...S.card, boxShadow: cardGlow, borderColor: cardBorder, animation: status === 'success' ? 'successPop 0.5s ease' : 'none' }}>
+                    <div style={{ ...S.diffBadge, background: diffColor + '22', color: diffColor, border: `1px solid ${diffColor}66` }}>
                         {currentCard.difficulty}
-                    </span>
-
-                    <h1 style={styles.wordText}>{currentCard.text}</h1>
-
-                    <div style={{ height: '30px', marginTop: '10px', color: status === 'success' ? '#43b581' : '#f04747', fontWeight: 'bold' }}>
-                        {processing ? "Analiz ediliyor..." : feedbackMsg}
                     </div>
 
-                    <div style={styles.controls}>
-                        <button onClick={playPronunciation} style={styles.iconButton} title="Doğrusunu Dinle">
-                            <FaVolumeUp size={24} />
-                        </button>
+                    <h1 style={S.word}>{currentCard.text}</h1>
 
-                        <button
-                            onMouseDown={startRecording}
-                            onMouseUp={stopRecording}
-                            onTouchStart={startRecording}
-                            onTouchEnd={stopRecording}
-                            style={{
-                                ...styles.micButton,
-                                backgroundColor: isRecording ? '#f04747' : (status === 'success' ? '#43b581' : '#5865f2'),
-                                transform: isRecording ? 'scale(1.1)' : 'scale(1)'
-                            }}
-                        >
-                            <FaMicrophone size={32} />
-                        </button>
+                    {currentCard.ipa && (
+                        <div style={{ color: '#7a7d87', fontSize: '1em', marginBottom: 6, fontStyle: 'italic' }}>/{currentCard.ipa}/</div>
+                    )}
+
+                    {status !== 'idle' && status !== 'recording' && (
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 8 }}>
+                            <ScoreArc score={score} />
+                            <span style={{ fontSize: '0.75em', color: '#7a7d87', marginTop: 2 }}>Skor</span>
+                        </div>
+                    )}
+
+                    {isRecording && (
+                        <div style={S.waveWrapper}>
+                            {waveData.map((h, i) => (
+                                <div key={i} style={{ ...S.waveBar, height: h, background: `hsl(${0 + i * 6}, 80%, 58%)` }} />
+                            ))}
+                        </div>
+                    )}
+
+                    <div style={{
+                        minHeight: 28, fontSize: '0.9em', fontWeight: 600, textAlign: 'center', marginBottom: 8, padding: '0 10px',
+                        color: status === 'success' ? '#23a559' : status === 'error' ? '#f23f42' : '#949ba4',
+                        transition: 'color 0.3s',
+                    }}>
+                        {processing ? '\uD83D\uDD0D Analiz ediliyor...' : feedbackMsg || (status === 'recording' ? '\uD83D\uDD34 Dinliyor...' : 'Mikrofona bas\u0131l\u0131 tut ve oku')}
                     </div>
 
-                    <p style={styles.hint}>
-                        {isRecording ? "Dinliyor..." : "Mikrofona basılı tut ve oku"}
-                    </p>
+                    <div style={S.controls}>
+                        <button onClick={playPronunciation} style={S.listenBtn} title="Do\u011fru telaffuzu dinle">
+                            <FaVolumeUp size={20} />
+                            <span style={{ fontSize: '0.8em' }}>Dinle</span>
+                        </button>
+
+                        <div style={{ position: 'relative' }}>
+                            {isRecording && [1, 2].map(r => (
+                                <span key={r} style={{
+                                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+                                    width: 76 + r * 22, height: 76 + r * 22, borderRadius: '50%',
+                                    border: '2px solid rgba(242,63,66,0.4)',
+                                    animation: `pulse ${0.7 + r * 0.3}s ease-in-out infinite`
+                                }} />
+                            ))}
+                            <button
+                                onMouseDown={startRecording} onMouseUp={stopRecording}
+                                onTouchStart={startRecording} onTouchEnd={stopRecording}
+                                style={{
+                                    ...S.micButton,
+                                    background: isRecording
+                                        ? 'linear-gradient(135deg, #f23f42, #d4313a)'
+                                        : (status === 'success'
+                                            ? 'linear-gradient(135deg, #23a559, #1a9e50)'
+                                            : 'linear-gradient(135deg, #5865f2, #7b6cf6)'),
+                                    boxShadow: isRecording
+                                        ? '0 0 32px rgba(242,63,66,0.55), 0 4px 0 #a41f22'
+                                        : status === 'success'
+                                            ? '0 0 28px rgba(35,165,89,0.5), 0 4px 0 #156936'
+                                            : '0 0 24px rgba(88,101,242,0.45), 0 4px 0 #3b45c7',
+                                    position: 'relative', zIndex: 1,
+                                }}
+                            >
+                                <FaMicrophone size={30} />
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
-                <div style={styles.bottomNav}>
-                    <button onClick={pickRandomCard} style={styles.skipButton}>
-                        {status === 'success' ? (
-                            <>Sonraki Kelime <FaForward /></>
-                        ) : (
-                            <>Bunu Geç <FaRedo /></>
-                        )}
-                    </button>
-                </div>
-
+                <button onClick={pickRandomCard} style={S.nextBtn}>
+                    {status === 'success' ? 'Sonraki Kelime \u27A1\uFE0F' : 'Bunu Ge\u00e7 \u23ED\uFE0F'}
+                    <FaForward size={13} style={{ marginLeft: 6 }} />
+                </button>
             </div>
         </div>
     );
 };
 
-const styles = {
+const S = {
     container: {
-        display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#1e1f22', color: 'white',
-        padding: '20px', boxSizing: 'border-box', fontFamily: 'Poppins, sans-serif', alignItems: 'center'
+        display: 'flex', flexDirection: 'column', minHeight: '100%',
+        background: 'linear-gradient(160deg, #0b0d10 0%, #0d0f18 50%, #090c10 100%)',
+        color: 'white', fontFamily: 'Poppins, sans-serif', alignItems: 'center'
     },
     header: {
-        width: '100%', maxWidth: '600px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px'
+        width: '100%', maxWidth: 560, display: 'flex', justifyContent: 'space-between',
+        alignItems: 'center', padding: '14px 16px', boxSizing: 'border-box'
     },
-    backBtn: { color: '#b9bbbe', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600' },
-    scoreBadge: { backgroundColor: '#f0b232', color: '#000', padding: '5px 15px', borderRadius: '20px', fontWeight: 'bold' },
-
+    backBtn: {
+        color: '#949ba4', textDecoration: 'none', display: 'flex', alignItems: 'center',
+        gap: 7, fontWeight: 700, fontSize: '0.88em',
+        backgroundColor: 'rgba(255,255,255,0.05)', padding: '7px 13px',
+        borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)'
+    },
     mainContent: {
-        flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%'
+        flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+        justifyContent: 'center', width: '100%', maxWidth: 520,
+        padding: '0 16px', boxSizing: 'border-box', gap: 22
     },
     card: {
-        backgroundColor: '#2b2d31', padding: '40px', borderRadius: '24px', width: '100%', maxWidth: '500px', // Kartı biraz genişlettik
+        background: 'linear-gradient(160deg, #0f1117 0%, #111520 60%, #0d0f14 100%)',
+        border: '2px solid', borderRadius: 28, width: '100%', padding: '34px 28px',
         display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-        border: '3px solid transparent', transition: 'all 0.3s ease'
+        transition: 'border-color 0.3s, box-shadow 0.3s', gap: 10, boxSizing: 'border-box',
+        backdropFilter: 'blur(6px)'
     },
-    difficulty: {
-        padding: '4px 12px', borderRadius: '12px', fontSize: '0.85em', marginBottom: '20px', fontWeight: 'bold'
+    diffBadge: { borderRadius: 20, padding: '4px 16px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.8px' },
+    word: {
+        fontSize: '2.6em', fontWeight: 900, margin: '6px 0', letterSpacing: 1, lineHeight: 1.15,
+        background: 'linear-gradient(135deg,#fff 40%,#b8beee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
     },
-    wordText: {
-        fontSize: '2.2em', fontWeight: '800', margin: '0 0 10px 0', color: '#fff', letterSpacing: '1px', lineHeight: '1.3'
-    },
-    controls: {
-        display: 'flex', alignItems: 'center', gap: '30px', marginTop: '30px'
-    },
-    iconButton: {
-        width: '50px', height: '50px', borderRadius: '50%', border: '2px solid #40444b',
-        backgroundColor: 'transparent', color: '#b9bbbe', cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s'
+    waveWrapper: { display: 'flex', alignItems: 'flex-end', gap: 3, height: 52, margin: '6px 0' },
+    waveBar: { width: 6, borderRadius: 4, transition: 'height 0.07s ease', minHeight: 3 },
+    controls: { display: 'flex', alignItems: 'center', gap: 30, marginTop: 10 },
+    listenBtn: {
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5,
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        borderRadius: 14, padding: '12px 18px', color: '#dbdee1',
+        cursor: 'pointer', fontFamily: 'inherit',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)'
     },
     micButton: {
-        width: '80px', height: '80px', borderRadius: '50%', border: 'none', color: 'white',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-        boxShadow: '0 5px 20px rgba(0,0,0,0.4)', transition: 'all 0.1s ease'
+        width: 80, height: 80, borderRadius: '50%', border: 'none', color: 'white',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', transition: 'all 0.15s'
     },
-    hint: { marginTop: '20px', color: '#72767d', fontSize: '0.9em' },
-
-    bottomNav: { marginTop: '50px' },
-    skipButton: {
-        background: 'transparent', border: 'none', color: '#b9bbbe', fontSize: '1.1em', fontWeight: '600',
-        cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 20px',
-        borderRadius: '8px', transition: 'background 0.2s',
-        ':hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
-    }
+    nextBtn: {
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.1)',
+        color: '#dbdee1', fontSize: '0.95em', fontWeight: 700, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: 8, padding: '11px 24px',
+        borderRadius: 14, fontFamily: 'inherit', transition: 'background 0.18s',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.3)'
+    },
 };
 
 export default React.memo(PronunciationPage);
+
 

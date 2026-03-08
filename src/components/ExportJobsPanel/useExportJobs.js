@@ -20,14 +20,14 @@ export const formatFileSize = (bytes) => {
 };
 
 const STATUS_ICONS = {
-    completed: <FaCheckCircle style={{ color: '#43b581' }} />,
-    processing: <FaSpinner style={{ color: '#faa61a' }} className="fa-spin" />,
-    failed: <FaExclamationCircle style={{ color: '#f04747' }} />
+    completed: <FaCheckCircle style={{ color: '#23a559' }} />,
+    processing: <FaSpinner style={{ color: '#f0b232' }} className="fa-spin" />,
+    failed: <FaExclamationCircle style={{ color: '#f23f42' }} />
 };
-const STATUS_COLORS = { completed: '#43b581', processing: '#faa61a', failed: '#f04747' };
+const STATUS_COLORS = { completed: '#23a559', processing: '#f0b232', failed: '#f23f42' };
 
-export const getStatusIcon = (status) => STATUS_ICONS[status] || <FaClock style={{ color: '#99aab5' }} />;
-export const getStatusColor = (status) => STATUS_COLORS[status] || '#99aab5';
+export const getStatusIcon = (status) => STATUS_ICONS[status] || <FaClock style={{ color: '#949ba4' }} />;
+export const getStatusColor = (status) => STATUS_COLORS[status] || '#949ba4';
 
 export default function useExportJobs(fetchWithAuth, apiBaseUrl) {
     const [jobs, setJobs] = useState([]);
@@ -38,6 +38,7 @@ export default function useExportJobs(fetchWithAuth, apiBaseUrl) {
     const loadExportJobs = async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/exports/jobs/`);
+            if (!res.ok) return;
             const data = await res.json();
             setJobs(data.jobs || []);
         } catch (err) { console.error('Failed to load export jobs:', err); }

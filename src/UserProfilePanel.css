@@ -1,12 +1,12 @@
-/* 🎨 UserProfilePanel Sidebar Hover Effects */
+﻿/* 🎨 UserProfilePanel Sidebar Hover Effects */
 
 /* 🎨 MODERN PROFILE HEADER */
 .profile-header-banner {
     position: relative;
     width: 100%;
-    height: 180px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 12px 12px 0 0;
+    height: 200px;
+    background: linear-gradient(135deg, #3a4fcf 0%, #5865f2 35%, #7b68ee 70%, #9b59b6 100%);
+    border-radius: 16px 16px 0 0;
     overflow: hidden;
 }
 
@@ -17,9 +17,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.08)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
     background-size: cover;
-    opacity: 0.3;
+    opacity: 0.35;
 }
 
 .profile-header-content {
@@ -37,17 +37,18 @@
 }
 
 .profile-avatar-large {
-    width: 120px;
-    height: 120px;
+    width: 128px;
+    height: 128px;
     border-radius: 50%;
-    border: 5px solid #2f3136;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border: 5px solid #0b0e1b;
+    box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.5), 0 8px 24px rgba(0, 0, 0, 0.5);
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
 }
 
 .profile-avatar-large:hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 0 0 3px #5865f2, 0 12px 28px rgba(0, 0, 0, 0.5);
 }
 
 .profile-status-indicator {
@@ -57,24 +58,24 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    border: 4px solid #2f3136;
-    background: #43b581;
+    border: 4px solid #0e1222;
+    background: #23a559;
 }
 
 .profile-status-indicator.online {
-    background: #43b581;
+    background: #23a559;
 }
 
 .profile-status-indicator.idle {
-    background: #faa61a;
+    background: #f0b232;
 }
 
 .profile-status-indicator.dnd {
-    background: #f04747;
+    background: #f23f42;
 }
 
 .profile-status-indicator.offline {
-    background: #747f8d;
+    background: #80848e;
 }
 
 .profile-header-info {
@@ -138,7 +139,8 @@
     display: flex;
     gap: 4px;
     padding: 16px 24px;
-    background: #2f3136;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -147,7 +149,7 @@
     border: none;
     border-radius: 8px;
     background: transparent;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -166,17 +168,19 @@
 
 /* 🎨 PROFILE CARDS */
 .profile-card {
-    background: #2f3136;
-    border-radius: 12px;
-    padding: 20px;
+    background: rgba(30, 31, 35, 0.88);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: 22px;
+    padding: 22px;
     margin-bottom: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-card:hover {
-    border-color: rgba(88, 101, 242, 0.3);
-    box-shadow: 0 4px 12px rgba(88, 101, 242, 0.1);
+    border-color: rgba(88, 101, 242, 0.25);
+    box-shadow: 0 4px 16px rgba(88, 101, 242, 0.08);
 }
 
 .profile-card-header {
@@ -203,7 +207,7 @@
     width: 100%;
     padding: 10px 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: 13px;
     cursor: pointer;
     font-size: 14px;
     text-align: left;
@@ -214,9 +218,10 @@
 }
 
 .sidebar-btn:hover {
-    background: rgba(88, 101, 242, 0.1) !important;
-    color: #fff !important;
-    transform: translateX(4px);
+    background: rgba(88, 101, 242, 0.15) !important;
+    color: #f2f3f5 !important;
+    transform: translateX(3px);
+    border-left-color: rgba(88, 101, 242, 0.5) !important;
 }
 
 .sidebar-btn:active {
@@ -263,13 +268,13 @@
     .profile-avatar-large {
         width: 80px;
         height: 80px;
-        border: 3px solid #2f3136;
+        border: 3px solid #0e1222;
     }
 
     .profile-status-indicator {
         width: 20px;
         height: 20px;
-        border: 3px solid #2f3136;
+        border: 3px solid #0e1222;
         bottom: 3px;
         right: 3px;
     }

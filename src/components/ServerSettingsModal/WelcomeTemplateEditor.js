@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { FaRobot } from 'react-icons/fa';
 import toast from '../../utils/toast';
 
@@ -102,17 +102,17 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         { key: '{member_count}', label: 'Üye Sayısı' },
     ];
 
-    if (loading) return <div style={{ padding: '20px', color: '#b9bbbe', textAlign: 'center' }}>Yükleniyor...</div>;
+    if (loading) return <div style={{ padding: '20px', color: '#b5bac1', textAlign: 'center' }}>Yükleniyor...</div>;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {/* Enable Toggle */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px', backgroundColor: '#2b2d31', borderRadius: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px', backgroundColor: '#111214', borderRadius: '8px' }}>
                 <div
                     onClick={() => setEnabled(!enabled)}
                     style={{
                         width: '44px', height: '24px', borderRadius: '12px',
-                        backgroundColor: enabled ? '#23a559' : '#72767d',
+                        backgroundColor: enabled ? '#23a559' : '#949ba4',
                         cursor: 'pointer', position: 'relative', transition: 'background-color 0.2s'
                     }}
                 >
@@ -124,26 +124,26 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     }} />
                 </div>
                 <div>
-                    <div style={{ color: '#dcddde', fontWeight: '600' }}>
+                    <div style={{ color: '#dbdee1', fontWeight: '600' }}>
                         {enabled ? '✓ Hoş Geldin Mesajları Aktif' : '✗ Hoş Geldin Mesajları Kapalı'}
                     </div>
-                    <div style={{ color: '#72767d', fontSize: '12px', marginTop: '2px' }}>
+                    <div style={{ color: '#949ba4', fontSize: '12px', marginTop: '2px' }}>
                         Yeni üyeler katıldığında otomatik mesaj gönderilir
                     </div>
                 </div>
             </div>
 
             {/* Bot avatar artık "Sistem Botu" sekmesinden ayarlanıyor */}
-            <div style={{ padding: '10px 14px', backgroundColor: '#2b2d31', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ padding: '10px 14px', backgroundColor: '#111214', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <FaRobot style={{ color: '#5865f2', fontSize: '16px' }} />
-                <div style={{ color: '#72767d', fontSize: '12px' }}>
-                    Bot profil fotoğrafı <strong style={{ color: '#dcddde' }}>Sistem Botu</strong> sekmesinden ayarlanır.
+                <div style={{ color: '#949ba4', fontSize: '12px' }}>
+                    Bot profil fotoğrafı <strong style={{ color: '#dbdee1' }}>Sistem Botu</strong> sekmesinden ayarlanır.
                 </div>
             </div>
 
             {/* Channel Selector */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Hoş Geldin Kanalı
                 </label>
                 <select
@@ -151,13 +151,13 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     onChange={(e) => setWelcomeChannelId(e.target.value)}
                     style={{
                         width: '100%', padding: '10px 14px',
-                        backgroundColor: '#1e1f22', border: '1px solid #40444b',
-                        borderRadius: '8px', color: '#dcddde', fontSize: '14px',
+                        backgroundColor: '#0d0e10', border: '1px solid #182135',
+                        borderRadius: '8px', color: '#dbdee1', fontSize: '14px',
                         outline: 'none', cursor: 'pointer',
                         transition: 'border-color 0.2s'
                     }}
                     onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
-                    onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#1e2024'; }}
                 >
                     <option value="">Otomatik (Varsayılan kanal)</option>
                     {channels.map(ch => (
@@ -166,14 +166,14 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                         </option>
                     ))}
                 </select>
-                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px' }}>
+                <div style={{ fontSize: '11px', color: '#949ba4', marginTop: '4px' }}>
                     Hoş geldin mesajlarının gönderileceği kanalı seçin
                 </div>
             </div>
 
             {/* Template Editor */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Mesaj Şablonu
                 </label>
                 <textarea
@@ -183,22 +183,22 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                     maxLength={500}
                     style={{
                         width: '100%', minHeight: '120px', padding: '12px',
-                        backgroundColor: '#1e1f22', border: '1px solid #40444b',
-                        borderRadius: '8px', color: '#dcddde', fontFamily: 'inherit',
+                        backgroundColor: '#0d0e10', border: '1px solid #182135',
+                        borderRadius: '8px', color: '#dbdee1', fontFamily: 'inherit',
                         resize: 'vertical', fontSize: '14px', lineHeight: '1.5',
                         outline: 'none', transition: 'border-color 0.2s'
                     }}
                     onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
-                    onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#1e2024'; }}
                 />
-                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px', textAlign: 'right' }}>
+                <div style={{ fontSize: '11px', color: '#949ba4', marginTop: '4px', textAlign: 'right' }}>
                     {template.length}/500 karakter
                 </div>
             </div>
 
             {/* Variables */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Kullanılabilir Değişkenler
                 </label>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -208,14 +208,14 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                             onClick={() => setTemplate(prev => prev + (prev.endsWith(' ') || !prev ? '' : ' ') + v.key)}
                             title={v.label}
                             style={{
-                                padding: '6px 12px', backgroundColor: '#1e1f22',
-                                border: '1px solid #40444b', borderRadius: '6px',
+                                padding: '6px 12px', backgroundColor: '#0d0e10',
+                                border: '1px solid #182135', borderRadius: '6px',
                                 color: '#5865f2', cursor: 'pointer',
                                 fontFamily: 'monospace', fontSize: '13px',
                                 transition: 'all 0.15s'
                             }}
                             onMouseEnter={(e) => { e.target.style.backgroundColor = '#5865f2'; e.target.style.color = '#fff'; }}
-                            onMouseLeave={(e) => { e.target.style.backgroundColor = '#1e1f22'; e.target.style.color = '#5865f2'; }}
+                            onMouseLeave={(e) => { e.target.style.backgroundColor = '#0d0e10'; e.target.style.color = '#5865f2'; }}
                         >
                             {v.key}
                         </button>
@@ -226,12 +226,12 @@ const WelcomeTemplateEditor = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
             {/* Live Preview */}
             {preview && (
                 <div>
-                    <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                    <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                         Önizleme
                     </label>
                     <div style={{
-                        padding: '14px', backgroundColor: '#1e1f22', borderRadius: '8px',
-                        border: '1px solid #40444b', color: '#dcddde', fontSize: '14px',
+                        padding: '14px', backgroundColor: '#0d0e10', borderRadius: '8px',
+                        border: '1px solid #182135', color: '#dbdee1', fontSize: '14px',
                         lineHeight: '1.5', fontStyle: 'italic'
                     }}>
                         {preview}

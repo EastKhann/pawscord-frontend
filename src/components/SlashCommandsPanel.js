@@ -78,12 +78,12 @@ function SlashCommandsPanel({ apiBaseUrl, fetchWithAuth }) {
   const getCategoryColor = (category) => {
     const colors = {
       utility: '#5865f2',
-      moderation: '#f04747',
-      fun: '#43b581',
-      info: '#faa61a',
-      admin: '#7289da'
+      moderation: '#f23f42',
+      fun: '#23a559',
+      info: '#f0b232',
+      admin: '#5865f2'
     };
-    return colors[category] || '#72767d';
+    return colors[category] || '#949ba4';
   };
 
   return (

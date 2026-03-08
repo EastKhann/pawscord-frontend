@@ -226,15 +226,15 @@ const ChatAutocomplete = ({
     const getIcon = (type, item) => {
         if (type === 'mention') {
             if (item.special) {
-                return item.icon === 'globe' ? <FaGlobe style={{ color: '#5865f2' }} /> : <FaAt style={{ color: '#faa61a' }} />;
+                return item.icon === 'globe' ? <FaGlobe style={{ color: '#5865f2' }} /> : <FaAt style={{ color: '#f0b232' }} />;
             }
-            return <FaUser style={{ color: '#b9bbbe' }} />;
+            return <FaUser style={{ color: '#b5bac1' }} />;
         }
         if (type === 'channel') {
             const ct = item.channel_type;
-            if (ct === 'voice') return <FaVolumeUp style={{ color: '#b9bbbe' }} />;
-            if (ct === 'announcement') return <FaBullhorn style={{ color: '#b9bbbe' }} />;
-            return <FaHashtag style={{ color: '#b9bbbe' }} />;
+            if (ct === 'voice') return <FaVolumeUp style={{ color: '#b5bac1' }} />;
+            if (ct === 'announcement') return <FaBullhorn style={{ color: '#b5bac1' }} />;
+            return <FaHashtag style={{ color: '#b5bac1' }} />;
         }
         if (type === 'emoji') {
             return <span style={{ fontSize: 18 }}>{item.emoji}</span>;
@@ -253,7 +253,7 @@ const ChatAutocomplete = ({
                     )}
                     <span style={{ color: '#fff', fontWeight: 500 }}>{item.display_name || item.nickname || item.username}</span>
                     {(item.display_name || item.nickname) && (
-                        <span style={{ color: '#72767d', fontSize: 12 }}>@{item.username}</span>
+                        <span style={{ color: '#949ba4', fontSize: 12 }}>@{item.username}</span>
                     )}
                     {item.special && (
                         <span style={S.specialBadge}>
@@ -269,7 +269,7 @@ const ChatAutocomplete = ({
                     {getIcon(type, item)}
                     <span style={{ color: '#fff' }}>{item.name || item.slug}</span>
                     {item.category_name && (
-                        <span style={{ color: '#72767d', fontSize: 11 }}>• {item.category_name}</span>
+                        <span style={{ color: '#949ba4', fontSize: 11 }}>• {item.category_name}</span>
                     )}
                 </div>
             );
@@ -278,7 +278,7 @@ const ChatAutocomplete = ({
             return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ fontSize: 20 }}>{item.emoji}</span>
-                    <span style={{ color: '#dcddde' }}>:{item.name}:</span>
+                    <span style={{ color: '#dbdee1' }}>:{item.name}:</span>
                 </div>
             );
         }
@@ -318,7 +318,7 @@ const S = {
         right: 0,
         maxHeight: 300,
         overflowY: 'auto',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#17191c',
         borderRadius: '8px 8px 0 0',
         boxShadow: '0 -4px 16px rgba(0,0,0,0.4)',
         zIndex: 100,

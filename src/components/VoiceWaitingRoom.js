@@ -1,4 +1,4 @@
-// frontend/src/components/VoiceWaitingRoom.js
+﻿// frontend/src/components/VoiceWaitingRoom.js
 import { useState, useEffect } from 'react';
 import { FaUsers, FaClock, FaPhoneSlash } from 'react-icons/fa';
 
@@ -91,7 +91,7 @@ const styles = {
         zIndex: 1000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '400px',
         maxWidth: '90vw',
@@ -100,7 +100,7 @@ const styles = {
     },
     header: {
         padding: '20px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         display: 'flex',
         alignItems: 'center',
         gap: '12px'
@@ -130,14 +130,14 @@ const styles = {
         gap: '12px',
         marginBottom: '24px',
         padding: '16px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '6px'
     },
     infoItem: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     infoLabel: {
         fontSize: '14px'
@@ -148,7 +148,7 @@ const styles = {
         color: '#fff'
     },
     clockIcon: {
-        color: '#72767d',
+        color: '#949ba4',
         marginRight: 'auto'
     },
     ready: {
@@ -179,7 +179,7 @@ const styles = {
         margin: '0 auto 12px'
     },
     waitingText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         margin: 0,
         fontSize: '14px'
     },

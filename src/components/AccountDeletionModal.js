@@ -1,4 +1,4 @@
-import { FaExclamationTriangle, FaTimes, FaTrash, FaLock, FaSpinner } from 'react-icons/fa';
+﻿import { FaExclamationTriangle, FaTimes, FaTrash, FaLock, FaSpinner } from 'react-icons/fa';
 import styles from './AccountDeletionModal/accountDeletionStyles';
 import useAccountDeletion from './AccountDeletionModal/useAccountDeletion';
 import useModalA11y from '../hooks/useModalA11y';
@@ -20,7 +20,7 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
     <div style={styles.overlay} {...overlayProps}>
       <div style={styles.modal} {...dialogProps}>
         <div style={styles.header}>
-          <div style={styles.headerIcon}><FaExclamationTriangle size={24} color="#f04747" /></div>
+          <div style={styles.headerIcon}><FaExclamationTriangle size={24} color="#f23f42" /></div>
           <h2 style={styles.title}>Hesabı Sil</h2>
           <button style={styles.closeButton} onClick={handleClose}><FaTimes size={18} /></button>
         </div>
@@ -28,7 +28,7 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
         {step === 1 && (
           <div style={styles.content}>
             <div style={styles.warningBox}>
-              <FaExclamationTriangle size={48} color="#f04747" />
+              <FaExclamationTriangle size={48} color="#f23f42" />
               <h3 style={styles.warningTitle}>Bu işlem geri alınamaz!</h3>
               <p style={styles.warningText}>Hesabınızı sildiğinizde aşağıdakiler kalıcı olarak silinecektir:</p>
             </div>
@@ -46,7 +46,7 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
         {step === 2 && (
           <div style={styles.content}>
             <div style={styles.confirmBox}>
-              <FaLock size={32} color="#faa61a" />
+              <FaLock size={32} color="#f0b232" />
               <h3 style={styles.confirmTitle}>Kimliğinizi Doğrulayın</h3>
               <p style={styles.confirmText}>Hesabınızı silmek için şifrenizi girin ve onay metnini yazın.</p>
             </div>
@@ -57,7 +57,7 @@ const AccountDeletionModal = ({ isOpen, onClose, onConfirmDelete, username, fetc
             </div>
             <div style={styles.inputGroup}>
               <label style={styles.label}>Onaylamak için <code style={styles.code}>{CONFIRM_PHRASE}</code> yazın</label>
-              <input type="text" value={confirmText} onChange={e => setConfirmText(e.target.value)} placeholder={CONFIRM_PHRASE} style={{ ...styles.input, borderColor: confirmText === CONFIRM_PHRASE ? '#43b581' : '#40444b' }} disabled={isDeleting} />
+              <input type="text" value={confirmText} onChange={e => setConfirmText(e.target.value)} placeholder={CONFIRM_PHRASE} style={{ ...styles.input, borderColor: confirmText === CONFIRM_PHRASE ? '#23a559' : '#1e2024' }} disabled={isDeleting} />
             </div>
             <div style={styles.buttonGroup}>
               <button style={styles.cancelButton} onClick={() => setStep(1)} disabled={isDeleting}>Geri</button>

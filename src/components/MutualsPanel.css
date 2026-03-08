@@ -1,4 +1,4 @@
-.mutuals-overlay {
+﻿.mutuals-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@
 }
 
 .mutuals-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 480px;
@@ -21,7 +21,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(76, 175, 80, 0.3);
+    box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
     border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
@@ -45,7 +45,7 @@
 .target-user {
     background: rgba(255, 255, 255, 0.2);
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.85rem;
 }
 
@@ -211,7 +211,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    border: 3px solid #1a1a2e;
+    border: 3px solid #0b0e1b;
 }
 
 .friend-info {

@@ -77,7 +77,7 @@ const DashboardTab = ({
                             { icon: <FaGlobe color="#23a559" />, value: detailedStats?.users?.active || stats?.onlineUsers, label: 'Aktif (24s)', color: '#23a559' },
                             { icon: <FaServer color="#f0b132" />, value: detailedStats?.servers?.total || stats?.totalServers, label: 'Sunucu', color: '#f0b132' },
                             { icon: <FaComment color="#e74c3c" />, value: (detailedStats?.messages?.total || stats?.totalMessages)?.toLocaleString(), label: 'Mesaj', color: '#e74c3c' },
-                            { icon: <FaShieldAlt color="#9b59b6" />, value: detailedStats?.users?.verified || 0, label: 'Doğrulanmış', color: '#9b59b6' },
+                            { icon: <FaShieldAlt color="#5865f2" />, value: detailedStats?.users?.verified || 0, label: 'Doğrulanmış', color: '#5865f2' },
                             { icon: <FaCrown color="#ffd700" />, value: detailedStats?.premium?.total || stats?.premiumUsers, label: 'Premium', color: '#ffd700' },
                         ].map((stat, idx) => (
                             <div key={idx} style={styles.statCard}>
@@ -130,7 +130,7 @@ const DashboardTab = ({
                                     {
                                         value: `${detailedStats?.system?.disk_percent?.toFixed(1) || 0}%`,
                                         label: 'Disk',
-                                        color: (detailedStats?.system?.disk_percent || 0) > 90 ? '#e74c3c' : '#9b59b6'
+                                        color: (detailedStats?.system?.disk_percent || 0) > 90 ? '#e74c3c' : '#5865f2'
                                     },
                                     {
                                         value: detailedStats?.system?.uptime || '---',
@@ -219,7 +219,7 @@ const DashboardTab = ({
                                                 backgroundColor: activity.type === 'user_join' ? '#23a559' :
                                                     activity.type === 'message' ? '#5865f2' :
                                                         activity.type === 'server_create' ? '#f0b132' :
-                                                            activity.type === 'premium' ? '#ffd700' : '#9b59b6'
+                                                            activity.type === 'premium' ? '#ffd700' : '#5865f2'
                                             }} />
                                             <div style={{ flex: 1, color: '#e5e7eb', fontSize: '12px' }}>
                                                 <strong style={{ color: '#fff' }}>{activity.user}</strong> {activity.action}
@@ -322,7 +322,7 @@ const DashboardTab = ({
                                 ))}
                             </div>
                             <div style={{ marginTop: '10px', padding: '8px', backgroundColor: '#111113', borderRadius: '6px', textAlign: 'center' }}>
-                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#9b59b6' }}>
+                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#5865f2' }}>
                                     {detailedStats?.files?.total_storage || '0 MB'}
                                 </div>
                                 <div style={{ fontSize: '10px', color: '#6b7280' }}>Toplam Depolama</div>

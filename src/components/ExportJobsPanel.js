@@ -29,7 +29,7 @@ const ExportJobsPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
           <div style={styles.jobsSection}>
             <h3 style={styles.sectionTitle}>Your Export Jobs</h3>
             {e.loading ? <div style={styles.loading}>Loading jobs...</div> : e.jobs.length === 0 ? (
-              <div style={styles.empty}><FaFile style={{ fontSize: '48px', color: '#99aab5', marginBottom: '16px' }} /><p>No export jobs yet</p><p style={{ fontSize: '14px', color: '#99aab5' }}>Create your first export to get started</p></div>
+              <div style={styles.empty}><FaFile style={{ fontSize: '48px', color: '#949ba4', marginBottom: '16px' }} /><p>No export jobs yet</p><p style={{ fontSize: '14px', color: '#949ba4' }}>Create your first export to get started</p></div>
             ) : (
               <div style={styles.jobsList}>
                 {e.jobs.map(job => (

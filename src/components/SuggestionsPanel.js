@@ -114,8 +114,8 @@ const SuggestionsPanel = ({ serverId, onClose }) => {
     const badges = {
       pending: { text: 'Beklemede', color: '#f59e0b', icon: '⏳' },
       approved: { text: 'Onaylandı', color: '#22c55e', icon: '✅' },
-      rejected: { text: 'Reddedildi', color: '#ef4444', icon: '❌' },
-      implemented: { text: 'Uygulandı', color: '#8b5cf6', icon: '🎉' }
+      rejected: { text: 'Reddedildi', color: '#f23f42', icon: '❌' },
+      implemented: { text: 'Uygulandı', color: '#5865f2', icon: '🎉' }
     };
     return badges[status] || badges.pending;
   };

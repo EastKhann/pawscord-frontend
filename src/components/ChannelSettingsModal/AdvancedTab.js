@@ -20,7 +20,7 @@ const AdvancedTab = ({
                 <h4 style={{ margin: 0, color: '#fff' }}>
                     <FaHistory /> Gelişmiş Ayarlar
                 </h4>
-                <p style={{ color: '#72767d', fontSize: '13px', marginTop: '8px' }}>
+                <p style={{ color: '#949ba4', fontSize: '13px', marginTop: '8px' }}>
                     Kanal geçmişi, arşiv ve tehlikeli işlemler
                 </p>
             </div>

@@ -147,8 +147,8 @@ export default function useServerHandlers({
     const handleUserContextAction = useCallback(async (action, user, extraData) => {
         switch (action) {
             case 'profile': {
-                const userProfile = allUsers.find(u => u.username === user.username);
-                if (userProfile) setViewingProfile(userProfile);
+                const userProfile = Array.isArray(allUsers) ? allUsers.find(u => u.username === user.username) : null;
+                setViewingProfile(userProfile || user);
                 break;
             }
             case 'message': handleDMClick(user.username); break;
@@ -198,7 +198,7 @@ export default function useServerHandlers({
             case 'remove_friend':
                 if (await confirmDialog(`${user.username} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) {
                     try {
-                        const friendship = friendsList.find(f => f.sender_username === user.username || f.receiver_username === user.username);
+                        const friendship = Array.isArray(friendsList) ? friendsList.find(f => f.sender_username === user.username || f.receiver_username === user.username) : null;
                         if (friendship) {
                             const res = await fetchWithAuth(`${API_BASE_URL}/friends/remove/${friendship.id}/`, { method: 'DELETE' });
                             if (res.ok) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaDesktop } from 'react-icons/fa';
 import SettingSection from '../components/SettingSection';
 import S from '../styles';
@@ -24,7 +24,7 @@ const DevicesTab = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {sessions.map(s => (
                         <div key={s.id} style={{
-                            padding: '14px 16px', backgroundColor: '#1e1f22', borderRadius: 8,
+                            padding: '14px 16px', backgroundColor: '#0d0e10', borderRadius: 8,
                             border: s.current ? '1px solid rgba(59,165,92,0.3)' : '1px solid transparent',
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

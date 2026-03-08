@@ -1,4 +1,4 @@
-// frontend/src/components/ServerRolesPanel.js
+﻿// frontend/src/components/ServerRolesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaUserShield, FaPlus, FaTrash, FaGripVertical, FaPalette } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -160,7 +160,7 @@ const ServerRolesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
                                 onChange={(e) => setNewRole({ ...newRole, color: e.target.value })}
                                 style={styles.colorPicker}
                             />
-                            <span style={{ color: '#dcddde', fontSize: '14px' }}>{newRole.color}</span>
+                            <span style={{ color: '#dbdee1', fontSize: '14px' }}>{newRole.color}</span>
                         </div>
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button onClick={createRole} style={styles.saveBtn}>Oluştur</button>
@@ -277,7 +277,7 @@ const styles = {
     },
     newRoleForm: {
         padding: '20px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderBottom: '1px solid #333'
     },
     input: {
@@ -299,7 +299,7 @@ const styles = {
     },
     saveBtn: {
         flex: 1,
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '10px',
@@ -328,7 +328,7 @@ const styles = {
         display: 'flex',
         gap: '15px',
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '8px',
         alignItems: 'center',
@@ -358,7 +358,7 @@ const styles = {
     deleteBtn: {
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#ed4245',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '18px',
         padding: '8px'

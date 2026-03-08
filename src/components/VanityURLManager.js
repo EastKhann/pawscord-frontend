@@ -1,4 +1,4 @@
-// frontend/src/components/VanityURLManager.js
+﻿// frontend/src/components/VanityURLManager.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaLink, FaCopy, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -123,7 +123,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
                     <div style={styles.description}>
                         Sunucunuz için özel bir davet URL'i oluşturun.
                         <br />
-                        <span style={{ fontSize: '0.9em', color: '#72767d' }}>
+                        <span style={{ fontSize: '0.9em', color: '#949ba4' }}>
                             Format: <strong style={{ color: '#5865f2' }}>pawscord.com/join/yourpath</strong>
                         </span>
                     </div>
@@ -157,7 +157,7 @@ const VanityURLManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, embedd
                         />
                     </div>
 
-                    <div style={{ fontSize: '0.85em', color: '#72767d', marginTop: '8px', marginBottom: '15px' }}>
+                    <div style={{ fontSize: '0.85em', color: '#949ba4', marginTop: '8px', marginBottom: '15px' }}>
                         • En az 3, en fazla 32 karakter<br />
                         • Sadece küçük harf, rakam ve tire (-) kullanılabilir<br />
                         • Sistem kelimeleri (api, admin, vb.) kullanılamaz
@@ -212,7 +212,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '500px'
@@ -222,7 +222,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -235,7 +235,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.3em'
     },
@@ -243,17 +243,17 @@ const styles = {
         padding: '20px'
     },
     description: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '0.9em',
         marginBottom: '15px',
         padding: '10px',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         borderRadius: '4px'
     },
     existingSection: {
         marginBottom: '20px',
         padding: '15px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         border: '1px solid #5865f2'
     },
@@ -278,13 +278,13 @@ const styles = {
     inputGroup: {
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         borderRadius: '4px',
         padding: '5px',
         marginBottom: '15px'
     },
     prefix: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '0 10px',
         fontWeight: 'bold'
     },
@@ -299,7 +299,7 @@ const styles = {
     },
     copyButton: {
         padding: '8px 12px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: 'white',
@@ -311,7 +311,7 @@ const styles = {
     },
     deleteButton: {
         padding: '8px 12px',
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: 'white',

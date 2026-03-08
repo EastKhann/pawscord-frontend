@@ -1,4 +1,4 @@
-// frontend/src/components/ChannelSettingsModal/styles.js
+﻿// frontend/src/components/ChannelSettingsModal/styles.js
 // Extracted from ChannelSettingsModal.js
 
 const styles = {
@@ -17,7 +17,7 @@ const styles = {
         overflow: 'auto'
     },
     modal: {
-        background: '#313338',
+        background: '#17191c',
         width: '960px',
         maxWidth: '100%',
         borderRadius: '8px',
@@ -32,7 +32,7 @@ const styles = {
     },
     header: {
         padding: '24px 28px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -50,8 +50,8 @@ const styles = {
     },
     tabs: {
         display: 'flex',
-        borderBottom: '1px solid #1e1f22',
-        background: '#2b2d31',
+        borderBottom: '1px solid #0b0e1b',
+        background: '#111214',
         flexShrink: 0
     },
     tab: {
@@ -97,8 +97,8 @@ const styles = {
     input: {
         width: '100%',
         padding: '12px 14px',
-        background: '#1e1f22',
-        border: '1px solid #1e1f22',
+        background: '#0d0e10',
+        border: '1px solid #0b0e1b',
         color: 'white',
         borderRadius: '6px',
         marginTop: '8px',
@@ -109,7 +109,7 @@ const styles = {
     rolesList: {
         maxHeight: '250px',
         overflowY: 'auto',
-        background: '#2b2d31',
+        background: '#111214',
         padding: '12px',
         borderRadius: '6px',
         marginTop: '12px'
@@ -131,7 +131,7 @@ const styles = {
         justifyContent: 'space-between',
         marginTop: '28px',
         paddingTop: '20px',
-        borderTop: '1px solid #1e1f22'
+        borderTop: '1px solid #0b0e1b'
     },
     saveBtn: {
         background: '#23a559',
@@ -166,7 +166,7 @@ const styles = {
         alignItems: 'center',
         marginBottom: '20px',
         paddingBottom: '10px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     addPermBtn: {
         background: '#5865f2',
@@ -185,7 +185,7 @@ const styles = {
         marginBottom: '20px'
     },
     permissionItem: {
-        background: '#2b2d31',
+        background: '#111214',
         padding: '12px',
         borderRadius: '6px',
         marginBottom: '10px',
@@ -207,7 +207,7 @@ const styles = {
         fontSize: '0.8em'
     },
     addPermModal: {
-        background: '#2b2d31',
+        background: '#111214',
         padding: '20px',
         borderRadius: '8px',
         marginTop: '20px',
@@ -215,7 +215,7 @@ const styles = {
     },
     cancelBtn: {
         background: 'transparent',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         border: '1px solid #4e5058',
         padding: '10px 20px',
         borderRadius: '6px',
@@ -255,17 +255,17 @@ const styles = {
     integrationHeader: {
         marginBottom: '24px',
         paddingBottom: '16px',
-        borderBottom: '1px solid #1e1f22'
+        borderBottom: '1px solid #0b0e1b'
     },
     integrationCard: {
-        background: '#2b2d31',
+        background: '#111214',
         borderRadius: '12px',
         padding: '20px',
         marginBottom: '16px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        border: '1px solid #3f4147',
+        border: '1px solid #182135',
         transition: 'border-color 0.2s'
     },
     integrationCardHeader: {
@@ -289,7 +289,7 @@ const styles = {
         margin: 0
     },
     integrationDesc: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.85em',
         margin: '4px 0 0 0'
     },
@@ -309,11 +309,11 @@ const styles = {
     },
     // ⚙️ GELİŞMİŞ TAB STİLLERİ
     advancedSection: {
-        background: '#2b2d31',
+        background: '#111214',
         borderRadius: '12px',
         padding: '20px',
         marginBottom: '16px',
-        border: '1px solid #3f4147'
+        border: '1px solid #182135'
     },
     advancedSectionTitle: {
         color: '#fff',
@@ -329,7 +329,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '12px 0',
-        borderTop: '1px solid #3f4147'
+        borderTop: '1px solid #182135'
     },
     advancedOptionTitle: {
         color: '#dbdee1',
@@ -338,7 +338,7 @@ const styles = {
         margin: 0
     },
     advancedOptionDesc: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.8em',
         margin: '4px 0 0 0'
     },
@@ -348,7 +348,7 @@ const styles = {
         gap: '12px'
     },
     statBox: {
-        background: '#1e1f22',
+        background: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
         textAlign: 'center',
@@ -362,7 +362,7 @@ const styles = {
         fontWeight: 'bold'
     },
     statLabel: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.8em'
     },
     dangerZone: {
@@ -373,7 +373,7 @@ const styles = {
         border: '1px solid rgba(237, 66, 69, 0.3)'
     },
     dangerZoneTitle: {
-        color: '#ed4245',
+        color: '#f23f42',
         fontSize: '1em',
         fontWeight: 'bold',
         margin: '0 0 16px 0',
@@ -382,7 +382,7 @@ const styles = {
         gap: '10px'
     },
     dangerBtnSmall: {
-        background: '#ed4245',
+        background: '#f23f42',
         color: 'white',
         border: 'none',
         padding: '8px 16px',
@@ -392,7 +392,7 @@ const styles = {
         fontWeight: 'bold'
     },
     dangerBtnLarge: {
-        background: '#ed4245',
+        background: '#f23f42',
         color: 'white',
         border: 'none',
         padding: '12px 24px',

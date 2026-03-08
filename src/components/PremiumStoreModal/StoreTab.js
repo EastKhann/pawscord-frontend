@@ -23,7 +23,7 @@ const StoreTab = ({ styles, storeItems, userInventory, handleBuyItem, loading })
                     return (
                         <div key={item.id} style={{
                             ...styles.storeItem,
-                            ...(isOwned && { opacity: 0.6, borderColor: '#43b581' })
+                            ...(isOwned && { opacity: 0.6, borderColor: '#23a559' })
                         }}>
                             <div style={styles.itemIcon}>{item.icon || '🎁'}</div>
                             <h4 style={styles.itemName}>{item.name}</h4>
@@ -35,7 +35,7 @@ const StoreTab = ({ styles, storeItems, userInventory, handleBuyItem, loading })
                                     disabled
                                     style={{
                                         ...styles.buyButton,
-                                        backgroundColor: '#43b581',
+                                        backgroundColor: '#23a559',
                                         cursor: 'not-allowed',
                                         opacity: 0.7
                                     }}

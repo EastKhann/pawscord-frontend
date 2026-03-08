@@ -1,4 +1,4 @@
-// frontend/src/components/ModeratorNotesPanel.js
+﻿// frontend/src/components/ModeratorNotesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaStickyNote, FaPlus, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -83,7 +83,7 @@ const ModeratorNotesPanel = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaStickyNote style={{ color: '#faa61a' }} />
+                        <FaStickyNote style={{ color: '#f0b232' }} />
                         <h2 style={{ margin: 0 }}>Moderatör Notları - {username}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -180,7 +180,7 @@ const styles = {
     textarea: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -190,7 +190,7 @@ const styles = {
         fontFamily: 'inherit'
     },
     addBtn: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '10px 20px',
@@ -211,7 +211,7 @@ const styles = {
         display: 'flex',
         gap: '15px',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '10px'
     },
@@ -224,14 +224,14 @@ const styles = {
         marginBottom: '8px'
     },
     noteText: {
-        color: '#dcddde',
+        color: '#dbdee1',
         lineHeight: '1.5',
         whiteSpace: 'pre-wrap'
     },
     deleteBtn: {
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#ed4245',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '18px',
         padding: '10px'

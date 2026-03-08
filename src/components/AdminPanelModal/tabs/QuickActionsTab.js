@@ -9,7 +9,7 @@ const QuickActionsTab = ({ onClose, onOpenAnalytics, onOpenAutoResponder, onOpen
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '12px' }}>
                         {[
                             { icon: '📊', title: 'Analytics', desc: 'İstatistikleri görüntüle', color: '#f0b132', action: onOpenAnalytics },
-                            { icon: '🪝', title: 'Webhooks', desc: 'Webhook ayarları', color: '#9b59b6', action: onOpenWebhooks },
+                            { icon: '🪝', title: 'Webhooks', desc: 'Webhook ayarları', color: '#5865f2', action: onOpenWebhooks },
                             { icon: '🤖', title: 'Oto Yanıtlayıcı', desc: 'Otomatik yanıtlar', color: '#5865f2', action: onOpenAutoResponder },
                             { icon: '🔗', title: 'Vanity URL', desc: 'Özel URL\'ler', color: '#1abc9c', action: onOpenVanityURL },
                         ].map((item, idx) => (

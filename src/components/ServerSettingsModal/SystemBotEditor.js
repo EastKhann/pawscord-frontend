@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { FaRobot } from 'react-icons/fa';
 import toast from '../../utils/toast';
 
@@ -74,19 +74,19 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
         setIsCustomAvatar(false);
     };
 
-    if (loading) return <div style={{ padding: '20px', color: '#b9bbbe', textAlign: 'center' }}>Yükleniyor...</div>;
+    if (loading) return <div style={{ padding: '20px', color: '#b5bac1', textAlign: 'center' }}>Yükleniyor...</div>;
 
     const displayAvatar = botAvatarPreview || botAvatar || serverIcon;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {/* Bilgi Kartı */}
-            <div style={{ padding: '16px', backgroundColor: '#2b2d31', borderRadius: '10px', border: '1px solid #40444b' }}>
+            <div style={{ padding: '16px', backgroundColor: '#111214', borderRadius: '10px', border: '1px solid #182135' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
                     <FaRobot style={{ color: '#5865f2', fontSize: '18px' }} />
-                    <span style={{ color: '#dcddde', fontWeight: '600', fontSize: '15px' }}>Sistem Botu Hakkında</span>
+                    <span style={{ color: '#dbdee1', fontWeight: '600', fontSize: '15px' }}>Sistem Botu Hakkında</span>
                 </div>
-                <p style={{ color: '#72767d', fontSize: '13px', lineHeight: '1.5', margin: 0 }}>
+                <p style={{ color: '#949ba4', fontSize: '13px', lineHeight: '1.5', margin: 0 }}>
                     Sistem botu, hoş geldin mesajları ve otomatik bildirimler gibi tüm sistem mesajlarını gönderir.
                     Burada botun profil fotoğrafını ve adını özelleştirebilirsiniz.
                     Varsayılan olarak sunucu ikonu kullanılır.
@@ -95,15 +95,15 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Bot Avatar */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Bot Profil Fotoğrafı
                 </label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px', backgroundColor: '#2b2d31', borderRadius: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px', backgroundColor: '#111214', borderRadius: '10px' }}>
                     <div style={{
                         width: '80px', height: '80px', borderRadius: '50%',
                         overflow: 'hidden', border: '3px solid #5865f2',
                         cursor: 'pointer', position: 'relative',
-                        backgroundColor: '#1e1f22',
+                        backgroundColor: '#0d0e10',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         flexShrink: 0,
                         transition: 'all 0.2s',
@@ -144,10 +144,10 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                         </div>
                     </div>
                     <div style={{ flex: 1 }}>
-                        <div style={{ color: '#dcddde', fontSize: '15px', fontWeight: '600' }}>
+                        <div style={{ color: '#dbdee1', fontSize: '15px', fontWeight: '600' }}>
                             {botName}
                         </div>
-                        <div style={{ color: '#72767d', fontSize: '12px', marginTop: '6px' }}>
+                        <div style={{ color: '#949ba4', fontSize: '12px', marginTop: '6px' }}>
                             {botAvatarPreview ? '📷 Yeni fotoğraf seçildi (kaydettiğinizde uygulanır)' :
                                 isCustomAvatar ? '✓ Özel avatar ayarlanmış' : '🖼️ Sunucu ikonu kullanılıyor (varsayılan)'}
                         </div>
@@ -172,7 +172,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Bot Adı */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Bot Adı
                 </label>
                 <input
@@ -182,28 +182,28 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                     placeholder="🎉 Sistem"
                     style={{
                         width: '100%', padding: '10px 14px',
-                        backgroundColor: '#1e1f22', border: '1px solid #40444b',
-                        borderRadius: '8px', color: '#dcddde', fontSize: '14px',
+                        backgroundColor: '#0d0e10', border: '1px solid #182135',
+                        borderRadius: '8px', color: '#dbdee1', fontSize: '14px',
                         outline: 'none', transition: 'border-color 0.2s'
                     }}
                     onFocus={(e) => { e.target.style.borderColor = '#5865f2'; }}
-                    onBlur={(e) => { e.target.style.borderColor = '#40444b'; }}
+                    onBlur={(e) => { e.target.style.borderColor = '#1e2024'; }}
                 />
-                <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px' }}>
+                <div style={{ fontSize: '11px', color: '#949ba4', marginTop: '4px' }}>
                     Sistem mesajlarında görünecek bot adı
                 </div>
             </div>
 
             {/* Önizleme */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Önizleme
                 </label>
-                <div style={{ padding: '14px', backgroundColor: '#1e1f22', borderRadius: '8px', border: '1px solid #40444b' }}>
+                <div style={{ padding: '14px', backgroundColor: '#0d0e10', borderRadius: '8px', border: '1px solid #182135' }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                         <div style={{
                             width: '40px', height: '40px', borderRadius: '50%',
-                            overflow: 'hidden', backgroundColor: '#2b2d31',
+                            overflow: 'hidden', backgroundColor: '#111214',
                             flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}>
                             {displayAvatar ? (
@@ -219,9 +219,9 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                                     backgroundColor: '#5865f2', color: '#fff', fontSize: '10px',
                                     padding: '1px 5px', borderRadius: '3px', fontWeight: '600'
                                 }}>BOT</span>
-                                <span style={{ color: '#72767d', fontSize: '11px' }}>Bugün {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+                                <span style={{ color: '#949ba4', fontSize: '11px' }}>Bugün {new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
-                            <div style={{ color: '#dcddde', fontSize: '14px', marginTop: '4px', lineHeight: '1.4' }}>
+                            <div style={{ color: '#dbdee1', fontSize: '14px', marginTop: '4px', lineHeight: '1.4' }}>
                                 Hoş geldin Kullanıcı! 🎉 Sunucuya katıldın!
                             </div>
                         </div>
@@ -231,7 +231,7 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
 
             {/* Kullanım Alanları */}
             <div>
-                <label style={{ color: '#b9bbbe', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                <label style={{ color: '#b5bac1', fontSize: '12px', fontWeight: '700', display: 'block', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                     Bu Bot Nerede Kullanılır?
                 </label>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -240,9 +240,9 @@ const SystemBotEditor = ({ serverId, serverIcon, fetchWithAuth, apiBaseUrl }) =>
                         { icon: '👋', text: 'Ayrılma mesajları' },
                         { icon: '📢', text: 'Sistem bildirimleri' },
                     ].map((item, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', backgroundColor: '#2b2d31', borderRadius: '6px' }}>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', backgroundColor: '#111214', borderRadius: '6px' }}>
                             <span>{item.icon}</span>
-                            <span style={{ color: '#dcddde', fontSize: '13px' }}>{item.text}</span>
+                            <span style={{ color: '#dbdee1', fontSize: '13px' }}>{item.text}</span>
                         </div>
                     ))}
                 </div>

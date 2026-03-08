@@ -56,7 +56,7 @@ const UserDetailModal = ({
                     <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                         {selectedUser.is_staff && <span style={styles.badge('#e74c3c')}>👑 Admin</span>}
                         {selectedUser.is_premium && <span style={styles.badge('#ffd700')}>⭐ Premium</span>}
-                        {selectedUser.is_whitelisted && <span style={styles.badge('#9b59b6')}>💎 Whitelist</span>}
+                        {selectedUser.is_whitelisted && <span style={styles.badge('#5865f2')}>💎 Whitelist</span>}
                         {selectedUser.has_spotify && <span style={styles.badge('#1db954')}>🎵 Spotify</span>}
                     </div>
                 </div>
@@ -148,7 +148,7 @@ const UserDetailModal = ({
                     <button style={styles.actionBtn('#f0b132')} onClick={handleWarn}>
                         <FaExclamationTriangle /> Uyar
                     </button>
-                    <button style={styles.actionBtn('#8b5cf6')} onClick={handleReset2FA}>
+                    <button style={styles.actionBtn('#5865f2')} onClick={handleReset2FA}>
                         <FaLock /> 2FA Sıfırla
                     </button>
                     <button style={styles.actionBtn('#06b6d4')} onClick={handleVerifyEmail}>
@@ -160,7 +160,7 @@ const UserDetailModal = ({
                     <button style={styles.actionBtn('#ec4899')} onClick={handleRemovePremium}>
                         <FaStar /> Premium Kaldır
                     </button>
-                    <button style={styles.actionBtn('#6366f1')} onClick={handleForceLogout}>
+                    <button style={styles.actionBtn('#4752c4')} onClick={handleForceLogout}>
                         <FaLock /> Oturumu Sonlandır
                     </button>
                     <button style={styles.actionBtn('#f97316')} onClick={handleResetAvatar}>

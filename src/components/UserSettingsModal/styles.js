@@ -1,27 +1,32 @@
-const S = {
+﻿const S = {
     overlay: {
-        position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)',
+        position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.75)',
+        backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5000,
     },
     modal: {
         display: 'flex', width: '95vw', maxWidth: 900, height: '85vh',
-        backgroundColor: '#313338', borderRadius: 12, overflow: 'hidden',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(30, 31, 35, 0.92)', backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
+        borderRadius: 22, overflow: 'hidden',
+        boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.65)',
+        border: '1px solid rgba(255,255,255,0.07)',
     },
     sidebar: {
-        width: 220, backgroundColor: '#2b2d31', flexShrink: 0,
+        width: 220, backgroundColor: 'rgba(17, 18, 20, 0.6)', flexShrink: 0,
         display: 'flex', flexDirection: 'column',
+        borderRight: '1px solid rgba(255,255,255,0.06)',
     },
     sidebarScroll: {
         flex: 1, overflowY: 'auto', padding: '12px 8px',
     },
     sectionLabel: {
-        fontSize: 11, fontWeight: 700, color: '#949ba4', padding: '8px 10px 4px',
+        fontSize: 11, fontWeight: 700, color: '#80848e', padding: '8px 10px 4px',
         letterSpacing: '0.04em',
     },
     tabBtn: {
         width: '100%', display: 'flex', alignItems: 'center', gap: 10,
-        padding: '8px 10px', border: 'none', borderRadius: 4,
+        padding: '8px 10px', border: 'none', borderRadius: 8,
         cursor: 'pointer', fontSize: 14, fontWeight: 500,
         textAlign: 'left', transition: 'all 0.1s',
         background: 'transparent',
@@ -38,7 +43,7 @@ const S = {
     },
     closeBtn: {
         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-        background: 'none', border: '2px solid #949ba4', color: '#949ba4',
+        background: 'none', border: '2px solid #80848e', color: '#80848e',
         width: 36, height: 36, borderRadius: '50%', cursor: 'pointer',
         justifyContent: 'center', fontSize: 14, transition: 'all 0.15s',
     },
@@ -46,10 +51,12 @@ const S = {
         flex: 1, overflowY: 'auto', padding: '20px 24px',
     },
     actionBtn: {
-        padding: '8px 16px', backgroundColor: 'rgba(88,101,242,0.1)',
-        border: '1px solid rgba(88,101,242,0.3)', borderRadius: 4,
-        color: '#5865f2', cursor: 'pointer', fontSize: 14, fontWeight: 500,
+        padding: '8px 16px', background: 'linear-gradient(135deg, #5865f2, #4752c4)',
+        border: 'none', borderRadius: 13,
+        color: '#fff', cursor: 'pointer', fontSize: 14, fontWeight: 600,
         display: 'flex', alignItems: 'center', gap: 8,
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
+        transition: 'all 0.2s',
     },
     themeBtn: {
         width: 100, height: 70, borderRadius: 8, border: '2px solid',
@@ -57,8 +64,8 @@ const S = {
         position: 'relative', transition: 'border-color 0.15s',
     },
     kbd: {
-        padding: '3px 8px', backgroundColor: '#1e1f22', borderRadius: 4,
-        color: '#dcddde', fontSize: 12, fontFamily: 'monospace',
+        padding: '3px 8px', backgroundColor: '#0d0e10', borderRadius: 4,
+        color: '#dbdee1', fontSize: 12, fontFamily: 'monospace',
         border: '1px solid rgba(255,255,255,0.08)',
     },
     volumeRow: {

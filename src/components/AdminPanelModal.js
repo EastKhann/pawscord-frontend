@@ -1,14 +1,16 @@
 // frontend/src/components/AdminPanelModal.js
 // Thin orchestrator - state & API logic in useAdminAPI hook
-import { FaTimes, FaCrown, FaChartLine, FaUsers, FaServer, FaUserShield, FaBook, FaDatabase, FaTools, FaCog, FaPaperPlane, FaSync } from 'react-icons/fa';
+import { FaTimes, FaCrown, FaChartLine, FaUsers, FaServer, FaUserShield, FaBook, FaDatabase, FaTools, FaCog, FaPaperPlane, FaSync, FaBitcoin, FaFingerprint } from 'react-icons/fa';
 import { MdStorage, MdSecurity } from 'react-icons/md';
 import styles from './AdminPanelModal/styles';
+import './AdminPanelModal.css';
 import useAdminAPI from './AdminPanelModal/hooks/useAdminAPI';
 import useModalA11y from '../hooks/useModalA11y';
 
 import {
     DashboardTab, UsersTab, ServersTab, LogsTab, ModerationTab,
     DatabaseTab, SystemHealthTab, SecurityTab, BroadcastTab, ToolsTab, QuickActionsTab,
+    WhitelistTab, CryptoSignalsTab, VisitorLogsTab,
 } from './AdminPanelModal/tabs';
 
 import {
@@ -27,7 +29,10 @@ const MENU_ITEMS = [
     { id: 'security', label: 'Güvenlik', icon: <MdSecurity size={14} /> },
     { id: 'broadcast', label: 'Duyuru', icon: <FaPaperPlane size={14} /> },
     { id: 'tools', label: 'Araçlar', icon: <FaTools size={14} /> },
-    { id: 'quickActions', label: 'Hızlı İşlem', icon: <FaCog size={14} /> }
+    { id: 'quickActions', label: 'Hızlı İşlem', icon: <FaCog size={14} /> },
+    { id: 'whitelist', label: 'Whitelist', icon: <FaCrown size={14} /> },
+    { id: 'cryptoSignals', label: 'Kripto Sinyaller', icon: <FaBitcoin size={14} /> },
+    { id: 'visitorLogs', label: 'Ziyaretçi Logları', icon: <FaFingerprint size={14} /> }
 ];
 
 const AdminPanelModal = ({
@@ -76,6 +81,19 @@ const AdminPanelModal = ({
             case 'quickActions':
                 return <QuickActionsTab onClose={onClose} onOpenAnalytics={onOpenAnalytics}
                     onOpenAutoResponder={onOpenAutoResponder} onOpenVanityURL={onOpenVanityURL} onOpenWebhooks={onOpenWebhooks} />;
+            case 'whitelist':
+                return <WhitelistTab fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />;
+            case 'cryptoSignals':
+                return <CryptoSignalsTab fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />;
+            case 'visitorLogs':
+                return <VisitorLogsTab
+                    visitorLogs={api.visitorLogs}
+                    fetchVisitorLogs={api.fetchVisitorLogs}
+                    visitorIpFilter={api.visitorIpFilter} setVisitorIpFilter={api.setVisitorIpFilter}
+                    visitorUsernameFilter={api.visitorUsernameFilter} setVisitorUsernameFilter={api.setVisitorUsernameFilter}
+                    visitorPathFilter={api.visitorPathFilter} setVisitorPathFilter={api.setVisitorPathFilter}
+                    visitorPage={api.visitorPage} setVisitorPage={api.setVisitorPage}
+                    visitorLoading={api.visitorLoading} />;
             default:
                 return <DashboardTab detailedStats={api.detailedStats} fetchDetailedStats={api.fetchDetailedStats}
                     fetchLiveActivity={api.fetchLiveActivity} fetchSecurityAlerts={api.fetchSecurityAlerts}
@@ -87,31 +105,32 @@ const AdminPanelModal = ({
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Yönetici Paneli' });
 
     return (
-        <div style={styles.overlay} {...overlayProps}>
-            <div style={styles.modal} {...dialogProps}>
-                <div style={styles.header}>
+        <div style={styles.overlay} className="admin-panel-overlay" {...overlayProps}>
+            <div style={styles.modal} className="admin-panel-modal" {...dialogProps}>
+                <div style={styles.header} className="admin-panel-header">
                     <div style={styles.headerLeft}>
                         <FaCrown size={20} color="#ffd700" />
-                        <h2 style={styles.title}>👑 Admin Panel - PAWSCORD</h2>
-                        <span style={styles.badge('#23a559')}>v2.0</span>
+                        <h2 style={styles.title} className="admin-panel-title">👑 Admin Panel</h2>
+                        <span style={styles.badge('#23a559')} className="admin-panel-badge">v2.0</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ color: '#6b7280', fontSize: '11px' }}>🟢 {api.realtimeStats.online} Online</span>
+                        <span style={{ color: '#6b7280', fontSize: '11px' }} className="admin-panel-online-info">🟢 {api.realtimeStats.online} Online</span>
                         <button onClick={onClose} style={styles.closeButton}><FaTimes /></button>
                     </div>
                 </div>
 
-                <div style={styles.body}>
-                    <div style={styles.sidebar}>
+                <div style={styles.body} className="admin-panel-body">
+                    <div style={styles.sidebar} className="admin-panel-sidebar">
                         {MENU_ITEMS.map(item => (
                             <button key={item.id} onClick={() => api.setActiveTab(item.id)}
+                                className="admin-panel-sidebar-btn"
                                 style={styles.sidebarButton(api.activeTab === item.id)}>
                                 {item.icon}<span>{item.label}</span>
                             </button>
                         ))}
                     </div>
 
-                    <div style={styles.content}>
+                    <div style={styles.content} className="admin-panel-content">
                         {api.loading ? (
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                                 <FaSync className="spin" size={24} color="#5865f2" />

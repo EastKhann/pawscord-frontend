@@ -1,4 +1,4 @@
-// frontend/src/components/DJModal.js
+﻿// frontend/src/components/DJModal.js
 
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
@@ -99,12 +99,12 @@ const DJModal = ({ onClose, ws, roomSlug }) => {
 
 const styles = {
     overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.8)', zIndex: 2000, display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    modal: { background: '#2b2d31', width: '500px', borderRadius: '12px', padding: '20px' },
+    modal: { background: '#111214', width: '500px', borderRadius: '12px', padding: '20px' },
     header: { display: 'flex', justifyContent: 'space-between', color: 'white', marginBottom: 20 },
     closeBtn: { background: 'none', border: 'none', color: 'white', fontSize: '1.2em', cursor: 'pointer' },
     playerWrapper: { marginBottom: 20, borderRadius: '8px', overflow: 'hidden' },
     controls: { display: 'flex', gap: 10, marginBottom: 20 },
-    input: { flex: 1, padding: 8, borderRadius: 4, border: '1px solid #444', background: '#202225', color: 'white' },
+    input: { flex: 1, padding: 8, borderRadius: 4, border: '1px solid #444', background: '#0d0e10', color: 'white' },
     addBtn: { padding: '8px 12px', background: '#5865f2', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer' },
     nextBtn: { padding: '8px 12px', background: '#23a559', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer' },
     queueList: { maxHeight: 200, overflowY: 'auto', color: '#ccc' },

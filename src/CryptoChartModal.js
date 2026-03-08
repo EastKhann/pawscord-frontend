@@ -1,4 +1,4 @@
-// frontend/src/CryptoChartModal.js
+﻿// frontend/src/CryptoChartModal.js
 
 import { useEffect, useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
@@ -68,16 +68,16 @@ const styles = {
         display: 'flex', justifyContent: 'center', alignItems: 'center'
     },
     modal: {
-        width: '90%', height: '80%', backgroundColor: '#1e1f22',
+        width: '90%', height: '80%', backgroundColor: '#0d0e10',
         borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column',
         boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
     },
     header: {
         padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        borderBottom: '1px solid #2b2d31', backgroundColor: '#2b2d31', color: 'white'
+        borderBottom: '1px solid #0e1222', backgroundColor: '#111214', color: 'white'
     },
     closeBtn: {
-        background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.5em', cursor: 'pointer'
+        background: 'none', border: 'none', color: '#b5bac1', fontSize: '1.5em', cursor: 'pointer'
     },
     chartContainer: { flex: 1, width: '100%', height: '100%' }
 };

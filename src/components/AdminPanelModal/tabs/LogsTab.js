@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { FaCode, FaDownload, FaSync, FaTimes } from 'react-icons/fa';
 import styles from '../styles';
 
@@ -108,7 +108,7 @@ const LogsTab = ({
                                 { label: 'Login', count: logStats.login_count, color: '#23a559', icon: '🔐' },
                                 { label: 'Errors', count: logStats.error_count, color: '#e74c3c', icon: '❌' },
                                 { label: 'Security', count: logStats.security_count, color: '#f0b132', icon: '🛡️' },
-                                { label: 'Moderation', count: logStats.moderation_count, color: '#9b59b6', icon: '⚖️' },
+                                { label: 'Moderation', count: logStats.moderation_count, color: '#5865f2', icon: '⚖️' },
                                 { label: 'API', count: logStats.api_count, color: '#3498db', icon: '🌐' },
                             ].map((stat, idx) => (
                                 <div key={idx} style={{
@@ -129,7 +129,7 @@ const LogsTab = ({
                     <div style={{
                         backgroundColor: '#0a0a0c', borderRadius: '10px',
                         fontFamily: 'JetBrains Mono, Consolas, monospace', maxHeight: '450px',
-                        overflowY: 'auto', border: '1px solid #1f2023'
+                        overflowY: 'auto', border: '1px solid #16203a'
                     }}>
                         {logLoading ? (
                             <div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
@@ -165,13 +165,13 @@ const LogsTab = ({
                                                         log.type === 'error' ? '#f8514920' :
                                                             log.type === 'security' ? '#f0b13220' :
                                                                 log.type === 'login' ? '#23a55920' :
-                                                                    log.type === 'moderation' ? '#9b59b620' :
+                                                                    log.type === 'moderation' ? '#5865f220' :
                                                                         log.type === 'api' ? '#3498db20' : '#5865f220',
                                                     color:
                                                         log.type === 'error' ? '#f85149' :
                                                             log.type === 'security' ? '#f0b132' :
                                                                 log.type === 'login' ? '#23a559' :
-                                                                    log.type === 'moderation' ? '#9b59b6' :
+                                                                    log.type === 'moderation' ? '#5865f2' :
                                                                         log.type === 'api' ? '#3498db' : '#5865f2'
                                                 }}>
                                                     {log.type}

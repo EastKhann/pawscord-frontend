@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 function VanityInviteScreen({ vanityPath, fetchWithAuth, onClose, apiBaseUrl }) {
@@ -181,12 +181,12 @@ const styles = {
         alignItems: 'center',
         width: '100vw',
         height: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
         padding: '20px',
         overflow: 'auto',
     },
     card: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '12px',
         padding: '40px',
         maxWidth: '450px',
@@ -227,7 +227,7 @@ const styles = {
     },
     inviteText: {
         fontSize: '16px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         marginBottom: '25px',
     },
     statsContainer: {
@@ -236,7 +236,7 @@ const styles = {
         gap: '30px',
         marginBottom: '30px',
         padding: '15px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
     },
     stat: {
@@ -249,11 +249,11 @@ const styles = {
         fontSize: '12px',
     },
     memberDot: {
-        color: '#747f8d',
+        color: '#80848e',
         fontSize: '12px',
     },
     statText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
     },
     joinButton: {
@@ -276,7 +276,7 @@ const styles = {
     },
     vanityInfo: {
         fontSize: '12px',
-        color: '#72767d',
+        color: '#949ba4',
         marginTop: '10px',
     },
     loadingSpinner: {
@@ -285,21 +285,21 @@ const styles = {
         animation: 'spin 1s linear infinite',
     },
     loadingText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '16px',
     },
     errorTitle: {
         fontSize: '24px',
-        color: '#ed4245',
+        color: '#f23f42',
         marginBottom: '15px',
     },
     errorText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         marginBottom: '20px',
     },
     backButton: {
         padding: '12px 24px',
-        backgroundColor: '#4f545c',
+        backgroundColor: '#4e5058',
         color: '#fff',
         border: 'none',
         borderRadius: '8px',

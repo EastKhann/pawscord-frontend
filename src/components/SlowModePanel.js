@@ -1,4 +1,4 @@
-// frontend/src/components/SlowModePanel.js
+﻿// frontend/src/components/SlowModePanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaClock, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -74,7 +74,7 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaClock style={{ color: '#faa61a' }} />
+                        <FaClock style={{ color: '#f0b232' }} />
                         <h2 style={{ margin: 0 }}>Slow Mode</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -93,7 +93,7 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
                             style={styles.toggleBtn}
                         >
                             {slowMode.enabled ?
-                                <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                 <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                             }
                         </button>
@@ -110,7 +110,7 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
                                             onClick={() => setSlowMode({ ...slowMode, interval_seconds: preset.value })}
                                             style={{
                                                 ...styles.presetBtn,
-                                                backgroundColor: slowMode.interval_seconds === preset.value ? '#5865f2' : '#2c2f33'
+                                                backgroundColor: slowMode.interval_seconds === preset.value ? '#5865f2' : '#111214'
                                             }}
                                         >
                                             {preset.label}
@@ -196,7 +196,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '20px'
     },
@@ -220,7 +220,7 @@ const styles = {
     label: {
         display: 'block',
         marginBottom: '12px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         fontWeight: '600'
     },
@@ -243,7 +243,7 @@ const styles = {
     input: {
         width: '100%',
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -266,7 +266,7 @@ const styles = {
     },
     cancelBtn: {
         flex: 1,
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         color: '#fff',
         border: 'none',
         padding: '12px',
@@ -277,7 +277,7 @@ const styles = {
     },
     saveBtn: {
         flex: 1,
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '12px',

@@ -14,7 +14,7 @@ const ToolsTab = ({ handleBackup, handleClearCache }) => {
                             { icon: <FaBroom />, title: 'Cache Temizle', desc: 'Önbellek temizle', color: '#f0b132', action: handleClearCache },
                             { icon: <FaSync />, title: 'Yeniden Başlat', desc: 'Servisleri yeniden başlat', color: '#e74c3c', action: () => toast.info('🔄 Bu özellik güvenlik nedeniyle sunucu üzerinden yapılmalıdır') },
                             { icon: <FaTerminal />, title: 'Konsol', desc: 'Admin konsolu', color: '#23a559', action: () => toast.info('🖥️ Konsol erişimi SSH üzerinden yapılmalıdır') },
-                            { icon: <FaBug />, title: 'Debug Modu', desc: 'Hata ayıklama', color: '#9b59b6', action: () => toast.info('🐛 Debug modu güvenlik nedeniyle devre dışı') },
+                            { icon: <FaBug />, title: 'Debug Modu', desc: 'Hata ayıklama', color: '#5865f2', action: () => toast.info('🐛 Debug modu güvenlik nedeniyle devre dışı') },
                             { icon: <FaFileExport />, title: 'Export', desc: 'Veri dışa aktar', color: '#1abc9c', action: handleBackup },
                         ].map((item, idx) => (
                             <div key={idx} style={{ ...styles.statCard, cursor: 'pointer' }} onClick={item.action}>

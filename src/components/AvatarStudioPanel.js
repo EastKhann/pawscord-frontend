@@ -14,7 +14,7 @@ const AvatarStudioPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
             <FaUser style={{ marginRight: '10px', color: '#5865f2' }} />
             <h2 style={styles.title}>Avatar Studio</h2>
           </div>
-          <div style={styles.coinsDisplay}><FaCoins style={{ color: '#faa61a' }} /><span>{s.userCoins}</span></div>
+          <div style={styles.coinsDisplay}><FaCoins style={{ color: '#f0b232' }} /><span>{s.userCoins}</span></div>
           <button onClick={onClose} style={styles.closeButton}><FaTimes /></button>
         </div>
 

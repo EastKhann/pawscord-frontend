@@ -9,21 +9,21 @@ const OverviewTab = ({ stats, settings }) => (
         {/* Stats Cards */}
         <div style={styles.statsGrid}>
             <div style={styles.statCard}>
-                <div style={styles.statIcon}><FaShieldAlt size={20} color="#43b581" /></div>
+                <div style={styles.statIcon}><FaShieldAlt size={20} color="#23a559" /></div>
                 <div style={styles.statInfo}>
                     <div style={styles.statValue}>{stats.totalDetected}</div>
                     <div style={styles.statLabel}>Toplam Tespit</div>
                 </div>
             </div>
             <div style={styles.statCard}>
-                <div style={styles.statIcon}><FaExclamationTriangle size={20} color="#faa61a" /></div>
+                <div style={styles.statIcon}><FaExclamationTriangle size={20} color="#f0b232" /></div>
                 <div style={styles.statInfo}>
                     <div style={styles.statValue}>{stats.todayDetected}</div>
                     <div style={styles.statLabel}>Bugün</div>
                 </div>
             </div>
             <div style={styles.statCard}>
-                <div style={styles.statIcon}><FaUserSlash size={20} color="#f04747" /></div>
+                <div style={styles.statIcon}><FaUserSlash size={20} color="#f23f42" /></div>
                 <div style={styles.statInfo}>
                     <div style={styles.statValue}>{stats.actionsTaken?.ban || 0}</div>
                     <div style={styles.statLabel}>Ban</div>

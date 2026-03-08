@@ -1,4 +1,4 @@
-// frontend/src/VoiceChatPanel/UserVideoCard/VideoDisplay.js
+﻿// frontend/src/VoiceChatPanel/UserVideoCard/VideoDisplay.js
 // 📹 Video feed or avatar fallback display with talking animation
 
 import React from 'react';
@@ -45,7 +45,7 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '16px',
-                    background: 'linear-gradient(135deg, #36393f 0%, #2f3136 50%, #202225 100%)',
+                    background: 'linear-gradient(135deg, #17191c 0%, #111214 50%, #0d0e10 100%)',
                     position: 'relative',
                 }}>
                     {/* Avatar Container with Talking Animation */}
@@ -54,7 +54,7 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
                         padding: '8px',
                         borderRadius: '50%',
                         background: user.isTalking
-                            ? 'linear-gradient(135deg, #43b581, #3ca374)'
+                            ? 'linear-gradient(135deg, #23a559, #3ca374)'
                             : 'transparent',
                         boxShadow: user.isTalking
                             ? '0 0 20px rgba(67, 181, 129, 0.6), 0 0 40px rgba(67, 181, 129, 0.3)'
@@ -74,7 +74,7 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
                                 height: '140px',
                                 borderRadius: '50%',
                                 objectFit: 'cover',
-                                border: '5px solid #40444b',
+                                border: '5px solid #182135',
                                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
                                 display: 'block',
                             }}
@@ -103,7 +103,7 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
                     }}>
                         <span style={{ fontSize: '16px' }}>{user.isMuted ? '🔇' : '🎤'}</span>
                         <span style={{
-                            color: user.isMuted ? '#f04747' : '#43b581',
+                            color: user.isMuted ? '#f23f42' : '#23a559',
                             fontSize: '13px',
                             fontWeight: 600,
                         }}>

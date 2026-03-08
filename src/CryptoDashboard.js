@@ -1,4 +1,4 @@
-// frontend/src/CryptoDashboard.js
+﻿// frontend/src/CryptoDashboard.js
 // v3.0 — Balance/Winrate Mode + 5 Tab — Decomposed Orchestrator
 
 import { useCallback, memo } from 'react';
@@ -76,7 +76,7 @@ const CryptoDashboard = () => {
                 <div style={{ textAlign: 'center', marginTop: 50 }}>
                     <h3 style={{ color: '#da373c' }}>⚠️ {api.errorMsg}</h3>
                     {api.debugInfo && (
-                        <div style={{ backgroundColor: '#2b2d31', padding: 10, margin: '20px auto', maxWidth: 600, borderRadius: 8, textAlign: 'left' }}>
+                        <div style={{ backgroundColor: '#111214', padding: 10, margin: '20px auto', maxWidth: 600, borderRadius: 8, textAlign: 'left' }}>
                             <strong style={{ color: '#f0b232' }}><FaBug /> Hata Verisi:</strong>
                             <pre style={{ color: '#dbdee1', fontSize: '0.8em', whiteSpace: 'pre-wrap' }}>{api.debugInfo}</pre>
                         </div>
@@ -93,7 +93,7 @@ const CryptoDashboard = () => {
                             style={{
                                 ...styles.modeToggleBtn,
                                 ...(api.activeMode === 'balance_mode' ? styles.modeToggleActive : {}),
-                                borderColor: api.activeMode === 'balance_mode' ? '#f0b232' : '#40444b'
+                                borderColor: api.activeMode === 'balance_mode' ? '#f0b232' : '#1e2024'
                             }}
                         >
                             <FaChartLine style={{ marginRight: 6 }} />
@@ -104,7 +104,7 @@ const CryptoDashboard = () => {
                             style={{
                                 ...styles.modeToggleBtn,
                                 ...(api.activeMode === 'winrate_mode' ? styles.modeToggleActive : {}),
-                                borderColor: api.activeMode === 'winrate_mode' ? '#23a559' : '#40444b'
+                                borderColor: api.activeMode === 'winrate_mode' ? '#23a559' : '#1e2024'
                             }}
                         >
                             <FaTrophy style={{ marginRight: 6 }} />

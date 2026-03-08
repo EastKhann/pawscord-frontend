@@ -13,7 +13,7 @@
 }
 
 .showcase-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 600px;
@@ -21,7 +21,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(255, 193, 7, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 193, 7, 0.3);
     border: 1px solid rgba(255, 193, 7, 0.3);
 }
 
@@ -31,7 +31,7 @@
     align-items: center;
     padding: 20px 24px;
     background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
-    color: #1a1a2e;
+    color: #0d0e10;
 }
 
 .panel-header h2 {
@@ -45,7 +45,7 @@
 .close-btn {
     background: rgba(0, 0, 0, 0.2);
     border: none;
-    color: #1a1a2e;
+    color: #0d0e10;
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -106,7 +106,7 @@
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
-    color: #1a1a2e;
+    color: #0d0e10;
     font-weight: 500;
     cursor: pointer;
     display: inline-flex;
@@ -270,7 +270,7 @@
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
-    color: #1a1a2e;
+    color: #0d0e10;
     font-weight: 500;
     cursor: pointer;
     display: flex;
@@ -304,7 +304,7 @@
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: linear-gradient(135deg, #0d0e10, #0d0e10);
     border-radius: 16px;
     padding: 24px;
     width: 90%;
@@ -413,7 +413,7 @@
     border: none;
     border-radius: 8px;
     padding: 12px;
-    color: #1a1a2e;
+    color: #0d0e10;
     font-weight: 500;
     cursor: pointer;
     display: flex;

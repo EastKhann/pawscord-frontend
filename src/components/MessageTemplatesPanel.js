@@ -1,4 +1,4 @@
-// frontend/src/components/MessageTemplatesPanel.js
+﻿// frontend/src/components/MessageTemplatesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaFileAlt, FaPlus, FaTrash, FaCopy } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -209,7 +209,7 @@ const styles = {
     input: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -219,7 +219,7 @@ const styles = {
     textarea: {
         width: '100%',
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -251,7 +251,7 @@ const styles = {
         display: 'flex',
         gap: '15px',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '10px'
     },
@@ -273,7 +273,7 @@ const styles = {
         fontWeight: '600',
         fontSize: '16px',
         marginBottom: '6px',
-        color: '#dcddde'
+        color: '#dbdee1'
     },
     templatePreview: {
         fontSize: '13px',
@@ -291,7 +291,7 @@ const styles = {
         gap: '8px'
     },
     useBtn: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '8px 12px',
@@ -305,7 +305,7 @@ const styles = {
         whiteSpace: 'nowrap'
     },
     deleteBtn: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '8px 12px',

@@ -43,8 +43,8 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
 
     const colors = {
         info: { bg: 'rgba(88, 101, 242, 0.1)', border: '#5865f2', text: '#5865f2' },
-        warning: { bg: 'rgba(250, 166, 26, 0.1)', border: '#faa61a', text: '#faa61a' },
-        critical: { bg: 'rgba(240, 71, 71, 0.1)', border: '#f04747', text: '#f04747' }
+        warning: { bg: 'rgba(250, 166, 26, 0.1)', border: '#f0b232', text: '#f0b232' },
+        critical: { bg: 'rgba(240, 71, 71, 0.1)', border: '#f23f42', text: '#f23f42' }
     };
 
     const color = colors[level] || colors.info;
@@ -72,7 +72,7 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
                             level === 'warning' ? '⚠️ Scheduled Maintenance' :
                                 'ℹ️ Maintenance Notice'}
                     </div>
-                    <div style={{ color: '#dcddde', fontSize: '14px', marginTop: '2px' }}>
+                    <div style={{ color: '#dbdee1', fontSize: '14px', marginTop: '2px' }}>
                         {message}
                         {timeLeft && <span style={{ marginLeft: '10px', opacity: 0.7 }}>({timeLeft})</span>}
                     </div>
@@ -84,7 +84,7 @@ const MaintenanceBanner = ({ message, endTime, level = 'info', onDismiss }) => {
                     style={{
                         background: 'none',
                         border: 'none',
-                        color: '#b9bbbe',
+                        color: '#b5bac1',
                         cursor: 'pointer',
                         padding: '8px',
                         borderRadius: '4px',

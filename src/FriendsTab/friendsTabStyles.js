@@ -1,46 +1,46 @@
-const localStyles = {
-    container: { display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#313338', color: '#dcddde' },
+﻿const localStyles = {
+    container: { display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: '#17191c', color: '#dbdee1' },
     topBar: {
-        padding: '10px 15px', borderBottom: '1px solid #1f2023', display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between', backgroundColor: '#313338', height: '50px', boxSizing: 'border-box'
+        padding: '0 16px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', backgroundColor: '#17191c', height: '48px', boxSizing: 'border-box', flexShrink: 0
     },
-    headerLeft: { display: 'flex', alignItems: 'center', flex: 1, overflow: 'hidden' },
+    headerLeft: { display: 'flex', alignItems: 'center', flex: 1, overflow: 'hidden', gap: '12px' },
     title: {
-        fontSize: '1em', fontWeight: 'bold', color: '#fff', display: 'flex', alignItems: 'center',
-        marginRight: '10px', paddingRight: '10px', borderRight: '1px solid #4f545c', whiteSpace: 'nowrap'
+        fontSize: '15px', fontWeight: '700', color: '#f2f3f5', display: 'flex', alignItems: 'center',
+        paddingRight: '12px', borderRight: '1px solid rgba(255,255,255,0.08)', whiteSpace: 'nowrap', flexShrink: 0
     },
-    tabButtons: { display: 'flex', gap: '10px', overflowX: 'auto' },
-    tabBtn: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', fontSize: '0.9em', padding: '2px 8px', borderRadius: '4px', fontWeight: '500', transition: 'all 0.2s', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '5px' },
-    activeTabBtn: { color: '#fff', backgroundColor: 'rgba(79,84,92,0.32)' },
-    addFriendBtn: { backgroundColor: '#23a559', color: '#fff', border: 'none', borderRadius: '4px', padding: '2px 10px', fontSize: '0.9em', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s', whiteSpace: 'nowrap' },
+    tabButtons: { display: 'flex', gap: '2px', overflowX: 'auto' },
+    tabBtn: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', fontSize: '14px', padding: '4px 10px', borderRadius: '8px', fontWeight: '500', transition: 'background-color 0.15s ease, color 0.15s ease', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' },
+    activeTabBtn: { color: '#f2f3f5', backgroundColor: 'rgba(255,255,255,0.1)' },
+    addFriendBtn: { background: 'linear-gradient(135deg, #23a559 0%, #1d8f4a 100%)', color: '#fff', border: 'none', borderRadius: '13px', padding: '5px 14px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.15s ease', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 3px 0 #177a3e, 0 6px 16px rgba(35,165,89,0.30)' },
     activeAddFriendBtn: { backgroundColor: 'transparent', color: '#23a559', border: '1px solid transparent' },
-    closeHeaderBtn: { background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.5em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5px', borderRadius: '50%' },
-    contentArea: { flexGrow: 1, padding: '20px', overflowY: 'auto' },
-    addSection: { maxWidth: '100%', borderBottom: '1px solid #4f545c', paddingBottom: '20px' },
+    closeHeaderBtn: { background: 'none', border: 'none', color: '#b5bac1', fontSize: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', borderRadius: '4px', transition: 'color 0.15s ease' },
+    contentArea: { flexGrow: 1, padding: '16px 20px', overflowY: 'auto' },
+    addSection: { maxWidth: '100%', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '20px' },
     addForm: {
-        display: 'flex', flexDirection: window.innerWidth <= 768 ? 'column' : 'row', gap: '10px',
-        backgroundColor: '#1e1f22', padding: '10px', borderRadius: '8px', border: '1px solid #1e1f22',
-        alignItems: 'stretch', marginTop: '10px'
+        display: 'flex', flexDirection: window.innerWidth <= 768 ? 'column' : 'row', gap: '8px',
+        backgroundColor: 'rgba(30,31,35,0.88)', padding: '10px 14px', borderRadius: '13px', border: '1px solid rgba(255,255,255,0.07)',
+        alignItems: 'stretch', marginTop: '10px', backdropFilter: 'blur(24px)'
     },
-    input: { flexGrow: 1, background: 'transparent', border: 'none', color: '#fff', fontSize: '1em', outline: 'none', minHeight: '40px' },
-    sendRequestBtn: { backgroundColor: '#5865f2', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap' },
+    input: { flexGrow: 1, background: 'transparent', border: 'none', color: '#dbdee1', fontSize: '15px', outline: 'none', minHeight: '36px' },
+    sendRequestBtn: { background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)', color: '#fff', border: 'none', padding: '8px 18px', borderRadius: '13px', cursor: 'pointer', fontWeight: '600', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', whiteSpace: 'nowrap', transition: 'all 0.15s ease', boxShadow: '0 3px 0 #3b45c7, 0 6px 16px rgba(88,101,242,0.30)' },
     listContainer: {},
-    listHeader: { fontSize: '0.8em', color: '#b9bbbe', textTransform: 'uppercase', marginBottom: '15px', borderBottom: '1px solid #4f545c', paddingBottom: '10px' },
-    emptyState: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: '50px' },
-    emptyText: { color: '#72767d', fontStyle: 'italic', marginBottom: '20px', textAlign: 'center' },
-    emptyBtn: { padding: '10px 20px', backgroundColor: '#5865f2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' },
-    listItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', borderTop: '1px solid #4f545c', cursor: 'pointer', transition: 'background-color 0.2s' },
-    userInfo: { display: 'flex', alignItems: 'center' },
-    avatar: { width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' },
-    username: { color: '#fff', fontWeight: '600' },
-    status: { fontSize: '0.8em', color: '#b9bbbe' },
-    actions: { display: 'flex', gap: '10px' },
-    iconButton: { padding: '8px', borderRadius: '50%', backgroundColor: '#2f3136', border: 'none', color: '#b9bbbe', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    acceptBtn: { padding: '8px', borderRadius: '50%', backgroundColor: '#2f3136', border: 'none', color: '#43b581', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-    rejectBtn: { padding: '8px', borderRadius: '50%', backgroundColor: '#2f3136', border: 'none', color: '#f04747', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+    listHeader: { fontSize: '11px', color: '#80848e', textTransform: 'uppercase', letterSpacing: '0.8px', fontWeight: '700', marginBottom: '8px', paddingBottom: '0', paddingTop: '16px' },
+    emptyState: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: '60px', gap: '12px' },
+    emptyText: { color: '#80848e', marginBottom: '4px', textAlign: 'center', fontSize: '15px' },
+    emptyBtn: { padding: '8px 20px', background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)', color: 'white', border: 'none', borderRadius: '13px', cursor: 'pointer', fontWeight: '600', fontSize: '14px', boxShadow: '0 3px 0 #3b45c7, 0 6px 16px rgba(88,101,242,0.30)' },
+    listItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', borderRadius: '8px', cursor: 'pointer', transition: 'background-color 0.15s ease', margin: '1px 0' },
+    userInfo: { display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 },
+    avatar: { width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 },
+    username: { color: '#f2f3f5', fontWeight: '600', fontSize: '14px' },
+    status: { fontSize: '12px', color: '#80848e' },
+    actions: { display: 'flex', gap: '8px', flexShrink: 0 },
+    iconButton: { padding: '8px', borderRadius: '50%', backgroundColor: '#111214', border: 'none', color: '#b5bac1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.15s ease, color 0.15s ease' },
+    acceptBtn: { padding: '8px', borderRadius: '50%', backgroundColor: '#111214', border: 'none', color: '#23a559', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.15s ease' },
+    rejectBtn: { padding: '8px', borderRadius: '50%', backgroundColor: '#111214', border: 'none', color: '#f23f42', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background-color 0.15s ease' },
     badgePulse: {
-        backgroundColor: '#f04747', color: '#fff', borderRadius: '50%', padding: '1px 6px', fontSize: '0.75em', marginLeft: '5px',
-        animation: 'pulseBadge 1.5s infinite'
+        backgroundColor: '#f23f42', color: '#fff', borderRadius: '8px', padding: '1px 5px', fontSize: '11px', marginLeft: '5px', fontWeight: '700',
+        animation: 'pulseBadge 2s infinite'
     }
 };
 
@@ -48,11 +48,14 @@ const localStyles = {
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   @keyframes pulseBadge {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(240, 71, 71, 0.7); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(240, 71, 71, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(240, 71, 71, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(242, 63, 66, 0.5); }
+    70% { box-shadow: 0 0 0 5px rgba(242, 63, 66, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(242, 63, 66, 0); }
   }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .friends-list-item:hover { background-color: rgba(255,255,255,0.06) !important; }
+  .friends-action-btn:hover { background-color: #182135 !important; color: #dbdee1 !important; }
+  .friends-tab-btn:hover { background-color: rgba(255,255,255,0.06) !important; color: #dbdee1 !important; }
 `;
 document.head.appendChild(styleSheet);
 

@@ -1,4 +1,4 @@
-// frontend/src/UserProfileModal.js
+﻿// frontend/src/UserProfileModal.js
 // Decomposed: styles.js + hooks/useProfileModal.js
 
 import ReactDOM from 'react-dom';
@@ -31,17 +31,17 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
 
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: `${user.username} profili` });
 
-    const handleAvatarEnter = useCallback((e) => e.currentTarget.style.transform = 'scale(1.05)', []);
-    const handleAvatarLeave = useCallback((e) => e.currentTarget.style.transform = 'scale(1)', []);
+    const handleAvatarEnter = useCallback((e) => { e.currentTarget.style.transform = 'scale(1.07)'; e.currentTarget.style.boxShadow = '0 0 0 3px #5865f2, 0 12px 28px rgba(0,0,0,0.5)'; }, []);
+    const handleAvatarLeave = useCallback((e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(88,101,242,0.5), 0 8px 24px rgba(0,0,0,0.5)'; }, []);
     const handleAvatarClick = useCallback(() => onImageClick(avatarUrl), [onImageClick, avatarUrl]);
     const handleClose = useCallback((e) => { e.preventDefault(); e.stopPropagation(); onClose(); }, [onClose]);
-    const handleCloseBtnEnter = useCallback((e) => { e.currentTarget.style.background = 'rgba(240, 71, 71, 0.8)'; e.currentTarget.style.transform = 'scale(1.1)'; }, []);
-    const handleCloseBtnLeave = useCallback((e) => { e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)'; e.currentTarget.style.transform = 'scale(1)'; }, []);
+    const handleCloseBtnEnter = useCallback((e) => { e.currentTarget.style.background = 'rgba(242, 63, 66, 0.85)'; e.currentTarget.style.transform = 'scale(1.1)'; }, []);
+    const handleCloseBtnLeave = useCallback((e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.55)'; e.currentTarget.style.transform = 'scale(1)'; }, []);
     const handleOpenSessionManager = useCallback(() => setShowSessionManager(true), [setShowSessionManager]);
     const handleStartDM = useCallback(() => onStartDM(user?.username), [onStartDM, user?.username]);
     const handleOpenNotes = useCallback(() => setShowNotes(true), [setShowNotes]);
-    const handleFriendCodeEnter = useCallback((e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.2)', []);
-    const handleFriendCodeLeave = useCallback((e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.1)', []);
+    const handleFriendCodeEnter = useCallback((e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.18)', []);
+    const handleFriendCodeLeave = useCallback((e) => e.currentTarget.style.background = 'rgba(88, 101, 242, 0.08)', []);
     const handleTabProfile = useCallback(() => setActiveTab('profile'), [setActiveTab]);
     const handleTabActivity = useCallback(() => setActiveTab('activity'), [setActiveTab]);
     const handleTabNotes = useCallback(() => setActiveTab('notes'), [setActiveTab]);
@@ -51,167 +51,177 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
 
     const modalContent = (
         <div style={{ ...styles.overlay, zIndex: 9999 }} {...overlayProps}>
+            {/* Inject entrance animation CSS */}
+            <style>{`
+                @keyframes profileModalEnter {
+                    from { opacity: 0; transform: scale(0.9) translateY(16px); }
+                    to   { opacity: 1; transform: scale(1) translateY(0); }
+                }
+            `}</style>
             <div style={{ ...styles.modal, zIndex: 10000, position: 'relative' }} {...dialogProps}>
 
-                {/* 🎨 MODERN PROFILE BANNER */}
+                {/* ─── PREMIUM BANNER ─── */}
                 <div style={{
                     position: 'relative',
                     height: '180px',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    borderRadius: '16px 16px 0 0',
-                    overflow: 'visible' // 🔥 FIX: Avatar'ın görünmesi için overflow:visible
+                    background: 'linear-gradient(135deg, #2f3db5 0%, #5865f2 40%, #8b5cf6 75%, #a855f7 100%)',
+                    borderRadius: '20px 20px 0 0',
+                    overflow: 'visible',
+                    flexShrink: 0,
                 }}>
-                    {/* Banner pattern */}
+                    {/* Radial glow top-right */}
                     <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 1440 320\'%3E%3Cpath fill=\'rgba(255,255,255,0.1)\' d=\'M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z\'%3E%3C/path%3E%3C/svg%3E")',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'bottom',
-                        backgroundSize: 'cover',
-                        opacity: 0.3,
-                        zIndex: 1,
-                        borderRadius: '16px 16px 0 0', // 🔥 Pattern için de border radius
-                        overflow: 'hidden'
+                        position: 'absolute', top: '-20px', right: '-20px',
+                        width: '220px', height: '220px',
+                        background: 'radial-gradient(circle, rgba(168,85,247,0.35) 0%, transparent 65%)',
+                        pointerEvents: 'none', zIndex: 1,
+                    }} />
+                    {/* Noise/wave overlay */}
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='rgba(255,255,255,0.07)' d='M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E\")",
+                        backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom', backgroundSize: 'cover',
+                        zIndex: 1, borderRadius: '20px 20px 0 0',
                     }} />
 
-                    {/* Avatar in banner - Fixed positioning */}
+                    {/* Avatar */}
                     <div style={{
                         position: 'absolute',
-                        bottom: '-50px', // Adjusted for better visibility
-                        left: '32px',
-                        width: '120px',
-                        height: '120px',
+                        bottom: '-50px',
+                        left: '24px',
+                        width: '104px',
+                        height: '104px',
                         borderRadius: '50%',
-                        border: '5px solid #2f3136',
-                        overflow: 'hidden',
-                        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-                        cursor: 'pointer',
-                        transition: 'transform 0.3s ease',
+                        border: '4px solid #0b0e1b',
+                        overflow: 'visible',
                         zIndex: 1000,
-                        backgroundColor: '#2f3136' // Background color for loading state
-                    }}
-                        onMouseEnter={handleAvatarEnter}
-                        onMouseLeave={handleAvatarLeave}
-                        onClick={handleAvatarClick}
-                    >
-                        <img
-                            src={avatarSrc}
-                            key={avatarUrl}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            alt={`${user.username} avatar`}
-                            onError={(e) => {
-                                console.error('❌ [UserProfileModal] Avatar load failed:', e.target.src);
-                                e.target.src = getDeterministicAvatar(user.username);
-                            }}
-                        />
+                    }}>
+                        <div style={{
+                            width: '100%', height: '100%', borderRadius: '50%',
+                            overflow: 'hidden',
+                            boxShadow: '0 0 0 2px rgba(88,101,242,0.45), 0 10px 30px rgba(0,0,0,0.55)',
+                            cursor: 'pointer',
+                            transition: 'transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease',
+                        }}
+                            onMouseEnter={handleAvatarEnter}
+                            onMouseLeave={handleAvatarLeave}
+                            onClick={handleAvatarClick}
+                        >
+                            <img
+                                src={avatarSrc}
+                                key={avatarUrl}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                alt={`${user.username} avatar`}
+                                onError={(e) => {
+                                    e.target.src = getDeterministicAvatar(user.username);
+                                }}
+                            />
+                        </div>
+                        {/* Online status dot */}
+                        <div style={{
+                            position: 'absolute', bottom: '3px', right: '3px',
+                            width: '18px', height: '18px', borderRadius: '50%',
+                            backgroundColor: user.is_online ? '#23a559' : '#80848e',
+                            border: '3px solid #0b0e1b',
+                            zIndex: 1001,
+                            boxShadow: user.is_online ? '0 0 8px rgba(35,165,89,0.6)' : 'none',
+                        }} />
                     </div>
 
-                    {/* Action buttons in banner */}
-                    <div style={{
-                        position: 'absolute',
-                        top: '16px',
-                        right: '16px',
-                        display: 'flex',
-                        gap: '8px',
-                        zIndex: 1000 // 🔥 FIX: z-index eklendi
-                    }}>
-                        {/* Close button */}
-                        <button
-                            onClick={handleClose}
-                            style={{
-                                width: '36px',
-                                height: '36px',
-                                borderRadius: '50%',
-                                border: '2px solid rgba(255, 255, 255, 0.3)',
-                                background: 'rgba(0, 0, 0, 0.6)',
-                                color: '#fff',
-                                fontSize: '20px',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                transition: 'all 0.2s ease',
-                                zIndex: 1001
-                            }}
-                            onMouseEnter={handleCloseBtnEnter}
-                            onMouseLeave={handleCloseBtnLeave}
-                        >×</button>
-                    </div>
+                    {/* Close button */}
+                    <button
+                        onClick={handleClose}
+                        style={{
+                            position: 'absolute', top: '12px', right: '12px',
+                            width: '32px', height: '32px',
+                            borderRadius: '50%',
+                            border: '1px solid rgba(255,255,255,0.25)',
+                            background: 'rgba(0,0,0,0.5)',
+                            color: '#fff', fontSize: '16px', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            transition: 'all 0.2s ease', zIndex: 1002,
+                            backdropFilter: 'blur(4px)',
+                        }}
+                        onMouseEnter={handleCloseBtnEnter}
+                        onMouseLeave={handleCloseBtnLeave}
+                        aria-label="Kapat"
+                    >✕</button>
                 </div>
 
-                {/* User info section - Adjusted padding for avatar */}
+                {/* ─── USER INFO ─── */}
                 <div style={{
-                    padding: '70px 32px 24px 32px', // Reduced top padding since avatar is higher
-                    background: '#2f3136'
+                    padding: '60px 24px 16px 24px',
+                    background: 'linear-gradient(180deg, #0d0e10 0%, #111214 100%)',
+                    borderBottom: '1px solid rgba(255,255,255,0.055)',
                 }}>
-                    <h2 style={{
-                        fontSize: '28px',
-                        fontWeight: '700',
-                        margin: '0 0 12px 0',
-                        color: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                    }}>
-                        {user.username}
-                        {user.is_premium && <span style={{ fontSize: '20px' }}>💎</span>}
-                        {user.is_verified && <span style={{ fontSize: '20px' }}>✅</span>}
-                    </h2>
+                    {/* Username row */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                        <h2 style={{ ...styles.username, margin: 0 }}>
+                            {user.username}
+                        </h2>
+                        {user.is_premium && (
+                            <span title="Premium" style={{
+                                background: 'linear-gradient(135deg, #f0b232, #e77c00)',
+                                color: '#fff', fontSize: '10px', fontWeight: '800',
+                                padding: '2px 7px', borderRadius: '6px', letterSpacing: '0.05em',
+                            }}>💎 PREMIUM</span>
+                        )}
+                        {user.is_verified && (
+                            <span title="Doğrulanmış" style={{
+                                background: 'linear-gradient(135deg, #23a559, #1a7a42)',
+                                color: '#fff', fontSize: '10px', fontWeight: '800',
+                                padding: '2px 7px', borderRadius: '6px', letterSpacing: '0.05em',
+                            }}>✅ DOĞRULANDI</span>
+                        )}
+                        <span style={{
+                            marginLeft: 'auto', fontSize: '11px', fontWeight: '600',
+                            color: user.is_online ? '#23a559' : '#72767d',
+                            display: 'flex', alignItems: 'center', gap: '4px',
+                        }}>
+                            <span style={{
+                                width: '7px', height: '7px', borderRadius: '50%',
+                                backgroundColor: user.is_online ? '#23a559' : '#72767d',
+                                display: 'inline-block',
+                                boxShadow: user.is_online ? '0 0 6px rgba(35,165,89,0.7)' : 'none',
+                            }} />
+                            {user.is_online ? 'Çevrimiçi' : 'Çevrimdışı'}
+                        </span>
+                    </div>
 
-                    {/* Action buttons row */}
-                    <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                        {/* 🔥 Sadece arkadaş olmayan ve kendisi olmayan kişilerde "Ekle" butonu göster */}
+                    {/* Action buttons */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         {!isFriend && !isSelf && (
                             <button
                                 onClick={handleAddFriend}
                                 style={{
                                     ...styles.actionButton,
-                                    backgroundColor: requestStatus === 'success' ? '#43b581' : '#5865f2',
+                                    backgroundColor: requestStatus === 'success' ? 'rgba(35,165,89,0.15)' : 'rgba(88,101,242,0.15)',
+                                    flex: 1, minWidth: '100px',
                                     cursor: requestStatus === 'success' || requestStatus === 'loading' ? 'default' : 'pointer',
-                                    flex: 1
                                 }}
                                 disabled={requestStatus !== 'idle'}
                             >
-                                {requestStatus === 'loading' ? '...' : (
-                                    requestStatus === 'success' ? <FaCheck /> : <FaUserPlus />
-                                )}
-                                {requestStatus === 'success' ? ' Gönderildi' : ' Arkadaş Ekle'}
+                                {requestStatus === 'loading' ? '⏳' : requestStatus === 'success' ? <FaCheck /> : <FaUserPlus />}
+                                {requestStatus === 'success' ? 'Gönderildi' : 'Arkadaş Ekle'}
                             </button>
                         )}
-
-                        {/* 🔥 Coin gönderme - kendisi değilse */}
                         {!isSelf && (
-                            <button onClick={handleSendMoney} style={{ ...styles.actionButton, backgroundColor: '#f0b232', flex: 1 }}>
-                                <FaCoins /> Coin Gönder
+                            <button onClick={handleStartDM} style={{ ...styles.messageButton, flex: 1.5, minWidth: '110px' }}>
+                                💬 Mesaj
                             </button>
                         )}
-
+                        {!isSelf && (
+                            <button onClick={handleSendMoney} style={{ ...styles.actionButton, backgroundColor: 'rgba(240,178,50,0.15)', minWidth: '44px' }} title="Coin Gönder">
+                                <FaCoins />
+                            </button>
+                        )}
                         {isSelf && (
-                            <button
-                                onClick={handleOpenSessionManager}
-                                style={{ ...styles.actionButton, backgroundColor: '#43b581', flex: 1 }}
-                                title="Aktif Oturumları Yönet"
-                            >
+                            <button onClick={handleOpenSessionManager} style={{ ...styles.actionButton, backgroundColor: 'rgba(35,165,89,0.15)', flex: 1 }} title="Aktif Oturumları Yönet">
                                 <FaDesktop /> Oturumlar
                             </button>
                         )}
-
                         {!isSelf && (
-                            <button onClick={handleStartDM} style={{ ...styles.messageButton, flex: 1 }}>
-                                💬 Mesaj Gönder
-                            </button>
-                        )}
-
-                        {!isSelf && (
-                            <button
-                                onClick={handleOpenNotes}
-                                style={{ ...styles.actionButton, backgroundColor: '#faa61a', flex: 0, minWidth: '44px' }}
-                                title="Kullanıcı Notu"
-                            >
+                            <button onClick={handleOpenNotes} style={{ ...styles.actionButton, backgroundColor: 'rgba(255,255,255,0.06)', minWidth: '44px' }} title="Kullanıcı Notu">
                                 <FaStickyNote />
                             </button>
                         )}
@@ -219,28 +229,15 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                 </div>
 
                 {/* Content area */}
-                <div style={{
-                    ...styles.content,
-                    padding: '24px 32px',
-                    overflowY: 'auto'
-                }}>
-                    {/* 🔥 ARKADAŞ KODU BÖLÜMÜ */}
+                <div style={{ ...styles.content, background: '#0d0e10' }}>
+                    {/* ARKADAŞ KODU */}
                     {user.friend_code && (
                         <div
                             onClick={() => copyToClipboard(user.friend_code, 'Arkadaş Kodu')}
-                            style={{
-                                ...styles.friendCodeContainer,
-                                background: 'rgba(88, 101, 242, 0.1)',
-                                border: '1px solid rgba(88, 101, 242, 0.3)',
-                                borderRadius: '8px',
-                                padding: '12px 16px',
-                                marginBottom: '16px',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s'
-                            }}
+                            style={styles.friendCodeContainer}
                             onMouseEnter={handleFriendCodeEnter}
                             onMouseLeave={handleFriendCodeLeave}
-                            title="Kodu Kopyalamak İçin Tıkla"
+                            title="Kopyalamak İçin Tıkla"
                         >
                             <span style={styles.friendCodeLabel}>Arkadaş Kodu</span>
                             <span style={styles.friendCodeValue}>{user.friend_code}</span>
@@ -254,26 +251,17 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         </div>
                     )}
 
-                    {/* 🆕 Tabs */}
+                    {/* Tabs */}
                     <div style={styles.tabsContainer}>
-                        <button
-                            onClick={handleTabProfile}
-                            style={{ ...styles.tabButton, ...(activeTab === 'profile' && styles.activeTab) }}
-                        >
-                            Profile
+                        <button onClick={handleTabProfile} style={{ ...styles.tabButton, ...(activeTab === 'profile' && styles.activeTab) }}>
+                            👤 Profil
                         </button>
-                        <button
-                            onClick={handleTabActivity}
-                            style={{ ...styles.tabButton, ...(activeTab === 'activity' && styles.activeTab) }}
-                        >
-                            <FaClock /> Activity
+                        <button onClick={handleTabActivity} style={{ ...styles.tabButton, ...(activeTab === 'activity' && styles.activeTab) }}>
+                            <FaClock /> Aktivite
                         </button>
                         {!isSelf && (
-                            <button
-                                onClick={handleTabNotes}
-                                style={{ ...styles.tabButton, ...(activeTab === 'notes' && styles.activeTab) }}
-                            >
-                                <FaStickyNote /> Notes
+                            <button onClick={handleTabNotes} style={{ ...styles.tabButton, ...(activeTab === 'notes' && styles.activeTab) }}>
+                                <FaStickyNote /> Not
                             </button>
                         )}
                     </div>
@@ -330,21 +318,21 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
                         </>
                     )}
 
-                    {/* 🆕 Activity Tab - Presence History */}
+                    {/* Activity Tab */}
                     {activeTab === 'activity' && (
                         <div style={styles.section}>
-                            <h4 style={styles.sectionTitle}>Activity Timeline</h4>
+                            <h4 style={styles.sectionTitle}>Aktivite Zaman Çizelgesi</h4>
                             {presenceHistory.length === 0 ? (
-                                <p style={styles.noDataText}>No activity data available</p>
+                                <p style={styles.noDataText}>Aktivite verisi bulunamadı</p>
                             ) : (
                                 <div style={styles.presenceTimeline}>
                                     {presenceHistory.map((entry, idx) => (
                                         <div key={idx} style={styles.presenceEntry}>
                                             <div style={{
                                                 ...styles.presenceStatus,
-                                                backgroundColor: entry.status === 'online' ? '#43b581' :
-                                                    entry.status === 'idle' ? '#faa61a' :
-                                                        entry.status === 'dnd' ? '#f04747' : '#747f8d'
+                                                backgroundColor: entry.status === 'online' ? '#23a559' :
+                                                    entry.status === 'idle' ? '#f0b232' :
+                                                        entry.status === 'dnd' ? '#f23f42' : '#80848e'
                                             }} />
                                             <div style={styles.presenceDetails}>
                                                 <span style={styles.presenceStatusText}>
@@ -372,7 +360,7 @@ const UserProfileModal = ({ user, onClose, onStartDM, onImageClick, getDetermini
 
             {/* 📝 Notes Tab - Inline */}
             {activeTab === 'notes' && !isSelf && (
-                <div style={{ padding: '0 32px 24px' }}>
+                <div style={{ padding: '0 28px 24px', background: '#0d0e10' }}>
                     <UserNotesModal
                         targetUser={user.username}
                         apiBaseUrl={apiBaseUrl ? apiBaseUrl.replace(/\/api\/?$/, '') + '/api' : ''}

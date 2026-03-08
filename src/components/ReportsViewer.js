@@ -1,4 +1,4 @@
-// frontend/src/components/ReportsViewer.js
+﻿// frontend/src/components/ReportsViewer.js
 import React, { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaExclamationTriangle, FaCheck, FaTrash } from 'react-icons/fa';
@@ -113,7 +113,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '700px',
@@ -126,7 +126,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -139,7 +139,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.5em'
     },
@@ -150,12 +150,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#43b581',
+        color: '#23a559',
         padding: '40px',
         fontSize: '1.2em'
     },
@@ -165,10 +165,10 @@ const styles = {
         gap: '15px'
     },
     reportItem: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '15px',
         borderRadius: '8px',
-        borderLeft: '4px solid #f04747'
+        borderLeft: '4px solid #f23f42'
     },
     reportHeader: {
         display: 'flex',
@@ -181,27 +181,27 @@ const styles = {
         fontSize: '0.9em'
     },
     timestamp: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.75em'
     },
     reportContent: {
         marginBottom: '15px'
     },
     reportedUser: {
-        color: '#f04747',
+        color: '#f23f42',
         fontWeight: 'bold',
         marginBottom: '5px'
     },
     reason: {
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
         fontSize: '0.9em'
     },
     messagePreview: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '10px',
         borderRadius: '4px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '0.85em',
         fontStyle: 'italic',
         borderLeft: '3px solid #5865f2'
@@ -213,7 +213,7 @@ const styles = {
     approveButton: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: 'white',
@@ -227,7 +227,7 @@ const styles = {
     rejectButton: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: 'white',

@@ -32,9 +32,9 @@
     width: 90%;
     max-width: 800px;
     max-height: 85vh;
-    background: var(--bg-primary, #1e1f22);
+    background: var(--bg-primary, #0d0e10);
     border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     animation: slideUp 0.3s ease;
 }
@@ -80,7 +80,7 @@
 /* Panel Content */
 .connections-panel {
     padding: 24px;
-    background: var(--bg-primary, #1e1f22);
+    background: var(--bg-primary, #0d0e10);
     max-height: 85vh;
     overflow-y: auto;
     color: var(--text-primary, #dbdee1);
@@ -215,7 +215,7 @@
 }
 
 .status-icon.success {
-    color: #43b581;
+    color: #23a559;
 }
 
 .connection-data {
@@ -233,7 +233,7 @@
     color: var(--platform-color);
     background: rgba(0, 0, 0, 0.3);
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 12px;
 }
 
 .connection-features {
@@ -247,7 +247,7 @@
     font-size: 0.75rem;
     padding: 3px 8px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 12px;
     color: var(--text-secondary);
 }
 
@@ -288,9 +288,9 @@
 }
 
 .disconnect-btn:hover:not(:disabled) {
-    background: #f04747;
+    background: #f23f42;
     color: white;
-    border-color: #f04747;
+    border-color: #f23f42;
 }
 
 .connect-btn:disabled,

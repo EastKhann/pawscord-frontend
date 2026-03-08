@@ -24,7 +24,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
         <div style={styles.container}>
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
-                    <FaShieldAlt size={24} color="#43b581" />
+                    <FaShieldAlt size={24} color="#23a559" />
                     <div>
                         <h2 style={styles.title}>Spam Koruma Sistemi</h2>
                         <p style={styles.subtitle}>ML tabanlı akıllı spam algılama</p>
@@ -34,7 +34,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
                     <div style={{
                         ...styles.statusBadge,
                         backgroundColor: api.settings.enabled ? 'rgba(67, 181, 129, 0.2)' : 'rgba(240, 71, 71, 0.2)',
-                        color: api.settings.enabled ? '#43b581' : '#f04747'
+                        color: api.settings.enabled ? '#23a559' : '#f23f42'
                     }}>
                         {api.settings.enabled ? '✓ Aktif' : '✗ Kapalı'}
                     </div>
@@ -44,7 +44,7 @@ const SpamDetectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, isAdmin = fal
             <div style={styles.tabs}>
                 {['overview', 'settings', 'logs'].map(tab => (
                     <button key={tab}
-                        style={{ ...styles.tab, backgroundColor: api.activeTab === tab ? '#5865f2' : 'transparent', color: api.activeTab === tab ? '#fff' : '#b9bbbe' }}
+                        style={{ ...styles.tab, backgroundColor: api.activeTab === tab ? '#5865f2' : 'transparent', color: api.activeTab === tab ? '#fff' : '#b5bac1' }}
                         onClick={() => api.setActiveTab(tab)}
                     >
                         {tab === 'overview' && <FaChartBar />}

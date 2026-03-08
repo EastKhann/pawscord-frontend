@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaCode, FaTimes, FaPaperPlane } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
 
@@ -63,14 +63,14 @@ const CodeSnippetModal = ({ onClose, onSend }) => {
 
 const styles = {
     overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 2000, display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    modal: { backgroundColor: '#2b2d31', width: '90%', maxWidth: '600px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #1e1f22', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' },
-    header: { padding: '15px 20px', borderBottom: '1px solid #1f2023', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'white' },
-    closeBtn: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', fontSize: '1.2em' },
+    modal: { backgroundColor: '#111214', width: '90%', maxWidth: '600px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #0b0e1b', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' },
+    header: { padding: '15px 20px', borderBottom: '1px solid #16203a', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'white' },
+    closeBtn: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', fontSize: '1.2em' },
     body: { padding: '20px', display: 'flex', flexDirection: 'column', gap: '15px' },
     row: { display: 'flex', gap: '10px' },
-    input: { flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #1f2023', backgroundColor: '#383a40', color: 'white', outline: 'none' },
-    select: { padding: '10px', borderRadius: '6px', border: '1px solid #1f2023', backgroundColor: '#383a40', color: 'white', outline: 'none' },
-    textarea: { minHeight: '200px', padding: '15px', borderRadius: '6px', border: '1px solid #1f2023', backgroundColor: '#1e1f22', color: '#00ff00', fontFamily: 'monospace', resize: 'vertical', outline: 'none' },
+    input: { flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #16203a', backgroundColor: '#1e2024', color: 'white', outline: 'none' },
+    select: { padding: '10px', borderRadius: '6px', border: '1px solid #16203a', backgroundColor: '#1e2024', color: 'white', outline: 'none' },
+    textarea: { minHeight: '200px', padding: '15px', borderRadius: '6px', border: '1px solid #16203a', backgroundColor: '#0d0e10', color: '#00ff00', fontFamily: 'monospace', resize: 'vertical', outline: 'none' },
     sendBtn: { padding: '12px', backgroundColor: '#5865f2', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }
 };
 

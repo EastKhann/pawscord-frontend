@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+﻿import { useState, useEffect, useCallback, memo } from 'react';
 import { FaVolumeUp, FaVolumeMute, FaEdit, FaImage, FaLock, FaGlobe, FaComments, FaFileAlt, FaTrash } from 'react-icons/fa';
 import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
@@ -149,7 +149,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
     const handleDefaultChannelChange = useCallback(e => setDefaultChannelSlug(e.target.value), []);
     const handleDeleteConfirmationChange = useCallback(e => setDeleteConfirmation(e.target.value), []);
     const handleInputFocus = useCallback(e => { e.target.style.borderColor = '#5865f2'; }, []);
-    const handleInputBlur = useCallback(e => { e.target.style.borderColor = '#40444b'; }, []);
+    const handleInputBlur = useCallback(e => { e.target.style.borderColor = '#1e2024'; }, []);
     const handleShowDeleteModal = useCallback(() => setShowDeleteModal(true), []);
     const handleCancelDelete = useCallback(() => { setShowDeleteModal(false); setDeleteConfirmation(''); }, []);
 
@@ -217,7 +217,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                             <input
                                 type="text" value={serverName} onChange={handleServerNameChange} maxLength={100}
-                                style={{ padding: '10px 14px', backgroundColor: '#1e1f22', border: '1px solid #40444b', borderRadius: '8px', color: '#dcddde', fontSize: '14px', outline: 'none', width: '220px', transition: 'border-color 0.2s' }}
+                                style={{ padding: '10px 14px', backgroundColor: '#0d0e10', border: '1px solid #182135', borderRadius: '8px', color: '#dbdee1', fontSize: '14px', outline: 'none', width: '220px', transition: 'border-color 0.2s' }}
                                 onFocus={handleInputFocus}
                                 onBlur={handleInputBlur}
                                 placeholder="Sunucu adı..."
@@ -238,7 +238,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
                         <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                             <textarea value={serverDescription} onChange={handleServerDescriptionChange} maxLength={300}
                                 placeholder="Bu sunucu hakkında bir açıklama yazın..."
-                                style={{ flex: 1, padding: '10px 14px', backgroundColor: '#1e1f22', border: '1px solid #40444b', borderRadius: '8px', color: '#dcddde', fontSize: '14px', outline: 'none', resize: 'vertical', minHeight: '60px', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
+                                style={{ flex: 1, padding: '10px 14px', backgroundColor: '#0d0e10', border: '1px solid #182135', borderRadius: '8px', color: '#dbdee1', fontSize: '14px', outline: 'none', resize: 'vertical', minHeight: '60px', fontFamily: 'inherit', transition: 'border-color 0.2s' }}
                                 onFocus={handleInputFocus}
                                 onBlur={handleInputBlur}
                             />
@@ -247,7 +247,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
                                 {isSavingDescription ? '...' : 'Kaydet'}
                             </button>
                         </div>
-                        <div style={{ fontSize: '11px', color: '#72767d', marginTop: '4px', textAlign: 'right' }}>
+                        <div style={{ fontSize: '11px', color: '#949ba4', marginTop: '4px', textAlign: 'right' }}>
                             {serverDescription.length}/300 karakter
                         </div>
                     </div>
@@ -274,7 +274,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
                                 {server.is_public ? 'Herkes bu sunucuyu bulabilir ve katılabilir.' : 'Sadece davet edilen kişiler katılabilir.'}
                             </div>
                         </div>
-                        <button onClick={handlePrivacyToggle} style={{ ...styles.actionBtn, backgroundColor: server.is_public ? '#ed4245' : '#43b581' }}>
+                        <button onClick={handlePrivacyToggle} style={{ ...styles.actionBtn, backgroundColor: server.is_public ? '#f23f42' : '#23a559' }}>
                             {server.is_public ? <FaLock /> : <FaGlobe />}
                             {server.is_public ? ' Özel Yap' : ' Herkese Açık Yap'}
                         </button>
@@ -288,7 +288,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
                         </div>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                             <select value={defaultChannelSlug} onChange={handleDefaultChannelChange}
-                                style={{ padding: '10px 14px', backgroundColor: '#1e1f22', border: '1px solid #40444b', borderRadius: '8px', color: '#dcddde', fontSize: '14px', outline: 'none', width: '220px', cursor: 'pointer' }}>
+                                style={{ padding: '10px 14px', backgroundColor: '#0d0e10', border: '1px solid #182135', borderRadius: '8px', color: '#dbdee1', fontSize: '14px', outline: 'none', width: '220px', cursor: 'pointer' }}>
                                 <option value="">Otomatik (İlk metin kanalı)</option>
                                 {server.categories?.map(cat => cat.rooms?.filter(r => r.room_type !== 'voice' && r.channel_type !== 'voice').map(room => (
                                     <option key={room.slug} value={room.slug}>{room.name}</option>
@@ -315,7 +315,7 @@ const ManagementTab = memo(({ server, isOwner, fetchWithAuth, apiBaseUrl, onRefr
                             <div style={styles.settingDesc}>Bu işlem geri alınamaz! Tüm kanallar, mesajlar ve ayarlar kalıcı olarak silinir.</div>
                             {showDeleteModal && (
                                 <div style={styles.deleteConfirmation}>
-                                    <p style={{ margin: '10px 0', color: '#dcddde' }}>Silmek için sunucu adını yazın: <strong>{server.name}</strong></p>
+                                    <p style={{ margin: '10px 0', color: '#dbdee1' }}>Silmek için sunucu adını yazın: <strong>{server.name}</strong></p>
                                     <input type="text" value={deleteConfirmation} onChange={handleDeleteConfirmationChange} placeholder={server.name} style={styles.confirmInput} />
                                     <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                                         <button onClick={handleDeleteServer} disabled={deleteConfirmation !== server.name}

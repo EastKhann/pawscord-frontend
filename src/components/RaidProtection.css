@@ -49,7 +49,7 @@
     bottom: 0;
     background-color: #cbd5e0;
     transition: 0.3s;
-    border-radius: 28px;
+    border-radius: 12px;
 }
 
 .toggle-slider:before {
@@ -169,7 +169,7 @@ input:checked+.toggle-slider:before {
 
 .setting-group input[type="number"]:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #5865f2;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 

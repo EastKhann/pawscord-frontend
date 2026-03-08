@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import './ServerDiscoveryPage.css';
 import toast from '../utils/toast';
 
-const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
+const ServerDiscoveryPage = ({ apiBaseUrl, fetchWithAuth, onJoinServer }) => {
     const [servers, setServers] = useState([]);
     const [featured, setFeatured] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,17 +30,6 @@ const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
         loadFeatured();
     }, [filters]);
 
-    const fetchWithAuth = async (url, options = {}) => {
-        const headers = {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-            ...options.headers,
-        };
-        const res = await fetch(url, { ...options, headers });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-    };
-
     const loadServers = async () => {
         try {
             setLoading(true);
@@ -50,7 +39,9 @@ const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
             if (filters.size !== 'all') params.append('size', filters.size);
             if (filters.search) params.append('search', filters.search);
 
-            const data = await fetchWithAuth(`${apiBaseUrl}/discovery/servers/?${params}`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/discovery/servers/?${params}`);
+            if (!res.ok) return;
+            const data = await res.json();
             setServers(data.servers || []);
         } catch (error) {
             console.error('❌ Servers yüklenemedi:', error);
@@ -61,20 +52,24 @@ const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
 
     const loadFeatured = async () => {
         try {
-            const data = await fetchWithAuth(`${apiBaseUrl}/discovery/featured/`);
+            const res = await fetchWithAuth(`${apiBaseUrl}/discovery/featured/`);
+            if (!res.ok) return;
+            const data = await res.json();
             setFeatured(data.servers || []);
         } catch (error) {
             console.error('❌ Featured servers yüklenemedi:', error);
         }
     };
 
-    const handleJoinServer = async (serverId) => {
+    const handleJoinServer = async (server) => {
         try {
-            await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/join/`, {
-                method: 'POST',
-            });
-            toast.success('✅ Sunucuya katıldınız!');
-            if (onJoinServer) onJoinServer(serverId);
+            const res = await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/join/`, { method: 'POST' });
+            if (res.ok) {
+                toast.success('✅ Sunucuya katıldınız!');
+                if (onJoinServer) onJoinServer(server);
+            } else {
+                toast.error('❌ Sunucuya katılınamadı!');
+            }
         } catch (error) {
             console.error('❌ Sunucuya katılınamadı:', error);
             toast.error('❌ Sunucuya katılınamadı!');
@@ -174,7 +169,7 @@ const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
                                         <span>{getOnlineCount(server.online_count)} çevrimiçi</span>
                                     </div>
                                 </div>
-                                <button className="join-btn" onClick={() => handleJoinServer(server.id)}>
+                                <button className="join-btn" onClick={() => handleJoinServer(server)}>
                                     🚀 Katıl
                                 </button>
                             </div>
@@ -227,7 +222,7 @@ const ServerDiscoveryPage = ({ apiBaseUrl, token, onJoinServer }) => {
                                     </div>
                                 )}
 
-                                <button className="join-btn-small" onClick={() => handleJoinServer(server.id)}>
+                                <button className="join-btn-small" onClick={() => handleJoinServer(server)}>
                                     Katıl
                                 </button>
                             </div>

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { FaServer, FaUserFriends, FaTimes } from '../utils/iconOptimization';
+import { FaServer, FaUserFriends, FaTimes, FaCompass } from '../utils/iconOptimization';
 import { styles } from '../SidebarStyles';
 import useModalA11y from '../hooks/useModalA11y';
 
-const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => {
+const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDiscoverClick }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Sunucu Ekle' });
     const [isCreatingServer, setIsCreatingServer] = useState(false);
     const [newServerName, setNewServerName] = useState('');
@@ -17,6 +17,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => 
         setNewServerName('');
         setIsNewServerPublic(false);
         setIsCreatingServer(false);
+        onClose();
     };
 
     if (!isOpen && !isCreatingServer) return null;
@@ -28,9 +29,9 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => 
                 <form onSubmit={handleCreateServer} style={styles.addCategoryForm}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h3 style={{ margin: 0, color: 'white' }}>Sunucu Oluştur</h3>
-                        <FaTimes style={{ cursor: 'pointer', color: '#b9bbbe' }} onClick={() => { setIsCreatingServer(false); onClose(); }} />
+                        <FaTimes style={{ cursor: 'pointer', color: '#b5bac1' }} onClick={() => { setIsCreatingServer(false); onClose(); }} />
                     </div>
-                    <p style={{ color: '#b9bbbe', fontSize: '0.9em' }}>Sunucuna bir isim ver.</p>
+                    <p style={{ color: '#b5bac1', fontSize: '0.9em' }}>Sunucuna bir isim ver.</p>
                     <input autoFocus placeholder="Sunucu Adı..." aria-label="Sunucu adı" value={newServerName} onChange={e => setNewServerName(e.target.value)} style={styles.addRoomInput} />
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '10px 0' }}>
@@ -50,8 +51,9 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick }) => 
             <div style={styles.selectionModalContent} {...dialogProps}>
                 <h3 style={{ color: 'white', margin: 0 }}>Ne Yapmak İstersin?</h3>
                 <button style={{ ...styles.selectionButton, backgroundColor: '#5865f2' }} onClick={() => { setIsCreatingServer(true); }}><FaServer /> Sunucu Oluştur</button>
-                <button style={{ ...styles.selectionButton, backgroundColor: '#23a559' }} onClick={() => { onClose(); if (onFriendsClick) onFriendsClick(); }}><FaUserFriends /> Arkadaş Ekle</button>
-                <button style={{ marginTop: 10, background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer' }} onClick={onClose}>İptal</button>
+                <button style={{ ...styles.selectionButton, backgroundColor: '#23a559' }} onClick={() => { onClose(); if (onDiscoverClick) onDiscoverClick(); }}><FaCompass /> Sunucu Bul</button>
+                <button style={{ ...styles.selectionButton, backgroundColor: '#4f545c' }} onClick={() => { onClose(); if (onFriendsClick) onFriendsClick(); }}><FaUserFriends /> Arkadaş Ekle</button>
+                <button style={{ marginTop: 10, background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer' }} onClick={onClose}>İptal</button>
             </div>
         </div>,
         document.body

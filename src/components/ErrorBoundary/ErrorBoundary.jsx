@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 import './ErrorBoundary.css';
 
 class ErrorBoundary extends React.Component {
@@ -104,14 +105,16 @@ class ErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             // Too many errors - show critical error
+            const { t } = this.props;
+
             if (this.state.errorCount > 3) {
                 return (
                     <div className="error-boundary critical">
                         <div className="error-content">
-                            <h1>⚠️ Critical Error</h1>
-                            <p>Multiple errors detected. Please refresh the page.</p>
+                            <h1>⚠️ {t('errors.criticalError')}</h1>
+                            <p>{t('errors.multipleErrors')}</p>
                             <button onClick={() => window.location.reload()} className="btn-reload">
-                                Refresh Page
+                                {t('errors.refreshPage')}
                             </button>
                         </div>
                     </div>
@@ -122,9 +125,9 @@ class ErrorBoundary extends React.Component {
                 <div className="error-boundary">
                     <div className="error-content">
                         <div className="error-icon">😕</div>
-                        <h1>Oops! Something went wrong</h1>
+                        <h1>{t('errors.somethingWrong')}</h1>
                         <p className="error-message">
-                            {this.props.fallbackMessage || "We're sorry for the inconvenience. The error has been reported."}
+                            {this.props.fallbackMessage || t('errors.errorReported')}
                         </p>
 
                         {process.env.NODE_ENV === 'development' && this.state.error && (
@@ -139,10 +142,10 @@ class ErrorBoundary extends React.Component {
 
                         <div className="error-actions">
                             <button onClick={this.handleReset} className="btn-retry">
-                                Try Again
+                                {t('errors.tryAgain')}
                             </button>
                             <button onClick={() => window.location.href = '/'} className="btn-home">
-                                Go Home
+                                {t('errors.goHome')}
                             </button>
                         </div>
                     </div>
@@ -169,4 +172,4 @@ export const useErrorHandler = () => {
     return setError;
 };
 
-export default ErrorBoundary;
+export default withTranslation()(ErrorBoundary);

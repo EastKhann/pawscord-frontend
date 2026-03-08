@@ -5,7 +5,7 @@
    BASE STYLES
 ======================================== */
 .extra-features-panel {
-    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(145deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     padding: 24px;
     min-height: 500px;
@@ -23,7 +23,7 @@
 
 .extra-features-panel .panel-header h2 {
     font-size: 1.5rem;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -51,7 +51,7 @@
 
 .extra-features-panel .feature-card:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: #667eea;
+    border-color: #5865f2;
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
@@ -75,7 +75,7 @@
    FEATURE PANEL BASE
 ======================================== */
 .feature-panel {
-    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(145deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     padding: 20px;
     color: #fff;
@@ -170,7 +170,7 @@
 }
 
 .scheduled-messages .add-scheduled button {
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     border: none;
     padding: 10px;
     border-radius: 8px;
@@ -290,7 +290,7 @@
 
 .server-templates .template-card button {
     width: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     border: none;
     padding: 8px;
     border-radius: 6px;
@@ -341,7 +341,7 @@
 }
 
 .custom-commands .add-command button {
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     border: none;
     padding: 10px 20px;
     border-radius: 8px;
@@ -370,7 +370,7 @@
     display: block;
     font-size: 1.75rem;
     font-weight: 700;
-    color: #667eea;
+    color: #5865f2;
 }
 
 .server-analytics .stat-card .label {
@@ -433,7 +433,7 @@
 .member-levels .rank {
     font-weight: 700;
     min-width: 40px;
-    color: #667eea;
+    color: #5865f2;
 }
 
 .member-levels .username {
@@ -487,7 +487,7 @@
 
 .welcome-messages .save-btn {
     width: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     border: none;
     padding: 12px;
     border-radius: 8px;
@@ -543,7 +543,7 @@
 }
 
 .privacy-settings .toggle.on {
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
 }
 
 .privacy-settings .toggle.on::after {
@@ -552,7 +552,7 @@
 
 .privacy-settings .save-btn {
     width: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     border: none;
     padding: 12px;
     border-radius: 8px;
@@ -670,7 +670,7 @@
 
 .activity-status .type-btn.active {
     background: rgba(102, 126, 234, 0.2);
-    border-color: #667eea;
+    border-color: #5865f2;
 }
 
 .activity-status .type-btn span:first-child {
@@ -689,7 +689,7 @@
 
 .activity-status .save-btn {
     width: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #5865f2, #4752c4);
     border: none;
     padding: 12px;
     border-radius: 8px;

@@ -1,4 +1,4 @@
-// frontend/src/components/ChannelSettingsModal/PermissionsTab.js
+﻿// frontend/src/components/ChannelSettingsModal/PermissionsTab.js
 
 import { FaUserShield, FaPlus, FaLock } from 'react-icons/fa';
 import styles from './styles';
@@ -29,7 +29,7 @@ const PermissionsTab = ({
             {/* Rol İzinleri */}
             {permissions.role_permissions?.length > 0 && (
                 <div style={styles.permSection}>
-                    <h5 style={{ color: '#b9bbbe', fontSize: '0.9em', marginBottom: '10px' }}>ROL İZİNLERİ</h5>
+                    <h5 style={{ color: '#b5bac1', fontSize: '0.9em', marginBottom: '10px' }}>ROL İZİNLERİ</h5>
                     {permissions.role_permissions.map(perm => (
                         <div key={perm.id} style={styles.permissionItem}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -51,7 +51,7 @@ const PermissionsTab = ({
             {/* Kullanıcı İzinleri */}
             {permissions.user_permissions?.length > 0 && (
                 <div style={styles.permSection}>
-                    <h5 style={{ color: '#b9bbbe', fontSize: '0.9em', marginBottom: '10px' }}>KULLANICI İZİNLERİ</h5>
+                    <h5 style={{ color: '#b5bac1', fontSize: '0.9em', marginBottom: '10px' }}>KULLANICI İZİNLERİ</h5>
                     {permissions.user_permissions.map(perm => (
                         <div key={perm.id} style={styles.permissionItem}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -87,7 +87,7 @@ const PermissionsTab = ({
                     <h5 style={{ color: '#fff', marginBottom: '15px' }}>İzin Ekle</h5>
 
                     <div style={{ marginBottom: '15px' }}>
-                        <label style={{ color: '#b9bbbe', fontSize: '0.9em' }}>İzin Türü</label>
+                        <label style={{ color: '#b5bac1', fontSize: '0.9em' }}>İzin Türü</label>
                         <select
                             value={permissionType}
                             onChange={e => setPermissionType(e.target.value)}
@@ -100,7 +100,7 @@ const PermissionsTab = ({
 
                     {permissionType === 'role' && (
                         <div style={{ marginBottom: '15px' }}>
-                            <label style={{ color: '#b9bbbe', fontSize: '0.9em' }}>Rol Seç</label>
+                            <label style={{ color: '#b5bac1', fontSize: '0.9em' }}>Rol Seç</label>
                             <select
                                 value={selectedRoleForPerm || ''}
                                 onChange={e => setSelectedRoleForPerm(e.target.value)}
@@ -116,7 +116,7 @@ const PermissionsTab = ({
 
                     {permissionType === 'user' && (
                         <div style={{ marginBottom: '15px' }}>
-                            <label style={{ color: '#b9bbbe', fontSize: '0.9em' }}>Kullanıcı Ara</label>
+                            <label style={{ color: '#b5bac1', fontSize: '0.9em' }}>Kullanıcı Ara</label>
                             <input
                                 type="text"
                                 placeholder="Kullanıcı adı yazın... (min 2 karakter)"
@@ -131,7 +131,7 @@ const PermissionsTab = ({
                             {/* Arama Sonuçları */}
                             {searchResults.length > 0 && (
                                 <div style={{
-                                    background: '#1e1f22',
+                                    background: '#0d0e10',
                                     borderRadius: '6px',
                                     marginTop: '8px',
                                     maxHeight: '200px',
@@ -152,13 +152,13 @@ const PermissionsTab = ({
                                                 alignItems: 'center',
                                                 gap: '10px',
                                                 cursor: 'pointer',
-                                                borderBottom: '1px solid #2b2d31',
+                                                borderBottom: '1px solid #0e1222',
                                                 backgroundColor: selectedUserForPerm === user.id ? '#5865f2' : 'transparent',
                                                 transition: 'background-color 0.2s'
                                             }}
                                             onMouseEnter={e => {
                                                 if (selectedUserForPerm !== user.id) {
-                                                    e.currentTarget.style.backgroundColor = '#2b2d31';
+                                                    e.currentTarget.style.backgroundColor = '#111214';
                                                 }
                                             }}
                                             onMouseLeave={e => {
@@ -188,7 +188,7 @@ const PermissionsTab = ({
                             )}
 
                             {selectedUserForPerm && (
-                                <p style={{ fontSize: '0.85em', color: '#43b581', marginTop: '5px' }}>
+                                <p style={{ fontSize: '0.85em', color: '#23a559', marginTop: '5px' }}>
                                     ✅ Kullanıcı seçildi: <strong>{searchUser}</strong>
                                 </p>
                             )}

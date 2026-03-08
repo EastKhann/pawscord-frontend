@@ -1,4 +1,4 @@
-export const injectInviteStyles = () => {
+﻿export const injectInviteStyles = () => {
     if (typeof document === 'undefined') return;
     const id = 'invite-modal-styles';
     if (document.getElementById(id)) return;
@@ -23,7 +23,7 @@ const st = {
         backdropFilter: 'blur(4px)',
     },
     modal: {
-        backgroundColor: '#313338',
+        backgroundColor: '#17191c',
         borderRadius: '12px',
         width: '460px',
         maxWidth: '92vw',
@@ -75,7 +75,7 @@ const st = {
         padding: '8px 20px 4px 20px',
     },
     searchBox: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '0 12px',
         display: 'flex',
@@ -190,7 +190,7 @@ const st = {
         animation: 'inviteSpin 0.6s linear infinite',
     },
     linkSection: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '16px 20px',
         borderTop: '1px solid rgba(255,255,255,0.04)',
     },
@@ -206,7 +206,7 @@ const st = {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '4px 4px 4px 12px',
         minHeight: '44px',

@@ -1,4 +1,4 @@
-
+﻿
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCalendarAlt, FaTag, FaCheckSquare, FaUser, FaTrash, FaAlignLeft } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
@@ -68,7 +68,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
             display: 'flex', justifyContent: 'center', alignItems: 'center'
         }} {...overlayProps}>
             <div style={{
-                backgroundColor: '#313338', width: '600px', maxHeight: '90vh',
+                backgroundColor: '#17191c', width: '600px', maxHeight: '90vh',
                 borderRadius: '8px', overflowY: 'auto', padding: '20px',
                 color: '#dbdee1', display: 'flex', flexDirection: 'column', gap: '20px',
                 position: 'relative'
@@ -122,7 +122,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                 onChange={e => setDescription(e.target.value)}
                                 placeholder="Add a more detailed description..."
                                 style={{
-                                    width: '100%', minHeight: '100px', backgroundColor: '#383a40', border: 'none',
+                                    width: '100%', minHeight: '100px', backgroundColor: '#1e2024', border: 'none',
                                     borderRadius: '4px', color: '#dbdee1', padding: '10px', resize: 'vertical'
                                 }}
                             />
@@ -140,7 +140,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                     <span style={{ fontSize: '0.8em', color: '#949ba4' }}>
                                         {Math.round((checklist.filter(i => i.done).length / checklist.length) * 100)}%
                                     </span>
-                                    <div style={{ flex: 1, height: '6px', backgroundColor: '#383a40', borderRadius: '3px', overflow: 'hidden' }}>
+                                    <div style={{ flex: 1, height: '6px', backgroundColor: '#1e2024', borderRadius: '3px', overflow: 'hidden' }}>
                                         <div style={{
                                             height: '100%', backgroundColor: '#5865f2',
                                             width: `${(checklist.filter(i => i.done).length / checklist.length) * 100}%`
@@ -176,7 +176,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                         placeholder="Add an item"
                                         onKeyDown={e => e.key === 'Enter' && addChecklistItem()}
                                         style={{
-                                            backgroundColor: '#383a40', border: 'none', borderRadius: '4px',
+                                            backgroundColor: '#1e2024', border: 'none', borderRadius: '4px',
                                             color: 'white', padding: '8px', flex: 1
                                         }}
                                     />
@@ -193,7 +193,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
                         {/* Label Picker (Simplified) */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#dbdee1', padding: '5px', backgroundColor: '#383a40', borderRadius: '3px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#dbdee1', padding: '5px', backgroundColor: '#1e2024', borderRadius: '3px' }}>
                                 <FaTag /> Labels
                             </div>
                             <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', padding: '5px' }}>
@@ -213,7 +213,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
 
                         {/* Due Date */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#dbdee1', padding: '5px', backgroundColor: '#383a40', borderRadius: '3px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#dbdee1', padding: '5px', backgroundColor: '#1e2024', borderRadius: '3px' }}>
                                 <FaCalendarAlt /> Due Date
                             </div>
                             <input
@@ -221,7 +221,7 @@ const KanbanCardModal = ({ card, onClose, onSave, onDelete, columnTitle }) => {
                                 value={dueDate}
                                 onChange={e => setDueDate(e.target.value)}
                                 style={{
-                                    backgroundColor: '#383a40', border: 'none', borderRadius: '3px', color: 'white', padding: '5px', width: '100%'
+                                    backgroundColor: '#1e2024', border: 'none', borderRadius: '3px', color: 'white', padding: '5px', width: '100%'
                                 }}
                             />
                         </div>

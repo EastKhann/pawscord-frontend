@@ -14,31 +14,31 @@
 }
 
 .roles-manager-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 800px;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
     overflow: hidden;
 }
 
 .roles-manager-header {
     padding: 24px;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(88, 101, 242, 0.2);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(139, 92, 246, 0.05);
+    background: rgba(88, 101, 242, 0.05);
 }
 
 .roles-manager-header h2 {
     margin: 0;
-    font-size: 24px;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    font-size: 20px;
+    background: linear-gradient(135deg, #5865f2, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -47,7 +47,7 @@
 .close-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #ef4444;
+    color: #f23f42;
     width: 36px;
     height: 36px;
     border-radius: 8px;
@@ -61,7 +61,7 @@
 
 .close-btn:hover {
     background: rgba(239, 68, 68, 0.2);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .roles-manager-content {
@@ -79,7 +79,7 @@
 }
 
 .create-role-btn {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    background: linear-gradient(135deg, #5865f2, #7c3aed);
     border: none;
     color: white;
     padding: 12px 24px;
@@ -95,7 +95,7 @@
 
 .create-role-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.4);
 }
 
 .roles-info {
@@ -107,10 +107,10 @@
 }
 
 .info-tip {
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(88, 101, 242, 0.1);
     padding: 6px 12px;
     border-radius: 6px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
 }
 
 .roles-list {
@@ -121,8 +121,8 @@
 
 .role-card {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(88, 101, 242, 0.2);
     border-radius: 12px;
     padding: 16px;
     display: flex;
@@ -134,7 +134,7 @@
 
 .role-card:hover {
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(139, 92, 246, 0.4);
+    border-color: rgba(88, 101, 242, 0.4);
     transform: translateX(4px);
 }
 
@@ -189,13 +189,13 @@
 }
 
 .role-badge {
-    background: rgba(139, 92, 246, 0.15);
-    color: #8b5cf6;
+    background: rgba(88, 101, 242, 0.15);
+    color: #5865f2;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 11px;
     font-weight: 500;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
 }
 
 .role-actions {
@@ -220,19 +220,19 @@
 .role-action-btn.edit:hover {
     background: rgba(59, 130, 246, 0.2);
     border-color: rgba(59, 130, 246, 0.4);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .role-action-btn.copy:hover {
     background: rgba(16, 185, 129, 0.2);
     border-color: rgba(16, 185, 129, 0.4);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .role-action-btn.delete:hover {
     background: rgba(239, 68, 68, 0.2);
     border-color: rgba(239, 68, 68, 0.4);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .empty-state {
@@ -274,19 +274,19 @@
 }
 
 .role-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     padding: 24px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
 }
 
 .role-modal h3 {
     margin: 0 0 24px 0;
     font-size: 20px;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    background: linear-gradient(135deg, #5865f2, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -301,7 +301,7 @@
     margin-bottom: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: #e2e3ee;
+    color: #dbdee1;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -309,7 +309,7 @@
 .form-group input[type="text"] {
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 8px;
     padding: 12px 16px;
     color: white;
@@ -319,9 +319,9 @@
 
 .form-group input[type="text"]:focus {
     outline: none;
-    border-color: #8b5cf6;
+    border-color: #5865f2;
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
 }
 
 .color-picker {
@@ -342,7 +342,7 @@
 }
 
 .color-preset:hover {
-    transform: scale(1.15);
+    transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -354,7 +354,7 @@
 .color-input {
     width: 36px;
     height: 36px;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 8px;
     cursor: pointer;
     background: transparent;
@@ -379,7 +379,7 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
-    accent-color: #8b5cf6;
+    accent-color: #5865f2;
     margin-top: 2px;
     flex-shrink: 0;
 }
@@ -422,20 +422,20 @@
 
 .save-btn,
 .create-btn {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    background: linear-gradient(135deg, #5865f2, #7c3aed);
     color: white;
 }
 
 .save-btn:hover,
 .create-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.4);
 }
 
 .loading-spinner {
     text-align: center;
     padding: 60px;
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 16px;
 }
 

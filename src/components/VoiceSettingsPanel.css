@@ -130,7 +130,7 @@
 
 .tab-btn:hover {
     background: rgba(255, 255, 255, 0.06);
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .tab-btn.active {
@@ -311,7 +311,7 @@
 }
 
 .premium-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .premium-slider::-moz-range-thumb {
@@ -328,7 +328,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
     margin-top: 4px;
 }
 
@@ -336,7 +336,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
     margin-top: 4px;
 }
 
@@ -399,7 +399,7 @@
 }
 
 .toggle-row span {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
 }
 
@@ -411,7 +411,7 @@
 
 .option-desc {
     font-size: 11px !important;
-    color: #72767d !important;
+    color: #949ba4 !important;
 }
 
 /* Noise Level Buttons */
@@ -464,7 +464,7 @@
 
 .level-desc {
     font-size: 10px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .level-btn.active .level-name {
@@ -503,7 +503,7 @@
 .gate-slider label {
     display: block;
     font-size: 13px;
-    color: #dcddde;
+    color: #dbdee1;
     margin-bottom: 8px;
 }
 
@@ -585,7 +585,7 @@
 
 .radio-desc {
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* Frequency Selector */
@@ -651,7 +651,7 @@
 }
 
 .mode-icon {
-    font-size: 24px;
+    font-size: 20px;
     color: #8e9297;
     margin-bottom: 4px;
 }
@@ -668,7 +668,7 @@
 
 .mode-desc {
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* Sensitivity Control */
@@ -684,7 +684,7 @@
 }
 
 .sensitivity-header span {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 13px;
 }
 
@@ -693,7 +693,7 @@
     align-items: center;
     gap: 6px;
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
     margin-top: 4px;
 }
 
@@ -734,7 +734,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 10px;
-    color: #72767d;
+    color: #949ba4;
     margin-top: 4px;
 }
 
@@ -808,7 +808,7 @@
 
 .ptt-delay .hint {
     font-size: 11px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* Mic Test Area */
@@ -963,7 +963,7 @@
 
 .preset-label {
     font-size: 11px;
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .eq-preset-btn.active .preset-label {
@@ -1004,12 +1004,12 @@
 }
 
 .effect-icon {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .effect-name {
     font-size: 11px;
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .effect-btn.active .effect-name {
@@ -1050,7 +1050,7 @@
 
 .option-row label {
     font-size: 14px;
-    color: #dcddde;
+    color: #dbdee1;
 }
 
 .option-row select {

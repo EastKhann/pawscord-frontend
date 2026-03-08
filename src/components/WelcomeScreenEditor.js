@@ -1,4 +1,4 @@
-// frontend/src/components/WelcomeScreenEditor.js
+﻿// frontend/src/components/WelcomeScreenEditor.js
 // 🔥 FEATURE 40: Welcome screen editor
 // Admin can configure what new members see when joining
 
@@ -154,7 +154,7 @@ const S = {
         display: 'flex', alignItems: 'center', gap: 6,
         padding: '6px 12px', borderRadius: 4,
         border: 'none', backgroundColor: 'rgba(255,255,255,0.06)',
-        color: '#dcddde', fontSize: 13, cursor: 'pointer',
+        color: '#dbdee1', fontSize: 13, cursor: 'pointer',
     },
     field: {
         marginBottom: 20, position: 'relative',
@@ -165,8 +165,8 @@ const S = {
     },
     textarea: {
         width: '100%', resize: 'none', padding: '8px 10px',
-        backgroundColor: '#1e1f22', border: '1px solid rgba(255,255,255,0.06)',
-        borderRadius: 6, color: '#dcddde', fontSize: 14,
+        backgroundColor: '#0d0e10', border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: 6, color: '#dbdee1', fontSize: 14,
         outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box',
     },
     charCount: {
@@ -176,26 +176,26 @@ const S = {
     channelRow: {
         display: 'flex', alignItems: 'center', gap: 6,
         marginBottom: 8, padding: '6px 8px',
-        backgroundColor: '#1e1f22', borderRadius: 6,
+        backgroundColor: '#0d0e10', borderRadius: 6,
     },
     emojiSelect: {
-        width: 42, backgroundColor: '#2b2d31', border: 'none', borderRadius: 4,
-        color: '#dcddde', fontSize: 16, padding: '4px', textAlign: 'center',
+        width: 42, backgroundColor: '#111214', border: 'none', borderRadius: 4,
+        color: '#dbdee1', fontSize: 16, padding: '4px', textAlign: 'center',
         outline: 'none', cursor: 'pointer',
     },
     channelSelect: {
-        flex: 1, backgroundColor: '#2b2d31', border: 'none', borderRadius: 4,
-        color: '#dcddde', fontSize: 13, padding: '6px 8px', outline: 'none',
+        flex: 1, backgroundColor: '#111214', border: 'none', borderRadius: 4,
+        color: '#dbdee1', fontSize: 13, padding: '6px 8px', outline: 'none',
     },
     descInput: {
-        flex: 1, backgroundColor: '#2b2d31', border: 'none', borderRadius: 4,
-        color: '#dcddde', fontSize: 13, padding: '6px 8px', outline: 'none',
+        flex: 1, backgroundColor: '#111214', border: 'none', borderRadius: 4,
+        color: '#dbdee1', fontSize: 13, padding: '6px 8px', outline: 'none',
     },
     removeBtn: {
         width: 28, height: 28, borderRadius: 4,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         border: 'none', background: 'transparent',
-        color: '#ed4245', cursor: 'pointer',
+        color: '#f23f42', cursor: 'pointer',
     },
     addBtn: {
         display: 'flex', alignItems: 'center', gap: 6,
@@ -231,7 +231,7 @@ const S = {
     },
     previewChannel: {
         display: 'flex', alignItems: 'center', gap: 10,
-        padding: '10px 14px', backgroundColor: '#2b2d31',
+        padding: '10px 14px', backgroundColor: '#111214',
         borderRadius: 8, textAlign: 'left',
     },
     previewEmoji: { fontSize: 24 },
@@ -246,7 +246,7 @@ const S = {
         margin: '20px auto 0', padding: '8px 16px',
         borderRadius: 4, border: 'none',
         backgroundColor: 'rgba(255,255,255,0.06)',
-        color: '#dcddde', fontSize: 14, cursor: 'pointer',
+        color: '#dbdee1', fontSize: 14, cursor: 'pointer',
     },
 };
 

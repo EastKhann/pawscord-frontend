@@ -20,7 +20,7 @@ const KeybindsTab = () => (
         <SettingSection title="Klavye Kısayolları">
             {SHORTCUTS.map((s, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <span style={{ color: '#dcddde', fontSize: 14 }}>{s.desc}</span>
+                    <span style={{ color: '#dbdee1', fontSize: 14 }}>{s.desc}</span>
                     <kbd style={S.kbd}>{s.keys}</kbd>
                 </div>
             ))}

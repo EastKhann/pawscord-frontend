@@ -1,4 +1,4 @@
-// frontend/src/LinkPreview.js (DISCORD-STYLE ÖNİZLEME - V2.0)
+﻿// frontend/src/LinkPreview.js (DISCORD-STYLE ÖNİZLEME - V2.0)
 
 import { memo } from 'react';
 
@@ -154,7 +154,7 @@ const styles = {
         maxWidth: 516,
         borderRadius: 4,
         overflow: 'hidden',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         border: '1px solid rgba(255,255,255,0.04)',
     },
     accentBar: {
@@ -190,7 +190,7 @@ const styles = {
     },
     embedDescription: {
         fontSize: '0.875rem',
-        color: '#dcddde',
+        color: '#dbdee1',
         margin: 0,
         lineHeight: '1.125rem',
         maxHeight: 54,

@@ -1,4 +1,4 @@
-// frontend/src/components/CustomStatusModal.js
+﻿// frontend/src/components/CustomStatusModal.js
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaGamepad, FaHeadphones, FaEye, FaTwitch, FaTrophy, FaPen } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';
@@ -6,12 +6,12 @@ import useModalA11y from '../hooks/useModalA11y';
 
 const STATUS_TYPES = [
     { key: 'custom', label: 'Özel', icon: '✨', color: '#5865F2', placeholder: 'Özel durumunu yaz...' },
-    { key: 'gaming', label: 'Oynuyor', icon: '🎮', color: '#57F287', placeholder: 'Hangi oyunu oynuyorsun?' },
+    { key: 'gaming', label: 'Oynuyor', icon: '🎮', color: '#23a559', placeholder: 'Hangi oyunu oynuyorsun?' },
     { key: 'happy', label: 'Dinliyor', icon: '🎧', color: '#1DB954', placeholder: 'Ne dinliyorsun?' },
     { key: 'focused', label: 'İzliyor', icon: '👀', color: '#E91E63', placeholder: 'Ne izliyorsun?' },
     { key: 'creative', label: 'Yayında', icon: '📡', color: '#9146FF', placeholder: 'Yayın başlığı...' },
-    { key: 'excited', label: 'Yarışıyor', icon: '🏆', color: '#FAA61A', placeholder: 'Hangi yarışma?' },
-    { key: 'working', label: 'Çalışıyor', icon: '💼', color: '#747F8D', placeholder: 'Ne üzerinde çalışıyorsun?' },
+    { key: 'excited', label: 'Yarışıyor', icon: '🏆', color: '#f0b232', placeholder: 'Hangi yarışma?' },
+    { key: 'working', label: 'Çalışıyor', icon: '💼', color: '#80848e', placeholder: 'Ne üzerinde çalışıyorsun?' },
     { key: 'studying', label: 'Okuyor', icon: '📚', color: '#5865F2', placeholder: 'Ne okuyorsun?' },
 ];
 
@@ -238,7 +238,7 @@ const styles = {
     modal: {
         width: '440px',
         maxWidth: '90vw',
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '12px',
         overflow: 'hidden',
         boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
@@ -248,7 +248,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '16px 20px',
-        borderBottom: '1px solid #2f3136',
+        borderBottom: '1px solid #0e1222',
     },
     title: {
         margin: 0,
@@ -259,7 +259,7 @@ const styles = {
     closeBtn: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '16px',
         padding: '4px',
@@ -270,7 +270,7 @@ const styles = {
         gap: '12px',
         margin: '16px 20px',
         padding: '14px 16px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         borderLeft: '4px solid #5865F2',
     },
@@ -283,7 +283,7 @@ const styles = {
         gap: '2px',
     },
     previewContent: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
     },
     section: {
@@ -293,7 +293,7 @@ const styles = {
     },
     label: {
         display: 'block',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '12px',
         fontWeight: 700,
         textTransform: 'uppercase',
@@ -310,10 +310,10 @@ const styles = {
         alignItems: 'center',
         gap: '4px',
         padding: '10px 8px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         border: '2px solid transparent',
         borderRadius: '8px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         transition: 'all 0.15s',
         fontSize: '16px',
@@ -321,8 +321,8 @@ const styles = {
     emojiInput: {
         width: '60px',
         padding: '8px 12px',
-        backgroundColor: '#202225',
-        border: '1px solid #40444b',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #182135',
         borderRadius: '6px',
         color: '#fff',
         fontSize: '24px',
@@ -332,10 +332,10 @@ const styles = {
     textInput: {
         width: '100%',
         padding: '10px 14px',
-        backgroundColor: '#202225',
-        border: '1px solid #40444b',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #182135',
         borderRadius: '6px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         outline: 'none',
         boxSizing: 'border-box',
@@ -345,7 +345,7 @@ const styles = {
         right: '28px',
         bottom: '-16px',
         fontSize: '11px',
-        color: '#72767d',
+        color: '#949ba4',
     },
     expiryRow: {
         display: 'flex',
@@ -354,10 +354,10 @@ const styles = {
     },
     expiryBtn: {
         padding: '6px 12px',
-        backgroundColor: '#2f3136',
-        border: '1px solid #40444b',
+        backgroundColor: '#111214',
+        border: '1px solid #182135',
         borderRadius: '6px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '12px',
         transition: 'all 0.15s',
@@ -372,15 +372,15 @@ const styles = {
         alignItems: 'center',
         gap: '8px',
         padding: '16px 20px',
-        borderTop: '1px solid #2f3136',
-        backgroundColor: '#2f3136',
+        borderTop: '1px solid #0e1222',
+        backgroundColor: '#111214',
     },
     clearBtn: {
         padding: '8px 16px',
         backgroundColor: 'transparent',
-        border: '1px solid #ed4245',
+        border: '1px solid #f23f42',
         borderRadius: '6px',
-        color: '#ed4245',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '13px',
         fontWeight: 500,
@@ -389,7 +389,7 @@ const styles = {
         padding: '8px 16px',
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '13px',
         fontWeight: 500,

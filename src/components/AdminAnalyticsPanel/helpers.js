@@ -20,9 +20,9 @@ export const StatCard = ({ icon, label, value, color, subtitle }) => (
 );
 
 export const GrowthCard = ({ label, value, isPositive, suffix = '%', icon }) => (
-    <div style={{ ...styles.growthCard, borderLeft: `4px solid ${isPositive ? '#23a559' : '#ed4245'}` }}>
+    <div style={{ ...styles.growthCard, borderLeft: `4px solid ${isPositive ? '#23a559' : '#f23f42'}` }}>
         <div style={styles.growthLabel}>{label}</div>
-        <div style={{ ...styles.growthValue, color: isPositive ? '#23a559' : '#ed4245' }}>
+        <div style={{ ...styles.growthValue, color: isPositive ? '#23a559' : '#f23f42' }}>
             {icon || (isPositive ? <FaArrowUp /> : <FaArrowDown />)}
             <span>{typeof value === 'number' ? value.toFixed(1) : value}{suffix}</span>
         </div>

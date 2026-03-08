@@ -89,7 +89,7 @@ const S = {
         display: 'inline-flex', alignItems: 'center', gap: 4,
         padding: '2px 8px', backgroundColor: 'rgba(88,101,242,0.1)',
         border: '1px solid rgba(88,101,242,0.3)', borderRadius: 12,
-        cursor: 'pointer', transition: 'all 0.2s', fontSize: 13, color: '#dcddde',
+        cursor: 'pointer', transition: 'all 0.2s', fontSize: 13, color: '#dbdee1',
     },
     btnActive: {
         backgroundColor: 'rgba(88,101,242,0.25)',
@@ -97,7 +97,7 @@ const S = {
         boxShadow: '0 0 8px rgba(88,101,242,0.3)',
     },
     emoji: { fontSize: 14, lineHeight: 1 },
-    count: { fontSize: 11, fontWeight: 600, color: '#dcddde' },
+    count: { fontSize: 11, fontWeight: 600, color: '#dbdee1' },
     popup: {
         position: 'fixed', zIndex: 20000,
         backgroundColor: '#18191c', border: '1px solid rgba(255,255,255,0.1)',
@@ -109,7 +109,7 @@ const S = {
     popupEmoji: { fontSize: 24, textAlign: 'center', marginBottom: 8 },
     userList: { display: 'flex', flexDirection: 'column', gap: 4 },
     userRow: { display: 'flex', alignItems: 'center', gap: 6 },
-    userName: { color: '#dcddde', fontSize: 12, fontWeight: 500 },
+    userName: { color: '#dbdee1', fontSize: 12, fontWeight: 500 },
     userNameMe: { color: '#5865f2' },
     youBadge: {
         fontSize: 9, color: '#5865f2', backgroundColor: 'rgba(88,101,242,0.15)',

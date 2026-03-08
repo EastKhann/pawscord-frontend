@@ -84,7 +84,7 @@ const ReportDetailModal = ({ report, onClose, onHandle, getReportBadgeColor, get
                                         onHandle(report.id, 'delete_message');
                                     }
                                 }}
-                                style={{ ...styles.actionBtn, backgroundColor: '#ed4245' }}
+                                style={{ ...styles.actionBtn, backgroundColor: '#f23f42' }}
                             >
                                 <FaTrash /> Delete Message
                             </button>
@@ -111,7 +111,7 @@ const ReportDetailModal = ({ report, onClose, onHandle, getReportBadgeColor, get
                                     onHandle(report.id, 'dismiss', reason);
                                 }
                             }}
-                            style={{ ...styles.actionBtn, backgroundColor: '#72767d' }}
+                            style={{ ...styles.actionBtn, backgroundColor: '#949ba4' }}
                         >
                             <FaTimes /> Dismiss
                         </button>

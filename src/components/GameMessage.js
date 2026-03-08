@@ -66,7 +66,7 @@ const GameMessage = ({ gameId, state, currentUser, onMove }) => {
 
 const styles = {
     container: {
-        background: 'linear-gradient(135deg, #2b2d31, #232428)',
+        background: 'linear-gradient(135deg, #111214, #232428)',
         borderRadius: '8px',
         border: '1px solid #eb459e',
         padding: '12px',
@@ -82,14 +82,14 @@ const styles = {
         width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.1)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2em'
     },
-    vs: { fontSize: '0.8em', color: '#b9bbbe', fontWeight: 'bold' },
+    vs: { fontSize: '0.8em', color: '#b5bac1', fontWeight: 'bold' },
     controls: { display: 'flex', justifyContent: 'center', gap: '10px' },
     moveBtn: {
         backgroundColor: '#5865f2', border: 'none', borderRadius: '8px', width: '40px', height: '40px',
         fontSize: '1.2em', cursor: 'pointer', transition: 'transform 0.1s'
     },
     result: { textAlign: 'center', fontWeight: 'bold', color: '#23a559', marginTop: '10px' },
-    status: { textAlign: 'center', fontSize: '0.8em', color: '#b9bbbe', marginTop: '5px' }
+    status: { textAlign: 'center', fontSize: '0.8em', color: '#b5bac1', marginTop: '5px' }
 };
 
 export default GameMessage;

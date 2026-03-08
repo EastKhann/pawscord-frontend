@@ -337,6 +337,9 @@ export function useWebRTC({
                 setTimeout(() => setIsReconnecting(false), 3000);
             } else if (pc.iceConnectionState === 'disconnected') {
                 setIsReconnecting(true);
+                // 🔥 FIX: Try ICE restart first (transient network blip recovery)
+                // before giving up and closing the PC after 15s.
+                pc.restartIce();
                 setTimeout(() => {
                     if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'failed') {
                         setRemoteStreams(prev => {

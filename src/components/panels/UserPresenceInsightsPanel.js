@@ -90,7 +90,7 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
         switch (status) {
             case 'online': return '#10b981';
             case 'idle': return '#f59e0b';
-            case 'dnd': return '#ef4444';
+            case 'dnd': return '#f23f42';
             default: return '#6b7280';
         }
     };

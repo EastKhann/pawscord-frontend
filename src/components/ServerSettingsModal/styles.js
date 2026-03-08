@@ -1,8 +1,8 @@
-// Extracted from ServerSettingsModal.js — centralized styles object
+﻿// Extracted from ServerSettingsModal.js — centralized styles object
 
 const styles = {
-    overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000 },
-    modal: { backgroundColor: '#313338', borderRadius: '12px', width: '900px', maxWidth: '95vw', height: '650px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.6)' },
+    overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000 },
+    modal: { backgroundColor: 'rgba(30, 31, 35, 0.92)', backdropFilter: 'blur(48px) saturate(180%)', WebkitBackdropFilter: 'blur(48px) saturate(180%)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', width: '900px', maxWidth: '95vw', height: '650px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.65)' },
 
     // Layout
     layoutContainer: { display: 'flex', flex: 1, overflow: 'hidden' },
@@ -11,7 +11,7 @@ const styles = {
     sidebar: {
         width: '220px',
         minWidth: '220px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: 'rgba(17, 18, 20, 0.6)',
         display: 'flex',
         flexDirection: 'column',
         borderRight: '1px solid rgba(255,255,255,0.06)',
@@ -123,7 +123,7 @@ const styles = {
         fontSize: '1.2em',
         fontWeight: '700',
     },
-    closeBtn: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', padding: '4px', borderRadius: '4px', transition: 'color 0.15s' },
+    closeBtn: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', padding: '4px', borderRadius: '8px', transition: 'color 0.15s' },
     content: { flex: 1, padding: '20px 24px', overflow: 'auto' },
 
     // Legacy compat (header/tabs removed - kept for inner usage)
@@ -134,22 +134,22 @@ const styles = {
     activeTab: {},
 
     // Sol Menü
-    rolesSidebar: { width: '200px', borderRight: '1px solid #1e1f22', display: 'flex', flexDirection: 'column', gap: '10px' },
-    newRoleBtn: { padding: '10px', backgroundColor: '#232428', color: '#fff', border: '1px solid #1e1f22', borderRadius: '4px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' },
+    rolesSidebar: { width: '200px', borderRight: '1px solid #0b0e1b', display: 'flex', flexDirection: 'column', gap: '10px' },
+    newRoleBtn: { padding: '10px', backgroundColor: '#0d0e10', color: '#fff', border: '1px solid #0b0e1b', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' },
     rolesList: { overflowY: 'auto', flex: 1 },
-    roleItem: { padding: '10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: '4px', marginBottom: '2px', color: '#b9bbbe' },
+    roleItem: { padding: '10px', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: '8px', marginBottom: '2px', color: '#b5bac1' },
 
     // Sağ Editör
     roleEditor: { flex: 1, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' },
-    editorTitle: { margin: 0, color: '#fff', borderBottom: '1px solid #40444b', paddingBottom: '10px' },
-    inputGroup: { display: 'flex', flexDirection: 'column', gap: '5px', color: '#b9bbbe', fontSize: '0.9em' },
-    input: { padding: '10px', backgroundColor: '#1e1f22', border: 'none', borderRadius: '4px', color: '#fff', outline: 'none' },
-    colorPreview: { width: '40px', height: '40px', borderRadius: '4px', border: '1px solid #fff', cursor: 'pointer' },
+    editorTitle: { margin: 0, color: '#fff', borderBottom: '1px solid #182135', paddingBottom: '10px' },
+    inputGroup: { display: 'flex', flexDirection: 'column', gap: '5px', color: '#b5bac1', fontSize: '0.9em' },
+    input: { padding: '10px', backgroundColor: '#0d0e10', border: 'none', borderRadius: '8px', color: '#fff', outline: 'none' },
+    colorPreview: { width: '40px', height: '40px', borderRadius: '8px', border: '1px solid #fff', cursor: 'pointer' },
 
     // 🔥 KAPLAMA (COVER) STİLİ: Tüm ekranı kaplar ama z-index ile picker'ın altında kalır
     cover: { position: 'fixed', top: '0px', right: '0px', bottom: '0px', left: '0px', zIndex: 999 },
 
-    permissionsGrid: { display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: '#2b2d31', padding: '15px', borderRadius: '8px' },
+    permissionsGrid: { display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: '#111214', padding: '15px', borderRadius: '8px' },
 
     // 🛡️ Moderation Cards - YENİ KAPSAMLI STİLLER
     moderationTab: {
@@ -162,7 +162,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '16px 20px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '12px',
         marginBottom: '8px'
     },
@@ -187,7 +187,7 @@ const styles = {
     },
     statLabel: {
         fontSize: '12px',
-        color: '#72767d'
+        color: '#949ba4'
     },
     quickStatsGrid: {
         display: 'grid',
@@ -195,7 +195,7 @@ const styles = {
         gap: '12px'
     },
     quickStatCard: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '16px',
         borderRadius: '8px',
         display: 'flex',
@@ -209,7 +209,7 @@ const styles = {
     },
     quickStatLabel: {
         fontSize: '12px',
-        color: '#72767d'
+        color: '#949ba4'
     },
     moderationCardsGrid: {
         display: 'grid',
@@ -217,10 +217,10 @@ const styles = {
         gap: '16px'
     },
     modCard: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '20px',
         borderRadius: '12px',
-        border: '1px solid #1e1f22',
+        border: '1px solid #0b0e1b',
         transition: 'transform 0.2s, box-shadow 0.2s'
     },
     modCardHeader: {
@@ -252,7 +252,7 @@ const styles = {
         fontWeight: '600'
     },
     modCardDesc: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px',
         lineHeight: '1.5',
         marginBottom: '16px'
@@ -264,18 +264,19 @@ const styles = {
         marginBottom: '16px'
     },
     modCardFeature: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         padding: '6px 10px',
         borderRadius: '6px',
         fontSize: '11px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     modCardBtn: {
         width: '100%',
-        backgroundColor: '#5865f2',
+        background: 'linear-gradient(135deg, #5865f2, #4752c4)',
         color: '#fff',
         border: 'none',
-        borderRadius: '8px',
+        borderRadius: '13px',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
         padding: '12px 16px',
         cursor: 'pointer',
         fontSize: '14px',
@@ -287,7 +288,7 @@ const styles = {
         transition: 'opacity 0.2s'
     },
     quickActionsSection: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         padding: '20px',
         borderRadius: '12px'
     },
@@ -306,9 +307,9 @@ const styles = {
         gap: '12px'
     },
     quickActionBtn: {
-        backgroundColor: '#2b2d31',
-        color: '#b9bbbe',
-        border: '1px solid #40444b',
+        backgroundColor: '#111214',
+        color: '#b5bac1',
+        border: '1px solid #182135',
         borderRadius: '8px',
         padding: '12px 16px',
         cursor: 'pointer',
@@ -320,28 +321,29 @@ const styles = {
         transition: 'all 0.2s'
     },
     moderationCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         padding: '20px',
         borderRadius: '8px',
-        border: '1px solid #2b2d31'
+        border: '1px solid #0e1222'
     },
     moderationBtn: {
         width: '100%',
         backgroundColor: '#5865f2',
         color: '#fff',
         border: 'none',
-        borderRadius: '6px',
+        borderRadius: '13px',
         padding: '10px 16px',
         cursor: 'pointer',
         fontSize: '14px',
         fontWeight: '600',
-        transition: 'background-color 0.2s'
+        transition: 'background-color 0.2s',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
     },
     permLabel: { display: 'flex', gap: '10px', alignItems: 'center', color: '#dbdee1', cursor: 'pointer' },
 
-    editorFooter: { marginTop: 'auto', display: 'flex', justifyContent: 'flex-end', gap: '10px', borderTop: '1px solid #40444b', paddingTop: '15px' },
-    saveBtn: { padding: '10px 20px', backgroundColor: '#23a559', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' },
-    deleteBtn: { padding: '10px 20px', backgroundColor: 'transparent', color: '#da373c', border: '1px solid #1e1f22', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' },
+    editorFooter: { marginTop: 'auto', display: 'flex', justifyContent: 'flex-end', gap: '10px', borderTop: '1px solid #182135', paddingTop: '15px' },
+    saveBtn: { padding: '10px 20px', background: 'linear-gradient(135deg, #23a559, #1a8f4a)', color: '#fff', border: 'none', borderRadius: '13px', boxShadow: '0 4px 0 #15803d, 0 8px 24px rgba(35,165,89,0.40)', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' },
+    deleteBtn: { padding: '10px 20px', backgroundColor: 'transparent', color: '#da373c', border: '1px solid #0b0e1b', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '5px' },
 
     // 🔥 YENİ: SUNUCU YÖNETİMİ TAB STİLLERİ
     managementTab: {
@@ -355,11 +357,11 @@ const styles = {
         margin: 0,
         color: '#fff',
         fontSize: '1.1em',
-        borderBottom: '2px solid #40444b',
+        borderBottom: '2px solid #182135',
         paddingBottom: '10px'
     },
     settingBox: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '20px',
         borderRadius: '8px',
         display: 'flex',
@@ -377,14 +379,14 @@ const styles = {
         marginBottom: '5px'
     },
     settingDesc: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '0.9em'
     },
     actionBtn: {
         padding: '10px 20px',
         color: '#fff',
         border: 'none',
-        borderRadius: '4px',
+        borderRadius: '8px',
         cursor: 'pointer',
         fontWeight: 'bold',
         display: 'flex',
@@ -395,11 +397,11 @@ const styles = {
     },
     divider: {
         height: '1px',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         margin: '10px 0'
     },
     dangerBox: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '20px',
         borderRadius: '8px',
         border: '2px solid #da373c',
@@ -413,7 +415,7 @@ const styles = {
         backgroundColor: '#da373c',
         color: '#fff',
         border: 'none',
-        borderRadius: '4px',
+        borderRadius: '8px',
         cursor: 'pointer',
         fontWeight: 'bold',
         display: 'flex',
@@ -424,15 +426,15 @@ const styles = {
     deleteConfirmation: {
         marginTop: '15px',
         padding: '15px',
-        backgroundColor: '#1e1f22',
-        borderRadius: '4px'
+        backgroundColor: '#0d0e10',
+        borderRadius: '8px'
     },
     confirmInput: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#313338',
+        backgroundColor: '#17191c',
         border: '1px solid #da373c',
-        borderRadius: '4px',
+        borderRadius: '8px',
         color: '#fff',
         fontSize: '0.95em',
         outline: 'none'
@@ -440,9 +442,9 @@ const styles = {
     cancelBtn: {
         padding: '10px 20px',
         backgroundColor: 'transparent',
-        color: '#b9bbbe',
-        border: '1px solid #40444b',
-        borderRadius: '4px',
+        color: '#b5bac1',
+        border: '1px solid #182135',
+        borderRadius: '8px',
         cursor: 'pointer',
         fontWeight: 'bold'
     }

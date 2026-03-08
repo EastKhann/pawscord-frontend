@@ -1,4 +1,4 @@
-// frontend/src/components/E2EESettingsPanel.js
+﻿// frontend/src/components/E2EESettingsPanel.js
 import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaLock, FaKey, FaSync, FaTrash, FaShieldAlt, FaCheckCircle, FaClock, FaExclamationTriangle } from 'react-icons/fa';
@@ -145,7 +145,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
                 </div>
 
                 <div style={styles.disabledState}>
-                    <FaExclamationTriangle size={48} color="#faa61a" />
+                    <FaExclamationTriangle size={48} color="#f0b232" />
                     <h4>E2EE Devre Dışı</h4>
                     <p>Şu anda E2EE kullanmıyorsunuz. Mesajlarınızı şifrelemek için ayarlardan etkinleştirin.</p>
                 </div>
@@ -163,7 +163,7 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
             {/* Status Card */}
             <div style={styles.statusCard}>
                 <div style={styles.statusHeader}>
-                    <FaCheckCircle size={32} color="#43b581" />
+                    <FaCheckCircle size={32} color="#23a559" />
                     <span style={styles.statusText}>E2EE Aktif</span>
                 </div>
                 <div style={styles.statusInfo}>
@@ -244,9 +244,9 @@ const E2EESettingsPanel = ({ username, apiBaseUrl, fetchWithAuth }) => {
 const styles = {
     container: {
         padding: '20px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     header: {
         display: 'flex',
@@ -254,7 +254,7 @@ const styles = {
         gap: '12px',
         marginBottom: '24px',
         paddingBottom: '16px',
-        borderBottom: '2px solid #40444b',
+        borderBottom: '2px solid #182135',
     },
     title: {
         margin: 0,
@@ -262,11 +262,11 @@ const styles = {
         fontWeight: 'bold',
     },
     statusCard: {
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '20px',
         marginBottom: '16px',
-        border: '2px solid #43b581',
+        border: '2px solid #23a559',
     },
     statusHeader: {
         display: 'flex',
@@ -277,7 +277,7 @@ const styles = {
     statusText: {
         fontSize: '18px',
         fontWeight: 'bold',
-        color: '#43b581',
+        color: '#23a559',
     },
     statusInfo: {
         display: 'flex',
@@ -289,18 +289,18 @@ const styles = {
         alignItems: 'center',
         gap: '8px',
         fontSize: '14px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     warningCard: {
-        backgroundColor: '#faa61a20',
-        border: '2px solid #faa61a',
+        backgroundColor: '#f0b23220',
+        border: '2px solid #f0b232',
         borderRadius: '8px',
         padding: '16px',
         marginBottom: '16px',
         display: 'flex',
         gap: '12px',
         alignItems: 'flex-start',
-        color: '#faa61a',
+        color: '#f0b232',
     },
     actions: {
         display: 'flex',
@@ -325,7 +325,7 @@ const styles = {
     },
     disableButton: {
         padding: '12px 20px',
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         color: 'white',
         border: 'none',
         borderRadius: '6px',
@@ -341,10 +341,10 @@ const styles = {
     disabledState: {
         textAlign: 'center',
         padding: '40px 20px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     infoSection: {
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '20px',
     },
@@ -358,7 +358,7 @@ const styles = {
     infoList: {
         margin: 0,
         paddingLeft: '20px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         lineHeight: '1.8',
     }

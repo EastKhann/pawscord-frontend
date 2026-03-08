@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+﻿import React, { useState, useCallback } from 'react';
 import { FaCrown } from 'react-icons/fa';
 import { styles } from './chatUserListStyles';
 
@@ -27,7 +27,7 @@ const isIgnoredApp = (appName) => {
 };
 
 const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
-    const statusColor = user.is_online ? '#43b581' : '#747f8d';
+    const statusColor = user.is_online ? '#23a559' : '#80848e';
     const isOwner = user.role === 'owner';
     const isModerator = user.role === 'moderator' || user.role === 'mod';
     // Faz 3.2: profile hover popup
@@ -64,7 +64,7 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                     top: '50%',
                     transform: 'translateY(-50%)',
                     zIndex: 300,
-                    background: '#1e1f22',
+                    background: '#0d0e10',
                     border: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: '8px',
                     boxShadow: '0 12px 32px rgba(0,0,0,0.65)',
@@ -75,25 +75,25 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                     overflow: 'hidden',
                 }}>
                     {/* Banner */}
-                    <div style={{ height: '48px', background: 'linear-gradient(135deg,#5865f2 0%,#7289da 100%)' }} />
+                    <div style={{ height: '48px', background: 'linear-gradient(135deg,#5865f2 0%,#5865f2 100%)' }} />
                     {/* Avatar */}
                     <div style={{ padding: '0 14px' }}>
                         <img src={user.avatar} alt={user.display_name || user.username}
-                            style={{ width: '56px', height: '56px', borderRadius: '50%', border: '4px solid #1e1f22', marginTop: '-28px', objectFit: 'cover', display: 'block' }} />
+                            style={{ width: '56px', height: '56px', borderRadius: '50%', border: '4px solid #0b0e1b', marginTop: '-28px', objectFit: 'cover', display: 'block' }} />
                         <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span style={{ color: '#f2f3f5', fontWeight: 700, fontSize: '15px', fontFamily: "'gg sans','Noto Sans',sans-serif" }}>
                                 {user.display_name || user.username}
                             </span>
-                            {isOwner && <FaCrown size={11} color="#faa61a" title="Sunucu sahibi" />}
+                            {isOwner && <FaCrown size={11} color="#f0b232" title="Sunucu sahibi" />}
                             {isModerator && !isOwner && <FaCrown size={11} color="#5865f2" title="Moderatör" />}
                         </div>
                         <div style={{ color: '#949ba4', fontSize: '12px', marginTop: '1px' }}>@{user.username}</div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px' }}>
                             <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: statusColor, flexShrink: 0 }} />
-                            <span style={{ color: '#b9bbbe', fontSize: '12px' }}>{user.is_online ? 'Çevrimiçi' : 'Çevrimdışı'}</span>
+                            <span style={{ color: '#b5bac1', fontSize: '12px' }}>{user.is_online ? 'Çevrimiçi' : 'Çevrimdışı'}</span>
                         </div>
                         {user.custom_status && (
-                            <div style={{ color: '#b9bbbe', fontSize: '11px', marginTop: '6px', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '6px' }}>
+                            <div style={{ color: '#b5bac1', fontSize: '11px', marginTop: '6px', borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '6px' }}>
                                 {user.custom_status}
                             </div>
                         )}
@@ -132,11 +132,11 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                 <div style={styles.usernameRow}>
                     <span style={{
                         ...styles.username,
-                        color: isCurrentUser ? '#5865f2' : (user.is_online ? '#ffffff' : '#b9bbbe')
+                        color: isCurrentUser ? '#5865f2' : (user.is_online ? '#ffffff' : '#b5bac1')
                     }}>
                         {user.display_name || user.username}
                     </span>
-                    {isOwner && <FaCrown size={12} color="#faa61a" title="Sunucu Sahibi" />}
+                    {isOwner && <FaCrown size={12} color="#f0b232" title="Sunucu Sahibi" />}
                     {isModerator && <FaCrown size={12} color="#5865f2" title="Moderatör" />}
                 </div>
                 {user.custom_status && (

@@ -28,7 +28,7 @@ export const StatusBadges = React.memo(({
             <span key="rec" style={{
                 ...badgeBase,
                 background: 'rgba(237,66,69,0.2)',
-                color: '#ed4245',
+                color: '#f23f42',
                 border: '1px solid rgba(237,66,69,0.4)',
             }}>
                 ⏺️ Kayıtta ({Math.floor(recordingDuration / 60).toString().padStart(2, '0')}:{Math.floor(recordingDuration % 60).toString().padStart(2, '0')})
@@ -54,7 +54,7 @@ export const StatusBadges = React.memo(({
             <span key="ptt" style={{
                 ...badgeBase,
                 background: 'rgba(250,166,26,0.18)',
-                color: '#faa61a',
+                color: '#f0b232',
                 border: '1px solid rgba(250,166,26,0.35)',
             }}>
                 🎙️ PTT ({pttKey}) {isPTTActive ? '• Aktif' : ''}
@@ -92,7 +92,7 @@ export const StreamBadge = React.memo(({ user }) => {
                 position: 'absolute',
                 top: '12px',
                 left: '12px',
-                background: 'linear-gradient(135deg, #5865f2 0%, #7289da 100%)',
+                background: 'linear-gradient(135deg, #5865f2 0%, #5865f2 100%)',
                 color: '#fff',
                 padding: '8px 16px',
                 borderRadius: '12px',

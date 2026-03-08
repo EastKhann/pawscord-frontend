@@ -1,4 +1,4 @@
-// frontend/src/components/BookmarksPanel.js
+﻿// frontend/src/components/BookmarksPanel.js
 import { useState, useEffect } from 'react';
 import { FaBookmark, FaStar, FaTimes, FaFolder } from 'react-icons/fa';
 
@@ -121,13 +121,13 @@ const BookmarkCard = ({ bookmark, onRemove }) => {
 const styles = {
     container: {
         padding: '20px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         minHeight: '500px'
     },
     header: {
         marginBottom: '20px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         paddingBottom: '15px'
     },
     title: {
@@ -149,7 +149,7 @@ const styles = {
         border: '1px solid #4e5058',
         borderRadius: '16px',
         backgroundColor: 'transparent',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '13px',
         display: 'flex',
@@ -166,14 +166,14 @@ const styles = {
         fontSize: '11px'
     },
     loading: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         textAlign: 'center',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     emptyIcon: {
         fontSize: '64px',
@@ -185,7 +185,7 @@ const styles = {
         gap: '12px'
     },
     bookmarkCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '12px',
         border: '1px solid transparent',
@@ -206,7 +206,7 @@ const styles = {
     removeButton: {
         background: 'none',
         border: 'none',
-        color: '#72767d',
+        color: '#949ba4',
         cursor: 'pointer',
         padding: '4px',
         fontSize: '14px',
@@ -222,7 +222,7 @@ const styles = {
         display: 'block'
     },
     bookmarkText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px',
         margin: 0
     },
@@ -230,7 +230,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'space-between',
         fontSize: '11px',
-        color: '#72767d'
+        color: '#949ba4'
     }
 };
 

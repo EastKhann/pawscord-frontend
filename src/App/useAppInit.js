@@ -86,9 +86,9 @@ export default function useAppInit({
                 }).filter(Boolean);
 
                 const uniqueFriendProfiles = friendProfiles.filter(fp => fp.username !== currentUser.username);
-                setAllUsers(uniqueFriendProfiles);
-                setCategories(rooms);
-                setConversations(convs);
+                setAllUsers(Array.isArray(uniqueFriendProfiles) ? uniqueFriendProfiles : []);
+                setCategories(Array.isArray(rooms) ? rooms : []);
+                setConversations(Array.isArray(convs) ? convs : []);
                 setFriendsList(uniqueFriendProfiles);
                 setIsInitialDataLoaded(true);
 
@@ -137,7 +137,9 @@ export default function useAppInit({
         try {
             const res = await fetchWithAuth(`${API_BASE_URL}/servers/${serverId}/members/`);
             if (res.ok) {
-                const members = await res.json();
+                const raw = await res.json();
+                // API may return paginated {results:[...]} or plain array
+                const members = Array.isArray(raw) ? raw : (Array.isArray(raw?.results) ? raw.results : []);
                 serverMembersCacheRef.current[serverId] = { members, timestamp: Date.now() };
                 setServerMembers(members);
             } else setServerMembers([]);
@@ -145,21 +147,22 @@ export default function useAppInit({
     }, [fetchWithAuth]);
 
     const handleServerSelect = useCallback((server) => {
+        if (!server || !server.id) return;
         fetchServerMembersById(server.id);
         const defaultSlug = server.metadata?.default_channel_slug;
         let selectedRoom = null;
         if (server.categories && Array.isArray(server.categories)) {
             for (const cat of server.categories) {
-                if (cat.rooms && Array.isArray(cat.rooms)) {
-                    for (const room of cat.rooms) {
-                        if (defaultSlug && room.slug === defaultSlug) { selectedRoom = room; break; }
-                        if (!selectedRoom && room.room_type !== 'voice') selectedRoom = room;
-                    }
-                    if (selectedRoom && defaultSlug && selectedRoom.slug === defaultSlug) break;
+                if (!cat || !cat.rooms || !Array.isArray(cat.rooms)) continue;
+                for (const room of cat.rooms) {
+                    if (!room) continue;
+                    if (defaultSlug && room.slug === defaultSlug) { selectedRoom = room; break; }
+                    if (!selectedRoom && room.room_type !== 'voice') selectedRoom = room;
                 }
+                if (selectedRoom && defaultSlug && selectedRoom.slug === defaultSlug) break;
             }
         }
-        if (selectedRoom) setActiveChat('room', selectedRoom.slug, null);
+        if (selectedRoom && selectedRoom.slug) setActiveChat('room', selectedRoom.slug, null);
         else setActiveChat('server', server.id, null);
     }, [fetchServerMembersById, setActiveChat]);
 
@@ -168,10 +171,11 @@ export default function useAppInit({
         if (isAuthenticated && activeChat.id && activeChat.type === 'room') {
             let serverId = null;
             for (const server of (categories || [])) {
-                if (!server.categories) continue;
+                if (!server || !server.categories) continue;
                 for (const category of server.categories) {
-                    if (!category.rooms) continue;
+                    if (!category || !category.rooms) continue;
                     for (const room of category.rooms) {
+                        if (!room || !room.slug) continue;
                         if (room.slug === activeChat.id) { serverId = server.id; break; }
                     }
                     if (serverId) break;
@@ -210,8 +214,9 @@ export default function useAppInit({
                                 const roomsRes = await fetchWithAuth(ROOM_LIST_URL);
                                 if (roomsRes.ok) {
                                     const rooms = await roomsRes.json();
-                                    setCategories(rooms);
-                                    const joinedServer = rooms.find(s => s.id === parseInt(joinServerId));
+                                    const roomsArr = Array.isArray(rooms) ? rooms : [];
+                                    setCategories(roomsArr);
+                                    const joinedServer = roomsArr.find(s => s.id === parseInt(joinServerId));
                                     if (joinedServer) handleServerSelect(joinedServer);
                                 }
                             } catch (e) { console.warn('Server list refresh failed:', e); }

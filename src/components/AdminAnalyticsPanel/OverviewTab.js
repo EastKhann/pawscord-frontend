@@ -1,4 +1,4 @@
-import {
+﻿import {
     FaUsers, FaComments, FaEye, FaUserPlus, FaMobile, FaDesktop
 } from 'react-icons/fa';
 import {
@@ -10,15 +10,15 @@ import { formatNumber, StatCard, GrowthCard, ActivityItem } from './helpers';
 import styles from './styles';
 
 const tooltipStyle = (borderColor) => ({
-    backgroundColor: '#1e1f22',
+    backgroundColor: '#0d0e10',
     border: `1px solid ${borderColor}`,
     borderRadius: '6px',
     color: '#fff'
 });
 
 const axisProps = {
-    stroke: '#b9bbbe',
-    tick: { fill: '#b9bbbe', fontSize: 12 },
+    stroke: '#b5bac1',
+    tick: { fill: '#b5bac1', fontSize: 12 },
     interval: 4
 };
 
@@ -41,7 +41,7 @@ const OverviewTab = ({ stats }) => (
                 subtitle={`Son 24h: ${formatNumber(stats.messages_24h || 0)}`} />
             <StatCard icon={<FaEye />} label="Toplam Ziyaret" value={formatNumber(stats.total_page_views || 0)} color="#e91e63"
                 subtitle={`Son 24h: ${formatNumber(stats.page_views_24h || 0)}`} />
-            <StatCard icon={<FaUsers />} label="Premium Kullanıcı" value={stats.premium_users || 0} color="#9b59b6"
+            <StatCard icon={<FaUsers />} label="Premium Kullanıcı" value={stats.premium_users || 0} color="#5865f2"
                 subtitle={`Gelir: ${stats.monthly_revenue || 0} TL/ay`} />
             <StatCard icon={<FaUsers />} label="Benzersiz Ziyaretçi" value={formatNumber(stats.unique_visitors_30d || 0)} color="#00bcd4"
                 subtitle={`Son 24h: ${formatNumber(stats.unique_visitors_24h || 0)}`} />
@@ -89,9 +89,9 @@ const OverviewTab = ({ stats }) => (
                                     <stop offset="95%" stopColor="#5865f2" stopOpacity={0} />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e1f22" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#0d0e10" />
                             <XAxis dataKey="label" {...axisProps} />
-                            <YAxis stroke="#b9bbbe" tick={{ fill: '#b9bbbe', fontSize: 12 }} />
+                            <YAxis stroke="#b5bac1" tick={{ fill: '#b5bac1', fontSize: 12 }} />
                             <Tooltip contentStyle={tooltipStyle('#5865f2')} />
                             <Area type="monotone" dataKey="messages" stroke="#5865f2" strokeWidth={2} fillOpacity={1} fill="url(#colorMessages)" />
                         </AreaChart>
@@ -102,9 +102,9 @@ const OverviewTab = ({ stats }) => (
                     <h3 style={styles.sectionTitle}>👥 Günlük Aktif Kullanıcı (Son 30 Gün)</h3>
                     <ResponsiveContainer width="100%" height={250}>
                         <LineChart data={stats.daily_stats}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e1f22" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#0d0e10" />
                             <XAxis dataKey="label" {...axisProps} />
-                            <YAxis stroke="#b9bbbe" tick={{ fill: '#b9bbbe', fontSize: 12 }} />
+                            <YAxis stroke="#b5bac1" tick={{ fill: '#b5bac1', fontSize: 12 }} />
                             <Tooltip contentStyle={tooltipStyle('#23a559')} />
                             <Line type="monotone" dataKey="active_users" stroke="#23a559" strokeWidth={3} dot={{ fill: '#23a559', r: 4 }} activeDot={{ r: 6 }} />
                         </LineChart>
@@ -115,9 +115,9 @@ const OverviewTab = ({ stats }) => (
                     <h3 style={styles.sectionTitle}>🆕 Günlük Yeni Kayıtlar (Son 30 Gün)</h3>
                     <ResponsiveContainer width="100%" height={250}>
                         <BarChart data={stats.daily_stats}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e1f22" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#0d0e10" />
                             <XAxis dataKey="label" {...axisProps} />
-                            <YAxis stroke="#b9bbbe" tick={{ fill: '#b9bbbe', fontSize: 12 }} />
+                            <YAxis stroke="#b5bac1" tick={{ fill: '#b5bac1', fontSize: 12 }} />
                             <Tooltip contentStyle={tooltipStyle('#f0b132')} />
                             <Bar dataKey="signups" fill="#f0b132" radius={[8, 8, 0, 0]} />
                         </BarChart>
@@ -134,9 +134,9 @@ const OverviewTab = ({ stats }) => (
                                     <stop offset="95%" stopColor="#e91e63" stopOpacity={0} />
                                 </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e1f22" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#0d0e10" />
                             <XAxis dataKey="label" {...axisProps} />
-                            <YAxis stroke="#b9bbbe" tick={{ fill: '#b9bbbe', fontSize: 12 }} />
+                            <YAxis stroke="#b5bac1" tick={{ fill: '#b5bac1', fontSize: 12 }} />
                             <Tooltip contentStyle={tooltipStyle('#e91e63')} />
                             <Area type="monotone" dataKey="page_views" stroke="#e91e63" strokeWidth={2} fillOpacity={1} fill="url(#colorPageViews)" />
                         </AreaChart>
@@ -147,9 +147,9 @@ const OverviewTab = ({ stats }) => (
                     <h3 style={styles.sectionTitle}>👥 Günlük Benzersiz Ziyaretçi (Son 30 Gün)</h3>
                     <ResponsiveContainer width="100%" height={250}>
                         <LineChart data={stats.daily_stats}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#1e1f22" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#0d0e10" />
                             <XAxis dataKey="label" {...axisProps} />
-                            <YAxis stroke="#b9bbbe" tick={{ fill: '#b9bbbe', fontSize: 12 }} />
+                            <YAxis stroke="#b5bac1" tick={{ fill: '#b5bac1', fontSize: 12 }} />
                             <Tooltip contentStyle={tooltipStyle('#00bcd4')} />
                             <Line type="monotone" dataKey="unique_visitors" stroke="#00bcd4" strokeWidth={3} dot={{ fill: '#00bcd4', r: 4 }} activeDot={{ r: 6 }} />
                         </LineChart>

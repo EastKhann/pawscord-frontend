@@ -1,4 +1,4 @@
-// frontend/src/components/WhiteboardModal.js
+﻿// frontend/src/components/WhiteboardModal.js
 
 import { useRef, useState, useEffect } from 'react';
 import { FaTimes, FaEraser, FaPen, FaTrash } from 'react-icons/fa';
@@ -130,11 +130,11 @@ const WhiteboardModal = ({ roomSlug, onClose, wsProtocol, apiHost }) => {
 
 const styles = {
     overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 3000, display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    modal: { backgroundColor: '#2b2d31', borderRadius: '12px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px' },
+    modal: { backgroundColor: '#111214', borderRadius: '12px', padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px' },
     header: { display: 'flex', justifyContent: 'space-between', color: 'white', padding: '0 10px' },
     closeBtn: { background: 'none', border: 'none', color: 'white', fontSize: '1.5em', cursor: 'pointer' },
-    toolbar: { display: 'flex', gap: '10px', alignItems: 'center', backgroundColor: '#1e1f22', padding: '10px', borderRadius: '8px' },
-    canvasContainer: { border: '1px solid #1e1f22', borderRadius: '4px', overflow: 'hidden', backgroundColor: 'white' },
+    toolbar: { display: 'flex', gap: '10px', alignItems: 'center', backgroundColor: '#0d0e10', padding: '10px', borderRadius: '8px' },
+    canvasContainer: { border: '1px solid #0b0e1b', borderRadius: '4px', overflow: 'hidden', backgroundColor: 'white' },
     canvas: { cursor: 'crosshair', touchAction: 'none' },
     toolBtn: { background: 'none', border: 'none', color: '#ccc', fontSize: '1.2em', cursor: 'pointer' },
     colorPicker: { border: 'none', width: '30px', height: '30px', cursor: 'pointer', padding: 0 }

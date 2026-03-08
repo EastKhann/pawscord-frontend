@@ -1,4 +1,4 @@
-// frontend/src/components/InviteLinkManager.js
+﻿// frontend/src/components/InviteLinkManager.js
 // 🔥 FEATURE 42: Invite link manager
 // View, create, revoke server invites
 
@@ -122,14 +122,14 @@ const InviteLinkManager = ({ invites = [], serverName, onCreateInvite, onRevokeI
                                     title="Kopyala"
                                 >
                                     {copiedId === invite.id ? (
-                                        <FaCheck style={{ color: '#57f287' }} />
+                                        <FaCheck style={{ color: '#23a559' }} />
                                     ) : (
                                         <FaCopy />
                                     )}
                                 </button>
                                 <button
                                     type="button"
-                                    style={{ ...S.actionBtn, color: '#ed4245' }}
+                                    style={{ ...S.actionBtn, color: '#f23f42' }}
                                     onClick={() => onRevokeInvite?.(invite.id)}
                                     title="İptal Et"
                                 >
@@ -159,7 +159,7 @@ const S = {
         color: '#fff', fontSize: 13, fontWeight: 500, cursor: 'pointer',
     },
     createSection: {
-        padding: 14, backgroundColor: '#2b2d31', borderRadius: 8,
+        padding: 14, backgroundColor: '#111214', borderRadius: 8,
         marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 12,
     },
     createRow: { display: 'flex', gap: 12 },
@@ -169,13 +169,13 @@ const S = {
         textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4,
     },
     select: {
-        backgroundColor: '#1e1f22', border: 'none', borderRadius: 4,
-        color: '#dcddde', fontSize: 13, padding: '8px 10px', outline: 'none',
+        backgroundColor: '#0d0e10', border: 'none', borderRadius: 4,
+        color: '#dbdee1', fontSize: 13, padding: '8px 10px', outline: 'none',
     },
     generateBtn: {
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         padding: '8px', borderRadius: 4,
-        border: 'none', backgroundColor: '#57f287',
+        border: 'none', backgroundColor: '#23a559',
         color: '#000', fontSize: 13, fontWeight: 600, cursor: 'pointer',
     },
     list: { display: 'flex', flexDirection: 'column', gap: 4 },
@@ -185,7 +185,7 @@ const S = {
     },
     inviteItem: {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '10px 12px', backgroundColor: '#2b2d31',
+        padding: '10px 12px', backgroundColor: '#111214',
         borderRadius: 6, transition: 'background 0.1s',
     },
     inviteInfo: { flex: 1, minWidth: 0 },

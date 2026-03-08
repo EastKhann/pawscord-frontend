@@ -1,4 +1,4 @@
-// frontend/src/components/CreateGroupModal.js
+﻿// frontend/src/components/CreateGroupModal.js
 
 import { useState } from 'react';
 import { FaTimes, FaUserPlus, FaCheck } from 'react-icons/fa';
@@ -56,7 +56,7 @@ const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onG
                 </div>
 
                 <div style={styles.body}>
-                    <p style={{ color: '#b9bbbe', marginBottom: 15 }}>
+                    <p style={{ color: '#b5bac1', marginBottom: 15 }}>
                         Gruba eklemek istediğin arkadaşlarını seç ({selectedFriends.length})
                     </p>
 
@@ -67,15 +67,15 @@ const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onG
                                 onClick={() => toggleFriend(friendName)}
                                 style={{
                                     ...styles.friendItem,
-                                    backgroundColor: selectedFriends.includes(friendName) ? 'rgba(88, 101, 242, 0.3)' : '#2f3136',
+                                    backgroundColor: selectedFriends.includes(friendName) ? 'rgba(88, 101, 242, 0.3)' : '#111214',
                                     borderColor: selectedFriends.includes(friendName) ? '#5865f2' : 'transparent'
                                 }}
                             >
                                 <span style={{ color: 'white' }}>{friendName}</span>
-                                {selectedFriends.includes(friendName) ? <FaCheck color="#5865f2" /> : <FaUserPlus color="#b9bbbe" />}
+                                {selectedFriends.includes(friendName) ? <FaCheck color="#5865f2" /> : <FaUserPlus color="#b5bac1" />}
                             </div>
                         ))}
-                        {friendsList.length === 0 && <p style={{ color: '#72767d' }}>Listenizde arkadaş yok.</p>}
+                        {friendsList.length === 0 && <p style={{ color: '#949ba4' }}>Listenizde arkadaş yok.</p>}
                     </div>
 
                     <button
@@ -93,9 +93,9 @@ const CreateGroupModal = ({ onClose, friendsList, fetchWithAuth, apiBaseUrl, onG
 
 const styles = {
     overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 2000, display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    modal: { backgroundColor: '#313338', width: '400px', borderRadius: '8px', overflow: 'hidden' },
-    header: { padding: '15px 20px', borderBottom: '1px solid #1e1f22', display: 'flex', justifyContent: 'space-between', color: 'white', alignItems: 'center' },
-    closeBtn: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', fontSize: '1.2em' },
+    modal: { backgroundColor: '#17191c', width: '400px', borderRadius: '8px', overflow: 'hidden' },
+    header: { padding: '15px 20px', borderBottom: '1px solid #0b0e1b', display: 'flex', justifyContent: 'space-between', color: 'white', alignItems: 'center' },
+    closeBtn: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', fontSize: '1.2em' },
     body: { padding: '20px' },
     friendList: { maxHeight: '300px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' },
     friendItem: { padding: '10px', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid transparent' },

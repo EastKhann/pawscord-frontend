@@ -1,4 +1,4 @@
-export const calculateTimeUntilReset = (resetAt) => {
+﻿export const calculateTimeUntilReset = (resetAt) => {
     const now = new Date();
     const reset = new Date(resetAt);
     const diff = reset - now;
@@ -54,7 +54,7 @@ export const styles = {
     },
     timeRangeSelect: {
         padding: '8px 12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '6px',
         color: '#fff',
@@ -77,7 +77,7 @@ export const styles = {
     loading: {
         textAlign: 'center',
         padding: '40px',
-        color: '#99aab5'
+        color: '#949ba4'
     },
     statsGrid: {
         display: 'grid',
@@ -86,7 +86,7 @@ export const styles = {
         marginBottom: '32px'
     },
     statCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         display: 'flex',
@@ -109,7 +109,7 @@ export const styles = {
     },
     statLabel: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         textTransform: 'uppercase',
         letterSpacing: '1px'
     },
@@ -122,7 +122,7 @@ export const styles = {
         marginBottom: '16px'
     },
     rateLimitCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         borderLeft: '4px solid'
@@ -145,7 +145,7 @@ export const styles = {
     },
     rateLimitBar: {
         height: '8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '4px',
         overflow: 'hidden',
         marginBottom: '8px'
@@ -156,7 +156,7 @@ export const styles = {
     },
     rateLimitReset: {
         fontSize: '12px',
-        color: '#99aab5'
+        color: '#949ba4'
     },
     endpointsList: {
         display: 'flex',
@@ -164,7 +164,7 @@ export const styles = {
         gap: '8px'
     },
     endpointItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '16px',
         cursor: 'pointer',
@@ -199,12 +199,12 @@ export const styles = {
     },
     endpointStats: {
         fontSize: '12px',
-        color: '#99aab5'
+        color: '#949ba4'
     },
     endpointBar: {
         width: '100px',
         height: '6px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '3px',
         overflow: 'hidden'
     },
@@ -218,7 +218,7 @@ export const styles = {
         gap: '8px'
     },
     timelineItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '12px',
         display: 'flex',
@@ -254,11 +254,11 @@ export const styles = {
     },
     timelineMeta: {
         fontSize: '12px',
-        color: '#99aab5'
+        color: '#949ba4'
     },
     empty: {
         textAlign: 'center',
         padding: '40px',
-        color: '#99aab5'
+        color: '#949ba4'
     }
 };

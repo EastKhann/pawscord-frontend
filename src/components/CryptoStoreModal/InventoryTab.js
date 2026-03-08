@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import { FaCheck } from 'react-icons/fa';
 import styles from './cryptoStoreStyles';
 
 const InventoryTab = ({ inventory, loading, handleEquip }) => (
     <div style={styles.grid}>
         {inventory.map(entry => (
-            <div key={entry.id} style={{ ...styles.itemCard, border: entry.is_equipped ? '1px solid #23a559' : '1px solid #1e1f22' }}>
+            <div key={entry.id} style={{ ...styles.itemCard, border: entry.is_equipped ? '1px solid #23a559' : '1px solid #0b0e1b' }}>
                 <div style={styles.iconPlace}>
                     {entry.preview_image
                         ? <img src={entry.preview_image} alt={entry.name} style={{ width: 50, height: 50 }} />

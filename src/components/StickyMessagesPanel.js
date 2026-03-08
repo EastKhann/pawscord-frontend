@@ -1,4 +1,4 @@
-// frontend/src/components/StickyMessagesPanel.js
+﻿// frontend/src/components/StickyMessagesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaThumbtack, FaPlus, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -84,7 +84,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaThumbtack style={{ color: '#faa61a' }} />
+                        <FaThumbtack style={{ color: '#f0b232' }} />
                         <h2 style={{ margin: 0 }}>Sticky Mesajlar</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -118,7 +118,7 @@ const StickyMessagesPanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) =
                         stickies.map((sticky) => (
                             <div key={sticky.id} style={styles.stickyCard}>
                                 <div style={styles.stickyIcon}>
-                                    <FaThumbtack style={{ color: '#faa61a' }} />
+                                    <FaThumbtack style={{ color: '#f0b232' }} />
                                 </div>
                                 <div style={styles.stickyContent}>
                                     <div style={styles.stickyMessage}>{sticky.message}</div>
@@ -183,7 +183,7 @@ const styles = {
     textarea: {
         width: '100%',
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -215,8 +215,8 @@ const styles = {
         display: 'flex',
         gap: '15px',
         padding: '15px',
-        backgroundColor: '#faa61a1a',
-        border: '1px solid #faa61a',
+        backgroundColor: '#f0b2321a',
+        border: '1px solid #f0b232',
         borderRadius: '8px',
         marginBottom: '10px'
     },
@@ -224,7 +224,7 @@ const styles = {
         width: '40px',
         height: '40px',
         borderRadius: '50%',
-        backgroundColor: '#faa61a33',
+        backgroundColor: '#f0b23233',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -235,7 +235,7 @@ const styles = {
         flex: 1
     },
     stickyMessage: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         marginBottom: '8px',
         lineHeight: '1.5'
@@ -245,7 +245,7 @@ const styles = {
         color: '#888'
     },
     deleteBtn: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '8px 12px',

@@ -1,4 +1,4 @@
-// frontend/src/components/LoadingSpinner.js
+﻿// frontend/src/components/LoadingSpinner.js
 
 import { memo } from 'react';
 
@@ -49,7 +49,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         zIndex: 9999,
         gap: '16px'
     },
@@ -82,7 +82,7 @@ const styles = {
         width: '70%',
         height: '70%',
         border: '3px solid rgba(88, 101, 242, 0.1)',
-        borderBottom: '3px solid #7289da',
+        borderBottom: '3px solid #5865f2',
         borderRadius: '50%',
         animation: 'spin 0.7s linear infinite reverse'
     },

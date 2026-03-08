@@ -1,4 +1,4 @@
-// frontend/src/components/MessageSearch.js
+﻿// frontend/src/components/MessageSearch.js
 import React, { useState, useEffect, useRef } from 'react';
 import { FaSearch, FaTimes, FaFilter } from 'react-icons/fa';
 
@@ -228,40 +228,40 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
     },
     header: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
         padding: '12px',
-        borderBottom: '1px solid #202225',
+        borderBottom: '1px solid #0b0e1b',
     },
     searchBar: {
         flex: 1,
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '4px',
         padding: '8px 12px',
     },
     searchIcon: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '16px',
     },
     searchInput: {
         flex: 1,
         background: 'none',
         border: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         outline: 'none',
     },
     clearButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '16px',
         padding: '4px',
@@ -269,7 +269,7 @@ const styles = {
     filterButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '18px',
         padding: '8px',
@@ -282,22 +282,22 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '8px',
     },
     filters: {
         padding: '16px',
-        borderBottom: '1px solid #202225',
-        backgroundColor: '#36393f',
+        borderBottom: '1px solid #0b0e1b',
+        backgroundColor: '#17191c',
     },
     filterGroup: {
         marginBottom: '12px',
     },
     filterLabel: {
         display: 'block',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '12px',
         fontWeight: 'bold',
         marginBottom: '6px',
@@ -306,19 +306,19 @@ const styles = {
     filterInput: {
         width: '100%',
         padding: '8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         border: 'none',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
     },
     filterSelect: {
         width: '100%',
         padding: '8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         border: 'none',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
     },
     checkboxGroup: {
@@ -330,7 +330,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         cursor: 'pointer',
     },
@@ -340,7 +340,7 @@ const styles = {
         padding: '12px',
     },
     resultCount: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '12px',
         marginBottom: '12px',
         textTransform: 'uppercase',
@@ -349,7 +349,7 @@ const styles = {
     resultItem: {
         padding: '12px',
         marginBottom: '8px',
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '4px',
         cursor: 'pointer',
         transition: 'background 0.2s',
@@ -363,11 +363,11 @@ const styles = {
         fontSize: '14px',
     },
     resultDate: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px',
     },
     resultContent: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         lineHeight: '1.4',
     },
@@ -382,7 +382,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        color: '#72767d',
+        color: '#949ba4',
         textAlign: 'center',
     },
     emptyIcon: {
@@ -391,7 +391,7 @@ const styles = {
         opacity: 0.5,
     },
     highlight: {
-        backgroundColor: '#faa61a',
+        backgroundColor: '#f0b232',
         color: '#000',
         padding: '2px 4px',
         borderRadius: '2px',

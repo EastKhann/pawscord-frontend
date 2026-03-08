@@ -12,7 +12,7 @@ import { FaBan, FaFlag, FaHistory, FaShieldAlt, FaUnlock } from 'react-icons/fa'
                     { icon: <FaShieldAlt />, title: 'Mod Araçları', color: '#e74c3c', action: onOpenModTools },
                     { icon: <FaFlag />, title: 'Raporlar', color: '#f0b132', badge: '3', action: onOpenReports },
                     { icon: <FaHistory />, title: 'Denetim Log', color: '#5865f2', action: onOpenAuditLogs },
-                    { icon: <FaBan />, title: 'Ban Listesi', color: '#9b59b6', badge: bannedUsers.length.toString() },
+                    { icon: <FaBan />, title: 'Ban Listesi', color: '#5865f2', badge: bannedUsers.length.toString() },
                 ].map((item, idx) => (
                     <div key={idx} style={{ ...styles.statCard, cursor: 'pointer' }} onClick={() => { item.action?.(); }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

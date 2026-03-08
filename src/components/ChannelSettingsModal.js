@@ -246,7 +246,7 @@ const ChannelSettingsModal = ({ room, serverRoles, onClose, fetchWithAuth, apiBa
                         </div>
                         <div>
                             <h3 style={{ margin: 0, fontSize: '1.1em', color: '#fff' }}>{room.name}</h3>
-                            <span style={{ fontSize: '0.8em', color: '#72767d' }}>
+                            <span style={{ fontSize: '0.8em', color: '#949ba4' }}>
                                 {isVoiceChannel ? 'Ses Kanalı' : 'Metin Kanalı'} Ayarları
                             </span>
                         </div>

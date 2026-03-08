@@ -24,11 +24,11 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     const loadBalance = useCallback(async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/users/balance/`);
+            if (!response.ok) { setBalance(0); return; }
             const data = await response.json();
             setBalance(data.balance || 0);
         } catch (error) {
             console.error('Failed to load balance:', error);
-            toast.error('Failed to load balance');
         } finally {
             setLoading(false);
         }
@@ -37,6 +37,7 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     const loadTransactions = useCallback(async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/payments/history/`);
+            if (!response.ok) return;
             const data = await response.json();
             setTransactions(data.transactions || []);
         } catch (error) {

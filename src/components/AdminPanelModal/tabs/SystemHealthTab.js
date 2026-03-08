@@ -36,7 +36,7 @@ const SystemHealthTab = ({ systemHealth }) => {
                             { label: 'Uptime', value: systemHealth?.uptime, icon: <FaClock color="#5865f2" /> },
                             { label: 'Bağlantı', value: systemHealth?.activeConnections, icon: <FaWifi color="#23a559" /> },
                             { label: 'İstek/dk', value: systemHealth?.requestsPerMinute, icon: <FaChartLine color="#f0b132" /> },
-                            { label: 'DB Bağlantı', value: systemHealth?.dbConnections, icon: <FaDatabase color="#9b59b6" /> },
+                            { label: 'DB Bağlantı', value: systemHealth?.dbConnections, icon: <FaDatabase color="#5865f2" /> },
                             { label: 'Cache Hit', value: `${systemHealth?.cacheHitRate}%`, icon: <FaMemory color="#e74c3c" /> },
                         ].map((item, idx) => (
                             <div key={idx} style={{ ...styles.statCard, textAlign: 'center' }}>

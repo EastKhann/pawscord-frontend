@@ -1,4 +1,4 @@
-// frontend/src/components/MarkdownPreviewToggle.js
+﻿// frontend/src/components/MarkdownPreviewToggle.js
 // 📝 FEATURE 8: Markdown Preview Toggle
 // Live preview of markdown before sending
 
@@ -10,9 +10,9 @@ const parseMarkdown = (text) => {
     if (!text) return '';
     let html = text
         // Code blocks ```
-        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre style="background:#1e1f22;padding:8px 12px;border-radius:6px;overflow-x:auto;font-size:13px;margin:4px 0"><code>$2</code></pre>')
+        .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre style="background:#0b0e1b;padding:8px 12px;border-radius:6px;overflow-x:auto;font-size:13px;margin:4px 0"><code>$2</code></pre>')
         // Inline code `
-        .replace(/`([^`]+)`/g, '<code style="background:#1e1f22;padding:2px 6px;border-radius:4px;font-size:13px">$1</code>')
+        .replace(/`([^`]+)`/g, '<code style="background:#0b0e1b;padding:2px 6px;border-radius:4px;font-size:13px">$1</code>')
         // Bold **
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         // Italic *
@@ -22,7 +22,7 @@ const parseMarkdown = (text) => {
         // Strikethrough ~~
         .replace(/~~(.+?)~~/g, '<s>$1</s>')
         // Spoiler ||
-        .replace(/\|\|(.+?)\|\|/g, '<span style="background:#1e1f22;color:#1e1f22;padding:0 4px;border-radius:3px;cursor:pointer" onclick="this.style.color=\'#dcddde\'">$1</span>')
+        .replace(/\|\|(.+?)\|\|/g, '<span style="background:#0b0e1b;color:#0d0e10;padding:0 4px;border-radius:3px;cursor:pointer" onclick="this.style.color=\'#dbdee1\'">$1</span>')
         // Headers
         .replace(/^### (.+)$/gm, '<h3 style="margin:4px 0;font-size:1em">$1</h3>')
         .replace(/^## (.+)$/gm, '<h2 style="margin:4px 0;font-size:1.15em">$1</h2>')
@@ -74,7 +74,7 @@ const S = {
     toggleBtnActive: { color: '#5865f2' },
     preview: {
         position: 'absolute', bottom: '100%', left: 0, right: 0,
-        marginBottom: 8, backgroundColor: '#2b2d31',
+        marginBottom: 8, backgroundColor: '#111214',
         border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: 8, overflow: 'hidden',
         boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
@@ -88,7 +88,7 @@ const S = {
         backgroundColor: 'rgba(0,0,0,0.1)',
     },
     previewContent: {
-        padding: '10px 12px', color: '#dcddde',
+        padding: '10px 12px', color: '#dbdee1',
         fontSize: 14, lineHeight: 1.5, wordBreak: 'break-word',
     },
 };

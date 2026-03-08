@@ -37,7 +37,7 @@ const MinimizedView = React.memo(({
                 style={{
                     position: 'fixed',
                     zIndex: 9999,
-                    background: 'linear-gradient(135deg, #1e2124 0%, #2c2f33 50%, #23272a 100%)',
+                    background: 'linear-gradient(135deg, #1e2124 0%, #111214 50%, #0d0e10 100%)',
                     borderRadius: '16px',
                     padding: '16px',
                     boxShadow: '0 12px 48px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(88, 101, 242, 0.15)',
@@ -65,8 +65,8 @@ const MinimizedView = React.memo(({
                         width: '10px',
                         height: '10px',
                         borderRadius: '50%',
-                        background: '#43b581',
-                        boxShadow: '0 0 12px #43b581',
+                        background: '#23a559',
+                        boxShadow: '0 0 12px #23a559',
                         animation: 'pulse 2s infinite',
                     }} />
                     <span style={{
@@ -82,7 +82,7 @@ const MinimizedView = React.memo(({
                         borderRadius: '12px',
                         padding: '4px 10px',
                         fontSize: '11px',
-                        color: '#43b581',
+                        color: '#23a559',
                         fontWeight: 600,
                     }}>
                         👥 {userCount}
@@ -174,7 +174,7 @@ const MinimizedView = React.memo(({
                                     borderRadius: '50%',
                                     objectFit: 'cover',
                                     border: user.isTalking
-                                        ? '2px solid #43b581'
+                                        ? '2px solid #23a559'
                                         : '2px solid rgba(255, 255, 255, 0.15)',
                                     boxShadow: user.isTalking
                                         ? '0 0 10px rgba(67, 181, 129, 0.5)'

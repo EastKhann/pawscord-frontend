@@ -1,4 +1,4 @@
-// frontend/src/index.js
+﻿// frontend/src/index.js
 
 // 🔇 Console cleanup — silences noisy logs in production, filters spam in dev
 import './utils/consoleCleanup';
@@ -33,6 +33,8 @@ import { AuthProvider, useAuth } from './AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import RouteErrorBoundary from './components/RouteErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
+import PageTransitionWrapper from './components/PageTransitionWrapper';
+import { ConnectionStatusBanner } from './components/ConnectionStatusBanner';
 import LoadingSkeleton from './components/LoadingSkeleton';
 
 // 🔐 Whitelist Guard — sadece is_whitelisted kullanıcılar erişebilir
@@ -81,7 +83,7 @@ const WhitelistGuard = ({ children }) => {
         })();
     }, [isAuthenticated, token]);
 
-    if (allowed === null) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#1e1f22', color: '#f0b232', fontSize: 18 }}>⏳ Kontrol ediliyor...</div>;
+    if (allowed === null) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#0d0e10', color: '#f0b232', fontSize: 18 }}>⏳ Kontrol ediliyor...</div>;
     if (!allowed) return <Navigate to="/" replace />;
     return children;
 };
@@ -165,191 +167,194 @@ const RootApp = () => {
                 <GlobalWebSocketProvider>
                     <ErrorBoundary>
                         <HashRouter>
+                            <ConnectionStatusBanner />
                             <SignalNotification />
-                            <Routes>
-                                {/* Email Verification */}
-                                <Route path="/verify/:token" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <VerifyEmailPage />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-
-                                {/* 🔐 Auth & Security Routes */}
-                                <Route path="/verify-email/:token" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <VerifyEmailPageNew apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/forgot-password" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ForgotPasswordPage apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/reset-password/:token" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ResetPasswordPage apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/2fa-login" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <TwoFactorLoginPage apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-
-                                {/* 🔐 OAuth Secure Callback - Direct import for reliability */}
-                                <Route path="/auth/callback" element={
-                                    <PageWrapper>
-                                        <AuthCallback apiBaseUrl={API_URL_BASE_STRING} />
-                                    </PageWrapper>
-                                } />
-
-                                {/* � LEGAL: Privacy Policy & Terms */}
-                                <Route path="/privacy-policy" element={
-                                    <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
-                                        <PrivacyPolicyPage />
-                                    </React.Suspense>
-                                } />
-                                <Route path="/terms-of-service" element={
-                                    <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
-                                        <PrivacyPolicyPage />
-                                    </React.Suspense>
-                                } />
-
-                                {/* 🛒 Store */}
-                                <Route path="/store" element={
-                                    <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
-                                        <StorePage />
-                                    </React.Suspense>
-                                } />
-
-                                {/* 📈 GROWTH: Landing Page & Growth System */}
-                                <Route path="/launch" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <LandingPage apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/referral" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ReferralProgram apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/growth-dashboard" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <GrowthDashboard apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-
-                                {/* 🎨 DEMO: Toast Notification Demo */}
-                                <Route path="/toast-demo" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <ToastDemo />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-
-                                {/* 🔗 Server Invite */}
-                                <Route path="/invite/:code" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <InvitePage />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-
-                                {/* Spotify Callback */}
-                                <Route path="/spotify-callback" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <SpotifyCallback apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-
-                                {/* İngilizce Modülleri */}
-                                <Route path="/eng-learn" element={
-                                    <RouteErrorBoundary>
+                            <PageTransitionWrapper>
+                                <Routes>
+                                    {/* Email Verification */}
+                                    <Route path="/verify/:token" element={
                                         <PageWrapper>
-                                            <React.Suspense fallback={<LoadingSkeleton label="Eğitim modülü yükleniyor..." />}>
-                                                <EnglishHub />
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <VerifyEmailPage />
                                             </React.Suspense>
                                         </PageWrapper>
-                                    </RouteErrorBoundary>
-                                } />
-                                <Route path="/eng-learn/vocab" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <EnglishLearningPage />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/eng-learn/grammar" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <GrammarQuizPage />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/eng-learn/voice" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <EnglishVoicePractice apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
-                                <Route path="/eng-learn/pronunciation" element={
-                                    <PageWrapper>
-                                        <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                                            <PronunciationPage apiBaseUrl={API_BASE_URL} />
-                                        </React.Suspense>
-                                    </PageWrapper>
-                                } />
+                                    } />
 
-                                {/* Kripto Sinyaller (Sadece Whitelist) */}
-                                <Route path="/crypto-analysis" element={
-                                    <RouteErrorBoundary>
+                                    {/* 🔐 Auth & Security Routes */}
+                                    <Route path="/verify-email/:token" element={
                                         <PageWrapper>
-                                            <React.Suspense fallback={<LoadingSkeleton label="Kripto verileri yükleniyor..." />}>
-                                                <ProtectedRoute>
-                                                    <WhitelistGuard>
-                                                        <CryptoSignals />
-                                                    </WhitelistGuard>
-                                                </ProtectedRoute>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <VerifyEmailPageNew apiBaseUrl={API_BASE_URL} />
                                             </React.Suspense>
                                         </PageWrapper>
-                                    </RouteErrorBoundary>
-                                } />
-
-                                {/* Eski Crypto Dashboard (yedek) */}
-                                <Route path="/crypto-dashboard-old" element={
-                                    <RouteErrorBoundary>
+                                    } />
+                                    <Route path="/forgot-password" element={
                                         <PageWrapper>
-                                            <React.Suspense fallback={<LoadingSkeleton />}>
-                                                <CryptoDashboard />
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <ForgotPasswordPage apiBaseUrl={API_BASE_URL} />
                                             </React.Suspense>
                                         </PageWrapper>
-                                    </RouteErrorBoundary>
-                                } />
+                                    } />
+                                    <Route path="/reset-password/:token" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <ResetPasswordPage apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+                                    <Route path="/2fa-login" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <TwoFactorLoginPage apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
 
-                                {/* Ana Uygulama (Catch-All) */}
-                                <Route path="/*" element={<App />} />
-                            </Routes>
+                                    {/* 🔐 OAuth Secure Callback - Direct import for reliability */}
+                                    <Route path="/auth/callback" element={
+                                        <PageWrapper>
+                                            <AuthCallback apiBaseUrl={API_URL_BASE_STRING} />
+                                        </PageWrapper>
+                                    } />
+
+                                    {/* � LEGAL: Privacy Policy & Terms */}
+                                    <Route path="/privacy-policy" element={
+                                        <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
+                                            <PrivacyPolicyPage />
+                                        </React.Suspense>
+                                    } />
+                                    <Route path="/terms-of-service" element={
+                                        <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
+                                            <PrivacyPolicyPage />
+                                        </React.Suspense>
+                                    } />
+
+                                    {/* 🛒 Store */}
+                                    <Route path="/store" element={
+                                        <React.Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', color: '#fff' }}>Loading...</div>}>
+                                            <StorePage />
+                                        </React.Suspense>
+                                    } />
+
+                                    {/* 📈 GROWTH: Landing Page & Growth System */}
+                                    <Route path="/launch" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <LandingPage apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+                                    <Route path="/referral" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <ReferralProgram apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+                                    <Route path="/growth-dashboard" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <GrowthDashboard apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+
+                                    {/* 🎨 DEMO: Toast Notification Demo */}
+                                    <Route path="/toast-demo" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <ToastDemo />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+
+                                    {/* 🔗 Server Invite */}
+                                    <Route path="/invite/:code" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <InvitePage />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+
+                                    {/* Spotify Callback */}
+                                    <Route path="/spotify-callback" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <SpotifyCallback apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+
+                                    {/* İngilizce Modülleri */}
+                                    <Route path="/eng-learn" element={
+                                        <RouteErrorBoundary>
+                                            <PageWrapper>
+                                                <React.Suspense fallback={<LoadingSkeleton label="Eğitim modülü yükleniyor..." />}>
+                                                    <EnglishHub />
+                                                </React.Suspense>
+                                            </PageWrapper>
+                                        </RouteErrorBoundary>
+                                    } />
+                                    <Route path="/eng-learn/vocab" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <EnglishLearningPage />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+                                    <Route path="/eng-learn/grammar" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <GrammarQuizPage />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+                                    <Route path="/eng-learn/voice" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <EnglishVoicePractice apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+                                    <Route path="/eng-learn/pronunciation" element={
+                                        <PageWrapper>
+                                            <React.Suspense fallback={<div>Yükleniyor...</div>}>
+                                                <PronunciationPage apiBaseUrl={API_BASE_URL} />
+                                            </React.Suspense>
+                                        </PageWrapper>
+                                    } />
+
+                                    {/* Kripto Sinyaller (Sadece Whitelist) */}
+                                    <Route path="/crypto-analysis" element={
+                                        <RouteErrorBoundary>
+                                            <PageWrapper>
+                                                <React.Suspense fallback={<LoadingSkeleton label="Kripto verileri yükleniyor..." />}>
+                                                    <ProtectedRoute>
+                                                        <WhitelistGuard>
+                                                            <CryptoSignals />
+                                                        </WhitelistGuard>
+                                                    </ProtectedRoute>
+                                                </React.Suspense>
+                                            </PageWrapper>
+                                        </RouteErrorBoundary>
+                                    } />
+
+                                    {/* Eski Crypto Dashboard (yedek) */}
+                                    <Route path="/crypto-dashboard-old" element={
+                                        <RouteErrorBoundary>
+                                            <PageWrapper>
+                                                <React.Suspense fallback={<LoadingSkeleton />}>
+                                                    <CryptoDashboard />
+                                                </React.Suspense>
+                                            </PageWrapper>
+                                        </RouteErrorBoundary>
+                                    } />
+
+                                    {/* Ana Uygulama (Catch-All) */}
+                                    <Route path="/*" element={<App />} />
+                                </Routes>
+                            </PageTransitionWrapper>
                         </HashRouter>
                     </ErrorBoundary>
                 </GlobalWebSocketProvider>

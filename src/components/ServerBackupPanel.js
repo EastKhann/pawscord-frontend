@@ -126,7 +126,7 @@ const ServerBackupPanel = ({ serverId, onClose }) => {
     const badges = {
       completed: { text: 'Tamamlandı', color: '#22c55e', icon: '✅' },
       processing: { text: 'İşleniyor', color: '#f59e0b', icon: '⏳' },
-      failed: { text: 'Başarısız', color: '#ef4444', icon: '❌' }
+      failed: { text: 'Başarısız', color: '#f23f42', icon: '❌' }
     };
     return badges[status] || badges.processing;
   };

@@ -29,7 +29,7 @@ const hoverBorder = (isPopular, enter) => isPopular
 
 const buyBtn = (isPopular, loading) => ({
     width: '100%', padding: '16px', borderRadius: '12px', fontWeight: 'bold', fontSize: '16px', color: 'white',
-    background: isPopular ? 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)' : 'linear-gradient(135deg, #57f287 0%, #3ba55d 100%)',
+    background: isPopular ? 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)' : 'linear-gradient(135deg, #23a559 0%, #3ba55d 100%)',
     border: 'none', cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.3s',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
     boxShadow: isPopular ? '0 6px 20px rgba(88, 101, 242, 0.4)' : '0 6px 20px rgba(87, 242, 135, 0.3)',
@@ -82,10 +82,10 @@ const PackageCard = ({ pkg, loading, selectedPackage, onPurchase }) => {
                 </div>
                 {pkg.bonus && (
                     <>
-                        <div style={{ fontSize: '16px', color: '#57f287', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '8px', textShadow: '0 0 10px rgba(87, 242, 135, 0.3)' }}>
+                        <div style={{ fontSize: '16px', color: '#23a559', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '8px', textShadow: '0 0 10px rgba(87, 242, 135, 0.3)' }}>
                             <GiSparkles style={{ fontSize: '18px' }} /> +{pkg.bonus.toLocaleString()} Bonus!
                         </div>
-                        <div style={{ fontSize: '13px', color: '#b9bbbe', marginTop: '6px' }}>Toplam: {totalCoins.toLocaleString()} coin</div>
+                        <div style={{ fontSize: '13px', color: '#b5bac1', marginTop: '6px' }}>Toplam: {totalCoins.toLocaleString()} coin</div>
                     </>
                 )}
             </div>

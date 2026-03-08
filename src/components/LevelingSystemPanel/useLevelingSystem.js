@@ -13,7 +13,7 @@ export const getRankColor = (rank) => {
   if (rank === 1) return '#fbbf24';
   if (rank === 2) return '#c0c0c0';
   if (rank === 3) return '#cd7f32';
-  return '#6366f1';
+  return '#4752c4';
 };
 
 export const getLevelForXP = (xp) => {

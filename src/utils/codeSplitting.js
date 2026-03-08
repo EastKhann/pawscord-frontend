@@ -1,4 +1,4 @@
-// frontend/src/utils/codeSplitting.js
+﻿// frontend/src/utils/codeSplitting.js
 // 📦 CODE SPLITTING & LAZY LOADING UTILITY
 
 import { lazy, Suspense } from 'react';
@@ -99,10 +99,10 @@ const LoadingSpinner = () => (
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '200px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     }}>
         <div style={{
-            border: '3px solid #40444b',
+            border: '3px solid #182135',
             borderTop: '3px solid #5865f2',
             borderRadius: '50%',
             width: '40px',

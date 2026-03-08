@@ -1,4 +1,4 @@
-// frontend/src/components/AutoResponderManager.js
+﻿// frontend/src/components/AutoResponderManager.js
 import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaPlus, FaRobot, FaTrash } from 'react-icons/fa';
@@ -80,7 +80,7 @@ const AutoResponderManager = ({ onClose, fetchWithAuth, apiBaseUrl, serverId, em
                             checked={newResponder.is_regex}
                             onChange={(e) => setNewResponder({ ...newResponder, is_regex: e.target.checked })}
                         />
-                        <span style={{ marginLeft: '8px', color: '#b9bbbe' }}>Regex kullan</span>
+                        <span style={{ marginLeft: '8px', color: '#b5bac1' }}>Regex kullan</span>
                     </label>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <button onClick={handleCreate} style={styles.submitButton}>Oluştur</button>
@@ -145,7 +145,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '600px',
@@ -158,7 +158,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -171,7 +171,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.5em'
     },
@@ -196,7 +196,7 @@ const styles = {
         marginBottom: '15px'
     },
     createForm: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '15px',
         borderRadius: '8px',
         marginBottom: '15px'
@@ -205,7 +205,7 @@ const styles = {
         width: '100%',
         padding: '10px',
         marginBottom: '10px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         border: '1px solid #5865f2',
         borderRadius: '4px',
         color: 'white'
@@ -215,7 +215,7 @@ const styles = {
         padding: '10px',
         marginBottom: '10px',
         minHeight: '80px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         border: '1px solid #5865f2',
         borderRadius: '4px',
         color: 'white',
@@ -239,7 +239,7 @@ const styles = {
     cancelButton: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '4px',
         color: 'white',
@@ -248,12 +248,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     responderList: {
@@ -262,7 +262,7 @@ const styles = {
         gap: '10px'
     },
     responderItem: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '15px',
         borderRadius: '8px'
     },
@@ -272,7 +272,7 @@ const styles = {
         marginBottom: '8px'
     },
     response: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '0.9em'
     }
 };

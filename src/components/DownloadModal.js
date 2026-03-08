@@ -1,4 +1,4 @@
-// frontend/src/components/DownloadModal.js
+﻿// frontend/src/components/DownloadModal.js
 
 import { FaWindows, FaAndroid, FaApple, FaTimes, FaDownload, FaInfoCircle } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
@@ -86,9 +86,9 @@ const styles = {
         padding: '20px', boxSizing: 'border-box'
     },
     modal: {
-        backgroundColor: '#1e1f22', width: '100%', maxWidth: '800px',
+        backgroundColor: '#0d0e10', width: '100%', maxWidth: '800px',
         borderRadius: '16px', padding: '30px', position: 'relative',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.5)', border: '1px solid #2b2d31',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.5)', border: '1px solid #0e1222',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
 
         // 🔥🔥🔥 DÜZELTME BURADA 🔥🔥🔥
@@ -101,8 +101,8 @@ const styles = {
         flexShrink: 0 // Header kaybolmasın, sıkışmasın
     },
     title: { margin: 0, color: 'white', fontSize: '1.8em' },
-    closeBtn: { background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.5em', cursor: 'pointer' },
-    subtitle: { color: '#b9bbbe', textAlign: 'center', marginBottom: '30px', fontSize: '1.1em', flexShrink: 0 },
+    closeBtn: { background: 'none', border: 'none', color: '#b5bac1', fontSize: '1.5em', cursor: 'pointer' },
+    subtitle: { color: '#b5bac1', textAlign: 'center', marginBottom: '30px', fontSize: '1.1em', flexShrink: 0 },
 
     grid: {
         display: 'grid',
@@ -112,7 +112,7 @@ const styles = {
         flexGrow: 1
     },
     card: {
-        backgroundColor: '#2b2d31', padding: '25px', borderRadius: '12px',
+        backgroundColor: '#111214', padding: '25px', borderRadius: '12px',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         boxShadow: '0 4px 10px rgba(0,0,0,0.2)', transition: 'transform 0.2s'
     },
@@ -126,7 +126,7 @@ const styles = {
         transition: 'opacity 0.2s'
     },
     disabledBtn: {
-        width: '100%', padding: '10px', border: '1px solid #4f545c', borderRadius: '6px',
+        width: '100%', padding: '10px', border: '1px solid #4e5058', borderRadius: '6px',
         backgroundColor: 'transparent', color: '#949ba4', fontSize: '0.9em',
         display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'not-allowed'
     },

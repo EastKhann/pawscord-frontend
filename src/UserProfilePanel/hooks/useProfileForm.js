@@ -5,7 +5,7 @@ import { API_URL, authGet, authPost, authHeaders } from './profileApiUtils';
 
 // Global cache for default avatars (survives component remounts)
 const avatarCache = {
-    data: null, timestamp: 0, maxAge: 60 * 60 * 1000,
+    data: null, timestamp: 0, maxAge: 5 * 60 * 1000, // 5 min cache
     isValid() { return this.data && (Date.now() - this.timestamp < this.maxAge); }
 };
 

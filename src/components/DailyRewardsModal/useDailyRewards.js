@@ -26,11 +26,13 @@ export default function useDailyRewards({ fetchWithAuth, apiBaseUrl }) {
     const loadDailyRewards = async () => {
         try {
             const r = await fetchWithAuth(`${apiBaseUrl}/rewards/daily/`);
+            if (!r.ok) return;
             const data = await r.json();
             setRewards(data.rewards || []); setStreak(data.streak || 0); setCanClaim(data.can_claim || false); setLastClaimed(data.last_claimed);
-        } catch (e) { console.error('Failed to load daily rewards:', e); toast.error('Failed to load rewards'); }
+        } catch (e) { console.error('Failed to load daily rewards:', e); }
         finally { setLoading(false); }
     };
+
 
     const handleClaim = async () => {
         if (!canClaim) { toast.error('Already claimed today!'); return; }

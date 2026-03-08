@@ -47,7 +47,12 @@ const refreshToken = async () => {
     });
 
     if (!response.ok) {
-        throw new Error('Token refresh failed');
+        // Only throw (which triggers logout) for actual auth failures, not server/network errors
+        if (response.status === 401 || response.status === 403) {
+            throw new Error('Token refresh failed: unauthorized');
+        }
+        // Server error (500, 502, 503) — throw so caller knows, but AuthContext won't logout
+        throw new Error(`Token refresh server error: ${response.status}`);
     }
 
     const data = await response.json();
@@ -76,8 +81,11 @@ export const authFetch = async (url, options = {}) => {
             } catch (error) {
                 console.error('❌ [AuthFetch] Token refresh failed:', error);
                 isRefreshing = false;
-                // Redirect to login or handle logout
-                window.dispatchEvent(new CustomEvent('auth:logout'));
+                // Only force logout on genuine auth failure (expired/invalid token)
+                // Not on network errors or server errors (user goes back online = still logged in)
+                if (error.message.includes('unauthorized')) {
+                    window.dispatchEvent(new CustomEvent('auth:logout'));
+                }
                 throw error;
             } finally {
                 isRefreshing = false;
@@ -113,7 +121,9 @@ export const authFetch = async (url, options = {}) => {
                 response = await fetch(url, { ...options, headers });
             } catch (error) {
                 console.error('❌ [AuthFetch] Retry refresh failed:', error);
-                window.dispatchEvent(new CustomEvent('auth:logout'));
+                if (error.message.includes('unauthorized')) {
+                    window.dispatchEvent(new CustomEvent('auth:logout'));
+                }
                 throw error;
             } finally {
                 isRefreshing = false;

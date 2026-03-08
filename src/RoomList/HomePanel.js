@@ -1,6 +1,6 @@
-// frontend/src/RoomList/HomePanel.js
+﻿// frontend/src/RoomList/HomePanel.js
 import React, { useCallback, useRef, useEffect } from 'react';
-import { FaUserFriends, FaRobot, FaChartLine } from '../utils/iconOptimization';
+import { FaUserFriends, FaRobot, FaChartLine, FaCompass } from '../utils/iconOptimization';
 import LazyImage from '../components/LazyImage';
 import { styles } from '../SidebarStyles';
 
@@ -8,8 +8,9 @@ const HomePanel = ({
     conversations, currentConversationId, currentUsername,
     onRoomSelect, onDMSelect, onPrefetchChat, onFriendsClick, pendingFriendRequests,
     safeUnreadCounts, onlineUsers, allUsers,
-    getAvatarUrl, setDmContextMenu
+    getAvatarUrl, setDmContextMenu, onDiscoverClick, servers
 }) => {
+    const hasNoServers = !servers || servers.length === 0;
     // 🚀 Prefetch top DM conversations when HomePanel mounts
     useEffect(() => {
         if (!onPrefetchChat || !conversations || conversations.length === 0) return;
@@ -22,6 +23,26 @@ const HomePanel = ({
     return (
         <div style={styles.topSection}>
             <div style={styles.headerTitle}>Ana Sayfa</div>
+
+            {/* Sunucuya Katıl / Keşfet butonu — sadece hiç sunucu yoksa göster */}
+            {onDiscoverClick && hasNoServers && (
+                <button
+                    onClick={onDiscoverClick}
+                    style={{
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        width: 'calc(100% - 24px)', margin: '8px 12px 4px',
+                        padding: '10px 14px', borderRadius: '6px', border: 'none',
+                        background: 'linear-gradient(135deg, #23a559 0%, #1a7a40 100%)',
+                        color: 'white', fontSize: '13px', fontWeight: '600',
+                        cursor: 'pointer', textAlign: 'left',
+                    }}
+                    aria-label="Sunucuya Katıl"
+                >
+                    <FaCompass size={16} />
+                    Sunucuya Katıl
+                </button>
+            )}
+
             <div style={styles.channelsContainer}>
                 <div style={{ ...styles.roomItem, marginBottom: 5 }} role="button" tabIndex={0} onClick={() => onRoomSelect('ai')} onKeyDown={e => e.key === 'Enter' && onRoomSelect('ai')} aria-label="PawPaw AI kanalı">
                     <div style={styles.channelContent}><FaRobot style={{ marginRight: 8 }} /> <span>PawPaw AI</span></div>
@@ -38,11 +59,11 @@ const HomePanel = ({
                         {pendingFriendRequests > 0 && (
                             <div style={{
                                 position: 'absolute', top: '-6px', right: '-6px',
-                                backgroundColor: '#ed4245', color: 'white', borderRadius: '50%',
+                                backgroundColor: '#f23f42', color: 'white', borderRadius: '50%',
                                 width: '18px', height: '18px', display: 'flex',
                                 alignItems: 'center', justifyContent: 'center',
                                 fontSize: '11px', fontWeight: 'bold',
-                                border: '2px solid #2b2d31', zIndex: 1
+                                border: '2px solid #0e1222', zIndex: 1
                             }}>
                                 {pendingFriendRequests > 9 ? '9+' : pendingFriendRequests}
                             </div>
@@ -50,7 +71,7 @@ const HomePanel = ({
                     </button>
                 </div>
                 {!conversations || conversations.length === 0 ? (
-                    <div style={{ padding: '20px', textAlign: 'center', color: '#72767d', fontSize: '0.9em' }}>
+                    <div style={{ padding: '20px', textAlign: 'center', color: '#949ba4', fontSize: '0.9em' }}>
                         Henüz özel mesaj yok.<br />Arkadaş ekle butonuna tıklayarak başla!
                     </div>
                 ) : (
@@ -138,7 +159,7 @@ const DMItem = ({
                 <LazyImage src={getAvatarUrl(otherUser.avatar, otherUser.username)} style={{ ...styles.avatarSmall, width: 32, height: 32 }} alt="" />
                 <div style={{
                     position: 'absolute', bottom: -2, right: -2, width: 12, height: 12,
-                    borderRadius: '50%', backgroundColor: statusColor, border: '2px solid #2b2d31'
+                    borderRadius: '50%', backgroundColor: statusColor, border: '2px solid #0e1222'
                 }} />
             </div>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginLeft: 8, overflow: 'hidden' }}>

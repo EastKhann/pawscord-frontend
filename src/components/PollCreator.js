@@ -213,7 +213,7 @@ const PollCreator = ({ roomSlug, token, onClose, onPollCreated, isMobile }) => {
         createButton: {
             flex: 1,
             padding: '14px',
-            background: 'linear-gradient(135deg, #5865f2, #7289da)',
+            background: 'linear-gradient(135deg, #5865f2, #5865f2)',
             border: 'none',
             borderRadius: '8px',
             cursor: isCreating ? 'not-allowed' : 'pointer',

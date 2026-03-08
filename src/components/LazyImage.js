@@ -1,4 +1,4 @@
-// components/LazyImage.js
+﻿// components/LazyImage.js
 // 🚀 PERFORMANS: Progressive lazy loading + WebP + Blur placeholder (%60 daha hızlı görsel yükleme)
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -140,7 +140,7 @@ const LazyImage = ({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: '#2b2d31',
+            backgroundColor: '#111214',
             backgroundImage: `url("${blurPlaceholder}")`,
             backgroundSize: 'cover',
             filter: 'blur(10px)',
@@ -180,8 +180,8 @@ const LazyImage = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#2b2d31',
-            color: '#b9bbbe',
+            backgroundColor: '#111214',
+            color: '#b5bac1',
             fontSize: '12px'
           }}
         >

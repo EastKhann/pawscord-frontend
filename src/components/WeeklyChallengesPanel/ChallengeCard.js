@@ -1,4 +1,4 @@
-// WeeklyChallengesPanel/ChallengeCard.js
+﻿// WeeklyChallengesPanel/ChallengeCard.js
 import { FaLock, FaCheck, FaStar } from 'react-icons/fa';
 import { getIcon, getDifficultyColor, getDifficultyStars, getRewardIcon, getRewardText } from './hooks/useChallenges';
 
@@ -11,11 +11,11 @@ const ChallengeCard = ({ challenge, isDaily, styles }) => {
         <div style={{
             ...styles.challengeCard,
             opacity: isCompleted ? 0.7 : 1,
-            backgroundColor: isCompleted ? '#202225' : '#2f3136'
+            backgroundColor: isCompleted ? '#0d0e10' : '#111214'
         }}>
             <div style={styles.challengeIcon}>
-                {isLocked ? <FaLock size={20} color="#72767d" />
-                    : isCompleted ? <FaCheck size={20} color="#43b581" />
+                {isLocked ? <FaLock size={20} color="#949ba4" />
+                    : isCompleted ? <FaCheck size={20} color="#23a559" />
                         : <span style={{ color: getDifficultyColor(challenge.difficulty) }}>{getIcon(challenge.icon)}</span>}
             </div>
 
@@ -32,7 +32,7 @@ const ChallengeCard = ({ challenge, isDaily, styles }) => {
                         <div style={{
                             ...styles.progressFill,
                             width: `${Math.min(progress, 100)}%`,
-                            backgroundColor: isCompleted ? '#43b581' : '#5865f2'
+                            backgroundColor: isCompleted ? '#23a559' : '#5865f2'
                         }} />
                     </div>
                     <span style={styles.progressText}>{challenge.current}/{challenge.target}</span>
@@ -41,7 +41,7 @@ const ChallengeCard = ({ challenge, isDaily, styles }) => {
 
             <div style={styles.challengeReward}>
                 <div style={styles.pointsBadge}>
-                    <FaStar size={10} color="#faa61a" /><span>{challenge.points}</span>
+                    <FaStar size={10} color="#f0b232" /><span>{challenge.points}</span>
                 </div>
                 {challenge.reward && (
                     <div style={styles.rewardBadge}>

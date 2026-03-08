@@ -173,6 +173,12 @@ const useVoiceSettings = ({ channelId }) => {
             source.connect(gainNode);
             gainNode.connect(analyserRef.current);
 
+            // Loopback — sesi hoparlore yonlendir (kullanici kendini duysun)
+            const loopbackGain = audioContextRef.current.createGain();
+            loopbackGain.gain.value = 0.85;
+            gainNode.connect(loopbackGain);
+            loopbackGain.connect(audioContextRef.current.destination);
+
             // 🔥 Time-domain peak + RMS hybrid analiz
             analyserRef.current.fftSize = 2048;
             analyserRef.current.smoothingTimeConstant = 0.3;

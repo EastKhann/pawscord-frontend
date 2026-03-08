@@ -97,8 +97,8 @@ const ChatUserList = ({
       <div style={styles.userList} role="list" aria-label={isServer ? 'Sunucu üyeleri' : 'Arkadaş listesi'}>
         {totalCount === 0 ? (
           <div style={styles.emptyState}>
-            <FaCircle size={24} color="#43b581" style={{ opacity: 0.3 }} />
-            <p style={{ color: '#b9bbbe', fontSize: '13px', marginTop: '8px' }}>
+            <FaCircle size={24} color="#23a559" style={{ opacity: 0.3 }} />
+            <p style={{ color: '#b5bac1', fontSize: '13px', marginTop: '8px' }}>
               {isServer ? 'Bu sunucuda kimse yok' : 'Arkadaş listesi boş. Arkadaş ekle!'}
             </p>
           </div>
@@ -107,7 +107,7 @@ const ChatUserList = ({
             {onlineList.length > 0 && (
               <>
                 <div style={styles.sectionHeader}>
-                  <FaCircle size={8} color="#43b581" />
+                  <FaCircle size={8} color="#23a559" />
                   <span style={styles.sectionTitle}>Çevrimiçi — {onlineList.length}</span>
                 </div>
                 {renderUserList(onlineList)}
@@ -117,7 +117,7 @@ const ChatUserList = ({
             {offlineList.length > 0 && (
               <>
                 <div style={{ ...styles.sectionHeader, marginTop: onlineList.length > 0 ? '16px' : '0' }}>
-                  <FaMoon size={8} color="#747f8d" />
+                  <FaMoon size={8} color="#80848e" />
                   <span style={styles.sectionTitle}>Çevrimdışı — {offlineList.length}</span>
                 </div>
                 {renderUserList(offlineList)}
@@ -159,7 +159,7 @@ const ChatUserList = ({
         <div style={styles.pawscordLogo}>
           <div style={{ fontSize: '24px', marginBottom: '4px' }}>🐾</div>
           <div style={{ fontWeight: 'bold', color: '#5865f2', fontSize: '14px' }}>PAWSCORD</div>
-          <div style={{ fontSize: '11px', color: '#b9bbbe', opacity: 0.7, marginTop: '2px' }}>v1.1.133</div>
+          <div style={{ fontSize: '11px', color: '#b5bac1', opacity: 0.7, marginTop: '2px' }}>v1.1.133</div>
         </div>
       </div>
     </div>

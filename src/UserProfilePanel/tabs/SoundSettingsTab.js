@@ -8,14 +8,14 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
     <div style={styles.card}>
       <h3 style={styles.sectionTitle}>🎵 Ses Ayarları</h3>
 
-      <p style={{ color: '#b9bbbe', marginBottom: '24px' }}>
+      <p style={{ color: '#b5bac1', marginBottom: '24px' }}>
         Uygulama seslerini özelleştirin.
       </p>
 
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>💬 Mesaj Sesi</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Mesaj geldiğinde ses çal
           </p>
         </div>
@@ -47,7 +47,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>🔔 Bildirim Sesi</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Bildirim geldiğinde ses çal
           </p>
         </div>
@@ -79,7 +79,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>🎤 Sesli Sohbet Ayrılma Sesi</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Sesli sohbetten ayrıldığınızda ses çal
           </p>
         </div>
@@ -111,7 +111,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
       <div style={{ marginTop: '32px' }}>
         <h4 style={{ color: '#fff', marginBottom: '12px' }}>🔊 Ana Ses Seviyesi</h4>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span style={{ color: '#b9bbbe', fontSize: '14px', minWidth: '40px' }}>
+          <span style={{ color: '#b5bac1', fontSize: '14px', minWidth: '40px' }}>
             {soundSettings.volume}%
           </span>
           <input
@@ -141,7 +141,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
         <div style={styles.settingRow}>
           <div>
             <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>🔇 Krisp Gürültü Engelleme</h4>
-            <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+            <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
               Arka plan gürültülerini akıllıca bastırır (AI powered)
             </p>
           </div>
@@ -154,7 +154,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
             style={{
               width: '50px',
               height: '26px',
-              background: soundSettings.krisp_enabled ? '#43b581' : 'rgba(255, 255, 255, 0.1)',
+              background: soundSettings.krisp_enabled ? '#23a559' : 'rgba(255, 255, 255, 0.1)',
               borderRadius: '26px',
               cursor: 'pointer',
               position: 'relative',
@@ -175,12 +175,12 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
         </div>
 
         {soundSettings.krisp_enabled && (
-          <div style={{ marginTop: '16px', paddingLeft: '12px', borderLeft: '3px solid #43b581' }}>
+          <div style={{ marginTop: '16px', paddingLeft: '12px', borderLeft: '3px solid #23a559' }}>
             <h4 style={{ color: '#fff', marginBottom: '8px', fontSize: '13px' }}>
               🎚️ Gürültü Bastırma Seviyesi
             </h4>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ color: '#b9bbbe', fontSize: '12px', minWidth: '60px' }}>
+              <span style={{ color: '#b5bac1', fontSize: '12px', minWidth: '60px' }}>
                 {soundSettings.noise_suppression_level || 80}%
                 {(soundSettings.noise_suppression_level || 80) >= 90 && ' 🔥'}
               </span>
@@ -194,13 +194,13 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
                   flex: 1,
                   height: '4px',
                   borderRadius: '2px',
-                  background: `linear-gradient(to right, #43b581 0%, #43b581 ${(soundSettings.noise_suppression_level || 80) - 50}%, rgba(255,255,255,0.1) ${(soundSettings.noise_suppression_level || 80) - 50}%, rgba(255,255,255,0.1) 100%)`,
+                  background: `linear-gradient(to right, #23a559 0%, #23a559 ${(soundSettings.noise_suppression_level || 80) - 50}%, rgba(255,255,255,0.1) ${(soundSettings.noise_suppression_level || 80) - 50}%, rgba(255,255,255,0.1) 100%)`,
                   outline: 'none',
                   cursor: 'pointer',
                 }}
               />
             </div>
-            <p style={{ color: '#72767d', fontSize: '11px', marginTop: '4px' }}>
+            <p style={{ color: '#949ba4', fontSize: '11px', marginTop: '4px' }}>
               💡 Yüksek değerler daha fazla gürültü engeller ama sesinizi de etkileyebilir
             </p>
           </div>
@@ -209,7 +209,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
         <div style={{ ...styles.settingRow, marginTop: '20px' }}>
           <div>
             <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>🎵 Yankı Önleme</h4>
-            <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+            <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
               Hoparlör sesinin mikrofona geri yansımasını engeller
             </p>
           </div>
@@ -221,7 +221,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
             style={{
               width: '50px',
               height: '26px',
-              background: soundSettings.echo_cancellation !== false ? '#43b581' : 'rgba(255, 255, 255, 0.1)',
+              background: soundSettings.echo_cancellation !== false ? '#23a559' : 'rgba(255, 255, 255, 0.1)',
               borderRadius: '26px',
               cursor: 'pointer',
               position: 'relative',
@@ -244,7 +244,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
         <div style={styles.settingRow}>
           <div>
             <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>📊 Otomatik Ses Seviyesi</h4>
-            <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+            <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
               Mikrofonunuzu otomatik normalize eder (Auto Gain Control)
             </p>
           </div>
@@ -256,7 +256,7 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
             style={{
               width: '50px',
               height: '26px',
-              background: soundSettings.auto_gain_control !== false ? '#43b581' : 'rgba(255, 255, 255, 0.1)',
+              background: soundSettings.auto_gain_control !== false ? '#23a559' : 'rgba(255, 255, 255, 0.1)',
               borderRadius: '26px',
               cursor: 'pointer',
               position: 'relative',
@@ -276,8 +276,8 @@ const SoundSettingsTab = ({ handleSoundSettingsUpdate, soundSettings }) => {
           </div>
         </div>
 
-        <div style={{ marginTop: '16px', padding: '12px', backgroundColor: 'rgba(114, 137, 218, 0.1)', borderRadius: '8px', borderLeft: '3px solid #7289da' }}>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: 0 }}>
+        <div style={{ marginTop: '16px', padding: '12px', backgroundColor: 'rgba(114, 137, 218, 0.1)', borderRadius: '8px', borderLeft: '3px solid #5865f2' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: 0 }}>
             💡 <strong style={{ color: '#fff' }}>Profesyonel İpucu:</strong> En iyi sonuç için tüm iyileştirmeleri açık tutun.
             Eğer ses robotikleşirse gürültü bastırma seviyesini 70-80% arası deneyin.
           </p>

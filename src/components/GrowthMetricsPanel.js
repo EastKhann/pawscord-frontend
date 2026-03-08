@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaChartLine, FaUsers, FaArrowUp, FaCalendar } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -77,7 +77,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <div style={styles.statLabel}>Total Members</div>
                                         <div style={styles.statValue}>{formatNumber(metrics.total_members || 0)}</div>
                                         {metrics.member_growth !== undefined && (
-                                            <div style={{ ...styles.statChange, color: metrics.member_growth >= 0 ? '#43b581' : '#f04747' }}>
+                                            <div style={{ ...styles.statChange, color: metrics.member_growth >= 0 ? '#23a559' : '#f23f42' }}>
                                                 <FaArrowUp style={{ transform: metrics.member_growth < 0 ? 'rotate(180deg)' : 'none' }} />
                                                 {Math.abs(metrics.member_growth)}% this period
                                             </div>
@@ -87,7 +87,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
                                 <div style={styles.statCard}>
                                     <div style={styles.statIcon}>
-                                        <FaChartLine style={{ color: '#43b581', fontSize: '24px' }} />
+                                        <FaChartLine style={{ color: '#23a559', fontSize: '24px' }} />
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statLabel}>Active Members</div>
@@ -106,7 +106,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                         <div style={styles.statLabel}>Messages Sent</div>
                                         <div style={styles.statValue}>{formatNumber(metrics.messages_sent || 0)}</div>
                                         {metrics.message_growth !== undefined && (
-                                            <div style={{ ...styles.statChange, color: metrics.message_growth >= 0 ? '#43b581' : '#f04747' }}>
+                                            <div style={{ ...styles.statChange, color: metrics.message_growth >= 0 ? '#23a559' : '#f23f42' }}>
                                                 <FaArrowUp style={{ transform: metrics.message_growth < 0 ? 'rotate(180deg)' : 'none' }} />
                                                 {Math.abs(metrics.message_growth)}% this period
                                             </div>
@@ -116,7 +116,7 @@ const GrowthMetricsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
 
                                 <div style={styles.statCard}>
                                     <div style={styles.statIcon}>
-                                        <FaCalendar style={{ color: '#faa61a', fontSize: '24px' }} />
+                                        <FaCalendar style={{ color: '#f0b232', fontSize: '24px' }} />
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statLabel}>New Joins</div>
@@ -199,7 +199,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -213,19 +213,19 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     toolbar: {
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     select: {
         padding: '10px',
-        backgroundColor: '#2c2f33',
-        border: '1px solid #2c2f33',
+        backgroundColor: '#111214',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
         color: '#ffffff',
         fontSize: '14px',
@@ -238,12 +238,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     statsGrid: {
@@ -253,7 +253,7 @@ const styles = {
         marginBottom: '32px',
     },
     statCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         display: 'flex',
@@ -267,7 +267,7 @@ const styles = {
     },
     statLabel: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '6px',
     },
     statValue: {
@@ -284,7 +284,7 @@ const styles = {
     },
     statSubtext: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     chartSection: {
         marginBottom: '32px',
@@ -301,7 +301,7 @@ const styles = {
         justifyContent: 'space-between',
         height: '200px',
         padding: '20px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
     },
     chartBar: {
@@ -319,7 +319,7 @@ const styles = {
     },
     chartLabel: {
         fontSize: '10px',
-        color: '#99aab5',
+        color: '#949ba4',
         textAlign: 'center',
     },
     section: {
@@ -331,7 +331,7 @@ const styles = {
         gap: '8px',
     },
     contributorCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '12px',
         display: 'flex',
@@ -355,7 +355,7 @@ const styles = {
     },
     contributorStat: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
 };
 

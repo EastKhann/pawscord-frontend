@@ -3,6 +3,7 @@ import useSecurityAPI from './SecuritySettingsPanel/useSecurityAPI';
 import TwoFactorTab from './SecuritySettingsPanel/TwoFactorTab';
 import SessionsTab from './SecuritySettingsPanel/SessionsTab';
 import IPWhitelistTab from './SecuritySettingsPanel/IPWhitelistTab';
+import PasskeyTab from './SecuritySettingsPanel/PasskeyTab';
 import './SecuritySettingsPanel.css';
 
 const SecuritySettingsPanel = ({ onClose }) => {
@@ -39,7 +40,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
                 )}
 
                 <div className="security-tabs">
-                    {[['2fa', '🔐 2FA'], ['sessions', '💻 Oturumlar'], ['ip', '🌐 IP Whitelist']].map(([key, label]) => (
+                    {[['2fa', '🔐 2FA'], ['passkey', '🔑 Passkey'], ['sessions', '💻 Oturumlar'], ['ip', '🌐 IP Whitelist']].map(([key, label]) => (
                         <button key={key} className={`tab-btn ${api.activeTab === key ? 'active' : ''}`}
                             onClick={() => api.setActiveTab(key)}>{label}</button>
                     ))}
@@ -47,6 +48,7 @@ const SecuritySettingsPanel = ({ onClose }) => {
 
                 <div className="security-content">
                     {api.activeTab === '2fa' && <TwoFactorTab {...api} />}
+                    {api.activeTab === 'passkey' && <PasskeyTab />}
                     {api.activeTab === 'sessions' && <SessionsTab {...api} />}
                     {api.activeTab === 'ip' && <IPWhitelistTab {...api} />}
                 </div>

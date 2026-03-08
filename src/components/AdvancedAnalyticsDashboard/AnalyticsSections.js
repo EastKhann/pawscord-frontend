@@ -1,4 +1,4 @@
-import { FaUsers, FaComments, FaClock, FaInfoCircle, FaChartBar, FaHeart, FaGlobe, FaLink } from 'react-icons/fa';
+﻿import { FaUsers, FaComments, FaClock, FaInfoCircle, FaChartBar, FaHeart, FaGlobe, FaLink } from 'react-icons/fa';
 import { formatNumber, renderSimpleChart } from './useAdvancedAnalytics';
 
 export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) => {
@@ -11,7 +11,7 @@ export const ChartsSection = ({ memberActivity, messageActivity, peakHours }) =>
     return (
       <div className="peak-hours-chart">
         {hours.map((h, idx) => (
-          <div key={idx} className="hour-bar" style={{ height: `${max > 0 ? (h.value / max) * 100 : 0}%`, background: h.value > max * 0.8 ? '#23a559' : h.value > max * 0.5 ? '#5865f2' : '#3f4147' }} title={`${h.hour}:00 - ${h.value} mesaj`}>
+          <div key={idx} className="hour-bar" style={{ height: `${max > 0 ? (h.value / max) * 100 : 0}%`, background: h.value > max * 0.8 ? '#23a559' : h.value > max * 0.5 ? '#5865f2' : '#1e2024' }} title={`${h.hour}:00 - ${h.value} mesaj`}>
             <span className="hour-label">{h.hour}</span>
           </div>
         ))}

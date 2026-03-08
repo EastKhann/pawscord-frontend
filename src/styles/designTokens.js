@@ -1,4 +1,4 @@
-// frontend/src/styles/designTokens.js
+﻿// frontend/src/styles/designTokens.js
 // =============================================
 // PAWSCORD Design Token System
 // Generated from codebase analysis (2026-03-01)
@@ -15,36 +15,36 @@ export const tokens = {
         // Brand / Primary
         primary: '#5865f2',  // 1020 refs — Pawscord brand blue
         primaryHover: '#4752c4',  //   59 refs
-        primaryLight: '#7289da',  //   61 refs — legacy blurple
+        primaryLight: '#5865f2',  //   61 refs — legacy blurple
         primarySoft: '#5e81f4',  //   19 refs
 
         // Accent / Purple variant (heavily used)
-        accent: '#8b5cf6',  //  235 refs — violet accent
-        accentAlt: '#6366f1',  //   82 refs — indigo accent
-        accentGradient: '#764ba2',  //   35 refs — gradient endpoint
-        accentBlue: '#667eea',  //   62 refs — blue-purple
+        accent: '#5865f2',  //  235 refs — blurple accent
+        accentAlt: '#4752c4',  //   82 refs — blurple hover
+        accentGradient: '#4752c4',  //   35 refs — gradient endpoint
+        accentBlue: '#5865f2',  //   62 refs — blurple
 
         // Success / Green
-        success: '#43b581',  //  317 refs — primary green
+        success: '#23a559',  //  317 refs — primary green
         successAlt: '#23a559',  //  194 refs — brighter green
-        successBright: '#57f287',  //   27 refs — neon green
+        successBright: '#23a559',  //   27 refs — neon green
         successMuted: '#3ba55d',  //   28 refs
         successDark: '#2ecc71',  //   16 refs
         successModern: '#10b981',  //   75 refs — emerald
         spotify: '#1db954',  //   34 refs
 
         // Danger / Red
-        danger: '#ed4245',  //  158 refs — danger red
-        dangerAlt: '#f04747',  //  185 refs — legacy red
-        dangerBright: '#ef4444',  //   76 refs — tailwind red-500
+        danger: '#f23f42',  //  158 refs — danger red
+        dangerAlt: '#f23f42',  //  185 refs — legacy red
+        dangerBright: '#f23f42',  //   76 refs — tailwind red-500
         dangerDark: '#da373c',  //  112 refs
         dangerLegacy: '#e74c3c',  //   98 refs
         dangerMaterial: '#f44336',  //   33 refs
         dangerDeep: '#dc2626',  //   18 refs
-        dangerIos: '#ff3b30',  //   53 refs
+        dangerIos: '#f23f42',  //   53 refs
 
         // Warning / Yellow-Orange
-        warning: '#faa61a',  //  175 refs — warning yellow
+        warning: '#f0b232',  //  175 refs — warning yellow
         warningAlt: '#f0b232',  //   78 refs
         warningBright: '#fbbf24',  //   44 refs
         warningAmber: '#f59e0b',  //   66 refs
@@ -63,7 +63,7 @@ export const tokens = {
         // Pink / Fuchsia
         pink: '#eb459e',  //   17 refs — accent pink
         pinkModern: '#ec4899',  //   20 refs
-        pinkLegacy: '#9b59b6',  //   52 refs — purple-pink
+        pinkLegacy: '#5865f2',  //   52 refs — purple-pink
 
         // Special
         neonGreen: '#00ff88',  //   32 refs
@@ -74,20 +74,20 @@ export const tokens = {
         bgDeepest: '#111113',  //   17 refs — absolute deep
         bgDeep: '#111214',  //   19 refs
         bgDarkest: '#1a1a1e',  //   16 refs
-        bgDarker: '#1a1a2e',  //   95 refs — blue-tinted dark
-        bgTertiary: '#202225',  //  169 refs — tertiary background
-        bgPrimary: '#1e1f22',  //  292 refs — main app background
-        bgPrimaryAlt: '#1e1e2e',  //   16 refs — catppuccin-style
-        bgSecondary: '#2b2d31',  //  270 refs — sidebar/panels
-        bgSecondaryAlt: '#2c2f33',  //  230 refs — legacy secondary
+        bgDarker: '#0d0e10',  //   95 refs — Discord tertiary
+        bgTertiary: '#0d0e10',  //  169 refs — tertiary background
+        bgPrimary: '#0d0e10',  //  292 refs — main app background
+        bgPrimaryAlt: '#0d0e10',  //   16 refs
+        bgSecondary: '#111214',  //  270 refs — sidebar/panels
+        bgSecondaryAlt: '#111214',  //  230 refs — legacy secondary
         bgSecondaryDark: '#2a2a2e',  //   38 refs
-        bgNavy: '#16213e',  //   68 refs — navy tinted bg
-        bgModifier: '#2f3136',  //  214 refs — legacy modifier
-        bgCard: '#313338',  //   60 refs — card surfaces
-        bgElevated: '#36393f',  //   81 refs — legacy chat bg
-        bgInput: '#40444b',  //  264 refs — input fields
-        bgHover: '#3f4147',  //   46 refs
-        bgInputAlt: '#383a40',  //   17 refs
+        bgNavy: '#0d0e10',  //   68 refs — Discord tertiary
+        bgModifier: '#111214',  //  214 refs — legacy modifier
+        bgCard: '#17191c',  //   60 refs — card surfaces
+        bgElevated: '#17191c',  //   81 refs — legacy chat bg
+        bgInput: '#1e2024',  //  264 refs — input fields
+        bgHover: '#1e2024',  //   46 refs
+        bgInputAlt: '#1e2024',  //   17 refs
         bgDark: '#1f2023',  //   18 refs
         bgSlate: '#1f2937',  //   19 refs — tailwind slate
 
@@ -106,31 +106,31 @@ export const tokens = {
 
         // ─── TEXT SHADES ────────────────────────────────
         textWhite: '#ffffff',  //  473 refs
-        textPrimary: '#dcddde',  //  346 refs — default body text
-        textSecondary: '#b9bbbe',  //  587 refs — secondary text (2nd most used!)
+        textPrimary: '#dbdee1',  //  346 refs — default body text
+        textSecondary: '#b5bac1',  //  587 refs — secondary text (2nd most used!)
         textNormal: '#b5bac1',  //   85 refs — modern normal
         textNormalAlt: '#dbdee1',  //   78 refs
-        textInteractive: '#99aab5',  //  205 refs — interactive default
-        textMuted: '#72767d',  //  338 refs — muted text
+        textInteractive: '#949ba4',  //  205 refs — interactive default
+        textMuted: '#949ba4',  //  338 refs — muted text
         textMutedAlt: '#949ba4',  //  183 refs — modern muted
         textFaint: '#6b7280',  //  114 refs — tailwind gray-500
-        textFaintAlt: '#6c6d7d',  //   53 refs
+        textFaintAlt: '#949ba4',  //   53 refs
         textDisabled: '#4e5058',  //   65 refs — disabled state
-        textSubtle: '#4f545c',  //   31 refs
+        textSubtle: '#4e5058',  //   31 refs
         textGray: '#9ca3af',  //   26 refs — tailwind gray-400
         textLight: '#a0aec0',  //   26 refs
         textLightBg: '#f2f3f5',  //   33 refs — light theme text
-        textLightAlt: '#e2e3ee',  //  106 refs
+        textLightAlt: '#dbdee1',  //  106 refs
         textLightNeutral: '#e5e7eb',  //   20 refs
 
         // Text link
         textLink: '#00b0f4',
 
         // ─── STATUS INDICATORS ──────────────────────────
-        statusOnline: '#43b581',
-        statusIdle: '#faa61a',
-        statusDnd: '#ed4245',
-        statusOffline: '#747f8d',  //   17 refs
+        statusOnline: '#23a559',
+        statusIdle: '#f0b232',
+        statusDnd: '#f23f42',
+        statusOffline: '#80848e',  //   17 refs
         statusStreaming: '#6441a5',
 
         // ─── BORDER COLORS ─────────────────────────────
@@ -141,9 +141,9 @@ export const tokens = {
 
         // Focus rings
         focusPrimary: 'rgba(88, 101, 242, 0.3)',    //  49 refs
-        focusAccent: 'rgba(139, 92, 246, 0.3)',    // 110 refs
-        focusAccentLight: 'rgba(139, 92, 246, 0.2)',    // 100 refs
-        focusAccentFaint: 'rgba(139, 92, 246, 0.1)',    //  49 refs
+        focusAccent: 'rgba(88, 101, 242, 0.3)',    // 110 refs
+        focusAccentLight: 'rgba(88, 101, 242, 0.2)',    // 100 refs
+        focusAccentFaint: 'rgba(88, 101, 242, 0.1)',    //  49 refs
         focusDanger: 'rgba(239, 68, 68, 0.2)',     //  44 refs
     },
 
@@ -229,13 +229,13 @@ export const tokens = {
         md: '0 4px 15px rgba(0, 0, 0, 0.3)',
         lg: '0 8px 32px rgba(0, 0, 0, 0.5)',               //   8 refs
         xl: '0 20px 60px rgba(0, 0, 0, 0.5)',              //  31 refs — MOST common
-        glow: '0 0 20px rgba(139, 92, 246, 0.5)',            //  14 refs
-        glowSm: '0 4px 15px rgba(139, 92, 246, 0.3)',      //   7 refs
-        glowMd: '0 6px 20px rgba(139, 92, 246, 0.4)',      //   7 refs
-        glowLg: '0 8px 24px rgba(139, 92, 246, 0.3)',      //   5 refs
+        glow: '0 0 20px rgba(88, 101, 242, 0.5)',            //  14 refs
+        glowSm: '0 4px 15px rgba(88, 101, 242, 0.3)',      //   7 refs
+        glowMd: '0 6px 20px rgba(88, 101, 242, 0.4)',      //   7 refs
+        glowLg: '0 8px 24px rgba(88, 101, 242, 0.3)',      //   5 refs
         glowPrimary: '0 4px 12px rgba(88, 101, 242, 0.4)',  //   4 refs
-        focus: '0 0 0 3px rgba(139, 92, 246, 0.2)',       //   6 refs
-        focusThin: '0 0 0 3px rgba(139, 92, 246, 0.1)',      //   8 refs
+        focus: '0 0 0 3px rgba(88, 101, 242, 0.2)',       //   6 refs
+        focusThin: '0 0 0 3px rgba(88, 101, 242, 0.1)',      //   8 refs
         modal: '0 0 0 1px rgba(32, 34, 37, 0.6), 0 2px 10px 0 rgba(0, 0, 0, 0.2)',
         elevated: '0 8px 24px rgba(0, 0, 0, 0.4)',           //   4 refs
     },

@@ -44,7 +44,7 @@ const InputMenu = ({
                     style={{
                         ...styles.actionButton,
                         backgroundColor: showMobileMenu ? 'rgba(88, 101, 242, 0.2)' : 'transparent',
-                        color: showMobileMenu ? '#5865f2' : '#b9bbbe'
+                        color: showMobileMenu ? '#5865f2' : '#b5bac1'
                     }}
                     title="Seçenekler"
                     aria-label="Mesaj seçenekleri menüsü"

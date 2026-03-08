@@ -7,7 +7,7 @@
   bottom: 0;
   width: 400px;
   max-width: 90vw;
-  background: var(--bg-primary, #2B2D31);
+  background: var(--bg-primary, #111214);
   border-left: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
-  background: var(--bg-secondary, #1E1F22);
+  background: var(--bg-secondary, #0d0e10);
 }
 
 .thread-title {
@@ -37,7 +37,7 @@
 .thread-close {
   background: transparent;
   border: none;
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
   cursor: pointer;
   padding: 8px;
   border-radius: 4px;
@@ -51,7 +51,7 @@
 
 .thread-parent {
   padding: 16px 20px;
-  background: var(--bg-secondary, #1E1F22);
+  background: var(--bg-secondary, #0d0e10);
   border-bottom: 2px solid var(--brand-primary, #5865F2);
 }
 
@@ -71,7 +71,7 @@
 
 .parent-meta {
   font-size: 11px;
-  color: var(--text-muted, #72767D);
+  color: var(--text-muted, #949ba4);
 }
 
 .thread-replies {
@@ -85,13 +85,13 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: var(--text-muted, #72767D);
+  color: var(--text-muted, #949ba4);
 }
 
 .thread-reply {
   padding: 12px;
   margin-bottom: 8px;
-  background: var(--bg-tertiary, #313338);
+  background: var(--bg-tertiary, #17191c);
   border-radius: 8px;
   border-left: 3px solid var(--brand-primary, #5865F2);
   animation: fadeIn 0.2s ease;
@@ -106,14 +106,14 @@
 
 .reply-content {
   font-size: 14px;
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
   margin-bottom: 6px;
   line-height: 1.4;
 }
 
 .reply-meta {
   font-size: 10px;
-  color: var(--text-muted, #72767D);
+  color: var(--text-muted, #949ba4);
 }
 
 .thread-empty {
@@ -122,7 +122,7 @@
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: var(--text-muted, #72767D);
+  color: var(--text-muted, #949ba4);
   text-align: center;
 }
 
@@ -134,7 +134,7 @@
 .thread-empty p {
   margin: 0 0 4px 0;
   font-size: 14px;
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
 }
 
 .thread-empty small {
@@ -146,13 +146,13 @@
   gap: 8px;
   padding: 16px;
   border-top: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
-  background: var(--bg-secondary, #1E1F22);
+  background: var(--bg-secondary, #0d0e10);
 }
 
 .thread-input input {
   flex: 1;
   padding: 10px 12px;
-  background: var(--bg-tertiary, #313338);
+  background: var(--bg-tertiary, #17191c);
   border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
   border-radius: 6px;
   color: var(--text-primary, #FFFFFF);

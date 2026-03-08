@@ -1,4 +1,4 @@
-/* SecurityAlertsPanel.css - Güvenlik Uyarıları Stilleri */
+﻿/* SecurityAlertsPanel.css - Güvenlik Uyarıları Stilleri */
 
 .security-alerts-overlay {
     position: fixed;
@@ -18,7 +18,7 @@
     width: 90%;
     max-width: 900px;
     max-height: 90vh;
-    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    background: linear-gradient(145deg, #0d0e10, #0d0e10);
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -45,7 +45,7 @@
 }
 
 .panel-header h2 svg {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 .header-actions {
@@ -88,7 +88,7 @@
 }
 
 .close-btn:hover {
-    background: #ef4444;
+    background: #f23f42;
     transform: rotate(90deg);
 }
 
@@ -133,11 +133,11 @@
 }
 
 .stat-item.danger .stat-value {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 .stat-item.critical .stat-value {
-    color: #f97316;
+    color: #4752c4;
 }
 
 .stat-item.success .stat-value {
@@ -205,7 +205,7 @@
 }
 
 .filter-btn.active {
-    background: linear-gradient(135deg, #ef4444, #f97316);
+    background: linear-gradient(135deg, #f23f42, #4752c4);
     color: #fff;
     border-color: transparent;
 }
@@ -273,12 +273,12 @@
 }
 
 .alert-card.critical {
-    border-left: 3px solid #ef4444;
+    border-left: 3px solid #f23f42;
     animation: pulse-critical 2s infinite;
 }
 
 .alert-card.high {
-    border-left: 3px solid #f97316;
+    border-left: 3px solid #4752c4;
 }
 
 .alert-card.medium {
@@ -391,11 +391,11 @@
 
 .view-btn {
     background: rgba(99, 102, 241, 0.2);
-    color: #6366f1;
+    color: #4752c4;
 }
 
 .view-btn:hover {
-    background: #6366f1;
+    background: #4752c4;
     color: #fff;
 }
 
@@ -434,7 +434,7 @@
 }
 
 .alert-detail-modal {
-    background: #1a1a2e;
+    background: #0b0e1b;
     border-radius: 14px;
     width: 90%;
     max-width: 600px;
@@ -459,7 +459,7 @@
     align-items: center;
     gap: 8px;
     padding: 8px 15px;
-    border-radius: 20px;
+    border-radius: 12px;
     color: #fff;
     font-size: 0.85rem;
     font-weight: 600;
@@ -571,7 +571,7 @@
     padding: 8px 14px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
+    border-radius: 12px;
     color: #a0a0a0;
     cursor: pointer;
     font-size: 0.8rem;

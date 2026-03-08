@@ -103,7 +103,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
             padding: '20px',
         }} {...overlayProps}>
             <div style={{
-                background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
+                background: 'linear-gradient(135deg, #111214 0%, #0d0e10 100%)',
                 borderRadius: '24px',
                 maxWidth: '1200px',
                 width: '100%',
@@ -187,7 +187,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                             position: 'absolute',
                             top: '-8px',
                             right: '-8px',
-                            background: '#43b581',
+                            background: '#23a559',
                             padding: '2px 8px',
                             borderRadius: '8px',
                             fontSize: '10px',
@@ -234,7 +234,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                                         top: '-12px',
                                         left: '50%',
                                         transform: 'translateX(-50%)',
-                                        background: '#43b581',
+                                        background: '#23a559',
                                         padding: '6px 16px',
                                         borderRadius: '20px',
                                         fontSize: '12px',
@@ -296,7 +296,7 @@ const PremiumModal = ({ isOpen, onClose }) => {
                                             alignItems: 'center',
                                             gap: '8px',
                                         }}>
-                                            <span style={{ color: '#43b581' }}>✓</span>
+                                            <span style={{ color: '#23a559' }}>✓</span>
                                             {feature}
                                         </li>
                                     ))}

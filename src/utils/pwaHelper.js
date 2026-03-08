@@ -199,7 +199,7 @@ const showNetworkBanner = (message, type = 'info') => {
         font-weight: 600;
         z-index: 9999;
         animation: slideDown 0.3s ease;
-        background: ${type === 'success' ? '#43b581' : '#ed4245'};
+        background: ${type === 'success' ? '#23a559' : '#f23f42'};
     `;
 
     document.body.appendChild(banner);

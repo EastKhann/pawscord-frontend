@@ -48,11 +48,11 @@
 }
 
 .swipe-action.primary {
-    background: #667eea;
+    background: #5865f2;
 }
 
 .swipe-action.danger {
-    background: #ef4444;
+    background: #f23f42;
 }
 
 .swipe-action.success {
@@ -64,7 +64,7 @@
 }
 
 .action-icon {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 4px;
 }
 

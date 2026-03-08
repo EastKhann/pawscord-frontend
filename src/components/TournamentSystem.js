@@ -1,4 +1,4 @@
-// frontend/src/components/TournamentSystem.js
+﻿// frontend/src/components/TournamentSystem.js
 import { useEffect } from 'react';
 import { FaTrophy, FaPlus, FaTimes } from 'react-icons/fa';
 import { useTournament } from './TournamentSystem/hooks/useTournament';
@@ -21,7 +21,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
             <div style={styles.panel}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
-                        <FaTrophy size={24} color="#faa61a" />
+                        <FaTrophy size={24} color="#f0b232" />
                         <h2 style={styles.title}>Turnuvalar</h2>
                     </div>
                     <div style={styles.headerActions}>
@@ -42,7 +42,7 @@ const TournamentSystem = ({ onClose, fetchWithAuth, apiBaseUrl, currentUser }) =
                             onClick={() => setFilter(f)}
                             style={{
                                 ...styles.filterButton,
-                                backgroundColor: filter === f ? '#5865f2' : '#2f3136'
+                                backgroundColor: filter === f ? '#5865f2' : '#111214'
                             }}
                         >
                             {f === 'all' ? 'Tümü' : f === 'active' ? 'Aktif' : f === 'upcoming' ? 'Yaklaşan' : 'Tamamlanan'}

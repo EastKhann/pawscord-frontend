@@ -1,4 +1,4 @@
-// frontend/src/components/NotificationPreferencesPanel.js
+﻿// frontend/src/components/NotificationPreferencesPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaBell, FaToggleOn, FaToggleOff, FaClock } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -73,7 +73,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaBell style={{ color: '#43b581' }} />
+                        <FaBell style={{ color: '#23a559' }} />
                         <h2 style={{ margin: 0 }}>Bildirim Tercihleri</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -93,7 +93,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.all_messages ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -109,7 +109,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.mentions_only ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -125,7 +125,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.direct_messages ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -145,7 +145,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.sound_enabled ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -161,7 +161,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.desktop_enabled ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -177,7 +177,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.email_enabled ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -200,7 +200,7 @@ const NotificationPreferencesPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) =>
                                 style={styles.toggle}
                             >
                                 {preferences.dnd_enabled ?
-                                    <FaToggleOn style={{ color: '#43b581', fontSize: '32px' }} /> :
+                                    <FaToggleOn style={{ color: '#23a559', fontSize: '32px' }} /> :
                                     <FaToggleOff style={{ color: '#888', fontSize: '32px' }} />
                                 }
                             </button>
@@ -297,7 +297,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '10px'
     },
@@ -319,7 +319,7 @@ const styles = {
         display: 'flex',
         gap: '20px',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginTop: '10px'
     },
@@ -343,7 +343,7 @@ const styles = {
     },
     saveBtn: {
         width: '100%',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '12px',

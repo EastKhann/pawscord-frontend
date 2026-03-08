@@ -74,7 +74,7 @@ export const getStyles = (isMobile, isSaving) => ({
   toggle: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' },
   switch: (enabled) => ({
     width: '50px', height: '28px',
-    background: enabled ? 'linear-gradient(135deg, #43b581, #4caf50)' : 'rgba(255,255,255,0.2)',
+    background: enabled ? 'linear-gradient(135deg, #23a559, #4caf50)' : 'rgba(255,255,255,0.2)',
     borderRadius: '14px', position: 'relative', cursor: 'pointer',
     transition: 'all 0.3s ease', border: '2px solid rgba(88,101,242,0.3)',
   }),
@@ -94,7 +94,7 @@ export const getStyles = (isMobile, isSaving) => ({
     cursor: 'pointer', transition: 'all 0.2s ease', minHeight: '44px',
   },
   saveBtn: {
-    flex: 1, padding: '14px', background: 'linear-gradient(135deg, #5865f2, #7289da)',
+    flex: 1, padding: '14px', background: 'linear-gradient(135deg, #5865f2, #5865f2)',
     border: 'none', borderRadius: '8px', color: 'white', fontSize: '16px',
     fontWeight: '600', cursor: isSaving ? 'not-allowed' : 'pointer',
     opacity: isSaving ? 0.6 : 1, transition: 'all 0.2s ease',

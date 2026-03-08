@@ -1,4 +1,4 @@
-/* Community Settings Panel Styles */
+﻿/* Community Settings Panel Styles */
 
 .community-settings-overlay {
     position: fixed;
@@ -15,7 +15,7 @@
 }
 
 .community-settings-panel {
-    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    background: linear-gradient(145deg, #0d0e10, #0d0e10);
     border-radius: 16px;
     width: 100%;
     max-width: 700px;
@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(230, 126, 34, 0.2);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
 
@@ -194,7 +194,7 @@
 }
 
 .form-group select option {
-    background: #1a1a2e;
+    background: #0b0e1b;
 }
 
 .form-group textarea {

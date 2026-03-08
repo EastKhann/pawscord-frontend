@@ -1,4 +1,4 @@
-// frontend/src/components/ReminderModal.js
+﻿// frontend/src/components/ReminderModal.js
 import { useState } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaBell } from 'react-icons/fa';
@@ -130,7 +130,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '500px',
@@ -141,7 +141,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -154,7 +154,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.3em',
         padding: '5px'
@@ -163,10 +163,10 @@ const styles = {
         padding: '20px'
     },
     messagePreview: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '12px',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '0.9em',
         marginBottom: '15px',
         borderLeft: '3px solid #5865f2'
@@ -179,7 +179,7 @@ const styles = {
     presetButton: {
         flex: 1,
         padding: '8px',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         border: '1px solid #5865f2',
         borderRadius: '4px',
         color: 'white',
@@ -191,7 +191,7 @@ const styles = {
     },
     label: {
         display: 'block',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '0.85em',
         marginBottom: '5px',
         fontWeight: 'bold'
@@ -199,7 +199,7 @@ const styles = {
     input: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         border: '1px solid #5865f2',
         borderRadius: '4px',
         color: 'white',

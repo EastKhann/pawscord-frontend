@@ -29,7 +29,7 @@ export const StatusBadge = ({ status }) => {
         <span style={{
             padding: '3px 10px', borderRadius: 6, fontWeight: 700, fontSize: '0.82em',
             backgroundColor: isProfit ? 'rgba(35,165,89,0.12)' : isLoss ? 'rgba(218,55,60,0.12)' : 'rgba(240,178,50,0.12)',
-            color: isProfit ? '#57F287' : isLoss ? '#ED4245' : '#f0b232',
+            color: isProfit ? '#23a559' : isLoss ? '#f23f42' : '#f0b232',
         }}>
             {isProfit ? '✅' : isLoss ? '🔴' : '⚪'} {clean}
         </span>

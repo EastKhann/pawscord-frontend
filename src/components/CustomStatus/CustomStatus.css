@@ -6,7 +6,7 @@
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.15s;
@@ -23,21 +23,21 @@
 .status-text {
     flex: 1;
     font-size: 14px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .status-placeholder {
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     font-size: 14px;
 }
 
 .status-clear-btn {
     background: none;
     border: none;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     cursor: pointer;
     padding: 4px;
     border-radius: 4px;
@@ -51,13 +51,13 @@
 }
 
 .status-clear-btn:hover {
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     background: var(--bg-modifier-selected, rgba(79, 84, 92, 0.6));
 }
 
 /* Editor Mode */
 .custom-status-editor {
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border-radius: 8px;
     padding: 16px;
     width: 100%;
@@ -75,20 +75,20 @@
     margin: 0;
     font-size: 16px;
     font-weight: 600;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .close-btn {
     background: none;
     border: none;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     cursor: pointer;
     font-size: 18px;
     padding: 4px;
 }
 
 .close-btn:hover {
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 /* Input Row */
@@ -104,7 +104,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border-radius: 8px;
     font-size: 20px;
     cursor: pointer;
@@ -117,17 +117,17 @@
 
 .status-input {
     flex: 1;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 8px;
     padding: 10px 14px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     outline: none;
 }
 
 .status-input::placeholder {
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .status-input:focus {
@@ -140,7 +140,7 @@
     grid-template-columns: repeat(8, 1fr);
     gap: 4px;
     padding: 8px;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border-radius: 8px;
     margin-bottom: 12px;
 }
@@ -163,7 +163,7 @@
 .character-count {
     text-align: right;
     font-size: 11px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     margin-bottom: 12px;
 }
 
@@ -175,7 +175,7 @@
 .preset-label {
     display: block;
     font-size: 12px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     margin-bottom: 8px;
 }
 
@@ -186,12 +186,12 @@
 }
 
 .preset-btn {
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 16px;
     padding: 6px 12px;
     font-size: 12px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     cursor: pointer;
     transition: background 0.15s;
 }
@@ -210,16 +210,16 @@
 
 .clear-after-section label {
     font-size: 13px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .clear-after-section select {
     flex: 1;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 4px;
     padding: 8px 12px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 13px;
     cursor: pointer;
     outline: none;
@@ -237,11 +237,11 @@
 }
 
 .btn-secondary {
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 4px;
     padding: 10px 16px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     cursor: pointer;
     transition: background 0.15s;
@@ -272,7 +272,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border-radius: 16px;
     padding: 4px 10px;
 }
@@ -297,7 +297,7 @@
 }
 
 .badge-text {
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -315,7 +315,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid var(--bg-primary, #36393f);
+    border: 2px solid var(--bg-primary, #17191c);
 }
 
 .custom-status-emoji {

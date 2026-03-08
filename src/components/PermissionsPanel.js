@@ -227,7 +227,7 @@ const PermissionsPanel = ({ serverId, roleId, onClose }) => {
                                     className={`role-item ${selectedRole?.id === role.id ? 'active' : ''}`}
                                     onClick={() => setSelectedRole(role)}
                                 >
-                                    <div className="role-icon" style={{ background: role.color || '#8b5cf6' }}>
+                                    <div className="role-icon" style={{ background: role.color || '#5865f2' }}>
                                         {getRoleIcon(role.name)}
                                     </div>
                                     <div className="role-info">

@@ -1,4 +1,4 @@
-export const styles = {
+﻿export const styles = {
     overlay: {
         position: 'fixed',
         top: 0, left: 0, right: 0, bottom: 0,
@@ -23,7 +23,7 @@ export const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -37,21 +37,21 @@ export const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     tabs: {
         display: 'flex',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
         padding: '0 20px',
     },
     tab: {
         padding: '12px 20px',
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '14px',
         display: 'flex',
@@ -69,7 +69,7 @@ export const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     toolbar: {
@@ -88,7 +88,7 @@ export const styles = {
         fontWeight: '500',
     },
     createForm: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         marginBottom: '20px',
@@ -103,7 +103,7 @@ export const styles = {
     },
     label: {
         display: 'block',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         marginBottom: '8px',
         fontWeight: '500',
@@ -112,7 +112,7 @@ export const styles = {
         width: '100%',
         padding: '10px',
         backgroundColor: '#1e1e1e',
-        border: '1px solid #2c2f33',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
         color: '#ffffff',
         fontSize: '14px',
@@ -126,7 +126,7 @@ export const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         cursor: 'pointer',
     },
@@ -138,7 +138,7 @@ export const styles = {
     },
     submitButton: {
         padding: '10px 20px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -148,7 +148,7 @@ export const styles = {
     },
     cancelButton: {
         padding: '10px 20px',
-        backgroundColor: '#4f545c',
+        backgroundColor: '#4e5058',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -157,7 +157,7 @@ export const styles = {
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     appsList: {
@@ -166,7 +166,7 @@ export const styles = {
         gap: '16px',
     },
     appCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
     },
@@ -183,12 +183,12 @@ export const styles = {
     },
     appDescription: {
         fontSize: '14px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     deleteButton: {
         background: 'none',
         border: 'none',
-        color: '#f04747',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '16px',
         padding: '5px',
@@ -203,7 +203,7 @@ export const styles = {
         alignItems: 'center',
         gap: '10px',
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     code: {
         flex: 1,
@@ -217,14 +217,14 @@ export const styles = {
     copyButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '14px',
         padding: '5px',
     },
     detail: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     uri: {
         fontSize: '13px',
@@ -238,7 +238,7 @@ export const styles = {
         gap: '16px',
     },
     botCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
     },
@@ -254,11 +254,11 @@ export const styles = {
     },
     botDescription: {
         fontSize: '14px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '4px',
     },
     botStatus: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
 };

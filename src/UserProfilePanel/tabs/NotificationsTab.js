@@ -8,14 +8,14 @@ const NotificationsTab = ({ handleNotificationSettingsUpdate, notificationSettin
     <div style={styles.card}>
       <h3 style={styles.sectionTitle}>🔔 Bildirim Ayarları</h3>
 
-      <p style={{ color: '#b9bbbe', marginBottom: '24px' }}>
+      <p style={{ color: '#b5bac1', marginBottom: '24px' }}>
         Hangi bildirimlerle uyarılmak istediğinizi seçin.
       </p>
 
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>💬 Mesaj Bildirimleri</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Yeni mesaj geldiğinde bildirim göster
           </p>
         </div>
@@ -47,7 +47,7 @@ const NotificationsTab = ({ handleNotificationSettingsUpdate, notificationSettin
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>@️⃣ Bahsetme Bildirimleri</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Biri sizi etiketlediğinde bildirim göster
           </p>
         </div>
@@ -79,7 +79,7 @@ const NotificationsTab = ({ handleNotificationSettingsUpdate, notificationSettin
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>📨 DM Bildirimleri</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Direkt mesaj geldiğinde bildirim göster
           </p>
         </div>
@@ -111,7 +111,7 @@ const NotificationsTab = ({ handleNotificationSettingsUpdate, notificationSettin
       <div style={styles.settingRow}>
         <div>
           <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>📧 E-posta Bildirimleri</h4>
-          <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+          <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
             Önemli olaylar için e-posta gönder
           </p>
         </div>

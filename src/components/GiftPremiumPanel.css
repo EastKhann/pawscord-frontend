@@ -1,8 +1,8 @@
-.gift-premium-panel {
-    background: #2f3136;
+﻿.gift-premium-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     max-width: 900px;
     margin: 0 auto;
 }
@@ -10,7 +10,7 @@
 .gift-header {
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
     text-align: center;
 }
 
@@ -25,13 +25,13 @@
 }
 
 .gift-header p {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     margin: 0;
 }
 
 .gift-message-alert {
-    background: #40444b;
+    background: #182135;
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 20px;
@@ -45,7 +45,7 @@
 }
 
 .form-section {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
 }
@@ -66,15 +66,15 @@
 }
 
 .input-group label {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
     font-weight: 600;
 }
 
 .form-input {
-    background: #2f3136;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #0e1222;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 12px;
     border-radius: 6px;
     font-size: 14px;
@@ -92,7 +92,7 @@
 }
 
 .plan-card {
-    background: #2f3136;
+    background: #0e1222;
     border: 3px solid transparent;
     border-radius: 12px;
     padding: 20px;
@@ -116,7 +116,7 @@
     position: absolute;
     top: -10px;
     right: -10px;
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     font-size: 11px;
     font-weight: 700;
@@ -139,15 +139,15 @@
 }
 
 .plan-per-month {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
 }
 
 .message-textarea {
     width: 100%;
-    background: #2f3136;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #0e1222;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 12px;
     border-radius: 6px;
     font-size: 14px;
@@ -162,13 +162,13 @@
 
 .char-count {
     text-align: right;
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     margin-top: 5px;
 }
 
 .gift-btn {
-    background: linear-gradient(135deg, #5865f2, #7289da);
+    background: linear-gradient(135deg, #5865f2, #5865f2);
     color: #ffffff;
     border: none;
     padding: 18px;
@@ -195,7 +195,7 @@
 }
 
 .premium-features {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-top: 25px;
@@ -215,7 +215,7 @@
 }
 
 .feature-item {
-    background: #2f3136;
+    background: #0e1222;
     padding: 15px;
     border-radius: 8px;
     display: flex;
@@ -226,7 +226,7 @@
 
 .feature-item:hover {
     transform: translateX(5px);
-    background: #40444b;
+    background: #182135;
 }
 
 .feature-icon {
@@ -235,13 +235,13 @@
 }
 
 .feature-text {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     font-weight: 600;
 }
 
 .info-box {
-    background: #40444b;
+    background: #182135;
     padding: 20px;
     border-radius: 8px;
     border-left: 4px solid #5865f2;
@@ -257,7 +257,7 @@
 .info-box ul {
     margin: 0;
     padding-left: 20px;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
     line-height: 1.8;
 }

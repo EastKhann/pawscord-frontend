@@ -1,4 +1,4 @@
-// frontend/src/ReplyPreview.js
+﻿// frontend/src/ReplyPreview.js
 
 import React from 'react';
 
@@ -18,7 +18,7 @@ const ReplyPreview = ({ message, onCancel }) => {
 
 const styles = {
     container: {
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         padding: '8px 20px',
         margin: '0 -20px 10px -20px',
         display: 'flex',
@@ -31,20 +31,20 @@ const styles = {
     },
     replyingTo: {
         fontSize: '0.8em',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     messageText: {
         margin: 0,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '0.9em',
     },
     cancelButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '1.5em',
         cursor: 'pointer',
         marginLeft: '10px',

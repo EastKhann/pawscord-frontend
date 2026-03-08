@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     height: 64px;
-    background: var(--bg-primary, #1e1f22);
+    background: var(--bg-primary, #0d0e10);
     border-top: 1px solid var(--border-default, rgba(255, 255, 255, 0.06));
     display: flex;
     justify-content: space-around;
@@ -48,7 +48,7 @@
 }
 
 .nav-tab.active .tab-icon {
-    transform: scale(1.15);
+    transform: scale(1.05);
     filter: drop-shadow(0 0 6px rgba(88, 101, 242, 0.7));
 }
 

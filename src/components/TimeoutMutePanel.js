@@ -1,4 +1,4 @@
-// frontend/src/components/TimeoutMutePanel.js
+﻿// frontend/src/components/TimeoutMutePanel.js
 import { useState } from 'react';
 import { FaTimes, FaClock, FaVolumeUp } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -89,7 +89,7 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaClock style={{ color: '#faa61a' }} />
+                        <FaClock style={{ color: '#f0b232' }} />
                         <h2 style={{ margin: 0 }}>Timeout - {username}</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -103,7 +103,7 @@ const TimeoutMutePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, userId, usernam
                                 onClick={() => setDuration(preset.value)}
                                 style={{
                                     ...styles.presetBtn,
-                                    backgroundColor: duration === preset.value ? '#5865f2' : '#2c2f33'
+                                    backgroundColor: duration === preset.value ? '#5865f2' : '#111214'
                                 }}
                             >
                                 {preset.label}
@@ -218,14 +218,14 @@ const styles = {
     label: {
         display: 'block',
         marginBottom: '8px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         fontWeight: '600'
     },
     input: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -234,7 +234,7 @@ const styles = {
     textarea: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -258,7 +258,7 @@ const styles = {
     },
     unmuteBtn: {
         flex: 1,
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '12px',
@@ -273,7 +273,7 @@ const styles = {
     },
     muteBtn: {
         flex: 1,
-        backgroundColor: '#faa61a',
+        backgroundColor: '#f0b232',
         color: '#fff',
         border: 'none',
         padding: '12px',

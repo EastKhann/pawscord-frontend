@@ -1,5 +1,5 @@
 // frontend/src/components/SecurityAlertsPanel.js - Security Alerts Dashboard
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import {
     FaExclamationTriangle, FaTimes, FaShieldAlt, FaCheckCircle,
     FaBan, FaEye, FaFilter, FaClock, FaUser, FaGlobe, FaBell,
@@ -22,7 +22,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
     });
 
     const severityLevels = {
-        critical: { label: 'Kritik', color: '#ef4444', icon: <FaFire /> },
+        critical: { label: 'Kritik', color: '#f23f42', icon: <FaFire /> },
         high: { label: 'Yüksek', color: '#f97316', icon: <FaExclamationTriangle /> },
         medium: { label: 'Orta', color: '#f59e0b', icon: <FaBell /> },
         low: { label: 'Düşük', color: '#3b82f6', icon: <FaShieldAlt /> }
@@ -120,7 +120,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
         }
     };
 
-    const filteredAlerts = alerts.filter(alert => {
+    const filteredAlerts = useMemo(() => alerts.filter(alert => {
         const matchesSearch =
             alert.message?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             alert.source_ip?.includes(searchQuery) ||
@@ -133,7 +133,7 @@ const SecurityAlertsPanel = ({ serverId, apiBaseUrl, onClose }) => {
             (filter === 'critical' && alert.severity === 'critical');
 
         return matchesSearch && matchesFilter;
-    });
+    }), [alerts, searchQuery, filter]);
 
     return (
         <div className="security-alerts-overlay" onClick={onClose}>
@@ -407,4 +407,4 @@ const AlertDetailModal = ({ alert, severityLevels, alertTypes, onClose, onResolv
     );
 };
 
-export default SecurityAlertsPanel;
+export default memo(SecurityAlertsPanel);

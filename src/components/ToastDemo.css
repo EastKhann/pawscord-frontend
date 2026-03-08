@@ -3,7 +3,7 @@
 .toast-demo-container {
     padding: 40px 20px;
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,11 +11,11 @@
 
 .toast-demo-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 12px;
     padding: 40px;
     max-width: 1200px;
     width: 100%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .toast-demo-card h1 {
@@ -50,7 +50,7 @@
 }
 
 .toast-demo-section:hover {
-    border-color: #667eea;
+    border-color: #5865f2;
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
@@ -91,7 +91,7 @@
 }
 
 .demo-btn.error {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
+    background: linear-gradient(135deg, #f23f42, #dc2626);
 }
 
 .demo-btn.warning {
@@ -109,7 +109,7 @@
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #5865f2, #4752c4);
     color: white;
     transition: all 0.3s;
     margin-right: 15px;
@@ -278,7 +278,7 @@
 
 /* Live Test Area */
 .live-test-area {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #5865f2, #4752c4);
     padding: 30px;
     border-radius: 12px;
     color: white;
@@ -325,7 +325,7 @@
     font-weight: 600;
     cursor: pointer;
     background: white;
-    color: #667eea;
+    color: #5865f2;
     transition: all 0.3s;
 }
 

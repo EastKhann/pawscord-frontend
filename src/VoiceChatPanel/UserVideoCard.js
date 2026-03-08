@@ -87,11 +87,11 @@ const UserVideoCard = React.memo(({
             onMouseLeave={() => setShowFullControls(false)}
             onMouseMove={handleFsMouseMove}
             style={{
-                background: 'linear-gradient(135deg, #2c2f33 0%, #23272a 100%)',
+                background: 'linear-gradient(135deg, #111214 0%, #0d0e10 100%)',
                 borderRadius: '16px',
                 overflow: 'hidden',
                 position: 'relative',
-                border: isActive ? '3px solid #43b581' : isPinned ? '3px solid #5865f2' : '1px solid rgba(255, 255, 255, 0.1)',
+                border: isActive ? '3px solid #23a559' : isPinned ? '3px solid #5865f2' : '1px solid rgba(255, 255, 255, 0.1)',
                 boxShadow: isActive ? '0 0 20px rgba(67, 181, 129, 0.5)' : '0 4px 16px rgba(0, 0, 0, 0.3)',
                 transition: 'all 0.3s ease',
                 cursor: user.isLocal ? 'default' : 'pointer',

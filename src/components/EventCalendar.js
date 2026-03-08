@@ -1,4 +1,4 @@
-// frontend/src/components/EventCalendar.js
+﻿// frontend/src/components/EventCalendar.js
 import { useState, useEffect } from 'react';
 import { FaCalendarAlt, FaUsers, FaClock, FaMapMarkerAlt, FaPlus } from 'react-icons/fa';
 
@@ -175,7 +175,7 @@ const EventCard = ({ event, onRSVP, formatDate, formatTime }) => {
 const styles = {
     container: {
         padding: '20px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         minHeight: '400px'
     },
@@ -184,7 +184,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '20px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         paddingBottom: '15px'
     },
     title: {
@@ -209,14 +209,14 @@ const styles = {
         transition: 'background-color 0.2s'
     },
     loading: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         textAlign: 'center',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     emptyIcon: {
         fontSize: '64px',
@@ -232,7 +232,7 @@ const styles = {
         gap: '15px'
     },
     eventCard: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
         border: '1px solid transparent',
@@ -255,7 +255,7 @@ const styles = {
         fontWeight: 'bold'
     },
     eventDescription: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         marginBottom: '12px'
     },
@@ -269,11 +269,11 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px'
     },
     detailIcon: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px'
     },
     rsvpButtons: {
@@ -286,7 +286,7 @@ const styles = {
         border: '1px solid #4e5058',
         borderRadius: '6px',
         backgroundColor: 'transparent',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '14px',
         transition: 'all 0.2s'
@@ -299,7 +299,7 @@ const styles = {
     rsvpButtonInterested: {
         backgroundColor: '#f0b132',
         borderColor: '#f0b132',
-        color: '#1e1f22'
+        color: '#0d0e10'
     }
 };
 

@@ -12,7 +12,7 @@ const NicknameHistoryTab = ({ nicknameHistory }) => {
         <div style={{ padding: '48px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px' }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>📜</div>
           <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Değişiklik yok</h4>
-          <p style={{ color: '#b9bbbe', margin: 0 }}>İsim değişiklikleriniz burada görünecek</p>
+          <p style={{ color: '#b5bac1', margin: 0 }}>İsim değişiklikleriniz burada görünecek</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -30,11 +30,11 @@ const NicknameHistoryTab = ({ nicknameHistory }) => {
                   <p style={{ color: '#fff', margin: 0, fontSize: '14px', fontWeight: '600' }}>
                     {history.old_nickname} → {history.new_nickname}
                   </p>
-                  <p style={{ color: '#b9bbbe', margin: '4px 0 0 0', fontSize: '12px' }}>
+                  <p style={{ color: '#b5bac1', margin: '4px 0 0 0', fontSize: '12px' }}>
                     {history.server_name}
                   </p>
                 </div>
-                <span style={{ color: '#b9bbbe', fontSize: '12px' }}>
+                <span style={{ color: '#b5bac1', fontSize: '12px' }}>
                   {new Date(history.changed_at).toLocaleString('tr-TR')}
                 </span>
               </div>

@@ -17,7 +17,7 @@ const DraftsTab = ({ deleteDraft, drafts }) => {
         }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>📝</div>
           <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Taslak yok</h4>
-          <p style={{ color: '#b9bbbe', margin: 0 }}>
+          <p style={{ color: '#b5bac1', margin: 0 }}>
             Mesaj taslakları otomatik olarak kaydedilir
           </p>
         </div>
@@ -40,7 +40,7 @@ const DraftsTab = ({ deleteDraft, drafts }) => {
                   {draft.channel_name || `Kanal ${draft.channel_id}`}
                 </h4>
                 <p style={{
-                  color: '#b9bbbe',
+                  color: '#b5bac1',
                   margin: 0,
                   fontSize: '13px',
                   overflow: 'hidden',
@@ -49,7 +49,7 @@ const DraftsTab = ({ deleteDraft, drafts }) => {
                 }}>
                   {draft.content}
                 </p>
-                <span style={{ color: '#72767d', fontSize: '11px', marginTop: '4px', display: 'block' }}>
+                <span style={{ color: '#949ba4', fontSize: '11px', marginTop: '4px', display: 'block' }}>
                   {new Date(draft.updated_at).toLocaleString('tr-TR')}
                 </span>
               </div>

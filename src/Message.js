@@ -298,7 +298,7 @@ const Message = ({
                 />
 
                 {msg.snippet_data && msg.snippet_data.type === 'game_xox' ? (
-                    <Suspense fallback={<div style={{ padding: '12px', color: '#b9bbbe', fontSize: '0.9em' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
+                    <Suspense fallback={<div style={{ padding: '12px', color: '#b5bac1', fontSize: '0.9em' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
                         <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
                             onMove={(gid, idx) => { fetchWithAuth(`${absoluteHostUrl}/api/games/xox/move/`, { method: 'POST', body: JSON.stringify({ game_id: gid, index: idx }) }); }} />
                     </Suspense>
@@ -312,7 +312,7 @@ const Message = ({
                     </div>
                 ) : displayContent && (
                     <div style={styles.messageContent}>
-                        {isMessageEncrypted && <span style={{ color: '#43b581', marginRight: 5 }} title="Encrypted"><FaLock /></span>}
+                        {isMessageEncrypted && <span style={{ color: '#23a559', marginRight: 5 }} title="Encrypted"><FaLock /></span>}
                         <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
                             a({ href, children, ...props }) {
                                 const handleLinkClick = (e) => {

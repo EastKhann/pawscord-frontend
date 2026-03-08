@@ -55,7 +55,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: linear-gradient(135deg, #4752c4, #5865f2);
 }
 
 .smart-suggestions-panel .header-info h2 {
@@ -169,8 +169,8 @@
 }
 
 .smart-suggestions-panel .tab.active {
-    color: #a78bfa;
-    border-bottom-color: #a78bfa;
+    color: #5865f2;
+    border-bottom-color: #5865f2;
 }
 
 /* Tab Content */
@@ -240,9 +240,9 @@
 }
 
 .emoji-btn:hover {
-    transform: scale(1.15);
+    transform: scale(1.05);
     background: rgba(255, 255, 255, 0.15);
-    border-color: #a78bfa;
+    border-color: #5865f2;
 }
 
 /* Replies List */
@@ -329,7 +329,7 @@
 }
 
 .action-btn.use {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: linear-gradient(135deg, #4752c4, #5865f2);
     color: white;
 }
 
@@ -356,7 +356,7 @@
 
 .topic-rank {
     font-weight: 700;
-    color: #a78bfa;
+    color: #5865f2;
     width: 30px;
 }
 
@@ -385,7 +385,7 @@
 }
 
 .trend.down {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 .trend.stable {
@@ -443,7 +443,7 @@
 }
 
 .action-item.moderation .action-icon {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    background: linear-gradient(135deg, #5865f2, #7c3aed);
     color: white;
 }
 
@@ -477,8 +477,8 @@
 }
 
 .action-type.moderation {
-    background: rgba(139, 92, 246, 0.2);
-    color: #a78bfa;
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
 }
 
 /* AI Tip */
@@ -493,7 +493,7 @@
 }
 
 .ai-tip svg {
-    color: #a78bfa;
+    color: #5865f2;
     font-size: 1.2rem;
     flex-shrink: 0;
     margin-top: 2px;
@@ -518,7 +518,7 @@
 
 .loading-state .pulse {
     font-size: 3rem;
-    color: #a78bfa;
+    color: #5865f2;
     animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -531,7 +531,7 @@
     }
 
     50% {
-        transform: scale(1.1);
+        transform: scale(1.03);
         opacity: 0.7;
     }
 }

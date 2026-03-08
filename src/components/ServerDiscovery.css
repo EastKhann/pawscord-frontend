@@ -1,4 +1,4 @@
-/* frontend/src/components/ServerDiscovery.css */
+﻿/* frontend/src/components/ServerDiscovery.css */
 
 .discovery-overlay {
     position: fixed;
@@ -7,7 +7,7 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,15 +16,15 @@
 }
 
 .discovery-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     max-width: 1400px;
     width: 95%;
     max-height: 95vh;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
 }
 
 .discovery-header {
@@ -38,7 +38,7 @@
 .discovery-header h2 {
     margin: 0;
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -57,13 +57,13 @@
     align-items: center;
     gap: 12px;
     background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 10px;
     padding: 12px 16px;
 }
 
 .search-bar svg {
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 18px;
 }
 
@@ -81,7 +81,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 12px 16px;
-    color: #e2e3ee;
+    color: #dbdee1;
     cursor: pointer;
     font-size: 14px;
 }
@@ -99,7 +99,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 10px 20px;
-    color: #e2e3ee;
+    color: #dbdee1;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -110,12 +110,12 @@
 }
 
 .category-tab:hover {
-    background: rgba(139, 92, 246, 0.2);
-    border-color: rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.2);
+    border-color: rgba(88, 101, 242, 0.3);
 }
 
 .category-tab.active {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border-color: transparent;
     color: #ffffff;
 }
@@ -147,7 +147,7 @@
 
 .featured-card {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 16px;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -155,12 +155,12 @@
 
 .featured-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 12px 32px rgba(88, 101, 242, 0.3);
 }
 
 .featured-banner {
     height: 120px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     background-size: cover;
     background-position: center;
     position: relative;
@@ -171,7 +171,7 @@
 }
 
 .featured-badge {
-    background: linear-gradient(135deg, #faa61a 0%, #ff9500 100%);
+    background: linear-gradient(135deg, #f0b232 0%, #ff9500 100%);
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 12px;
@@ -196,7 +196,7 @@
     height: 80px;
     border-radius: 50%;
     margin-top: -50px;
-    border: 4px solid #1a1a2e;
+    border: 4px solid #0b0e1b;
     object-fit: cover;
 }
 
@@ -208,7 +208,7 @@
 
 .featured-content p {
     margin: 0;
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -223,7 +223,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #6c6d7d;
+    color: #949ba4;
     font-size: 13px;
     font-weight: 600;
 }
@@ -231,14 +231,14 @@
 .online-dot {
     width: 8px;
     height: 8px;
-    background: #34c759;
+    background: #23a559;
     border-radius: 50%;
     animation: pulse 2s infinite;
 }
 
 .btn-join-large {
     width: 100%;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border: none;
     border-radius: 10px;
     padding: 12px 24px;
@@ -250,8 +250,8 @@
 }
 
 .btn-join-large:hover {
-    background: linear-gradient(135deg, #9d6fff 0%, #7478ff 100%);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
 }
 
 /* Servers Section */
@@ -279,8 +279,8 @@
 }
 
 .server-card:hover {
-    background: rgba(139, 92, 246, 0.05);
-    border-color: rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.05);
+    border-color: rgba(88, 101, 242, 0.3);
     transform: translateY(-2px);
 }
 
@@ -312,8 +312,8 @@
 }
 
 .category-badge {
-    background: rgba(139, 92, 246, 0.2);
-    color: #8b5cf6;
+    background: rgba(88, 101, 242, 0.2);
+    color: #5865f2;
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 11px;
@@ -325,7 +325,7 @@
 
 .server-description {
     margin: 0;
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 13px;
     line-height: 1.5;
     overflow: hidden;
@@ -346,7 +346,7 @@
     display: flex;
     gap: 12px;
     font-size: 12px;
-    color: #6c6d7d;
+    color: #949ba4;
     font-weight: 600;
 }
 
@@ -359,12 +359,12 @@
 .online-dot-small {
     width: 6px;
     height: 6px;
-    background: #34c759;
+    background: #23a559;
     border-radius: 50%;
 }
 
 .btn-join {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border: none;
     border-radius: 8px;
     padding: 8px 20px;
@@ -376,8 +376,8 @@
 }
 
 .btn-join:hover {
-    background: linear-gradient(135deg, #9d6fff 0%, #7478ff 100%);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
 }
 
 .empty-state {
@@ -387,7 +387,7 @@
     justify-content: center;
     padding: 80px 20px;
     text-align: center;
-    color: #6c6d7d;
+    color: #949ba4;
 }
 
 .empty-state svg {
@@ -396,7 +396,7 @@
 }
 
 .empty-state h3 {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 20px;
     margin: 0 0 8px 0;
 }
@@ -412,15 +412,15 @@
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid rgba(139, 92, 246, 0.2);
-    border-top-color: #8b5cf6;
+    border: 4px solid rgba(88, 101, 242, 0.2);
+    border-top-color: #5865f2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
 }
 
 .loading-state p {
-    color: #8b5cf6;
+    color: #5865f2;
     font-weight: 600;
 }
 

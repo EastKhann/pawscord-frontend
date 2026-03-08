@@ -157,10 +157,10 @@ const AvatarCropper = ({ onCropComplete, onCancel, imageFile }) => {
 
         <div className="avatar-cropper-body">
           {!src && (
-            <div style={{ padding: '40px', textAlign: 'center', color: '#dcddde' }}>
+            <div style={{ padding: '40px', textAlign: 'center', color: '#dbdee1' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>⏳</div>
               <p>Fotoğraf yükleniyor...</p>
-              {!imageFile && <p style={{ color: '#f04747', marginTop: '8px' }}>⚠️ Dosya bulunamadı!</p>}
+              {!imageFile && <p style={{ color: '#f23f42', marginTop: '8px' }}>⚠️ Dosya bulunamadı!</p>}
             </div>
           )}
 

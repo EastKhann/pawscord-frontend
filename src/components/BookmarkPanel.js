@@ -1,4 +1,4 @@
-import { useCallback, memo } from 'react';
+﻿import { useCallback, memo } from 'react';
 import { FaTimes, FaTags, FaTrash, FaSearch, FaPlus, FaBookmark, FaFolder } from 'react-icons/fa';
 import { styles } from './BookmarkPanel/bookmarkPanelStyles';
 import useBookmarks from './BookmarkPanel/useBookmarks';
@@ -27,7 +27,7 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
         {/* Header */}
         <div style={styles.header}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FaBookmark style={{ color: '#faa61a' }} />
+            <FaBookmark style={{ color: '#f0b232' }} />
             <h2 style={{ margin: 0 }}>Kaydedilenler</h2>
           </div>
           <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -48,12 +48,12 @@ const BookmarkPanel = ({ fetchWithAuth, apiBaseUrl, onClose, onMessageClick }) =
         {/* Tags */}
         <div style={styles.tagsContainer}>
           <button onClick={handleSelectAllTags}
-            style={{ ...styles.tagChip, backgroundColor: !selectedTag ? '#5865f2' : '#2c2f33' }}>
+            style={{ ...styles.tagChip, backgroundColor: !selectedTag ? '#5865f2' : '#111214' }}>
             <FaFolder /> Tümü ({bookmarks.length})
           </button>
           {tags.map(tag => (
             <button key={tag.id} onClick={() => setSelectedTag(tag.id)}
-              style={{ ...styles.tagChip, backgroundColor: selectedTag === tag.id ? tag.color : '#2c2f33', borderLeft: `3px solid ${tag.color}` }}>
+              style={{ ...styles.tagChip, backgroundColor: selectedTag === tag.id ? tag.color : '#111214', borderLeft: `3px solid ${tag.color}` }}>
               <FaTags /> {tag.name} ({tag.bookmark_count || 0})
             </button>
           ))}

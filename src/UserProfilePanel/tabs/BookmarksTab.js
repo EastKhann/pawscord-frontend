@@ -17,7 +17,7 @@ const BookmarksTab = ({ bookmarks }) => {
         }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>🔖</div>
           <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Henüz yer imi yok</h4>
-          <p style={{ color: '#b9bbbe', margin: 0 }}>
+          <p style={{ color: '#b5bac1', margin: 0 }}>
             Mesajları işaretleyerek buraya ekleyebilirsiniz
           </p>
         </div>
@@ -43,12 +43,12 @@ const BookmarksTab = ({ bookmarks }) => {
                   <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>
                     {bookmark.author_name}
                   </h4>
-                  <span style={{ color: '#b9bbbe', fontSize: '12px' }}>
+                  <span style={{ color: '#b5bac1', fontSize: '12px' }}>
                     {bookmark.channel_name} • {new Date(bookmark.timestamp).toLocaleString('tr-TR')}
                   </span>
                 </div>
               </div>
-              <p style={{ color: '#dcddde', margin: 0, fontSize: '14px' }}>
+              <p style={{ color: '#dbdee1', margin: 0, fontSize: '14px' }}>
                 {bookmark.content}
               </p>
             </div>

@@ -1,4 +1,4 @@
-const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -13,7 +13,7 @@ const styles = {
         padding: '20px'
     },
     panel: {
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '100%',
         maxWidth: '1200px',
@@ -26,7 +26,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '20px',
-        borderBottom: '1px solid #202225'
+        borderBottom: '1px solid #0b0e1b'
     },
     headerLeft: {
         display: 'flex',
@@ -57,7 +57,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '8px'
     },
@@ -65,7 +65,7 @@ const styles = {
         display: 'flex',
         gap: '8px',
         padding: '16px 20px',
-        borderBottom: '1px solid #202225'
+        borderBottom: '1px solid #0b0e1b'
     },
     filterButton: {
         padding: '8px 16px',
@@ -83,7 +83,7 @@ const styles = {
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     tournamentGrid: {
         display: 'grid',
@@ -91,7 +91,7 @@ const styles = {
         gap: '16px'
     },
     tournamentCard: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -126,7 +126,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px'
     },
     cardFooter: {
@@ -136,7 +136,7 @@ const styles = {
     },
     viewButton: {
         flex: 1,
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         color: '#ffffff',
         border: 'none',
         padding: '8px',
@@ -157,7 +157,7 @@ const styles = {
     },
     leaveButton: {
         flex: 1,
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         color: '#ffffff',
         border: 'none',
         padding: '8px',
@@ -178,7 +178,7 @@ const styles = {
         zIndex: 10001
     },
     modal: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         padding: '24px',
         width: '90%',
@@ -197,9 +197,9 @@ const styles = {
     },
     input: {
         width: '100%',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         border: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         padding: '10px',
         borderRadius: '4px',
         fontSize: '14px',
@@ -237,7 +237,7 @@ const styles = {
     modalClose: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '4px'
     },
@@ -247,14 +247,14 @@ const styles = {
         gap: '16px'
     },
     detailSection: {
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         padding: '16px',
         borderRadius: '8px'
     },
     bracketInfo: {
         textAlign: 'center',
         padding: '20px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     participantList: {
         display: 'grid',
@@ -262,16 +262,16 @@ const styles = {
         gap: '8px'
     },
     participant: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         padding: '8px 12px',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '13px',
         display: 'flex',
         justifyContent: 'space-between'
     },
     seed: {
-        color: '#faa61a',
+        color: '#f0b232',
         fontWeight: 'bold'
     }
 };

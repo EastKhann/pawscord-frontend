@@ -20,7 +20,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
             <div style={styles.modal} onClick={e => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
-                        <FaWallet style={{ fontSize: '24px', color: '#faa61a' }} />
+                        <FaWallet style={{ fontSize: '24px', color: '#f0b232' }} />
                         <h2 style={{ margin: 0, fontSize: '20px' }}>Payment Center</h2>
                     </div>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>
@@ -46,7 +46,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                     ) : activeTab === 'balance' ? (
                         <div style={styles.balanceView}>
                             <div style={styles.balanceCard}>
-                                <FaCoins style={{ fontSize: '48px', color: '#faa61a' }} />
+                                <FaCoins style={{ fontSize: '48px', color: '#f0b232' }} />
                                 <div style={styles.balanceAmount}>{balance.toLocaleString()}</div>
                                 <div style={styles.balanceLabel}>Current Balance</div>
                             </div>
@@ -76,13 +76,13 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                         <div key={idx} style={styles.transaction}>
                                             <div style={styles.txIcon}>
                                                 {tx.type === 'purchase' ? <FaCreditCard style={{ color: '#5865f2' }} />
-                                                    : <FaCoins style={{ color: tx.type === 'transfer_sent' ? '#f04747' : '#43b581' }} />}
+                                                    : <FaCoins style={{ color: tx.type === 'transfer_sent' ? '#f23f42' : '#23a559' }} />}
                                             </div>
                                             <div style={styles.txDetails}>
                                                 <div style={styles.txTitle}>{tx.description}</div>
                                                 <div style={styles.txDate}>{new Date(tx.created_at).toLocaleString()}</div>
                                             </div>
-                                            <div style={{ ...styles.txAmount, color: tx.amount > 0 ? '#43b581' : '#f04747' }}>
+                                            <div style={{ ...styles.txAmount, color: tx.amount > 0 ? '#23a559' : '#f23f42' }}>
                                                 {tx.amount > 0 ? '+' : ''}{tx.amount}
                                             </div>
                                         </div>

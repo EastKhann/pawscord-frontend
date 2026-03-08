@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaExternalLinkAlt, FaImage, FaVideo, FaPlay, FaTimes } from 'react-icons/fa';
 
 const LinkPreviewRenderer = ({ url, onRemove }) => {
@@ -129,21 +129,21 @@ const styles = {
         alignItems: 'center',
         gap: '12px',
         padding: '16px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         borderLeft: '4px solid #5865f2',
     },
     loadingSpinner: {
         width: '20px',
         height: '20px',
-        border: '3px solid #2c2f33',
+        border: '3px solid #0e1222',
         borderTop: '3px solid #5865f2',
         borderRadius: '50%',
         animation: 'spin 1s linear infinite',
     },
     loadingText: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     removeButton: {
         position: 'absolute',
@@ -164,7 +164,7 @@ const styles = {
     },
     linkPreview: {
         display: 'flex',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         overflow: 'hidden',
         textDecoration: 'none',
@@ -213,7 +213,7 @@ const styles = {
     },
     description: {
         fontSize: '12px',
-        color: '#dcddde',
+        color: '#dbdee1',
         lineHeight: '1.4',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -223,13 +223,13 @@ const styles = {
     },
     url: {
         fontSize: '11px',
-        color: '#99aab5',
+        color: '#949ba4',
         display: 'flex',
         alignItems: 'center',
         marginTop: 'auto',
     },
     videoPreview: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         overflow: 'hidden',
         borderLeft: '4px solid #FF0000',
@@ -281,7 +281,7 @@ const styles = {
     },
     videoDescription: {
         fontSize: '12px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
         lineHeight: '1.4',
     },

@@ -1,4 +1,4 @@
-﻿// frontend/src/components/ServerSettingsModal.js
+// frontend/src/components/ServerSettingsModal.js
 // Refactored: All tabs extracted as self-contained components
 
 import { useState, useEffect, useCallback } from 'react';
@@ -211,7 +211,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                             {activeTab === 'autoresponders' && (
                                 <div>
                                     <h3 style={styles.sectionTitle}>🤖 Otomatik Yanıtlar</h3>
-                                    <p style={{ color: '#b9bbbe', marginBottom: '20px' }}>
+                                    <p style={{ color: '#b5bac1', marginBottom: '20px' }}>
                                         Belirli anahtar kelimeler için otomatik yanıtlar oluşturun.
                                     </p>
                                     <AutoResponderManager serverId={server.id} fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} embedded={true} />
@@ -221,7 +221,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                             {activeTab === 'vanity' && (
                                 <div>
                                     <h3 style={styles.sectionTitle}>🔗 Özel Davet URL'i</h3>
-                                    <p style={{ color: '#b9bbbe', marginBottom: '20px' }}>
+                                    <p style={{ color: '#b5bac1', marginBottom: '20px' }}>
                                         Sunucunuz için hatırlanması kolay özel bir URL oluşturun.
                                     </p>
                                     <VanityURLManager serverId={server.id} fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} embedded={true} />
@@ -231,7 +231,7 @@ const ServerSettingsModal = ({ onClose, server, currentUsername, fetchWithAuth, 
                             {activeTab === 'welcome' && (
                                 <div>
                                     <h3 style={styles.sectionTitle}>👋 Hoş Geldin Mesajı</h3>
-                                    <p style={{ color: '#b9bbbe', marginBottom: '20px' }}>
+                                    <p style={{ color: '#b5bac1', marginBottom: '20px' }}>
                                         Yeni üyeler için özel hoş geldin mesajı oluşturun.
                                     </p>
                                     <WelcomeTemplateEditor serverId={server.id} fetchWithAuth={fetchWithAuth} apiBaseUrl={apiBaseUrl} />

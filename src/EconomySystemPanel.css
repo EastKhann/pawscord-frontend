@@ -4,7 +4,7 @@
     right: 0;
     width: 500px;
     height: 100vh;
-    background: #2f3136;
+    background: #0e1222;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -50,7 +50,7 @@
 
     50% {
         opacity: 1;
-        transform: rotate(180deg) scale(1.2);
+        transform: rotate(180deg) scale(1.05);
     }
 
     100% {
@@ -61,9 +61,9 @@
 }
 
 .panel-header {
-    background: #202225;
+    background: #0b0e1b;
     padding: 20px;
-    border-bottom: 1px solid #1e1f22;
+    border-bottom: 1px solid #0b0e1b;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -86,7 +86,7 @@
 .close-btn {
     background: none;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 24px;
     cursor: pointer;
     padding: 8px;
@@ -95,7 +95,7 @@
 }
 
 .close-btn:hover {
-    background: #40444b;
+    background: #182135;
     color: #fff;
 }
 
@@ -131,7 +131,7 @@
 }
 
 .balance-label {
-    color: #1e1f22;
+    color: #0d0e10;
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
@@ -162,14 +162,14 @@
 }
 
 .amount {
-    color: #1e1f22;
+    color: #0d0e10;
     font-size: 42px;
     font-weight: 800;
     line-height: 1;
 }
 
 .currency {
-    color: #1e1f22;
+    color: #0d0e10;
     font-size: 18px;
     font-weight: 600;
     opacity: 0.8;
@@ -183,7 +183,7 @@
 .btn-daily {
     background: rgba(0, 0, 0, 0.2);
     border: none;
-    color: #1e1f22;
+    color: #0d0e10;
     padding: 10px 16px;
     border-radius: 6px;
     font-size: 13px;
@@ -204,7 +204,7 @@
 .transfer-section,
 .leaderboard-section,
 .transactions-section {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -235,15 +235,15 @@
 }
 
 .form-group label {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .transfer-input {
-    background: #2f3136;
-    border: 2px solid #2f3136;
+    background: #0e1222;
+    border: 2px solid #0e1222;
     color: #fff;
     padding: 12px;
     border-radius: 6px;
@@ -281,7 +281,7 @@
     right: 8px;
     background: #ffd700;
     border: none;
-    color: #1e1f22;
+    color: #0d0e10;
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 12px;
@@ -302,9 +302,9 @@
 }
 
 .quick-amount-btn {
-    background: #2f3136;
-    border: 2px solid #2f3136;
-    color: #b9bbbe;
+    background: #0e1222;
+    border: 2px solid #0e1222;
+    color: #b5bac1;
     padding: 8px;
     border-radius: 6px;
     font-size: 12px;
@@ -325,10 +325,10 @@
 
 .error-message {
     background: rgba(237, 66, 69, 0.1);
-    border: 1px solid #ed4245;
+    border: 1px solid #f23f42;
     border-radius: 6px;
     padding: 10px;
-    color: #ed4245;
+    color: #f23f42;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -338,7 +338,7 @@
 .btn-transfer {
     background: linear-gradient(135deg, #ffd700, #ffed4e);
     border: none;
-    color: #1e1f22;
+    color: #0d0e10;
     padding: 14px;
     border-radius: 8px;
     font-size: 15px;
@@ -371,7 +371,7 @@
 }
 
 .leaderboard-item {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
     padding: 12px;
     display: flex;
@@ -382,7 +382,7 @@
 }
 
 .leaderboard-item:hover {
-    background: #36393f;
+    background: #121928;
     transform: translateX(4px);
 }
 
@@ -408,7 +408,7 @@
     justify-content: center;
     font-size: 16px;
     font-weight: 700;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .rank i.gold {
@@ -480,9 +480,9 @@
 }
 
 .filter-btn {
-    background: #2f3136;
+    background: #0e1222;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 12px;
@@ -492,7 +492,7 @@
 }
 
 .filter-btn:hover {
-    background: #36393f;
+    background: #121928;
     color: #fff;
 }
 
@@ -512,7 +512,7 @@
 .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .empty-state i {
@@ -531,7 +531,7 @@
 }
 
 .transaction-item {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
     padding: 12px;
     display: flex;
@@ -542,7 +542,7 @@
 }
 
 .transaction-item:hover {
-    background: #36393f;
+    background: #121928;
 }
 
 .transaction-item.green {
@@ -550,7 +550,7 @@
 }
 
 .transaction-item.red {
-    border-left-color: #ed4245;
+    border-left-color: #f23f42;
 }
 
 .transaction-icon {
@@ -571,7 +571,7 @@
 
 .transaction-item.red .transaction-icon {
     background: rgba(237, 66, 69, 0.2);
-    color: #ed4245;
+    color: #f23f42;
 }
 
 .transaction-info {
@@ -582,7 +582,7 @@
 }
 
 .transaction-title {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
 }
 
@@ -592,13 +592,13 @@
 }
 
 .transaction-note {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 12px;
     font-style: italic;
 }
 
 .transaction-time {
-    color: #72767d;
+    color: #949ba4;
     font-size: 11px;
 }
 
@@ -617,7 +617,7 @@
 }
 
 .transaction-item.red .transaction-amount {
-    color: #ed4245;
+    color: #f23f42;
 }
 
 .transaction-amount i {
@@ -636,7 +636,7 @@
     padding: 16px;
     display: flex;
     gap: 15px;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
 }
 
@@ -674,7 +674,7 @@
 
 .panel-content::-webkit-scrollbar-thumb,
 .transactions-list::-webkit-scrollbar-thumb {
-    background: #202225;
+    background: #0b0e1b;
     border-radius: 4px;
 }
 

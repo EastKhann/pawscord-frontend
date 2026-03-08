@@ -5,8 +5,8 @@ const StickyMessageBanner = ({ message, type = 'info', onDismiss }) => {
 
     const bgColors = {
         info: 'linear-gradient(90deg, #5865F2 0%, #4752C4 100%)',
-        warning: 'linear-gradient(90deg, #FAA61A 0%, #F57C00 100%)',
-        error: 'linear-gradient(90deg, #ED4245 0%, #C62828 100%)',
+        warning: 'linear-gradient(90deg, #f0b232 0%, #F57C00 100%)',
+        error: 'linear-gradient(90deg, #f23f42 0%, #C62828 100%)',
         success: 'linear-gradient(90deg, #3BA55C 0%, #2D7D46 100%)'
     };
 

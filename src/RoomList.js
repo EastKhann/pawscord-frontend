@@ -18,6 +18,7 @@ import QuickAccessButtons from './RoomList/QuickAccessButtons';
 import VoiceControlBar from './RoomList/VoiceControlBar';
 import SupportButton from './RoomList/SupportButton';
 import RoomListModals from './RoomList/RoomListModals';
+import JoinServerModal from './components/JoinServerModal';
 import './RoomList/animations';
 
 const RoomList = ({
@@ -36,7 +37,8 @@ const RoomList = ({
     updateAvailable = false, onUpdateClick, onOpenStore, onOpenAnalytics, onOpenAdminPanel,
     onOpenPaymentPanel, onOpenStoreModal, onOpenDailyRewards, onOpenAPIUsage,
     onOpenExportJobs, onOpenScheduledAnnouncements,
-    onOpenMiniGames, onOpenProjectCollaboration, onOpenAvatarStudio, onServerSelect
+    onOpenMiniGames, onOpenProjectCollaboration, onOpenAvatarStudio, onServerSelect,
+    openDiscovery = false, onDiscoveryOpened
 }) => {
     // --- Derived values ---
     const safeUnreadCounts = unreadCounts || {};
@@ -55,11 +57,11 @@ const RoomList = ({
     const voiceRoomDisplayName = useMemo(() => {
         if (!currentVoiceRoom) return '';
         for (const server of servers) {
-            if (server.categories) {
-                for (const cat of server.categories) {
-                    const foundRoom = cat.rooms?.find(r => r.slug === currentVoiceRoom);
-                    if (foundRoom) return String(foundRoom.name);
-                }
+            if (!server || !server.categories) continue;
+            for (const cat of server.categories) {
+                if (!cat || !cat.rooms) continue;
+                const foundRoom = cat.rooms.find(r => r && r.slug === currentVoiceRoom);
+                if (foundRoom) return String(foundRoom.name);
             }
         }
         return String(currentVoiceRoom);
@@ -127,6 +129,15 @@ const RoomList = ({
 
     // --- Effects ---
     useEffect(() => {
+        if (openDiscovery) {
+            setShowDiscovery(true);
+            handleOpenDiscovery();
+            onDiscoveryOpened?.();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [openDiscovery]);
+
+    useEffect(() => {
         if (activeChat && (activeChat.type === 'welcome' || activeChat.type === 'friends' || activeChat.type === 'dm')) {
             setSelectedServerId('home');
         }
@@ -144,6 +155,7 @@ const RoomList = ({
     const toggleCategory = (id) => setCollapsedCategories(p => ({ ...p, [id]: !p[id] }));
 
     const handleServerClick = (server) => {
+        if (!server || !server.id) return;
         setSelectedServerId(server.id);
         if (onServerSelect) onServerSelect(server);
     };
@@ -237,7 +249,7 @@ const RoomList = ({
                 handleServerDragEndWrapper={handleServerDragEndWrapper}
                 handleServerDropWrapper={handleServerDropWrapper}
                 onOpenStore={onOpenStore}
-                onDiscoverClick={() => { setShowDiscovery(true); handleOpenDiscovery(); }}
+                onDiscoverClick={() => setShowDiscovery(true)}
                 onAddClick={() => setShowAddMenu(true)}
             />
 
@@ -251,6 +263,8 @@ const RoomList = ({
                         onFriendsClick={onFriendsClick} pendingFriendRequests={pendingFriendRequests}
                         safeUnreadCounts={safeUnreadCounts} onlineUsers={onlineUsers} allUsers={allUsers}
                         getAvatarUrl={getAvatarUrl} setDmContextMenu={setDmContextMenu}
+                        onDiscoverClick={() => setShowDiscovery(true)}
+                        servers={servers}
                     />
                 )}
 
@@ -285,14 +299,14 @@ const RoomList = ({
                     />
                 )}
 
-                <AddServerModal isOpen={showAddMenu} onClose={() => setShowAddMenu(false)} onCreateServer={handleCreateServer} />
+                <AddServerModal isOpen={showAddMenu} onClose={() => setShowAddMenu(false)} onCreateServer={handleCreateServer} onFriendsClick={onFriendsClick} onDiscoverClick={() => { setShowAddMenu(false); setShowDiscovery(true); }} />
 
                 <div style={styles.bottomSection}>
                     {/* Admin Panel Button */}
                     {isAdmin && (
                         <button onClick={onOpenAdminPanel} style={{
                             width: '100%', padding: '12px', marginBottom: '10px',
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
                             border: 'none', borderRadius: '8px', color: 'white',
                             fontWeight: '600', fontSize: '0.95em', cursor: 'pointer',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
@@ -372,6 +386,9 @@ const RoomList = ({
                 showChannelSettings={showChannelSettings} setShowChannelSettings={setShowChannelSettings}
                 selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom}
             />
+
+            {/* Yeni bağımsız Sunucuya Katıl modal */}
+            <JoinServerModal isOpen={showDiscovery} onClose={() => setShowDiscovery(false)} />
         </div>
     );
 };

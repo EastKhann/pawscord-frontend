@@ -35,7 +35,7 @@ const VoiceRecordingUI = ({
                 <div style={{
                     position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)',
                     opacity: cancelProgress, transition: 'opacity 0.1s ease',
-                    color: cancelProgress > 0.7 ? '#ed4245' : '#72767d',
+                    color: cancelProgress > 0.7 ? '#f23f42' : '#949ba4',
                     fontSize: '18px', pointerEvents: 'none',
                 }}>
                     <FaTrash />
@@ -59,7 +59,7 @@ const VoiceRecordingUI = ({
                     <div style={styles.slideToLock}>
                         <div style={{
                             ...styles.slideMicCircle,
-                            backgroundColor: slideProgress > 0.7 ? '#43b581' : `rgba(237, 66, 69, ${0.6 + slideProgress * 0.4})`,
+                            backgroundColor: slideProgress > 0.7 ? '#23a559' : `rgba(237, 66, 69, ${0.6 + slideProgress * 0.4})`,
                             transform: `scale(${1 + slideProgress * 0.3}) translateY(${-slideProgress * 20}px)`,
                             boxShadow: slideProgress > 0.5 ? '0 0 12px rgba(67,181,129,0.5)' : '0 0 8px rgba(237,66,69,0.3)',
                         }}>
@@ -69,12 +69,12 @@ const VoiceRecordingUI = ({
                             <div style={{
                                 ...styles.slideTrackFill,
                                 height: `${slideProgress * 100}%`,
-                                backgroundColor: slideProgress > 0.7 ? '#43b581' : '#ed4245',
+                                backgroundColor: slideProgress > 0.7 ? '#23a559' : '#f23f42',
                             }} />
                         </div>
                         <span style={{
                             ...styles.slideLabel,
-                            color: slideProgress > 0.7 ? '#43b581' : '#72767d',
+                            color: slideProgress > 0.7 ? '#23a559' : '#949ba4',
                         }}>
                             {slideProgress > 0.7 ? 'Bırak → Kilitle' : '↑ Kilitle'}
                         </span>

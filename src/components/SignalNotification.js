@@ -1,4 +1,4 @@
-// frontend/src/components/SignalNotification.js
+﻿// frontend/src/components/SignalNotification.js
 
 import { useEffect, useState } from 'react';
 import { useGlobalWebSocket } from '../GlobalWebSocketContext'; // Context'i içe aktar
@@ -83,7 +83,7 @@ const styles = {
         top: '20px',
         right: '20px',
         width: '320px',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         boxShadow: '0 8px 20px rgba(0,0,0,0.5)',
         borderLeft: '5px solid #f0b232',
@@ -118,7 +118,7 @@ const styles = {
         marginBottom: '5px'
     },
     coinName: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontWeight: 'bold',
         fontSize: '1.1em'
     },

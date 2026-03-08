@@ -8,6 +8,7 @@ import toast from './utils/toast';
 import { useRecaptcha } from './utils/recaptcha';
 import { jwtDecode } from 'jwt-decode'; // 🔥 FIX: Import jwtDecode for user extraction
 import { API_URL_BASE_STRING, API_BASE_URL, isElectron, isNative, GOOGLE_WEB_CLIENT_ID } from './utils/constants';
+import './LoginPage.css';
 
 // --- ORTAM AYARLARI (Centralized from constants.js) ---
 const API_URL = API_BASE_URL;
@@ -363,7 +364,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                     </div>
 
                     <button type="submit" className="submit-btn" disabled={isLoading}>
-                        {isLoading ? <div className="spinner"></div> : (isLoginMode ? "Giriş Yap" : "Kayıt Ol")}
+                        {isLoading ? <div className="spinner-white"></div> : (isLoginMode ? "Giriş Yap" : "Kayıt Ol")}
                     </button>
                 </form>
 

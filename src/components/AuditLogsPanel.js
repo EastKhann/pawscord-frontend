@@ -131,7 +131,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
 
   const getActionColor = (actionType) => {
     if (actionType.includes('delete') || actionType.includes('remove') || actionType.includes('kick') || actionType.includes('ban')) {
-      return '#ef4444';
+      return '#f23f42';
     }
     if (actionType.includes('create') || actionType.includes('add') || actionType.includes('join')) {
       return '#10b981';
@@ -139,7 +139,7 @@ const AuditLogsPanel = ({ serverId, onClose }) => {
     if (actionType.includes('edit') || actionType.includes('update')) {
       return '#f59e0b';
     }
-    return '#6366f1';
+    return '#4752c4';
   };
 
   const formatDate = (dateString) => {

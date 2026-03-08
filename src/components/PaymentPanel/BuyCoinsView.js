@@ -36,11 +36,11 @@ const BuyCoinsView = ({ styles, amount, setAmount, paymentMethod, setPaymentMeth
             {COIN_PACKAGES.map((pkg, idx) => (
                 <div key={idx} onClick={() => setAmount(pkg.amount)}
                     style={{ ...styles.package, ...(amount === pkg.amount && styles.selectedPackage) }}>
-                    <FaCoins style={{ fontSize: '32px', color: '#faa61a' }} />
+                    <FaCoins style={{ fontSize: '32px', color: '#f0b232' }} />
                     <div style={styles.pkgAmount}>{pkg.amount.toLocaleString()}</div>
                     {pkg.bonus > 0 && <div style={styles.bonus}>+{pkg.bonus} BONUS</div>}
                     <div style={styles.price}>${pkg.price}</div>
-                    {amount === pkg.amount && <FaCheckCircle style={{ position: 'absolute', top: '10px', right: '10px', color: '#43b581' }} />}
+                    {amount === pkg.amount && <FaCheckCircle style={{ position: 'absolute', top: '10px', right: '10px', color: '#23a559' }} />}
                 </div>
             ))}
         </div>
@@ -57,7 +57,7 @@ const BuyCoinsView = ({ styles, amount, setAmount, paymentMethod, setPaymentMeth
                 </div>
                 <div style={styles.paymentInfoRow}>
                     <span>Total Price:</span>
-                    <strong style={{ color: '#faa61a', fontSize: '18px' }}>
+                    <strong style={{ color: '#f0b232', fontSize: '18px' }}>
                         {COIN_PACKAGES.find(p => p.amount === amount)?.price && (
                             paymentMethod === 'iyzico'
                                 ? `₺${(COIN_PACKAGES.find(p => p.amount === amount).price * 35).toFixed(0)}`

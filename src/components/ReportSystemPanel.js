@@ -33,12 +33,12 @@ const ReportSystemPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                         <div style={styles.statLabel}>Pending</div>
                     </div>
                     <div style={styles.statCard}>
-                        <FaCheck style={{ ...styles.statIcon, color: '#43b581' }} />
+                        <FaCheck style={{ ...styles.statIcon, color: '#23a559' }} />
                         <div style={styles.statValue}>{stats.resolved}</div>
                         <div style={styles.statLabel}>Resolved</div>
                     </div>
                     <div style={styles.statCard}>
-                        <FaTimes style={{ ...styles.statIcon, color: '#72767d' }} />
+                        <FaTimes style={{ ...styles.statIcon, color: '#949ba4' }} />
                         <div style={styles.statValue}>{stats.dismissed}</div>
                         <div style={styles.statLabel}>Dismissed</div>
                     </div>

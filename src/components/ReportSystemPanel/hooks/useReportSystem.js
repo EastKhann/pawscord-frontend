@@ -82,19 +82,19 @@ export const useReportSystem = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const getReportBadgeColor = (status) => {
         switch (status) {
             case 'pending': return '#f0b132';
-            case 'resolved': return '#43b581';
-            case 'dismissed': return '#72767d';
+            case 'resolved': return '#23a559';
+            case 'dismissed': return '#949ba4';
             default: return '#5865f2';
         }
     };
 
     const getSeverityColor = (severity) => {
         switch (severity) {
-            case 'low': return '#43b581';
+            case 'low': return '#23a559';
             case 'medium': return '#f0b132';
-            case 'high': return '#ed4245';
+            case 'high': return '#f23f42';
             case 'critical': return '#a12929';
-            default: return '#72767d';
+            default: return '#949ba4';
         }
     };
 

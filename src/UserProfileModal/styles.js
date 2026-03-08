@@ -1,196 +1,232 @@
-// UserProfileModal/styles.js
+﻿// UserProfileModal/styles.js — v3 premium dark redesign
 export const styles = {
     overlay: {
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.82)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
-        backdropFilter: 'blur(8px)'
+        zIndex: 9999,
+        backdropFilter: 'blur(14px)',
+        WebkitBackdropFilter: 'blur(14px)',
     },
     modal: {
-        width: '500px',
-        maxWidth: '90vw',
-        backgroundColor: '#2f3136',
-        borderRadius: '16px',
-        boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+        width: '460px',
+        maxWidth: '95vw',
+        backgroundColor: 'rgba(30, 31, 35, 0.92)',
+        backdropFilter: 'blur(48px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(48px) saturate(180%)',
+        borderRadius: '22px',
+        border: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 48px 96px rgba(0,0,0,0.75)',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
         overflow: 'hidden',
-        maxHeight: '90vh',
-        border: '1px solid rgba(255, 255, 255, 0.1)'
+        maxHeight: '92vh',
+        animation: 'profileModalEnter 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)',
     },
     actionButton: {
-        padding: '12px 20px',
+        padding: '8px 16px',
         color: 'white',
-        border: 'none',
-        borderRadius: '8px',
+        border: '1px solid rgba(255,255,255,0.1)',
+        borderRadius: '13px',
         fontWeight: '600',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '8px',
-        fontSize: '14px',
-        transition: 'all 0.2s',
-        cursor: 'pointer'
+        gap: '6px',
+        fontSize: '13px',
+        transition: 'filter 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease',
+        cursor: 'pointer',
+        letterSpacing: '0.01em',
+        backdropFilter: 'blur(8px)',
     },
     messageButton: {
-        padding: '12px 20px',
-        backgroundColor: '#5865f2',
+        padding: '8px 16px',
+        background: 'linear-gradient(135deg, #5865f2, #4752c4)',
         color: 'white',
         border: 'none',
-        borderRadius: '4px',
+        borderRadius: '13px',
         cursor: 'pointer',
-        fontWeight: 'bold',
-        fontSize: '0.9em'
+        fontWeight: '600',
+        fontSize: '13px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        transition: 'filter 0.15s ease, transform 0.12s ease',
+        letterSpacing: '0.01em',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
     },
     content: {
-        padding: '20px',
-        maxHeight: '60vh',
-        overflowY: 'auto'
+        padding: '18px 22px 22px',
+        maxHeight: '52vh',
+        overflowY: 'auto',
+        scrollbarWidth: 'thin',
+        scrollbarColor: 'rgba(255,255,255,0.08) transparent',
     },
     username: {
-        color: 'var(--text-primary)',
-        margin: '0 0 10px 0',
-        fontSize: '1.8em'
+        color: '#f2f3f5',
+        margin: '0 0 6px 0',
+        fontSize: '1.55em',
+        fontWeight: '800',
+        letterSpacing: '-0.025em',
+        lineHeight: 1.1,
     },
     friendCodeContainer: {
-        backgroundColor: 'rgba(88, 101, 242, 0.1)',
-        padding: '10px 15px',
-        borderRadius: '8px',
+        backgroundColor: 'rgba(88,101,242,0.07)',
+        padding: '11px 16px',
+        borderRadius: '10px',
         cursor: 'pointer',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        border: '1px dashed #5865f2',
-        marginBottom: '15px',
-        transition: 'background-color 0.2s'
+        border: '1px solid rgba(88,101,242,0.25)',
+        marginBottom: '16px',
+        transition: 'all 0.2s ease',
     },
     friendCodeLabel: {
-        fontSize: '0.75em',
-        color: '#949ba4',
+        fontSize: '0.67em',
+        color: '#7289ff',
         textTransform: 'uppercase',
-        fontWeight: 'bold',
-        marginBottom: '4px'
+        fontWeight: '700',
+        letterSpacing: '0.1em',
+        marginBottom: '4px',
     },
     friendCodeValue: {
-        fontSize: '1.3em',
-        color: '#5865f2',
+        fontSize: '1.2em',
+        color: '#c9cfff',
         fontWeight: '800',
-        letterSpacing: '2px'
+        letterSpacing: '4px',
+        fontFamily: "'Fira Code', 'Cascadia Code', monospace"
     },
     section: {
-        marginTop: '20px'
+        marginTop: '18px'
     },
     sectionTitle: {
-        color: 'var(--text-secondary)',
-        fontSize: '0.8em',
-        fontWeight: 'bold',
+        color: '#72767d',
+        fontSize: '0.69em',
+        fontWeight: '700',
         textTransform: 'uppercase',
-        margin: '0 0 8px 0',
-        borderBottom: '1px solid var(--border-primary)',
-        paddingBottom: '5px'
+        letterSpacing: '0.1em',
+        margin: '0 0 10px 0',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
     },
     statusText: {
-        color: 'var(--text-primary)',
+        color: '#dbdee1',
         margin: 0,
-        fontSize: '0.9em'
+        fontSize: '0.93em',
+        lineHeight: '1.5',
+        padding: '10px 14px',
+        background: 'rgba(255,255,255,0.04)',
+        borderRadius: '8px',
+        borderLeft: '3px solid #5865f2'
     },
     linksContainer: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'
+        gap: '6px'
     },
     linkButton: {
         display: 'flex',
         alignItems: 'center',
-        padding: '10px 12px',
-        backgroundColor: 'var(--background-secondary)',
-        borderRadius: '4px',
-        color: 'var(--text-primary)',
+        padding: '9px 14px',
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        borderRadius: '8px',
+        color: '#dbdee1',
         textDecoration: 'none',
-        transition: 'background-color 0.2s ease',
-        border: 'none',
+        transition: 'background-color 0.15s ease',
+        border: '1px solid rgba(255,255,255,0.07)',
         fontFamily: 'inherit',
-        fontSize: '1em',
+        fontSize: '0.9em',
         width: 'auto',
         cursor: 'pointer',
         textAlign: 'left',
-        alignSelf: 'flex-start'
+        alignSelf: 'stretch'
     },
     linkText: {
         marginLeft: '10px',
-        fontWeight: '500'
+        fontWeight: '500',
+        color: '#c9cdd2'
     },
     tabsContainer: {
         display: 'flex',
-        gap: '10px',
-        borderBottom: '2px solid var(--background-tertiary)',
-        marginBottom: '20px'
+        gap: '2px',
+        background: 'rgba(255,255,255,0.04)',
+        borderRadius: '10px',
+        padding: '3px',
+        marginBottom: '16px',
+        border: '1px solid rgba(255,255,255,0.05)',
     },
     tabButton: {
         background: 'none',
         border: 'none',
-        padding: '10px 20px',
-        color: 'var(--text-secondary)',
+        padding: '7px 12px',
+        color: '#72767d',
         cursor: 'pointer',
-        fontWeight: '500',
-        borderBottom: '2px solid transparent',
-        transition: 'all 0.2s',
+        fontWeight: '600',
+        fontSize: '12.5px',
+        borderRadius: '8px',
+        transition: 'all 0.15s ease',
         display: 'flex',
         alignItems: 'center',
-        gap: '5px'
+        gap: '5px',
+        flex: 1,
+        justifyContent: 'center',
+        whiteSpace: 'nowrap',
     },
     activeTab: {
-        color: 'var(--brand-color)',
-        borderBottomColor: 'var(--brand-color)'
+        color: '#e3e5e8',
+        background: 'linear-gradient(135deg, rgba(88,101,242,0.3) 0%, rgba(88,101,242,0.18) 100%)',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.4)',
     },
     presenceTimeline: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
-        marginTop: '15px'
+        gap: '8px',
+        marginTop: '12px'
     },
     presenceEntry: {
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        padding: '10px',
-        backgroundColor: 'var(--background-secondary)',
-        borderRadius: '6px',
-        transition: 'background-color 0.2s'
+        padding: '10px 14px',
+        backgroundColor: 'rgba(255,255,255,0.04)',
+        borderRadius: '8px',
+        border: '1px solid rgba(255,255,255,0.06)',
+        transition: 'background-color 0.15s ease'
     },
     presenceStatus: {
-        width: '12px',
-        height: '12px',
+        width: '10px',
+        height: '10px',
         borderRadius: '50%',
-        flexShrink: 0
+        flexShrink: 0,
+        boxShadow: '0 0 6px currentColor'
     },
     presenceDetails: {
         display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         flex: 1
     },
     presenceStatusText: {
-        color: 'var(--text-primary)',
+        color: '#dbdee1',
         fontWeight: '500',
-        fontSize: '0.95em'
+        fontSize: '0.9em'
     },
     presenceTime: {
-        color: 'var(--text-secondary)',
-        fontSize: '0.85em'
+        color: '#72767d',
+        fontSize: '0.8em',
+        fontVariantNumeric: 'tabular-nums'
     },
     noDataText: {
-        color: 'var(--text-secondary)',
+        color: '#72767d',
         textAlign: 'center',
-        padding: '20px',
-        fontStyle: 'italic'
+        padding: '28px 20px',
+        fontStyle: 'italic',
+        fontSize: '0.9em'
     }
 };

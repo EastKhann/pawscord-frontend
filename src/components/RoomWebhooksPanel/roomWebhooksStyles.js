@@ -1,4 +1,4 @@
-export const styles = {
+﻿export const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -26,7 +26,7 @@ export const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -40,7 +40,7 @@ export const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -52,7 +52,7 @@ export const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     section: {
@@ -82,7 +82,7 @@ export const styles = {
         alignItems: 'center',
     },
     createForm: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '20px',
         marginBottom: '16px',
@@ -92,7 +92,7 @@ export const styles = {
     },
     label: {
         display: 'block',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         marginBottom: '8px',
         fontWeight: '500',
@@ -101,7 +101,7 @@ export const styles = {
         width: '100%',
         padding: '10px',
         backgroundColor: '#1e1e1e',
-        border: '1px solid #2c2f33',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
         color: '#ffffff',
         fontSize: '14px',
@@ -115,7 +115,7 @@ export const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         cursor: 'pointer',
     },
@@ -129,7 +129,7 @@ export const styles = {
     },
     createButton: {
         padding: '10px 20px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -139,7 +139,7 @@ export const styles = {
     },
     cancelButton: {
         padding: '10px 20px',
-        backgroundColor: '#4f545c',
+        backgroundColor: '#4e5058',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -153,11 +153,11 @@ export const styles = {
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     webhookCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '16px',
     },
@@ -180,7 +180,7 @@ export const styles = {
     },
     webhookEvents: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     webhookActions: {
         display: 'flex',
@@ -189,7 +189,7 @@ export const styles = {
     iconButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '16px',
         padding: '5px',
@@ -202,7 +202,7 @@ export const styles = {
         overflowY: 'auto',
     },
     deliveryCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '12px',
     },
@@ -224,21 +224,21 @@ export const styles = {
     },
     deliveryTime: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     deliveryBody: {
         display: 'flex',
         flexDirection: 'column',
         gap: '4px',
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     deliveryInfo: {
         display: 'flex',
         gap: '8px',
     },
     deliveryError: {
-        color: '#f04747',
+        color: '#f23f42',
         marginTop: '4px',
     },
     retryButton: {

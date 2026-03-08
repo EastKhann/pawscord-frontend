@@ -39,7 +39,7 @@ const Row = memo(({ index, style, data, isScrolling }) => {
     if (isScrolling && data.showPlaceholderWhileScrolling) {
         return (
             <div style={style}>
-                <div style={{ padding: '8px 16px', color: '#72767d', fontSize: '0.85em' }}>
+                <div style={{ padding: '8px 16px', color: '#949ba4', fontSize: '0.85em' }}>
                     {message.username || '...'}
                 </div>
             </div>

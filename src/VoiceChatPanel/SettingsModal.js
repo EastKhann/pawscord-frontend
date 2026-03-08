@@ -34,7 +34,7 @@ const SettingsModal = ({
         {/* Content */}
         <div style={styles.content}>
           {/* Mic Test */}
-          <div style={{ ...styles.section, border: isTesting ? '2px solid #43b581' : '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ ...styles.section, border: isTesting ? '2px solid #23a559' : '1px solid rgba(255,255,255,0.1)' }}>
             <div style={styles.sectionHeader}>
               <div style={styles.sectionTitleRow}>🎤 Mikrofon Testi</div>
               <div style={styles.descNoMargin}>Mikrofonunuzun çalışıp çalışmadığını test edin</div>
@@ -47,11 +47,11 @@ const SettingsModal = ({
                 <div style={styles.levelBar}>
                   <div style={{
                     height: '100%', width: `${micLevel}%`,
-                    background: micLevel > 70 ? '#43b581' : micLevel > 40 ? '#faa61a' : '#ed4245',
+                    background: micLevel > 70 ? '#23a559' : micLevel > 40 ? '#f0b232' : '#f23f42',
                     borderRadius: '4px', transition: 'width 0.1s ease',
                   }} />
                 </div>
-                <div style={{ fontSize: '12px', color: micLevel > 10 ? '#43b581' : '#ed4245', textAlign: 'center', fontWeight: 600 }}>
+                <div style={{ fontSize: '12px', color: micLevel > 10 ? '#23a559' : '#f23f42', textAlign: 'center', fontWeight: 600 }}>
                   {micLevel > 10 ? '✅ Mikrofonunuz çalışıyor!' : '⚠️ Konuşun veya ses yapın'}
                 </div>
               </div>
@@ -127,7 +127,7 @@ const SettingsModal = ({
                   <option value="KeyV">V</option>
                   <option value="KeyC">C</option>
                 </select>
-                <div style={{ fontSize: '11px', color: '#43b581', marginTop: '6px', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#23a559', marginTop: '6px', textAlign: 'center' }}>
                   ℹ️ Tuşa basılı tutunca konuşursunuz
                 </div>
               </div>
@@ -156,7 +156,7 @@ const SettingsModal = ({
             </div>
             <div style={{
               marginTop: '8px', fontSize: '12px', textAlign: 'center',
-              color: tempVadSensitivity < 35 ? '#ff9800' : tempVadSensitivity > 60 ? '#ff9800' : '#43b581',
+              color: tempVadSensitivity < 35 ? '#ff9800' : tempVadSensitivity > 60 ? '#ff9800' : '#23a559',
             }}>
               {tempVadSensitivity < 35 ? '⚠️ Çok hassas - False positive olabilir'
                 : tempVadSensitivity > 60 ? '⚠️ Az hassas - Konuşma algılanmayabilir'
@@ -185,7 +185,7 @@ const SettingsModal = ({
                 onChange={(e) => { const v = parseInt(e.target.value); setTempScreenFPS(v); onScreenFPSChange && onScreenFPSChange(v); }}
                 style={{ width: '100%', cursor: 'pointer' }} />
             </div>
-            <div style={{ fontSize: '12px', textAlign: 'center', color: tempScreenFPS === 30 ? '#43b581' : '#faa61a' }}>
+            <div style={{ fontSize: '12px', textAlign: 'center', color: tempScreenFPS === 30 ? '#23a559' : '#f0b232' }}>
               {tempScreenFPS === 30 ? '✅ Optimal (Önerilen)' : tempScreenFPS < 30 ? '⚠️ Düşük FPS' : '⚠️ Yüksek bandwidth'}
             </div>
             <div style={{ marginTop: '12px' }}>

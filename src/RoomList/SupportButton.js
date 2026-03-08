@@ -1,4 +1,4 @@
-// frontend/src/RoomList/SupportButton.js
+﻿// frontend/src/RoomList/SupportButton.js
 import React from 'react';
 import { FaHeart } from '../utils/iconOptimization';
 
@@ -7,7 +7,7 @@ const SupportButton = ({ onClick }) => {
         <div
             onClick={onClick}
             style={{
-                backgroundColor: '#1e1f22', padding: '10px 14px', margin: '0 8px 8px 8px',
+                backgroundColor: '#0d0e10', padding: '10px 14px', margin: '0 8px 8px 8px',
                 borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 border: '1px solid transparent',

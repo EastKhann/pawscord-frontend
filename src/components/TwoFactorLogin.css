@@ -12,13 +12,13 @@
 }
 
 .twofa-login-content {
-    background: var(--background-primary, #36393f);
+    background: var(--background-primary, #17191c);
     border-radius: 8px;
     padding: 40px;
     max-width: 450px;
     width: 90%;
     position: relative;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
@@ -29,7 +29,7 @@
     background: transparent;
     border: none;
     font-size: 28px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     cursor: pointer;
     width: 36px;
     height: 36px;
@@ -54,7 +54,7 @@
 
 .twofa-login-subtitle {
     text-align: center;
-    color: var(--text-muted, #b9bbbe);
+    color: var(--text-muted, #b5bac1);
     margin: 0 0 30px 0;
     font-size: 14px;
 }
@@ -67,7 +67,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -79,8 +79,8 @@
     font-size: 28px;
     text-align: center;
     letter-spacing: 8px;
-    background: var(--background-secondary, #2f3136);
-    border: 2px solid var(--background-tertiary, #202225);
+    background: var(--background-secondary, #111214);
+    border: 2px solid var(--background-tertiary, #0d0e10);
     border-radius: 6px;
     color: var(--text-normal, #fff);
     font-family: 'Courier New', monospace;
@@ -143,10 +143,10 @@
 
 .twofa-login-error {
     background: rgba(237, 66, 69, 0.1);
-    border-left: 4px solid #ed4245;
+    border-left: 4px solid #f23f42;
     padding: 12px;
     border-radius: 4px;
-    color: #ed4245;
+    color: #f23f42;
     font-weight: 600;
     margin-bottom: 16px;
     font-size: 14px;
@@ -155,7 +155,7 @@
 .twofa-login-help {
     margin-top: 24px;
     padding: 16px;
-    background: var(--background-secondary, #2f3136);
+    background: var(--background-secondary, #111214);
     border-radius: 6px;
     font-size: 13px;
     line-height: 1.6;
@@ -163,13 +163,13 @@
 
 .twofa-login-help p {
     margin: 0 0 8px 0;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .twofa-login-help ul {
     margin: 0;
     padding-left: 20px;
-    color: var(--text-muted, #b9bbbe);
+    color: var(--text-muted, #b5bac1);
 }
 
 .twofa-login-help li {

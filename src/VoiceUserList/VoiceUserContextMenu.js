@@ -21,7 +21,7 @@ const MenuItem = ({ className = 'user-context-menu-item', icon, label, onClick, 
             borderRadius: '4px',
             cursor: 'pointer',
             fontSize: '13px',
-            color: danger ? '#ed4245' : '#dcddde',
+            color: danger ? '#f23f42' : '#dbdee1',
             transition: 'background 0.1s, color 0.1s',
             userSelect: 'none',
             ...extraStyle,
@@ -38,7 +38,7 @@ const SectionLabel = ({ children }) => (
         fontWeight: '700',
         textTransform: 'uppercase',
         letterSpacing: '0.6px',
-        color: '#72767d',
+        color: '#949ba4',
         padding: '8px 12px 4px',
     }}>
         {children}
@@ -146,7 +146,7 @@ const VoiceUserContextMenu = ({
                 />
                 <div>
                     <div style={{ fontWeight: '600', fontSize: '14px', color: '#fff', lineHeight: 1.2 }}>{userObj.username}</div>
-                    {isSelf && <div style={{ fontSize: '11px', color: '#b9bbbe', marginTop: '2px' }}>Sensin</div>}
+                    {isSelf && <div style={{ fontSize: '11px', color: '#b5bac1', marginTop: '2px' }}>Sensin</div>}
                 </div>
             </div>
 
@@ -186,7 +186,7 @@ const VoiceUserContextMenu = ({
                                 position: 'absolute', left: 0, top: 0, bottom: 0,
                                 width: `${Math.min((volumeVal / 200) * 100, 100)}%`,
                                 background: volumeVal > 100
-                                    ? 'linear-gradient(90deg, #5865f2, #7289da)'
+                                    ? 'linear-gradient(90deg, #5865f2, #5865f2)'
                                     : '#5865f2',
                                 borderRadius: '2px',
                                 transition: 'width 0.04s',
@@ -236,7 +236,7 @@ const VoiceUserContextMenu = ({
                                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                                 gap: '8px', padding: '8px 12px', margin: '1px 4px',
                                 borderRadius: '4px', cursor: 'pointer', fontSize: '13px',
-                                color: '#dcddde', transition: 'background 0.1s', userSelect: 'none',
+                                color: '#dbdee1', transition: 'background 0.1s', userSelect: 'none',
                             }}
                         >
                             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -244,7 +244,7 @@ const VoiceUserContextMenu = ({
                                 Başka Kanala Taşı
                             </span>
                             <span style={{
-                                fontSize: '10px', color: '#72767d',
+                                fontSize: '10px', color: '#949ba4',
                                 transform: showMoveMenu ? 'rotate(90deg)' : 'none',
                                 transition: 'transform 0.18s ease',
                                 display: 'inline-block',
@@ -264,7 +264,7 @@ const VoiceUserContextMenu = ({
                                 padding: '2px 0',
                             }}>
                                 {otherChannels.length === 0 ? (
-                                    <div style={{ padding: '8px 12px', fontSize: '12px', color: '#72767d', cursor: 'default' }}>
+                                    <div style={{ padding: '8px 12px', fontSize: '12px', color: '#949ba4', cursor: 'default' }}>
                                         Başka kanal yok
                                     </div>
                                 ) : otherChannels.map(channel => (
@@ -278,7 +278,7 @@ const VoiceUserContextMenu = ({
                                             display: 'flex', alignItems: 'center', gap: '6px',
                                             padding: '6px 12px', margin: '1px 4px',
                                             borderRadius: '4px', cursor: 'pointer',
-                                            fontSize: '12px', color: '#b9bbbe',
+                                            fontSize: '12px', color: '#b5bac1',
                                             transition: 'background 0.1s', userSelect: 'none',
                                         }}
                                     >

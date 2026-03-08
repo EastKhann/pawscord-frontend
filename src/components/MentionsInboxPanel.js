@@ -1,4 +1,4 @@
-// frontend/src/components/MentionsInboxPanel.js
+﻿// frontend/src/components/MentionsInboxPanel.js
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaInbox, FaTimes, FaHashtag, FaReply, FaThumbtack, FaSync } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';
@@ -162,7 +162,7 @@ const styles = {
         width: '500px',
         maxWidth: '90vw',
         maxHeight: '80vh',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         overflow: 'hidden',
         display: 'flex',
@@ -174,8 +174,8 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '16px 20px',
-        borderBottom: '1px solid #202225',
-        backgroundColor: '#292b2f',
+        borderBottom: '1px solid #0b0e1b',
+        backgroundColor: '#0d0e10',
     },
     headerLeft: {
         display: 'flex',
@@ -194,7 +194,7 @@ const styles = {
         color: '#fff',
     },
     badge: {
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         color: '#fff',
         fontSize: '11px',
         fontWeight: 700,
@@ -206,7 +206,7 @@ const styles = {
     refreshBtn: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '6px',
         borderRadius: '4px',
@@ -215,7 +215,7 @@ const styles = {
     closeBtn: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '6px',
         borderRadius: '4px',
@@ -232,12 +232,12 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '48px 24px',
-        color: '#72767d',
+        color: '#949ba4',
     },
     emptyTitle: {
         fontSize: '16px',
         fontWeight: 600,
-        color: '#dcddde',
+        color: '#dbdee1',
         margin: '12px 0 4px',
     },
     emptySubtitle: {
@@ -265,11 +265,11 @@ const styles = {
         fontSize: '14px',
     },
     mentionTime: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px',
     },
     mentionContent: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         lineHeight: 1.5,
         wordBreak: 'break-word',
@@ -291,7 +291,7 @@ const styles = {
         alignItems: 'center',
         gap: '4px',
         backgroundColor: 'rgba(255,255,255,0.06)',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '2px 8px',
         borderRadius: '4px',
         fontSize: '12px',
@@ -301,7 +301,7 @@ const styles = {
         alignItems: 'center',
         gap: '4px',
         backgroundColor: 'rgba(250, 166, 26, 0.1)',
-        color: '#faa61a',
+        color: '#f0b232',
         padding: '2px 8px',
         borderRadius: '4px',
         fontSize: '12px',

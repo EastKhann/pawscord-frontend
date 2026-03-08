@@ -20,11 +20,11 @@ const PremiumTab = ({ premiumStatus }) => {
             <h4 style={{ color: '#ffd700', margin: '0 0 12px 0', fontSize: '20px' }}>
               ⭐ Premium Üye
             </h4>
-            <p style={{ color: '#b9bbbe', margin: 0 }}>
+            <p style={{ color: '#b5bac1', margin: 0 }}>
               Premium üyeliğiniz aktif! Tüm özel özelliklere erişiminiz var.
             </p>
             {premiumStatus.expires_at && (
-              <p style={{ color: '#b9bbbe', margin: '8px 0 0 0', fontSize: '13px' }}>
+              <p style={{ color: '#b5bac1', margin: '8px 0 0 0', fontSize: '13px' }}>
                 📅 Bitiş tarihi: {new Date(premiumStatus.expires_at).toLocaleDateString('tr-TR')}
               </p>
             )}
@@ -71,11 +71,11 @@ const PremiumTab = ({ premiumStatus }) => {
             <h4 style={{ color: '#fff', margin: '0 0 12px 0', fontSize: '24px' }}>
               Premium'a Yükselt
             </h4>
-            <p style={{ color: '#b9bbbe', margin: '0 0 24px 0' }}>
+            <p style={{ color: '#b5bac1', margin: '0 0 24px 0' }}>
               Özel özelliklerle deneyiminizi geliştirin
             </p>
             <div style={{ fontSize: '32px', fontWeight: '700', color: '#5865f2', marginBottom: '8px' }}>
-              $4.99<span style={{ fontSize: '16px', color: '#b9bbbe' }}>/ay</span>
+              $4.99<span style={{ fontSize: '16px', color: '#b5bac1' }}>/ay</span>
             </div>
             <button
               style={{

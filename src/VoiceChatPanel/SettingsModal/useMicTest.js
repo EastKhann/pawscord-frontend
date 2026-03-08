@@ -6,6 +6,7 @@ const useMicTest = () => {
     const testStreamRef = useRef(null);
     const analyserRef = useRef(null);
     const animationRef = useRef(null);
+    const audioContextRef = useRef(null);
 
     useEffect(() => {
         if (!isTesting) {
@@ -13,6 +14,10 @@ const useMicTest = () => {
             if (testStreamRef.current) {
                 testStreamRef.current.getTracks().forEach(track => track.stop());
                 testStreamRef.current = null;
+            }
+            if (audioContextRef.current) {
+                audioContextRef.current.close();
+                audioContextRef.current = null;
             }
             setMicLevel(0);
             return;
@@ -28,13 +33,21 @@ const useMicTest = () => {
 
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 const audioContext = new AudioContext();
+                audioContextRef.current = audioContext;
+
                 const analyser = audioContext.createAnalyser();
                 analyser.fftSize = 2048;
                 analyser.smoothingTimeConstant = 0.4;
                 analyserRef.current = analyser;
 
+                // Loopback gain — sesi hoparlore yonlendir (kullanici kendini duysun)
+                const loopbackGain = audioContext.createGain();
+                loopbackGain.gain.value = 0.85;
+
                 const source = audioContext.createMediaStreamSource(stream);
                 source.connect(analyser);
+                source.connect(loopbackGain);
+                loopbackGain.connect(audioContext.destination);
 
                 // 🔥 Time-domain RMS+peak hybrid — perceptual scaling
                 const dataArray = new Uint8Array(analyser.fftSize);
@@ -68,6 +81,10 @@ const useMicTest = () => {
             if (animationRef.current) cancelAnimationFrame(animationRef.current);
             if (testStreamRef.current) {
                 testStreamRef.current.getTracks().forEach(track => track.stop());
+            }
+            if (audioContextRef.current) {
+                audioContextRef.current.close();
+                audioContextRef.current = null;
             }
         };
     }, [isTesting]);

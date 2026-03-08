@@ -32,8 +32,8 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
                     <div style={{
                         marginBottom: '20px', padding: '12px', borderRadius: '8px',
                         backgroundColor: api.statusMsg.type === 'success' ? 'rgba(67, 181, 129, 0.2)' : (api.statusMsg.type === 'info' ? 'rgba(88, 101, 242, 0.2)' : 'rgba(240, 71, 71, 0.2)'),
-                        color: api.statusMsg.type === 'success' ? '#43b581' : (api.statusMsg.type === 'info' ? '#dee0fc' : '#f04747'),
-                        border: `1px solid ${api.statusMsg.type === 'success' ? '#43b581' : (api.statusMsg.type === 'info' ? '#5865f2' : '#f04747')}`,
+                        color: api.statusMsg.type === 'success' ? '#23a559' : (api.statusMsg.type === 'info' ? '#dee0fc' : '#f23f42'),
+                        border: `1px solid ${api.statusMsg.type === 'success' ? '#23a559' : (api.statusMsg.type === 'info' ? '#5865f2' : '#f23f42')}`,
                         display: 'flex', alignItems: 'center', gap: '10px', animation: 'fadeIn 0.3s ease'
                     }}>
                         {api.statusMsg.type === 'info' && <FaBell />}{api.statusMsg.text}
@@ -43,7 +43,7 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
                 {api.activeTab === 'add' && (
                     <div style={styles.addSection}>
                         <h3 style={{ color: '#fff', marginBottom: '10px' }}>ARKADA{'Ş'} EKLE</h3>
-                        <p style={{ color: '#b9bbbe', fontSize: '0.9em', marginBottom: '20px' }}>Kullan{'ı'}c{'ı'} ad{'ı'}n{'ı'} girerek arkada{'ş'} ekleyebilirsin.</p>
+                        <p style={{ color: '#b5bac1', fontSize: '0.9em', marginBottom: '20px' }}>Kullan{'ı'}c{'ı'} ad{'ı'}n{'ı'} girerek arkada{'ş'} ekleyebilirsin.</p>
                         <form onSubmit={api.handleSendRequest} style={styles.addForm}>
                             <input type="text" value={api.addUsername} onChange={(e) => api.setAddUsername(e.target.value)}
                                 placeholder="Kullanıcı Adı veya Arkadaş Kodu (Örn: 8392014)" aria-label="Kullanıcı adı veya arkadaş kodu" style={styles.input} autoFocus />

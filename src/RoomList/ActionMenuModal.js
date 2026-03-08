@@ -10,7 +10,7 @@ const ActionMenuModal = ({ actionMenu, onClose, onRename, onDelete, onSettings }
     return (
         <div style={styles.modalOverlay} {...overlayProps}>
             <div style={{ ...styles.selectionModalContent, width: '250px' }} {...dialogProps}>
-                <h4 style={{ color: 'white', marginTop: 0, borderBottom: '1px solid #4f545c', paddingBottom: 10 }}>{actionMenu.name}</h4>
+                <h4 style={{ color: 'white', marginTop: 0, borderBottom: '1px solid #4e5058', paddingBottom: 10 }}>{actionMenu.name}</h4>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {actionMenu.type === 'room' && (
@@ -36,7 +36,7 @@ const ActionMenuModal = ({ actionMenu, onClose, onRename, onDelete, onSettings }
                         <FaTrash /> Sil
                     </button>
                 </div>
-                <button style={{ marginTop: 15, background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', width: '100%' }} onClick={onClose}>İptal</button>
+                <button style={{ marginTop: 15, background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', width: '100%' }} onClick={onClose}>İptal</button>
             </div>
         </div>
     );

@@ -12,17 +12,18 @@ const useStoreAPI = ({ fetchWithAuth, apiBaseUrl }) => {
     const loadStoreItems = async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/store/items/`);
+            if (!response.ok) { setItems([]); return; }
             const data = await response.json();
             setItems(data.items || []);
         } catch (error) {
             console.error('Failed to load store items:', error);
-            toast.error('Failed to load store');
         } finally { setLoading(false); }
     };
 
     const loadBalance = async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/users/balance/`);
+            if (!response.ok) return;
             const data = await response.json();
             setBalance(data.balance || 0);
         } catch (error) { console.error('Failed to load balance:', error); }

@@ -1,23 +1,23 @@
-// WatchPartyEnhanced/styles.js
+﻿// WatchPartyEnhanced/styles.js
 const styles = {
     container: {
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: '#1e1f22', zIndex: 9999,
+        backgroundColor: '#0d0e10', zIndex: 9999,
         display: 'flex', flexDirection: 'column'
     },
     header: {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '16px 20px', backgroundColor: '#2b2d31',
+        padding: '16px 20px', backgroundColor: '#111214',
         borderBottom: '1px solid rgba(255,255,255,0.1)'
     },
     headerLeft: { display: 'flex', alignItems: 'center', gap: '12px' },
     title: { fontSize: '18px', fontWeight: 'bold', color: '#ffffff' },
     participantCount: {
-        fontSize: '13px', color: '#b9bbbe',
+        fontSize: '13px', color: '#b5bac1',
         backgroundColor: 'rgba(88, 101, 242, 0.15)', padding: '4px 8px', borderRadius: '12px'
     },
     closeButton: {
-        background: 'none', border: 'none', color: '#b9bbbe',
+        background: 'none', border: 'none', color: '#b5bac1',
         cursor: 'pointer', padding: '8px', borderRadius: '4px', transition: 'all 0.2s'
     },
     mainContent: { display: 'flex', flex: 1, overflow: 'hidden' },
@@ -73,7 +73,7 @@ const styles = {
     volumeSlider: { width: '80px', height: '4px' },
     quickReactions: {
         display: 'flex', gap: '8px', padding: '12px 20px',
-        backgroundColor: '#2b2d31', borderTop: '1px solid rgba(255,255,255,0.1)',
+        backgroundColor: '#111214', borderTop: '1px solid rgba(255,255,255,0.1)',
         justifyContent: 'center'
     },
     reactionButton: {
@@ -82,7 +82,7 @@ const styles = {
         cursor: 'pointer', transition: 'all 0.2s'
     },
     chatSection: {
-        width: '350px', backgroundColor: '#2b2d31',
+        width: '350px', backgroundColor: '#111214',
         borderLeft: '1px solid rgba(255,255,255,0.1)',
         display: 'flex', flexDirection: 'column'
     },
@@ -100,13 +100,13 @@ const styles = {
         borderRadius: '8px', marginBottom: '8px', wordWrap: 'break-word'
     },
     messageSender: { fontWeight: 'bold', color: '#5865f2', marginRight: '6px', fontSize: '13px' },
-    messageText: { color: '#dcddde', fontSize: '13px' },
+    messageText: { color: '#dbdee1', fontSize: '13px' },
     chatInput: {
         display: 'flex', gap: '8px', padding: '12px',
         borderTop: '1px solid rgba(255,255,255,0.1)'
     },
     chatInputField: {
-        flex: 1, backgroundColor: '#383a40', border: 'none',
+        flex: 1, backgroundColor: '#1e2024', border: 'none',
         borderRadius: '4px', padding: '10px 12px', color: '#fff',
         fontSize: '14px', outline: 'none'
     },
@@ -117,14 +117,14 @@ const styles = {
     },
     settingsPanel: {
         position: 'absolute', bottom: '80px', right: '20px',
-        backgroundColor: '#2b2d31', borderRadius: '8px',
+        backgroundColor: '#111214', borderRadius: '8px',
         padding: '16px', minWidth: '200px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.3)'
     },
     settingsTitle: { color: '#fff', fontSize: '14px', fontWeight: 'bold', marginBottom: '12px' },
     settingItem: { marginBottom: '12px' },
     select: {
-        width: '100%', backgroundColor: '#383a40', border: 'none',
+        width: '100%', backgroundColor: '#1e2024', border: 'none',
         color: '#fff', padding: '8px', borderRadius: '4px',
         fontSize: '13px', marginTop: '4px'
     }

@@ -1,8 +1,8 @@
-.ocr-panel {
-    background: #2f3136;
+﻿.ocr-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -10,12 +10,12 @@
 .ocr-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .ocr-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -23,7 +23,7 @@
 }
 
 .ocr-error {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     padding: 12px;
     border-radius: 4px;
@@ -36,7 +36,7 @@
 
 .upload-area {
     display: block;
-    background: #40444b;
+    background: #182135;
     border: 2px dashed #5865f2;
     border-radius: 8px;
     padding: 40px;
@@ -47,12 +47,12 @@
 }
 
 .upload-area:hover {
-    background: #36393f;
+    background: #121928;
     border-color: #4752c4;
 }
 
 .upload-placeholder {
-    color: #b9bbbe;
+    color: #b5bac1;
 }
 
 .upload-icon {
@@ -69,7 +69,7 @@
 
 .upload-placeholder span {
     font-size: 13px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .image-preview {
@@ -102,7 +102,7 @@
 }
 
 .ocr-result {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
 }
@@ -113,7 +113,7 @@
     align-items: center;
     margin-bottom: 15px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #2f3136;
+    border-bottom: 1px solid #0e1222;
 }
 
 .result-header h3 {
@@ -140,7 +140,7 @@
 }
 
 .copy-btn {
-    background: #43b581;
+    background: #23a559;
     color: #ffffff;
     border: none;
     padding: 8px 16px;
@@ -159,7 +159,7 @@
 }
 
 .copy-btn.copied {
-    background: #43b581;
+    background: #23a559;
     animation: checkPulse 0.5s;
 }
 
@@ -171,15 +171,15 @@
     }
 
     50% {
-        transform: scale(1.1);
+        transform: scale(1.03);
     }
 }
 
 .extracted-text {
-    background: #2f3136;
+    background: #0e1222;
     padding: 15px;
     border-radius: 4px;
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     line-height: 1.6;
     white-space: pre-wrap;
@@ -192,10 +192,10 @@
 }
 
 .extracted-text::-webkit-scrollbar-track {
-    background: #40444b;
+    background: #182135;
 }
 
 .extracted-text::-webkit-scrollbar-thumb {
-    background: #202225;
+    background: #0b0e1b;
     border-radius: 4px;
 }

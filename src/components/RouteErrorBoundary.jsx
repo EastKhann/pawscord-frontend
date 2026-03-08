@@ -16,6 +16,7 @@
  */
 
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 
 class RouteErrorBoundary extends React.Component {
     constructor(props) {
@@ -45,6 +46,8 @@ class RouteErrorBoundary extends React.Component {
                     : this.props.fallback;
             }
 
+            const { t } = this.props;
+
             return (
                 <div
                     role="alert"
@@ -56,21 +59,20 @@ class RouteErrorBoundary extends React.Component {
                         justifyContent: 'center',
                         minHeight: '40vh',
                         padding: '2rem',
-                        color: '#dcddde',
+                        color: '#dbdee1',
                         textAlign: 'center',
                     }}
                 >
-                    <h2 style={{ color: '#ed4245', marginBottom: '0.5rem', fontSize: '1.4rem' }}>
-                        Bir Hata Oluştu
+                    <h2 style={{ color: '#f23f42', marginBottom: '0.5rem', fontSize: '1.4rem' }}>
+                        {t('errors.errorOccurred')}
                     </h2>
                     <p style={{ color: '#96989d', maxWidth: 420, marginBottom: '1.5rem', lineHeight: 1.5 }}>
-                        Bu sayfa beklenmeyen bir hatayla karşılaştı.
-                        Tekrar deneyebilir veya ana sayfaya dönebilirsiniz.
+                        {t('errors.unexpectedError')}
                     </p>
                     <div style={{ display: 'flex', gap: '0.75rem' }}>
                         <button
                             onClick={this.handleRetry}
-                            aria-label="Sayfayı tekrar dene"
+                            aria-label={t('errors.tryAgain')}
                             style={{
                                 padding: '0.6rem 1.5rem',
                                 borderRadius: 4,
@@ -82,23 +84,23 @@ class RouteErrorBoundary extends React.Component {
                                 fontSize: '0.95rem',
                             }}
                         >
-                            Tekrar Dene
+                            {t('errors.tryAgain')}
                         </button>
                         <button
                             onClick={() => (window.location.hash = '#/')}
-                            aria-label="Ana sayfaya dön"
+                            aria-label={t('errors.goHome')}
                             style={{
                                 padding: '0.6rem 1.5rem',
                                 borderRadius: 4,
                                 border: '1px solid #4e5058',
                                 background: 'transparent',
-                                color: '#dcddde',
+                                color: '#dbdee1',
                                 fontWeight: 600,
                                 cursor: 'pointer',
                                 fontSize: '0.95rem',
                             }}
                         >
-                            Ana Sayfa
+                            {t('errors.goHome')}
                         </button>
                     </div>
                 </div>
@@ -109,4 +111,4 @@ class RouteErrorBoundary extends React.Component {
     }
 }
 
-export default RouteErrorBoundary;
+export default withTranslation()(RouteErrorBoundary);

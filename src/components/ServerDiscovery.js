@@ -31,7 +31,7 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
       </div>
 
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}><FaStar style={{ color: '#faa61a' }} /> Öne Çıkan Sunucular</h2>
+        <h2 style={styles.sectionTitle}><FaStar style={{ color: '#f0b232' }} /> Öne Çıkan Sunucular</h2>
         <div style={styles.serverGrid}>
           {loading ? <div style={styles.loading}>Yükleniyor...</div> : featuredServers.length === 0 ? <div style={styles.empty}>Öne çıkan sunucu bulunamadı</div> : (
             featuredServers.map(server => <ServerCard key={server.id} server={server} onJoin={joinServer} featured />)
@@ -40,7 +40,7 @@ const ServerDiscovery = ({ fetchWithAuth, apiBaseUrl, onJoinServer }) => {
       </div>
 
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}><FaFire style={{ color: '#ed4245' }} /> Popüler Sunucular</h2>
+        <h2 style={styles.sectionTitle}><FaFire style={{ color: '#f23f42' }} /> Popüler Sunucular</h2>
         <div style={styles.serverGrid}>
           {loading ? <div style={styles.loading}>Yükleniyor...</div> : servers.length === 0 ? (
             <div style={styles.empty}><FaSearch style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.3 }} /><p>Sunucu bulunamadı</p></div>

@@ -1,10 +1,12 @@
-.screen-share-overlay {
+﻿.screen-share-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,20 +15,23 @@
 }
 
 .screen-share-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 16px;
+    background: rgba(30, 31, 35, 0.92);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
     width: 90%;
     max-width: 900px;
     max-height: 85vh;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
     display: flex;
     flex-direction: column;
 }
 
 .screen-share-header {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     padding: 20px 24px;
     display: flex;
     align-items: center;
@@ -36,7 +41,7 @@
 
 .screen-share-header h2 {
     margin: 0;
-    font-size: 24px;
+    font-size: 20px;
     color: white;
     display: flex;
     align-items: center;
@@ -44,7 +49,8 @@
 }
 
 .close-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
     border: none;
     color: white;
     width: 36px;
@@ -57,7 +63,7 @@
 
 .close-btn:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .screen-share-content {
@@ -80,7 +86,7 @@
 }
 
 .live-badge {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: linear-gradient(135deg, #f23f42 0%, #dc2626 100%);
     color: white;
     padding: 12px 28px;
     border-radius: 24px;
@@ -99,8 +105,8 @@
 }
 
 .active-source {
-    background: rgba(139, 92, 246, 0.1);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.1);
+    border: 2px solid rgba(88, 101, 242, 0.3);
     border-radius: 12px;
     padding: 24px;
     display: flex;
@@ -149,16 +155,16 @@
 }
 
 .stop-share-btn {
-    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    background: linear-gradient(135deg, #f23f42, #dc2626);
     border: none;
     color: white;
     padding: 14px 32px;
-    border-radius: 8px;
+    border-radius: 13px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    box-shadow: 0 4px 0 #b91c1c, 0 8px 24px rgba(237, 66, 69, 0.40);
 }
 
 .stop-share-btn:hover {
@@ -195,14 +201,14 @@
 
 .source-card:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(139, 92, 246, 0.3);
+    border-color: rgba(88, 101, 242, 0.3);
     transform: translateY(-2px);
 }
 
 .source-card.selected {
-    background: rgba(139, 92, 246, 0.15);
-    border-color: rgba(139, 92, 246, 0.6);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.15);
+    border-color: rgba(88, 101, 242, 0.6);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.3);
 }
 
 .source-thumbnail {
@@ -234,7 +240,7 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     color: white;
     width: 28px;
     height: 28px;
@@ -244,13 +250,13 @@
     justify-content: center;
     font-size: 16px;
     font-weight: bold;
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 2px 8px rgba(88, 101, 242, 0.5);
 }
 
 /* Settings */
 .share-settings {
-    background: rgba(139, 92, 246, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(88, 101, 242, 0.05);
+    border: 1px solid rgba(88, 101, 242, 0.2);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 24px;
@@ -291,12 +297,12 @@
 
 .setting-select:focus {
     outline: none;
-    border-color: rgba(139, 92, 246, 0.5);
+    border-color: rgba(88, 101, 242, 0.5);
     background: rgba(255, 255, 255, 0.08);
 }
 
 .setting-select option {
-    background: #1a1a2e;
+    background: #0b0e1b;
     color: white;
 }
 
@@ -319,7 +325,7 @@
 
 .audio-toggle:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(139, 92, 246, 0.3);
+    border-color: rgba(88, 101, 242, 0.3);
 }
 
 .audio-toggle input[type="checkbox"] {
@@ -327,7 +333,7 @@
     height: 18px;
     margin-right: 10px;
     cursor: pointer;
-    accent-color: #8b5cf6;
+    accent-color: #5865f2;
 }
 
 .audio-toggle span {
@@ -343,21 +349,21 @@
 }
 
 .start-share-btn {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border: none;
     color: white;
     padding: 14px 40px;
-    border-radius: 8px;
+    border-radius: 13px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 0 #3b45c7, 0 8px 24px rgba(88, 101, 242, 0.40);
 }
 
 .start-share-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.5);
 }
 
 .start-share-btn:disabled {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaSignInAlt, FaSignOutAlt, FaDownload } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -86,9 +86,9 @@ const JoinLeaveLogsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =>
                                 <div key={idx} style={styles.logItem}>
                                     <div style={styles.logIcon}>
                                         {log.action === 'joined' ? (
-                                            <FaSignInAlt style={{ color: '#43b581' }} />
+                                            <FaSignInAlt style={{ color: '#23a559' }} />
                                         ) : (
-                                            <FaSignOutAlt style={{ color: '#f04747' }} />
+                                            <FaSignOutAlt style={{ color: '#f23f42' }} />
                                         )}
                                     </div>
                                     <div style={styles.logInfo}>
@@ -141,7 +141,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -155,7 +155,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -164,12 +164,12 @@ const styles = {
         display: 'flex',
         gap: '10px',
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
         flexWrap: 'wrap',
     },
     filterButton: {
         padding: '8px 16px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -182,7 +182,7 @@ const styles = {
     exportButton: {
         marginLeft: 'auto',
         padding: '8px 16px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -198,12 +198,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     logsList: {
@@ -212,7 +212,7 @@ const styles = {
         gap: '12px',
     },
     logItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '16px',
         display: 'flex',
@@ -233,16 +233,16 @@ const styles = {
     },
     logAction: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '2px',
     },
     logMeta: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     logTime: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
 };
 

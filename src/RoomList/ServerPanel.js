@@ -30,13 +30,12 @@ const ServerPanel = ({
     useEffect(() => {
         if (!onPrefetchChat || !selectedServerId || !servers) return;
         const server = servers.find(s => s.id === selectedServerId);
-        if (!server?.categories) return;
+        if (!server?.categories || !Array.isArray(server.categories)) return;
         const textChannels = [];
         for (const cat of server.categories) {
-            if (cat.rooms) {
-                for (const room of cat.rooms) {
-                    if (room.room_type !== 'voice') textChannels.push(room.slug);
-                }
+            if (!cat || !cat.rooms) continue;
+            for (const room of cat.rooms) {
+                if (room && room.room_type !== 'voice' && room.slug) textChannels.push(room.slug);
             }
         }
         // Stagger prefetch requests to avoid flooding (max 6, 150ms apart)
@@ -83,7 +82,7 @@ const ServerPanel = ({
                         )}
 
                         {/* KATEGORİLER */}
-                        {server.categories && server.categories.map(cat => (
+                        {server.categories && server.categories.filter(Boolean).map(cat => (
                             <CategorySection
                                 key={cat.id}
                                 cat={cat}
@@ -224,7 +223,7 @@ const CategorySection = React.memo(({
                 opacity: isCollapsed ? 0 : 1,
                 transition: 'max-height 0.25s ease-out, opacity 0.18s ease',
             }} role="group" aria-label={`${cat.name} kanalları`}>
-                {cat.rooms && cat.rooms.map(room => (
+                {cat.rooms && cat.rooms.filter(Boolean).map(room => (
                     <ChannelItem
                         key={room.id}
                         room={room}
@@ -357,7 +356,7 @@ const ChannelItem = React.memo(({
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleChannelClick()}
             >
                 <div style={styles.channelContent}>
-                    {isVoice && <FaVolumeUp style={{ ...styles.voiceIcon, color: isActive ? '#43b581' : '#949ba4', transition: 'color 0.2s ease' }} />}
+                    {isVoice && <FaVolumeUp style={{ ...styles.voiceIcon, color: isActive ? '#23a559' : '#949ba4', transition: 'color 0.2s ease' }} />}
                     {!isVoice && <FaCog style={{ ...styles.hashtagIcon, fontSize: '0.9em' }} />}
 
                     {isEditingThisRoom ? (
@@ -367,15 +366,15 @@ const ChannelItem = React.memo(({
                     ) : (
                         <span style={{ ...styles.channelNameText, paddingLeft: '5px', fontWeight: isActive ? '600' : 'normal', flex: 1, display: 'flex', alignItems: 'center', gap: '6px' }}>
                             {room.name}
-                            {room.is_private && <span style={{ fontSize: '0.7em', color: '#faa61a', border: '1px solid #faa61a', borderRadius: '3px', padding: '1px 4px' }}>🔒</span>}
-                            {room.is_nsfw && <span style={{ fontSize: '0.7em', color: '#f04747', border: '1px solid #f04747', borderRadius: '3px', padding: '1px 4px' }}>18+</span>}
+                            {room.is_private && <span style={{ fontSize: '0.7em', color: '#f0b232', border: '1px solid #f0b232', borderRadius: '3px', padding: '1px 4px' }}>🔒</span>}
+                            {room.is_nsfw && <span style={{ fontSize: '0.7em', color: '#f23f42', border: '1px solid #f23f42', borderRadius: '3px', padding: '1px 4px' }}>18+</span>}
                             {room.is_locked && <span style={{ fontSize: '0.7em', color: '#949ba4', border: '1px solid #949ba4', borderRadius: '3px', padding: '1px 4px' }}>🔐</span>}
-                            {room.admin_only_chat && <span style={{ fontSize: '0.7em', color: '#43b581', border: '1px solid #43b581', borderRadius: '3px', padding: '1px 4px' }}>📢</span>}
+                            {room.admin_only_chat && <span style={{ fontSize: '0.7em', color: '#23a559', border: '1px solid #23a559', borderRadius: '3px', padding: '1px 4px' }}>📢</span>}
                         </span>
                     )}
 
                     {isVoice && (
-                        <span style={{ fontSize: '0.75em', color: userCount > 0 ? '#43b581' : '#72767d', fontWeight: '500', marginLeft: 'auto', marginRight: '4px' }}>
+                        <span style={{ fontSize: '0.75em', color: userCount > 0 ? '#23a559' : '#949ba4', fontWeight: '500', marginLeft: 'auto', marginRight: '4px' }}>
                             ({userCount}/{room.user_limit > 0 ? room.user_limit : '∞'})
                         </span>
                     )}

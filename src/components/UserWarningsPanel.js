@@ -7,10 +7,10 @@ import AddWarningModal from './UserWarningsPanel/AddWarningModal';
 
 const getSeverityColor = (severity) => {
     switch (severity) {
-        case 'low': return '#43b581';
+        case 'low': return '#23a559';
         case 'medium': return '#f0b132';
-        case 'high': return '#ed4245';
-        default: return '#72767d';
+        case 'high': return '#f23f42';
+        default: return '#949ba4';
     }
 };
 
@@ -54,9 +54,9 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                 <div style={styles.statsGrid}>
                     {[
                         { icon: FaExclamationTriangle, color: '#f0b132', value: stats.total_warnings, label: 'Total Warnings' },
-                        { icon: FaExclamationTriangle, color: '#43b581', value: stats.active_warnings, label: 'Active' },
-                        { icon: FaHistory, color: '#72767d', value: stats.expired_warnings, label: 'Expired' },
-                        { icon: FaBan, color: '#ed4245', value: stats.auto_banned_users, label: 'Auto-Banned' },
+                        { icon: FaExclamationTriangle, color: '#23a559', value: stats.active_warnings, label: 'Active' },
+                        { icon: FaHistory, color: '#949ba4', value: stats.expired_warnings, label: 'Expired' },
+                        { icon: FaBan, color: '#f23f42', value: stats.auto_banned_users, label: 'Auto-Banned' },
                     ].map(({ icon: Icon, color, value, label }) => (
                         <div key={label} style={styles.statCard}>
                             <Icon style={{ ...styles.statIcon, color }} />
@@ -91,7 +91,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                         <div style={styles.userInfo}>
                                             <FaUser style={styles.userIcon} />
                                             <div style={styles.userName}>{username}</div>
-                                            <span style={{ ...styles.badge, backgroundColor: isAtRisk ? '#ed4245' : '#f0b132' }}>
+                                            <span style={{ ...styles.badge, backgroundColor: isAtRisk ? '#f23f42' : '#f0b132' }}>
                                                 {activeWarnings.length} Active Warning{activeWarnings.length !== 1 ? 's' : ''}
                                             </span>
                                             {isAtRisk && <span style={styles.riskBadge}>{'⚠️'} AT RISK</span>}
@@ -114,7 +114,7 @@ const UserWarningsPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) => 
                                                             <span>{'•'}</span>
                                                             <span>{new Date(warning.created_at).toLocaleString()}</span>
                                                             {warning.expires_at && (<><span>{'•'}</span><span>Expires: {new Date(warning.expires_at).toLocaleDateString()}</span></>)}
-                                                            {!warning.is_active && (<><span>{'•'}</span><span style={{ color: '#72767d' }}>EXPIRED</span></>)}
+                                                            {!warning.is_active && (<><span>{'•'}</span><span style={{ color: '#949ba4' }}>EXPIRED</span></>)}
                                                         </div>
                                                     </div>
                                                 </div>

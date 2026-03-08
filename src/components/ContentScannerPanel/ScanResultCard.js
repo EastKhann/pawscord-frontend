@@ -2,13 +2,13 @@ import { FaCheckCircle, FaExclamationTriangle, FaBan, FaShieldAlt, FaEye } from 
 import { styles } from './contentScannerStyles';
 
 const STATUS_CONFIG = {
-  safe: { icon: FaCheckCircle, color: '#43b581' },
-  flagged: { icon: FaExclamationTriangle, color: '#faa61a' },
-  blocked: { icon: FaBan, color: '#f04747' },
+  safe: { icon: FaCheckCircle, color: '#23a559' },
+  flagged: { icon: FaExclamationTriangle, color: '#f0b232' },
+  blocked: { icon: FaBan, color: '#f23f42' },
 };
 
 const ScanResultCard = ({ result, onReview }) => {
-  const cfg = STATUS_CONFIG[result.status] || { icon: FaShieldAlt, color: '#99aab5' };
+  const cfg = STATUS_CONFIG[result.status] || { icon: FaShieldAlt, color: '#949ba4' };
   const StatusIcon = cfg.icon;
 
   return (
@@ -27,7 +27,7 @@ const ScanResultCard = ({ result, onReview }) => {
             <div style={styles.infoRow}>
               <strong>Confidence:</strong>
               <div style={styles.progressBar}>
-                <div style={{ ...styles.progressFill, width: `${result.confidence_score}%`, backgroundColor: result.confidence_score > 80 ? '#f04747' : result.confidence_score > 50 ? '#faa61a' : '#43b581' }} />
+                <div style={{ ...styles.progressFill, width: `${result.confidence_score}%`, backgroundColor: result.confidence_score > 80 ? '#f23f42' : result.confidence_score > 50 ? '#f0b232' : '#23a559' }} />
               </div>
               <span>{result.confidence_score}%</span>
             </div>

@@ -1,4 +1,4 @@
-// frontend/src/components/QuickActionsMenu.js
+﻿// frontend/src/components/QuickActionsMenu.js
 import React from 'react';
 import {
     FaUserShield, FaLink, FaHistory, FaFileExport,
@@ -15,11 +15,11 @@ const QuickActionsMenu = ({
     onShowReports
 }) => {
     const adminActions = [
-        { icon: FaUserShield, label: 'Moderatör Araçları', onClick: onOpenModerator, color: '#f04747' },
+        { icon: FaUserShield, label: 'Moderatör Araçları', onClick: onOpenModerator, color: '#f23f42' },
         { icon: FaLink, label: 'Webhook Yönetimi', onClick: onOpenWebhooks, color: '#5865f2' },
-        { icon: FaHistory, label: 'Audit Logları', onClick: onShowAuditLogs, color: '#faa61a' },
-        { icon: FaBan, label: 'Raporları Görüntüle', onClick: onShowReports, color: '#f04747' },
-        { icon: FaFileExport, label: 'Veri Dışa Aktar', onClick: onExportData, color: '#43b581' },
+        { icon: FaHistory, label: 'Audit Logları', onClick: onShowAuditLogs, color: '#f0b232' },
+        { icon: FaBan, label: 'Raporları Görüntüle', onClick: onShowReports, color: '#f23f42' },
+        { icon: FaFileExport, label: 'Veri Dışa Aktar', onClick: onExportData, color: '#23a559' },
         { icon: FaChartBar, label: 'Sunucu İstatistikleri', onClick: () => window.open('/analytics', '_blank'), color: '#f0b132' }
     ];
 
@@ -61,7 +61,7 @@ const styles = {
         zIndex: 10000
     },
     menu: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         width: '90%',

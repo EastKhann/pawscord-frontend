@@ -53,11 +53,11 @@ const styles = {
     },
     iconSingle: {
         fontSize: '12px',
-        color: '#72767d'
+        color: '#949ba4'
     },
     iconDelivered: {
         fontSize: '12px',
-        color: '#72767d'
+        color: '#949ba4'
     },
     iconRead: {
         fontSize: '12px',

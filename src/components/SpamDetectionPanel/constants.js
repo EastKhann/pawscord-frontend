@@ -43,6 +43,6 @@ export const getPatternIcon = (type) => {
 };
 
 export const getActionColor = (action) => {
-    const colors = { warn: '#faa61a', mute: '#5865f2', kick: '#f04747', ban: '#ed4245' };
-    return colors[action] || '#72767d';
+    const colors = { warn: '#f0b232', mute: '#5865f2', kick: '#f23f42', ban: '#f23f42' };
+    return colors[action] || '#949ba4';
 };

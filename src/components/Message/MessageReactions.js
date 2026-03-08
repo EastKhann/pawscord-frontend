@@ -1,4 +1,4 @@
-// frontend/src/components/Message/MessageReactions.js
+﻿// frontend/src/components/Message/MessageReactions.js
 // ❤️ MESSAGE REACTIONS - Emoji reactions display with hover user popup
 
 import { memo, useCallback, useState, useRef } from 'react';
@@ -66,7 +66,7 @@ export const MessageReactions = memo(({
                     style={{
                         ...styles.reactionTag,
                         border: myReaction(emoji) ? '1px solid #5865f2' : '1px solid transparent',
-                        backgroundColor: myReaction(emoji) ? 'rgba(88, 101, 242, 0.15)' : '#2b2d31'
+                        backgroundColor: myReaction(emoji) ? 'rgba(88, 101, 242, 0.15)' : '#111214'
                     }}
                     title={`${emoji} tepkisi ekle/kaldır`}
                 >
@@ -94,12 +94,12 @@ const styles = {
         flexWrap: 'wrap'
     },
     reactionTag: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '4px 8px',
         borderRadius: '8px',
         fontSize: '0.85em',
         cursor: 'pointer',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         border: '1px solid transparent',
         display: 'flex',
         alignItems: 'center',

@@ -1,4 +1,4 @@
-// components/ConfirmModal.js
+﻿// components/ConfirmModal.js
 // 🎯 Modern Confirmation Dialog - alert() ve confirm() yerine kullanılır
 
 import { useState, useEffect, useCallback } from 'react';
@@ -191,7 +191,7 @@ const styles = {
         animation: 'fadeIn 0.2s ease-out',
     },
     modal: {
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         maxWidth: '500px',
         width: '100%',
@@ -239,7 +239,7 @@ const styles = {
         margin: 0,
         fontSize: '15px',
         lineHeight: '1.6',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '16px',
     },
     dangerBox: {
@@ -259,12 +259,12 @@ const styles = {
         margin: '8px 0',
         padding: '0 0 0 12px',
         listStyle: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     dangerItem: {
         fontSize: '13px',
         lineHeight: '1.8',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     dangerFooter: {
         fontSize: '14px',
@@ -282,16 +282,16 @@ const styles = {
     inputLabel: {
         display: 'block',
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
     },
     input: {
         width: '100%',
         padding: '12px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         border: '2px solid #4e5058',
         borderRadius: '6px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         outline: 'none',
         transition: 'border-color 0.2s',
@@ -304,7 +304,7 @@ const styles = {
     },
     footer: {
         padding: '16px 24px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         display: 'flex',
         gap: '12px',
         justifyContent: 'flex-end',
@@ -314,7 +314,7 @@ const styles = {
         backgroundColor: 'transparent',
         border: '2px solid #4e5058',
         borderRadius: '6px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         fontWeight: '600',
         cursor: 'pointer',

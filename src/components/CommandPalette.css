@@ -15,7 +15,7 @@
 }
 
 .command-palette {
-  background: var(--bg-primary, #2B2D31);
+  background: var(--bg-primary, #111214);
   border-radius: 12px;
   width: 90%;
   max-width: 700px;
@@ -46,7 +46,7 @@
 .palette-close {
   background: transparent;
   border: none;
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
   font-size: 20px;
   cursor: pointer;
   padding: 8px;
@@ -70,7 +70,7 @@
   padding: 8px 16px;
   background: transparent;
   border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -106,7 +106,7 @@
   margin: 0 0 12px 0;
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-muted, #72767D);
+  color: var(--text-muted, #949ba4);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -122,14 +122,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: var(--bg-secondary, #1E1F22);
+  background: var(--bg-secondary, #0d0e10);
   border-radius: 8px;
   border: 1px solid transparent;
   transition: all 0.2s;
 }
 
 .command-item:hover {
-  background: var(--bg-tertiary, #313338);
+  background: var(--bg-tertiary, #17191c);
   border-color: var(--brand-primary, #5865F2);
   transform: translateX(4px);
 }
@@ -148,7 +148,7 @@
 
 .command-description {
   font-size: 13px;
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
 }
 
 .command-shortcut {
@@ -159,7 +159,7 @@
 }
 
 .command-shortcut kbd {
-  background: var(--bg-tertiary, #313338);
+  background: var(--bg-tertiary, #17191c);
   padding: 4px 8px;
   border-radius: 4px;
   font-family: monospace;
@@ -172,7 +172,7 @@
 }
 
 .command-shortcut .plus {
-  color: var(--text-muted, #72767D);
+  color: var(--text-muted, #949ba4);
   font-size: 12px;
   margin: 0 2px;
 }
@@ -180,7 +180,7 @@
 .palette-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
-  background: var(--bg-secondary, #1E1F22);
+  background: var(--bg-secondary, #0d0e10);
 }
 
 .footer-hint {
@@ -189,11 +189,11 @@
   justify-content: center;
   gap: 4px;
   font-size: 13px;
-  color: var(--text-secondary, #B9BBBE);
+  color: var(--text-secondary, #b5bac1);
 }
 
 .footer-hint kbd {
-  background: var(--bg-tertiary, #313338);
+  background: var(--bg-tertiary, #17191c);
   padding: 2px 6px;
   border-radius: 3px;
   font-family: monospace;

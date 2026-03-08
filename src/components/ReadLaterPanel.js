@@ -14,7 +14,7 @@ function ReadLaterPanel({ apiBaseUrl, fetchWithAuth }) {
   const [error, setError] = useState('');
 
   const tagColors = [
-    '#5865f2', '#43b581', '#f04747', '#faa61a', '#9b59b6',
+    '#5865f2', '#23a559', '#f23f42', '#f0b232', '#5865f2',
     '#3498db', '#e91e63', '#00bcd4', '#ff9800', '#4caf50'
   ];
 

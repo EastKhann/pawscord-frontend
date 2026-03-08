@@ -1,4 +1,4 @@
-// frontend/src/components/ConnectionQualityIndicator.js
+﻿// frontend/src/components/ConnectionQualityIndicator.js
 // 📶 WebRTC Bağlantı Kalitesi Göstergesi
 
 import { FaWifi, FaExclamationTriangle, FaCheck, FaTimes } from 'react-icons/fa';
@@ -29,13 +29,13 @@ const ConnectionQualityIndicator = ({
         // RTT bazlı kalite
         // < 50ms = Mükemmel, 50-100ms = İyi, 100-200ms = Orta, > 200ms = Kötü
         if (rtt < 50 && lossPercent < 1) {
-            return { level: 'excellent', label: 'Mükemmel', color: '#43b581', bars: 4 };
+            return { level: 'excellent', label: 'Mükemmel', color: '#23a559', bars: 4 };
         } else if (rtt < 100 && lossPercent < 3) {
-            return { level: 'good', label: 'İyi', color: '#7289da', bars: 3 };
+            return { level: 'good', label: 'İyi', color: '#5865f2', bars: 3 };
         } else if (rtt < 200 && lossPercent < 5) {
-            return { level: 'fair', label: 'Orta', color: '#faa61a', bars: 2 };
+            return { level: 'fair', label: 'Orta', color: '#f0b232', bars: 2 };
         } else {
-            return { level: 'poor', label: 'Zayıf', color: '#f04747', bars: 1 };
+            return { level: 'poor', label: 'Zayıf', color: '#f23f42', bars: 1 };
         }
     };
 
@@ -59,7 +59,7 @@ const ConnectionQualityIndicator = ({
                         style={{
                             width: '3px',
                             height: `${bar * 3 + 2}px`,
-                            backgroundColor: bar <= quality.bars ? quality.color : '#2f3136',
+                            backgroundColor: bar <= quality.bars ? quality.color : '#111214',
                             borderRadius: '1px',
                             transition: 'background-color 0.3s ease'
                         }}
@@ -80,7 +80,7 @@ const ConnectionQualityIndicator = ({
                         style={{
                             ...styles.bar,
                             height: `${bar * 4 + 4}px`,
-                            backgroundColor: bar <= quality.bars ? quality.color : '#2f3136'
+                            backgroundColor: bar <= quality.bars ? quality.color : '#111214'
                         }}
                     />
                 ))}
@@ -139,8 +139,8 @@ const ConnectionQualityIndicator = ({
                         <span style={styles.detailLabel}>ICE:</span>
                         <span style={{
                             ...styles.detailValue,
-                            color: stats.iceConnectionState === 'connected' ? '#43b581' :
-                                stats.iceConnectionState === 'checking' ? '#faa61a' : '#f04747'
+                            color: stats.iceConnectionState === 'connected' ? '#23a559' :
+                                stats.iceConnectionState === 'checking' ? '#f0b232' : '#f23f42'
                         }}>
                             {stats.iceConnectionState || 'N/A'}
                         </span>
@@ -194,10 +194,10 @@ const styles = {
         fontSize: '10px'
     },
     detailLabel: {
-        color: '#72767d'
+        color: '#949ba4'
     },
     detailValue: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontFamily: 'monospace'
     }
 };

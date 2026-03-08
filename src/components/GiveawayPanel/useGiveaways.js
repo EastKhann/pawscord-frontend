@@ -21,7 +21,7 @@ export const getStatusBadge = (status) => {
   const badges = {
     active: { text: 'Aktif', color: '#10b981' },
     ended: { text: 'Sonlandı', color: '#6b7280' },
-    cancelled: { text: 'İptal', color: '#ef4444' }
+    cancelled: { text: 'İptal', color: '#f23f42' }
   };
   return badges[status] || badges.active;
 };

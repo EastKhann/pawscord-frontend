@@ -1,4 +1,4 @@
-// frontend/src/VoiceUserList/styles.js
+﻿// frontend/src/VoiceUserList/styles.js
 
 const styles = {
     container: {
@@ -14,7 +14,7 @@ const styles = {
         fontSize: '0.7em',
         padding: '4px 8px',
         marginBottom: '4px',
-        color: '#99aab5',
+        color: '#949ba4',
         textTransform: 'uppercase',
         fontWeight: '600',
         letterSpacing: '0.5px',
@@ -62,7 +62,7 @@ const styles = {
         objectFit: 'cover',
         transition: 'all 0.2s ease',
         display: 'block',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         flexShrink: 0,
         minWidth: '22px',
         minHeight: '22px',
@@ -78,7 +78,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         fontSize: '6px',
-        border: '1px solid #2f3136',
+        border: '1px solid #0e1222',
         boxShadow: '0 1px 2px rgba(0,0,0,0.3)',
     },
     userInfo: {
@@ -124,7 +124,7 @@ const styles = {
         fontSize: '0.7em',
         minWidth: '35px',
         textAlign: 'right',
-        color: '#99aab5',
+        color: '#949ba4',
         fontWeight: '500',
     },
     contextMenu: {
@@ -163,7 +163,7 @@ const styles = {
     menuItem: {
         padding: '8px 12px',
         cursor: 'pointer',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '13px',
         transition: 'background-color 0.1s, color 0.1s',
         position: 'relative',
@@ -178,7 +178,7 @@ const styles = {
     subMenu: {
         position: 'absolute',
         backgroundColor: '#18191c',
-        border: '1px solid #2b2d31',
+        border: '1px solid #0e1222',
         borderRadius: '6px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
         zIndex: 2147483647,
@@ -209,7 +209,7 @@ styleSheet.textContent = `
     
     .user-context-menu-item-danger:hover {
         background-color: rgba(237, 66, 69, 0.15) !important;
-        color: #ed4245 !important;
+        color: #f23f42 !important;
     }
     
     .user-context-submenu-item:hover {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaPlus, FaCheck, FaEdit, FaTrash } from 'react-icons/fa';
 import { ChromePicker } from 'react-color';
 import toast from '../../utils/toast';
@@ -16,7 +16,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
     };
     const [editingRole, setEditingRole] = useState(null);
     const [roleName, setRoleName] = useState('');
-    const [roleColor, setRoleColor] = useState('#99aab5');
+    const [roleColor, setRoleColor] = useState('#949ba4');
     const [permissions, setPermissions] = useState({
         is_admin: false, can_manage_channels: false, can_delete_messages: false,
         can_manage_roles: false, can_ban_members: false
@@ -36,7 +36,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
     };
 
     const resetForm = () => {
-        setEditingRole(null); setRoleName(''); setRoleColor('#99aab5');
+        setEditingRole(null); setRoleName(''); setRoleColor('#949ba4');
         setPermissions({ is_admin: false, can_manage_channels: false, can_delete_messages: false, can_manage_roles: false, can_ban_members: false });
     };
 
@@ -85,7 +85,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
                 <div style={styles.rolesList}>
                     {roles.map(role => (
                         <div key={role.id}
-                            style={{ ...styles.roleItem, backgroundColor: editingRole?.id === role.id ? '#40444b' : 'transparent', borderLeft: `4px solid ${role.color}` }}
+                            style={{ ...styles.roleItem, backgroundColor: editingRole?.id === role.id ? '#1e2024' : 'transparent', borderLeft: `4px solid ${role.color}` }}
                             onClick={() => startEditRole(role)}>
                             <span>{role.name}</span>
                             <FaEdit style={{ opacity: 0.5, fontSize: '0.8em' }} />
@@ -105,7 +105,7 @@ const RolesTab = ({ server, fetchWithAuth, apiBaseUrl, onRolesChange }) => {
                     <label>Rol Rengi</label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <div style={{ ...styles.colorPreview, backgroundColor: roleColor }} onClick={() => setShowColorPicker(!showColorPicker)} />
-                        <span style={{ fontSize: '0.9em', color: '#b9bbbe' }}>{roleColor}</span>
+                        <span style={{ fontSize: '0.9em', color: '#b5bac1' }}>{roleColor}</span>
                     </div>
                     {showColorPicker && (
                         <>

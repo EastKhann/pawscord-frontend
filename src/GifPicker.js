@@ -1,4 +1,4 @@
-// frontend/src/GifPicker.js (Mutlak URL ile çalışan kesin çözüm)
+﻿// frontend/src/GifPicker.js (Mutlak URL ile çalışan kesin çözüm)
 
 import React, { useState, useEffect, useRef } from 'react';
 // <<< DÜZELTME: absoluteHostUrl prop'u eklendi >>>
@@ -146,7 +146,7 @@ const styles = {
         bottom: '100px',
         width: '400px',
         height: '350px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         boxShadow: '0 5px 15px rgba(0,0,0,0.5)',
         display: 'flex',
@@ -192,20 +192,20 @@ const styles = {
         objectFit: 'cover',
     },
     loadingText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         gridColumn: '1 / -1',
         textAlign: 'center',
         marginTop: '50px',
     },
     errorText: {
-        color: '#f04747',
+        color: '#f23f42',
         gridColumn: '1 / -1',
         textAlign: 'center',
         marginTop: '50px',
         fontWeight: 'bold',
     },
     noResultsText: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         gridColumn: '1 / -1',
         textAlign: 'center',
         marginTop: '50px',

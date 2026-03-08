@@ -1,4 +1,4 @@
-// frontend/src/components/AuditLogPanel.js
+﻿// frontend/src/components/AuditLogPanel.js
 import { useState, useEffect } from 'react';
 import { FaHistory, FaTimes, FaFilter, FaDownload, FaSearch } from 'react-icons/fa';
 
@@ -70,12 +70,12 @@ const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
 
     const getActionColor = (action) => {
         if (action.includes('delete') || action.includes('kick') || action.includes('ban')) {
-            return '#ed4245';
+            return '#f23f42';
         }
         if (action.includes('create') || action.includes('join')) {
             return '#3ba55d';
         }
-        return '#faa61a';
+        return '#f0b232';
     };
 
     const filteredLogs = logs.filter(log => {
@@ -101,7 +101,7 @@ const AuditLogPanel = ({ serverId, onClose, fetchWithAuth, apiBaseUrl }) => {
                 {/* Filters */}
                 <div style={styles.filters}>
                     <div style={styles.searchBox}>
-                        <FaSearch size={14} color="#b9bbbe" />
+                        <FaSearch size={14} color="#b5bac1" />
                         <input
                             type="text"
                             placeholder="Ara..."
@@ -192,7 +192,7 @@ const styles = {
         padding: '20px'
     },
     panel: {
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '100%',
         maxWidth: '900px',
@@ -206,7 +206,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '20px',
-        borderBottom: '1px solid #202225'
+        borderBottom: '1px solid #0b0e1b'
     },
     headerLeft: {
         display: 'flex',
@@ -222,7 +222,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '8px',
         borderRadius: '4px',
@@ -232,14 +232,14 @@ const styles = {
         display: 'flex',
         gap: '12px',
         padding: '16px 20px',
-        borderBottom: '1px solid #202225',
+        borderBottom: '1px solid #0b0e1b',
         flexWrap: 'wrap'
     },
     searchBox: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         padding: '8px 12px',
         borderRadius: '4px',
         flex: 1,
@@ -248,15 +248,15 @@ const styles = {
     searchInput: {
         background: 'none',
         border: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         outline: 'none',
         width: '100%'
     },
     select: {
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         border: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         padding: '8px 12px',
         borderRadius: '4px',
         fontSize: '14px',
@@ -285,19 +285,19 @@ const styles = {
     loading: {
         textAlign: 'center',
         padding: '40px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#b9bbbe'
+        color: '#b5bac1'
     },
     logItem: {
         display: 'flex',
         gap: '12px',
         padding: '12px',
         marginBottom: '8px',
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '4px',
         borderLeft: '3px solid #5865f2',
         transition: 'all 0.2s'
@@ -314,13 +314,13 @@ const styles = {
         flex: 1
     },
     logDescription: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         marginBottom: '4px'
     },
     logMeta: {
         fontSize: '12px',
-        color: '#72767d'
+        color: '#949ba4'
     }
 };
 

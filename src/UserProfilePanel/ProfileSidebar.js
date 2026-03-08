@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+﻿import React, { useCallback } from 'react';
 import profileStyles from './styles';
 
 /**
@@ -164,13 +164,13 @@ const ProfileSidebar = ({ activeTab, setActiveTab, setActiveCategory, isOwnProfi
 
       {/* 🚪 Çıkış Yap Butonu */}
       {isOwnProfile && onLogout && (
-        <div style={{ ...styles.sidebarSection, borderTop: '1px solid #40444b', marginTop: '16px', paddingTop: '16px' }}>
+        <div style={{ ...styles.sidebarSection, borderTop: '1px solid #182135', marginTop: '16px', paddingTop: '16px' }}>
           <button
             className="sidebar-btn logout-btn"
             style={{
               ...styles.sidebarBtn(false),
               background: 'transparent',
-              color: '#f04747',
+              color: '#f23f42',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',

@@ -219,7 +219,7 @@ const useTicketSystem = (serverId) => {
     const badges = {
       low: { text: 'Düşük', color: '#10b981' },
       medium: { text: 'Orta', color: '#f59e0b' },
-      high: { text: 'Yüksek', color: '#ef4444' },
+      high: { text: 'Yüksek', color: '#f23f42' },
       urgent: { text: 'Acil', color: '#dc2626' }
     };
     return badges[priority] || badges.medium;

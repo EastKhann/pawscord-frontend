@@ -55,7 +55,7 @@
     border: 2px solid var(--primary-color);
     background: var(--background-secondary);
     color: var(--text-primary);
-    border-radius: 25px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s;
     font-weight: 600;
@@ -114,7 +114,7 @@
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     color: #1A1A1A;
     padding: 6px 20px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-weight: bold;
     font-size: 0.85rem;
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5);
@@ -162,7 +162,7 @@
     background: #00D26A;
     color: white;
     padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.9rem;
     margin-top: 10px;
     display: inline-block;

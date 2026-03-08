@@ -1,4 +1,4 @@
-/* frontend/src/components/panels/ChannelAnalyticsPanel.css */
+﻿/* frontend/src/components/panels/ChannelAnalyticsPanel.css */
 /* 📈 Channel Analytics Panel Styles */
 
 .channel-analytics-overlay {
@@ -27,7 +27,7 @@
 }
 
 .channel-analytics-panel {
-    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    background: linear-gradient(145deg, #0d0e10, #0d0e10);
     border-radius: 18px;
     width: 95%;
     max-width: 950px;
@@ -93,7 +93,7 @@
 }
 
 .time-select option {
-    background: #1a1a2e;
+    background: #0b0e1b;
     color: white;
 }
 
@@ -160,7 +160,7 @@
 }
 
 .card-icon.active {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
+    background: linear-gradient(135deg, #f23f42, #dc2626);
 }
 
 .card-content {
@@ -303,7 +303,7 @@
 }
 
 .channel-growth .negative {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 .growth-up {
@@ -311,7 +311,7 @@
 }
 
 .growth-down {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 .growth-neutral {
@@ -433,7 +433,7 @@
 }
 
 .detail-value.negative {
-    color: #ef4444;
+    color: #f23f42;
 }
 
 /* Loading & Empty States */

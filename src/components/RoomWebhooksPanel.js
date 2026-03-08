@@ -104,7 +104,7 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                                         <button onClick={() => fetchDeliveries(webhook.id)} style={styles.iconButton} title="View Deliveries">
                                                             <FaHistory />
                                                         </button>
-                                                        <button onClick={() => deleteWebhook(webhook.id)} style={{ ...styles.iconButton, color: '#f04747' }} title="Delete Webhook">
+                                                        <button onClick={() => deleteWebhook(webhook.id)} style={{ ...styles.iconButton, color: '#f23f42' }} title="Delete Webhook">
                                                             <FaTrash />
                                                         </button>
                                                     </div>
@@ -127,9 +127,9 @@ const RoomWebhooksPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }) => 
                                                     <div style={styles.deliveryHeader}>
                                                         <div style={styles.deliveryStatus}>
                                                             {delivery.status === 'success' ? (
-                                                                <FaCheckCircle style={{ color: '#43b581' }} />
+                                                                <FaCheckCircle style={{ color: '#23a559' }} />
                                                             ) : (
-                                                                <FaExclamationTriangle style={{ color: '#f04747' }} />
+                                                                <FaExclamationTriangle style={{ color: '#f23f42' }} />
                                                             )}
                                                             <span style={styles.deliveryStatusText}>
                                                                 {delivery.status === 'success' ? 'Success' : 'Failed'}

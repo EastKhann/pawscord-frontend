@@ -82,7 +82,7 @@ const ServerHealthPanel = ({ onClose, fetchWithAuth }) => {
                 return '#f59e0b';
             case 'down':
             case 'error':
-                return '#ef4444';
+                return '#f23f42';
             default:
                 return '#6b7280';
         }
@@ -98,7 +98,7 @@ const ServerHealthPanel = ({ onClose, fetchWithAuth }) => {
                 return <FaExclamationTriangle style={{ color: '#f59e0b' }} />;
             case 'down':
             case 'error':
-                return <FaTimesCircle style={{ color: '#ef4444' }} />;
+                return <FaTimesCircle style={{ color: '#f23f42' }} />;
             default:
                 return <FaSync style={{ color: '#6b7280' }} />;
         }
@@ -107,7 +107,7 @@ const ServerHealthPanel = ({ onClose, fetchWithAuth }) => {
     const getResourceColor = (value) => {
         if (value < 60) return '#10b981';
         if (value < 80) return '#f59e0b';
-        return '#ef4444';
+        return '#f23f42';
     };
 
     const formatUptime = (date) => {

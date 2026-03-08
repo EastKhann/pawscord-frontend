@@ -23,6 +23,7 @@ const useAvatarStudio = (fetchWithAuth, apiBaseUrl) => {
     const fetchParts = async () => {
         try {
             const r = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/parts/`);
+            if (!r.ok) return;
             const d = await r.json();
             setParts(d.parts || {}); setUserCoins(d.user_coins || 0);
         } catch (e) { console.error('Failed to fetch parts:', e); }
@@ -31,6 +32,7 @@ const useAvatarStudio = (fetchWithAuth, apiBaseUrl) => {
     const fetchMyAvatar = async () => {
         try {
             const r = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/my-avatar/`);
+            if (!r.ok) { setAvatar(DEFAULT_AVATAR); return; }
             const d = await r.json();
             setAvatar(d.avatar || DEFAULT_AVATAR); setOwnedItems(d.owned_items || []);
         } catch (e) { console.error('Failed to fetch avatar:', e); }
@@ -39,6 +41,7 @@ const useAvatarStudio = (fetchWithAuth, apiBaseUrl) => {
     const fetchPresets = async () => {
         try {
             const r = await fetchWithAuth(`${apiBaseUrl}/avatar-studio/presets/`);
+            if (!r.ok) return;
             const d = await r.json();
             setPresets(d.presets || []);
         } catch (e) { console.error('Failed to fetch presets:', e); }

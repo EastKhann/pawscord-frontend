@@ -1,8 +1,8 @@
-.webauthn-panel {
-    background: #2f3136;
+﻿.webauthn-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     max-width: 700px;
     margin: 0 auto;
 }
@@ -10,12 +10,12 @@
 .webauthn-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .webauthn-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -23,7 +23,7 @@
 }
 
 .shield-icon {
-    color: #43b581;
+    color: #23a559;
     font-size: 28px;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .webauthn-error {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     padding: 12px;
     border-radius: 4px;
@@ -62,7 +62,7 @@
 }
 
 .webauthn-success {
-    background: #43b581;
+    background: #23a559;
     color: #ffffff;
     padding: 12px;
     border-radius: 4px;
@@ -70,7 +70,7 @@
 }
 
 .register-key-section {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
@@ -93,9 +93,9 @@
 
 .key-input {
     flex: 1;
-    background: #2f3136;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #0e1222;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 12px;
     border-radius: 4px;
     font-size: 14px;
@@ -107,7 +107,7 @@
 }
 
 .register-btn {
-    background: #43b581;
+    background: #23a559;
     color: #ffffff;
     border: none;
     padding: 12px 24px;
@@ -143,10 +143,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
     padding: 10px;
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 4px;
 }
 
@@ -166,12 +166,12 @@
 .empty-keys {
     text-align: center;
     padding: 40px;
-    color: #72767d;
+    color: #949ba4;
     font-style: italic;
 }
 
 .key-item {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
@@ -182,7 +182,7 @@
 }
 
 .key-item:hover {
-    background: #36393f;
+    background: #121928;
     transform: translateX(5px);
 }
 
@@ -193,8 +193,8 @@
 }
 
 .key-icon {
-    font-size: 24px;
-    color: #43b581;
+    font-size: 20px;
+    color: #23a559;
 }
 
 .key-name {
@@ -205,12 +205,12 @@
 }
 
 .key-date {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
 }
 
 .remove-key-btn {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     border: none;
     padding: 8px 16px;

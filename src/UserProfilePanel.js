@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import AvatarCropper from './components/AvatarCropper';
 import LogoutModal from './components/LogoutModal';
 import './UserProfilePanel.css';
@@ -105,14 +105,14 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
     return (
       <div style={styles.overlay} onClick={onClose}>
         <div style={{
-          background: '#2f3136',
+          background: '#111214',
           padding: '32px',
           borderRadius: '12px',
           textAlign: 'center',
           color: '#fff'
         }}>
           <h3>Profil Yuklenemedi</h3>
-          <p style={{ color: '#b9bbbe' }}>Bir hata olustu. Lutfen tekrar deneyin.</p>
+          <p style={{ color: '#b5bac1' }}>Bir hata olustu. Lutfen tekrar deneyin.</p>
           <button
             onClick={onClose}
             style={{

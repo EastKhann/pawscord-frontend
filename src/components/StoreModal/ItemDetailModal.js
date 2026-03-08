@@ -13,13 +13,13 @@ const ItemDetailModal = ({ item, balance, onClose, onPurchase }) => {
                 {item.image ? (
                     <img src={item.image} alt={item.name} style={styles.detailImage} />
                 ) : (
-                    <div style={styles.detailPlaceholder}><FaGift style={{ fontSize: '120px', color: '#99aab5' }} /></div>
+                    <div style={styles.detailPlaceholder}><FaGift style={{ fontSize: '120px', color: '#949ba4' }} /></div>
                 )}
                 <h2 style={{ ...styles.detailName, color: getRarityColor(item.rarity) }}>{item.name}</h2>
                 <div style={styles.detailRarity}>{item.rarity.toUpperCase()}</div>
                 <p style={styles.detailDescription}>{item.description || 'No description available.'}</p>
                 <div style={styles.detailPrice}>
-                    <FaCoins style={{ fontSize: '24px', color: '#faa61a' }} />
+                    <FaCoins style={{ fontSize: '24px', color: '#f0b232' }} />
                     <span style={{ fontSize: '32px', fontWeight: 'bold' }}>{item.price.toLocaleString()}</span>
                 </div>
                 <button onClick={() => onPurchase(item)} disabled={balance < item.price}

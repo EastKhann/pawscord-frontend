@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { LivePrice, formatPrice } from './helpers';
 import useModalA11y from '../hooks/useModalA11y';
@@ -53,15 +53,15 @@ const TradeModal = ({ coin, initialPrice, livePrices, portfolio, onClose, onTrad
                     <h3>{mode === 'BUY' ? '🟢 Alış' : '🔴 Satış'}: {coin}</h3>
                     <button onClick={onClose} style={styles.closeBtn}><FaTimes /></button>
                 </div>
-                <div style={{ backgroundColor: '#2b2d31', padding: 10, borderRadius: 8, marginBottom: 15, textAlign: 'center' }}>
+                <div style={{ backgroundColor: '#111214', padding: 10, borderRadius: 8, marginBottom: 15, textAlign: 'center' }}>
                     <span style={{ color: '#999', fontSize: '0.9em' }}>Canlı Piyasa Fiyatı</span>
                     <div style={{ fontSize: '1.4em', fontWeight: 'bold' }}><LivePrice price={currentLivePrice} /></div>
                 </div>
                 <div style={{ display: 'flex', gap: 10, marginBottom: 15 }}>
                     <button onClick={() => { setMode('BUY'); setAmount(''); setUsdtTotal(''); }}
-                        style={{ ...styles.modeBtn, backgroundColor: mode === 'BUY' ? '#23a559' : '#2b2d31', opacity: mode === 'BUY' ? 1 : 0.5 }}>AL (Buy)</button>
+                        style={{ ...styles.modeBtn, backgroundColor: mode === 'BUY' ? '#23a559' : '#111214', opacity: mode === 'BUY' ? 1 : 0.5 }}>AL (Buy)</button>
                     <button onClick={() => { setMode('SELL'); setAmount(''); setUsdtTotal(''); }}
-                        style={{ ...styles.modeBtn, backgroundColor: mode === 'SELL' ? '#da373c' : '#2b2d31', opacity: mode === 'SELL' ? 1 : 0.5 }}>SAT (Sell)</button>
+                        style={{ ...styles.modeBtn, backgroundColor: mode === 'SELL' ? '#da373c' : '#111214', opacity: mode === 'SELL' ? 1 : 0.5 }}>SAT (Sell)</button>
                 </div>
                 <div style={{ marginBottom: 10, fontSize: '0.85em', color: '#dbdee1', display: 'flex', justifyContent: 'space-between', padding: '0 5px' }}>
                     <span>💰 Bakiye: <span style={{ color: '#23a559' }}>${userBalance.toFixed(2)}</span></span>

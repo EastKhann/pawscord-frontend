@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaClock, FaPlay } from 'react-icons/fa';
 import { LEVELS, loadAllQuestions } from '../data/grammarQuestions';
 import toast from '../utils/toast';
 import styles from './grammarQuizStyles';
@@ -20,23 +20,47 @@ const LevelSelect = ({ knownQuestions, startQuiz }) => {
         const totalInDb = allQuestions.filter(q => q.level === lvl.id).length;
         const knownInLevel = allQuestions.filter(q => q.level === lvl.id && knownQuestions.includes(q.id)).length;
         const remaining = totalInDb - knownInLevel;
+        const done = remaining === 0;
 
         return (
-            <button
+            <div
                 key={lvl.id}
-                onClick={() => remaining > 0 ? startQuiz(lvl.id) : toast.success("Tebrikler! Bu seviyedeki tüm soruları tamamladın.")}
                 style={{
                     ...styles.levelCard,
-                    borderTop: `5px solid ${lvl.color}`,
-                    opacity: remaining === 0 ? 0.6 : 1
+                    borderTop: `4px solid ${lvl.color}`,
+                    boxShadow: `0 6px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05), 0 -2px 16px ${lvl.color}22`,
+                    opacity: done ? 0.55 : 1,
+                    display: 'flex', flexDirection: 'column', gap: 0
                 }}
             >
-                <div style={styles.levelIcon}>{lvl.icon}</div>
+                <div style={{ ...styles.levelIcon, fontSize: '2.8em', marginBottom: 4 }}>{lvl.icon}</div>
                 <div style={styles.levelName}>{lvl.name}</div>
-                <div style={styles.levelCount}>
-                    {remaining === 0 ? "Tamamlandı! 🎉" : `${knownInLevel} / ${totalInDb} Tamamlandı`}
+                <div style={{ ...styles.levelCount, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {done
+                        ? <span style={{ color: '#4ade80', fontWeight: 700 }}>✓ Tamamlandı</span>
+                        : <><span style={{ color: lvl.color, fontWeight: 700 }}>{knownInLevel}</span> / <span>{totalInDb}</span> Soru</>}
                 </div>
-            </button>
+                {/* Mini progress bar */}
+                {!done && totalInDb > 0 && (
+                    <div style={{ height: 4, borderRadius: 4, background: 'rgba(255,255,255,0.07)', marginTop: 8, overflow: 'hidden' }}>
+                        <div style={{ height: '100%', borderRadius: 4, width: `${Math.round(knownInLevel / totalInDb * 100)}%`, background: `linear-gradient(90deg,${lvl.color}cc,${lvl.color})`, transition: 'width 0.6s ease' }} />
+                    </div>
+                )}
+                <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+                    <button
+                        onClick={() => done ? toast.success("Bu seviyeyi tamamladın!") : startQuiz(lvl.id, false)}
+                        style={{ ...styles.modeBtn, flex: 1, background: 'rgba(88,101,242,0.13)', borderColor: 'rgba(88,101,242,0.5)', color: '#8b94ff' }}
+                    >
+                        <FaPlay size={10} /> Normal
+                    </button>
+                    <button
+                        onClick={() => done ? toast.success("Bu seviyeyi tamamladın!") : startQuiz(lvl.id, true)}
+                        style={{ ...styles.modeBtn, flex: 1, background: 'rgba(240,178,50,0.1)', borderColor: 'rgba(240,178,50,0.45)', color: '#f0b232' }}
+                    >
+                        <FaClock size={10} /> Zamanlı
+                    </button>
+                </div>
+            </div>
         );
     };
 

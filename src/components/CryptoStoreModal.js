@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { FaTimes, FaCoins, FaShoppingBag, FaTshirt, FaBitcoin } from 'react-icons/fa';
 import useCryptoStore from './CryptoStoreModal/useCryptoStore';
 import StoreTab from './CryptoStoreModal/StoreTab';
@@ -45,14 +45,14 @@ const CryptoStoreModal = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 </div>
 
                 {store.dailyInfo && (
-                    <div style={{ padding: '10px 20px', borderTop: '1px solid #1e1f22', backgroundColor: '#202225' }}>
+                    <div style={{ padding: '10px 20px', borderTop: '1px solid #0b0e1b', backgroundColor: '#0d0e10' }}>
                         {store.dailyInfo.claimed ? (
                             <div style={{ color: '#23a559' }}>
                                 {'🎁'} {(store.dailyInfo.added_coins ?? 0)} coin ald{'ı'}n! Yeni bakiye: <strong>{store.dailyInfo.new_balance ?? store.balance}</strong>.
-                                {typeof store.dailyInfo.streak !== 'undefined' && <span style={{ marginLeft: 8, color: '#b9bbbe' }}>Streak: {store.dailyInfo.streak}</span>}
+                                {typeof store.dailyInfo.streak !== 'undefined' && <span style={{ marginLeft: 8, color: '#b5bac1' }}>Streak: {store.dailyInfo.streak}</span>}
                             </div>
                         ) : store.dailyInfo.reason === 'cooldown' ? (
-                            <div style={{ color: '#b9bbbe' }}>{'⏳'} G{'ü'}nl{'ü'}k {'ö'}d{'ü'}l i{'ç'}in bekle: <strong>{Math.max(0, store.dailyInfo.remaining_seconds ?? 0)}</strong> sn</div>
+                            <div style={{ color: '#b5bac1' }}>{'⏳'} G{'ü'}nl{'ü'}k {'ö'}d{'ü'}l i{'ç'}in bekle: <strong>{Math.max(0, store.dailyInfo.remaining_seconds ?? 0)}</strong> sn</div>
                         ) : (
                             <div style={{ color: '#ff5d5d' }}>{'⚠️'} {(store.dailyInfo.error || 'Ödül alınamadı.')}</div>
                         )}

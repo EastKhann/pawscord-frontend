@@ -1,4 +1,4 @@
-// frontend/src/components/ServerThemesPanel.js
+﻿// frontend/src/components/ServerThemesPanel.js
 import { useState, useEffect, useCallback, memo } from 'react';
 import { FaTimes, FaPalette, FaPlus, FaCheck } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -14,10 +14,10 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
     const [customTheme, setCustomTheme] = useState({
         name: '',
         primary_color: '#5865f2',
-        secondary_color: '#2c2f33',
+        secondary_color: '#111214',
         background_color: '#1e1e1e',
         text_color: '#ffffff',
-        accent_color: '#43b581'
+        accent_color: '#23a559'
     });
     const [loading, setLoading] = useState(true);
 
@@ -33,18 +33,18 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
         {
             name: 'Discord Classic',
             primary_color: '#5865f2',
-            secondary_color: '#2c2f33',
+            secondary_color: '#111214',
             background_color: '#1e1e1e',
             text_color: '#ffffff',
-            accent_color: '#43b581'
+            accent_color: '#23a559'
         },
         {
             name: 'Dark Purple',
-            primary_color: '#7289da',
-            secondary_color: '#2c2f33',
-            background_color: '#23272a',
+            primary_color: '#5865f2',
+            secondary_color: '#111214',
+            background_color: '#0d0e10',
             text_color: '#ffffff',
-            accent_color: '#99aab5'
+            accent_color: '#949ba4'
         },
         {
             name: 'Ocean Blue',
@@ -139,10 +139,10 @@ const ServerThemesPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => 
                 setCustomTheme({
                     name: '',
                     primary_color: '#5865f2',
-                    secondary_color: '#2c2f33',
+                    secondary_color: '#111214',
                     background_color: '#1e1e1e',
                     text_color: '#ffffff',
-                    accent_color: '#43b581'
+                    accent_color: '#23a559'
                 });
             } else {
                 toast.error('Tema kaydedilemedi');
@@ -301,7 +301,7 @@ const styles = {
         marginBottom: '30px'
     },
     sectionTitle: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '18px',
         fontWeight: '600',
         marginBottom: '15px'
@@ -312,7 +312,7 @@ const styles = {
         gap: '15px'
     },
     themeCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '15px',
         cursor: 'pointer',
@@ -338,11 +338,11 @@ const styles = {
         position: 'absolute',
         top: '10px',
         right: '10px',
-        color: '#43b581',
+        color: '#23a559',
         fontSize: '20px'
     },
     customForm: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px'
     },

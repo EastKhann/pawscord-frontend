@@ -1,7 +1,7 @@
 /* Reminders Styles */
 
 .reminders-container {
-    background: var(--bg-secondary, #2f3136);
+    background: var(--bg-secondary, #111214);
     border-radius: 8px;
     padding: 16px;
     max-width: 400px;
@@ -17,13 +17,13 @@
 .reminders-header h3 {
     margin: 0;
     font-size: 16px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .reminder-count {
     font-size: 12px;
-    color: var(--text-muted, #72767d);
-    background: var(--bg-tertiary, #202225);
+    color: var(--text-muted, #949ba4);
+    background: var(--bg-tertiary, #0d0e10);
     padding: 4px 8px;
     border-radius: 10px;
 }
@@ -41,22 +41,22 @@
 
 .time-input {
     width: 100px;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 4px;
     padding: 10px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     outline: none;
 }
 
 .message-input {
     flex: 1;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 4px;
     padding: 10px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     font-size: 14px;
     outline: none;
 }
@@ -68,7 +68,7 @@
 
 .time-input::placeholder,
 .message-input::placeholder {
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .add-btn {
@@ -94,11 +94,11 @@
 }
 
 .quick-time-btn {
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border: none;
     border-radius: 12px;
     padding: 4px 10px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     font-size: 11px;
     cursor: pointer;
     transition: all 0.15s;
@@ -106,7 +106,7 @@
 
 .quick-time-btn:hover {
     background: var(--bg-modifier-hover, rgba(79, 84, 92, 0.4));
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 /* Reminders List */
@@ -129,7 +129,7 @@
 
 .list-header span {
     font-size: 12px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     text-transform: uppercase;
 }
 
@@ -151,7 +151,7 @@
     align-items: center;
     gap: 12px;
     padding: 10px 12px;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     border-radius: 6px;
     margin-bottom: 6px;
     transition: all 0.15s;
@@ -162,7 +162,7 @@
 }
 
 .reminder-item.urgent {
-    border-left: 3px solid #faa61a;
+    border-left: 3px solid #f0b232;
     animation: urgentPulse 2s ease-in-out infinite;
 }
 
@@ -170,7 +170,7 @@
 
     0%,
     100% {
-        background: var(--bg-tertiary, #202225);
+        background: var(--bg-tertiary, #0d0e10);
     }
 
     50% {
@@ -190,7 +190,7 @@
 .reminder-message {
     display: block;
     font-size: 14px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -199,18 +199,18 @@
 
 .reminder-time {
     font-size: 12px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .reminder-item.urgent .reminder-time {
-    color: #faa61a;
+    color: #f0b232;
     font-weight: 500;
 }
 
 .remove-btn {
     background: none;
     border: none;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 4px;
@@ -224,7 +224,7 @@
 }
 
 .remove-btn:hover {
-    background: var(--status-danger, #ed4245);
+    background: var(--status-danger, #f23f42);
     color: white;
 }
 
@@ -232,7 +232,7 @@
 .no-reminders {
     text-align: center;
     padding: 32px 16px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .empty-icon {
@@ -244,13 +244,13 @@
 
 .no-reminders p {
     margin: 0 0 8px;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .help-text {
     font-size: 12px;
     font-family: monospace;
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     padding: 4px 8px;
     border-radius: 4px;
 }
@@ -312,24 +312,24 @@
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
     margin-bottom: 2px;
 }
 
 .toast-message {
     font-size: 14px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
 }
 
 .toast-dismiss {
     background: none;
     border: none;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     cursor: pointer;
     padding: 8px;
     font-size: 16px;
 }
 
 .toast-dismiss:hover {
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }

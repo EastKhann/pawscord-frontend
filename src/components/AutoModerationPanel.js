@@ -160,11 +160,11 @@ const AutoModerationPanel = memo(({ serverId, onClose }) => {
 
     const getActionColor = (action) => {
         switch (action) {
-            case 'warn': return '#faa61a';
+            case 'warn': return '#f0b232';
             case 'mute': return '#ff9500';
-            case 'kick': return '#ff3b30';
+            case 'kick': return '#f23f42';
             case 'ban': return '#ff0000';
-            default: return '#8b5cf6';
+            default: return '#5865f2';
         }
     };
 

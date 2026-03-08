@@ -17,7 +17,7 @@ const ActivityTab = ({ userActivity }) => {
         }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>📊</div>
           <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Henüz aktivite yok</h4>
-          <p style={{ color: '#b9bbbe', margin: 0 }}>
+          <p style={{ color: '#b5bac1', margin: 0 }}>
             Aktiviteleriniz burada görünecek
           </p>
         </div>
@@ -40,12 +40,12 @@ const ActivityTab = ({ userActivity }) => {
                   {activity.type === 'voice' && '🎤 Sesli sohbete katıldı'}
                   {activity.type === 'game' && '🎮 Oyun başlatıldı'}
                 </h4>
-                <span style={{ color: '#b9bbbe', fontSize: '12px' }}>
+                <span style={{ color: '#b5bac1', fontSize: '12px' }}>
                   {new Date(activity.timestamp).toLocaleString('tr-TR')}
                 </span>
               </div>
               {activity.description && (
-                <p style={{ color: '#b9bbbe', margin: 0, fontSize: '13px' }}>
+                <p style={{ color: '#b5bac1', margin: 0, fontSize: '13px' }}>
                   {activity.description}
                 </p>
               )}

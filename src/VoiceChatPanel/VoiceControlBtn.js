@@ -1,7 +1,7 @@
 
 const VoiceControlBtn = ({ icon, active, danger, special, subtle, small, isLeave, onClick, title, label }) => {
     const getBackground = () => {
-        if (isLeave) return 'linear-gradient(135deg, #ed4245 0%, #c03537 100%)';
+        if (isLeave) return 'linear-gradient(135deg, #f23f42 0%, #c03537 100%)';
         if (danger && active) return 'rgba(240, 71, 71, 0.4)';
         if (danger) return 'rgba(240, 71, 71, 0.15)';
         if (special) return 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)';

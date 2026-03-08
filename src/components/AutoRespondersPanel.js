@@ -54,7 +54,7 @@ const AutoRespondersPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
                   </div>
                   <div style={styles.actions}>
                     <button onClick={() => toggleResponder(resp.id, !resp.enabled)} style={styles.toggleButton} title={resp.enabled ? 'Disable' : 'Enable'}>
-                      {resp.enabled ? <FaToggleOn style={{ color: '#43b581', fontSize: '24px' }} /> : <FaToggleOff style={{ color: '#99aab5', fontSize: '24px' }} />}
+                      {resp.enabled ? <FaToggleOn style={{ color: '#23a559', fontSize: '24px' }} /> : <FaToggleOff style={{ color: '#949ba4', fontSize: '24px' }} />}
                     </button>
                     <button onClick={() => deleteResponder(resp.id)} style={styles.deleteButton} title="Delete"><FaTrash /></button>
                   </div>

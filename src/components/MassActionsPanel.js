@@ -1,4 +1,4 @@
-// frontend/src/components/MassActionsPanel.js
+﻿// frontend/src/components/MassActionsPanel.js
 import { useState } from 'react';
 import { FaTimes, FaUsers, FaBan, FaVolumeUp, FaTrash } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -63,7 +63,7 @@ const MassActionsPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) => {
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaUsers style={{ color: '#f04747' }} />
+                        <FaUsers style={{ color: '#f23f42' }} />
                         <h2 style={{ margin: 0 }}>Toplu Moderasyon</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -191,14 +191,14 @@ const styles = {
     label: {
         display: 'block',
         marginBottom: '8px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         fontWeight: '600'
     },
     select: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -207,7 +207,7 @@ const styles = {
     textarea: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -218,18 +218,18 @@ const styles = {
     input: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
         fontSize: '14px'
     },
     warning: {
-        backgroundColor: '#faa61a1a',
-        border: '1px solid #faa61a',
+        backgroundColor: '#f0b2321a',
+        border: '1px solid #f0b232',
         borderRadius: '4px',
         padding: '15px',
-        color: '#faa61a',
+        color: '#f0b232',
         fontSize: '14px',
         textAlign: 'center'
     },
@@ -241,7 +241,7 @@ const styles = {
     },
     cancelBtn: {
         flex: 1,
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         color: '#fff',
         border: 'none',
         padding: '12px',
@@ -252,7 +252,7 @@ const styles = {
     },
     executeBtn: {
         flex: 1,
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '12px',

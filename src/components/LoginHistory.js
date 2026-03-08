@@ -1,4 +1,4 @@
-// frontend/src/components/LoginHistory.js
+﻿// frontend/src/components/LoginHistory.js
 // 🔥 FEATURE 48: Login history page
 // Shows recent login attempts with device, location, time
 
@@ -54,7 +54,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                             key={login.id || i}
                             style={{
                                 ...S.loginItem,
-                                borderLeftColor: isSuccess ? (isCurrent ? '#57f287' : '#5865f2') : '#ed4245',
+                                borderLeftColor: isSuccess ? (isCurrent ? '#23a559' : '#5865f2') : '#f23f42',
                             }}
                         >
                             <div
@@ -67,7 +67,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                 }}>
                                     <DeviceIcon style={{
                                         fontSize: 18,
-                                        color: isSuccess ? '#5865f2' : '#ed4245',
+                                        color: isSuccess ? '#5865f2' : '#f23f42',
                                     }} />
                                 </div>
 
@@ -80,7 +80,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                             <span style={S.currentBadge}>Şu anki oturum</span>
                                         )}
                                         {!isSuccess && (
-                                            <FaExclamationTriangle style={{ fontSize: 12, color: '#ed4245' }} />
+                                            <FaExclamationTriangle style={{ fontSize: 12, color: '#f23f42' }} />
                                         )}
                                     </div>
                                     <div style={S.loginMeta}>
@@ -98,9 +98,9 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
 
                                 <div style={S.statusIcon}>
                                     {isSuccess ? (
-                                        <FaCheck style={{ color: '#57f287', fontSize: 14 }} />
+                                        <FaCheck style={{ color: '#23a559', fontSize: 14 }} />
                                     ) : (
-                                        <FaTimes style={{ color: '#ed4245', fontSize: 14 }} />
+                                        <FaTimes style={{ color: '#f23f42', fontSize: 14 }} />
                                     )}
                                 </div>
                             </div>
@@ -123,7 +123,7 @@ const LoginHistory = ({ logins = [], onRevokeSession, onRevokeAll }) => {
                                         <span style={S.detailLabel}>Durum</span>
                                         <span style={{
                                             ...S.detailValue,
-                                            color: isSuccess ? '#57f287' : '#ed4245',
+                                            color: isSuccess ? '#23a559' : '#f23f42',
                                         }}>
                                             {isSuccess ? 'Başarılı' : 'Başarısız'}
                                         </span>
@@ -163,12 +163,12 @@ const S = {
     subtitle: { fontSize: 12, color: '#b5bac1', display: 'block' },
     revokeAllBtn: {
         padding: '6px 14px', borderRadius: 4,
-        border: 'none', backgroundColor: '#ed4245',
+        border: 'none', backgroundColor: '#f23f42',
         color: '#fff', fontSize: 12, fontWeight: 500, cursor: 'pointer',
     },
     list: { display: 'flex', flexDirection: 'column', gap: 6 },
     loginItem: {
-        backgroundColor: '#2b2d31', borderRadius: 8,
+        backgroundColor: '#111214', borderRadius: 8,
         borderLeft: '3px solid', overflow: 'hidden',
     },
     loginMain: {
@@ -188,7 +188,7 @@ const S = {
         fontSize: 14, fontWeight: 600, color: '#f2f3f5',
     },
     currentBadge: {
-        fontSize: 10, fontWeight: 600, color: '#57f287',
+        fontSize: 10, fontWeight: 600, color: '#23a559',
         backgroundColor: 'rgba(87,242,135,0.1)',
         padding: '1px 6px', borderRadius: 4,
     },
@@ -212,11 +212,11 @@ const S = {
         display: 'flex', justifyContent: 'space-between',
     },
     detailLabel: { fontSize: 13, color: '#b5bac1' },
-    detailValue: { fontSize: 13, color: '#dcddde', fontWeight: 500 },
+    detailValue: { fontSize: 13, color: '#dbdee1', fontWeight: 500 },
     revokeBtn: {
         marginTop: 8, padding: '6px 14px', borderRadius: 4,
         border: 'none', backgroundColor: 'rgba(237,66,69,0.1)',
-        color: '#ed4245', fontSize: 13, fontWeight: 500, cursor: 'pointer',
+        color: '#f23f42', fontSize: 13, fontWeight: 500, cursor: 'pointer',
         alignSelf: 'flex-start',
     },
     empty: {

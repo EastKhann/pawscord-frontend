@@ -1,4 +1,4 @@
-// frontend/src/components/NotificationManager.js
+﻿// frontend/src/components/NotificationManager.js
 
 /**
  * 🔔 Desktop Notification Manager
@@ -280,7 +280,7 @@ class NotificationManager {
             const ctx = canvas.getContext('2d');
 
             // Draw badge
-            ctx.fillStyle = '#f04747';
+            ctx.fillStyle = '#f23f42';
             ctx.beginPath();
             ctx.arc(24, 8, 8, 0, 2 * Math.PI);
             ctx.fill();
@@ -439,7 +439,7 @@ export const NotificationSettings = ({ settings, onUpdate }) => {
 const styles = {
     container: {
         padding: '20px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         color: '#fff'
     },

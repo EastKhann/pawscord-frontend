@@ -48,9 +48,9 @@ export default function useAppEffects({
     useEffect(() => {
         if (animationState === 'finished') return;
         setAnimationState('start');
-        // ⚡ Minimum animasyon: 800ms (logo animasyonu), data hazırsa hemen kapat
-        const minTimer = setTimeout(() => setAnimationState('pre-transition'), 800);
-        const forceFinishTimer = setTimeout(() => setAnimationState('finished'), 2000); // Max bekle
+        // ⚡ Minimum animasyon: 1600ms (logo + loading bar), data hazırsa hemen kapat
+        const minTimer = setTimeout(() => setAnimationState('pre-transition'), 1600);
+        const forceFinishTimer = setTimeout(() => setAnimationState('finished'), 3200); // Max bekle
         return () => {
             clearTimeout(minTimer);
             clearTimeout(forceFinishTimer);

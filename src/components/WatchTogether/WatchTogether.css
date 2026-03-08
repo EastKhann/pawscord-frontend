@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 50%, #0f3460 100%);
     border-radius: 16px;
     overflow: hidden;
     position: relative;
@@ -75,7 +75,7 @@
 .supported-platforms .platforms span {
     padding: 6px 14px;
     background: rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
+    border-radius: 12px;
     color: #a0aec0;
     font-size: 13px;
 }
@@ -197,7 +197,7 @@
 
 .live-badge {
     padding: 4px 10px;
-    background: #ef4444;
+    background: #f23f42;
     border-radius: 6px;
     font-size: 11px;
     font-weight: 700;
@@ -252,7 +252,7 @@
 
 .close-btn:hover {
     background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    color: #f23f42;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════════
@@ -319,7 +319,7 @@
     justify-content: space-between;
     padding: 12px 20px;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(4px);
 }
 
 .control-left,
@@ -346,7 +346,7 @@
 
 .watch-controls button:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .reactions-bar {
@@ -368,7 +368,7 @@
 
 .end-btn {
     background: rgba(239, 68, 68, 0.2) !important;
-    color: #ef4444 !important;
+    color: #f23f42 !important;
     width: auto !important;
     padding: 0 16px !important;
     border-radius: 8px !important;
@@ -391,7 +391,7 @@
     bottom: 66px;
     width: 300px;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
     border-left: 1px solid rgba(255, 255, 255, 0.08);

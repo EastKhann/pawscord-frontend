@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaChartLine, FaHeart, FaFire, FaTrophy, FaCalendar } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -50,10 +50,10 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
 
     const getHeatLevel = (value, max) => {
         const percentage = (value / max) * 100;
-        if (percentage > 75) return '#f04747';
-        if (percentage > 50) return '#faa61a';
+        if (percentage > 75) return '#f23f42';
+        if (percentage > 50) return '#f0b232';
         if (percentage > 25) return '#5865f2';
-        return '#2c2f33';
+        return '#111214';
     };
 
     const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -168,7 +168,7 @@ const ReactionAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                                         <div style={styles.userInfo}>
                                             <div style={styles.username}>{user.username}</div>
                                             <div style={styles.userReactions}>
-                                                <FaHeart style={{ color: '#f04747', marginRight: '5px' }} />
+                                                <FaHeart style={{ color: '#f23f42', marginRight: '5px' }} />
                                                 {user.reaction_count} reactions
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -225,21 +225,21 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     tabs: {
         display: 'flex',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
         padding: '0 20px',
     },
     tab: {
         padding: '12px 20px',
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '14px',
         display: 'flex',
@@ -257,12 +257,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     heatmapContainer: {
@@ -281,7 +281,7 @@ const styles = {
     },
     dayLabel: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         height: '20px',
         display: 'flex',
         alignItems: 'center',
@@ -307,7 +307,7 @@ const styles = {
     },
     hourLabel: {
         fontSize: '11px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     legend: {
         display: 'flex',
@@ -317,7 +317,7 @@ const styles = {
     },
     legendLabel: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     legendBox: {
         width: '15px',
@@ -341,11 +341,11 @@ const styles = {
     },
     statDate: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     barContainer: {
         height: '24px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         overflow: 'hidden',
     },
@@ -366,7 +366,7 @@ const styles = {
         gap: '12px',
     },
     leaderboardItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '16px',
         display: 'flex',
@@ -390,7 +390,7 @@ const styles = {
     },
     userReactions: {
         fontSize: '14px',
-        color: '#99aab5',
+        color: '#949ba4',
         display: 'flex',
         alignItems: 'center',
     },

@@ -82,7 +82,7 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
         switch (sentiment) {
             case 'positive': return '#10b981';
             case 'neutral': return '#6b7280';
-            case 'negative': return '#ef4444';
+            case 'negative': return '#f23f42';
             default: return '#6b7280';
         }
     };

@@ -1,4 +1,4 @@
-// frontend/src/components/SessionManagerModal.js
+﻿// frontend/src/components/SessionManagerModal.js
 import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaTimes, FaDesktop, FaMobile, FaTablet, FaTrash, FaCircle } from 'react-icons/fa';
@@ -138,7 +138,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '600px',
@@ -152,7 +152,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -162,7 +162,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.5em',
         padding: '5px'
@@ -174,12 +174,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     sessionList: {
@@ -188,7 +188,7 @@ const styles = {
         gap: '12px'
     },
     sessionItem: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         borderRadius: '8px',
         padding: '15px',
         display: 'flex',
@@ -225,16 +225,16 @@ const styles = {
         gap: '4px'
     },
     sessionDetails: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '0.85em',
         marginBottom: '3px'
     },
     sessionTime: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.75em'
     },
     revokeButton: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         color: 'white',
         padding: '8px 12px',

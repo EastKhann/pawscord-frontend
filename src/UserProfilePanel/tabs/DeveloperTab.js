@@ -12,7 +12,7 @@ const DeveloperTab = ({ botAccounts, oauthApps, webhooks }) => {
       <div style={{ marginBottom: '32px' }}>
         <h4 style={{ color: '#fff', marginBottom: '12px' }}>🔑 OAuth Uygulamalar</h4>
         {oauthApps.length === 0 ? (
-          <p style={{ color: '#b9bbbe', fontSize: '14px' }}>Henüz OAuth uygulamanız yok.</p>
+          <p style={{ color: '#b5bac1', fontSize: '14px' }}>Henüz OAuth uygulamanız yok.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {oauthApps.map((app, idx) => (
@@ -25,7 +25,7 @@ const DeveloperTab = ({ botAccounts, oauthApps, webhooks }) => {
                 }}
               >
                 <h5 style={{ color: '#fff', margin: '0 0 8px 0' }}>{app.name}</h5>
-                <p style={{ color: '#b9bbbe', margin: 0, fontSize: '13px' }}>
+                <p style={{ color: '#b5bac1', margin: 0, fontSize: '13px' }}>
                   Client ID: <code>{app.client_id}</code>
                 </p>
               </div>
@@ -38,7 +38,7 @@ const DeveloperTab = ({ botAccounts, oauthApps, webhooks }) => {
       <div style={{ marginBottom: '32px' }}>
         <h4 style={{ color: '#fff', marginBottom: '12px' }}>🪝 Webhook'lar</h4>
         {webhooks.length === 0 ? (
-          <p style={{ color: '#b9bbbe', fontSize: '14px' }}>Henüz webhook'unuz yok.</p>
+          <p style={{ color: '#b5bac1', fontSize: '14px' }}>Henüz webhook'unuz yok.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {webhooks.map((webhook, idx) => (
@@ -51,7 +51,7 @@ const DeveloperTab = ({ botAccounts, oauthApps, webhooks }) => {
                 }}
               >
                 <h5 style={{ color: '#fff', margin: '0 0 8px 0' }}>{webhook.name}</h5>
-                <p style={{ color: '#b9bbbe', margin: 0, fontSize: '13px' }}>
+                <p style={{ color: '#b5bac1', margin: 0, fontSize: '13px' }}>
                   URL: <code style={{ wordBreak: 'break-all' }}>{webhook.url}</code>
                 </p>
               </div>
@@ -64,7 +64,7 @@ const DeveloperTab = ({ botAccounts, oauthApps, webhooks }) => {
       <div>
         <h4 style={{ color: '#fff', marginBottom: '12px' }}>🤖 Bot Hesapları</h4>
         {botAccounts.length === 0 ? (
-          <p style={{ color: '#b9bbbe', fontSize: '14px' }}>Henüz bot hesabınız yok.</p>
+          <p style={{ color: '#b5bac1', fontSize: '14px' }}>Henüz bot hesabınız yok.</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {botAccounts.map((bot, idx) => (
@@ -86,7 +86,7 @@ const DeveloperTab = ({ botAccounts, oauthApps, webhooks }) => {
                 />
                 <div>
                   <h5 style={{ color: '#fff', margin: '0 0 4px 0' }}>{bot.username}</h5>
-                  <p style={{ color: '#b9bbbe', margin: 0, fontSize: '13px' }}>
+                  <p style={{ color: '#b5bac1', margin: 0, fontSize: '13px' }}>
                     Token: <code>{bot.token?.substring(0, 20)}...</code>
                   </p>
                 </div>

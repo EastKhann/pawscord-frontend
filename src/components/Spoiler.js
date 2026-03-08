@@ -1,4 +1,4 @@
-// frontend/src/components/Spoiler.js
+﻿// frontend/src/components/Spoiler.js
 import { useState } from 'react';
 
 const Spoiler = ({ children }) => {
@@ -8,7 +8,7 @@ const Spoiler = ({ children }) => {
         <span
             onClick={(e) => { e.stopPropagation(); setRevealed(true); }}
             style={{
-                backgroundColor: revealed ? 'rgba(255,255,255,0.1)' : '#202225',
+                backgroundColor: revealed ? 'rgba(255,255,255,0.1)' : '#0d0e10',
                 color: revealed ? 'inherit' : 'transparent',
                 borderRadius: '3px',
                 padding: '0 2px',

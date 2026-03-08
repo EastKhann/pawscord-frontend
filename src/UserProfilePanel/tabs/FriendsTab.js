@@ -10,7 +10,7 @@ const FriendsTab = ({ friendRequests, friends, removeFriend, respondToFriendRequ
         <h3 style={styles.sectionTitle}>📨 Bekleyen Arkadaşlık İstekleri</h3>
 
         {friendRequests.length === 0 && (
-          <p style={{ color: '#b9bbbe', textAlign: 'center', padding: '24px' }}>
+          <p style={{ color: '#b5bac1', textAlign: 'center', padding: '24px' }}>
             Bekleyen istek yok.
           </p>
         )}
@@ -27,7 +27,7 @@ const FriendsTab = ({ friendRequests, friends, removeFriend, respondToFriendRequ
                 <p style={{ color: '#fff', margin: 0, fontWeight: '600' }}>
                   {request.from_user.username}
                 </p>
-                <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+                <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
                   {new Date(request.created_at).toLocaleDateString('tr-TR')}
                 </p>
               </div>
@@ -54,7 +54,7 @@ const FriendsTab = ({ friendRequests, friends, removeFriend, respondToFriendRequ
         <h3 style={styles.sectionTitle}>👥 Arkadaşlarım ({friends.length})</h3>
 
         {friends.length === 0 && (
-          <p style={{ color: '#b9bbbe', textAlign: 'center', padding: '24px' }}>
+          <p style={{ color: '#b5bac1', textAlign: 'center', padding: '24px' }}>
             Henüz arkadaşınız yok.
           </p>
         )}
@@ -72,7 +72,7 @@ const FriendsTab = ({ friendRequests, friends, removeFriend, respondToFriendRequ
                   <p style={{ color: '#fff', margin: 0, fontWeight: '600' }}>
                     {friend.username}
                   </p>
-                  <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+                  <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
                     {friend.status_message || 'Durum mesajı yok'}
                   </p>
                 </div>
@@ -80,7 +80,7 @@ const FriendsTab = ({ friendRequests, friends, removeFriend, respondToFriendRequ
                   width: '10px',
                   height: '10px',
                   borderRadius: '50%',
-                  background: friend.is_online ? '#43b581' : '#747f8d'
+                  background: friend.is_online ? '#23a559' : '#80848e'
                 }} />
               </div>
               <button

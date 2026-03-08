@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaMicrophone, FaFileAlt, FaDownload, FaSearch } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -97,7 +97,7 @@ ${transcript.text}
 
                 <div style={styles.toolbar}>
                     <div style={styles.searchBox}>
-                        <FaSearch style={{ color: '#99aab5', marginRight: '8px' }} />
+                        <FaSearch style={{ color: '#949ba4', marginRight: '8px' }} />
                         <input
                             type="text"
                             value={searchQuery}
@@ -134,7 +134,7 @@ ${transcript.text}
                                             </span>
                                             <span style={{
                                                 ...styles.confidence,
-                                                color: transcript.confidence >= 0.8 ? '#43b581' : transcript.confidence >= 0.6 ? '#faa61a' : '#f04747'
+                                                color: transcript.confidence >= 0.8 ? '#23a559' : transcript.confidence >= 0.6 ? '#f0b232' : '#f23f42'
                                             }}>
                                                 {(transcript.confidence * 100).toFixed(1)}% confidence
                                             </span>
@@ -193,7 +193,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -207,7 +207,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -216,13 +216,13 @@ const styles = {
         display: 'flex',
         gap: '12px',
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     searchBox: {
         flex: 1,
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         padding: '8px 12px',
     },
@@ -252,12 +252,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     transcriptsList: {
@@ -266,7 +266,7 @@ const styles = {
         gap: '16px',
     },
     transcriptCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
     },
@@ -291,7 +291,7 @@ const styles = {
     },
     date: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     confidence: {
         fontSize: '12px',
@@ -299,7 +299,7 @@ const styles = {
     },
     transcriptText: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         lineHeight: '1.6',
         marginBottom: '12px',
         padding: '12px',
@@ -308,7 +308,7 @@ const styles = {
     },
     duration: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '12px',
     },
     downloadButton: {

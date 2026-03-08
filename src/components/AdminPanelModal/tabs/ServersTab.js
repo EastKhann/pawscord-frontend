@@ -38,7 +38,7 @@ const ServersTab = ({ handleServerDetails, servers, setDeleteConfirm }) => {
                                         <div style={{ fontSize: '9px', color: '#6b7280' }}>Kanal</div>
                                     </div>
                                     <div style={styles.miniCard}>
-                                        <div style={{ fontSize: '16px', fontWeight: '700', color: '#9b59b6' }}>{server.voice_channels}</div>
+                                        <div style={{ fontSize: '16px', fontWeight: '700', color: '#5865f2' }}>{server.voice_channels}</div>
                                         <div style={{ fontSize: '9px', color: '#6b7280' }}>Ses</div>
                                     </div>
                                 </div>

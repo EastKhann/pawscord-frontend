@@ -1,11 +1,13 @@
 /* frontend/src/components/MusicPlayer.css */
 
 .music-player {
-    background: linear-gradient(135deg, #1e1e30 0%, #2d1b47 100%);
-    border-radius: 16px;
+    background: rgba(30, 31, 35, 0.88);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border-radius: 22px;
     padding: 20px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     position: relative;
 }
 
@@ -48,7 +50,7 @@
 }
 
 .track-artist {
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
@@ -61,7 +63,7 @@
 }
 
 .source-icon {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .source-icon.youtube {
@@ -73,7 +75,7 @@
 }
 
 .no-track {
-    color: #6c6d7d;
+    color: #949ba4;
     font-style: italic;
     padding: 20px 0;
 }
@@ -108,25 +110,26 @@
 }
 
 .control-btn:hover {
-    background: rgba(139, 92, 246, 0.3);
-    transform: scale(1.1);
+    background: rgba(88, 101, 242, 0.3);
+    transform: scale(1.03);
 }
 
 .control-btn.active {
-    background: rgba(139, 92, 246, 0.4);
-    color: #8b5cf6;
+    background: rgba(88, 101, 242, 0.4);
+    color: #5865f2;
 }
 
 .play-btn {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     font-size: 20px;
+    box-shadow: 0 4px 0 #3b45c7, 0 8px 24px rgba(88, 101, 242, 0.40);
 }
 
 .play-btn:hover {
-    background: linear-gradient(135deg, #9d6fff 0%, #7478ff 100%);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, #6b73f7 0%, #5865f2 100%);
+    box-shadow: 0 4px 0 #3b45c7, 0 8px 24px rgba(88, 101, 242, 0.55);
 }
 
 .progress-container {
@@ -136,7 +139,7 @@
 }
 
 .time-display {
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 13px;
     font-variant-numeric: tabular-nums;
     min-width: 40px;
@@ -158,16 +161,16 @@
     appearance: none;
     width: 14px;
     height: 14px;
-    background: #8b5cf6;
+    background: #5865f2;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 2px 8px rgba(88, 101, 242, 0.5);
 }
 
 .progress-bar::-moz-range-thumb {
     width: 14px;
     height: 14px;
-    background: #8b5cf6;
+    background: #5865f2;
     border-radius: 50%;
     cursor: pointer;
     border: none;
@@ -192,14 +195,14 @@
 }
 
 .extra-btn:hover {
-    background: rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.3);
 }
 
 .queue-count {
     position: absolute;
     top: -6px;
     right: -6px;
-    background: #8b5cf6;
+    background: #5865f2;
     color: #ffffff;
     border-radius: 10px;
     padding: 2px 6px;
@@ -228,7 +231,7 @@
     appearance: none;
     width: 12px;
     height: 12px;
-    background: #8b5cf6;
+    background: #5865f2;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -236,14 +239,14 @@
 .volume-slider::-moz-range-thumb {
     width: 12px;
     height: 12px;
-    background: #8b5cf6;
+    background: #5865f2;
     border-radius: 50%;
     cursor: pointer;
     border: none;
 }
 
 .volume-display {
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 13px;
     min-width: 38px;
     text-align: right;
@@ -255,12 +258,14 @@
     bottom: 100%;
     right: 0;
     margin-bottom: 16px;
-    background: linear-gradient(135deg, #1e1e30 0%, #2d1b47 100%);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 16px;
+    background: rgba(30, 31, 35, 0.92);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
     width: 400px;
     max-height: 500px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     animation: slideUp 0.3s ease;
@@ -283,7 +288,7 @@
 .close-btn {
     background: none;
     border: none;
-    color: #6c6d7d;
+    color: #949ba4;
     cursor: pointer;
     font-size: 20px;
     padding: 4px;
@@ -303,7 +308,7 @@
 .queue-empty {
     padding: 40px 20px;
     text-align: center;
-    color: #6c6d7d;
+    color: #949ba4;
 }
 
 .queue-item {
@@ -319,12 +324,12 @@
 }
 
 .queue-item:hover {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.1);
+    border-color: rgba(88, 101, 242, 0.3);
 }
 
 .queue-index {
-    color: #8b5cf6;
+    color: #5865f2;
     font-weight: 600;
     font-size: 14px;
     min-width: 24px;
@@ -353,7 +358,7 @@
 }
 
 .queue-track-artist {
-    color: #6c6d7d;
+    color: #949ba4;
     font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
@@ -365,7 +370,7 @@
     border: none;
     border-radius: 6px;
     padding: 8px;
-    color: #ff3b30;
+    color: #f23f42;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -380,11 +385,13 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #1e1e30 0%, #2d1b47 100%);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 16px;
+    background: rgba(30, 31, 35, 0.92);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
     padding: 24px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
     min-width: 400px;
     animation: fadeIn 0.3s ease;
 }
@@ -397,9 +404,9 @@
 
 .track-url-input {
     width: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid rgba(139, 92, 246, 0.3);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.07);
+    border-radius: 13px;
     padding: 14px 16px;
     color: #ffffff;
     font-size: 14px;
@@ -408,8 +415,8 @@
 
 .track-url-input:focus {
     outline: none;
-    border-color: #8b5cf6;
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    border-color: #5865f2;
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2);
 }
 
 .modal-actions {
@@ -421,7 +428,7 @@
 .btn-cancel,
 .btn-add {
     padding: 10px 24px;
-    border-radius: 8px;
+    border-radius: 13px;
     border: none;
     font-size: 14px;
     font-weight: 600;
@@ -439,13 +446,13 @@
 }
 
 .btn-add {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     color: #ffffff;
 }
 
 .btn-add:hover {
-    background: linear-gradient(135deg, #9d6fff 0%, #7478ff 100%);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
 }
 
 @keyframes slideUp {

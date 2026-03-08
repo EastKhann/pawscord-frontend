@@ -10,10 +10,10 @@ const ICON_MAP = { FaShoppingCart, FaPalette, FaMedal, FaFire, FaCrown };
 const ItemCard = ({ item, onClick }) => (
     <div style={s.itemCard} onClick={() => onClick(item)}>
         {item.image ? <img src={item.image} alt={item.name} style={s.itemImage} />
-            : <div style={s.itemPlaceholder}><FaGift style={{ fontSize: '48px', color: '#99aab5' }} /></div>}
+            : <div style={s.itemPlaceholder}><FaGift style={{ fontSize: '48px', color: '#949ba4' }} /></div>}
         <div style={s.itemInfo}>
             <div style={{ ...s.itemName, color: getRarityColor(item.rarity) }}>{item.name}</div>
-            <div style={s.itemPrice}><FaCoins style={{ color: '#faa61a' }} />{item.price.toLocaleString()}</div>
+            <div style={s.itemPrice}><FaCoins style={{ color: '#f0b232' }} />{item.price.toLocaleString()}</div>
         </div>
         {item.limited && <div style={s.limitedBadge}>LIMITED</div>}
     </div>
@@ -32,7 +32,7 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         <h2 style={{ margin: 0, fontSize: '20px' }}>Item Store</h2>
                     </div>
                     <div style={s.headerRight}>
-                        <div style={s.balance}><FaCoins style={{ color: '#faa61a' }} /><span>{store.balance.toLocaleString()}</span></div>
+                        <div style={s.balance}><FaCoins style={{ color: '#f0b232' }} /><span>{store.balance.toLocaleString()}</span></div>
                         <button onClick={onClose} style={s.closeBtn}><FaTimes /></button>
                     </div>
                 </div>
@@ -54,7 +54,7 @@ const StoreModal = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                         <>
                             {store.selectedCategory === 'all' && store.featuredItems.length > 0 && (
                                 <div style={s.section}>
-                                    <h3 style={s.sectionTitle}><FaFire style={{ color: '#f04747' }} /> Featured Items</h3>
+                                    <h3 style={s.sectionTitle}><FaFire style={{ color: '#f23f42' }} /> Featured Items</h3>
                                     <div style={s.itemsGrid}>
                                         {store.featuredItems.map(item => <ItemCard key={item.id} item={item} onClick={store.setSelectedItem} />)}
                                     </div>

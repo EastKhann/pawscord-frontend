@@ -76,7 +76,7 @@ const styles = {
         boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
     },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '15px' },
-    closeBtn: { background: 'none', border: 'none', color: '#b9bbbe', fontSize: '1.2em', cursor: 'pointer', transition: 'color 0.2s', ':hover': { color: '#fff' } },
+    closeBtn: { background: 'none', border: 'none', color: '#b5bac1', fontSize: '1.2em', cursor: 'pointer', transition: 'color 0.2s', ':hover': { color: '#fff' } },
     grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '12px' },
     soundBtn: {
         backgroundColor: 'rgba(255,255,255,0.05)',

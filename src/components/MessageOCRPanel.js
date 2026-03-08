@@ -1,4 +1,4 @@
-// frontend/src/components/MessageOCRPanel.js
+﻿// frontend/src/components/MessageOCRPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaImage, FaFileAlt, FaCopy, FaDownload } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -167,7 +167,7 @@ const styles = {
         marginBottom: '15px'
     },
     toolBtn: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         color: '#fff',
         border: 'none',
         padding: '10px 15px',
@@ -180,13 +180,13 @@ const styles = {
     },
     textArea: {
         flex: 1,
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '15px',
         overflow: 'auto'
     },
     textContent: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         lineHeight: '1.6',
         margin: 0,

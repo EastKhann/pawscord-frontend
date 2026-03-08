@@ -1,4 +1,4 @@
-export const styles = {
+﻿export const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -40,7 +40,7 @@ export const styles = {
     },
     addBtn: {
         padding: '8px 16px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '6px',
         color: '#fff',
@@ -67,12 +67,12 @@ export const styles = {
     loading: {
         textAlign: 'center',
         padding: '40px',
-        color: '#99aab5'
+        color: '#949ba4'
     },
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#dcddde'
+        color: '#dbdee1'
     },
     createForm: {
         maxWidth: '600px',
@@ -96,12 +96,12 @@ export const styles = {
         fontSize: '14px',
         fontWeight: '600',
         marginBottom: '8px',
-        color: '#dcddde'
+        color: '#dbdee1'
     },
     input: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '6px',
         color: '#fff',
@@ -111,7 +111,7 @@ export const styles = {
     select: {
         width: '100%',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '6px',
         color: '#fff',
@@ -168,7 +168,7 @@ export const styles = {
         gap: '12px'
     },
     announcementCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         display: 'flex',
@@ -194,13 +194,13 @@ export const styles = {
     },
     announcementMessage: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '12px',
         lineHeight: '1.6'
     },
     announcementMeta: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap'
@@ -212,7 +212,7 @@ export const styles = {
     },
     deleteIconBtn: {
         padding: '8px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         border: 'none',
         borderRadius: '6px',
         color: '#fff',

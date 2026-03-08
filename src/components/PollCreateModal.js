@@ -1,4 +1,4 @@
-
+﻿
 import { useState } from 'react';
 import { FaPlus, FaTrash, FaTimes } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
@@ -80,17 +80,17 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
             backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000
         }} {...overlayProps}>
             <div style={{
-                backgroundColor: '#36393f', padding: '20px', borderRadius: '8px', width: '400px', maxWidth: '90%',
+                backgroundColor: '#17191c', padding: '20px', borderRadius: '8px', width: '400px', maxWidth: '90%',
                 color: 'white', display: 'flex', flexDirection: 'column', gap: '15px'
             }} {...dialogProps}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h3 style={{ margin: 0 }}>Anket Oluştur</h3>
-                    <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer' }}>
+                    <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer' }}>
                         <FaTimes />
                     </button>
                 </div>
 
-                {error && <div style={{ color: '#ed4245', fontSize: '14px' }}>{error}</div>}
+                {error && <div style={{ color: '#f23f42', fontSize: '14px' }}>{error}</div>}
 
                 <input
                     type="text"
@@ -98,7 +98,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     style={{
-                        padding: '10px', borderRadius: '4px', border: 'none', backgroundColor: '#202225', color: 'white'
+                        padding: '10px', borderRadius: '4px', border: 'none', backgroundColor: '#0d0e10', color: 'white'
                     }}
                 />
 
@@ -111,11 +111,11 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                                 value={opt}
                                 onChange={(e) => handleOptionChange(idx, e.target.value)}
                                 style={{
-                                    flex: 1, padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#202225', color: 'white'
+                                    flex: 1, padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#0d0e10', color: 'white'
                                 }}
                             />
                             {options.length > 2 && (
-                                <button onClick={() => removeOption(idx)} style={{ background: 'none', border: 'none', color: '#ed4245', cursor: 'pointer' }}>
+                                <button onClick={() => removeOption(idx)} style={{ background: 'none', border: 'none', color: '#f23f42', cursor: 'pointer' }}>
                                     <FaTrash />
                                 </button>
                             )}
@@ -144,7 +144,7 @@ const PollCreateModal = ({ onClose, fetchWithAuth, apiBaseUrl, activeRoomSlug })
                     <select
                         value={expiresIn}
                         onChange={(e) => setExpiresIn(e.target.value)}
-                        style={{ padding: '8px', borderRadius: '4px', backgroundColor: '#202225', color: 'white', border: 'none' }}
+                        style={{ padding: '8px', borderRadius: '4px', backgroundColor: '#0d0e10', color: 'white', border: 'none' }}
                     >
                         <option value="3600">1 Saat</option>
                         <option value="86400">24 Saat</option>

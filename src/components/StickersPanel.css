@@ -13,20 +13,20 @@
 }
 
 .stickers-panel-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 900px;
     max-height: 85vh;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
     display: flex;
     flex-direction: column;
 }
 
 .stickers-panel-header {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     padding: 20px 24px;
     display: flex;
     align-items: center;
@@ -36,7 +36,7 @@
 
 .stickers-panel-header h2 {
     margin: 0;
-    font-size: 24px;
+    font-size: 20px;
     color: white;
     display: flex;
     align-items: center;
@@ -57,7 +57,7 @@
 
 .close-btn:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 /* Tabs */
@@ -82,12 +82,12 @@
 }
 
 .tab-btn:hover {
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(88, 101, 242, 0.1);
     color: #cbd5e0;
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     color: white;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .upload-sticker-btn {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border: none;
     color: white;
     padding: 12px 24px;
@@ -117,12 +117,12 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
 }
 
 .upload-sticker-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
 }
 
 .sticker-count {
@@ -153,9 +153,9 @@
 
 .sticker-card:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(139, 92, 246, 0.5);
+    border-color: rgba(88, 101, 242, 0.5);
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
 }
 
 .sticker-image {
@@ -215,9 +215,9 @@
 
 .pack-card:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(139, 92, 246, 0.5);
+    border-color: rgba(88, 101, 242, 0.5);
     transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.3);
 }
 
 .pack-preview {
@@ -254,7 +254,7 @@
 
 .install-pack-btn {
     width: 100%;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border: none;
     color: white;
     padding: 10px;
@@ -267,7 +267,7 @@
 
 .install-pack-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
 }
 
 .install-pack-btn.installed {
@@ -315,12 +315,12 @@
 }
 
 .upload-modal {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     padding: 28px;
     width: 90%;
     max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
 }
 
@@ -355,7 +355,7 @@
 
 .sticker-name-input:focus {
     outline: none;
-    border-color: rgba(139, 92, 246, 0.5);
+    border-color: rgba(88, 101, 242, 0.5);
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -363,7 +363,7 @@
     width: 100%;
     min-height: 200px;
     background: rgba(255, 255, 255, 0.05);
-    border: 2px dashed rgba(139, 92, 246, 0.3);
+    border: 2px dashed rgba(88, 101, 242, 0.3);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -376,7 +376,7 @@
 
 .file-upload-area:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(139, 92, 246, 0.5);
+    border-color: rgba(88, 101, 242, 0.5);
 }
 
 .upload-icon {
@@ -430,14 +430,14 @@
 }
 
 .upload-btn {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     color: white;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
 }
 
 .upload-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
 }
 
 .upload-btn:disabled {

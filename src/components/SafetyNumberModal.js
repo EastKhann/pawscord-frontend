@@ -1,4 +1,4 @@
-// frontend/src/components/SafetyNumberModal.js
+﻿// frontend/src/components/SafetyNumberModal.js
 import { useState, useEffect } from 'react';
 import toast from '../utils/toast';
 import { FaShieldAlt, FaCheck, FaTimes, FaQrcode } from 'react-icons/fa';
@@ -77,7 +77,7 @@ const SafetyNumberModal = ({
         <div style={styles.overlay} {...overlayProps}>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
-                    <FaShieldAlt size={32} color={verified ? '#43b581' : '#faa61a'} />
+                    <FaShieldAlt size={32} color={verified ? '#23a559' : '#f0b232'} />
                     <h2 style={styles.title}>Safety Number</h2>
                     <button onClick={onClose} style={styles.closeButton}>
                         <FaTimes />
@@ -179,7 +179,7 @@ const styles = {
         zIndex: 100000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '24px',
         maxWidth: '500px',
@@ -203,7 +203,7 @@ const styles = {
     closeButton: {
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '4px',
         fontSize: '20px'
@@ -222,7 +222,7 @@ const styles = {
         marginBottom: '24px'
     },
     numberGroup: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         color: '#fff',
         padding: '12px',
         borderRadius: '4px',
@@ -256,7 +256,7 @@ const styles = {
         marginBottom: '24px'
     },
     statusVerified: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         padding: '12px',
         borderRadius: '4px',
@@ -266,7 +266,7 @@ const styles = {
         justifyContent: 'center'
     },
     statusPartial: {
-        backgroundColor: '#faa61a',
+        backgroundColor: '#f0b232',
         color: '#000',
         padding: '12px',
         borderRadius: '4px',
@@ -276,7 +276,7 @@ const styles = {
         justifyContent: 'center'
     },
     statusUnverified: {
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         color: '#fff',
         padding: '12px',
         borderRadius: '4px',
@@ -286,15 +286,15 @@ const styles = {
         justifyContent: 'center'
     },
     info: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         padding: '16px',
         borderRadius: '8px',
         marginBottom: '24px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px'
     },
     verifyButton: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         borderRadius: '4px',
@@ -309,7 +309,7 @@ const styles = {
         gap: '8px'
     },
     loading: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         textAlign: 'center',
         padding: '32px'
     }

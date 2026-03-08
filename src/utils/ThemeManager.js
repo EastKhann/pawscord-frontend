@@ -1,12 +1,12 @@
-// frontend/src/utils/ThemeManager.js
+﻿// frontend/src/utils/ThemeManager.js
 
 export const THEMES = {
     default: {
         name: 'Pawscord Dark',
         colors: {
-            '--background-primary': '#313338',
-            '--background-secondary': '#2b2d31',
-            '--background-tertiary': '#1e1f22',
+            '--background-primary': '#17191c',
+            '--background-secondary': '#111214',
+            '--background-tertiary': '#0d0e10',
             '--background-accent': '#404249',
             '--text-primary': '#dbdee1',
             '--text-secondary': '#949ba4',

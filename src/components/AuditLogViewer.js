@@ -1,4 +1,4 @@
-// frontend/src/components/AuditLogViewer.js
+﻿// frontend/src/components/AuditLogViewer.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaHistory, FaFilter } from 'react-icons/fa';
 
@@ -26,9 +26,9 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
     };
 
     const getActionColor = (action) => {
-        if (action.includes('delete') || action.includes('ban')) return '#f04747';
-        if (action.includes('create') || action.includes('add')) return '#43b581';
-        if (action.includes('update') || action.includes('edit')) return '#faa61a';
+        if (action.includes('delete') || action.includes('ban')) return '#f23f42';
+        if (action.includes('create') || action.includes('add')) return '#23a559';
+        if (action.includes('update') || action.includes('edit')) return '#f0b232';
         return '#5865f2';
     };
 
@@ -45,16 +45,16 @@ const AuditLogViewer = ({ onClose, fetchWithAuth, apiBaseUrl }) => {
                 </div>
 
                 <div style={styles.filters}>
-                    <button onClick={() => setFilter('all')} style={{ ...styles.filterButton, backgroundColor: filter === 'all' ? '#5865f2' : '#40444b' }}>
+                    <button onClick={() => setFilter('all')} style={{ ...styles.filterButton, backgroundColor: filter === 'all' ? '#5865f2' : '#1e2024' }}>
                         Tümü
                     </button>
-                    <button onClick={() => setFilter('moderation')} style={{ ...styles.filterButton, backgroundColor: filter === 'moderation' ? '#5865f2' : '#40444b' }}>
+                    <button onClick={() => setFilter('moderation')} style={{ ...styles.filterButton, backgroundColor: filter === 'moderation' ? '#5865f2' : '#1e2024' }}>
                         Moderasyon
                     </button>
-                    <button onClick={() => setFilter('server')} style={{ ...styles.filterButton, backgroundColor: filter === 'server' ? '#5865f2' : '#40444b' }}>
+                    <button onClick={() => setFilter('server')} style={{ ...styles.filterButton, backgroundColor: filter === 'server' ? '#5865f2' : '#1e2024' }}>
                         Sunucu
                     </button>
-                    <button onClick={() => setFilter('user')} style={{ ...styles.filterButton, backgroundColor: filter === 'user' ? '#5865f2' : '#40444b' }}>
+                    <button onClick={() => setFilter('user')} style={{ ...styles.filterButton, backgroundColor: filter === 'user' ? '#5865f2' : '#1e2024' }}>
                         Kullanıcı
                     </button>
                 </div>
@@ -100,7 +100,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '800px',
@@ -113,7 +113,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -126,7 +126,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.5em'
     },
@@ -134,7 +134,7 @@ const styles = {
         display: 'flex',
         gap: '8px',
         padding: '15px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     filterButton: {
         padding: '8px 15px',
@@ -152,12 +152,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     logList: {
@@ -166,7 +166,7 @@ const styles = {
         gap: '10px'
     },
     logItem: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         padding: '12px',
         borderRadius: '8px',
         display: 'flex',
@@ -190,12 +190,12 @@ const styles = {
         marginBottom: '4px'
     },
     logDescription: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '0.9em',
         marginBottom: '4px'
     },
     logTime: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.75em'
     }
 };

@@ -1,4 +1,4 @@
-import { FaCamera, FaTrash } from 'react-icons/fa';
+﻿import { FaCamera, FaTrash } from 'react-icons/fa';
 import SettingSection from '../components/SettingSection';
 import SettingField from '../components/SettingField';
 import S from '../styles';
@@ -6,16 +6,16 @@ import S from '../styles';
 const AccountTab = ({ user, onAvatarChange }) => (
     <div>
         <SettingSection title="Profil">
-            <div style={{ backgroundColor: '#1e1f22', borderRadius: 8, padding: 16 }}>
+            <div style={{ backgroundColor: '#0d0e10', borderRadius: 8, padding: 16 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                     <div style={{ position: 'relative' }}>
-                        <img src={user?.avatar || '/default-avatar.png'} alt="" style={{ width: 80, height: 80, borderRadius: '50%', border: '4px solid #2b2d31' }} />
+                        <img src={user?.avatar || '/default-avatar.png'} alt="" style={{ width: 80, height: 80, borderRadius: '50%', border: '4px solid #0e1222' }} />
                         <button
                             type="button"
                             onClick={onAvatarChange}
                             style={{
                                 position: 'absolute', bottom: 0, right: 0, width: 28, height: 28,
-                                borderRadius: '50%', backgroundColor: '#5865f2', border: '3px solid #1e1f22',
+                                borderRadius: '50%', backgroundColor: '#5865f2', border: '3px solid #0b0e1b',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 cursor: 'pointer', color: '#fff', fontSize: 11,
                             }}

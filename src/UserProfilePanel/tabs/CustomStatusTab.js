@@ -12,10 +12,10 @@ const CustomStatusTab = ({ customStatus, setCustomStatus, updateCustomStatus }) 
         <label style={styles.label}>Durum</label>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginTop: '8px' }}>
           {[
-            { value: 'online', icon: '🟢', label: 'Çevrimiçi', color: '#43b581' },
-            { value: 'idle', icon: '🟡', label: 'Boşta', color: '#faa61a' },
-            { value: 'dnd', icon: '🔴', label: 'Rahatsız Etmeyin', color: '#f04747' },
-            { value: 'invisible', icon: '⚫', label: 'Görünmez', color: '#747f8d' },
+            { value: 'online', icon: '🟢', label: 'Çevrimiçi', color: '#23a559' },
+            { value: 'idle', icon: '🟡', label: 'Boşta', color: '#f0b232' },
+            { value: 'dnd', icon: '🔴', label: 'Rahatsız Etmeyin', color: '#f23f42' },
+            { value: 'invisible', icon: '⚫', label: 'Görünmez', color: '#80848e' },
           ].map(status => (
             <button
               key={status.value}
@@ -49,7 +49,7 @@ const CustomStatusTab = ({ customStatus, setCustomStatus, updateCustomStatus }) 
           style={styles.input}
           maxLength={128}
         />
-        <p style={{ color: '#b9bbbe', fontSize: '12px', marginTop: '4px' }}>
+        <p style={{ color: '#b5bac1', fontSize: '12px', marginTop: '4px' }}>
           {customStatus.custom_status.length}/128 karakter
         </p>
       </div>

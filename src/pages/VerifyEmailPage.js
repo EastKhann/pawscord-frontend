@@ -1,4 +1,4 @@
-// frontend/src/pages/VerifyEmailPage.js
+﻿// frontend/src/pages/VerifyEmailPage.js
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
@@ -91,11 +91,11 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         padding: '20px'
     },
     card: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         padding: '40px',
         maxWidth: '500px',
@@ -125,7 +125,7 @@ const styles = {
         margin: 0
     },
     text: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '16px',
         margin: 0
     },
@@ -136,7 +136,7 @@ const styles = {
         margin: 0
     },
     redirect: {
-        color: '#747f8d',
+        color: '#80848e',
         fontSize: '14px',
         fontStyle: 'italic'
     },
@@ -153,7 +153,7 @@ const styles = {
         transition: 'background-color 0.2s'
     },
     errorReasons: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '20px',
         marginTop: '10px',
@@ -166,7 +166,7 @@ const styles = {
         marginBottom: '10px'
     },
     reasonList: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         margin: 0,
         paddingLeft: '20px'

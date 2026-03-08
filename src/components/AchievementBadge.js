@@ -1,4 +1,4 @@
-// frontend/src/components/AchievementBadge.js
+﻿// frontend/src/components/AchievementBadge.js
 import { useState, useEffect } from 'react';
 import { FaTrophy, FaMedal, FaStar, FaCrown } from 'react-icons/fa';
 
@@ -42,9 +42,9 @@ const AchievementBadge = ({ achievement, size = 'medium' }) => {
                     right: '-5px',
                     width: '12px',
                     height: '12px',
-                    backgroundColor: '#f04747',
+                    backgroundColor: '#f23f42',
                     borderRadius: '50%',
-                    border: '2px solid #2b2d31'
+                    border: '2px solid #0e1222'
                 }} />
             )}
         </div>

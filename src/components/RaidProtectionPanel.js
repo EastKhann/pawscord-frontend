@@ -10,7 +10,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
             <div style={styles.panel} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
-                        <FaShieldAlt style={{ ...styles.headerIcon, color: r.protection.enabled ? '#43b581' : '#72767d' }} />
+                        <FaShieldAlt style={{ ...styles.headerIcon, color: r.protection.enabled ? '#23a559' : '#949ba4' }} />
                         <h2 style={styles.title}>Raid Protection</h2>
                         {r.protection.lockdown_mode && <span style={styles.lockdownBadge}>{'🔒'} LOCKDOWN</span>}
                     </div>
@@ -19,7 +19,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
 
                 <div style={styles.statsGrid}>
                     <div style={styles.statCard}>
-                        <FaUserSlash style={{ ...styles.statIcon, color: '#ed4245' }} />
+                        <FaUserSlash style={{ ...styles.statIcon, color: '#f23f42' }} />
                         <div style={styles.statValue}>{r.stats.blocked_joins}</div>
                         <div style={styles.statLabel}>Blocked Joins</div>
                     </div>
@@ -29,7 +29,7 @@ const RaidProtectionPanel = ({ serverId, fetchWithAuth, apiBaseUrl, onClose }) =
                         <div style={styles.statLabel}>Auto-Kicked</div>
                     </div>
                     <div style={styles.statCard}>
-                        <FaExclamationCircle style={{ ...styles.statIcon, color: '#f04747' }} />
+                        <FaExclamationCircle style={{ ...styles.statIcon, color: '#f23f42' }} />
                         <div style={styles.statValue}>{r.stats.raid_attempts}</div>
                         <div style={styles.statLabel}>Raid Attempts</div>
                     </div>

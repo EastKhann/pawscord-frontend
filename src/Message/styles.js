@@ -1,30 +1,30 @@
-// Message/styles.js
+﻿// Message/styles.js
 // Styles and CSS injection extracted from Message.js
 
 const styles = {
     chatMessage: {
         display: 'flex',
-        padding: '4px 48px 4px 72px',
+        padding: '8px 48px 8px 72px',
         marginBottom: '0',
         position: 'relative',
         transition: 'background-color 0.1s ease',
         width: '100%',
         boxSizing: 'border-box',
         borderRadius: '0',
-        minHeight: '44px'
+        minHeight: '48px'
     },
 
     // Grouped (continuation) message — no header, tighter padding
     chatMessageGrouped: {
         display: 'flex',
-        padding: '1px 48px 1px 72px',
+        padding: '3px 48px 3px 72px',
         marginBottom: '0',
         position: 'relative',
         transition: 'background-color 0.1s ease',
         width: '100%',
         boxSizing: 'border-box',
         borderRadius: '0',
-        minHeight: '22px'
+        minHeight: '26px'
     },
 
     // Tiny timestamp shown on hover for grouped messages (at avatar position)
@@ -34,7 +34,7 @@ const styles = {
         width: '56px',
         textAlign: 'right',
         fontSize: '0.65rem',
-        color: '#72767d',
+        color: '#80848e',
         fontFamily: "'gg sans', 'Noto Sans', sans-serif",
         opacity: 0,
         transition: 'opacity 0.1s ease',
@@ -74,7 +74,7 @@ const styles = {
     },
     timestamp: {
         fontSize: '0.75rem',
-        color: '#949ba4',
+        color: '#80848e',
         fontWeight: '400',
         lineHeight: '1.375rem',
         marginLeft: '4px',
@@ -95,29 +95,31 @@ const styles = {
         position: 'absolute',
         top: '-10px',
         right: '10px',
-        backgroundColor: '#313338',
+        backgroundColor: 'rgba(30, 31, 35, 0.88)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
         borderRadius: '8px',
         padding: '4px',
         display: 'flex',
         gap: '4px',
         border: '1px solid rgba(255,255,255,0.08)',
         zIndex: 50,
-        boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+        boxShadow: '0 8px 24px rgba(0,0,0,0.4)'
     },
     actionButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.2em',
         padding: '6px',
         display: 'flex',
-        borderRadius: '4px',
+        borderRadius: '8px',
         transition: 'all 0.1s'
     },
 
     inlineCode: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '2px 4px',
         borderRadius: '3px',
         fontFamily: "'Consolas', monospace",
@@ -151,7 +153,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         padding: '12px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         marginTop: '6px',
         textDecoration: 'none',
@@ -164,7 +166,7 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         padding: '12px 16px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: 8,
         marginTop: 8,
         border: '1px solid rgba(255,255,255,0.06)',
@@ -198,7 +200,7 @@ const styles = {
         fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     fileDetails: {
-        color: '#72767d',
+        color: '#80848e',
         fontSize: 12,
         fontFamily: "'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
@@ -208,7 +210,7 @@ const styles = {
         padding: '8px 14px',
         backgroundColor: 'transparent',
         color: '#b5bac1',
-        borderRadius: 4,
+        borderRadius: 8,
         textDecoration: 'none',
         fontSize: 20,
         transition: 'all 0.2s ease',
@@ -219,12 +221,12 @@ const styles = {
 
     reactionsRow: { display: 'flex', gap: '4px', marginTop: '6px', flexWrap: 'wrap' },
     reactionTag: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         padding: '4px 8px',
         borderRadius: '8px',
         fontSize: '0.85em',
         cursor: 'pointer',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         border: '1px solid transparent',
         display: 'flex', alignItems: 'center', gap: '4px'
     },
@@ -235,14 +237,14 @@ const styles = {
     },
 
     footerRow: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '4px', minHeight: '20px' },
-    readReceipt: { fontSize: '0.75em', color: '#b9bbbe', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '4px' },
+    readReceipt: { fontSize: '0.75em', color: '#b5bac1', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '4px' },
 
-    replyContainer: { display: 'flex', alignItems: 'center', fontSize: '0.85em', color: '#b9bbbe', marginBottom: '4px', opacity: 0.8 },
-    replyLine: { width: '30px', borderTop: '2px solid #4f545c', borderLeft: '2px solid #4f545c', height: '10px', marginRight: '8px', borderTopLeftRadius: '6px', marginTop: '6px' },
+    replyContainer: { display: 'flex', alignItems: 'center', fontSize: '0.85em', color: '#b5bac1', marginBottom: '4px', opacity: 0.8 },
+    replyLine: { width: '30px', borderTop: '2px solid #4e5058', borderLeft: '2px solid #4e5058', height: '10px', marginRight: '8px', borderTopLeftRadius: '6px', marginTop: '6px' },
 
-    historyDropdown: { position: 'absolute', top: '100%', left: 0, width: '280px', backgroundColor: '#1e1f22', border: '1px solid #111214', borderRadius: '8px', padding: '12px', zIndex: 100, boxShadow: '0 10px 30px rgba(0,0,0,0.5)' },
-    historyHeader: { margin: '0 0 10px 0', fontSize: '0.9em', color: '#fff', borderBottom: '1px solid #2f3136', paddingBottom: '8px' },
-    historyItem: { marginBottom: '12px', fontSize: '0.85em', color: '#b9bbbe', paddingBottom: '8px', borderBottom: '1px solid #2b2d31' },
+    historyDropdown: { position: 'absolute', top: '100%', left: 0, width: '280px', backgroundColor: '#0d0e10', border: '1px solid #0e1222', borderRadius: '8px', padding: '12px', zIndex: 100, boxShadow: '0 10px 30px rgba(0,0,0,0.5)' },
+    historyHeader: { margin: '0 0 10px 0', fontSize: '0.9em', color: '#fff', borderBottom: '1px solid #0e1222', paddingBottom: '8px' },
+    historyItem: { marginBottom: '12px', fontSize: '0.85em', color: '#b5bac1', paddingBottom: '8px', borderBottom: '1px solid #0e1222' },
 
     langBadge: { textTransform: 'uppercase', fontSize: '0.7em', fontWeight: 'bold', padding: '2px 4px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.1)', marginLeft: '8px' },
     chartBtn: { marginTop: '5px', backgroundColor: 'rgba(240, 178, 50, 0.1)', border: '1px solid #f0b232', color: '#f0b232', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85em', display: 'inline-flex', alignItems: 'center', gap: '6px' },
@@ -260,17 +262,19 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '8px 12px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         fontSize: '0.85em',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
 
     contextMenu: {
         position: 'fixed',
-        backgroundColor: '#18191c',
-        border: '1px solid #2b2d31',
-        borderRadius: '6px',
-        boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(30, 31, 35, 0.92)',
+        backdropFilter: 'blur(24px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: '8px',
+        boxShadow: '0 12px 32px rgba(0,0,0,0.6)',
         zIndex: 10000,
         minWidth: '220px',
         overflow: 'hidden',
@@ -289,7 +293,7 @@ const styles = {
     },
     contextMenuDivider: {
         height: '1px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: 'rgba(255,255,255,0.06)',
         margin: '6px 0'
     },
     voiceTranscription: {
@@ -312,7 +316,7 @@ const styles = {
         flex: 1,
         fontSize: '13px',
         lineHeight: '1.5',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontStyle: 'italic'
     },
     transcribeButton: {
@@ -321,7 +325,7 @@ const styles = {
         backgroundColor: 'rgba(88, 101, 242, 0.15)',
         border: '1px solid rgba(88, 101, 242, 0.4)',
         borderRadius: '6px',
-        color: '#7289da',
+        color: '#5865f2',
         fontSize: '12px',
         cursor: 'pointer',
         transition: 'all 0.2s',
@@ -332,7 +336,7 @@ const styles = {
     transcribingLoader: {
         marginTop: '8px',
         padding: '6px 12px',
-        color: '#72767d',
+        color: '#80848e',
         fontSize: '12px',
         fontStyle: 'italic'
     }
@@ -346,7 +350,7 @@ if (typeof document !== 'undefined') {
     .action-button:hover { background-color: rgba(255, 255, 255, 0.1); color: white; }
     .poll-option:hover { background-color: rgba(255, 255, 255, 0.1) !important; }
     .context-menu-item:hover { background-color: #5865f2 !important; color: #fff !important; }
-    .context-menu-item.danger:hover { background-color: #ed4245 !important; }
+    .context-menu-item.danger:hover { background-color: #f23f42 !important; }
     
     /* 🆕 File Attachment Hover Effects */
     .file-attachment-hover:hover {
@@ -354,7 +358,7 @@ if (typeof document !== 'undefined') {
         border-color: rgba(255,255,255,0.1) !important;
     }
     .download-button-hover:hover {
-        color: #dcddde !important;
+        color: #dbdee1 !important;
         background-color: rgba(255,255,255,0.06) !important;
         border-radius: 4px;
     }
@@ -368,7 +372,7 @@ if (typeof document !== 'undefined') {
     }
     .file-code-header-btn:hover {
         background-color: rgba(255,255,255,0.1) !important;
-        color: #dcddde !important;
+        color: #dbdee1 !important;
     }
     .file-code-footer:hover {
         background-color: #32353b !important;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaChartBar, FaClock, FaCalendar } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -105,9 +105,9 @@ const UserActivityPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => 
                                     <div key={idx} style={styles.presenceItem}>
                                         <div style={{
                                             ...styles.statusIndicator,
-                                            backgroundColor: presence.status === 'online' ? '#43b581' :
-                                                presence.status === 'idle' ? '#faa61a' :
-                                                    presence.status === 'dnd' ? '#f04747' : '#99aab5'
+                                            backgroundColor: presence.status === 'online' ? '#23a559' :
+                                                presence.status === 'idle' ? '#f0b232' :
+                                                    presence.status === 'dnd' ? '#f23f42' : '#949ba4'
                                         }} />
                                         <div style={styles.presenceInfo}>
                                             <div style={styles.presenceStatus}>
@@ -161,7 +161,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -175,21 +175,21 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     tabs: {
         display: 'flex',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
         padding: '0 20px',
     },
     tab: {
         padding: '12px 20px',
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '14px',
         display: 'flex',
@@ -207,12 +207,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     activityList: {
@@ -221,7 +221,7 @@ const styles = {
         gap: '12px',
     },
     activityItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '16px',
         display: 'flex',
@@ -236,12 +236,12 @@ const styles = {
     },
     activityText: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '4px',
     },
     activityTime: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     presenceList: {
         display: 'flex',
@@ -249,7 +249,7 @@ const styles = {
         gap: '12px',
     },
     presenceItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '16px',
         display: 'flex',
@@ -272,11 +272,11 @@ const styles = {
     },
     presenceTime: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     presenceDuration: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
 };
 

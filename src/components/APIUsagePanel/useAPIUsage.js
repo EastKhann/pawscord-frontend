@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import toast from '../../utils/toast';
 
 const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
     const [stats, setStats] = useState(null);
@@ -17,6 +16,7 @@ const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
         setLoading(true);
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/analytics/usage/?range=${timeRange}`);
+            if (!response.ok) return;
             const data = await response.json();
 
             setStats(data.stats || {});
@@ -24,21 +24,20 @@ const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
             setTimeline(data.timeline || []);
         } catch (error) {
             console.error('Failed to load API usage:', error);
-            toast.error('Failed to load analytics');
         } finally {
             setLoading(false);
         }
     };
 
     const getRateLimitStatus = () => {
-        if (!stats || !stats.rate_limit) return { color: '#43b581', text: 'Normal' };
+        if (!stats || !stats.rate_limit) return { color: '#23a559', text: 'Normal' };
 
         const requestsMade = stats.requests_made || 0;
         const usage = (requestsMade / stats.rate_limit) * 100;
 
-        if (usage >= 90) return { color: '#f04747', text: 'Critical' };
-        if (usage >= 70) return { color: '#faa61a', text: 'Warning' };
-        return { color: '#43b581', text: 'Normal' };
+        if (usage >= 90) return { color: '#f23f42', text: 'Critical' };
+        if (usage >= 70) return { color: '#f0b232', text: 'Warning' };
+        return { color: '#23a559', text: 'Normal' };
     };
 
     const safeStats = stats || { requests_made: 0, rate_limit: 10000, success_rate: 0, avg_response_time: 0, errors: 0 };

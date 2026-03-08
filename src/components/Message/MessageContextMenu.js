@@ -1,4 +1,4 @@
-// frontend/src/components/Message/MessageContextMenu.js
+﻿// frontend/src/components/Message/MessageContextMenu.js
 // 📋 MESSAGE CONTEXT MENU - Right-click menu
 
 import { memo, useCallback } from 'react';
@@ -128,7 +128,7 @@ export const MessageContextMenu = memo(({
             {isMyMessage && (
                 <div
                     className="context-menu-item danger"
-                    style={{ ...styles.contextMenuItem, color: '#ed4245' }}
+                    style={{ ...styles.contextMenuItem, color: '#f23f42' }}
                     onClick={async () => {
                         if (await confirmDialog('Bu mesajı silmek istediğinize emin misiniz?')) {
                             await onDelete(msg.id);
@@ -143,7 +143,7 @@ export const MessageContextMenu = memo(({
             {!isMyMessage && (
                 <div
                     className="context-menu-item danger"
-                    style={{ ...styles.contextMenuItem, color: '#ed4245' }}
+                    style={{ ...styles.contextMenuItem, color: '#f23f42' }}
                     onClick={handleReport}
                 >
                     <FaExclamationTriangle /> Rapor Et
@@ -157,7 +157,7 @@ const styles = {
     contextMenu: {
         position: 'fixed',
         backgroundColor: '#18191c',
-        border: '1px solid #2b2d31',
+        border: '1px solid #0e1222',
         borderRadius: '6px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.5)',
         zIndex: 10000,
@@ -178,7 +178,7 @@ const styles = {
     },
     contextMenuDivider: {
         height: '1px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         margin: '6px 0'
     }
 };

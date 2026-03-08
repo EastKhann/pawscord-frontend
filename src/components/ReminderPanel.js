@@ -131,7 +131,7 @@ const ReminderPanel = ({ serverId, onClose }) => {
     const badges = {
       once: { text: 'Bir kez', color: '#6b7280' },
       daily: { text: 'Günlük', color: '#3b82f6' },
-      weekly: { text: 'Haftalık', color: '#8b5cf6' },
+      weekly: { text: 'Haftalık', color: '#5865f2' },
       monthly: { text: 'Aylık', color: '#ec4899' }
     };
     return badges[repeat] || badges.once;

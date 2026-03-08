@@ -1,4 +1,4 @@
-// frontend/src/components/UserNotesModal.js
+﻿// frontend/src/components/UserNotesModal.js
 import { useState, useEffect } from 'react';
 import { FaStickyNote, FaSave, FaTimes } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
@@ -174,7 +174,7 @@ const styles = {
         zIndex: 1000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '500px',
         maxWidth: '90vw',
@@ -182,7 +182,7 @@ const styles = {
     },
     header: {
         padding: '16px 20px',
-        borderBottom: '1px solid #1e1f22',
+        borderBottom: '1px solid #0b0e1b',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -198,7 +198,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '20px',
         cursor: 'pointer',
         padding: '4px'
@@ -207,7 +207,7 @@ const styles = {
         padding: '20px'
     },
     info: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '13px',
         marginBottom: '16px',
         fontStyle: 'italic'
@@ -216,7 +216,7 @@ const styles = {
         marginBottom: '16px'
     },
     label: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px',
         marginBottom: '8px',
         display: 'block'
@@ -244,7 +244,7 @@ const styles = {
         border: '1px solid #4e5058',
         borderRadius: '6px',
         fontSize: '14px',
-        color: '#1e1f22',
+        color: '#0d0e10',
         resize: 'vertical',
         fontFamily: 'inherit',
         marginBottom: '12px'
@@ -255,7 +255,7 @@ const styles = {
         alignItems: 'center'
     },
     charCount: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px'
     },
     saveButton: {

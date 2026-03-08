@@ -108,7 +108,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
-    backgroundColor: '#1E1F22',
+    backgroundColor: '#0d0e10',
     color: '#FFFFFF',
     padding: '20px',
     fontFamily: "'Inter', sans-serif"
@@ -117,7 +117,7 @@ const styles = {
     textAlign: 'center',
     maxWidth: '600px',
     padding: '40px',
-    background: 'linear-gradient(135deg, #2B2D31 0%, #1E1F22 100%)',
+    background: 'linear-gradient(135deg, #111214 0%, #0d0e10 100%)',
     borderRadius: '16px',
     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
   },
@@ -134,7 +134,7 @@ const styles = {
   },
   message: {
     fontSize: '16px',
-    color: '#B9BBBE',
+    color: '#b5bac1',
     marginBottom: '32px',
     lineHeight: '1.6'
   },
@@ -175,11 +175,11 @@ const styles = {
     cursor: 'pointer',
     fontWeight: '600',
     marginBottom: '12px',
-    color: '#FAA61A'
+    color: '#f0b232'
   },
   errorText: {
     fontSize: '12px',
-    color: '#ED4245',
+    color: '#f23f42',
     overflow: 'auto',
     maxHeight: '300px',
     padding: '12px',

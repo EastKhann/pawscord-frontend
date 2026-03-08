@@ -1,4 +1,4 @@
-// frontend/src/utils/imageOptimization.js
+﻿// frontend/src/utils/imageOptimization.js
 
 /**
  * 🖼️ Image Optimization Utilities
@@ -185,8 +185,8 @@ export const generatePlaceholder = (width = 10, height = 10) => {
 
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, '#2f3136');
-    gradient.addColorStop(1, '#36393f');
+    gradient.addColorStop(0, '#111214');
+    gradient.addColorStop(1, '#17191c');
 
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaPlus, FaTrash, FaCheck, FaStickyNote } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
 import confirmDialog from '../utils/confirmDialog';
@@ -137,11 +137,11 @@ const overlayStyle = {
     backdropFilter: 'blur(5px)'
 };
 const modalStyle = {
-    backgroundColor: '#313338', width: '400px', borderRadius: '8px', overflow: 'hidden',
+    backgroundColor: '#17191c', width: '400px', borderRadius: '8px', overflow: 'hidden',
     boxShadow: '0 4px 15px rgba(0,0,0,0.5)', color: 'white', display: 'flex', flexDirection: 'column', maxHeight: '80vh'
 };
 const headerStyle = {
-    padding: '16px', backgroundColor: '#2B2D31', borderBottom: '1px solid #1F2023',
+    padding: '16px', backgroundColor: '#111214', borderBottom: '1px solid #16203a',
     display: 'flex', justifyContent: 'space-between', alignItems: 'center'
 };
 const closeButtonStyle = { background: 'none', border: 'none', color: '#B5BAC1', cursor: 'pointer', fontSize: '16px' };
@@ -152,14 +152,14 @@ const addButtonStyle = {
 };
 const listStyle = { display: 'flex', flexDirection: 'column', gap: '8px' };
 const itemStyle = {
-    backgroundColor: '#2B2D31', padding: '10px', borderRadius: '4px', cursor: 'pointer',
+    backgroundColor: '#111214', padding: '10px', borderRadius: '4px', cursor: 'pointer',
     display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: '0.2s'
 };
-const badgeStyle = { fontSize: '10px', backgroundColor: '#FAA61A', color: 'black', padding: '2px 6px', borderRadius: '10px', fontWeight: 'bold' };
+const badgeStyle = { fontSize: '10px', backgroundColor: '#f0b232', color: 'black', padding: '2px 6px', borderRadius: '10px', fontWeight: 'bold' };
 const deleteButtonStyle = { background: 'none', border: 'none', color: '#DA373C', cursor: 'pointer' };
 const formStyle = { display: 'flex', flexDirection: 'column', gap: '10px' };
-const inputStyle = { padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#1E1F22', color: 'white' };
-const textareaStyle = { padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#1E1F22', color: 'white', minHeight: '100px', resize: 'vertical' };
+const inputStyle = { padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#0d0e10', color: 'white' };
+const textareaStyle = { padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#0d0e10', color: 'white', minHeight: '100px', resize: 'vertical' };
 const saveButtonStyle = { flex: 1, padding: '8px', backgroundColor: '#23A559', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' };
 const cancelButtonStyle = { flex: 1, padding: '8px', backgroundColor: '#DA373C', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' };
 

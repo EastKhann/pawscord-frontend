@@ -44,7 +44,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                     <FaShieldAlt style={{ fontSize: '28px', color: '#5865f2' }} />
                     <div>
                         <h3 style={{ margin: 0, color: '#fff', fontSize: '18px' }}>Moderasyon Merkezi</h3>
-                        <p style={{ margin: '4px 0 0', color: '#b9bbbe', fontSize: '13px' }}>
+                        <p style={{ margin: '4px 0 0', color: '#b5bac1', fontSize: '13px' }}>
                             Sunucunuzu güvende tutmak için gelişmiş araçlar
                         </p>
                     </div>
@@ -63,22 +63,22 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
 
             {/* HIZLI İSTATİSTİKLER */}
             <div style={styles.quickStatsGrid}>
-                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #43b581' }}>
-                    <FaUsers style={{ fontSize: '20px', color: '#43b581' }} />
+                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #23a559' }}>
+                    <FaUsers style={{ fontSize: '20px', color: '#23a559' }} />
                     <div>
                         <div style={styles.quickStatValue}>Aktif</div>
                         <div style={styles.quickStatLabel}>Moderasyon Durumu</div>
                     </div>
                 </div>
-                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #faa61a' }}>
-                    <FaExclamationTriangle style={{ fontSize: '20px', color: '#faa61a' }} />
+                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #f0b232' }}>
+                    <FaExclamationTriangle style={{ fontSize: '20px', color: '#f0b232' }} />
                     <div>
                         <div style={styles.quickStatValue}>0</div>
                         <div style={styles.quickStatLabel}>Bekleyen Rapor</div>
                     </div>
                 </div>
-                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #ed4245' }}>
-                    <FaBan style={{ fontSize: '20px', color: '#ed4245' }} />
+                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #f23f42' }}>
+                    <FaBan style={{ fontSize: '20px', color: '#f23f42' }} />
                     <div>
                         <div style={styles.quickStatValue}>0</div>
                         <div style={styles.quickStatLabel}>Yasaklı Kullanıcı</div>
@@ -114,9 +114,9 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
                         <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(237, 66, 69, 0.2)' }}>
-                            <FaShieldAlt style={{ color: '#ed4245', fontSize: '20px' }} />
+                            <FaShieldAlt style={{ color: '#f23f42', fontSize: '20px' }} />
                         </div>
-                        <div style={{ ...styles.modCardBadge, backgroundColor: 'rgba(237, 66, 69, 0.2)', color: '#ed4245' }}>Kritik</div>
+                        <div style={{ ...styles.modCardBadge, backgroundColor: 'rgba(237, 66, 69, 0.2)', color: '#f23f42' }}>Kritik</div>
                     </div>
                     <h4 style={styles.modCardTitle}>Raid Koruması</h4>
                     <p style={styles.modCardDesc}>
@@ -127,7 +127,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>⏱️ Join Limiti</span>
                         <span style={styles.modCardFeature}>🛡️ Anti-Bot</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#ed4245' }} onClick={handleRaidProtection}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#f23f42' }} onClick={handleRaidProtection}>
                         <FaShieldAlt /> Korumayı Yönet
                     </button>
                 </div>
@@ -136,7 +136,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
                         <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(250, 166, 26, 0.2)' }}>
-                            <FaGavel style={{ color: '#faa61a', fontSize: '20px' }} />
+                            <FaGavel style={{ color: '#f0b232', fontSize: '20px' }} />
                         </div>
                     </div>
                     <h4 style={styles.modCardTitle}>Uyarı Sistemi</h4>
@@ -148,7 +148,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>🔇 Otomatik Mute</span>
                         <span style={styles.modCardFeature}>📝 Uyarı Geçmişi</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#faa61a' }} onClick={handleUserWarnings}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#f0b232' }} onClick={handleUserWarnings}>
                         <FaGavel /> Uyarıları Yönet
                     </button>
                 </div>
@@ -157,7 +157,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
                         <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(67, 181, 129, 0.2)' }}>
-                            <FaFileAlt style={{ color: '#43b581', fontSize: '20px' }} />
+                            <FaFileAlt style={{ color: '#23a559', fontSize: '20px' }} />
                         </div>
                     </div>
                     <h4 style={styles.modCardTitle}>Rapor Merkezi</h4>
@@ -169,7 +169,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>✅ Çözüm Takibi</span>
                         <span style={styles.modCardFeature}>📊 İstatistikler</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#43b581' }} onClick={handleReportSystem}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#23a559' }} onClick={handleReportSystem}>
                         <FaFileAlt /> Raporları Görüntüle
                     </button>
                 </div>
@@ -178,7 +178,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
                         <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(114, 137, 218, 0.2)' }}>
-                            <FaHistory style={{ color: '#7289da', fontSize: '20px' }} />
+                            <FaHistory style={{ color: '#5865f2', fontSize: '20px' }} />
                         </div>
                     </div>
                     <h4 style={styles.modCardTitle}>Audit Log</h4>
@@ -190,7 +190,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>🔍 Filtreleme</span>
                         <span style={styles.modCardFeature}>📥 Dışa Aktar</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#7289da' }} onClick={handleAuditLog}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#5865f2' }} onClick={handleAuditLog}>
                         <FaHistory /> Logları Görüntüle
                     </button>
                 </div>
@@ -199,7 +199,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
                         <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(153, 170, 181, 0.2)' }}>
-                            <FaClock style={{ color: '#99aab5', fontSize: '20px' }} />
+                            <FaClock style={{ color: '#949ba4', fontSize: '20px' }} />
                         </div>
                     </div>
                     <h4 style={styles.modCardTitle}>Slow Mode & Timeout</h4>
@@ -211,7 +211,7 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
                         <span style={styles.modCardFeature}>🔇 Timeout</span>
                         <span style={styles.modCardFeature}>⏰ Süre Yönetimi</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#99aab5' }} onClick={handleSlowMode}>
+                    <button style={{ ...styles.modCardBtn, backgroundColor: '#949ba4' }} onClick={handleSlowMode}>
                         <FaClock /> Ayarları Yapılandır
                     </button>
                 </div>

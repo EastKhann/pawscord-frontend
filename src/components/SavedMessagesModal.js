@@ -1,4 +1,4 @@
-// frontend/src/components/SavedMessagesModal.js
+﻿// frontend/src/components/SavedMessagesModal.js
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaBookmark, FaStar, FaClock, FaTrash } from 'react-icons/fa';
 import useModalA11y from '../hooks/useModalA11y';
@@ -117,7 +117,7 @@ const SavedMessagesModal = ({ type = 'bookmarks', onClose, fetchWithAuth, apiBas
                                         </button>
                                         <button
                                             onClick={() => handleRemove(msg.id)}
-                                            style={{ ...styles.actionButton, color: '#f04747' }}
+                                            style={{ ...styles.actionButton, color: '#f23f42' }}
                                             title="Kaldır"
                                         >
                                             <FaTrash />
@@ -147,7 +147,7 @@ const styles = {
         zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         width: '90%',
         maxWidth: '700px',
@@ -161,7 +161,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #40444b'
+        borderBottom: '1px solid #182135'
     },
     title: {
         color: 'white',
@@ -174,7 +174,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.5em',
         padding: '5px'
@@ -186,12 +186,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     empty: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px'
     },
     messageList: {
@@ -200,7 +200,7 @@ const styles = {
         gap: '10px'
     },
     messageItem: {
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         borderRadius: '4px',
         padding: '12px',
         display: 'flex',
@@ -222,11 +222,11 @@ const styles = {
         fontSize: '0.9em'
     },
     timestamp: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '0.75em'
     },
     messageText: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '0.9em',
         marginBottom: '5px'
     },
@@ -245,8 +245,8 @@ const styles = {
     },
     actionButton: {
         background: 'none',
-        border: '1px solid #72767d',
-        color: '#b9bbbe',
+        border: '1px solid #949ba4',
+        color: '#b5bac1',
         cursor: 'pointer',
         padding: '5px 10px',
         borderRadius: '4px',

@@ -228,7 +228,7 @@ const AIChatbotPanel = ({ username, apiBaseUrl, fetchWithAuth, currentRoomSlug }
 
     const renderQuotaBar = () => {
         const percentage = (quota.used / quota.limit) * 100;
-        const color = percentage > 90 ? '#ed4245' : percentage > 70 ? '#faa61a' : '#43b581';
+        const color = percentage > 90 ? '#f23f42' : percentage > 70 ? '#f0b232' : '#23a559';
 
         return (
             <div className="ai-quota-container">

@@ -1,16 +1,16 @@
-export const styles = {
+﻿export const styles = {
   overlay: {
     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.95)', zIndex: 10000,
     display: 'flex', alignItems: 'center', justifyContent: 'center'
   },
   container: {
-    width: '100%', height: '100%', backgroundColor: '#1e1f22',
+    width: '100%', height: '100%', backgroundColor: '#0d0e10',
     display: 'flex', flexDirection: 'column', position: 'relative'
   },
   header: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '16px 24px', backgroundColor: '#2f3136', borderBottom: '1px solid #1e1f22'
+    padding: '16px 24px', backgroundColor: '#111214', borderBottom: '1px solid #0b0e1b'
   },
   headerInfo: { display: 'flex', alignItems: 'center', gap: '12px' },
   avatar: {
@@ -20,32 +20,32 @@ export const styles = {
   },
   userInfo: { display: 'flex', flexDirection: 'column', gap: '4px' },
   username: { fontSize: '16px', fontWeight: 'bold', color: '#fff' },
-  status: { fontSize: '13px', color: '#b9bbbe' },
+  status: { fontSize: '13px', color: '#b5bac1' },
   headerActions: { display: 'flex', gap: '8px' },
   headerButton: {
-    backgroundColor: 'transparent', border: 'none', color: '#b9bbbe',
+    backgroundColor: 'transparent', border: 'none', color: '#b5bac1',
     fontSize: '18px', cursor: 'pointer', padding: '8px', borderRadius: '4px', transition: 'background-color 0.2s'
   },
   closeButton: {
-    backgroundColor: '#f04747', border: 'none', color: '#fff',
+    backgroundColor: '#f23f42', border: 'none', color: '#fff',
     fontSize: '18px', cursor: 'pointer', padding: '8px 12px', borderRadius: '4px'
   },
   settingsPanel: {
-    position: 'absolute', top: '70px', right: '24px', backgroundColor: '#2f3136',
-    border: '1px solid #1e1f22', borderRadius: '8px', padding: '16px',
+    position: 'absolute', top: '70px', right: '24px', backgroundColor: '#111214',
+    border: '1px solid #0b0e1b', borderRadius: '8px', padding: '16px',
     width: '280px', zIndex: 100, boxShadow: '0 8px 16px rgba(0,0,0,0.4)'
   },
   settingsTitle: { fontSize: '14px', fontWeight: 'bold', color: '#fff', marginBottom: '12px' },
   settingGroup: { marginBottom: '12px' },
-  settingLabel: { display: 'block', fontSize: '12px', color: '#b9bbbe', marginBottom: '6px' },
+  settingLabel: { display: 'block', fontSize: '12px', color: '#b5bac1', marginBottom: '6px' },
   settingSelect: {
-    width: '100%', backgroundColor: '#40444b', border: '1px solid #1e1f22',
-    borderRadius: '4px', padding: '8px', color: '#dcddde', fontSize: '13px'
+    width: '100%', backgroundColor: '#1e2024', border: '1px solid #0b0e1b',
+    borderRadius: '4px', padding: '8px', color: '#dbdee1', fontSize: '13px'
   },
   videoGrid: { flex: 1, position: 'relative', backgroundColor: '#000' },
   remoteVideoContainer: { width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   remoteVideo: { width: '100%', height: '100%', objectFit: 'contain' },
-  videoPlaceholder: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', color: '#b9bbbe' },
+  videoPlaceholder: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', color: '#b5bac1' },
   placeholderAvatar: {
     width: '120px', height: '120px', borderRadius: '50%', backgroundColor: '#5865f2',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -58,7 +58,7 @@ export const styles = {
   },
   localVideo: { width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)' },
   localVideoPlaceholder: {
-    width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#2f3136'
+    width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#111214'
   },
   placeholderAvatarSmall: {
     width: '60px', height: '60px', borderRadius: '50%', backgroundColor: '#5865f2',
@@ -67,17 +67,17 @@ export const styles = {
   },
   controls: {
     display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px',
-    padding: '24px', backgroundColor: '#2f3136'
+    padding: '24px', backgroundColor: '#111214'
   },
   controlButton: {
     width: '56px', height: '56px', borderRadius: '50%', border: 'none',
-    backgroundColor: '#40444b', color: '#fff', fontSize: '20px', cursor: 'pointer',
+    backgroundColor: '#1e2024', color: '#fff', fontSize: '20px', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s'
   },
-  controlButtonActive: { backgroundColor: '#f04747' },
+  controlButtonActive: { backgroundColor: '#f23f42' },
   hangupButton: {
     width: '56px', height: '56px', borderRadius: '50%', border: 'none',
-    backgroundColor: '#f04747', color: '#fff', fontSize: '20px', cursor: 'pointer',
+    backgroundColor: '#f23f42', color: '#fff', fontSize: '20px', cursor: 'pointer',
     display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s'
   }
 };

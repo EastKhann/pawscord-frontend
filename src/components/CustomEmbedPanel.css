@@ -1,4 +1,4 @@
-.custom-embed-overlay {
+﻿.custom-embed-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -14,12 +14,12 @@
 }
 
 .custom-embed-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    border-radius: 12px;
     width: 95%;
     max-width: 1400px;
     max-height: 90vh;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
     display: flex;
     flex-direction: column;
     animation: slideUp .3s ease;
@@ -49,7 +49,7 @@
     height: 36px;
     border-radius: 50%;
     color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -157,7 +157,7 @@
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 14px;
     font-weight: 600
 }
@@ -210,14 +210,14 @@ input[type=color] {
 }
 
 .checkbox-label span {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 13px
 }
 
 .remove-field-btn {
     background: rgba(239, 68, 68, .2);
     border: 1px solid rgba(239, 68, 68, .3);
-    color: #ef4444;
+    color: #f23f42;
     padding: 10px 14px;
     border-radius: 8px;
     cursor: pointer;
@@ -262,7 +262,7 @@ input[type=color] {
 }
 
 .pawscord-embed {
-    background: #2f3136;
+    background: #0e1222;
     border-left: 4px solid;
     border-radius: 4px;
     padding: 16px;
@@ -296,7 +296,7 @@ input[type=color] {
 }
 
 .embed-description {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 12px
@@ -329,7 +329,7 @@ input[type=color] {
 }
 
 .field-value {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 13px;
     line-height: 1.4
 }
@@ -358,7 +358,7 @@ input[type=color] {
 }
 
 .embed-footer span {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px
 }
 
@@ -384,7 +384,7 @@ input[type=color] {
 }
 
 .loading-state p {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 15px
 }
 
@@ -401,7 +401,7 @@ input[type=color] {
 }
 
 .empty-state p {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 18px;
     font-weight: 600
 }
@@ -439,7 +439,7 @@ input[type=color] {
 
 .embed-info p {
     margin: 0;
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 14px;
     line-height: 1.5
 }
@@ -481,7 +481,7 @@ input[type=color] {
 
 .embed-actions button:last-child {
     background: rgba(239, 68, 68, .2);
-    color: #ef4444;
+    color: #f23f42;
     border: 1px solid rgba(239, 68, 68, .3)
 }
 

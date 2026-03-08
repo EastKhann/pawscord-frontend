@@ -495,19 +495,16 @@ export default function useMessageHandlers({
                 // trigger state updates on unmounted components
                 try {
                     const url = `${API_BASE_URL}/messages/mark_read/`;
-                    const blob = new Blob(
-                        [JSON.stringify({ message_ids: remaining })],
-                        { type: 'application/json' }
-                    );
-                    if (navigator.sendBeacon) {
-                        navigator.sendBeacon(url, blob);
-                    } else {
-                        // Fallback for older browsers — fire and forget
+                    // sendBeacon can't send auth headers — skip it, use fetch instead
+                    // (fire-and-forget with keepalive so it survives page unload)
+                    try {
                         fetchWithAuth(url, {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ message_ids: remaining })
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message_ids: remaining }),
+                            keepalive: true,  // survives page unload like sendBeacon
                         }).catch(() => { });
-                    }
+                    } catch (e) { /* ignore unmount errors */ }
                 } catch { /* best effort */ }
             }
         };

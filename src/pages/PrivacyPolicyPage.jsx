@@ -5,19 +5,19 @@ const PrivacyPolicyPage = () => {
         <div style={{
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             lineHeight: 1.6,
-            color: '#dcddde',
-            background: 'linear-gradient(135deg, #1e1f22 0%, #2b2d31 100%)',
+            color: '#dbdee1',
+            background: 'radial-gradient(ellipse at 10% 10%, rgba(88,101,242,0.12) 0%, transparent 55%), radial-gradient(ellipse at 90% 90%, rgba(124,58,237,0.08) 0%, transparent 50%), #0d0e10',
             minHeight: '100vh',
             padding: '0',
         }}>
             <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
                 <div style={{
-                    background: 'linear-gradient(135deg, #5865f2 0%, #7289da 100%)',
+                    background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
                     padding: '60px 40px',
-                    borderRadius: '16px',
+                    borderRadius: '22px',
                     textAlign: 'center',
                     marginBottom: '40px',
-                    boxShadow: '0 8px 32px rgba(88, 101, 242, 0.4)',
+                    boxShadow: '0 4px 0 #3b45c7, 0 8px 32px rgba(88, 101, 242, 0.4)',
                 }}>
                     <h1 style={{
                         fontSize: '3em',
@@ -29,10 +29,13 @@ const PrivacyPolicyPage = () => {
                 </div>
 
                 <div style={{
-                    background: '#2b2d31',
+                    background: 'rgba(30, 31, 35, 0.88)',
+                    backdropFilter: 'blur(48px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(48px) saturate(180%)',
                     padding: '50px 40px',
-                    borderRadius: '16px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                    borderRadius: '20px',
+                    border: '1px solid rgba(255,255,255,0.07)',
+                    boxShadow: '0 0 0 1px rgba(88,101,242,0.06), 0 24px 60px rgba(0,0,0,0.55)',
                 }}>
                     <div style={{
                         background: 'rgba(88, 101, 242, 0.15)',
@@ -51,30 +54,30 @@ const PrivacyPolicyPage = () => {
                         borderBottom: '2px solid #5865f2',
                         paddingBottom: '10px',
                     }}>1. Information We Collect</h2>
-                    <p style={{ color: '#b9bbbe' }}>To provide Pawscord's chat and communication services, we collect:</p>
+                    <p style={{ color: '#b5bac1' }}>To provide Pawscord's chat and communication services, we collect:</p>
 
-                    <h3 style={{ color: '#7289da', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Personal Information</h3>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <h3 style={{ color: '#5865f2', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Personal Information</h3>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}><strong>Account Data:</strong> Username, email address, password (encrypted)</li>
                         <li style={{ margin: '10px 0' }}><strong>Profile Information:</strong> Avatar, display name, bio (optional)</li>
                         <li style={{ margin: '10px 0' }}><strong>User ID:</strong> Unique identifier for your account</li>
                     </ul>
 
-                    <h3 style={{ color: '#7289da', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Communication Data</h3>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <h3 style={{ color: '#5865f2', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Communication Data</h3>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}><strong>Messages:</strong> Text messages, direct messages, group chats</li>
                         <li style={{ margin: '10px 0' }}><strong>Media Files:</strong> Photos, videos, and files you share</li>
                         <li style={{ margin: '10px 0' }}><strong>Voice Messages:</strong> Audio recordings (if feature is used)</li>
                     </ul>
 
-                    <h3 style={{ color: '#7289da', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Usage Information</h3>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <h3 style={{ color: '#5865f2', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Usage Information</h3>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}><strong>Activity Data:</strong> Online status, last seen timestamp</li>
                         <li style={{ margin: '10px 0' }}><strong>App Interactions:</strong> Features used, settings preferences</li>
                     </ul>
 
-                    <h3 style={{ color: '#7289da', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Device Information</h3>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <h3 style={{ color: '#5865f2', margin: '25px 0 15px 0', fontSize: '1.4em' }}>Device Information</h3>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}><strong>Device Identifiers:</strong> Device ID for push notifications (FCM token)</li>
                         <li style={{ margin: '10px 0' }}><strong>Technical Data:</strong> App version, OS version</li>
                     </ul>
@@ -86,8 +89,8 @@ const PrivacyPolicyPage = () => {
                         borderBottom: '2px solid #5865f2',
                         paddingBottom: '10px',
                     }}>2. How We Use Your Information</h2>
-                    <p style={{ color: '#b9bbbe' }}>We use collected data to:</p>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <p style={{ color: '#b5bac1' }}>We use collected data to:</p>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}>✅ Provide and maintain Pawscord services</li>
                         <li style={{ margin: '10px 0' }}>✅ Deliver messages and notifications</li>
                         <li style={{ margin: '10px 0' }}>✅ Create and manage your account</li>
@@ -103,8 +106,8 @@ const PrivacyPolicyPage = () => {
                         borderBottom: '2px solid #5865f2',
                         paddingBottom: '10px',
                     }}>3. Data Sharing</h2>
-                    <p style={{ color: '#b9bbbe' }}><strong style={{ color: '#fff' }}>We do NOT sell your data.</strong> Your information is only shared in these limited cases:</p>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <p style={{ color: '#b5bac1' }}><strong style={{ color: '#fff' }}>We do NOT sell your data.</strong> Your information is only shared in these limited cases:</p>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}><strong>With Other Users:</strong> Messages and media you send are delivered to intended recipients</li>
                         <li style={{ margin: '10px 0' }}><strong>Service Providers:</strong> Cloud hosting (AWS/Cloudflare), push notifications (Firebase)</li>
                         <li style={{ margin: '10px 0' }}><strong>Legal Requirements:</strong> If required by law enforcement with valid legal request</li>
@@ -117,8 +120,8 @@ const PrivacyPolicyPage = () => {
                         borderBottom: '2px solid #5865f2',
                         paddingBottom: '10px',
                     }}>4. Data Security</h2>
-                    <p style={{ color: '#b9bbbe' }}>We protect your data using:</p>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <p style={{ color: '#b5bac1' }}>We protect your data using:</p>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}>🔒 HTTPS/TLS encryption for data transmission</li>
                         <li style={{ margin: '10px 0' }}>🔒 Password hashing (bcrypt/PBKDF2)</li>
                         <li style={{ margin: '10px 0' }}>🔒 Secure database storage</li>
@@ -132,8 +135,8 @@ const PrivacyPolicyPage = () => {
                         borderBottom: '2px solid #5865f2',
                         paddingBottom: '10px',
                     }}>5. Your Rights</h2>
-                    <p style={{ color: '#b9bbbe' }}>You have the right to:</p>
-                    <ul style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <p style={{ color: '#b5bac1' }}>You have the right to:</p>
+                    <ul style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}>📋 Access your personal data</li>
                         <li style={{ margin: '10px 0' }}>✏️ Update or correct your information</li>
                         <li style={{ margin: '10px 0' }}>🗑️ Delete your account and associated data</li>
@@ -141,8 +144,8 @@ const PrivacyPolicyPage = () => {
                         <li style={{ margin: '10px 0' }}>❌ Opt-out of non-essential notifications</li>
                     </ul>
 
-                    <h3 style={{ color: '#7289da', margin: '25px 0 15px 0', fontSize: '1.4em' }}>How to Delete Your Account</h3>
-                    <ol style={{ color: '#b9bbbe', margin: '15px 0 15px 30px' }}>
+                    <h3 style={{ color: '#5865f2', margin: '25px 0 15px 0', fontSize: '1.4em' }}>How to Delete Your Account</h3>
+                    <ol style={{ color: '#b5bac1', margin: '15px 0 15px 30px' }}>
                         <li style={{ margin: '10px 0' }}>Open Pawscord app</li>
                         <li style={{ margin: '10px 0' }}>Go to <strong>Settings → Account Settings</strong></li>
                         <li style={{ margin: '10px 0' }}>Tap <strong>"Delete Account"</strong></li>
@@ -152,21 +155,21 @@ const PrivacyPolicyPage = () => {
 
                     <div style={{
                         background: 'rgba(114, 137, 218, 0.1)',
-                        border: '2px solid #7289da',
+                        border: '2px solid #5865f2',
                         padding: '30px',
                         borderRadius: '12px',
                         margin: '40px 0',
                     }}>
                         <h2 style={{ marginTop: 0, color: '#5865f2', border: 'none' }}>Contact Us</h2>
-                        <p style={{ color: '#b9bbbe' }}>If you have questions about this Privacy Policy or your data:</p>
-                        <ul style={{ color: '#b9bbbe', margin: 0, padding: 0, listStyle: 'none' }}>
+                        <p style={{ color: '#b5bac1' }}>If you have questions about this Privacy Policy or your data:</p>
+                        <ul style={{ color: '#b5bac1', margin: 0, padding: 0, listStyle: 'none' }}>
                             <li style={{ margin: '10px 0' }}>📧 <strong>Email:</strong> support@pawscord.com</li>
                             <li style={{ margin: '10px 0' }}>🌐 <strong>Website:</strong> pawscord.com</li>
                             <li style={{ margin: '10px 0' }}>📱 <strong>In-App:</strong> Settings → Help & Support</li>
                         </ul>
                     </div>
 
-                    <div style={{ textAlign: 'center', marginTop: '50px', paddingTop: '30px', borderTop: '1px solid #40444b', color: '#72767d' }}>
+                    <div style={{ textAlign: 'center', marginTop: '50px', paddingTop: '30px', borderTop: '1px solid #1e2024', color: '#949ba4' }}>
                         <p><strong>Pawscord</strong> - Secure Chat & Communication Platform</p>
                         <p>© 2026 Pawscord. All rights reserved.</p>
                     </div>

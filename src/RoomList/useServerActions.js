@@ -178,10 +178,20 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
         const serverName = typeof nameOrEvent === 'string' ? nameOrEvent : newServerName;
         const serverPublic = typeof nameOrEvent === 'string' ? isPublic : isNewServerPublic;
         if (!serverName?.trim()) return;
-        await fetchWithAuth(`${apiUrl}/servers/create/`, {
-            method: 'POST',
-            body: JSON.stringify({ name: serverName, is_public: !!serverPublic })
-        });
+        try {
+            const res = await fetchWithAuth(`${apiUrl}/servers/create/`, {
+                method: 'POST',
+                body: JSON.stringify({ name: serverName, is_public: !!serverPublic })
+            });
+            if (res.ok) {
+                toast.success(`✅ "${serverName}" sunucusu oluşturuldu!`);
+            } else {
+                const data = await res.json().catch(() => ({}));
+                toast.error(data.error || 'Sunucu oluşturulamadı.');
+            }
+        } catch (e) {
+            toast.error('Bağlantı hatası. Sunucu oluşturulamadı.');
+        }
         setNewServerName('');
         setIsNewServerPublic(false);
     };
@@ -289,7 +299,8 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
         try {
             const res = await fetchWithAuth(`${apiUrl}/servers/public/`);
             const data = await res.json();
-            setPublicServers(data);
+            // Backend paginated response ({ results: [...] }) veya düz dizi her ikisini destekle
+            setPublicServers(Array.isArray(data) ? data : (data.results || []));
         } catch (e) {
             console.error("Sunucular çekilemedi", e);
         }

@@ -17,7 +17,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                         <LazyImage src={senderAvatar || getDeterministicAvatar(senderUsername)} style={styles.avatar} alt="avatar" />
                         <div style={{ marginLeft: '12px' }}>
                             <strong style={{ color: 'white', display: 'block' }}>{senderUsername}</strong>
-                            <span style={{ fontSize: '0.8em', color: '#faa61a' }}>Sana istek gönderdi!</span>
+                            <span style={{ fontSize: '0.8em', color: '#f0b232' }}>Sana istek gönderdi!</span>
                         </div>
                     </div>
                     <div style={styles.actions}>
@@ -38,7 +38,7 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                         <div key={req.id} style={styles.listItem}>
                             <div style={styles.userInfo}>
                                 <LazyImage src={receiverAvatar || getDeterministicAvatar(receiverUsername)} style={styles.avatar} alt="avatar" />
-                                <span style={{ marginLeft: '12px', color: '#b9bbbe' }}>{receiverUsername} (Bekliyor...)</span>
+                                <span style={{ marginLeft: '12px', color: '#b5bac1' }}>{receiverUsername} (Bekliyor...)</span>
                             </div>
                             <button onClick={() => handleRespond(req.id, 'reject')} style={styles.rejectBtn} title="{'İ'}ptal Et"><FaTimes /></button>
                         </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaLink, FaHistory, FaCheck } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -113,7 +113,7 @@ const VanityURLPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) => {
                             />
                             {checking && <div style={styles.checking}>Checking...</div>}
                             {!checking && available === true && (
-                                <FaCheck style={{ color: '#43b581', fontSize: '20px' }} />
+                                <FaCheck style={{ color: '#23a559', fontSize: '20px' }} />
                             )}
                             {!checking && available === false && (
                                 <div style={styles.unavailable}>Unavailable</div>
@@ -186,7 +186,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -200,7 +200,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -211,7 +211,7 @@ const styles = {
         flex: 1,
     },
     currentSection: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         marginBottom: '24px',
@@ -228,20 +228,20 @@ const styles = {
     label: {
         fontSize: '14px',
         fontWeight: '600',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
     },
     inputRow: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         padding: '10px 12px',
     },
     prefix: {
         fontSize: '14px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     input: {
         flex: 1,
@@ -253,15 +253,15 @@ const styles = {
     },
     checking: {
         fontSize: '12px',
-        color: '#faa61a',
+        color: '#f0b232',
     },
     unavailable: {
         fontSize: '12px',
-        color: '#f04747',
+        color: '#f23f42',
     },
     hint: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginTop: '8px',
         marginBottom: '16px',
     },
@@ -277,13 +277,13 @@ const styles = {
         fontWeight: '600',
     },
     setButtonDisabled: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         cursor: 'not-allowed',
     },
     sectionTitle: {
         fontSize: '14px',
         fontWeight: '600',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '12px',
         display: 'flex',
         alignItems: 'center',
@@ -294,7 +294,7 @@ const styles = {
         gap: '8px',
     },
     historyItem: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '4px',
         padding: '12px',
         display: 'flex',
@@ -303,12 +303,12 @@ const styles = {
     },
     historyUrl: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontFamily: 'monospace',
     },
     historyDate: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
 };
 

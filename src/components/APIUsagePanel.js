@@ -44,21 +44,21 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
-                                    <div style={styles.statIcon}><FaCheckCircle style={{ color: '#43b581' }} /></div>
+                                    <div style={styles.statIcon}><FaCheckCircle style={{ color: '#23a559' }} /></div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>{safeStats.success_rate ? `${safeStats.success_rate.toFixed(1)}%` : '0%'}</div>
                                         <div style={styles.statLabel}>Success Rate</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
-                                    <div style={styles.statIcon}><FaClock style={{ color: '#faa61a' }} /></div>
+                                    <div style={styles.statIcon}><FaClock style={{ color: '#f0b232' }} /></div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>{safeStats.avg_response_time ? `${safeStats.avg_response_time}ms` : '0ms'}</div>
                                         <div style={styles.statLabel}>Avg Response Time</div>
                                     </div>
                                 </div>
                                 <div style={styles.statCard}>
-                                    <div style={styles.statIcon}><FaExclamationTriangle style={{ color: '#f04747' }} /></div>
+                                    <div style={styles.statIcon}><FaExclamationTriangle style={{ color: '#f23f42' }} /></div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>{safeStats.errors || 0}</div>
                                         <div style={styles.statLabel}>Errors</div>
@@ -107,7 +107,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                         {endpoint.error_rate > 0 && (
                                                             <>
                                                                 <span style={{ margin: '0 8px', color: '#444' }}>•</span>
-                                                                <span style={{ color: '#f04747' }}>{endpoint.error_rate}% errors</span>
+                                                                <span style={{ color: '#f23f42' }}>{endpoint.error_rate}% errors</span>
                                                             </>
                                                         )}
                                                     </div>
@@ -116,7 +116,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                     <div style={{
                                                         ...styles.endpointBarFill,
                                                         width: `${(endpoint.count / endpoints[0].count) * 100}%`,
-                                                        backgroundColor: endpoint.error_rate > 5 ? '#f04747' : '#5865f2'
+                                                        backgroundColor: endpoint.error_rate > 5 ? '#f23f42' : '#5865f2'
                                                     }} />
                                                 </div>
                                             </div>
@@ -133,7 +133,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                     ) : (
                                         timeline.slice(0, 20).map((event, idx) => (
                                             <div key={idx} style={styles.timelineItem}>
-                                                <div style={{ ...styles.timelineIcon, backgroundColor: event.status >= 400 ? '#f04747' : '#43b581' }}>
+                                                <div style={{ ...styles.timelineIcon, backgroundColor: event.status >= 400 ? '#f23f42' : '#23a559' }}>
                                                     {event.status >= 400 ? <FaExclamationTriangle /> : <FaCheckCircle />}
                                                 </div>
                                                 <div style={styles.timelineContent}>
@@ -142,7 +142,7 @@ const APIUsagePanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                                                         {event.path}
                                                     </div>
                                                     <div style={styles.timelineMeta}>
-                                                        <span style={{ color: event.status >= 400 ? '#f04747' : '#43b581' }}>{event.status}</span>
+                                                        <span style={{ color: event.status >= 400 ? '#f23f42' : '#23a559' }}>{event.status}</span>
                                                         <span style={{ margin: '0 8px', color: '#444' }}>•</span>
                                                         <span>{event.response_time}ms</span>
                                                         <span style={{ margin: '0 8px', color: '#444' }}>•</span>

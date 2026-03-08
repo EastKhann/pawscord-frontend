@@ -134,7 +134,7 @@ const PremiumManagementPanel = ({ onClose }) => {
     const getTierColor = (tier) => {
         const colors = {
             'basic': '#3b82f6',
-            'classic': '#8b5cf6',
+            'classic': '#5865f2',
             'elite': '#f59e0b'
         };
         return colors[tier] || colors.classic;

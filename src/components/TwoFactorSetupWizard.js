@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaShieldAlt, FaQrcode, FaKey, FaCopy } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -67,7 +67,7 @@ const TwoFactorSetupWizard = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
             <div style={styles.modal}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
-                        <FaShieldAlt style={{ marginRight: '10px', color: '#43b581' }} />
+                        <FaShieldAlt style={{ marginRight: '10px', color: '#23a559' }} />
                         <h2 style={styles.title}>Two-Factor Authentication Setup</h2>
                     </div>
                     <button onClick={onClose} style={styles.closeButton}>
@@ -199,7 +199,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -213,7 +213,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -241,13 +241,13 @@ const styles = {
     stepDescription: {
         margin: 0,
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         textAlign: 'center',
         lineHeight: '1.5',
     },
     requirements: {
         width: '100%',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -256,7 +256,7 @@ const styles = {
     },
     requirementItem: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     qrContainer: {
         backgroundColor: '#ffffff',
@@ -269,14 +269,14 @@ const styles = {
     },
     manualEntry: {
         width: '100%',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         textAlign: 'center',
     },
     manualLabel: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '8px',
     },
     secretCode: {
@@ -291,7 +291,7 @@ const styles = {
         padding: '16px',
         fontSize: '24px',
         textAlign: 'center',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '2px solid #5865f2',
         borderRadius: '8px',
         color: '#ffffff',
@@ -300,7 +300,7 @@ const styles = {
     },
     backupCodesContainer: {
         width: '100%',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'grid',
@@ -310,7 +310,7 @@ const styles = {
     backupCode: {
         fontSize: '14px',
         fontFamily: 'monospace',
-        color: '#dcddde',
+        color: '#dbdee1',
         backgroundColor: '#1e1e1e',
         padding: '8px',
         borderRadius: '4px',
@@ -318,7 +318,7 @@ const styles = {
     },
     primaryButton: {
         padding: '12px 32px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',

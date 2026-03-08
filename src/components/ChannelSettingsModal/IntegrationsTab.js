@@ -16,7 +16,7 @@ const IntegrationsTab = ({
                 <h4 style={{ margin: 0, color: '#fff' }}>
                     <FaLink /> Kanal Entegrasyonları
                 </h4>
-                <p style={{ color: '#72767d', fontSize: '13px', marginTop: '8px' }}>
+                <p style={{ color: '#949ba4', fontSize: '13px', marginTop: '8px' }}>
                     Webhooklar, botlar ve dış servisler ile entegrasyon ayarları
                 </p>
             </div>
@@ -61,7 +61,7 @@ const IntegrationsTab = ({
             <div style={styles.integrationCard}>
                 <div style={styles.integrationCardHeader}>
                     <div style={{ ...styles.integrationIcon, backgroundColor: 'rgba(250, 166, 26, 0.2)' }}>
-                        <FaBell style={{ color: '#faa61a', fontSize: '20px' }} />
+                        <FaBell style={{ color: '#f0b232', fontSize: '20px' }} />
                     </div>
                     <div>
                         <h5 style={styles.integrationTitle}>Bildirim Ayarları</h5>
@@ -96,7 +96,7 @@ const IntegrationsTab = ({
             <div style={styles.integrationCard}>
                 <div style={styles.integrationCardHeader}>
                     <div style={{ ...styles.integrationIcon, backgroundColor: 'rgba(67, 181, 129, 0.2)' }}>
-                        <FaEye style={{ color: '#43b581', fontSize: '20px' }} />
+                        <FaEye style={{ color: '#23a559', fontSize: '20px' }} />
                     </div>
                     <div>
                         <h5 style={styles.integrationTitle}>Kanal Takibi</h5>
@@ -104,7 +104,7 @@ const IntegrationsTab = ({
                     </div>
                 </div>
                 <button
-                    style={{ ...styles.integrationBtn, backgroundColor: '#43b581' }}
+                    style={{ ...styles.integrationBtn, backgroundColor: '#23a559' }}
                     onClick={async () => {
                         try {
                             const res = await fetchWithAuth(`${apiBaseUrl}/channels/${room.slug}/follow-link/`, {

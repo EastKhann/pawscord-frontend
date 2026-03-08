@@ -1,4 +1,4 @@
-/* frontend/src/index.css (MODERN ELEGANT TEMA) */
+﻿/* frontend/src/index.css (MODERN ELEGANT TEMA) */
 
 /* 🔒 OPTIMIZED: Font import - gg sans equivalent + Inter fallback */
 /* gg sans is Discord's font; Noto Sans is the closest public equivalent */
@@ -54,7 +54,7 @@
     /* Brand Colors - Discord */
     --brand-primary: #5865f2;
     --brand-secondary: #4752c4;
-    --brand-accent: #7289da;
+    --brand-accent: #5865f2;
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
@@ -63,14 +63,14 @@
     --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
     --gradient-danger: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
 
-    /* Dark Theme - Discord accurate */
-    --bg-app: #111214;
-    --bg-primary: #313338;
-    --bg-secondary: #2b2d31;
-    --bg-tertiary: #1e1f22;
-    --bg-elevated: #383a40;
-    --bg-hover: rgba(88, 101, 242, 0.1);
-    --bg-active: rgba(88, 101, 242, 0.2);
+    /* Dark Theme — midnight blue (mavimsi) */
+    --bg-app: #0e1222;
+    --bg-primary: #121928;
+    --bg-secondary: #0e1222;
+    --bg-tertiary: #0b0e1b;
+    --bg-elevated: #182135;
+    --bg-hover: rgba(88, 101, 242, 0.12);
+    --bg-active: rgba(88, 101, 242, 0.22);
 
     /* Glassmorphism */
     --glass-bg: rgba(255, 255, 255, 0.03);
@@ -80,9 +80,9 @@
 
     /* Text Colors */
     --text-primary: #ffffff;
-    --text-secondary: #e2e3ee;
+    --text-secondary: #dbdee1;
     --text-tertiary: #b8b9c7;
-    --text-muted: #6c6d7d;
+    --text-muted: #949ba4;
 
     /* Shadows - Layered depth */
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -113,10 +113,10 @@
     /* ── Faz 3.1: Discord standard token aliases ── */
     --dc-header-primary: #f2f3f5;
     --dc-text-normal: #dbdee1;
-    --dc-background-primary: #313338;
-    --dc-background-secondary: #2b2d31;
-    --dc-background-tertiary: #232428;
-    --dc-background-accent: #1e1f22;
+    --dc-background-primary: #121928;
+    --dc-background-secondary: #0e1222;
+    --dc-background-tertiary: #1a2440;
+    --dc-background-accent: #0b0e1b;
     --dc-interactive-normal: #b5bac1;
     --dc-interactive-hover: #dbdee1;
     --dc-interactive-active: #fff;
@@ -129,6 +129,19 @@
 /* ================================================ */
 /* 🎬 ANIMATIONS */
 /* ================================================ */
+
+/* Auth pages card entrance — used by ForgotPassword, 2FA, ResetPassword, etc. */
+@keyframes authCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
 
 @keyframes pulse {
 
@@ -278,7 +291,7 @@ body,
     background: var(--bg-app);
 }
 
-/* Animated Background Gradient */
+/* Subtle background gradient — no animation */
 body::before {
     content: '';
     position: fixed;
@@ -287,24 +300,12 @@ body::before {
     right: 0;
     bottom: 0;
     background:
-        radial-gradient(ellipse at top left, rgba(139, 92, 246, 0.1), transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.1), transparent 50%);
+        radial-gradient(ellipse at top left, rgba(88, 101, 242, 0.06), transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(71, 82, 196, 0.04), transparent 50%);
     pointer-events: none;
     z-index: 0;
-    animation: backgroundPulse 15s ease-in-out infinite;
 }
 
-@keyframes backgroundPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-}
 
 /* ================================================ */
 /* 🎨 MODERN GLASSMORPHISM COMPONENTS */
@@ -312,8 +313,8 @@ body::before {
 
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
@@ -365,11 +366,11 @@ body::before {
 .btn-primary {
     background: var(--gradient-primary);
     color: white;
-    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 4px 14px rgba(88, 101, 242, 0.3);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
     transform: translateY(-1px);
 }
 
@@ -397,7 +398,7 @@ textarea:focus,
 select:focus {
     outline: none;
     border-color: var(--brand-primary);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
     background: var(--glass-bg-hover);
 }
 
@@ -465,6 +466,18 @@ select:focus {
     }
 }
 
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .fade-in {
     animation: fadeIn 0.4s ease-out;
 }
@@ -493,7 +506,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
-    background-color: var(--background-primary);
+    background-color: #0b0e1b;
     font-size: 16px;
     line-height: 1.375;
     /* 🔥 PREVENT BOUNCE SCROLLING ON iOS */
@@ -511,11 +524,11 @@ body {
 :root {
     color-scheme: dark;
     /* Discord'un Yeni "Midnight" Tonları */
-    --background-primary: #313338;
+    --background-primary: #17191c;
     /* Ana Sohbet Alanı */
-    --background-secondary: #2b2d31;
+    --background-secondary: #111214;
     /* Yan Menü */
-    --background-tertiary: #1e1f22;
+    --background-tertiary: #0d0e10;
     /* Input ve Paneller */
     --background-accent: #404249;
     /* Hover (Üzerine gelince) */
@@ -540,8 +553,8 @@ body {
     --text-danger: #da373c;
     /* Kırmızı (Hata) */
 
-    --input-background: #383a40;
-    --input-border: #1e1f22;
+    --input-background: #182135;
+    --input-border: #0d0e10;
 
     --button-primary: #5865f2;
     /* Ana Buton (Mor/Mavi) */
@@ -551,12 +564,12 @@ body {
     --border-primary: #1f2023;
     --border-mentioned: #5865f2;
 
-    --scrollbar-thumb: #1a1b1e;
-    --scrollbar-track: #2b2d31;
+    --scrollbar-thumb: #1e2a42;
+    --scrollbar-track: #0e1222;
 }
 
 select option {
-    background-color: var(--bg-secondary, #2b2d31);
+    background-color: var(--bg-secondary, #0e1222);
     color: var(--text-normal, #dbdee1);
 }
 
@@ -725,7 +738,7 @@ button:active {
 
 /* Markdown (Mesaj İçeriği) Stilleri */
 .messageContent code {
-    background-color: var(--bg-secondary, #2b2d31);
+    background-color: var(--bg-secondary, #0e1222);
     padding: 0.2em 0.4em;
     border-radius: var(--radius-sm, 4px);
     font-family: var(--font-mono, 'Consolas', 'Andale Mono', 'Monaco', 'Courier New', monospace);
@@ -735,7 +748,7 @@ button:active {
 }
 
 .messageContent pre {
-    background-color: var(--bg-secondary, #2b2d31);
+    background-color: var(--bg-secondary, #0e1222);
     padding: var(--space-md, 12px);
     border-radius: var(--radius-base, 8px);
     border: 1px solid var(--border-default, rgba(255, 255, 255, 0.06));
@@ -869,7 +882,7 @@ button:active {
     align-items: center;
     position: relative;
     overflow: hidden;
-    background-color: #1e1f22;
+    background-color: #0b0e1b;
     padding: 0;
     /* Tüm padding'i kaldır */
 }
@@ -895,8 +908,9 @@ button:active {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse at 25% 35%, rgba(88, 101, 242, 0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 75% 65%, rgba(35, 165, 89, 0.08) 0%, transparent 50%);
+        radial-gradient(ellipse at 20% 30%, rgba(88, 101, 242, 0.22) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 70%, rgba(88, 101, 242, 0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 100%, rgba(35, 165, 89, 0.06) 0%, transparent 45%);
     z-index: 0;
     pointer-events: none;
 }
@@ -931,42 +945,42 @@ button:active {
 .login-card {
     position: relative;
     z-index: 1;
-    background: rgba(30, 31, 34, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 40px;
-    border-radius: 20px;
+    background: rgba(30, 31, 34, 0.82);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    padding: 44px 40px;
+    border-radius: 16px;
     width: 100%;
-    max-width: 400px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     text-align: center;
-    animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: slideUpFade 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes slideUpFade {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(24px) scale(0.98);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
-/* Logo ve Başlık */
+/* logo-circle: solid blurple with glow */
 .logo-circle {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #5865f2, #9b59b6);
+    background: linear-gradient(145deg, #5865f2, #4752c4);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 15px auto;
-    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+    margin: 0 auto 16px auto;
+    box-shadow: 0 4px 24px rgba(88, 101, 242, 0.45), 0 0 0 4px rgba(88, 101, 242, 0.12);
 }
 
 .logo-header h1 {
@@ -978,7 +992,7 @@ button:active {
 }
 
 .logo-header p {
-    color: var(--text-secondary, #b9bbbe);
+    color: var(--text-secondary, #b5bac1);
     margin-top: 5px;
     font-size: 0.95em;
 }
@@ -994,51 +1008,61 @@ button:active {
     left: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-secondary, #b9bbbe);
+    color: var(--text-secondary, #b5bac1);
     z-index: 2;
 }
 
 .input-group input {
     width: 100%;
-    padding: 12px 15px 12px 45px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 13px 15px 13px 45px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 10px;
-    color: white;
-    font-size: 1em;
-    transition: all 0.3s ease;
+    color: #dbdee1;
+    font-size: 0.975em;
+    transition: all 0.2s ease;
     box-sizing: border-box;
+    font-family: inherit;
 }
 
 .input-group input:focus {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.42);
     border-color: #5865f2;
     outline: none;
-    box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.22), 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: #f2f3f5;
+}
+
+.input-group input::placeholder {
+    color: #4e5058;
 }
 
 /* Butonlar */
 .submit-btn {
     width: 100%;
-    padding: 12px;
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    padding: 13px;
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     color: white;
     border: none;
     border-radius: 10px;
-    font-size: 1.1em;
-    font-weight: bold;
+    font-size: 1em;
+    font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin-top: 10px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 12px;
+    letter-spacing: 0.2px;
+    box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
 }
 
 .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+    box-shadow: 0 8px 22px rgba(88, 101, 242, 0.5);
+    background: linear-gradient(135deg, #6470f3 0%, #5865f2 100%);
 }
 
 .submit-btn:active {
-    transform: scale(0.98);
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 2px 8px rgba(88, 101, 242, 0.35);
 }
 
 /* Ayırıcı */
@@ -1046,7 +1070,7 @@ button:active {
     display: flex;
     align-items: center;
     margin: 20px 0;
-    color: #72767d;
+    color: #949ba4;
     font-size: 0.85em;
 }
 
@@ -1065,7 +1089,7 @@ button:active {
 .toggle-mode {
     margin-top: 20px;
     font-size: 0.9em;
-    color: var(--text-secondary, #b9bbbe);
+    color: var(--text-secondary, #b5bac1);
 }
 
 .toggle-mode span {
@@ -1089,14 +1113,21 @@ button:active {
     font-size: 0.9em;
 }
 
-.spinner {
+.spinner-white {
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.35);
     border-radius: 50%;
-    border-top-color: white;
-    animation: spin 1s ease-in-out infinite;
+    border-top-color: #ffffff;
+    animation: spin-white 0.8s linear infinite;
     margin: 0 auto;
+    display: inline-block;
+}
+
+@keyframes spin-white {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Google Butonunu Düzenleyen CSS */
@@ -1406,8 +1437,8 @@ div:hover>div>.delete-chat-btn {
     bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%) translateY(4px);
-    background: #111214;
-    color: #dcddde;
+    background: #0e1222;
+    color: #dbdee1;
     font-size: 12px;
     font-weight: 500;
     font-family: 'gg sans', 'Noto Sans', sans-serif;
@@ -1439,7 +1470,7 @@ div:hover>div>.delete-chat-btn {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #5865f2 0%, #7289da 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
     color: #fff;
     font-size: 16px;
     font-weight: 700;
@@ -1559,7 +1590,7 @@ div:hover>div>.delete-chat-btn {
     }
 
     70% {
-        transform: scale(1.15) translateY(-6px);
+        transform: scale(1.05) translateY(-6px);
         opacity: 1;
     }
 
@@ -1587,7 +1618,7 @@ div:hover>div>.delete-chat-btn {
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--bg-secondary, #2b2d31);
+    background: var(--bg-secondary, #0e1222);
     border-radius: 18px 18px 0 0;
     z-index: 500;
     animation: bottomSheetIn 0.28s cubic-bezier(0.32, 0.72, 0, 1);
@@ -1645,7 +1676,7 @@ div:hover>div>.delete-chat-btn {
 }
 
 .bottom-sheet-action.danger {
-    color: #ed4245;
+    color: #f23f42;
 }
 
 @keyframes bottomSheetIn {
@@ -1725,14 +1756,14 @@ div:hover>div>.delete-chat-btn {
     --dc-background-modifier-active: rgba(255, 255, 255, 0.08);
     --dc-background-modifier-selected: rgba(255, 255, 255, 0.1);
     --dc-text-normal: #e3e5e8;
-    --dc-text-muted: #72767d;
+    --dc-text-muted: #949ba4;
     --dc-text-link: #00b0f4;
     --dc-header-primary: #f2f3f5;
-    --dc-header-secondary: #b9bbbe;
-    --dc-interactive-normal: #b9bbbe;
-    --dc-interactive-hover: #dcddde;
+    --dc-header-secondary: #b5bac1;
+    --dc-interactive-normal: #b5bac1;
+    --dc-interactive-hover: #dbdee1;
     --dc-interactive-active: #ffffff;
-    --dc-interactive-muted: #4f545c;
+    --dc-interactive-muted: #4e5058;
     --dc-divider: rgba(255, 255, 255, 0.06);
     --dc-channeltextarea-background: #111111;
     --dc-brand: #5865f2;
@@ -1796,7 +1827,7 @@ div:hover>div>.delete-chat-btn {
 
 .swipe-action-btn:hover {
     background: #5865f2;
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .swipe-action-btn.danger {
@@ -1804,7 +1835,7 @@ div:hover>div>.delete-chat-btn {
 }
 
 .swipe-action-btn.danger:hover {
-    background: #ed4245;
+    background: #f23f42;
 }
 
 /* ═══════════════════════════════════════════════════════════

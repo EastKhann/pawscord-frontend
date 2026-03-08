@@ -28,12 +28,13 @@ export default defineConfig({
       exclude: ['node_modules/', 'src/__tests__/setup.js']
     }
   },
-  // 🔥 FIX: Electron için relative path, web için CDN/absolute path
+  // 🔥 FIX: Electron için relative path, web/CF Pages için '/'
   // VITE_ELECTRON=true ise './' kullan (file:// protokolü için)
-  // Değilse CDN URL veya '/' kullan (web deployment için)
+  // VITE_BASE_PATH ile override edilebilir (CDN asset hosting için)
+  // CF Pages: '/' (varsayılan) — CDN'e taşınan asset'ler için CDN URL set et
   base: process.env.VITE_ELECTRON === 'true'
     ? './'
-    : (process.env.VITE_CDN_URL || '/'),
+    : (process.env.VITE_BASE_PATH || '/'),
 
   plugins: [
     // ⚡ React with automatic JSX runtime (React 19 default)
@@ -195,7 +196,8 @@ export default defineConfig({
   // Build optimizations
   build: {
     // Output directory
-    outDir: 'build',
+    // VITE_OUT_DIR=dist for Cloudflare Pages, default 'build' for local/Electron
+    outDir: process.env.VITE_OUT_DIR || 'build',
 
     // Sourcemap (production'da false)
     sourcemap: false,

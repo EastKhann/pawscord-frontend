@@ -11,7 +11,7 @@ export const StatCard = ({ icon, label, value, subtext, change, color }) => (
             {change !== undefined && (
                 <span style={{
                     ...styles.statChange,
-                    color: change >= 0 ? '#43b581' : '#f04747'
+                    color: change >= 0 ? '#23a559' : '#f23f42'
                 }}>
                     {change >= 0 ? <FaArrowUp /> : <FaArrowDown />} {Math.abs(change)}%
                 </span>
@@ -55,7 +55,7 @@ export const ComparisonCard = ({ label, thisWeek, lastWeek, change }) => (
         {change !== undefined && (
             <span style={{
                 ...styles.comparisonChange,
-                color: change >= 0 ? '#43b581' : '#f04747'
+                color: change >= 0 ? '#23a559' : '#f23f42'
             }}>
                 {change >= 0 ? '📈' : '📉'} {change >= 0 ? '+' : ''}{change}%
             </span>

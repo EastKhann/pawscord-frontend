@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaTrash, FaClock, FaSave } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -229,7 +229,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -243,7 +243,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -263,7 +263,7 @@ const styles = {
         marginBottom: '16px',
     },
     form: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
     },
@@ -274,14 +274,14 @@ const styles = {
         display: 'block',
         fontSize: '14px',
         fontWeight: '600',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
     },
     select: {
         width: '100%',
         padding: '10px',
         backgroundColor: '#1e1e1e',
-        border: '1px solid #2c2f33',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
         color: '#ffffff',
         fontSize: '14px',
@@ -294,9 +294,9 @@ const styles = {
     presetButton: {
         padding: '8px 12px',
         backgroundColor: '#1e1e1e',
-        border: '1px solid #2c2f33',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         cursor: 'pointer',
         fontSize: '13px',
     },
@@ -307,7 +307,7 @@ const styles = {
     },
     saveButton: {
         padding: '10px 20px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -320,12 +320,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     policiesList: {
@@ -334,7 +334,7 @@ const styles = {
         gap: '12px',
     },
     policyCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -357,7 +357,7 @@ const styles = {
     },
     policyMeta: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginTop: '4px',
     },
     policyActions: {
@@ -378,14 +378,14 @@ const styles = {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         transition: '0.3s',
         borderRadius: '24px',
     },
     deleteButton: {
         background: 'none',
         border: 'none',
-        color: '#f04747',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '16px',
         padding: '8px',

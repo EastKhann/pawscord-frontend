@@ -98,7 +98,7 @@ export const ENDPOINTS = {
         DETAIL: (id) => `${API_BASE}/servers/${id}/`,
         JOIN: (id) => `${API_BASE}/servers/${id}/join/`,
         LEAVE: (id) => `${API_BASE}/servers/${id}/leave/`,
-        DISCOVER: `${API_BASE}/servers/discover/`,
+        DISCOVER: `${API_BASE}/servers/public/`,
         MEMBERS: (id) => `${API_BASE}/servers/${id}/members/`,
         SETTINGS: (id) => `${API_BASE}/servers/${id}/settings/`,
         ROLES: (id) => `${API_BASE}/servers/${id}/roles/`,

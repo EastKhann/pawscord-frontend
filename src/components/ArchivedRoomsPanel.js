@@ -1,4 +1,4 @@
-// frontend/src/components/ArchivedRoomsPanel.js
+﻿// frontend/src/components/ArchivedRoomsPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaArchive, FaUndo, FaTrash, FaClock } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -181,7 +181,7 @@ const styles = {
         display: 'flex',
         gap: '15px',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '10px'
     },
@@ -203,7 +203,7 @@ const styles = {
         fontWeight: '600',
         fontSize: '16px',
         marginBottom: '6px',
-        color: '#dcddde'
+        color: '#dbdee1'
     },
     roomMeta: {
         display: 'flex',
@@ -224,7 +224,7 @@ const styles = {
         gap: '8px'
     },
     unarchiveBtn: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '8px 12px',
@@ -238,7 +238,7 @@ const styles = {
         whiteSpace: 'nowrap'
     },
     deleteBtn: {
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '8px 12px',

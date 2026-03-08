@@ -1,4 +1,4 @@
-// frontend/src/utils/confirmDialog.js
+﻿// frontend/src/utils/confirmDialog.js
 // 🎯 Global Promise-based Confirm Dialog
 // window.confirm() yerine kullan - Styled modal gösterir
 // Kullanım: const ok = await confirmDialog('Emin misiniz?');
@@ -67,9 +67,9 @@ export function confirmDialog(options) {
             },
             danger: {
                 icon: <FaTrash />,
-                color: '#ef4444',
-                gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                btnColor: '#ef4444',
+                color: '#f23f42',
+                gradient: 'linear-gradient(135deg, #f23f42 0%, #dc2626 100%)',
+                btnColor: '#f23f42',
             },
             info: {
                 icon: <FaQuestionCircle />,
@@ -106,7 +106,7 @@ export function confirmDialog(options) {
                     aria-modal="true"
                     aria-labelledby="confirm-dialog-title"
                     style={{
-                        background: '#2b2d31',
+                        background: '#111214',
                         borderRadius: '16px',
                         width: '420px',
                         maxWidth: '90vw',

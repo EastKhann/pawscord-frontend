@@ -45,7 +45,7 @@ export const BookmarkButton = memo(({ messageId, isBookmarked = false, fetchWith
             style={{
                 background: 'none',
                 border: 'none',
-                color: bookmarked ? '#faa61a' : '#b9bbbe',
+                color: bookmarked ? '#f0b232' : '#b5bac1',
                 cursor: loading ? 'wait' : 'pointer',
                 fontSize: '1em',
                 padding: '5px',
@@ -104,7 +104,7 @@ export const StarButton = memo(({ messageId, isStarred = false, fetchWithAuth, a
             style={{
                 background: 'none',
                 border: 'none',
-                color: starred ? '#ffd700' : '#b9bbbe',
+                color: starred ? '#ffd700' : '#b5bac1',
                 cursor: loading ? 'wait' : 'pointer',
                 fontSize: '1em',
                 padding: '5px',
@@ -163,7 +163,7 @@ export const ReadLaterButton = memo(({ messageId, isReadLater = false, fetchWith
             style={{
                 background: 'none',
                 border: 'none',
-                color: readLater ? '#3ba55d' : '#b9bbbe',
+                color: readLater ? '#3ba55d' : '#b5bac1',
                 cursor: loading ? 'wait' : 'pointer',
                 fontSize: '1em',
                 padding: '5px',

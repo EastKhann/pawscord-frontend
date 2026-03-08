@@ -1,4 +1,4 @@
-// frontend/src/MessageEditForm.js (ENTER TUŞU FİXLENDİ)
+﻿// frontend/src/MessageEditForm.js (ENTER TUŞU FİXLENDİ)
 
 import React, { useState, useEffect, useRef } from 'react';
 import { FaSave, FaTimes } from 'react-icons/fa';
@@ -89,7 +89,7 @@ const styles = {
     input: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         border: '1px solid #5865f2',
         borderRadius: '4px',
         color: 'white',
@@ -131,7 +131,7 @@ const styles = {
     },
     footer: {
         fontSize: '0.7em',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         marginTop: '5px',
         marginLeft: '2px'
     }

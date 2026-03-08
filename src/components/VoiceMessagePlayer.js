@@ -217,7 +217,7 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
                     <div style={styles.errorIcon}>🔇</div>
                     <div style={styles.errorText}>Ses dosyası bulunamadı (eski mesaj)</div>
                     {/* 🔥 Debug: URL'yi göster */}
-                    <div style={{ fontSize: '10px', color: '#72767d', marginTop: '4px', wordBreak: 'break-all' }}>
+                    <div style={{ fontSize: '10px', color: '#949ba4', marginTop: '4px', wordBreak: 'break-all' }}>
                         {audioUrl?.substring(0, 80)}...
                     </div>
                 </div>
@@ -245,7 +245,7 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
                                         style={{
                                             ...styles.waveBar,
                                             height: `${height * 100}%`,
-                                            backgroundColor: isActive ? '#5865f2' : '#4f545c',
+                                            backgroundColor: isActive ? '#5865f2' : '#4e5058',
                                             opacity: isActive ? 1 : 0.5,
                                         }}
                                     />
@@ -256,7 +256,7 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
                         {/* Time Display */}
                         <div style={styles.timeDisplay}>
                             <span>{formatTime(currentTime)}</span>
-                            <span style={{ color: '#72767d' }}> / {formatTime(audioDuration)}</span>
+                            <span style={{ color: '#949ba4' }}> / {formatTime(audioDuration)}</span>
                         </div>
                     </div>
 
@@ -275,7 +275,7 @@ const VoiceMessagePlayer = ({ audioUrl, duration, onDownload, messageId, fetchWi
                             style={{
                                 ...styles.downloadButton,
                                 backgroundColor: transcription ? 'rgba(67, 181, 129, 0.1)' : 'transparent',
-                                color: isTranscribing ? '#faa61a' : transcription ? '#43b581' : '#b9bbbe',
+                                color: isTranscribing ? '#f0b232' : transcription ? '#23a559' : '#b5bac1',
                                 cursor: (isTranscribing || transcription) ? 'default' : 'pointer',
                             }}
                             title={transcription ? 'Çevrildi' : 'Metne Çevir'}
@@ -345,7 +345,7 @@ const styles = {
     },
     timeDisplay: {
         fontSize: '11px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontWeight: '500',
     },
     downloadButton: {
@@ -354,7 +354,7 @@ const styles = {
         borderRadius: '50%',
         border: 'none',
         backgroundColor: 'transparent',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -376,7 +376,7 @@ const styles = {
     },
     errorText: {
         fontSize: '12px',
-        color: '#72767d',
+        color: '#949ba4',
         fontStyle: 'italic'
     },
     transcriptionText: {
@@ -385,7 +385,7 @@ const styles = {
         backgroundColor: 'rgba(79, 84, 92, 0.3)',
         borderRadius: '8px',
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
         lineHeight: '1.4',
         fontStyle: 'italic'
     }

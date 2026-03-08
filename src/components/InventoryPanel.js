@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaCube, FaGift, FaTshirt, FaCrown } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -165,13 +165,13 @@ const InventoryPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
 
 const getRarityColor = (rarity) => {
     const colors = {
-        common: '#99aab5',
-        uncommon: '#43b581',
+        common: '#949ba4',
+        uncommon: '#23a559',
         rare: '#5865f2',
         epic: '#a020f0',
-        legendary: '#faa61a',
+        legendary: '#f0b232',
     };
-    return colors[rarity?.toLowerCase()] || '#99aab5';
+    return colors[rarity?.toLowerCase()] || '#949ba4';
 };
 
 const styles = {
@@ -202,7 +202,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -216,7 +216,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -225,15 +225,15 @@ const styles = {
         display: 'flex',
         gap: '8px',
         padding: '16px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
         overflowX: 'auto',
     },
     filterButton: {
         padding: '8px 16px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: 'none',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         cursor: 'pointer',
         fontSize: '13px',
         whiteSpace: 'nowrap',
@@ -259,12 +259,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     itemsGrid: {
@@ -273,7 +273,7 @@ const styles = {
         gap: '16px',
     },
     itemCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         overflow: 'hidden',
         position: 'relative',
@@ -287,7 +287,7 @@ const styles = {
         position: 'absolute',
         top: '8px',
         right: '8px',
-        backgroundColor: '#faa61a',
+        backgroundColor: '#f0b232',
         color: '#ffffff',
         padding: '4px 10px',
         borderRadius: '4px',
@@ -314,13 +314,13 @@ const styles = {
     },
     itemDescription: {
         fontSize: '12px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
         lineHeight: '1.4',
     },
     itemQuantity: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '8px',
     },
     itemActions: {
@@ -341,7 +341,7 @@ const styles = {
     unequipButton: {
         flex: 1,
         padding: '8px',
-        backgroundColor: '#99aab5',
+        backgroundColor: '#949ba4',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -352,7 +352,7 @@ const styles = {
     useButton: {
         flex: 1,
         padding: '8px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',

@@ -5,8 +5,8 @@ export const styles = {
         justifyContent: 'flex-start',
         alignItems: 'center',
         minHeight: '100%',
-        backgroundColor: 'var(--background-primary, #36393f)',
-        color: 'var(--text-primary, #dcddde)',
+        backgroundColor: 'var(--background-primary, #17191c)',
+        color: 'var(--text-primary, #dbdee1)',
         fontFamily: 'Poppins, sans-serif',
         padding: '30px 20px',
         boxSizing: 'border-box',
@@ -14,7 +14,7 @@ export const styles = {
     quizContainer: {
         width: '100%',
         maxWidth: '600px',
-        backgroundColor: 'var(--background-secondary, #2f3136)',
+        backgroundColor: 'var(--background-secondary, #111214)',
         borderRadius: '8px',
         padding: '25px 25px 35px 25px',
         boxShadow: '0 5px 15px rgba(0,0,0,0.5)',
@@ -26,11 +26,11 @@ export const styles = {
     pageTitle: {
         marginTop: '10px',
         marginBottom: '15px',
-        color: 'var(--text-primary, #dcddde)',
+        color: 'var(--text-primary, #dbdee1)',
     },
     backButton: {
         padding: '10px 15px',
-        backgroundColor: 'var(--button-secondary, #4f545c)',
+        backgroundColor: 'var(--button-secondary, #4e5058)',
         color: 'white',
         textDecoration: 'none',
         borderRadius: '5px',
@@ -55,12 +55,12 @@ export const styles = {
         display: 'flex',
         gap: '15px',
         fontSize: '0.9em',
-        color: 'var(--text-secondary, #72767d)',
+        color: 'var(--text-secondary, #949ba4)',
         justifyContent: 'flex-start',
     },
     totalStatsHeader: {
         fontSize: '0.9em',
-        color: 'var(--text-secondary, #72767d)',
+        color: 'var(--text-secondary, #949ba4)',
         fontWeight: 'bold',
         textTransform: 'uppercase',
         textAlign: 'left',
@@ -68,19 +68,19 @@ export const styles = {
     },
     label: {
         fontSize: '1.1em',
-        color: 'var(--text-primary, #dcddde)',
+        color: 'var(--text-primary, #dbdee1)',
     },
     select: {
         padding: '8px',
         fontSize: '1em',
-        backgroundColor: 'var(--background-tertiary, #202225)',
-        color: 'var(--text-primary, #dcddde)',
-        border: '1px solid var(--border-primary, #202225)',
+        backgroundColor: 'var(--background-tertiary, #0d0e10)',
+        color: 'var(--text-primary, #dbdee1)',
+        border: '1px solid var(--border-primary, #0d0e10)',
         borderRadius: '4px',
     },
     progressBarBackground: {
         width: '100%',
-        backgroundColor: 'var(--background-tertiary, #202225)',
+        backgroundColor: 'var(--background-tertiary, #0d0e10)',
         borderRadius: '5px',
         height: '24px',
         overflow: 'hidden',
@@ -88,7 +88,7 @@ export const styles = {
     },
     progressBarFill: {
         height: '100%',
-        backgroundColor: 'var(--text-positive, #43b581)',
+        backgroundColor: 'var(--text-positive, #23a559)',
         borderRadius: '5px',
         display: 'flex',
         alignItems: 'center',
@@ -106,7 +106,7 @@ export const styles = {
         left: '10px',
         top: '50%',
         transform: 'translateY(-50%)',
-        color: 'var(--text-primary, #dcddde)',
+        color: 'var(--text-primary, #dbdee1)',
         fontSize: '0.9em',
         fontWeight: 'bold'
     },
@@ -116,7 +116,7 @@ export const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'var(--background-tertiary, #202225)',
+        backgroundColor: 'var(--background-tertiary, #0d0e10)',
         borderRadius: '5px',
         padding: '30px 20px',
         wordBreak: 'break-word',
@@ -124,12 +124,12 @@ export const styles = {
     term: {
         fontSize: 'clamp(1.8em, 5vw, 2.5em)',
         fontWeight: 'bold',
-        color: 'var(--text-primary, #dcddde)',
+        color: 'var(--text-primary, #dbdee1)',
         margin: 0,
     },
     meanings: {
         fontSize: 'clamp(1.1em, 3vw, 1.5em)',
-        color: 'var(--text-positive, #43b581)',
+        color: 'var(--text-positive, #23a559)',
         margin: '10px 0 0 0',
     },
     buttonGroup: {
@@ -147,17 +147,17 @@ export const styles = {
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-        backgroundColor: 'var(--button-secondary, #4f545c)',
+        backgroundColor: 'var(--button-secondary, #4e5058)',
         color: 'white',
         transition: 'opacity 0.2s',
     },
     knownButton: {
-        backgroundColor: 'var(--text-positive, #43b581)',
+        backgroundColor: 'var(--text-positive, #23a559)',
     },
     primaryButton: {
         backgroundColor: 'var(--button-primary, #5865f2)',
     },
     errorText: {
-        color: 'var(--text-danger, #f04747)',
+        color: 'var(--text-danger, #f23f42)',
     }
 };

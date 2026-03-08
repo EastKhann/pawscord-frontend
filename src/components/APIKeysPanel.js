@@ -1,4 +1,4 @@
-// components/APIKeysPanel.js
+﻿// components/APIKeysPanel.js
 // 🔑 API Keys Management Panel
 
 import { useState, useEffect } from 'react';
@@ -74,14 +74,14 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
         return key.substring(0, 8) + '•'.repeat(24);
     };
 
-    if (loading) return <div style={{ padding: '20px', color: '#b9bbbe' }}>Loading...</div>;
+    if (loading) return <div style={{ padding: '20px', color: '#b5bac1' }}>Loading...</div>;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                    <h4 style={{ margin: 0, color: '#dcddde' }}>API Keys</h4>
-                    <p style={{ margin: '5px 0 0 0', color: '#72767d', fontSize: '13px' }}>
+                    <h4 style={{ margin: 0, color: '#dbdee1' }}>API Keys</h4>
+                    <p style={{ margin: '5px 0 0 0', color: '#949ba4', fontSize: '13px' }}>
                         Create and manage API keys for external integrations
                     </p>
                 </div>
@@ -108,8 +108,8 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                 <div style={{
                     padding: '40px',
                     textAlign: 'center',
-                    color: '#72767d',
-                    backgroundColor: '#2f3136',
+                    color: '#949ba4',
+                    backgroundColor: '#111214',
                     borderRadius: '8px'
                 }}>
                     <FaKey style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.5 }} />
@@ -122,16 +122,16 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                             key={key.id}
                             style={{
                                 padding: '16px',
-                                backgroundColor: '#2f3136',
+                                backgroundColor: '#111214',
                                 borderRadius: '8px',
-                                border: '1px solid #40444b'
+                                border: '1px solid #182135'
                             }}
                         >
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                                         <FaKey style={{ color: '#5865f2' }} />
-                                        <span style={{ color: '#dcddde', fontWeight: 'bold' }}>
+                                        <span style={{ color: '#dbdee1', fontWeight: 'bold' }}>
                                             {key.name}
                                         </span>
                                     </div>
@@ -140,11 +140,11 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                         alignItems: 'center',
                                         gap: '8px',
                                         padding: '8px',
-                                        backgroundColor: '#1e1f22',
+                                        backgroundColor: '#0d0e10',
                                         borderRadius: '4px',
                                         fontFamily: 'monospace',
                                         fontSize: '13px',
-                                        color: '#b9bbbe'
+                                        color: '#b5bac1'
                                     }}>
                                         <span>
                                             {showKey[key.id] ? key.key : maskKey(key.key)}
@@ -154,7 +154,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                             style={{
                                                 background: 'none',
                                                 border: 'none',
-                                                color: '#b9bbbe',
+                                                color: '#b5bac1',
                                                 cursor: 'pointer',
                                                 padding: '4px'
                                             }}
@@ -166,7 +166,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                             style={{
                                                 background: 'none',
                                                 border: 'none',
-                                                color: '#b9bbbe',
+                                                color: '#b5bac1',
                                                 cursor: 'pointer',
                                                 padding: '4px'
                                             }}
@@ -174,7 +174,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                             <FaCopy />
                                         </button>
                                     </div>
-                                    <div style={{ marginTop: '8px', fontSize: '12px', color: '#72767d' }}>
+                                    <div style={{ marginTop: '8px', fontSize: '12px', color: '#949ba4' }}>
                                         Created: {new Date(key.created_at).toLocaleDateString()}
                                         {key.last_used && (
                                             <> • Last used: {new Date(key.last_used).toLocaleDateString()}</>
@@ -186,7 +186,7 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
                                     style={{
                                         background: 'none',
                                         border: 'none',
-                                        color: '#f04747',
+                                        color: '#f23f42',
                                         cursor: 'pointer',
                                         padding: '8px',
                                         borderRadius: '4px'
@@ -204,10 +204,10 @@ const APIKeysPanel = ({ fetchWithAuth, apiBaseUrl }) => {
             <div style={{
                 padding: '12px',
                 backgroundColor: 'rgba(250, 166, 26, 0.1)',
-                borderLeft: '3px solid #faa61a',
+                borderLeft: '3px solid #f0b232',
                 borderRadius: '4px',
                 fontSize: '13px',
-                color: '#dcddde'
+                color: '#dbdee1'
             }}>
                 ⚠️ <strong>Security:</strong> Keep your API keys secret! Anyone with your key can access your account.
             </div>

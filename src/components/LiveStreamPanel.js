@@ -1,4 +1,4 @@
-// frontend/src/components/LiveStreamPanel.js
+﻿// frontend/src/components/LiveStreamPanel.js
 import { useState, useEffect, useRef } from 'react';
 import { FaVideo, FaTimes, FaMicrophone, FaDesktop, FaUsers, FaComments } from 'react-icons/fa';
 
@@ -73,7 +73,7 @@ const LiveStreamPanel = ({ onClose, currentUser, ws, channelId, fetchWithAuth, a
             <div style={styles.panel}>
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
-                        <FaVideo size={20} color="#ed4245" />
+                        <FaVideo size={20} color="#f23f42" />
                         <h2 style={styles.title}>Canlı Yayın</h2>
                         {isStreaming && <span style={styles.liveBadge}>🔴 CANLI</span>}
                     </div>
@@ -173,36 +173,36 @@ const LiveStreamPanel = ({ onClose, currentUser, ws, channelId, fetchWithAuth, a
 
 const styles = {
     overlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 },
-    panel: { backgroundColor: '#2f3136', borderRadius: '8px', width: '95%', maxWidth: '1400px', height: '90vh', display: 'flex', flexDirection: 'column' },
-    header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #202225' },
+    panel: { backgroundColor: '#111214', borderRadius: '8px', width: '95%', maxWidth: '1400px', height: '90vh', display: 'flex', flexDirection: 'column' },
+    header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #0b0e1b' },
     headerLeft: { display: 'flex', alignItems: 'center', gap: '12px' },
     title: { margin: 0, fontSize: '18px', color: '#ffffff' },
-    liveBadge: { backgroundColor: '#ed4245', color: '#ffffff', padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' },
-    closeButton: { background: 'none', border: 'none', color: '#b9bbbe', cursor: 'pointer', padding: '8px' },
+    liveBadge: { backgroundColor: '#f23f42', color: '#ffffff', padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' },
+    closeButton: { background: 'none', border: 'none', color: '#b5bac1', cursor: 'pointer', padding: '8px' },
     content: { display: 'flex', flex: 1, gap: '16px', padding: '16px', overflow: 'hidden' },
     mainArea: { flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' },
     videoContainer: { flex: 1, backgroundColor: '#000000', borderRadius: '8px', position: 'relative', overflow: 'hidden' },
     video: { width: '100%', height: '100%', objectFit: 'contain' },
-    noStream: { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', color: '#b9bbbe' },
-    controls: { backgroundColor: '#36393f', borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' },
+    noStream: { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', color: '#b5bac1' },
+    controls: { backgroundColor: '#17191c', borderRadius: '8px', padding: '16px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' },
     settingsGroup: { display: 'flex', gap: '16px', flex: 1 },
-    settingLabel: { display: 'flex', alignItems: 'center', gap: '8px', color: '#dcddde', cursor: 'pointer' },
-    qualitySelect: { backgroundColor: '#202225', border: 'none', color: '#dcddde', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer' },
+    settingLabel: { display: 'flex', alignItems: 'center', gap: '8px', color: '#dbdee1', cursor: 'pointer' },
+    qualitySelect: { backgroundColor: '#0d0e10', border: 'none', color: '#dbdee1', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer' },
     startButton: { backgroundColor: '#3ba55d', color: '#ffffff', border: 'none', padding: '10px 24px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' },
-    stopButton: { backgroundColor: '#ed4245', color: '#ffffff', border: 'none', padding: '10px 24px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' },
+    stopButton: { backgroundColor: '#f23f42', color: '#ffffff', border: 'none', padding: '10px 24px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' },
     sidebar: { width: '300px', display: 'flex', flexDirection: 'column', gap: '16px' },
-    viewersSection: { backgroundColor: '#36393f', borderRadius: '8px', padding: '16px', maxHeight: '250px', display: 'flex', flexDirection: 'column' },
+    viewersSection: { backgroundColor: '#17191c', borderRadius: '8px', padding: '16px', maxHeight: '250px', display: 'flex', flexDirection: 'column' },
     sectionHeader: { display: 'flex', alignItems: 'center', gap: '8px', color: '#ffffff', fontWeight: 'bold', marginBottom: '12px' },
     viewersList: { flex: 1, overflowY: 'auto' },
-    viewer: { display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0', color: '#dcddde' },
+    viewer: { display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0', color: '#dbdee1' },
     viewerAvatar: { width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#5865f2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' },
-    chatSection: { backgroundColor: '#36393f', borderRadius: '8px', padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' },
+    chatSection: { backgroundColor: '#17191c', borderRadius: '8px', padding: '16px', flex: 1, display: 'flex', flexDirection: 'column' },
     chatMessages: { flex: 1, overflowY: 'auto', marginBottom: '12px' },
-    chatMessage: { marginBottom: '8px', color: '#dcddde', fontSize: '14px' },
+    chatMessage: { marginBottom: '8px', color: '#dbdee1', fontSize: '14px' },
     chatAuthor: { fontWeight: 'bold', color: '#5865f2', marginRight: '4px' },
-    chatText: { color: '#dcddde' },
+    chatText: { color: '#dbdee1' },
     chatInput: { display: 'flex', gap: '8px' },
-    input: { flex: 1, backgroundColor: '#202225', border: 'none', color: '#dcddde', padding: '8px 12px', borderRadius: '4px', outline: 'none' },
+    input: { flex: 1, backgroundColor: '#0d0e10', border: 'none', color: '#dbdee1', padding: '8px 12px', borderRadius: '4px', outline: 'none' },
     sendButton: { backgroundColor: '#5865f2', color: '#ffffff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' },
 };
 

@@ -39,7 +39,7 @@ export const getIcon = (iconName) => {
     return <Icon />;
 };
 
-export const getDifficultyColor = (d) => d === 'easy' ? '#43b581' : d === 'medium' ? '#faa61a' : d === 'hard' ? '#f04747' : '#72767d';
+export const getDifficultyColor = (d) => d === 'easy' ? '#23a559' : d === 'medium' ? '#f0b232' : d === 'hard' ? '#f23f42' : '#949ba4';
 
 export const getDifficultyStars = (difficulty) => {
     const count = difficulty === 'easy' ? 1 : difficulty === 'medium' ? 2 : 3;
@@ -48,8 +48,8 @@ export const getDifficultyStars = (difficulty) => {
 
 export const getRewardIcon = (reward) => {
     if (!reward) return null;
-    const map = { badge: <FaMedal color="#faa61a" />, coins: <FaCoins color="#f1c40f" />, xp: <FaStar color="#5865f2" />, emoji: <span>{reward.name}</span>, special_badge: <FaGem color="#e91e63" /> };
-    return map[reward.type] || <FaGift color="#43b581" />;
+    const map = { badge: <FaMedal color="#f0b232" />, coins: <FaCoins color="#f1c40f" />, xp: <FaStar color="#5865f2" />, emoji: <span>{reward.name}</span>, special_badge: <FaGem color="#e91e63" /> };
+    return map[reward.type] || <FaGift color="#23a559" />;
 };
 
 export const getRewardText = (reward) => {

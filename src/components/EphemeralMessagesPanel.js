@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaClock, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -103,9 +103,9 @@ const EphemeralMessagesPanel = ({ fetchWithAuth, apiBaseUrl, onClose, roomSlug }
                                 </div>
                                 <button onClick={toggleEphemeral} style={styles.toggleButton}>
                                     {settings?.enabled ? (
-                                        <FaToggleOn style={{ fontSize: '32px', color: '#43b581' }} />
+                                        <FaToggleOn style={{ fontSize: '32px', color: '#23a559' }} />
                                     ) : (
-                                        <FaToggleOff style={{ fontSize: '32px', color: '#99aab5' }} />
+                                        <FaToggleOff style={{ fontSize: '32px', color: '#949ba4' }} />
                                     )}
                                 </button>
                             </div>
@@ -176,7 +176,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -190,7 +190,7 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
@@ -202,11 +202,11 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     toggleSection: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         display: 'flex',
@@ -222,7 +222,7 @@ const styles = {
     },
     toggleDescription: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     toggleButton: {
         background: 'none',
@@ -238,7 +238,7 @@ const styles = {
     label: {
         fontSize: '14px',
         fontWeight: '600',
-        color: '#dcddde',
+        color: '#dbdee1',
     },
     optionsGrid: {
         display: 'grid',
@@ -247,7 +247,7 @@ const styles = {
     },
     optionButton: {
         padding: '12px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -259,19 +259,19 @@ const styles = {
         backgroundColor: '#5865f2',
     },
     info: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '12px',
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         textAlign: 'center',
     },
     disabledMessage: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '6px',
         padding: '20px',
         fontSize: '14px',
-        color: '#99aab5',
+        color: '#949ba4',
         textAlign: 'center',
     },
 };

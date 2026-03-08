@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaDownload, FaFileArchive, FaClock, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -61,11 +61,11 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
     const getStatusIcon = (status) => {
         switch (status) {
             case 'completed':
-                return <FaCheckCircle style={{ color: '#43b581' }} />;
+                return <FaCheckCircle style={{ color: '#23a559' }} />;
             case 'failed':
-                return <FaExclamationCircle style={{ color: '#f04747' }} />;
+                return <FaExclamationCircle style={{ color: '#f23f42' }} />;
             default:
-                return <FaClock style={{ color: '#faa61a' }} />;
+                return <FaClock style={{ color: '#f0b232' }} />;
         }
     };
 
@@ -110,7 +110,7 @@ const GDPRExportPanel = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
                         <div style={styles.loading}>Loading exports...</div>
                     ) : exports.length === 0 ? (
                         <div style={styles.empty}>
-                            <FaFileArchive style={{ fontSize: '48px', color: '#2c2f33', marginBottom: '16px' }} />
+                            <FaFileArchive style={{ fontSize: '48px', color: '#111214', marginBottom: '16px' }} />
                             <div>No exports yet</div>
                             <div style={styles.emptySubtext}>Request your first data export above</div>
                         </div>
@@ -192,7 +192,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -206,18 +206,18 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     info: {
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     infoText: {
         fontSize: '14px',
-        color: '#dcddde',
+        color: '#dbdee1',
         lineHeight: '1.6',
         margin: '0 0 16px 0',
     },
@@ -239,12 +239,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '60px 20px',
         display: 'flex',
         flexDirection: 'column',
@@ -260,7 +260,7 @@ const styles = {
         gap: '12px',
     },
     exportCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -285,12 +285,12 @@ const styles = {
     },
     exportMeta: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginTop: '4px',
     },
     downloadButton: {
         padding: '8px 16px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',

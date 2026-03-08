@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+﻿import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import useModalA11y from './hooks/useModalA11y';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaTimes, FaLink, FaExclamationCircle, FaPlay, FaPause } from 'react-icons/fa';
@@ -102,7 +102,7 @@ const CinemaModal = ({ onClose, ws }) => {
                 <div style={styles.playerWrapper}>
                     {error && (
                         <div style={styles.statusOverlay}>
-                            <FaExclamationCircle size={40} color="#f04747" />
+                            <FaExclamationCircle size={40} color="#f23f42" />
                             <p style={{ marginTop: 10 }}>{error}</p>
                         </div>
                     )}
@@ -158,7 +158,7 @@ const CinemaModal = ({ onClose, ws }) => {
 
                 <div style={styles.controls}>
                     <form onSubmit={handleLoadUrl} style={styles.urlForm}>
-                        <FaLink style={{ color: '#b9bbbe' }} />
+                        <FaLink style={{ color: '#b5bac1' }} />
                         <input
                             type="text"
                             value={inputUrl}
@@ -182,7 +182,7 @@ const CinemaModal = ({ onClose, ws }) => {
                                 sendSignal('play', { time: t });
                             }
                         }}
-                        style={{ ...styles.loadBtn, backgroundColor: playing ? '#da373c' : '#43b581', marginLeft: 10, width: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}
+                        style={{ ...styles.loadBtn, background: playing ? 'linear-gradient(135deg, #f23f42 0%, #d93235 100%)' : 'linear-gradient(135deg, #23a559 0%, #1d8f4a 100%)', boxShadow: playing ? '0 3px 0 #a82b2e, 0 6px 16px rgba(242,63,66,0.30)' : '0 3px 0 #177a3e, 0 6px 16px rgba(35,165,89,0.30)', marginLeft: 10, width: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}
                     >
                         {playing ? <><FaPause /> Durdur</> : <><FaPlay /> Oynat</>}
                     </button>
@@ -193,15 +193,15 @@ const CinemaModal = ({ onClose, ws }) => {
 };
 
 const styles = {
-    overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 2000, display: 'flex', justifyContent: 'center', alignItems: 'center' },
-    modal: { width: '90%', maxWidth: '900px', backgroundColor: '#202225', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' },
-    header: { padding: '15px', backgroundColor: '#2f3136', display: 'flex', justifyContent: 'space-between', color: 'white' },
+    overlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', zIndex: 2000, display: 'flex', justifyContent: 'center', alignItems: 'center' },
+    modal: { width: '90%', maxWidth: '900px', background: 'rgba(30,31,35,0.92)', backdropFilter: 'blur(48px) saturate(180%)', WebkitBackdropFilter: 'blur(48px) saturate(180%)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 0 0 1px rgba(88,101,242,0.10), 0 16px 48px rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.07)' },
+    header: { padding: '16px 20px', background: 'linear-gradient(135deg, rgba(88,101,242,0.15), rgba(114,137,218,0.08))', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.06)' },
     playerWrapper: { position: 'relative', paddingTop: '56.25%', backgroundColor: 'black' },
-    closeBtn: { background: 'none', border: 'none', color: 'white', fontSize: '1.5em', cursor: 'pointer' },
-    controls: { padding: '20px', display: 'flex', alignItems: 'center' },
-    urlForm: { display: 'flex', gap: '10px', backgroundColor: '#40444b', padding: '10px', borderRadius: '8px', flex: 1 },
+    closeBtn: { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '8px', width: '32px', height: '32px', color: 'white', fontSize: '1.2em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' },
+    controls: { padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '10px' },
+    urlForm: { display: 'flex', gap: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', padding: '10px', borderRadius: '13px', flex: 1 },
     input: { flex: 1, background: 'transparent', border: 'none', color: 'white', outline: 'none' },
-    loadBtn: { padding: '8px 20px', backgroundColor: '#5865f2', border: 'none', borderRadius: '4px', color: 'white', fontWeight: 'bold', cursor: 'pointer' },
+    loadBtn: { padding: '8px 20px', background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)', border: 'none', borderRadius: '13px', color: 'white', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 3px 0 #3b45c7, 0 6px 16px rgba(88,101,242,0.30)', transition: 'all 0.15s' },
     statusOverlay: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', zIndex: 10 }
 };
 

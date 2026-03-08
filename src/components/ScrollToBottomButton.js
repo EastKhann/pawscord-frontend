@@ -1,4 +1,4 @@
-// frontend/src/components/ScrollToBottomButton.js
+﻿// frontend/src/components/ScrollToBottomButton.js
 // ⬇️ FEATURE 4: Scroll to Bottom FAB with Unread Count
 // Mesaj listesinde aşağı kaydırmak için floating buton
 
@@ -42,14 +42,15 @@ const S = {
         width: 40,
         height: 40,
         borderRadius: '50%',
-        backgroundColor: '#313338',
+        backgroundColor: '#17191c',
         border: '1px solid rgba(255,255,255,0.1)',
-        color: '#dcddde',
+        color: '#dbdee1',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+        backdropFilter: 'blur(8px)',
         transition: 'all 0.2s ease',
         zIndex: 50,
     },
@@ -77,7 +78,7 @@ if (typeof document !== 'undefined') {
     if (!document.getElementById(id)) {
         const s = document.createElement('style');
         s.id = id;
-        s.textContent = `.scroll-to-bottom-fab:hover { background-color: #404249 !important; transform: scale(1.1); }`;
+        s.textContent = `.scroll-to-bottom-fab:hover { background-color: #182135 !important; transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.6) !important; }`;
         document.head.appendChild(s);
     }
 }

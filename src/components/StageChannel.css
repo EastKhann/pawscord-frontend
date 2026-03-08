@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
 }
 
@@ -19,12 +19,12 @@
 .stage-info h2 {
     margin: 0 0 8px 0;
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .stage-info p {
     margin: 0;
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 14px;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .speakers-section h3 {
-    color: #8b5cf6;
+    color: #5865f2;
 }
 
 .participants-grid {
@@ -78,13 +78,13 @@
 }
 
 .participant-card.speaker {
-    background: rgba(139, 92, 246, 0.05);
-    border-color: rgba(139, 92, 246, 0.2);
+    background: rgba(88, 101, 242, 0.05);
+    border-color: rgba(88, 101, 242, 0.2);
 }
 
 .participant-card:hover {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.1);
+    border-color: rgba(88, 101, 242, 0.3);
 }
 
 .participant-avatar {
@@ -104,7 +104,7 @@
     position: absolute;
     bottom: -4px;
     right: -4px;
-    background: #ff3b30;
+    background: #f23f42;
     border-radius: 50%;
     width: 20px;
     height: 20px;
@@ -133,7 +133,7 @@
 }
 
 .moderator-badge {
-    background: linear-gradient(135deg, #faa61a 0%, #ff9500 100%);
+    background: linear-gradient(135deg, #f0b232 0%, #ff9500 100%);
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 11px;
@@ -157,12 +157,12 @@
 
 .action-btn.remove:hover {
     background: rgba(255, 59, 48, 0.3);
-    color: #ff3b30;
+    color: #f23f42;
 }
 
 .action-btn.invite:hover {
-    background: rgba(139, 92, 246, 0.3);
-    color: #8b5cf6;
+    background: rgba(88, 101, 242, 0.3);
+    color: #5865f2;
 }
 
 /* Requests Section */
@@ -201,7 +201,7 @@
 }
 
 .btn-approve {
-    background: linear-gradient(135deg, #34c759 0%, #30d158 100%);
+    background: linear-gradient(135deg, #23a559 0%, #30d158 100%);
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
@@ -226,7 +226,7 @@
 }
 
 .control-btn {
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
     border: none;
     border-radius: 12px;
     padding: 14px 28px;
@@ -241,8 +241,8 @@
 }
 
 .control-btn:hover {
-    background: linear-gradient(135deg, #9d6fff 0%, #7478ff 100%);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
 }
 
 .control-btn.muted {
@@ -255,7 +255,7 @@
 }
 
 .control-btn.request {
-    background: linear-gradient(135deg, #faa61a 0%, #ff9500 100%);
+    background: linear-gradient(135deg, #f0b232 0%, #ff9500 100%);
 }
 
 .control-btn.request:hover {

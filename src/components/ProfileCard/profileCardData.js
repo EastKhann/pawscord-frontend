@@ -5,8 +5,8 @@ export const BADGE_DATA = {
     'developer': { name: 'Developer', icon: '🛠️', color: '#3b82f6' },
     'bug_hunter': { name: 'Bug Hunter', icon: '🐛', color: '#22c55e' },
     'top_contributor': { name: 'Top Contributor', icon: '🏆', color: '#f59e0b' },
-    'server_owner': { name: 'Server Owner', icon: '👑', color: '#ef4444' },
+    'server_owner': { name: 'Server Owner', icon: '👑', color: '#f23f42' },
     'moderator': { name: 'Moderator', icon: '🛡️', color: '#10b981' },
     'artist': { name: 'Artist', icon: '🎨', color: '#ec4899' },
-    'streamer': { name: 'Streamer', icon: '📺', color: '#8b5cf6' },
+    'streamer': { name: 'Streamer', icon: '📺', color: '#5865f2' },
 };

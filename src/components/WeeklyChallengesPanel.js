@@ -9,7 +9,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
 
     if (loading) {
         return (<div style={styles.container}><div style={styles.loading}>
-            <FaTrophy className="pulse" size={32} color="#faa61a" />
+            <FaTrophy className="pulse" size={32} color="#f0b232" />
             <span>Görevler yükleniyor...</span>
         </div></div>);
     }
@@ -22,24 +22,24 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
         <div style={styles.container}>
             <div style={styles.header}>
                 <div style={styles.headerLeft}>
-                    <FaTrophy size={24} color="#faa61a" />
+                    <FaTrophy size={24} color="#f0b232" />
                     <div>
                         <h2 style={styles.title}>Haftalık Görevler</h2>
                         <p style={styles.subtitle}>Görevleri tamamla, ödüller kazan!</p>
                     </div>
                 </div>
                 <div style={styles.timer}>
-                    <FaClock size={14} color="#72767d" />
+                    <FaClock size={14} color="#949ba4" />
                     <span>{timeRemaining.days}g {timeRemaining.hours}s {timeRemaining.minutes}d kaldı</span>
                 </div>
             </div>
 
             <div style={styles.statsGrid}>
                 {[
-                    { icon: <FaFire size={20} color="#f04747" />, value: userProgress.streak, label: 'Günlük Seri' },
-                    { icon: <FaStar size={20} color="#faa61a" />, value: userProgress.weeklyPoints, label: 'Haftalık Puan' },
+                    { icon: <FaFire size={20} color="#f23f42" />, value: userProgress.streak, label: 'Günlük Seri' },
+                    { icon: <FaStar size={20} color="#f0b232" />, value: userProgress.weeklyPoints, label: 'Haftalık Puan' },
                     { icon: <FaTrophy size={20} color="#5865f2" />, value: `${userProgress.rank}`, label: 'Sıralama' },
-                    { icon: <FaMedal size={20} color="#43b581" />, value: userProgress.completedChallenges, label: 'Tamamlanan' }
+                    { icon: <FaMedal size={20} color="#23a559" />, value: userProgress.completedChallenges, label: 'Tamamlanan' }
                 ].map(s => (
                     <div key={s.label} style={styles.statCard}>
                         {s.icon}
@@ -78,7 +78,7 @@ const WeeklyChallengesPanel = ({ fetchWithAuth, apiBaseUrl, currentUser }) => {
                     <div style={styles.rewardsList}>
                         {userProgress.rewards.map((reward, index) => (
                             <div key={index} style={styles.earnedReward}>
-                                <FaMedal size={16} color="#faa61a" /><span>{reward.name}</span>
+                                <FaMedal size={16} color="#f0b232" /><span>{reward.name}</span>
                             </div>
                         ))}
                     </div>

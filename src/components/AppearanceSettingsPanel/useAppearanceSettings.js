@@ -5,12 +5,12 @@ import confirmDialog from '../../utils/confirmDialog';
 
 export const accentColors = [
   { name: 'Discord Blue', color: '#5865f2' },
-  { name: 'Blurple', color: '#7289da' },
-  { name: 'Green', color: '#43b581' },
-  { name: 'Yellow', color: '#faa61a' },
-  { name: 'Red', color: '#f04747' },
+  { name: 'Blurple', color: '#5865f2' },
+  { name: 'Green', color: '#23a559' },
+  { name: 'Yellow', color: '#f0b232' },
+  { name: 'Red', color: '#f23f42' },
   { name: 'Pink', color: '#ff73fa' },
-  { name: 'Purple', color: '#9b59b6' },
+  { name: 'Purple', color: '#5865f2' },
   { name: 'Orange', color: '#e67e22' }
 ];
 

@@ -1,4 +1,4 @@
-// frontend/src/components/EmojiManagementPanel.js
+﻿// frontend/src/components/EmojiManagementPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaSmile, FaPlus, FaTrash, FaStar, FaUpload } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -139,7 +139,7 @@ const EmojiManagementPanel = ({ fetchWithAuth, apiBaseUrl, serverId, onClose }) 
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaSmile style={{ color: '#faa61a' }} />
+                        <FaSmile style={{ color: '#f0b232' }} />
                         <h2 style={{ margin: 0 }}>Emoji Yönetimi</h2>
                     </div>
                     <FaTimes onClick={onClose} style={styles.closeBtn} />
@@ -314,7 +314,7 @@ const styles = {
     fileInput: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
@@ -323,14 +323,14 @@ const styles = {
     input: {
         flex: 1,
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         border: '1px solid #444',
         borderRadius: '4px',
         color: '#fff',
         fontSize: '14px'
     },
     uploadBtn: {
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '10px 20px',
@@ -353,7 +353,7 @@ const styles = {
         gap: '15px'
     },
     emojiCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '15px',
         textAlign: 'center',
@@ -368,7 +368,7 @@ const styles = {
     emojiName: {
         fontSize: '13px',
         fontWeight: '500',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '4px',
         fontFamily: 'monospace'
     },
@@ -380,7 +380,7 @@ const styles = {
         position: 'absolute',
         top: '8px',
         right: '8px',
-        backgroundColor: '#f04747',
+        backgroundColor: '#f23f42',
         color: '#fff',
         border: 'none',
         padding: '6px 8px',
@@ -389,7 +389,7 @@ const styles = {
         fontSize: '12px'
     },
     suggestionCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '15px',
         textAlign: 'center'

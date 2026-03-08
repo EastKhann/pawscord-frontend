@@ -34,7 +34,7 @@ const GeneralTab = ({
                         checked={isPrivate}
                         onChange={handlePrivateChange}
                     />
-                    {isPrivate ? <FaLock color="#f04747" /> : <FaGlobe color="#43b581" />}
+                    {isPrivate ? <FaLock color="#f23f42" /> : <FaGlobe color="#23a559" />}
                     <span>{isPrivate ? "🔒 Özel Kanal (İzinli roller)" : "🌍 Herkese Açık Kanal"}</span>
                 </label>
             </div>
@@ -58,7 +58,7 @@ const GeneralTab = ({
             <div style={styles.section}>
                 <label style={styles.checkboxLabel}>
                     <input type="checkbox" checked={isNsfw} onChange={handleNsfwChange} />
-                    <FaExclamationTriangle color="#f04747" size={16} />
+                    <FaExclamationTriangle color="#f23f42" size={16} />
                     <span>🔞 NSFW (18+ İçerik)</span>
                 </label>
                 <p style={{ fontSize: '0.875em', color: '#949ba4', marginTop: '8px', marginLeft: '28px', fontStyle: 'italic' }}>
@@ -74,7 +74,7 @@ const GeneralTab = ({
                         checked={isLocked}
                         onChange={handleLockedChange}
                     />
-                    <FaLock color="#f04747" size={14} />
+                    <FaLock color="#f23f42" size={14} />
                     <span>🔒 Kanal Kilitli</span>
                 </label>
                 <p style={{ fontSize: '0.875em', color: '#949ba4', marginTop: '8px', marginLeft: '28px', fontStyle: 'italic' }}>
@@ -86,7 +86,7 @@ const GeneralTab = ({
             <div style={styles.section}>
                 <label style={styles.checkboxLabel}>
                     <input type="checkbox" checked={isReadOnly} onChange={handleReadOnlyChange} />
-                    <FaBroadcastTower color="#faa61a" size={16} />
+                    <FaBroadcastTower color="#f0b232" size={16} />
                     <span>📢 Duyuru Kanalı (Sadece Admin Yazar)</span>
                 </label>
                 <p style={{ fontSize: '0.875em', color: '#949ba4', marginTop: '8px', marginLeft: '28px', fontStyle: 'italic' }}>

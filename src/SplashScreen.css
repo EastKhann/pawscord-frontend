@@ -1,4 +1,4 @@
-/* frontend/src/SplashScreen.css - Minimal Professional Splash */
+﻿/* frontend/src/SplashScreen.css - Minimal Professional Splash */
 
 .splash-screen {
     position: fixed;
@@ -6,7 +6,7 @@
     left: 0;
     width: 100%;
     height: 100dvh;
-    background: #1e1f22;
+    background: #0b0d10;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,7 +14,21 @@
     z-index: 9999;
     opacity: 1;
     overflow: hidden;
-    transition: opacity 0.25s ease-out, visibility 0s 0.25s;
+    transition: opacity 0.45s ease-out, visibility 0s 0.45s;
+}
+
+/* Subtle ambient glow */
+.splash-screen::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(88, 101, 242, 0.10) 0%, transparent 65%);
+    pointer-events: none;
+    border-radius: 50%;
 }
 
 .splash-screen.finished {
@@ -42,11 +56,12 @@
 
 /* Logo */
 .splash-logo {
-    width: 96px;
-    height: 96px;
+    width: 100px;
+    height: 100px;
     opacity: 0;
-    animation: splashLogoIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) 0.15s forwards;
-    filter: drop-shadow(0 4px 16px rgba(88, 101, 242, 0.35));
+    animation: splashLogoIn 0.65s cubic-bezier(0.34, 1.4, 0.64, 1) 0.2s forwards;
+    filter:
+        drop-shadow(0 4px 20px rgba(88, 101, 242, 0.45)) drop-shadow(0 1px 4px rgba(0, 0, 0, 0.6));
 }
 
 @keyframes splashLogoIn {
@@ -66,7 +81,7 @@
     display: flex;
     gap: 1px;
     opacity: 0;
-    animation: splashTextIn 0.4s ease-out 0.45s forwards;
+    animation: splashTextIn 0.5s ease-out 0.6s forwards;
 }
 
 @keyframes splashTextIn {
@@ -83,71 +98,96 @@
 
 .letter {
     font-family: 'gg sans', 'Noto Sans', -apple-system, sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: #f2f3f5;
-    letter-spacing: 0.5px;
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f2f3f5 0%, #d1d5f0 50%, #b5bac1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1.5px;
     /* override JS-set animation-delay — all letters together */
     animation: none !important;
     opacity: 1;
     transform: none;
+    filter: drop-shadow(0 2px 12px rgba(88, 101, 242, 0.25));
 }
 
 /* Loading Bar */
 .loading-bar {
     position: absolute;
     bottom: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 180px;
+    /* Use calc so no transform is needed for centering —
+       avoids splashTextIn animation overriding translateX(-50%) */
+    left: calc(50% - 100px);
+    width: 200px;
     height: 3px;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 2px;
     overflow: hidden;
     opacity: 0;
-    animation: splashTextIn 0.3s ease-out 0.6s forwards;
+    animation: splashBarIn 0.4s ease-out 0.75s forwards;
+}
+
+@keyframes splashBarIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .loading-progress {
     width: 100%;
     height: 100%;
-    background: #5865f2;
+    background: linear-gradient(90deg, #5865f2, #7c3aed);
     border-radius: 2px;
     transform: scaleX(0);
     transform-origin: left;
-    animation: loadingFill 1.2s ease-out 0.65s forwards;
+    animation: loadingFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.85s forwards;
 }
 
 @keyframes loadingFill {
-    from {
+    0% {
         transform: scaleX(0);
     }
 
-    to {
+    60% {
+        transform: scaleX(0.75);
+    }
+
+    85% {
+        transform: scaleX(0.92);
+    }
+
+    100% {
         transform: scaleX(1);
     }
 }
 
 /* Pre-transition exit */
 .splash-screen.pre-transition .logo-container {
-    animation: splashExit 0.3s ease-in forwards;
+    animation: splashExit 0.45s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 .splash-screen.pre-transition .brand-text,
 .splash-screen.pre-transition .loading-bar {
-    animation: splashFadeOut 0.25s ease-out forwards;
+    animation: splashFadeOut 0.35s ease-out forwards;
 }
 
 @keyframes splashExit {
     to {
         opacity: 0;
-        transform: scale(1.05);
+        transform: scale(1.08) translateY(-6px);
     }
 }
 
 @keyframes splashFadeOut {
     to {
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(-12px);
     }
 }

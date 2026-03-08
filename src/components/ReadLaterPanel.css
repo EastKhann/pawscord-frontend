@@ -1,8 +1,8 @@
-.readlater-panel {
-    background: #2f3136;
+﻿.readlater-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
@@ -14,12 +14,12 @@
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .readlater-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -47,7 +47,7 @@
 }
 
 .rl-error {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     padding: 12px;
     border-radius: 4px;
@@ -69,15 +69,15 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #72767d;
+    color: #949ba4;
     font-size: 14px;
 }
 
 .search-input {
     width: 100%;
-    background: #40444b;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #182135;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 12px 12px 12px 40px;
     border-radius: 4px;
     font-size: 14px;
@@ -95,7 +95,7 @@
 }
 
 .filter-icon {
-    color: #72767d;
+    color: #949ba4;
     font-size: 14px;
 }
 
@@ -107,9 +107,9 @@
 }
 
 .tag-filter {
-    background: #40444b;
+    background: #182135;
     border: 2px solid transparent;
-    color: #dcddde;
+    color: #dbdee1;
     padding: 6px 12px;
     border-radius: 16px;
     cursor: pointer;
@@ -121,11 +121,11 @@
 }
 
 .tag-filter:hover {
-    background: var(--bg-elevated, #36393f);
+    background: var(--bg-elevated, #17191c);
 }
 
 .tag-filter.active {
-    background: var(--bg-modifier, #2f3136);
+    background: var(--bg-modifier, #111214);
     border-width: 2px;
     border-style: solid;
     transform: scale(1.05);
@@ -142,27 +142,27 @@
 
 .rl-loading {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 40px;
     font-style: italic;
 }
 
 .empty-state {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 60px 20px;
 }
 
 .empty-icon {
     font-size: 64px;
-    color: #40444b;
+    color: #1e2024;
     margin-bottom: 15px;
 }
 
 .empty-state p {
     font-size: 18px;
     margin-bottom: 10px;
-    color: #b9bbbe;
+    color: #b5bac1;
 }
 
 .empty-state span {
@@ -171,7 +171,7 @@
 }
 
 .bookmark-item {
-    background: var(--bg-input, #40444b);
+    background: var(--bg-input, #1e2024);
     border-radius: var(--radius-base, 8px);
     padding: 15px;
     transition: var(--transition-normal, all 0.2s);
@@ -179,7 +179,7 @@
 }
 
 .bookmark-item:hover {
-    background: var(--bg-elevated, #36393f);
+    background: var(--bg-elevated, #17191c);
     transform: translateX(5px);
 }
 
@@ -210,17 +210,17 @@
 }
 
 .bookmark-date {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
 }
 
 .bookmark-content {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     line-height: 1.6;
     margin-bottom: 12px;
     padding: 10px;
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 4px;
 }
 
@@ -241,7 +241,7 @@
 }
 
 .bookmark-tag {
-    background: #2f3136;
+    background: #0e1222;
     border: 1px solid;
     padding: 4px 10px;
     border-radius: 12px;
@@ -263,9 +263,9 @@
 }
 
 .add-tag-select {
-    background: #2f3136;
+    background: #0e1222;
     border: 1px solid #5865f2;
-    color: #dcddde;
+    color: #dbdee1;
     padding: 4px 8px;
     border-radius: 12px;
     font-size: 12px;
@@ -274,7 +274,7 @@
 }
 
 .remove-bookmark-btn {
-    background: #f04747;
+    background: #f23f42;
     color: #ffffff;
     border: none;
     padding: 6px 12px;
@@ -319,7 +319,7 @@
 }
 
 .modal-content {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
@@ -343,7 +343,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .modal-header h3 {
@@ -358,7 +358,7 @@
 .modal-close {
     background: transparent;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 20px;
     cursor: pointer;
     padding: 5px;
@@ -380,7 +380,7 @@
 
 .form-group label {
     display: block;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 8px;
@@ -388,9 +388,9 @@
 
 .tag-input {
     width: 100%;
-    background: #40444b;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #182135;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 12px;
     border-radius: 4px;
     font-size: 14px;
@@ -417,18 +417,18 @@
 }
 
 .color-option:hover {
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 .color-option.selected {
     border-color: #ffffff;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    transform: scale(1.15);
+    transform: scale(1.05);
 }
 
 .create-tag-submit {
     width: 100%;
-    background: #43b581;
+    background: #23a559;
     color: #ffffff;
     border: none;
     padding: 12px;
@@ -454,15 +454,15 @@
 }
 
 .bookmarks-list::-webkit-scrollbar-track {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 4px;
 }
 
 .bookmarks-list::-webkit-scrollbar-thumb {
-    background: #202225;
+    background: #0b0e1b;
     border-radius: 4px;
 }
 
 .bookmarks-list::-webkit-scrollbar-thumb:hover {
-    background: #40444b;
+    background: #182135;
 }

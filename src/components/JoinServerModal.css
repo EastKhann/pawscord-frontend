@@ -1,0 +1,37 @@
+/* ====================================================
+   JOIN SERVER MODAL — MOBILE RESPONSIVE
+   ==================================================== */
+
+@media (max-width: 480px) {
+    .jsm-modal {
+        /* Stretch to near full-screen on tiny phones */
+        max-height: 92dvh !important;
+        max-height: 92vh !important;
+        padding: 14px !important;
+        border-radius: 8px !important;
+    }
+
+    /* Invite code form: stack input + button vertically */
+    .jsm-invite-form {
+        flex-direction: column !important;
+    }
+
+    .jsm-invite-form input {
+        width: 100% !important;
+    }
+
+    .jsm-invite-form button {
+        width: 100% !important;
+    }
+}
+
+/* Touch-friendly: slightly bigger buttons on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .jsm-modal button {
+        min-height: 40px;
+    }
+
+    .jsm-server-row {
+        padding: 12px !important;
+    }
+}

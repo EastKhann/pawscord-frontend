@@ -7,7 +7,7 @@ const DEFAULT_CONFIG = {
   welcome_embed: false, welcome_embed_color: '#5865f2', welcome_embed_title: 'Hoş Geldin!', welcome_embed_description: '{user} sunucuya katıldı!',
   welcome_dm: false, welcome_dm_message: 'Merhaba {user}! {server} sunucusuna hoş geldin!',
   goodbye_enabled: false, goodbye_channel_id: '', goodbye_message: '{user} sunucudan ayrıldı. Hoşça kal!',
-  goodbye_embed: false, goodbye_embed_color: '#ed4245',
+  goodbye_embed: false, goodbye_embed_color: '#f23f42',
   auto_role_enabled: false, auto_role_ids: []
 };
 

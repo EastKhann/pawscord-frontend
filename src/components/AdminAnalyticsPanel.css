@@ -1,8 +1,8 @@
-.admin-analytics-panel {
-    background: #2f3136;
+﻿.admin-analytics-panel {
+    background: #0e1222;
     border-radius: 8px;
     padding: 20px;
-    color: #dcddde;
+    color: #dbdee1;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -13,12 +13,12 @@
     align-items: center;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #40444b;
+    border-bottom: 2px solid #182135;
 }
 
 .analytics-header h2 {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -26,9 +26,9 @@
 }
 
 .time-range-select {
-    background: #40444b;
-    border: 2px solid #202225;
-    color: #dcddde;
+    background: #182135;
+    border: 2px solid #0b0e1b;
+    color: #dbdee1;
     padding: 8px 15px;
     border-radius: 6px;
     font-size: 14px;
@@ -37,7 +37,7 @@
 
 .loading {
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
     padding: 60px;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #5865f2, #7289da);
+    background: linear-gradient(135deg, #5865f2, #5865f2);
     border-radius: 12px;
     padding: 25px;
     display: flex;
@@ -59,19 +59,19 @@
 }
 
 .metric-card.users {
-    background: linear-gradient(135deg, #5865f2, #7289da);
+    background: linear-gradient(135deg, #5865f2, #5865f2);
 }
 
 .metric-card.messages {
-    background: linear-gradient(135deg, #43b581, #3ca374);
+    background: linear-gradient(135deg, #23a559, #3ca374);
 }
 
 .metric-card.servers {
-    background: linear-gradient(135deg, #faa61a, #f0932b);
+    background: linear-gradient(135deg, #f0b232, #f0932b);
 }
 
 .metric-card.active {
-    background: linear-gradient(135deg, #f04747, #d84040);
+    background: linear-gradient(135deg, #f23f42, #d84040);
 }
 
 .metric-icon {
@@ -115,7 +115,7 @@
 }
 
 .chart-card {
-    background: #40444b;
+    background: #182135;
     border-radius: 12px;
     padding: 20px;
 }
@@ -146,7 +146,7 @@
 
 .bar-fill {
     width: 100%;
-    background: linear-gradient(to top, #5865f2, #7289da);
+    background: linear-gradient(to top, #5865f2, #5865f2);
     border-radius: 6px 6px 0 0;
     display: flex;
     align-items: center;
@@ -157,7 +157,7 @@
 }
 
 .activity-bar .bar-fill {
-    background: linear-gradient(to top, #43b581, #3ca374);
+    background: linear-gradient(to top, #23a559, #3ca374);
 }
 
 .bar-value {
@@ -167,7 +167,7 @@
 }
 
 .bar-label {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 11px;
     margin-top: 8px;
 }
@@ -179,7 +179,7 @@
 }
 
 .stat-group {
-    background: #40444b;
+    background: #182135;
     border-radius: 12px;
     padding: 20px;
 }
@@ -204,9 +204,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
 }
 
@@ -222,13 +222,13 @@
 }
 
 .feature-item {
-    background: #2f3136;
+    background: #0e1222;
     padding: 12px;
     border-radius: 6px;
 }
 
 .feature-name {
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 8px;
@@ -242,13 +242,13 @@
 
 .usage-bar {
     height: 8px;
-    background: linear-gradient(90deg, #5865f2, #7289da);
+    background: linear-gradient(90deg, #5865f2, #5865f2);
     border-radius: 4px;
     transition: width 0.3s;
 }
 
 .usage-count {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 12px;
     font-weight: 700;
     min-width: 40px;
@@ -291,7 +291,7 @@
     }
 
     .metric-value {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .charts-section {

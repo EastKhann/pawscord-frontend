@@ -1,4 +1,4 @@
-// frontend/src/CryptoSignals/CoinDetailModal.js
+﻿// frontend/src/CryptoSignals/CoinDetailModal.js
 import React, { useMemo } from 'react';
 import { FaBitcoin, FaExternalLinkAlt } from 'react-icons/fa';
 import { formatPrice, parsePnl } from './utils';
@@ -8,10 +8,11 @@ import useModalA11y from '../hooks/useModalA11y';
 
 const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
     const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen: !!selectedCoin, label: 'Coin Detay' });
-    if (!selectedCoin) return null;
 
-    const rows = selectedCoin.data;
+    // ⚠️ useMemo MUST be called before any early return (Rules of Hooks)
+    const rows = selectedCoin?.data || [];
     const coinStats = useMemo(() => {
+        if (!rows.length) return { profits: 0, losses: 0, tersCount: 0, uyumluCount: 0, avgPnl: 0, avgWr: 0, price: null };
         const profits = rows.filter(r => parsePnl(r.pnl_percent) > 0).length;
         const losses = rows.filter(r => parsePnl(r.pnl_percent) < 0).length;
         const tersCount = rows.filter(r => r.ters_sinyal === true).length;
@@ -19,8 +20,11 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
         const avgPnl = rows.reduce((s, r) => s + parsePnl(r.pnl_percent), 0) / rows.length;
         const avgWr = rows.reduce((s, r) => s + parseFloat(String(r.win_rate || '0').replace('%', '')), 0) / rows.length;
         const price = rows[0]?.current_price;
-        return { profits, losses, tersCount, uyumluCount, avgPnl, avgWr, price };
+        return { profits, losses, tersCount, uyumluCount, avgPnl: isNaN(avgPnl) ? 0 : avgPnl, avgWr: isNaN(avgWr) ? 0 : avgWr, price };
     }, [rows]);
+
+    // Early return AFTER all hooks
+    if (!selectedCoin) return null;
 
     const binanceUrl = `https://www.binance.com/en/futures/${selectedCoin.name.endsWith('USDT') ? selectedCoin.name : selectedCoin.name + 'USDT'}`;
 
@@ -94,7 +98,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                                             </div>
                                         ))}
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 8, borderTop: '1px solid #40444b' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8, paddingTop: 8, borderTop: '1px solid #182135' }}>
                                         <StatusBadge status={row.status} />
                                         {row.days_ago !== undefined && (
                                             <span style={{ color: '#949ba4', fontSize: '0.78em' }}>{row.days_ago} g{'ü'}n {'·'} {row.bars_ago} bar</span>
@@ -106,7 +110,7 @@ const CoinDetailModal = ({ selectedCoin, isPositionsTab, onClose }) => {
                     </div>
                 </div>
 
-                <div style={{ padding: '12px 20px', borderTop: '1px solid #2f3136', textAlign: 'center' }}>
+                <div style={{ padding: '12px 20px', borderTop: '1px solid #0e1222', textAlign: 'center' }}>
                     <a href={binanceUrl} target="_blank" rel="noopener noreferrer"
                         style={{ color: '#f0b232', textDecoration: 'none', fontWeight: 600, fontSize: '0.9em' }}>
                         <FaExternalLinkAlt /> Binance Futures'da A{'ç'}

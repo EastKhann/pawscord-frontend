@@ -17,10 +17,10 @@ export const PERKS = [
 ];
 
 export const getBoostLevel = (boostCount) => {
-  if (boostCount >= 30) return { level: 3, name: 'Level 3', color: '#9b59b6' };
+  if (boostCount >= 30) return { level: 3, name: 'Level 3', color: '#5865f2' };
   if (boostCount >= 15) return { level: 2, name: 'Level 2', color: '#e91e63' };
   if (boostCount >= 2) return { level: 1, name: 'Level 1', color: '#5865f2' };
-  return { level: 0, name: 'No Level', color: '#99aab5' };
+  return { level: 0, name: 'No Level', color: '#949ba4' };
 };
 
 export const getNextLevelProgress = (boostCount) => {

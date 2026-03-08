@@ -42,6 +42,7 @@ import AppModals from './components/AppModals';
 import SplashScreen from './SplashScreen';
 import ConnectionStatusBar from './components/ConnectionStatusBar';
 import MobileNav from './components/MobileNav';
+import JoinServerModal from './components/JoinServerModal';
 import { FaTimes, FaUsers } from 'react-icons/fa';
 
 // --- LAZY IMPORTS ---
@@ -72,6 +73,9 @@ import useChatConnection from './App/useChatConnection';
 import useMessageHandlers from './App/useMessageHandlers';
 import useFileUpload from './App/useFileUpload';
 import useServerHandlers from './App/useServerHandlers';
+
+// --- PUSH NOTIFICATIONS ---
+import usePushNotifications from './hooks/usePushNotifications';
 
 // --- EXTRACTED COMPONENTS ---
 import ChatArea from './App/ChatArea';
@@ -115,6 +119,7 @@ const AppContent = () => {
     // ─── RESPONSIVE ───
     const { isMobile } = useResponsive();
     const [isLeftSidebarVisible, setIsLeftSidebarVisible] = useState(false);
+    const [triggerDiscovery, setTriggerDiscovery] = useState(false);
     const [isRightSidebarVisible, setIsRightSidebarVisible] = useState(false);
     const safeAreaBottom = isNative ? 'max(20px, env(safe-area-inset-bottom))' : '0px';
     const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -185,24 +190,6 @@ const AppContent = () => {
     useEffect(() => { tokenRef.current = token; }, [token]);
     useEffect(() => { usernameRef.current = username; }, [username]);
 
-    // ─── Recent navigation tracker ───
-    useEffect(() => {
-        const { type, id } = activeChat || {};
-        if (!type || type === 'welcome' || type === 'friends' || type === 'voice') return;
-        if (!id) return;
-        // chatTitle may be empty during first render — just use id as fallback
-        const label = chatTitle || String(id);
-        const item = { type, id, label, ts: Date.now() };
-        try {
-            const stored = JSON.parse(localStorage.getItem('pawscord_recent_nav') || '[]');
-            const filtered = stored.filter(x => !(x.type === type && String(x.id) === String(id)));
-            const updated = [item, ...filtered].slice(0, 6);
-            localStorage.setItem('pawscord_recent_nav', JSON.stringify(updated));
-            setRecentNavItems(updated);
-        } catch (e) { }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeChat?.type, activeChat?.id, chatTitle]);
-
     // ─── Faz 3.4: ESC closes the topmost open modal ───
     useEffect(() => {
         const handleEsc = (e) => {
@@ -248,6 +235,23 @@ const AppContent = () => {
         fetchWithAuth,
     });
 
+    // ─── Recent navigation tracker (needs chatTitle from useAppCallbacks) ───
+    useEffect(() => {
+        const { type, id } = activeChat || {};
+        if (!type || type === 'welcome' || type === 'friends' || type === 'voice') return;
+        if (!id) return;
+        const label = chatTitle || String(id);
+        const item = { type, id, label, ts: Date.now() };
+        try {
+            const stored = JSON.parse(localStorage.getItem('pawscord_recent_nav') || '[]');
+            const filtered = stored.filter(x => !(x.type === type && String(x.id) === String(id)));
+            const updated = [item, ...filtered].slice(0, 6);
+            localStorage.setItem('pawscord_recent_nav', JSON.stringify(updated));
+            setRecentNavItems(updated);
+        } catch (e) { }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeChat?.type, activeChat?.id, chatTitle]);
+
     // ═══════════════════════════════════════════════════════════════
     // EXTRACTED HOOKS
     // ═══════════════════════════════════════════════════════════════
@@ -277,6 +281,9 @@ const AppContent = () => {
         API_BASE_URL, MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL,
     });
 
+    // --- 🔔 PUSH NOTIFICATIONS ---
+    const { notifyMessage } = usePushNotifications(isAuthenticated, username);
+
     const { ws } = useChatConnection({
         activeChat, username, token, isAuthenticated, isInitialDataLoaded,
         fetchWithAuth, scrollToBottom, isNearBottom, setMessages,
@@ -292,6 +299,7 @@ const AppContent = () => {
         statusWsRef, statusWsReconnectRef,
         logout, refreshAccessToken,
         setCurrentTheme,
+        notifyMessage,
     });
 
     // Sync ws ref so message handlers always have access to the current WebSocket
@@ -381,7 +389,7 @@ const AppContent = () => {
     const handleOpenCinema = useCallback(() => { openModal('cinema'); if (isMobile) setIsLeftSidebarVisible(false); }, [openModal, isMobile]);
     const handleCloseLeftSidebar = useCallback(() => setIsLeftSidebarVisible(false), []);
     const handleCloseRightSidebar = useCallback(() => setIsRightSidebarVisible(false), []);
-    const handleViewUserProfile = useCallback((u) => { const usr = allUsers.find(a => a.username === u); if (usr) setViewingProfile(usr); }, [allUsers]);
+    const handleViewUserProfile = useCallback((u) => { const usr = Array.isArray(allUsers) ? allUsers.find(a => a.username === u) : null; setViewingProfile(usr || { username: u }); }, [allUsers]);
     const handleDismissMaintenance = useCallback(() => setMaintenanceMode(null), []);
     const handleCloseVanityInvite = useCallback(() => { setShowVanityInvite(null); window.location.hash = '#/'; }, []);
     const handleCloseInviteCode = useCallback(() => { setShowInviteCode(null); window.location.hash = '#/'; }, []);
@@ -547,6 +555,9 @@ const AppContent = () => {
                                 onOpenProjectCollaboration={handleOpenProjectCollaboration}
                                 onOpenAvatarStudio={handleOpenAvatarStudio}
                                 onServerSelect={handleServerSelect}
+                                activeChat={activeChat}
+                                openDiscovery={false}
+                                onDiscoveryOpened={null}
                             />
                         </SuspenseWithBoundary>
                     </nav>
@@ -571,7 +582,7 @@ const AppContent = () => {
                     ) : activeChat.type === 'welcome' ? (
                         <div style={{ width: '100%', height: '100%' }}>
                             <Suspense fallback={<LoadingSpinner size="medium" text="Yükleniyor..." />}>
-                                <WelcomeScreen isMobile={isMobile} onOpenMenu={() => setIsLeftSidebarVisible(true)}
+                                <WelcomeScreen isMobile={isMobile} onOpenMenu={() => setIsLeftSidebarVisible(true)} onOpenDiscovery={() => setTriggerDiscovery(true)}
                                     onOpenRightMenu={() => setIsRightSidebarVisible(true)}
                                     updateAvailable={updateAvailable} isDownloading={isDownloading}
                                     downloadProgress={downloadProgress} updateStatusText={updateStatusText}
@@ -591,14 +602,14 @@ const AppContent = () => {
                             </Suspense>
                         </div>
                     ) : activeChat.type === 'voice' && isInVoice ? (
-                        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#2f3136' }}>
+                        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#111214' }}>
                             <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     {isMobile && <button onClick={() => setActiveChat('welcome', 'welcome')} style={styles.mobileMenuButton} aria-label="Go back">←</button>}
                                     <h2 style={{ margin: 0, fontSize: '1.2em' }}>🔊 {voiceRoomDisplayName}</h2>
                                 </div>
                                 <button onClick={() => { leaveChannel(); setActiveChat('welcome', 'welcome'); }}
-                                    style={{ background: '#ed4245', color: 'white', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontWeight: 'bold' }}
+                                    style={{ background: '#f23f42', color: 'white', border: 'none', borderRadius: '8px', padding: '8px 16px', cursor: 'pointer', fontWeight: 'bold' }}
                                     aria-label="Disconnect from voice channel">
                                     Bağlantıyı Kes
                                 </button>
@@ -620,6 +631,7 @@ const AppContent = () => {
                             isSelectionMode={isSelectionMode} selectedMessages={selectedMessages} setSelectedMessages={setSelectedMessages}
                             username={username} isAdmin={isAdmin} allUsers={allUsers}
                             hasKey={hasKey}
+                            setMessages={setMessages}
                             modals={modals} openModal={openModal} closeModal={closeModal} toggleModal={toggleModal}
                             activeTypingUsers={activeTypingUsers}
                             soundSettings={soundSettings} isInVoice={isInVoice}
@@ -632,6 +644,7 @@ const AppContent = () => {
                             setChartSymbol={setChartSymbol}
                             messageBoxRef={messageBoxRef} messagesEndRef={messagesEndRef}
                             ABSOLUTE_HOST_URL={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth}
+                            ws={ws}
                         />
                     )}
 
@@ -641,7 +654,7 @@ const AppContent = () => {
                             {isMobile && (
                                 <div style={styles.mobileSidebarHeader}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <FaUsers size={18} color="#b9bbbe" />
+                                        <FaUsers size={18} color="#b5bac1" />
                                         <span style={{ fontSize: '16px', fontWeight: 'bold', color: 'white' }}>
                                             {activeChat.type === 'room' ? 'Sunucu Üyeleri' : 'Arkadaşlar'}
                                         </span>
@@ -654,17 +667,22 @@ const AppContent = () => {
                                     currentUser={username} currentUserProfile={currentUserProfile}
                                     getDeterministicAvatar={getDeterministicAvatar}
                                     onUserClick={(u) => {
-                                        let user = allUsers.find(usr => usr.username === u);
-                                        if (!user && serverMembers.length > 0) {
+                                        let user = Array.isArray(allUsers) ? allUsers.find(usr => usr.username === u) : null;
+                                        if (!user && Array.isArray(serverMembers) && serverMembers.length > 0) {
                                             const m = serverMembers.find(m => m.username === u);
                                             if (m) user = { username: m.username, display_name: m.username, avatar: getDeterministicAvatar(m.username), role: m.role || 'member' };
                                         }
-                                        if (user) setViewingProfile(user);
+                                        setViewingProfile(user || { username: u });
                                     }}
                                     onUserContextMenu={(e, targetUsername) => {
                                         if (targetUsername === username) return;
-                                        const targetUser = allUsers.find(u => u.username === targetUsername);
-                                        if (!targetUser) return;
+                                        let targetUser = Array.isArray(allUsers) ? allUsers.find(u => u.username === targetUsername) : null;
+                                        if (!targetUser) {
+                                            const m = Array.isArray(serverMembers) ? serverMembers.find(m => m.username === targetUsername) : null;
+                                            targetUser = m
+                                                ? { username: m.username, display_name: m.username, avatar: getDeterministicAvatar(m.username), role: m.role || 'member' }
+                                                : { username: targetUsername };
+                                        }
                                         setUserContextMenu({ x: e.clientX, y: e.clientY, user: targetUser, permissions: currentUserPermissions });
                                     }}
                                     activeChat={activeChat} serverMembers={serverMembers}
@@ -715,6 +733,9 @@ const AppContent = () => {
             {isMobile && (
                 <MobileNav activeTab={mobileActiveTab} onTabChange={handleMobileTabChange} />
             )}
+
+            {/* ─── SUNUCU KEŞİF MODAL (WelcomeScreen Sunucular kartından açılır) ─── */}
+            <JoinServerModal isOpen={triggerDiscovery} onClose={() => setTriggerDiscovery(false)} />
         </div>
     );
 };

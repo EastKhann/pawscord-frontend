@@ -1,4 +1,4 @@
-// AdminPanelModal styles - extracted from AdminPanelModal.js
+﻿// AdminPanelModal styles - extracted from AdminPanelModal.js
 const styles = {
     overlay: {
         position: 'fixed',
@@ -20,14 +20,14 @@ const styles = {
         flexDirection: 'column',
         boxShadow: '0 25px 80px rgba(0, 0, 0, 0.8)',
         overflow: 'hidden',
-        border: '1px solid #1f2023'
+        border: '1px solid #16203a'
     },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '14px 24px',
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        background: 'linear-gradient(135deg, #0d0e10 0%, #0d0e10 50%, #0f3460 100%)',
         borderBottom: '1px solid #2d2f34'
     },
     headerLeft: { display: 'flex', alignItems: 'center', gap: '12px' },
@@ -43,7 +43,7 @@ const styles = {
         backgroundColor: '#0d0d0f',
         padding: '10px 8px',
         overflowY: 'auto',
-        borderRight: '1px solid #1f2023'
+        borderRight: '1px solid #16203a'
     },
     sidebarButton: (active) => ({
         width: '100%',
@@ -82,7 +82,7 @@ const styles = {
         color: '#8b8d91', fontWeight: '600', fontSize: '11px',
         textTransform: 'uppercase', borderBottom: '1px solid #2a2a2e'
     },
-    td: { padding: '12px', color: '#e5e7eb', fontSize: '13px', borderBottom: '1px solid #1f2023' },
+    td: { padding: '12px', color: '#e5e7eb', fontSize: '13px', borderBottom: '1px solid #16203a' },
     actionBtn: (color) => ({
         padding: '6px 10px', backgroundColor: color, border: 'none',
         borderRadius: '6px', color: '#fff', cursor: 'pointer',

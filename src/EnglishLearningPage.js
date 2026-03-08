@@ -1,97 +1,306 @@
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import useEnglishLearning from './EnglishLearningPage/useEnglishLearning';
-import { styles } from './EnglishLearningPage/englishLearningStyles';
+import { FaArrowLeft, FaKeyboard, FaRedo, FaStar, FaBookOpen, FaBolt, FaCopy, FaCheck } from 'react-icons/fa';
 
+// ─── CSS for flip card (injected once) ──────────────────────────────────────
+const FLIP_CSS = `
+@keyframes eng-shake { 0%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} 100%{transform:translateX(0)} }
+.flashcard-scene { perspective: 900px; width: 100%; }
+.flashcard { width: 100%; min-height: 200px; position: relative; transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0.2,0.2,1); cursor: pointer; }
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-face { position: absolute; top:0;left:0;width:100%;height:100%;min-height:200px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 20px; display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 28px; box-sizing:border-box; }
+.flashcard-front { background: linear-gradient(145deg,#0d143a 0%,#111e4a 40%,#0e1838 100%);
+  border: 1px solid rgba(88,101,242,0.25); box-shadow: 0 8px 32px rgba(88,101,242,0.15); }
+.flashcard-back { background: linear-gradient(145deg,#071a10 0%,#0d2b18 40%,#0a1e12 100%);
+  border: 1px solid rgba(35,165,89,0.25); transform: rotateY(180deg); box-shadow: 0 8px 32px rgba(35,165,89,0.15); }
+.eng-btn { transition: transform 0.1s,filter 0.1s; }
+.eng-btn:active { transform: scale(0.95) !important; }
+.eng-btn:hover:not(:disabled) { filter: brightness(1.12); }
+`;
+
+function injectCSS(id, css) {
+    if (document.getElementById(id)) return;
+    const el = document.createElement('style');
+    el.id = id; el.textContent = css;
+    document.head.appendChild(el);
+}
+
+// ─── Main Component ──────────────────────────────────────────────────────────
 function EnglishLearningPage() {
     const e = useEnglishLearning();
+    const [flipped, setFlipped] = useState(false);
+    const [shake, setShake] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [sessionTime, setSessionTime] = useState(0);
+    const [sessionCards, setSessionCards] = useState(0);
 
-    if (e.isLoading) return <div style={styles.pageContainer}>Yükleniyor...</div>;
+    useEffect(() => { injectCSS('eng-flip-css', FLIP_CSS); }, []);
 
-    if (e.error) {
-        return (
-            <div style={styles.pageContainer}>
-                <h1 style={styles.errorText}>Hata: {e.error}</h1>
-                <Link to="/" style={styles.backButton}>Sohbete Geri Dön</Link>
+    // Session timer
+    useEffect(() => {
+        const t = setInterval(() => setSessionTime(s => s + 1), 1000);
+        return () => clearInterval(t);
+    }, []);
+
+    // Reset flip when word changes
+    useEffect(() => { setFlipped(false); }, [e.currentWord]);
+
+    const triggerShake = () => { setShake(true); setTimeout(() => setShake(false), 500); };
+
+    const handleKnown = useCallback(() => {
+        setSessionCards(c => c + 1);
+        try {
+            const xp = parseInt(localStorage.getItem('eng_xp') || '0') + 10;
+            localStorage.setItem('eng_xp', xp);
+        } catch { }
+        e.handleMarkAsKnown();
+    }, [e]);
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handler = (ev) => {
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ev.target.tagName)) return;
+            if (ev.key === ' ') { ev.preventDefault(); setFlipped(f => !f); }
+            else if (ev.key === 'ArrowRight' && !e.levelComplete) {
+                if (!flipped) { triggerShake(); return; }
+                handleKnown();
+            } else if (ev.key === 'ArrowLeft' && !e.levelComplete) { e.getNewWord(); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [flipped, e.levelComplete, handleKnown, e.getNewWord]);
+
+    const handleCopyList = () => {
+        try {
+            const words = (e.availableWordsForLevel || [])
+                .map(w => `${w.term}: ${w.meanings?.join(', ')}`)
+                .join('\n');
+            navigator.clipboard.writeText(words);
+            setCopied(true); setTimeout(() => setCopied(false), 2000);
+        } catch { }
+    };
+
+    const fmtTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+    if (e.isLoading) return (
+        <div style={S.root}>
+            <div style={S.loadWrap}>
+                <div style={S.spinner} />
+                <p style={{ color: '#949ba4', marginTop: 16 }}>Kelimeler yükleniyor…</p>
             </div>
-        );
-    }
+        </div>
+    );
+
+    if (e.error) return (
+        <div style={S.root}>
+            <div style={{ textAlign: 'center', padding: 40 }}>
+                <p style={{ color: '#f23f42', marginBottom: 16 }}>Hata: {e.error}</p>
+                <Link to="/eng-learn" style={S.backBtnLink}><FaArrowLeft /> Geri</Link>
+            </div>
+        </div>
+    );
 
     return (
-        <div style={styles.pageContainer}>
-            <Link to="/eng-learn" style={styles.backButton}>{'←'} Merkeze Dön</Link>
+        <div style={S.root}>
+            {/* ── Top Bar ─────────────────────────────────────────────── */}
+            <div style={S.topBar}>
+                <Link to="/eng-learn" style={S.backBtnLink}><FaArrowLeft /></Link>
+                <span style={S.topTitle}>Kelime Hazinesi</span>
+                <div style={S.sessionBadges}>
+                    <span style={S.badge}>⏱ {fmtTime(sessionTime)}</span>
+                    <span style={{ ...S.badge, color: '#23a559' }}>📗 {sessionCards}</span>
+                </div>
+            </div>
 
-            <div style={styles.quizContainer}>
-                <h1 style={styles.pageTitle}>{'İ'}ngilizce Kelime {'Öğren'}</h1>
-
-                <div style={styles.levelAndProgressContainer}>
-                    <div style={styles.controls}>
-                        <label htmlFor="level-select" style={styles.label}>Seviye:</label>
-                        <select id="level-select" value={e.currentLevel}
-                            onChange={(ev) => e.setCurrentLevel(ev.target.value)} style={styles.select}>
-                            {e.availableLevels.map(level => (
-                                <option key={level} value={level}>{level.toUpperCase()} ({e.allData[level]?.length || 0} kelime)</option>
+            <div style={S.body}>
+                {/* ── Controls ──────────────────────────────────────────── */}
+                <div style={S.controls}>
+                    <div style={S.levelRow}>
+                        <label style={S.label}>Seviye</label>
+                        <select style={S.select} value={e.currentLevel}
+                            onChange={ev => { e.setCurrentLevel(ev.target.value); setSessionCards(0); }}>
+                            {e.availableLevels.map(l => (
+                                <option key={l} value={l}>
+                                    {l.toUpperCase()} — {e.allData[l]?.length || 0} kelime
+                                </option>
                             ))}
                         </select>
                     </div>
-                    <div style={styles.progressStats}>
-                        <span>Bildiğiniz: <strong>{e.levelStats.knownWords}</strong></span>
-                        <span>Toplam: <strong>{e.levelStats.totalWords}</strong></span>
-                    </div>
+                    <button className="eng-btn" style={S.iconBtn} title="Listeyi kopyala" onClick={handleCopyList}>
+                        {copied ? <FaCheck style={{ color: '#23a559' }} /> : <FaCopy />}
+                    </button>
                 </div>
 
-                <div style={{ ...styles.progressBarBackground, marginBottom: '20px' }}>
-                    <div style={{ ...styles.progressBarFill, width: `${e.levelStats.progress}%` }}>
-                        {e.levelStats.progress > 15 && <span>{e.levelStats.progress}%</span>}
+                {/* ── Progress ──────────────────────────────────────────── */}
+                <div style={S.progressWrap}>
+                    <div style={S.progressRow}>
+                        <span style={S.pLabel}>Bu Seviye</span>
+                        <span style={S.pVal}>{e.levelStats.knownWords} / {e.levelStats.totalWords}</span>
                     </div>
-                    {e.levelStats.progress <= 15 && <span style={styles.progressTextOutside}>{e.levelStats.progress}%</span>}
+                    <div style={S.pBg}><div style={{ ...S.pFill, width: `${e.levelStats.progress}%` }} /></div>
+                    <div style={S.progressRow}>
+                        <span style={S.pLabel}>Genel</span>
+                        <span style={{ ...S.pVal, color: '#5865f2' }}>{e.totalStats.progress}%</span>
+                    </div>
+                    <div style={S.pBg}><div style={{ ...S.pFill, background: 'linear-gradient(90deg,#5865f2,#7e89f5)', width: `${e.totalStats.progress}%` }} /></div>
                 </div>
 
-                <div>
-                    <h4 style={styles.totalStatsHeader}>Genel Toplam {'İ'}lerleme</h4>
-                    <div style={{ ...styles.progressStats, marginBottom: '8px' }}>
-                        <span>Toplam Bildiğiniz: <strong>{e.totalStats.totalKnownWords}</strong></span>
-                        <span>Toplam Kelime: <strong>{e.totalStats.totalWords}</strong></span>
+                {/* ── Flashcard ─────────────────────────────────────────── */}
+                {e.levelComplete ? (
+                    <div style={S.completeCard}>
+                        <div style={{ fontSize: 60, marginBottom: 12 }}>🎉</div>
+                        <h2 style={{ color: '#23a559', fontWeight: 800, margin: '0 0 8px' }}>Tamamlandı!</h2>
+                        <p style={{ color: '#949ba4', marginBottom: 20 }}>Bu seviyedeki tüm kelimeleri öğrendiniz.</p>
+                        <button className="eng-btn" style={S.primaryBtn} onClick={() => {
+                            const idx = e.availableLevels.indexOf(e.currentLevel);
+                            if (idx < e.availableLevels.length - 1) e.setCurrentLevel(e.availableLevels[idx + 1]);
+                        }}>Sonraki Seviye →</button>
                     </div>
-                    <div style={styles.progressBarBackground}>
-                        <div style={{ ...styles.progressBarFill, ...styles.totalProgressBarFill, width: `${e.totalStats.progress}%` }}>
-                            {e.totalStats.progress > 15 && <span>{e.totalStats.progress}%</span>}
+                ) : e.currentWord ? (
+                    <>
+                        {/* Card container — needs explicit height for absolute positioning to work */}
+                        <div className="flashcard-scene"
+                            style={{ animation: shake ? 'eng-shake 0.4s ease' : 'none', marginBottom: 220 }}>
+                            <div className={`flashcard${flipped ? ' flipped' : ''}`}
+                                onClick={() => setFlipped(f => !f)}>
+                                <div className="flashcard-face flashcard-front">
+                                    <p style={S.cardHint}>tıkla veya SPACE</p>
+                                    <h2 style={S.cardWord}>{e.currentWord.term}</h2>
+                                    {e.currentWord.phonetic &&
+                                        <p style={S.phonetic}>{e.currentWord.phonetic}</p>}
+                                </div>
+                                <div className="flashcard-face flashcard-back">
+                                    <p style={{ ...S.cardHint, color: '#4ade80' }}>Anlam</p>
+                                    <h2 style={{ ...S.cardWord, fontSize: 22, color: '#4ade80' }}>
+                                        {e.currentWord.meanings?.join(' / ')}
+                                    </h2>
+                                    {e.currentWord.example &&
+                                        <p style={S.example}>"{e.currentWord.example}"</p>}
+                                </div>
+                            </div>
                         </div>
-                        {e.totalStats.progress <= 15 && <span style={styles.progressTextOutside}>{e.totalStats.progress}%</span>}
+
+                        <div style={S.actionRow}>
+                            <button className="eng-btn" style={{ ...S.actionBtn, ...S.skipBtn }}
+                                onClick={() => e.getNewWord()}>← Atla</button>
+                            <button className="eng-btn"
+                                style={{ ...S.actionBtn, ...(flipped ? S.knownBtn : S.dimBtn) }}
+                                onClick={() => flipped ? handleKnown() : triggerShake()}>
+                                ✓ Biliyorum +10 XP
+                            </button>
+                        </div>
+
+                        <div style={S.kbRow}>
+                            <FaKeyboard style={{ opacity: 0.25 }} />
+                            <span>SPACE=çevir</span><span>→=biliyorum</span><span>←=atla</span>
+                        </div>
+                    </>
+                ) : (
+                    <div style={S.emptyCard}>
+                        <FaBookOpen size={40} style={{ color: '#2e3035', marginBottom: 12 }} />
+                        <p style={{ color: '#949ba4', margin: 0 }}>Bu seviyede kelime bulunamadı.</p>
                     </div>
-                </div>
+                )}
 
-                <div style={styles.wordArea}>
-                    {e.levelComplete ? (
-                        <h2 style={{ ...styles.term, color: 'var(--text-positive)' }}>
-                            Tebrikler! {'🎉'}<br />Bu seviyedeki tüm kelimeleri tamamladınız.
-                        </h2>
-                    ) : e.currentWord ? (
-                        <>
-                            <h2 style={styles.term}>{e.currentWord.term}</h2>
-                            {e.showAnswer && <p style={styles.meanings}>{e.currentWord.meanings.join(' / ')}</p>}
-                        </>
-                    ) : (
-                        <p>Bu seviyede kelime bulunamadı.</p>
-                    )}
-                </div>
-
-                <div style={styles.buttonGroup}>
-                    <button style={styles.actionButton} onClick={() => e.setShowAnswer(true)}
-                        disabled={e.showAnswer || !e.currentWord || e.levelComplete}>
-                        Cevabı Göster
-                    </button>
-                    <button style={{ ...styles.actionButton, ...styles.knownButton }}
-                        onClick={e.handleMarkAsKnown} disabled={!e.currentWord || e.levelComplete}>
-                        Biliyorum (Geç)
-                    </button>
-                    <button style={{ ...styles.actionButton, ...styles.primaryButton }}
-                        onClick={e.getNewWord} disabled={e.levelComplete || e.availableWordsForLevel.length <= 1}>
-                        Yeni Kelime
-                    </button>
+                {/* ── Session Bar ───────────────────────────────────────── */}
+                <div style={S.sessionBar}>
+                    {[
+                        { icon: <FaStar style={{ color: '#f0b232' }} />, val: e.levelStats.knownWords, sub: 'biliyor' },
+                        { icon: <FaBolt style={{ color: '#5865f2' }} />, val: sessionCards, sub: 'oturum' },
+                        { icon: <span>⏱</span>, val: fmtTime(sessionTime), sub: 'süre' },
+                    ].map(s => (
+                        <div key={s.sub} style={S.sStat}>
+                            {s.icon}
+                            <span style={{ fontWeight: 700 }}>{s.val}</span>
+                            <span style={{ color: '#949ba4', fontSize: 11 }}>{s.sub}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
     );
 }
 
+const S = {
+    root: { minHeight: '100vh', backgroundColor: '#0b0d10', color: '#dbdee1', fontFamily: "'Poppins','Segoe UI',sans-serif" },
+    loadWrap: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' },
+    spinner: { width: 40, height: 40, border: '3px solid #1a1e26', borderTop: '3px solid #5865f2', borderRadius: '50%', animation: 'spin 0.8s linear infinite' },
+
+    topBar: {
+        display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px',
+        backgroundColor: 'rgba(15,16,20,0.9)', borderBottom: '1px solid rgba(255,255,255,0.07)',
+        position: 'sticky', top: 0, zIndex: 10, backdropFilter: 'blur(12px)'
+    },
+    backBtnLink: { display: 'flex', alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.06)', color: '#949ba4', textDecoration: 'none', flexShrink: 0, border: '1px solid rgba(255,255,255,0.08)' },
+    topTitle: { flex: 1, fontWeight: 800, fontSize: 16, letterSpacing: '-0.2px' },
+    sessionBadges: { display: 'flex', gap: 8 },
+    badge: { backgroundColor: 'rgba(255,255,255,0.06)', padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 700, border: '1px solid rgba(255,255,255,0.08)' },
+
+    body: { maxWidth: 560, margin: '0 auto', padding: '24px 20px 60px' },
+
+    controls: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, gap: 12 },
+    levelRow: { display: 'flex', alignItems: 'center', gap: 10 },
+    label: { color: '#6b7280', fontSize: 13, fontWeight: 600 },
+    select: { backgroundColor: '#0f1117', color: '#dbdee1', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, padding: '9px 14px', fontSize: 14, outline: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' },
+    iconBtn: { width: 38, height: 38, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#949ba4', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 14 },
+
+    progressWrap: {
+        display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 28,
+        background: 'linear-gradient(135deg,#0f1117 0%,#111520 100%)',
+        border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '16px 18px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.35)'
+    },
+    progressRow: { display: 'flex', justifyContent: 'space-between' },
+    pLabel: { color: '#6b7280', fontSize: 12, fontWeight: 600 },
+    pVal: { color: '#dbdee1', fontSize: 12, fontWeight: 700 },
+    pBg: { height: 8, backgroundColor: '#1a1e28', borderRadius: 6, overflow: 'hidden' },
+    pFill: { height: '100%', background: 'linear-gradient(90deg,#23a559,#4ade80)', borderRadius: 6, transition: 'width 0.6s ease', boxShadow: '0 0 8px rgba(35,165,89,0.4)' },
+
+    cardHint: { color: 'rgba(88,101,242,0.4)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 2, fontWeight: 700, margin: '0 0 18px', textAlign: 'center' },
+    cardWord: { fontSize: 42, fontWeight: 900, margin: 0, color: '#fff', textAlign: 'center', wordBreak: 'break-word', letterSpacing: '-1px' },
+    phonetic: { color: '#7e89f5', fontSize: 16, margin: '12px 0 0', fontStyle: 'italic', textAlign: 'center' },
+    example: { color: '#4a5568', fontSize: 14, fontStyle: 'italic', margin: '18px 0 0', textAlign: 'center', lineHeight: 1.6 },
+
+    completeCard: {
+        background: 'linear-gradient(135deg,#071a10 0%,#0d2b18 100%)',
+        border: '1px solid rgba(35,165,89,0.25)', borderRadius: 28, padding: 44, textAlign: 'center', marginBottom: 20,
+        boxShadow: '0 12px 40px rgba(35,165,89,0.15)'
+    },
+    emptyCard: {
+        background: 'linear-gradient(135deg,#0f1117 0%,#111520 100%)',
+        border: '1px solid rgba(255,255,255,0.06)', borderRadius: 28, padding: 52, textAlign: 'center', marginBottom: 20
+    },
+
+    actionRow: { display: 'flex', gap: 14, marginTop: 28 },
+    actionBtn: { flex: 1, padding: '17px', borderRadius: 18, border: 'none', fontSize: 15, fontWeight: 800, cursor: 'pointer', letterSpacing: '0.2px' },
+    skipBtn: { background: 'rgba(255,255,255,0.05)', color: '#6b7280', border: '1px solid rgba(255,255,255,0.08)' },
+    knownBtn: {
+        background: 'linear-gradient(135deg,#23a559,#1a9e50)', color: '#fff',
+        boxShadow: '0 4px 0 #156936, 0 8px 28px rgba(35,165,89,0.4)'
+    },
+    dimBtn: { background: 'rgba(255,255,255,0.03)', color: '#2e3035', cursor: 'not-allowed', border: '1px solid rgba(255,255,255,0.05)' },
+    primaryBtn: {
+        background: 'linear-gradient(135deg,#5865f2,#7e89f5)', color: '#fff', border: 'none',
+        borderRadius: 14, padding: '15px 30px', fontSize: 15, fontWeight: 800, cursor: 'pointer',
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.35)'
+    },
+
+    kbRow: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, marginTop: 16, color: '#2e3035', fontSize: 12, fontWeight: 600 },
+
+    sessionBar: {
+        display: 'flex', gap: 12, marginTop: 32,
+        background: 'linear-gradient(135deg,#0f1117 0%,#111520 100%)',
+        border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, padding: '16px 22px',
+        justifyContent: 'space-around',
+        boxShadow: '0 6px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)'
+    },
+    sStat: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 600 },
+};
+
 export default EnglishLearningPage;
+

@@ -1,4 +1,4 @@
-// frontend/src/components/MessageInput/styles.js
+﻿// frontend/src/components/MessageInput/styles.js
 // Extracted from MessageInput.js — inline styles + CSS keyframe injection
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
@@ -7,10 +7,13 @@ const styles = {
     container: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#383a40',
-        borderRadius: '8px',
+        backgroundColor: 'rgba(30,31,35,0.88)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderRadius: '13px',
         padding: isMobile ? '4px 8px' : '4px 12px',
         margin: isMobile ? '4px 8px 8px' : '0',
+        border: '1px solid rgba(255,255,255,0.06)',
     },
     replyPreview: {
         display: 'flex',
@@ -19,7 +22,7 @@ const styles = {
         padding: '8px 12px',
         backgroundColor: 'rgba(88, 101, 242, 0.1)',
         borderLeft: '3px solid #5865f2',
-        borderRadius: '4px',
+        borderRadius: '8px',
         marginBottom: '8px',
         fontSize: '0.9em',
     },
@@ -34,8 +37,8 @@ const styles = {
         alignItems: 'center',
         padding: '8px 12px',
         backgroundColor: 'rgba(250, 166, 26, 0.1)',
-        borderLeft: '3px solid #faa61a',
-        borderRadius: '4px',
+        borderLeft: '3px solid #f0b232',
+        borderRadius: '8px',
         marginBottom: '8px',
         fontSize: '0.9em',
     },
@@ -52,11 +55,11 @@ const styles = {
         width: '12px',
         height: '12px',
         borderRadius: '50%',
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
     },
     stopButton: {
         padding: '6px 12px',
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         color: 'white',
         border: 'none',
         borderRadius: '4px',
@@ -66,7 +69,7 @@ const styles = {
     cancelButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '16px',
         padding: '4px 8px',
@@ -93,11 +96,11 @@ const styles = {
     actionButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: isMobile ? '16px' : '20px',
         padding: isMobile ? '6px' : '8px',
-        borderRadius: '4px',
+        borderRadius: '8px',
         transition: 'all 0.2s',
         display: 'flex',
         alignItems: 'center',
@@ -125,7 +128,7 @@ const styles = {
         background: 'transparent',
         border: 'none',
         outline: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: isMobile ? '14px' : '15px',
         padding: isMobile ? '8px 10px' : '11px 4px',
         borderRadius: '0',
@@ -149,7 +152,7 @@ const styles = {
         position: 'absolute',
         bottom: '110%',
         left: 0,
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         border: '1px solid rgba(255,255,255,0.1)',
         borderRadius: '8px',
         padding: '8px',
@@ -168,7 +171,7 @@ const styles = {
         backgroundColor: 'transparent',
         border: 'none',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         cursor: 'pointer',
         transition: 'background 0.2s',
@@ -181,18 +184,18 @@ const styles = {
         top: '-30px',
         right: '10px',
         fontSize: '0.75em',
-        color: '#43b581',
+        color: '#23a559',
         backgroundColor: 'rgba(67, 181, 129, 0.1)',
         padding: '4px 8px',
         borderRadius: '4px',
-        border: '1px solid #43b581',
+        border: '1px solid #23a559',
         animation: 'fadeIn 0.3s ease-in-out',
     },
     // 🎤 Voice Recording Styles
     micButton: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: isMobile ? '18px' : '20px',
         padding: isMobile ? '6px' : '8px',
@@ -242,11 +245,11 @@ const styles = {
         width: '12px',
         height: '12px',
         borderRadius: '50%',
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
     },
     recordingTime: {
         fontSize: '15px',
-        color: '#ed4245',
+        color: '#f23f42',
         fontWeight: '700',
         fontVariantNumeric: 'tabular-nums',
         minWidth: '44px',
@@ -304,7 +307,7 @@ const styles = {
     },
     lockedBadge: {
         fontSize: '12px',
-        color: '#43b581',
+        color: '#23a559',
         backgroundColor: 'rgba(67, 181, 129, 0.15)',
         padding: '4px 10px',
         borderRadius: '12px',
@@ -317,7 +320,7 @@ const styles = {
         gap: '5px',
         padding: '7px 14px',
         backgroundColor: 'rgba(237, 66, 69, 0.12)',
-        color: '#ed4245',
+        color: '#f23f42',
         border: '1px solid rgba(237, 66, 69, 0.3)',
         borderRadius: '8px',
         cursor: 'pointer',
@@ -353,12 +356,12 @@ const styles = {
         alignItems: 'center',
         marginBottom: '8px',
         fontSize: '12px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     clearAllButton: {
         background: 'none',
         border: 'none',
-        color: '#ed4245',
+        color: '#f23f42',
         cursor: 'pointer',
         fontSize: '11px',
         padding: '4px 8px',
@@ -377,7 +380,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: '#40444b',
+        backgroundColor: '#1e2024',
         borderRadius: '8px',
         padding: '8px',
         width: '100px',
@@ -401,9 +404,9 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '4px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
     },
     fileInfo: {
         display: 'flex',
@@ -413,13 +416,13 @@ const styles = {
     },
     fileName: {
         fontSize: '10px',
-        color: '#dcddde',
+        color: '#dbdee1',
         textAlign: 'center',
         wordBreak: 'break-all',
     },
     fileSize: {
         fontSize: '9px',
-        color: '#72767d',
+        color: '#949ba4',
     },
     removeFileButton: {
         position: 'absolute',
@@ -428,7 +431,7 @@ const styles = {
         width: '20px',
         height: '20px',
         borderRadius: '50%',
-        backgroundColor: '#ed4245',
+        backgroundColor: '#f23f42',
         border: 'none',
         color: 'white',
         cursor: 'pointer',
@@ -499,7 +502,7 @@ styleSheet.textContent = `
     .rec-wave-bar {
         width: 3px;
         border-radius: 2px;
-        background: linear-gradient(180deg, #ed4245 0%, #f04747 50%, #ed4245 100%);
+        background: linear-gradient(180deg, #f23f42 0%, #f23f42 50%, #f23f42 100%);
         animation: waveBar 0.8s ease-in-out infinite alternate;
     }
     @keyframes waveBar {
@@ -510,12 +513,12 @@ styleSheet.textContent = `
     
     /* 🎤 Mic button hover/active states */
     .mic-button:hover {
-        color: #ed4245 !important;
+        color: #f23f42 !important;
         background: rgba(237, 66, 69, 0.1) !important;
     }
     .mic-button:active {
         transform: scale(1.15);
-        color: #ed4245 !important;
+        color: #f23f42 !important;
         background: rgba(237, 66, 69, 0.2) !important;
     }
     
@@ -524,7 +527,7 @@ styleSheet.textContent = `
     }
     
     textarea::-webkit-scrollbar-thumb {
-        background: #202225;
+        background: #0b0e1b;
         border-radius: 4px;
     }
     
@@ -533,7 +536,7 @@ styleSheet.textContent = `
     }
     
     .action-button:hover {
-        color: #dcddde;
+        color: #dbdee1;
         background-color: rgba(79, 84, 92, 0.4);
     }
 `;

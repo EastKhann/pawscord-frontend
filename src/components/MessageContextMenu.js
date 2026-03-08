@@ -122,7 +122,7 @@ const styles = {
         padding: '8px 12px',
         background: 'none',
         border: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         cursor: 'pointer',
         borderRadius: '2px',
@@ -130,7 +130,7 @@ const styles = {
         textAlign: 'left',
     },
     dangerItem: {
-        color: '#ed4245',
+        color: '#f23f42',
     },
     icon: {
         fontSize: '16px',

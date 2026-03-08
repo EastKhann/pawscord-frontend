@@ -47,13 +47,19 @@ export const AuthProvider = ({ children }) => {
                 scheduleTokenRefresh(data.access);
                 return true;
             } else {
-                console.error('❌ [Auth] Token refresh failed:', response.status);
-                logout();
+                // 401/403 = refresh token genuinely expired or blacklisted → must logout
+                // Any other status (500, 502 etc.) = server/network issue → don't logout
+                if (response.status === 401 || response.status === 403) {
+                    console.error('❌ [Auth] Refresh token expired/invalid, logging out');
+                    logout();
+                } else {
+                    console.warn(`⚠️ [Auth] Token refresh server error (${response.status}), will retry on next request`);
+                }
                 return false;
             }
         } catch (error) {
-            console.error('❌ [Auth] Token refresh error:', error);
-            logout();
+            // Network error (offline, DNS fail, etc.) — do NOT logout, user will recover when back online
+            console.warn('⚠️ [Auth] Token refresh network error (staying logged in):', error.message);
             return false;
         }
     }, []);

@@ -1,4 +1,4 @@
-// frontend/src/components/ServerMembers.js
+﻿// frontend/src/components/ServerMembers.js
 
 import { useState, useEffect } from 'react';
 import { FaCrown, FaUserShield, FaSearch, FaCheck } from 'react-icons/fa';
@@ -154,7 +154,7 @@ const ServerMembers = ({ members, roles, serverId, fetchWithAuth, apiBaseUrl, on
                                                         key={role.id}
                                                         style={{
                                                             ...styles.roleBadge,
-                                                            backgroundColor: role.color || '#99aab5'
+                                                            backgroundColor: role.color || '#949ba4'
                                                         }}
                                                     >
                                                         {role.name}
@@ -212,21 +212,21 @@ const styles = {
     searchIcon: {
         position: 'absolute',
         left: '12px',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '14px'
     },
     searchInput: {
         width: '100%',
         padding: '10px 10px 10px 36px',
-        backgroundColor: '#1e1f22',
-        border: '1px solid #40444b',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #182135',
         borderRadius: '8px',
         color: '#fff',
         fontSize: '14px',
         outline: 'none'
     },
     memberCount: {
-        color: '#b9bbbe',
+        color: '#b5bac1',
         fontSize: '13px',
         fontWeight: 600,
         textTransform: 'uppercase',
@@ -241,13 +241,13 @@ const styles = {
     },
     loadingText: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px',
         fontSize: '14px'
     },
     emptyState: {
         textAlign: 'center',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         padding: '40px',
         display: 'flex',
         flexDirection: 'column',
@@ -268,7 +268,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '12px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         transition: 'background-color 0.2s'
     },
@@ -337,8 +337,8 @@ const styles = {
     },
     roleSelect: {
         padding: '6px 12px',
-        backgroundColor: '#1e1f22',
-        border: '1px solid #40444b',
+        backgroundColor: '#0d0e10',
+        border: '1px solid #182135',
         borderRadius: '4px',
         color: '#fff',
         fontSize: '13px',

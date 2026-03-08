@@ -12,7 +12,7 @@
 }
 
 .twofa-modal-content {
-    background: var(--background-primary, #36393f);
+    background: var(--background-primary, #17191c);
     border-radius: 8px;
     padding: 30px;
     max-width: 500px;
@@ -20,7 +20,7 @@
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    color: var(--text-normal, #dcddde);
+    color: var(--text-normal, #dbdee1);
 }
 
 .twofa-close-btn {
@@ -30,7 +30,7 @@
     background: transparent;
     border: none;
     font-size: 28px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     cursor: pointer;
     width: 36px;
     height: 36px;
@@ -48,7 +48,7 @@
 
 .twofa-modal-content h2 {
     margin: 0 0 20px 0;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
 }
 
@@ -66,7 +66,7 @@
 
 .twofa-step p {
     margin: 0;
-    color: var(--text-muted, #b9bbbe);
+    color: var(--text-muted, #b5bac1);
     line-height: 1.5;
 }
 
@@ -75,14 +75,14 @@
     height: 256px;
     margin: 20px auto;
     display: block;
-    border: 4px solid var(--background-secondary, #2f3136);
+    border: 4px solid var(--background-secondary, #111214);
     border-radius: 8px;
     padding: 10px;
     background: white;
 }
 
 .twofa-secret {
-    background: var(--background-secondary, #2f3136);
+    background: var(--background-secondary, #111214);
     padding: 15px;
     border-radius: 6px;
     text-align: center;
@@ -119,8 +119,8 @@
     font-size: 32px;
     text-align: center;
     letter-spacing: 10px;
-    background: var(--background-secondary, #2f3136);
-    border: 2px solid var(--background-tertiary, #202225);
+    background: var(--background-secondary, #111214);
+    border: 2px solid var(--background-tertiary, #0d0e10);
     border-radius: 6px;
     color: var(--text-normal, #fff);
     font-family: 'Courier New', monospace;
@@ -174,7 +174,7 @@
     padding: 12px 24px;
     font-size: 16px;
     font-weight: 600;
-    border: 2px solid var(--background-tertiary, #202225);
+    border: 2px solid var(--background-tertiary, #0d0e10);
     background: transparent;
     color: var(--text-normal, #fff);
     border-radius: 4px;
@@ -197,10 +197,10 @@
 
 .twofa-warning {
     background: rgba(250, 166, 26, 0.1);
-    border-left: 4px solid #faa61a;
+    border-left: 4px solid #f0b232;
     padding: 12px;
     border-radius: 4px;
-    color: #faa61a;
+    color: #f0b232;
     font-weight: 600;
 }
 
@@ -208,13 +208,13 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    background: var(--background-secondary, #2f3136);
+    background: var(--background-secondary, #111214);
     padding: 20px;
     border-radius: 6px;
 }
 
 .twofa-backup-code {
-    background: var(--background-tertiary, #202225);
+    background: var(--background-tertiary, #0d0e10);
     padding: 12px;
     border-radius: 4px;
     text-align: center;
@@ -228,16 +228,16 @@
 .twofa-loading {
     text-align: center;
     padding: 40px;
-    color: var(--text-muted, #72767d);
+    color: var(--text-muted, #949ba4);
     font-size: 16px;
 }
 
 .twofa-error {
     background: rgba(237, 66, 69, 0.1);
-    border-left: 4px solid #ed4245;
+    border-left: 4px solid #f23f42;
     padding: 12px;
     border-radius: 4px;
-    color: #ed4245;
+    color: #f23f42;
     font-weight: 600;
 }
 
@@ -256,7 +256,7 @@
     }
 
     .twofa-code-input {
-        font-size: 24px;
+        font-size: 20px;
         letter-spacing: 6px;
     }
 }

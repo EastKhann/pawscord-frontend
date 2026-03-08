@@ -15,30 +15,30 @@
 }
 
 .stage-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    border-radius: 12px;
     width: 90%;
     max-width: 900px;
     max-height: 85vh;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
 }
 
 .stage-header {
     padding: 24px 32px;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    border-bottom: 1px solid rgba(88, 101, 242, 0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(139, 92, 246, 0.05);
+    background: rgba(88, 101, 242, 0.05);
 }
 
 .stage-header h2 {
     margin: 0;
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .header-actions {
@@ -48,9 +48,9 @@
 }
 
 .view-toggle {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    color: #8b5cf6;
+    background: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    color: #5865f2;
     padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
@@ -59,19 +59,19 @@
 }
 
 .view-toggle.active {
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    background: linear-gradient(135deg, #5865f2, #4752c4);
     color: white;
     border-color: transparent;
 }
 
 .view-toggle:hover:not(.active) {
-    background: rgba(139, 92, 246, 0.2);
+    background: rgba(88, 101, 242, 0.2);
 }
 
 .close-btn {
     background: none;
     border: none;
-    color: #e2e3ee;
+    color: #dbdee1;
     font-size: 28px;
     cursor: pointer;
     padding: 0;
@@ -86,21 +86,21 @@
 
 .close-btn:hover {
     background: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+    color: #f23f42;
     transform: rotate(90deg);
 }
 
 .stage-loading {
     padding: 60px;
     text-align: center;
-    color: #e2e3ee;
+    color: #dbdee1;
 }
 
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid rgba(139, 92, 246, 0.2);
-    border-top-color: #8b5cf6;
+    border: 4px solid rgba(88, 101, 242, 0.2);
+    border-top-color: #5865f2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto 16px;
@@ -126,16 +126,16 @@
 }
 
 .stage-card {
-    background: rgba(139, 92, 246, 0.05);
-    border: 1px solid rgba(139, 92, 246, 0.2);
+    background: rgba(88, 101, 242, 0.05);
+    border: 1px solid rgba(88, 101, 242, 0.2);
     border-radius: 16px;
     padding: 24px;
     transition: all 0.3s;
 }
 
 .stage-card:hover {
-    border-color: #8b5cf6;
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    border-color: #5865f2;
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
 }
 
 .stage-info {
@@ -168,18 +168,18 @@
     display: flex;
     gap: 16px;
     font-size: 13px;
-    color: #8b5cf6;
+    color: #5865f2;
     flex-wrap: wrap;
 }
 
 .speakers-list {
     margin: 16px 0;
     padding-top: 16px;
-    border-top: 1px solid rgba(139, 92, 246, 0.1);
+    border-top: 1px solid rgba(88, 101, 242, 0.1);
 }
 
 .speakers-list h4 {
-    color: #8b5cf6;
+    color: #5865f2;
     font-size: 14px;
     margin: 0 0 12px 0;
 }
@@ -191,9 +191,9 @@
 }
 
 .speaker-badge {
-    background: rgba(139, 92, 246, 0.1);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    border-radius: 20px;
+    background: rgba(88, 101, 242, 0.1);
+    border: 1px solid rgba(88, 101, 242, 0.3);
+    border-radius: 12px;
     padding: 6px 14px;
     display: flex;
     align-items: center;
@@ -202,7 +202,7 @@
 }
 
 .speaker-badge.more {
-    color: #8b5cf6;
+    color: #5865f2;
     font-weight: 600;
 }
 
@@ -211,7 +211,7 @@
 }
 
 .speaker-name {
-    color: #e2e3ee;
+    color: #dbdee1;
 }
 
 .stage-actions {
@@ -223,7 +223,7 @@
 .join-stage-btn {
     flex: 1;
     padding: 12px;
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    background: linear-gradient(135deg, #5865f2, #4752c4);
     color: white;
     border: none;
     border-radius: 8px;
@@ -235,13 +235,13 @@
 
 .join-stage-btn:hover {
     transform: scale(1.02);
-    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 16px rgba(88, 101, 242, 0.4);
 }
 
 .leave-stage-btn {
     padding: 12px 24px;
     background: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+    color: #f23f42;
     border: 1px solid rgba(255, 59, 48, 0.3);
     border-radius: 8px;
     font-size: 15px;
@@ -258,7 +258,7 @@
     flex: 1;
     padding: 12px;
     background: rgba(52, 199, 89, 0.1);
-    color: #34c759;
+    color: #23a559;
     border: 1px solid rgba(52, 199, 89, 0.3);
     border-radius: 8px;
     font-size: 15px;
@@ -274,12 +274,12 @@
 .no-stages {
     text-align: center;
     padding: 60px;
-    color: #6c6d7d;
+    color: #949ba4;
 }
 
 .no-stages button {
     margin-top: 16px;
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    background: linear-gradient(135deg, #5865f2, #4752c4);
     color: white;
     border: none;
     padding: 12px 24px;
@@ -310,7 +310,7 @@
 
 .form-group label {
     display: block;
-    color: #8b5cf6;
+    color: #5865f2;
     font-weight: 600;
     margin-bottom: 8px;
     font-size: 14px;
@@ -320,8 +320,8 @@
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    background: rgba(139, 92, 246, 0.05);
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    background: rgba(88, 101, 242, 0.05);
+    border: 2px solid rgba(88, 101, 242, 0.3);
     border-radius: 8px;
     color: #ffffff;
     font-size: 14px;
@@ -332,8 +332,8 @@
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #8b5cf6;
-    background: rgba(139, 92, 246, 0.1);
+    border-color: #5865f2;
+    background: rgba(88, 101, 242, 0.1);
 }
 
 .form-group textarea {
@@ -359,7 +359,7 @@
 }
 
 .checkbox-group span {
-    color: #e2e3ee;
+    color: #dbdee1;
     font-weight: normal;
 }
 
@@ -372,7 +372,7 @@
 .submit-btn {
     flex: 1;
     padding: 14px;
-    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    background: linear-gradient(135deg, #5865f2, #4752c4);
     color: white;
     border: none;
     border-radius: 8px;
@@ -384,13 +384,13 @@
 
 .submit-btn:hover {
     transform: scale(1.02);
-    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 24px rgba(88, 101, 242, 0.4);
 }
 
 .cancel-btn {
     padding: 14px 24px;
     background: rgba(255, 59, 48, 0.1);
-    color: #ff3b30;
+    color: #f23f42;
     border: 1px solid rgba(255, 59, 48, 0.3);
     border-radius: 8px;
     font-size: 16px;

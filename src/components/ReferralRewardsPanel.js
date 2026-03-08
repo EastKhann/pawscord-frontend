@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaGift, FaTrophy, FaCoins, FaUsers } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -101,7 +101,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                         </div>
                         <div style={styles.statCard}>
                             <div style={styles.statIcon}>
-                                <FaCoins style={{ color: '#faa61a', fontSize: '24px' }} />
+                                <FaCoins style={{ color: '#f0b232', fontSize: '24px' }} />
                             </div>
                             <div>
                                 <div style={styles.statValue}>{stats.coins_earned || 0}</div>
@@ -110,7 +110,7 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                         </div>
                         <div style={styles.statCard}>
                             <div style={styles.statIcon}>
-                                <FaTrophy style={{ color: '#43b581', fontSize: '24px' }} />
+                                <FaTrophy style={{ color: '#23a559', fontSize: '24px' }} />
                             </div>
                             <div>
                                 <div style={styles.statValue}>{stats.rewards_claimed || 0}</div>
@@ -131,9 +131,9 @@ const ReferralRewardsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) 
                             {rewards.map((reward, idx) => (
                                 <div key={idx} style={styles.rewardCard}>
                                     <div style={styles.rewardIcon}>
-                                        {reward.type === 'coins' && <FaCoins style={{ color: '#faa61a', fontSize: '32px' }} />}
+                                        {reward.type === 'coins' && <FaCoins style={{ color: '#f0b232', fontSize: '32px' }} />}
                                         {reward.type === 'badge' && <FaTrophy style={{ color: '#5865f2', fontSize: '32px' }} />}
-                                        {reward.type === 'item' && <FaGift style={{ color: '#43b581', fontSize: '32px' }} />}
+                                        {reward.type === 'item' && <FaGift style={{ color: '#23a559', fontSize: '32px' }} />}
                                     </div>
                                     <div style={styles.rewardInfo}>
                                         <div style={styles.rewardName}>{reward.name}</div>
@@ -203,7 +203,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -217,19 +217,19 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     referralSection: {
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
-        backgroundColor: '#2c2f33',
+        borderBottom: '1px solid #0e1222',
+        backgroundColor: '#111214',
     },
     referralLabel: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '8px',
     },
     referralLinkBox: {
@@ -258,7 +258,7 @@ const styles = {
     },
     referralHint: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         fontStyle: 'italic',
     },
     statsSection: {
@@ -266,10 +266,10 @@ const styles = {
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '16px',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     statCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -287,7 +287,7 @@ const styles = {
     },
     statLabel: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     content: {
         padding: '20px',
@@ -302,12 +302,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     rewardsList: {
@@ -316,7 +316,7 @@ const styles = {
         gap: '12px',
     },
     rewardCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -337,12 +337,12 @@ const styles = {
     },
     rewardDescription: {
         fontSize: '13px',
-        color: '#dcddde',
+        color: '#dbdee1',
         marginBottom: '6px',
     },
     rewardRequirement: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginBottom: '8px',
     },
     progressBar: {
@@ -362,7 +362,7 @@ const styles = {
     claimButton: {
         width: '100%',
         padding: '10px 20px',
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         border: 'none',
         borderRadius: '4px',
         color: '#ffffff',
@@ -373,10 +373,10 @@ const styles = {
     claimedBadge: {
         width: '100%',
         padding: '10px 20px',
-        backgroundColor: '#2c2f33',
-        border: '1px solid #43b581',
+        backgroundColor: '#111214',
+        border: '1px solid #23a559',
         borderRadius: '4px',
-        color: '#43b581',
+        color: '#23a559',
         textAlign: 'center',
         fontSize: '14px',
         fontWeight: '600',
@@ -384,10 +384,10 @@ const styles = {
     lockedBadge: {
         width: '100%',
         padding: '10px 20px',
-        backgroundColor: '#2c2f33',
-        border: '1px solid #99aab5',
+        backgroundColor: '#111214',
+        border: '1px solid #949ba4',
         borderRadius: '4px',
-        color: '#99aab5',
+        color: '#949ba4',
         textAlign: 'center',
         fontSize: '14px',
         fontWeight: '600',

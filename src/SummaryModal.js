@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { FaTimes, FaMagic, FaRobot } from 'react-icons/fa';
 import useModalA11y from './hooks/useModalA11y';
 
@@ -66,10 +66,10 @@ const styles = {
     modal: {
         width: '90%',
         maxWidth: '500px',
-        backgroundColor: '#2b2d31', // Discord koyu gri
+        backgroundColor: '#111214', // Discord koyu gri
         borderRadius: '12px',
         boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-        border: '1px solid #1e1f22',
+        border: '1px solid #0b0e1b',
         overflow: 'hidden',
         animation: 'popIn 0.3s ease-out'
     },
@@ -78,8 +78,8 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '15px 20px',
-        backgroundColor: '#1e1f22',
-        borderBottom: '1px solid #111214'
+        backgroundColor: '#0d0e10',
+        borderBottom: '1px solid #0e1222'
     },
     headerTitle: {
         display: 'flex',
@@ -92,7 +92,7 @@ const styles = {
     closeBtn: {
         background: 'none',
         border: 'none',
-        color: '#b9bbbe',
+        color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '1.2em',
         padding: '5px',
@@ -104,7 +104,7 @@ const styles = {
         minHeight: '150px',
         maxHeight: '60vh',
         overflowY: 'auto',
-        color: '#dcddde',
+        color: '#dbdee1',
         lineHeight: '1.5',
         fontSize: '0.95em'
     },

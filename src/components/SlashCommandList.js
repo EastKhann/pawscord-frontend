@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { FaUserShield, FaVolumeMute, FaBan, FaBroom, FaUserEdit, FaRegSmile, FaTable, FaUndo, FaFont, FaTerminal, FaCode, FaStickyNote } from 'react-icons/fa';
 
 export const COMMANDS = [
@@ -56,7 +56,7 @@ const SlashCommandList = ({ query, onSelect, activeIndex }) => {
                         </div>
                         <div style={styles.textWrapper}>
                             <span style={{ fontWeight: 'bold', color: 'white' }}>/{cmd.name}</span>
-                            <span style={{ fontSize: '0.85em', color: index === activeIndex ? '#eee' : '#b9bbbe', marginLeft: 8 }}>
+                            <span style={{ fontSize: '0.85em', color: index === activeIndex ? '#eee' : '#b5bac1', marginLeft: 8 }}>
                                 {cmd.description}
                             </span>
                         </div>
@@ -74,7 +74,7 @@ const styles = {
         left: 0,
         width: '300px',
         maxHeight: '300px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         boxShadow: '0 -4px 15px rgba(0,0,0,0.4)',
         display: 'flex',
@@ -88,8 +88,8 @@ const styles = {
         padding: '8px 12px',
         fontSize: '0.75em',
         fontWeight: 'bold',
-        color: '#b9bbbe',
-        backgroundColor: '#202225',
+        color: '#b5bac1',
+        backgroundColor: '#0d0e10',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
         display: 'flex',
         alignItems: 'center',

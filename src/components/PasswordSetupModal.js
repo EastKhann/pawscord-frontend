@@ -87,7 +87,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
         return strength;
     };
 
-    const strengthColors = ['#f04747', '#faa61a', '#faa61a', '#43b581', '#43b581', '#43b581'];
+    const strengthColors = ['#f23f42', '#f0b232', '#f0b232', '#23a559', '#23a559', '#23a559'];
     const strengthLabels = ['Çok Zayıf', 'Zayıf', 'Orta', 'İyi', 'Güçlü', 'Çok Güçlü'];
     const strength = getPasswordStrength();
 
@@ -153,7 +153,7 @@ const PasswordSetupModal = ({ onClose, apiBaseUrl }) => {
                                         />
                                     ))}
                                 </div>
-                                <span style={{ color: strengthColors[strength - 1] || '#72767d' }}>
+                                <span style={{ color: strengthColors[strength - 1] || '#949ba4' }}>
                                     {strengthLabels[strength - 1] || 'Şifre girin'}
                                 </span>
                             </div>

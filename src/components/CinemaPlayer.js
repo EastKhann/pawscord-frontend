@@ -1,4 +1,4 @@
-
+﻿
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 const ReactPlayer = lazy(() => import('react-player'));
 import { FaPlay, FaPause, FaLink, FaExclamationCircle } from 'react-icons/fa';
@@ -53,7 +53,7 @@ const CinemaPlayer = () => {
             <div style={styles.playerWrapper}>
                 {error && (
                     <div style={styles.statusOverlay}>
-                        <FaExclamationCircle size={40} color="#f04747" />
+                        <FaExclamationCircle size={40} color="#f23f42" />
                         <p style={{ marginTop: 10 }}>{error}</p>
                     </div>
                 )}
@@ -95,7 +95,7 @@ const CinemaPlayer = () => {
                     onClick={handlePlayPause}
                     style={{
                         ...styles.btn,
-                        backgroundColor: playing ? '#da373c' : '#43b581',
+                        backgroundColor: playing ? '#da373c' : '#23a559',
                         width: '40px', height: '40px', borderRadius: '50%',
                         display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}
@@ -104,7 +104,7 @@ const CinemaPlayer = () => {
                 </button>
 
                 <form onSubmit={handleLoadUrl} style={styles.urlForm}>
-                    <FaLink style={{ color: '#b9bbbe' }} />
+                    <FaLink style={{ color: '#b5bac1' }} />
                     <input
                         type="text"
                         value={inputUrl}
@@ -138,10 +138,10 @@ const styles = {
         flex: 1, position: 'relative', overflow: 'hidden'
     },
     controls: {
-        padding: '10px', display: 'flex', gap: '10px', backgroundColor: '#202225', alignItems: 'center'
+        padding: '10px', display: 'flex', gap: '10px', backgroundColor: '#0d0e10', alignItems: 'center'
     },
     urlForm: {
-        flex: 1, display: 'flex', gap: '8px', backgroundColor: '#40444b', padding: '5px 10px', borderRadius: '4px', alignItems: 'center'
+        flex: 1, display: 'flex', gap: '8px', backgroundColor: '#1e2024', padding: '5px 10px', borderRadius: '4px', alignItems: 'center'
     },
     input: {
         flex: 1, background: 'transparent', border: 'none', color: 'white', outline: 'none', fontSize: '14px'

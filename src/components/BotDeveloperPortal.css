@@ -1,4 +1,4 @@
-/* BotDeveloperPortal.css */
+﻿/* BotDeveloperPortal.css */
 .bot-portal-overlay {
     position: fixed;
     top: 0;
@@ -14,7 +14,7 @@
 }
 
 .bot-portal-panel {
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 12px;
     width: 95%;
     max-width: 1100px;
@@ -30,8 +30,8 @@
     align-items: center;
     gap: 16px;
     padding: 16px 20px;
-    background: linear-gradient(135deg, #5865f2, #8b5cf6);
-    border-bottom: 1px solid #3f4147;
+    background: linear-gradient(135deg, #5865f2, #5865f2);
+    border-bottom: 1px solid #182135;
 }
 
 .portal-header h2 {
@@ -105,7 +105,7 @@
 }
 
 .bot-card {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     padding: 20px;
     transition: all 0.2s;
@@ -143,7 +143,7 @@
 
 .bot-status {
     font-size: 12px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .bot-status.online {
@@ -160,7 +160,7 @@
     height: 32px;
     border-radius: 6px;
     border: none;
-    background: #2b2d31;
+    background: #0e1222;
     color: #b5bac1;
     cursor: pointer;
     display: flex;
@@ -170,7 +170,7 @@
 }
 
 .action-btn:hover {
-    background: #3f4147;
+    background: #182135;
     color: #fff;
 }
 
@@ -190,14 +190,14 @@
     gap: 16px;
     margin-bottom: 16px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #3f4147;
+    border-bottom: 1px solid #182135;
 }
 
 .stat {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #72767d;
+    color: #949ba4;
     font-size: 13px;
 }
 
@@ -206,7 +206,7 @@
 }
 
 .bot-token-section {
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 8px;
     padding: 12px;
     margin-bottom: 16px;
@@ -227,7 +227,7 @@
     margin-left: auto;
     background: transparent;
     border: none;
-    color: #72767d;
+    color: #949ba4;
     cursor: pointer;
     padding: 4px;
 }
@@ -245,10 +245,10 @@
 
 .token-value code {
     flex: 1;
-    background: #1e1f22;
+    background: #0b0e1b;
     padding: 8px 12px;
     border-radius: 4px;
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     font-family: 'Consolas', monospace;
     overflow: hidden;
@@ -258,7 +258,7 @@
 
 .copy-btn {
     padding: 8px;
-    background: #3f4147;
+    background: #182135;
     border: none;
     border-radius: 4px;
     color: #b5bac1;
@@ -312,12 +312,12 @@
 }
 
 .webhook-btn {
-    background: #3f4147;
+    background: #182135;
     color: #fff;
 }
 
 .webhook-btn:hover {
-    background: #4f545c;
+    background: #4e5058;
 }
 
 .analytics-btn {
@@ -333,12 +333,12 @@
 .no-bots {
     text-align: center;
     padding: 80px 20px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .no-bots .empty-icon {
     font-size: 64px;
-    color: #3f4147;
+    color: #1e2024;
     margin-bottom: 16px;
 }
 
@@ -384,8 +384,8 @@
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    background: #1e1f22;
-    border: 1px solid #3f4147;
+    background: #0b0e1b;
+    border: 1px solid #182135;
     border-radius: 6px;
     color: #fff;
     font-size: 14px;
@@ -409,7 +409,7 @@
     align-items: center;
     gap: 8px;
     padding: 10px 12px;
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 6px;
     cursor: pointer;
     color: #b5bac1;
@@ -418,7 +418,7 @@
 }
 
 .intent-checkbox:hover {
-    background: #2b2d31;
+    background: #0e1222;
 }
 
 .intent-checkbox input {
@@ -464,7 +464,7 @@
 
 .cancel-btn {
     padding: 14px 28px;
-    background: #3f4147;
+    background: #182135;
     border: none;
     border-radius: 8px;
     color: #b5bac1;
@@ -473,7 +473,7 @@
 }
 
 .cancel-btn:hover {
-    background: #4f545c;
+    background: #4e5058;
 }
 
 /* Analytics View */
@@ -509,7 +509,7 @@
 }
 
 .analytics-card {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     padding: 24px;
     text-align: center;
@@ -523,16 +523,16 @@
 }
 
 .analytics-label {
-    color: #72767d;
+    color: #949ba4;
     font-size: 13px;
 }
 
 .analytics-chart-placeholder {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     padding: 60px;
     text-align: center;
-    color: #72767d;
+    color: #949ba4;
 }
 
 /* Documentation */
@@ -545,7 +545,7 @@
 }
 
 .docs-section {
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
@@ -618,7 +618,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 6px;
 }
 
@@ -649,7 +649,7 @@
 
 .endpoint span:last-child,
 .event span:last-child {
-    color: #72767d;
+    color: #949ba4;
     font-size: 13px;
     margin-left: auto;
 }
@@ -665,7 +665,7 @@
 }
 
 .webhook-modal {
-    background: #2b2d31;
+    background: #0e1222;
     border-radius: 12px;
     padding: 24px;
     width: 90%;
@@ -691,7 +691,7 @@
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    background: #1e1f22;
+    background: #0b0e1b;
     border-radius: 6px;
     cursor: pointer;
     color: #b5bac1;
@@ -707,7 +707,7 @@
 .loading {
     text-align: center;
     padding: 40px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 @keyframes fadeIn {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import toast from '../../../utils/toast';
 import SettingSection from '../components/SettingSection';
@@ -37,7 +37,7 @@ const AdvancedTab = () => {
                 </div>
             </SettingSection>
             <SettingSection title="Hata Ayıklama">
-                <div style={{ padding: 12, backgroundColor: '#1e1f22', borderRadius: 8, fontFamily: 'monospace', fontSize: 12, color: '#949ba4' }}>
+                <div style={{ padding: 12, backgroundColor: '#0d0e10', borderRadius: 8, fontFamily: 'monospace', fontSize: 12, color: '#949ba4' }}>
                     <div>App Version: {window.__PAWSCORD_VERSION__ || '2.0.0'}</div>
                     <div>Build: {document.querySelector('script[src*="index-"]')?.src?.match(/index-(\w+)/)?.[1] || 'dev'}</div>
                     <div>Platform: {navigator.userAgent.includes('Electron') ? 'Desktop' : navigator.userAgent.includes('Android') ? 'Android' : 'Web'}</div>

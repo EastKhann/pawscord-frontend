@@ -12,10 +12,10 @@ import React from 'react';
  *   - size: piksel boyutu (varsayılan 16)
  */
 const qualityConfig = {
-    excellent: { bars: 4, color: '#43b581', label: 'Mükemmel' },
+    excellent: { bars: 4, color: '#23a559', label: 'Mükemmel' },
     good: { bars: 3, color: '#7BC96F', label: 'İyi' },
-    fair: { bars: 2, color: '#faa61a', label: 'Orta' },
-    poor: { bars: 1, color: '#f04747', label: 'Zayıf' },
+    fair: { bars: 2, color: '#f0b232', label: 'Orta' },
+    poor: { bars: 1, color: '#f23f42', label: 'Zayıf' },
 };
 
 const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore, size = 16 }) => {

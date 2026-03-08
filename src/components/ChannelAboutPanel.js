@@ -1,4 +1,4 @@
-// frontend/src/components/ChannelAboutPanel.js
+﻿// frontend/src/components/ChannelAboutPanel.js
 // ℹ️ FEATURE 10: Channel About / Info Panel
 // Shows channel details, topic, creation date, member count, pinned msgs
 
@@ -122,7 +122,7 @@ const ChannelAboutPanel = ({
 const S = {
     panel: {
         width: 280, height: '100%',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderLeft: '1px solid rgba(255,255,255,0.06)',
         display: 'flex', flexDirection: 'column',
         flexShrink: 0,

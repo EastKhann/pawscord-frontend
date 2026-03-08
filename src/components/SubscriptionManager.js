@@ -1,4 +1,4 @@
-// frontend/src/components/SubscriptionManager.js
+﻿// frontend/src/components/SubscriptionManager.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCrown, FaCreditCard, FaCheck, FaHistory, FaBan, FaGift, FaArrowRight } from 'react-icons/fa';
 import confirmDialog from '../utils/confirmDialog';
@@ -71,7 +71,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
             name: 'Ücretsiz',
             price: '$0',
             features: ['Temel Sohbet', '8MB Upload', 'Standart Ses'],
-            color: '#747f8d',
+            color: '#80848e',
             current: false
         },
         {
@@ -141,7 +141,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                                 <span style={{
                                                     ...styles.statusBadge,
                                                     backgroundColor: sub.status === 'active' ? 'rgba(59,165,93,0.2)' : 'rgba(237,66,69,0.2)',
-                                                    color: sub.status === 'active' ? '#3ba55d' : '#ed4245'
+                                                    color: sub.status === 'active' ? '#3ba55d' : '#f23f42'
                                                 }}>
                                                     {sub.status === 'active' ? 'Aktif' : 'İptal Edildi'}
                                                 </span>
@@ -234,7 +234,7 @@ const SubscriptionManager = ({ fetchWithAuth, apiBaseUrl, username, onClose }) =
                                             <FaCreditCard style={{ fontSize: '24px', color: '#5865f2' }} />
                                             <div>
                                                 <div style={{ color: '#fff', fontWeight: 'bold' }}>•••• •••• •••• 4242</div>
-                                                <div style={{ color: '#72767d', fontSize: '12px' }}>Son kullanma: 12/28</div>
+                                                <div style={{ color: '#949ba4', fontSize: '12px' }}>Son kullanma: 12/28</div>
                                             </div>
                                             <span style={styles.defaultBadge}>Varsayılan</span>
                                         </div>
@@ -260,7 +260,7 @@ const styles = {
         backdropFilter: 'blur(4px)'
     },
     modal: {
-        backgroundColor: '#36393f', borderRadius: '12px', width: '90%', maxWidth: '800px',
+        backgroundColor: '#17191c', borderRadius: '12px', width: '90%', maxWidth: '800px',
         maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column'
     },
     header: {
@@ -269,7 +269,7 @@ const styles = {
     },
     title: { margin: 0, color: '#fff', fontSize: '1.3em' },
     closeBtn: {
-        background: 'none', border: 'none', color: '#b9bbbe', fontSize: '20px', cursor: 'pointer'
+        background: 'none', border: 'none', color: '#b5bac1', fontSize: '20px', cursor: 'pointer'
     },
     tabs: {
         display: 'flex', padding: '0 24px', borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -284,24 +284,24 @@ const styles = {
         color: '#fff', borderBottomColor: '#5865f2'
     },
     content: { flex: 1, overflow: 'auto', padding: '20px 24px' },
-    loading: { textAlign: 'center', color: '#72767d', padding: '40px' },
-    empty: { textAlign: 'center', color: '#72767d', padding: '40px' },
+    loading: { textAlign: 'center', color: '#949ba4', padding: '40px' },
+    empty: { textAlign: 'center', color: '#949ba4', padding: '40px' },
     subscriptionsList: { display: 'flex', flexDirection: 'column', gap: '16px' },
     subCard: {
-        backgroundColor: '#2f3136', borderRadius: '8px', padding: '20px',
+        backgroundColor: '#111214', borderRadius: '8px', padding: '20px',
         border: '1px solid rgba(255,255,255,0.06)'
     },
     subHeader: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' },
     subName: { margin: 0, color: '#fff', fontSize: '16px' },
-    subPrice: { color: '#72767d', fontSize: '13px' },
+    subPrice: { color: '#949ba4', fontSize: '13px' },
     statusBadge: { padding: '4px 10px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold', marginLeft: 'auto' },
     subFeatures: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' },
-    feature: { display: 'flex', alignItems: 'center', gap: '4px', color: '#b9bbbe', fontSize: '12px' },
+    feature: { display: 'flex', alignItems: 'center', gap: '4px', color: '#b5bac1', fontSize: '12px' },
     subFooter: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)' },
-    nextBilling: { color: '#72767d', fontSize: '12px' },
+    nextBilling: { color: '#949ba4', fontSize: '12px' },
     cancelBtn: {
         display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px',
-        backgroundColor: 'rgba(237,66,69,0.2)', color: '#ed4245', border: '1px solid rgba(237,66,69,0.4)',
+        backgroundColor: 'rgba(237,66,69,0.2)', color: '#f23f42', border: '1px solid rgba(237,66,69,0.4)',
         borderRadius: '4px', cursor: 'pointer', fontSize: '13px'
     },
     resumeBtn: {
@@ -311,26 +311,26 @@ const styles = {
     },
     plansGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' },
     planCard: {
-        backgroundColor: '#2f3136', borderRadius: '12px', padding: '24px',
+        backgroundColor: '#111214', borderRadius: '12px', padding: '24px',
         position: 'relative', textAlign: 'center'
     },
     currentBadge: { position: 'absolute', top: '-1px', left: '50%', transform: 'translateX(-50%)', padding: '2px 12px', borderRadius: '0 0 8px 8px', color: '#fff', fontSize: '10px', fontWeight: 'bold' },
     planName: { margin: '12px 0 8px', fontSize: '18px' },
     planPrice: { color: '#fff', fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' },
     planFeatures: { textAlign: 'left' },
-    planFeature: { display: 'flex', alignItems: 'center', gap: '8px', color: '#b9bbbe', fontSize: '13px', marginBottom: '8px' },
+    planFeature: { display: 'flex', alignItems: 'center', gap: '8px', color: '#b5bac1', fontSize: '13px', marginBottom: '8px' },
     upgradeBtn: { width: '100%', padding: '10px', border: 'none', borderRadius: '4px', color: '#fff', cursor: 'pointer', fontWeight: 'bold', marginTop: '16px', fontSize: '14px' },
     historyList: { overflow: 'auto' },
     table: { width: '100%', borderCollapse: 'collapse' },
-    th: { textAlign: 'left', padding: '10px', color: '#72767d', fontSize: '12px', textTransform: 'uppercase', borderBottom: '1px solid rgba(255,255,255,0.06)' },
-    td: { padding: '12px 10px', color: '#dcddde', fontSize: '13px', borderBottom: '1px solid rgba(255,255,255,0.04)' },
+    th: { textAlign: 'left', padding: '10px', color: '#949ba4', fontSize: '12px', textTransform: 'uppercase', borderBottom: '1px solid rgba(255,255,255,0.06)' },
+    td: { padding: '12px 10px', color: '#dbdee1', fontSize: '13px', borderBottom: '1px solid rgba(255,255,255,0.04)' },
     paidBadge: { fontSize: '12px' },
     paymentSection: {},
     sectionTitle: { color: '#fff', fontSize: '16px', marginBottom: '16px' },
     paymentMethods: { display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' },
     paymentCard: {
         display: 'flex', alignItems: 'center', gap: '12px', padding: '16px',
-        backgroundColor: '#2f3136', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)'
+        backgroundColor: '#111214', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)'
     },
     defaultBadge: { marginLeft: 'auto', padding: '2px 8px', backgroundColor: 'rgba(88,101,242,0.2)', color: '#5865f2', borderRadius: '4px', fontSize: '11px' },
     addPaymentBtn: {

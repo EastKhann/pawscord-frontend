@@ -1,4 +1,4 @@
-export const styles = {
+﻿export const styles = {
   overlay: {
     position: 'fixed',
     top: 0, left: 0, right: 0, bottom: 0,
@@ -42,7 +42,7 @@ export const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    backgroundColor: '#2c2f33',
+    backgroundColor: '#111214',
     padding: '10px 15px',
     borderRadius: '8px'
   },
@@ -98,7 +98,7 @@ export const styles = {
     display: 'flex',
     gap: '15px',
     padding: '15px',
-    backgroundColor: '#2c2f33',
+    backgroundColor: '#111214',
     borderRadius: '8px',
     marginBottom: '10px',
     transition: 'background-color 0.2s'
@@ -110,7 +110,7 @@ export const styles = {
     marginBottom: '8px'
   },
   bookmarkText: {
-    color: '#dcddde',
+    color: '#dbdee1',
     marginBottom: '10px',
     cursor: 'pointer',
     lineHeight: '1.5'
@@ -140,7 +140,7 @@ export const styles = {
   deleteBtn: {
     backgroundColor: 'transparent',
     border: 'none',
-    color: '#ed4245',
+    color: '#f23f42',
     cursor: 'pointer',
     fontSize: '18px',
     padding: '10px',
@@ -167,7 +167,7 @@ export const styles = {
     zIndex: 9999999
   },
   newTagModal: {
-    backgroundColor: '#2c2f33',
+    backgroundColor: '#111214',
     padding: '30px',
     borderRadius: '8px',
     width: '90%',

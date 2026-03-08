@@ -21,7 +21,7 @@ export const getActivityColor = (type) => {
         case 'kick': case 'ban': return '#da373c';
         case 'suspicious': case 'raid_detected': return '#f0b132';
         case 'verified': return '#5865f2';
-        default: return '#72767d';
+        default: return '#949ba4';
     }
 };
 

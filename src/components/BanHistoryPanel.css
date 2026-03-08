@@ -1,4 +1,4 @@
-.banhistory-overlay {
+﻿.banhistory-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@
 }
 
 .banhistory-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 900px;
@@ -21,7 +21,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(244, 67, 54, 0.3);
+    box-shadow: 0 8px 32px rgba(244, 67, 54, 0.3);
     border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
@@ -45,7 +45,7 @@
 .server-name {
     background: rgba(255, 255, 255, 0.2);
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.85rem;
 }
 
@@ -171,7 +171,7 @@
 }
 
 .filters-bar select option {
-    background: #1a1a2e;
+    background: #0b0e1b;
 }
 
 .export-btn {
@@ -317,7 +317,7 @@
     align-items: center;
     gap: 6px;
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
 }

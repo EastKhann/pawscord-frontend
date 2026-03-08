@@ -13,7 +13,7 @@ const StoreTab = ({ storeItems, loading, balance, handleBuy }) => (
                 </div>
                 <h4>{item.name}</h4>
                 <p style={{ fontSize: '0.8em', color: '#999' }}>{item.description}</p>
-                {item.rarity && <span style={{ fontSize: '0.75em', color: '#b9bbbe', marginBottom: 6 }}>Nadirlik: {item.rarity}</span>}
+                {item.rarity && <span style={{ fontSize: '0.75em', color: '#b5bac1', marginBottom: 6 }}>Nadirlik: {item.rarity}</span>}
                 {item.is_owned ? (
                     <button style={styles.ownedBtn} disabled>Sahipsin</button>
                 ) : (

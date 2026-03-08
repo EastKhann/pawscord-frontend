@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🎫 InviteServerModal — Portal modal for inviting a user to a server
  * Extracted from App.js inline JSX
  */
@@ -29,15 +29,15 @@ export default function InviteServerModal({
             <div
                 {...dialogProps}
                 style={{
-                    backgroundColor: '#2b2d31', borderRadius: '12px',
+                    backgroundColor: '#111214', borderRadius: '12px',
                     width: '400px', maxHeight: '80vh', overflow: 'hidden',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
                 }}
             >
                 {/* Header */}
-                <div style={{ padding: '20px', borderBottom: '1px solid #3f4147', textAlign: 'center' }}>
+                <div style={{ padding: '20px', borderBottom: '1px solid #182135', textAlign: 'center' }}>
                     <h2 style={{ color: '#f2f3f5', margin: 0, fontSize: '18px' }}>🎫 Sunucuya Davet Et</h2>
-                    <p style={{ color: '#b9bbbe', margin: '8px 0 0', fontSize: '14px' }}>
+                    <p style={{ color: '#b5bac1', margin: '8px 0 0', fontSize: '14px' }}>
                         <strong>{inviteToServerUser.username}</strong> kullanıcısını hangi sunucuya davet etmek istiyorsunuz?
                     </p>
                 </div>
@@ -84,7 +84,7 @@ export default function InviteServerModal({
                             )}
                             <div style={{ flex: 1 }}>
                                 <div style={{ color: '#f2f3f5', fontWeight: '600' }}>{server.name}</div>
-                                <div style={{ color: '#b9bbbe', fontSize: '12px' }}>{server.member_count || 0} üye</div>
+                                <div style={{ color: '#b5bac1', fontSize: '12px' }}>{server.member_count || 0} üye</div>
                             </div>
                             <div style={{ color: '#5865f2', fontSize: '20px' }}>→</div>
                         </div>
@@ -92,10 +92,10 @@ export default function InviteServerModal({
                 </div>
 
                 {/* Footer */}
-                <div style={{ padding: '16px 20px', borderTop: '1px solid #3f4147', textAlign: 'center' }}>
+                <div style={{ padding: '16px 20px', borderTop: '1px solid #182135', textAlign: 'center' }}>
                     <button onClick={() => setInviteToServerUser(null)}
                         style={{
-                            backgroundColor: '#4f545c', color: '#f2f3f5', border: 'none',
+                            backgroundColor: '#4e5058', color: '#f2f3f5', border: 'none',
                             padding: '10px 24px', borderRadius: '4px', cursor: 'pointer', fontWeight: '600'
                         }}>İptal</button>
                 </div>

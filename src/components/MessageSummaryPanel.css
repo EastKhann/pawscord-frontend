@@ -1,4 +1,4 @@
-.summary-overlay {
+﻿.summary-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,8 +13,8 @@
 }
 
 .summary-panel {
-    background: linear-gradient(145deg, #1e1e2e 0%, #16161f 100%);
-    border-radius: 20px;
+    background: linear-gradient(145deg, #0d0e10 0%, #16161f 100%);
+    border-radius: 12px;
     width: 95%;
     max-width: 950px;
     max-height: 90vh;
@@ -136,7 +136,7 @@
 }
 
 .control-group select option {
-    background: #1e1e2e;
+    background: #0b0e1b;
     color: white;
 }
 
@@ -294,7 +294,7 @@
     background: rgba(0, 188, 212, 0.2);
     color: #4dd0e1;
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 12px;
     font-size: 0.8rem;
 }
 

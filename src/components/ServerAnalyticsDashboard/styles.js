@@ -1,4 +1,4 @@
-const styles = {
+﻿const styles = {
     overlay: {
         position: 'fixed',
         top: 0,
@@ -15,7 +15,7 @@ const styles = {
         width: '95%',
         maxWidth: '1200px',
         maxHeight: '90vh',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '12px',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
         display: 'flex',
@@ -27,7 +27,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px 24px',
-        borderBottom: '1px solid #202225',
+        borderBottom: '1px solid #0b0e1b',
     },
     headerLeft: {
         display: 'flex',
@@ -47,17 +47,17 @@ const styles = {
     },
     periodSelect: {
         padding: '8px 12px',
-        backgroundColor: '#36393f',
-        border: '1px solid #40444b',
+        backgroundColor: '#17191c',
+        border: '1px solid #182135',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '14px',
         cursor: 'pointer',
     },
     closeBtn: {
         background: 'none',
         border: 'none',
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '20px',
         cursor: 'pointer',
         padding: '4px',
@@ -73,13 +73,13 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '60px',
-        color: '#72767d',
+        color: '#949ba4',
         gap: '16px',
     },
     spinner: {
         width: '40px',
         height: '40px',
-        border: '3px solid #36393f',
+        border: '3px solid #121928',
         borderTopColor: '#5865f2',
         borderRadius: '50%',
         animation: 'spin 1s linear infinite',
@@ -90,7 +90,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '60px',
-        color: '#dcddde',
+        color: '#dbdee1',
         textAlign: 'center',
     },
     statsRow: {
@@ -104,7 +104,7 @@ const styles = {
         alignItems: 'center',
         gap: '16px',
         padding: '20px',
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
     },
     statIcon: {
@@ -122,7 +122,7 @@ const styles = {
         flexDirection: 'column',
     },
     statLabel: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px',
         marginBottom: '4px',
     },
@@ -132,7 +132,7 @@ const styles = {
         fontWeight: '700',
     },
     statSubtext: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '11px',
     },
     statChange: {
@@ -149,7 +149,7 @@ const styles = {
         marginBottom: '24px',
     },
     chartCard: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         padding: '20px',
     },
@@ -180,7 +180,7 @@ const styles = {
         minHeight: '4px',
     },
     barLabel: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '10px',
         marginTop: '4px',
     },
@@ -206,7 +206,7 @@ const styles = {
         marginBottom: '24px',
     },
     listCard: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         padding: '20px',
     },
@@ -229,7 +229,7 @@ const styles = {
         alignItems: 'center',
         gap: '12px',
         padding: '8px 12px',
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '4px',
     },
     listRank: {
@@ -238,15 +238,15 @@ const styles = {
         width: '24px',
     },
     listName: {
-        color: '#dcddde',
+        color: '#dbdee1',
         flex: 1,
     },
     listValue: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '12px',
     },
     emptyList: {
-        color: '#72767d',
+        color: '#949ba4',
         textAlign: 'center',
         padding: '20px',
     },
@@ -263,12 +263,12 @@ const styles = {
     contentBarLabel: {
         display: 'flex',
         justifyContent: 'space-between',
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '12px',
     },
     contentBarTrack: {
         height: '8px',
-        backgroundColor: '#202225',
+        backgroundColor: '#0d0e10',
         borderRadius: '4px',
         overflow: 'hidden',
     },
@@ -278,7 +278,7 @@ const styles = {
         transition: 'width 0.3s',
     },
     comparisonSection: {
-        backgroundColor: '#36393f',
+        backgroundColor: '#17191c',
         borderRadius: '8px',
         padding: '20px',
     },
@@ -294,7 +294,7 @@ const styles = {
         gap: '16px',
     },
     comparisonCard: {
-        backgroundColor: '#2f3136',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -314,11 +314,11 @@ const styles = {
         flexDirection: 'column',
     },
     comparisonPeriod: {
-        color: '#72767d',
+        color: '#949ba4',
         fontSize: '11px',
     },
     comparisonNumber: {
-        color: '#dcddde',
+        color: '#dbdee1',
         fontSize: '18px',
         fontWeight: '600',
     },

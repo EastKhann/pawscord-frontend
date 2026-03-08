@@ -34,7 +34,8 @@ const useAdminAPI = ({ fetchWithAuth, apiBaseUrl, onClose }) => {
         if (activeTab === 'logs') { fetch.fetchLogs(); fetch.fetchSystemLogs(); }
         if (activeTab === 'moderation') fetch.fetchBannedUsers();
         if (activeTab === 'database') fetch.fetchDbStats();
-    }, [activeTab, fetch.fetchUsers, fetch.fetchServers, fetch.fetchLogs, fetch.fetchBannedUsers, fetch.fetchDbStats, fetch.fetchSystemLogs]);
+        if (activeTab === 'visitorLogs') fetch.fetchVisitorLogs();
+    }, [activeTab, fetch.fetchUsers, fetch.fetchServers, fetch.fetchLogs, fetch.fetchBannedUsers, fetch.fetchDbStats, fetch.fetchSystemLogs, fetch.fetchVisitorLogs]);
 
     // Realtime auto-refresh every 10 seconds
     useEffect(() => {

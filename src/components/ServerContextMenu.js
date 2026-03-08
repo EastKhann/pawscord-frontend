@@ -1,4 +1,4 @@
-// frontend/src/components/ServerContextMenu.js
+﻿// frontend/src/components/ServerContextMenu.js
 import React, { useEffect, useRef } from 'react';
 import {
     FaCog,
@@ -105,14 +105,14 @@ const ServerContextMenu = ({
             label: 'Sunucu İkonunu Değiştir',
             action: onChangeIcon,
             show: isOwner,
-            color: '#faa61a'
+            color: '#f0b232'
         },
         {
             icon: server.is_public ? FaLock : FaGlobe,
             label: server.is_public ? 'Özel Yap' : 'Herkese Açık Yap',
             action: onChangePrivacy,
             show: isOwner,
-            color: server.is_public ? '#ed4245' : '#43b581'
+            color: server.is_public ? '#f23f42' : '#23a559'
         },
         {
             divider: true,
@@ -216,7 +216,7 @@ const styles = {
         padding: '8px 12px',
         color: '#fff',
         fontSize: '14px',
-        borderBottom: '1px solid #2b2d31',
+        borderBottom: '1px solid #0e1222',
         marginBottom: '4px',
     },
     menuItem: {
@@ -243,7 +243,7 @@ const styles = {
     },
     divider: {
         height: '1px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         margin: '4px 0',
     },
 };

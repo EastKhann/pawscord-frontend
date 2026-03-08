@@ -8,12 +8,12 @@ const PrivacyTab = ({ blockedUsers, unblockUser }) => {
     <div style={styles.card}>
       <h3 style={styles.sectionTitle}>🚫 Engellenmiş Kullanıcılar</h3>
 
-      <p style={{ color: '#b9bbbe', marginBottom: '24px' }}>
+      <p style={{ color: '#b5bac1', marginBottom: '24px' }}>
         Engellenmiş kullanıcılar sizinle iletişime geçemez ve mesajlarınızı göremez.
       </p>
 
       {blockedUsers.length === 0 && (
-        <p style={{ color: '#b9bbbe', textAlign: 'center', padding: '32px' }}>
+        <p style={{ color: '#b5bac1', textAlign: 'center', padding: '32px' }}>
           Engellenmiş kullanıcı yok.
         </p>
       )}
@@ -30,7 +30,7 @@ const PrivacyTab = ({ blockedUsers, unblockUser }) => {
               <p style={{ color: '#fff', margin: 0, fontWeight: '600' }}>
                 {blockedUser.username}
               </p>
-              <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+              <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
                 Engellenme: {new Date(blockedUser.blocked_at).toLocaleDateString('tr-TR')}
               </p>
             </div>
@@ -45,8 +45,8 @@ const PrivacyTab = ({ blockedUsers, unblockUser }) => {
       ))}
 
       <div style={{ marginTop: '32px', padding: '16px', background: 'rgba(250, 166, 26, 0.1)', borderRadius: '8px', border: '1px solid rgba(250, 166, 26, 0.3)' }}>
-        <h4 style={{ color: '#faa61a', margin: '0 0 8px 0', fontSize: '14px' }}>ℹ️ Gizlilik İpucu</h4>
-        <p style={{ color: '#b9bbbe', margin: 0, fontSize: '13px' }}>
+        <h4 style={{ color: '#f0b232', margin: '0 0 8px 0', fontSize: '14px' }}>ℹ️ Gizlilik İpucu</h4>
+        <p style={{ color: '#b5bac1', margin: 0, fontSize: '13px' }}>
           Bir kullanıcıyı engellemek için profil sayfasından "Engelle" butonunu kullanabilirsiniz.
         </p>
       </div>

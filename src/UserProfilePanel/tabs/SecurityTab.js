@@ -29,7 +29,7 @@ const SecurityTab = ({
 
         {!twoFactorEnabled && !twoFactorData && (
           <div>
-            <p style={{ color: '#b9bbbe', marginBottom: '16px' }}>
+            <p style={{ color: '#b5bac1', marginBottom: '16px' }}>
               Hesabınızı ekstra bir güvenlik katmanıyla koruyun. Giriş yaparken telefonunuzdaki
               doğrulama kodunu girmeniz istenecek.
             </p>
@@ -45,7 +45,7 @@ const SecurityTab = ({
 
         {twoFactorData && (
           <div>
-            <p style={{ color: '#b9bbbe', marginBottom: '16px' }}>
+            <p style={{ color: '#b5bac1', marginBottom: '16px' }}>
               Aşağıdaki QR kodunu Google Authenticator, Authy veya benzer bir uygulamayla tarayın:
             </p>
 
@@ -55,7 +55,7 @@ const SecurityTab = ({
               ) : (
                 <QRCodeSVG value={`otpauth://totp/Pawscord:${user.email}?secret=${twoFactorData.secret}&issuer=Pawscord`} size={200} />
               )}
-              <p style={{ color: '#b9bbbe', fontSize: '12px', marginTop: '12px' }}>
+              <p style={{ color: '#b5bac1', fontSize: '12px', marginTop: '12px' }}>
                 Manuel kod: <code style={{ background: 'rgba(0,0,0,0.3)', padding: '4px 8px', borderRadius: '4px' }}>{twoFactorData.secret}</code>
               </p>
             </div>
@@ -82,7 +82,7 @@ const SecurityTab = ({
             {backupCodes.length > 0 && (
               <div style={{ marginTop: '24px' }}>
                 <h4 style={{ color: '#fff', marginBottom: '12px' }}>🔑 Yedek Kodlar (Kaydedin!)</h4>
-                <p style={{ color: '#faa61a', fontSize: '13px', marginBottom: '12px' }}>
+                <p style={{ color: '#f0b232', fontSize: '13px', marginBottom: '12px' }}>
                   ⚠️ Bu kodları güvenli bir yerde saklayın! Telefonunuza erişemezseniz kullanabilirsiniz.
                 </p>
                 <div style={styles.backupCodesGrid}>
@@ -97,7 +97,7 @@ const SecurityTab = ({
 
         {twoFactorEnabled && (
           <div>
-            <p style={{ color: '#43b581', marginBottom: '16px' }}>
+            <p style={{ color: '#23a559', marginBottom: '16px' }}>
               ✅ 2FA aktif! Hesabınız korunuyor.
             </p>
             <button
@@ -125,7 +125,7 @@ const SecurityTab = ({
             padding: '12px 16px',
             marginBottom: '16px',
             fontSize: '14px',
-            color: '#b9bbbe'
+            color: '#b5bac1'
           }}>
             <strong style={{ color: '#5865f2' }}>ℹ️ Bilgi:</strong> Google ile giriş yaptınız.
             Şifre belirleyerek normal giriş de yapabilirsiniz.
@@ -155,8 +155,11 @@ const SecurityTab = ({
               onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
               style={styles.input}
               required
-              minLength={8}
+              minLength={12}
             />
+            <small style={{ color: '#80848e', fontSize: '11px', marginTop: '4px', display: 'block' }}>
+              En az 12 karakter, büyük/küçük harf, rakam ve özel karakter (!@#$%)
+            </small>
           </div>
 
           <div style={styles.inputGroup}>
@@ -167,7 +170,7 @@ const SecurityTab = ({
               onChange={(e) => setPasswordData({ ...passwordData, confirm_password: e.target.value })}
               style={styles.input}
               required
-              minLength={8}
+              minLength={12}
             />
           </div>
 
@@ -185,7 +188,7 @@ const SecurityTab = ({
         <h3 style={styles.sectionTitle}>🖥️ Aktif Oturumlar</h3>
 
         {sessions.length === 0 && (
-          <p style={{ color: '#b9bbbe' }}>Aktif oturum bulunamadı.</p>
+          <p style={{ color: '#b5bac1' }}>Aktif oturum bulunamadı.</p>
         )}
 
         {sessions.map((session) => (
@@ -194,7 +197,7 @@ const SecurityTab = ({
               <p style={{ color: '#fff', margin: 0, fontWeight: '600' }}>
                 {session.device_name || 'Bilinmeyen Cihaz'}
               </p>
-              <p style={{ color: '#b9bbbe', fontSize: '12px', margin: '4px 0 0 0' }}>
+              <p style={{ color: '#b5bac1', fontSize: '12px', margin: '4px 0 0 0' }}>
                 IP: {session.ip_address} • {new Date(session.created_at).toLocaleDateString('tr-TR')}
               </p>
             </div>

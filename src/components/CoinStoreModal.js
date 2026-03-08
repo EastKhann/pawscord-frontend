@@ -27,7 +27,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
             onClick={onClose}
             style={styles.closeBtn}
             onMouseEnter={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.1)'; e.target.style.color = '#ffffff'; e.target.style.transform = 'scale(1.1)'; }}
-            onMouseLeave={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.05)'; e.target.style.color = '#b9bbbe'; e.target.style.transform = 'scale(1)'; }}
+            onMouseLeave={(e) => { e.target.style.background = 'rgba(255, 255, 255, 0.05)'; e.target.style.color = '#b5bac1'; e.target.style.transform = 'scale(1)'; }}
           >
             <FaTimes style={{ fontSize: '24px' }} />
           </button>
@@ -47,7 +47,7 @@ const CoinStoreModal = ({ onClose, currentCoins, onPurchaseComplete }) => {
               {INFO_ITEMS.map((item, i) => (
                 <p key={i} style={styles.infoItem}>
                   <span style={{ color: item.color, fontSize: '16px' }}>{item.icon}</span>
-                  <span style={item.small ? { color: '#b9bbbe', fontSize: '12px' } : undefined}>{item.text}</span>
+                  <span style={item.small ? { color: '#b5bac1', fontSize: '12px' } : undefined}>{item.text}</span>
                 </p>
               ))}
             </div>

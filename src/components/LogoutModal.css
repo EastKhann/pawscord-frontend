@@ -49,7 +49,7 @@
 }
 
 .logout-modal {
-    background: linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%);
+    background: linear-gradient(135deg, #111214 0%, #0d0e10 100%);
     border-radius: 16px;
     padding: 32px;
     max-width: 420px;
@@ -69,7 +69,7 @@
 .logout-icon-container {
     width: 80px;
     height: 80px;
-    background: linear-gradient(135deg, #f04747 0%, #ed4245 100%);
+    background: linear-gradient(135deg, #f23f42 0%, #f23f42 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -85,13 +85,13 @@
 
 .logout-title {
     color: #ffffff;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     margin: 0 0 8px 0;
 }
 
 .logout-subtitle {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 15px;
     margin: 0;
     line-height: 1.5;
@@ -116,7 +116,7 @@
     align-items: center;
     gap: 12px;
     padding: 10px 0;
-    color: #dcddde;
+    color: #dbdee1;
     font-size: 14px;
     text-align: left;
 }
@@ -153,23 +153,23 @@
 }
 
 .logout-btn-cancel {
-    background: #4f545c;
+    background: #4e5058;
     color: #ffffff;
 }
 
 .logout-btn-cancel:hover {
-    background: #5d6269;
+    background: #4e5058;
     transform: translateY(-1px);
 }
 
 .logout-btn-confirm {
-    background: linear-gradient(135deg, #f04747 0%, #ed4245 100%);
+    background: linear-gradient(135deg, #f23f42 0%, #f23f42 100%);
     color: #ffffff;
     box-shadow: 0 4px 12px rgba(240, 71, 71, 0.3);
 }
 
 .logout-btn-confirm:hover {
-    background: linear-gradient(135deg, #ff5555 0%, #f04747 100%);
+    background: linear-gradient(135deg, #f23f42 0%, #f23f42 100%);
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(240, 71, 71, 0.4);
 }
@@ -207,7 +207,7 @@
 }
 
 .logout-loading-subtext {
-    color: #72767d;
+    color: #949ba4;
     font-size: 14px;
     margin: 0;
 }

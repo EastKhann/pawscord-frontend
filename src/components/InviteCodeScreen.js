@@ -198,11 +198,11 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        background: 'linear-gradient(135deg, #0d0e10 0%, #0d0e10 50%, #0f3460 100%)',
         padding: '20px',
     },
     card: {
-        background: '#2b2d31',
+        background: '#111214',
         borderRadius: '16px',
         padding: '40px',
         maxWidth: '440px',

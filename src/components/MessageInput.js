@@ -42,7 +42,8 @@ const MessageInput = ({
     placeholder = "Mesaj yaz...", editingMessage = null, onCancelEdit = null,
     replyingTo = null, onCancelReply = null, disabled = false,
     activeChat = null, fetchWithAuth = null, apiBaseUrl = '',
-    pendingFilesFromDrop = [], onClearPendingFiles = null
+    pendingFilesFromDrop = [], onClearPendingFiles = null,
+    ws = null, username = null
 }) => {
     useMeasurePerformance('MessageInput');
 
@@ -78,6 +79,39 @@ const MessageInput = ({
     const textareaRef = useRef(null);
 
     const { draftSaved, clearDraft } = useMessageDraft(activeChat, fetchWithAuth, apiBaseUrl, message, setMessage);
+
+    // --- ⌨️ TYPING INDICATOR ---
+    const typingTimeoutRef = useRef(null);
+    const isTypingRef = useRef(false);
+    const sendTyping = useCallback((isActive) => {
+        if (!ws?.current || ws.current.readyState !== WebSocket.OPEN) return;
+        if (!activeChat?.id || !username) return;
+        try {
+            ws.current.send(JSON.stringify({
+                type: isActive ? 'typing_start' : 'typing_stop',
+                username,
+                ...(activeChat.type === 'room' ? { room: activeChat.id } : { conversation: activeChat.id })
+            }));
+        } catch { /* silently ignore */ }
+    }, [ws, username, activeChat]);
+
+    const handleTypingInput = useCallback(() => {
+        if (!isTypingRef.current) {
+            isTypingRef.current = true;
+            sendTyping(true);
+        }
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = setTimeout(() => {
+            isTypingRef.current = false;
+            sendTyping(false);
+        }, 2500);
+    }, [sendTyping]);
+
+    // Reset typing state on chat change
+    useEffect(() => {
+        isTypingRef.current = false;
+        clearTimeout(typingTimeoutRef.current);
+    }, [activeChat?.id, activeChat?.type]);
 
     // Capacitor scroll fix
     useEffect(() => {
@@ -185,6 +219,9 @@ const MessageInput = ({
         if (disabled) return;
         if (trimmed) { onSendMessage(trimmed); setMessage(''); }
         clearDraft();
+        // Stop typing indicator on send
+        clearTimeout(typingTimeoutRef.current);
+        if (isTypingRef.current) { isTypingRef.current = false; sendTyping(false); }
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
     }, [message, disabled, onSendMessage, pendingFiles, sendPendingFiles, clearDraft]);
 
@@ -290,7 +327,7 @@ const MessageInput = ({
                     aria-label={editingMessage ? 'Mesaj düzenle' : replyingTo ? `${replyingTo.author} kullanıcısına yanıt yaz` : placeholder}
                     aria-multiline="true"
                     aria-describedby={editingMessage ? 'edit-hint' : undefined}
-                    onChange={(e) => { setMessage(e.target.value); setCursorPos(e.target.selectionStart); }}
+                    onChange={(e) => { setMessage(e.target.value); setCursorPos(e.target.selectionStart); handleTypingInput(); }}
                     onKeyDown={handleKeyDown}
                     onSelect={(e) => setCursorPos(e.target.selectionStart)}
                     onKeyUp={(e) => setCursorPos(e.target.selectionStart)}
@@ -313,7 +350,7 @@ const MessageInput = ({
                     {showEmojiPicker && <div style={styles.pickerWrapper}><EmojiPicker onSelect={handleEmojiSelect} /></div>}
                     {showGifPicker && (
                         <div style={styles.pickerWrapper}>
-                            <Suspense fallback={<div style={{ padding: '20px', textAlign: 'center', color: '#b9bbbe' }}>GIF y$([char]0x00FC)kleniyor...</div>}>
+                            <Suspense fallback={<div style={{ padding: '20px', textAlign: 'center', color: '#b5bac1' }}>GIF y$([char]0x00FC)kleniyor...</div>}>
                                 <GifPicker onSelect={handleGifSelect} onClose={() => setShowGifPicker(false)}
                                     localGifListUrl={`${apiBaseUrl || window.location.origin + '/api'}/gifs/list_local/`}
                                     absoluteHostUrl={window.location.origin} fetchWithAuth={fetchWithAuth} />

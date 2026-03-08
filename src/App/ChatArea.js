@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 💬 ChatArea — Main chat rendering section
  * Extracted from App.js: header, message list, drag overlay, input container
  */
@@ -53,6 +53,8 @@ const ChatArea = memo(function ChatArea({
     isSelectionMode, selectedMessages, setSelectedMessages,
     // User
     username, isAdmin, allUsers,
+    // Messages state (for optimistic reaction updates)
+    setMessages,
     // Encryption
     hasKey,
     // Modals
@@ -74,6 +76,8 @@ const ChatArea = memo(function ChatArea({
     messageBoxRef, messagesEndRef,
     // Config
     ABSOLUTE_HOST_URL, fetchWithAuth,
+    // WebSocket ref (for typing indicator)
+    ws = null,
 }) {
     // Stable callback references
     const handleDragOver = useCallback((e) => e.preventDefault(), []);
@@ -149,11 +153,33 @@ const ChatArea = memo(function ChatArea({
     const handleCloseNotifications = useCallback(() => closeModal('notifications'), [closeModal]);
     const handleToggleToolbar = useCallback(() => toggleModal('toolbarMenu'), [toggleModal]);
     const handleOpenRightSidebar = useCallback(() => setIsRightSidebarVisible(true), [setIsRightSidebarVisible]);
-    const handleToggleReaction = useCallback(() => { }, []);
+    const handleToggleReaction = useCallback(async (messageId, emoji) => {
+        if (!messageId || !emoji) return;
+        // Optimistic update: toggle reaction in local state immediately
+        setMessages(prev => prev.map(msg => {
+            if (msg.id !== messageId) return msg;
+            const reactions = Array.isArray(msg.reactions) ? msg.reactions : [];
+            const existing = reactions.find(r => r.emoji === emoji && r.user_id === msg._currentUserId);
+            const optimisticR = existing
+                ? reactions.filter(r => !(r.emoji === emoji && r.user_id === msg._currentUserId))
+                : [...reactions, { emoji, user_id: username, username, user: { username, display_name: username } }];
+            return { ...msg, reactions: optimisticR };
+        }));
+        try {
+            await fetchWithAuth(`${ABSOLUTE_HOST_URL}/api/messages/react/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message_id: messageId, emoji }),
+            });
+        } catch (e) {
+            // Rollback: re-fetch is handled by WS; log error only
+            console.error('[Reaction] toggle failed:', e);
+        }
+    }, [setMessages, fetchWithAuth, ABSOLUTE_HOST_URL, username]);
     const handleToggleSelection = useCallback((id) => {
         setSelectedMessages(prev => { const s = new Set(prev); if (s.has(id)) s.delete(id); else s.add(id); return s; });
     }, [setSelectedMessages]);
-    const handleViewProfile = useCallback((u) => setViewingProfile(allUsers.find(usr => usr.username === u)), [setViewingProfile, allUsers]);
+    const handleViewProfile = useCallback((u) => { const usr = Array.isArray(allUsers) ? allUsers.find(a => a.username === u) : null; setViewingProfile(usr || { username: u }); }, [setViewingProfile, allUsers]);
     const handleOpenGallery = useCallback((images, startIndex) => setGalleryData({ images, startIndex }), [setGalleryData]);
     const handleScrollToBottom = useCallback(() => { scrollToBottom('smooth'); setShowScrollToBottom(false); setNewMsgCount(0); }, [scrollToBottom, setShowScrollToBottom]);
     const handleShowCodeSnippet = useCallback(() => openModal('snippetModal'), [openModal]);
@@ -277,7 +303,7 @@ const ChatArea = memo(function ChatArea({
                     </form>
                     {!isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
                     {isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
-                    <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b9bbbe', position: 'relative' }} title="Bildirimler" aria-label="Notifications" aria-expanded={!!modals.notifications}><FaBell /></button>
+                    <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b5bac1', position: 'relative' }} title="Bildirimler" aria-label="Notifications" aria-expanded={!!modals.notifications}><FaBell /></button>
                     {modals.notifications && (
                         <div style={{ position: 'absolute', top: '54px', right: '20px', zIndex: 1000 }}>
                             <Suspense fallback={<LoadingSpinner size="small" text="" />}>
@@ -286,7 +312,7 @@ const ChatArea = memo(function ChatArea({
                         </div>
                     )}
                     <div className="toolbar-menu-container" style={{ position: 'relative' }}>
-                        <button onClick={handleToggleToolbar} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b9bbbe', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla" aria-label="More options" aria-expanded={!!modals.toolbarMenu}>⋮</button>
+                        <button onClick={handleToggleToolbar} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b5bac1', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla" aria-label="More options" aria-expanded={!!modals.toolbarMenu}>⋮</button>
                         {modals.toolbarMenu && (
                             <ToolbarMenu
                                 activeChat={activeChat} hasKey={hasKey} modals={modals}
@@ -363,22 +389,23 @@ const ChatArea = memo(function ChatArea({
 
             <div style={{ ...styles.inputContainer, paddingBottom: isNative ? `calc(16px + ${safeAreaBottom})` : (isMobile ? '25px' : '16px') }}>
                 {fileUpload.isUploading && fileUpload.uploadProgress > 0 && (
-                    <div style={{ position: 'absolute', top: '-40px', left: '16px', right: '16px', backgroundColor: '#2b2d31', borderRadius: '8px', padding: '8px 12px', boxShadow: '0 2px 10px rgba(0,0,0,0.3)', zIndex: 1001 }}>
+                    <div style={{ position: 'absolute', top: '-40px', left: '16px', right: '16px', backgroundColor: '#111214', borderRadius: '8px', padding: '8px 12px', boxShadow: '0 2px 10px rgba(0,0,0,0.3)', zIndex: 1001 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <span style={{ color: '#b9bbbe', fontSize: '12px', whiteSpace: 'nowrap' }}>📤 Yükleniyor: {fileUpload.uploadProgress}%</span>
-                            <div style={{ flex: 1, height: '6px', backgroundColor: '#40444b', borderRadius: '3px', overflow: 'hidden' }}>
+                            <span style={{ color: '#b5bac1', fontSize: '12px', whiteSpace: 'nowrap' }}>📤 Yükleniyor: {fileUpload.uploadProgress}%</span>
+                            <div style={{ flex: 1, height: '6px', backgroundColor: '#1e2024', borderRadius: '3px', overflow: 'hidden' }}>
                                 <div style={{ width: `${fileUpload.uploadProgress}%`, height: '100%', backgroundColor: '#5865f2', borderRadius: '3px', transition: 'width 0.3s ease' }} />
                             </div>
                         </div>
                     </div>
                 )}
-                <Suspense fallback={<div style={{ padding: '12px', color: '#72767d' }}>Yükleniyor...</div>}>
+                <Suspense fallback={<div style={{ padding: '12px', color: '#949ba4' }}>Yükleniyor...</div>}>
                     <MessageInput onSendMessage={messageHandlers.sendMessage} onFileUpload={fileUpload.uploadFile}
                         onShowCodeSnippet={handleShowCodeSnippet}
                         placeholder={chatTitle ? (activeChat.type === 'dm' ? `${chatTitle} kullanıcısına mesaj gönder` : `#${chatTitle} kanalına mesaj gönder`) : 'Mesaj yaz...'}
                         disabled={fileUpload.isUploading} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL}
                         activeChat={activeChat} pendingFilesFromDrop={fileUpload.pendingFilesFromDrop}
-                        onClearPendingFiles={handleClearPendingFiles} />
+                        onClearPendingFiles={handleClearPendingFiles}
+                        ws={ws} username={username} />
                 </Suspense>
             </div>
         </div>

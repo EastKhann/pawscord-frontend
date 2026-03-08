@@ -79,6 +79,11 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
             const newCounts = { ...state.unreadCounts };
             delete newCounts[key];
             persistUnread(newCounts);
+            // 🔔 Update tab title badge
+            const total = Object.values(newCounts).reduce((a: any, b: any) => a + b, 0);
+            if (typeof document !== 'undefined') {
+                document.title = total > 0 ? `(${total}) PawsCord` : 'PawsCord';
+            }
             return { unreadCounts: newCounts };
         });
     },
@@ -160,6 +165,11 @@ export const useChatStore = create<ChatStore>()(devtools((set, get) => ({
             [key]: (state.unreadCounts[key] || 0) + 1
         };
         persistUnread(newCounts);
+        // 🔔 Tab title badge: (N) PawsCord
+        const total = Object.values(newCounts).reduce((a: any, b: any) => a + b, 0);
+        if (typeof document !== 'undefined') {
+            document.title = total > 0 ? `(${total}) PawsCord` : 'PawsCord';
+        }
         return { unreadCounts: newCounts };
     }),
 

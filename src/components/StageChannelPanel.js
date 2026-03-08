@@ -1,5 +1,5 @@
 // frontend/src/components/StageChannelPanel.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import toast from '../utils/toast';
 import './StageChannelPanel.css';
 
@@ -22,13 +22,13 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         return () => clearInterval(interval);
     }, [roomId]);
 
-    const fetchActiveStages = async () => {
+    const fetchActiveStages = useCallback(async () => {
         try {
             const token = localStorage.getItem('access_token');
-            const url = roomId 
-                ? `${apiBaseUrl}/stages/active/` 
+            const url = roomId
+                ? `${apiBaseUrl}/stages/active/`
                 : `${apiBaseUrl}/stages/active/`;
-            
+
             const response = await fetch(url, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -42,9 +42,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [roomId, apiBaseUrl]);
 
-    const handleCreateStage = async () => {
+    const handleCreateStage = useCallback(async () => {
         if (!newStage.topic.trim()) {
             toast.error('⚠️ Konu başlığı gerekli');
             return;
@@ -80,9 +80,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
             console.error('Stage creation error:', error);
             toast.error('❌ Hata oluştu');
         }
-    };
+    }, [newStage, activeStages, roomId, apiBaseUrl]);
 
-    const handleJoinStage = async (stageId) => {
+    const handleJoinStage = useCallback(async (stageId) => {
         try {
             const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/join/`, {
@@ -101,9 +101,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
             console.error('Join stage error:', error);
             toast.error('❌ Hata oluştu');
         }
-    };
+    }, [apiBaseUrl, fetchActiveStages]);
 
-    const handleLeaveStage = async (stageId) => {
+    const handleLeaveStage = useCallback(async (stageId) => {
         try {
             const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/leave/`, {
@@ -118,9 +118,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         } catch (error) {
             console.error('Leave stage error:', error);
         }
-    };
+    }, [apiBaseUrl, fetchActiveStages]);
 
-    const handleRequestToSpeak = async (stageId) => {
+    const handleRequestToSpeak = useCallback(async (stageId) => {
         try {
             const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/request-speak/`, {
@@ -134,9 +134,9 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         } catch (error) {
             console.error('Request speak error:', error);
         }
-    };
+    }, [apiBaseUrl]);
 
-    const handleInviteSpeaker = async (stageId, username) => {
+    const handleInviteSpeaker = useCallback(async (stageId, username) => {
         try {
             const token = localStorage.getItem('access_token');
             const response = await fetch(`${apiBaseUrl}/stages/${stageId}/invite-speaker/`, {
@@ -154,7 +154,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
         } catch (error) {
             console.error('Invite speaker error:', error);
         }
-    };
+    }, [apiBaseUrl]);
 
     const getRoleIcon = (role) => {
         const icons = {
@@ -168,12 +168,12 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
     const getRoleColor = (role) => {
         const colors = {
-            host: '#faa61a',
-            moderator: '#8b5cf6',
-            speaker: '#34c759',
-            listener: '#6c6d7d'
+            host: '#f0b232',
+            moderator: '#5865f2',
+            speaker: '#23a559',
+            listener: '#949ba4'
         };
-        return colors[role] || '#6c6d7d';
+        return colors[role] || '#949ba4';
     };
 
     if (loading) {
@@ -197,13 +197,13 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                     <div className="header-actions">
                         {roomId && (
                             <>
-                                <button 
+                                <button
                                     className={`view-toggle ${view === 'list' ? 'active' : ''}`}
                                     onClick={() => setView('list')}
                                 >
                                     📋 Aktif Stage'ler
                                 </button>
-                                <button 
+                                <button
                                     className={`view-toggle ${view === 'create' ? 'active' : ''}`}
                                     onClick={() => setView('create')}
                                 >
@@ -242,7 +242,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                 <div className="speakers-grid">
                                                     {stage.speakers.slice(0, 6).map((speaker, idx) => (
                                                         <div key={idx} className="speaker-badge">
-                                                            <span 
+                                                            <span
                                                                 className="role-icon"
                                                                 style={{ color: getRoleColor(speaker.role) }}
                                                             >
@@ -262,7 +262,7 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
 
                                         <div className="stage-actions">
                                             {!stage.is_member ? (
-                                                <button 
+                                                <button
                                                     className="join-stage-btn"
                                                     onClick={() => handleJoinStage(stage.id)}
                                                 >
@@ -270,14 +270,14 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
                                                 </button>
                                             ) : (
                                                 <>
-                                                    <button 
+                                                    <button
                                                         className="leave-stage-btn"
                                                         onClick={() => handleLeaveStage(stage.id)}
                                                     >
                                                         👋 Ayrıl
                                                     </button>
                                                     {stage.user_role === 'listener' && (
-                                                        <button 
+                                                        <button
                                                             className="request-speak-btn"
                                                             onClick={() => handleRequestToSpeak(stage.id)}
                                                         >
@@ -376,4 +376,4 @@ const StageChannelPanel = ({ roomId, apiBaseUrl, onClose, currentUser }) => {
     );
 };
 
-export default StageChannelPanel;
+export default memo(StageChannelPanel);

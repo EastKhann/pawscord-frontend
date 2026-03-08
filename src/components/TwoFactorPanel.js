@@ -152,7 +152,7 @@ const TwoFactorPanel = ({ onClose }) => {
                     {step === 'check' && (
                         <div className="step-check">
                             <div className="info-box">
-                                <FaShieldAlt size={48} color="#7289da" />
+                                <FaShieldAlt size={48} color="#5865f2" />
                                 <h3>Hesabınızı Koruyun</h3>
                                 <p>
                                     İki faktörlü doğrulama ile hesabınıza ekstra güvenlik katmanı ekleyin.
@@ -252,7 +252,7 @@ const TwoFactorPanel = ({ onClose }) => {
                     {step === 'complete' && isEnabled && (
                         <div className="step-complete">
                             <div className="success-box">
-                                <FaCheck size={48} color="#43b581" />
+                                <FaCheck size={48} color="#23a559" />
                                 <h3>2FA Aktif!</h3>
                                 <p>Hesabınız artık iki faktörlü doğrulama ile korunuyor.</p>
                             </div>

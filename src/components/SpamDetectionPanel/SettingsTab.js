@@ -1,4 +1,4 @@
-import { FaShieldAlt, FaCheck, FaTimes } from 'react-icons/fa';
+﻿import { FaShieldAlt, FaCheck, FaTimes } from 'react-icons/fa';
 import { getPatternIcon, getActionColor, PATTERN_LABELS, ACTION_LABELS } from './constants';
 import styles from './styles';
 
@@ -7,14 +7,14 @@ const SettingsTab = ({ settings, isAdmin, onSensitivityChange, onPatternToggle, 
         {/* Enable/Disable */}
         <div style={styles.settingRow}>
             <div style={styles.settingInfo}>
-                <FaShieldAlt size={18} color="#43b581" />
+                <FaShieldAlt size={18} color="#23a559" />
                 <div>
                     <div style={styles.settingTitle}>Spam Koruması</div>
                     <div style={styles.settingDesc}>Otomatik spam algılama ve önleme</div>
                 </div>
             </div>
             <button
-                style={{ ...styles.toggleButton, backgroundColor: settings.enabled ? '#43b581' : '#72767d' }}
+                style={{ ...styles.toggleButton, backgroundColor: settings.enabled ? '#23a559' : '#949ba4' }}
                 onClick={onToggleEnabled}
             >
                 {settings.enabled ? <FaCheck /> : <FaTimes />}
@@ -34,7 +34,7 @@ const SettingsTab = ({ settings, isAdmin, onSensitivityChange, onPatternToggle, 
                     <button key={key}
                         style={{
                             ...styles.sensitivityButton,
-                            backgroundColor: settings.sensitivity === key ? '#5865f2' : '#40444b',
+                            backgroundColor: settings.sensitivity === key ? '#5865f2' : '#1e2024',
                             borderColor: settings.sensitivity === key ? '#5865f2' : 'transparent'
                         }}
                         onClick={() => onSensitivityChange(key)}
@@ -54,7 +54,7 @@ const SettingsTab = ({ settings, isAdmin, onSensitivityChange, onPatternToggle, 
                             <span>{PATTERN_LABELS[pattern] || pattern}</span>
                         </div>
                         <button
-                            style={{ ...styles.miniToggle, backgroundColor: enabled ? '#43b581' : '#72767d' }}
+                            style={{ ...styles.miniToggle, backgroundColor: enabled ? '#23a559' : '#949ba4' }}
                             onClick={() => onPatternToggle(pattern)}
                         >
                             {enabled ? <FaCheck size={10} /> : <FaTimes size={10} />}
@@ -75,7 +75,7 @@ const SettingsTab = ({ settings, isAdmin, onSensitivityChange, onPatternToggle, 
                             <span>{ACTION_LABELS[action] || action}</span>
                         </div>
                         <button
-                            style={{ ...styles.miniToggle, backgroundColor: enabled ? '#43b581' : '#72767d' }}
+                            style={{ ...styles.miniToggle, backgroundColor: enabled ? '#23a559' : '#949ba4' }}
                             onClick={() => onActionToggle(action)}
                         >
                             {enabled ? <FaCheck size={10} /> : <FaTimes size={10} />}

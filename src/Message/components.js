@@ -80,7 +80,7 @@ export const EditHistory = ({ messageId, messageEditHistoryUrl, fetchWithAuth })
         <div style={{ position: 'relative', display: 'inline-block', marginLeft: '5px' }} ref={historyRef}>
             <span
                 onClick={(e) => { e.stopPropagation(); setShowHistory(!showHistory); }}
-                style={{ fontSize: '0.7em', color: '#72767d', cursor: 'pointer', textDecoration: 'underline' }}
+                style={{ fontSize: '0.7em', color: '#949ba4', cursor: 'pointer', textDecoration: 'underline' }}
             >
                 (düzenlendi)
             </span>

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🛡️ Feature Error Boundary - Granular error isolation
  * Wraps individual features so one crash doesn't take down the entire app.
  * Usage:
@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 
 class FeatureErrorBoundary extends React.Component {
     constructor(props) {
@@ -45,7 +46,7 @@ class FeatureErrorBoundary extends React.Component {
                     url: window.location.href,
                     timestamp: new Date().toISOString()
                 })
-            }).catch(() => {}); // silent
+            }).catch(() => { }); // silent
         } catch (e) { /* silent */ }
     }
 
@@ -67,13 +68,15 @@ class FeatureErrorBoundary extends React.Component {
             }
 
             // Max retries reached
+            const { t } = this.props;
+
             if (this.state.retryCount >= 3) {
                 return (
                     <div style={styles.container}>
                         <div style={styles.icon}>⚠️</div>
-                        <p style={styles.text}>{this.props.name || 'Bu özellik'} şu anda kullanılamıyor.</p>
+                        <p style={styles.text}>{t('errors.featureUnavailable', { name: this.props.name || t('errors.featureUnavailable_default', 'This feature') })}</p>
                         <button onClick={() => window.location.reload()} style={styles.button}>
-                            Sayfayı Yenile
+                            {t('errors.refreshPage')}
                         </button>
                     </div>
                 );
@@ -84,10 +87,10 @@ class FeatureErrorBoundary extends React.Component {
                 <div style={styles.container}>
                     <div style={styles.icon}>😕</div>
                     <p style={styles.text}>
-                        {this.props.name || 'Bu bölüm'} yüklenirken bir hata oluştu.
+                        {t('errors.loadError', { name: this.props.name || t('errors.loadError_default', 'This section') })}
                     </p>
                     <button onClick={this.handleRetry} style={styles.button}>
-                        Tekrar Dene
+                        {t('errors.tryAgain')}
                     </button>
                 </div>
             );
@@ -105,7 +108,7 @@ const styles = {
         justifyContent: 'center',
         padding: '20px',
         minHeight: '100px',
-        background: '#2b2d31',
+        background: '#111214',
         borderRadius: '8px',
         margin: '8px',
     },
@@ -130,4 +133,4 @@ const styles = {
     },
 };
 
-export default FeatureErrorBoundary;
+export default withTranslation()(FeatureErrorBoundary);

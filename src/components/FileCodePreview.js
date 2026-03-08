@@ -1,4 +1,4 @@
-// frontend/src/components/FileCodePreview.js
+﻿// frontend/src/components/FileCodePreview.js
 // 🔥 Discord-style file preview for code/text files
 // Shows first 7 lines of content with syntax highlighting
 
@@ -117,7 +117,7 @@ const FileCodePreview = ({ fileUrl, fileName, fileSize, onDownload }) => {
                         style={styles.headerBtn}
                         title={copied ? 'Kopyalandı!' : 'Kodu Kopyala'}
                     >
-                        {copied ? <FaCheck style={{ color: '#57F287' }} /> : <FaCopy />}
+                        {copied ? <FaCheck style={{ color: '#23a559' }} /> : <FaCopy />}
                     </button>
                     {hasMore && (
                         <button
@@ -204,7 +204,7 @@ const styles = {
         borderRadius: 8,
         overflow: 'hidden',
         border: '1px solid #2a2d33',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         transition: 'border-color 0.2s',
     },
     header: {
@@ -212,7 +212,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '10px 12px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
         gap: 8,
     },
@@ -244,7 +244,7 @@ const styles = {
     },
     fileSize: {
         fontSize: 11,
-        color: '#72767d',
+        color: '#949ba4',
         flexShrink: 0,
     },
     headerActions: {
@@ -268,7 +268,7 @@ const styles = {
         textDecoration: 'none',
     },
     codeArea: {
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
         maxHeight: 400,
         overflowY: 'auto',
         overflowX: 'auto',
@@ -295,7 +295,7 @@ const styles = {
         borderRight: '1px solid rgba(255,255,255,0.06)',
     },
     lineContent: {
-        color: '#dcddde',
+        color: '#dbdee1',
         paddingLeft: 12,
         paddingRight: 12,
         whiteSpace: 'pre',
@@ -315,7 +315,7 @@ const styles = {
     },
     footer: {
         padding: '8px 12px',
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         borderTop: '1px solid rgba(255,255,255,0.06)',
         cursor: 'pointer',
         textAlign: 'center',

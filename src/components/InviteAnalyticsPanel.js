@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { FaTimes, FaChartLine, FaUsers, FaLink } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -84,7 +84,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
                                 <div style={styles.statCard}>
                                     <div style={styles.statIcon}>
-                                        <FaUsers style={{ color: '#43b581' }} />
+                                        <FaUsers style={{ color: '#23a559' }} />
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>{analytics.total_joins || 0}</div>
@@ -94,7 +94,7 @@ const InviteAnalyticsPanel = ({ fetchWithAuth, apiBaseUrl, onClose, serverId }) 
 
                                 <div style={styles.statCard}>
                                     <div style={styles.statIcon}>
-                                        <FaChartLine style={{ color: '#faa61a' }} />
+                                        <FaChartLine style={{ color: '#f0b232' }} />
                                     </div>
                                     <div style={styles.statInfo}>
                                         <div style={styles.statValue}>
@@ -185,7 +185,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     headerLeft: {
         display: 'flex',
@@ -199,14 +199,14 @@ const styles = {
     closeButton: {
         background: 'none',
         border: 'none',
-        color: '#99aab5',
+        color: '#949ba4',
         cursor: 'pointer',
         fontSize: '20px',
         padding: '5px',
     },
     toolbar: {
         padding: '15px 20px',
-        borderBottom: '1px solid #2c2f33',
+        borderBottom: '1px solid #0e1222',
     },
     timeRangeButtons: {
         display: 'flex',
@@ -214,10 +214,10 @@ const styles = {
     },
     timeRangeButton: {
         padding: '8px 16px',
-        backgroundColor: '#2c2f33',
-        border: '1px solid #2c2f33',
+        backgroundColor: '#111214',
+        border: '1px solid #0e1222',
         borderRadius: '4px',
-        color: '#dcddde',
+        color: '#dbdee1',
         cursor: 'pointer',
         fontSize: '13px',
     },
@@ -233,12 +233,12 @@ const styles = {
     },
     loading: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     empty: {
         textAlign: 'center',
-        color: '#99aab5',
+        color: '#949ba4',
         padding: '40px',
     },
     statsGrid: {
@@ -248,7 +248,7 @@ const styles = {
         marginBottom: '30px',
     },
     statCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
         display: 'flex',
@@ -269,7 +269,7 @@ const styles = {
     },
     statLabel: {
         fontSize: '13px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     section: {
         marginBottom: '30px',
@@ -286,7 +286,7 @@ const styles = {
         gap: '10px',
     },
     inviteCard: {
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '16px',
         display: 'flex',
@@ -311,7 +311,7 @@ const styles = {
     },
     inviteMeta: {
         fontSize: '12px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     inviteStats: {
         display: 'flex',
@@ -325,11 +325,11 @@ const styles = {
     inviteStatValue: {
         fontSize: '18px',
         fontWeight: '700',
-        color: '#43b581',
+        color: '#23a559',
     },
     inviteStatLabel: {
         fontSize: '11px',
-        color: '#99aab5',
+        color: '#949ba4',
     },
     chartContainer: {
         display: 'flex',
@@ -337,7 +337,7 @@ const styles = {
         alignItems: 'flex-end',
         height: '200px',
         padding: '10px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
     },
     barContainer: {
@@ -365,7 +365,7 @@ const styles = {
     },
     barLabel: {
         fontSize: '10px',
-        color: '#99aab5',
+        color: '#949ba4',
         marginTop: '4px',
         transform: 'rotate(-45deg)',
         transformOrigin: 'center',

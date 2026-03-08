@@ -1,9 +1,9 @@
-// CryptoSignals/styles.js
+﻿// CryptoSignals/styles.js
 // Styles and CSS injection extracted from CryptoSignals.js
 
 const S = {
     page: {
-        minHeight: '100vh', backgroundColor: '#1e1f22', color: '#dbdee1',
+        minHeight: '100vh', backgroundColor: '#0d0e10', color: '#dbdee1',
         padding: '16px', boxSizing: 'border-box',
         paddingTop: 'max(16px, env(safe-area-inset-top))',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
@@ -14,7 +14,7 @@ const S = {
     },
     header: {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid #2b2d31',
+        marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid #0e1222',
         flexWrap: 'wrap', gap: 10
     },
     headerLeft: { display: 'flex', flexDirection: 'column', gap: 4 },
@@ -28,7 +28,7 @@ const S = {
         gap: 10, fontWeight: 700, color: '#fff'
     },
     versionBadge: {
-        fontSize: '0.4em', color: '#949ba4', backgroundColor: '#2b2d31',
+        fontSize: '0.4em', color: '#949ba4', backgroundColor: '#111214',
         padding: '2px 8px', borderRadius: 8
     },
     updateTime: {
@@ -36,7 +36,7 @@ const S = {
         alignItems: 'center', gap: 4
     },
     checkboxLabel: {
-        fontSize: '0.8em', color: '#b9bbbe', display: 'flex',
+        fontSize: '0.8em', color: '#b5bac1', display: 'flex',
         alignItems: 'center', gap: 4, cursor: 'pointer'
     },
     primaryBtn: {
@@ -49,10 +49,10 @@ const S = {
     fileTabBar: {
         display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center',
         overflowX: 'auto', paddingBottom: 8, paddingTop: 2,
-        borderBottom: '2px solid #2f3136'
+        borderBottom: '2px solid #0e1222'
     },
     fileTabBtn: {
-        backgroundColor: '#2b2d31', border: '2px solid #40444b',
+        backgroundColor: '#111214', border: '2px solid #182135',
         color: '#949ba4', padding: '10px 20px', borderRadius: 10,
         cursor: 'pointer', fontWeight: 700, fontSize: '0.9em',
         whiteSpace: 'nowrap', transition: 'all 0.2s', flexShrink: 0,
@@ -64,13 +64,13 @@ const S = {
     },
     modeBtn: {
         flex: 1, padding: '10px 16px', borderRadius: 10,
-        border: '2px solid #40444b', backgroundColor: '#2b2d31',
+        border: '2px solid #182135', backgroundColor: '#111214',
         color: '#949ba4', cursor: 'pointer', fontWeight: 700,
         fontSize: '0.9em', display: 'flex', alignItems: 'center',
         justifyContent: 'center', gap: 8, transition: 'all 0.2s'
     },
     modeBtnActive: {
-        backgroundColor: '#313338', color: '#fff',
+        backgroundColor: '#17191c', color: '#fff',
         boxShadow: '0 2px 10px rgba(0,0,0,0.3)'
     },
     statsBar: {
@@ -79,8 +79,8 @@ const S = {
         gap: 8, marginBottom: 12
     },
     statCard: {
-        backgroundColor: '#2b2d31', borderRadius: 10, padding: '10px 8px',
-        textAlign: 'center', border: '1px solid #2f3136'
+        backgroundColor: '#111214', borderRadius: 10, padding: '10px 8px',
+        textAlign: 'center', border: '1px solid #0e1222'
     },
     statNum: { display: 'block', fontSize: '1.2em', fontWeight: 700, color: '#fff' },
     statLabel: { display: 'block', fontSize: '0.72em', color: '#949ba4', marginTop: 2 },
@@ -89,7 +89,7 @@ const S = {
         paddingBottom: 4
     },
     tabBtn: {
-        backgroundColor: '#2b2d31', border: '1px solid #40444b',
+        backgroundColor: '#111214', border: '1px solid #182135',
         color: '#949ba4', padding: '8px 14px', borderRadius: 10,
         cursor: 'pointer', fontWeight: 500, fontSize: '0.85em',
         display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
@@ -100,8 +100,8 @@ const S = {
         flexWrap: 'wrap', justifyContent: 'space-between'
     },
     searchBox: {
-        display: 'flex', alignItems: 'center', backgroundColor: '#2b2d31',
-        borderRadius: 8, padding: '7px 12px', border: '1px solid #40444b',
+        display: 'flex', alignItems: 'center', backgroundColor: '#111214',
+        borderRadius: 8, padding: '7px 12px', border: '1px solid #182135',
         flex: 1, maxWidth: 360, gap: 8
     },
     searchInput: {
@@ -113,7 +113,7 @@ const S = {
         cursor: 'pointer', padding: '2px 4px', fontSize: '0.9em'
     },
     viewToggle: {
-        backgroundColor: '#2b2d31', border: '1px solid #40444b',
+        backgroundColor: '#111214', border: '1px solid #182135',
         color: '#dbdee1', padding: '6px 10px', borderRadius: 6,
         cursor: 'pointer', fontSize: '1em'
     },
@@ -128,21 +128,21 @@ const S = {
         display: 'inline-flex', alignItems: 'center', gap: 3, transition: 'all 0.2s'
     },
     tableWrap: {
-        overflowX: 'auto', borderRadius: 12, border: '1px solid #2f3136',
-        backgroundColor: '#2b2d31'
+        overflowX: 'auto', borderRadius: 12, border: '1px solid #0e1222',
+        backgroundColor: '#111214'
     },
     table: { width: '100%', borderCollapse: 'collapse', fontSize: '0.85em' },
     th: {
-        padding: '10px 10px', textAlign: 'center', backgroundColor: '#202225',
-        color: '#b9bbbe', fontWeight: 600, fontSize: '0.82em',
-        borderBottom: '2px solid #40444b', position: 'sticky', top: 0, zIndex: 1
+        padding: '10px 10px', textAlign: 'center', backgroundColor: '#0d0e10',
+        color: '#b5bac1', fontWeight: 600, fontSize: '0.82em',
+        borderBottom: '2px solid #182135', position: 'sticky', top: 0, zIndex: 1
     },
     td: {
         padding: '8px 8px', textAlign: 'center',
         borderBottom: '1px solid rgba(47,49,54,0.6)'
     },
     tfBadge: {
-        backgroundColor: '#40444b', color: '#dbdee1', padding: '2px 8px',
+        backgroundColor: '#1e2024', color: '#dbdee1', padding: '2px 8px',
         borderRadius: 4, fontSize: '0.82em', fontWeight: 600
     },
     linkBtn: {
@@ -154,11 +154,11 @@ const S = {
         gap: 6, marginTop: 16, paddingBottom: 24
     },
     pageBtn: {
-        backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#dbdee1',
+        backgroundColor: '#111214', border: '1px solid #182135', color: '#dbdee1',
         padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600
     },
     pageNumBtn: {
-        backgroundColor: '#2b2d31', border: '1px solid #40444b', color: '#949ba4',
+        backgroundColor: '#111214', border: '1px solid #182135', color: '#949ba4',
         padding: '6px 10px', borderRadius: 4, cursor: 'pointer', fontSize: '0.85em',
         minWidth: 32, textAlign: 'center'
     },
@@ -171,13 +171,14 @@ const S = {
         gap: 12
     },
     coinCard: {
-        backgroundColor: '#2b2d31', borderRadius: 12, padding: 14,
-        border: '1px solid #2f3136', cursor: 'pointer',
-        transition: 'all 0.2s ease'
+        backgroundColor: '#111214', borderRadius: 14, padding: 16,
+        border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer',
+        transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
     },
     cardHeader: {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid #40444b'
+        marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid #182135'
     },
     cardCoinName: { color: '#f0b232', fontWeight: 700, fontSize: '1.1em' },
     cardBody: { display: 'flex', flexDirection: 'column', gap: 6 },
@@ -187,7 +188,7 @@ const S = {
     },
     cardRowLabel: { color: '#949ba4', fontSize: '0.82em' },
     cardRowValue: { color: '#dbdee1', fontSize: '0.9em', fontWeight: 600 },
-    cardFooter: { marginTop: 10, paddingTop: 8, borderTop: '1px solid #40444b' },
+    cardFooter: { marginTop: 10, paddingTop: 8, borderTop: '1px solid #182135' },
     miniBarBg: {
         width: '100%', height: 4, backgroundColor: '#da373c',
         borderRadius: 4, overflow: 'hidden'
@@ -203,23 +204,23 @@ const S = {
         padding: 16, backdropFilter: 'blur(6px)'
     },
     modal: {
-        backgroundColor: '#1e1f22', borderRadius: 16, width: '100%',
+        backgroundColor: '#0d0e10', borderRadius: 16, width: '100%',
         maxWidth: 700, maxHeight: '88vh', overflow: 'hidden',
         display: 'flex', flexDirection: 'column',
         border: '1px solid #f0b232',
         boxShadow: '0 20px 60px rgba(240,178,50,0.2)'
     },
     modalHeader: {
-        padding: '16px 20px', borderBottom: '1px solid #2f3136',
+        padding: '16px 20px', borderBottom: '1px solid #0e1222',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: 'linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%)'
+        background: 'linear-gradient(135deg, #111214 0%, #0d0e10 100%)'
     },
     modalBadge: {
         padding: '4px 10px', backgroundColor: '#5865f2', borderRadius: 16,
         fontSize: '0.72em', fontWeight: 600, color: '#fff'
     },
     modalCloseBtn: {
-        background: 'none', border: 'none', color: '#b9bbbe',
+        background: 'none', border: 'none', color: '#b5bac1',
         fontSize: 22, cursor: 'pointer', padding: 8, borderRadius: 8,
         lineHeight: 1, transition: 'color 0.2s'
     },
@@ -227,19 +228,19 @@ const S = {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
         gap: 10, padding: '16px 20px',
-        borderBottom: '1px solid #2f3136',
+        borderBottom: '1px solid #0e1222',
         background: 'linear-gradient(180deg, rgba(240,178,50,0.04) 0%, transparent 100%)'
     },
     mStatCard: {
-        textAlign: 'center', padding: '10px 6px', backgroundColor: '#2b2d31',
-        borderRadius: 10, border: '1px solid #40444b'
+        textAlign: 'center', padding: '10px 6px', backgroundColor: '#111214',
+        borderRadius: 10, border: '1px solid #182135'
     },
     mStatLabel: { display: 'block', fontSize: '0.7em', color: '#949ba4', marginTop: 2, textTransform: 'uppercase' },
     modalBody: { flex: 1, overflow: 'auto', padding: '16px 20px' },
     strategyList: { display: 'flex', flexDirection: 'column', gap: 10 },
     strategyCard: {
-        backgroundColor: '#2b2d31', borderRadius: 10, padding: 14,
-        border: '1px solid #40444b',
+        backgroundColor: '#111214', borderRadius: 10, padding: 14,
+        border: '1px solid #182135',
         animation: 'cryptoSlideIn 0.35s ease forwards',
         opacity: 0, transform: 'translateX(15px)'
     },
@@ -250,7 +251,7 @@ const S = {
     },
     stratItem: {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '5px 10px', backgroundColor: '#202225', borderRadius: 6,
+        padding: '5px 10px', backgroundColor: '#0d0e10', borderRadius: 6,
         fontSize: '0.85em'
     },
     stratItemLabel: { color: '#949ba4', fontSize: '0.85em' },

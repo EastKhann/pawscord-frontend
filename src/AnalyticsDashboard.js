@@ -1,4 +1,4 @@
-// frontend/src/AnalyticsDashboard.js
+﻿// frontend/src/AnalyticsDashboard.js
 // (MOBİL VE PC İÇİN AYRI AYRI OPTİMİZE EDİLMİŞ NİHAİ VERSİYON)
 
 import { useState, useEffect } from 'react';
@@ -113,7 +113,7 @@ const AnalyticsDashboard = ({ onClose, apiBaseUrl, fetchWithAuth }) => {
         plugins: {
             legend: {
                 position: 'top',
-                labels: { color: '#dcddde', font: { family: 'Poppins' } }
+                labels: { color: '#dbdee1', font: { family: 'Poppins' } }
             },
             title: {
                 display: true,
@@ -194,7 +194,7 @@ const AnalyticsDashboard = ({ onClose, apiBaseUrl, fetchWithAuth }) => {
                 {syncMessage && (
                     <div style={{
                         ...styles.syncMessage,
-                        backgroundColor: syncMessage.type === 'success' ? '#23a559' : '#ed4245'
+                        backgroundColor: syncMessage.type === 'success' ? '#23a559' : '#f23f42'
                     }}>
                         <div style={{ fontWeight: 'bold' }}>{syncMessage.text}</div>
                         {syncMessage.help && <div style={{ fontSize: '0.85em', marginTop: '5px' }}>{syncMessage.help}</div>}
@@ -261,11 +261,11 @@ const styles = {
 
     // TEMEL PANEL STİLİ
     panel: {
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         display: 'flex', flexDirection: 'column',
         overflow: 'hidden',
         boxShadow: '0 10px 40px rgba(0,0,0,0.6)',
-        border: '1px solid #1e1f22',
+        border: '1px solid #0b0e1b',
     },
 
     // 💻 PC İÇİN PANEL AYARLARI (GENİŞ VE ORTADA)
@@ -287,7 +287,7 @@ const styles = {
 
     header: {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '20px 25px', backgroundColor: '#1e1f22', borderBottom: '1px solid #111214',
+        padding: '20px 25px', backgroundColor: '#0d0e10', borderBottom: '1px solid #0e1222',
         flexShrink: 0
     },
     headerTitle: { margin: 0, color: '#fff', fontSize: '1.3em', display: 'flex', alignItems: 'center', gap: '10px' },
@@ -309,7 +309,7 @@ const styles = {
         marginBottom: '30px'
     },
     statBox: {
-        backgroundColor: '#313338', padding: '15px', borderRadius: '12px',
+        backgroundColor: '#17191c', padding: '15px', borderRadius: '12px',
         display: 'flex', alignItems: 'center', gap: '15px',
         boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
     },
@@ -333,7 +333,7 @@ const styles = {
     },
 
     chartCard: {
-        backgroundColor: '#313338', padding: '15px', borderRadius: '12px',
+        backgroundColor: '#17191c', padding: '15px', borderRadius: '12px',
         height: '300px', // Grafikler için sabit yükseklik
         boxShadow: '0 4px 10px rgba(0,0,0,0.2)', position: 'relative'
     },
@@ -382,7 +382,7 @@ const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   /* Scrollbar Özelleştirme */
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #2b2d31; }
+  ::-webkit-scrollbar-track { background: #0e1222; }
   ::-webkit-scrollbar-thumb { background: #1a1b1e; border-radius: 4px; }
 `;
 document.head.appendChild(styleSheet);

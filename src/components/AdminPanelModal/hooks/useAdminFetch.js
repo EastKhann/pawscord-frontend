@@ -23,6 +23,14 @@ const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
     const [sortOrder, setSortOrder] = useState('desc');
     const [filterStatus, setFilterStatus] = useState('all');
 
+    // Visitor logs
+    const [visitorLogs, setVisitorLogs] = useState({ logs: [], total: 0, page: 1, total_pages: 1, ip_summary: [], top_paths: [], stats: null });
+    const [visitorIpFilter, setVisitorIpFilter] = useState('');
+    const [visitorUsernameFilter, setVisitorUsernameFilter] = useState('');
+    const [visitorPathFilter, setVisitorPathFilter] = useState('');
+    const [visitorPage, setVisitorPage] = useState(1);
+    const [visitorLoading, setVisitorLoading] = useState(false);
+
     // Enhanced logs
     const [systemLogs, setSystemLogs] = useState([]);
     const [logStats, setLogStats] = useState(null);
@@ -138,17 +146,33 @@ const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
         setLogLoading(false);
     }, [fetchWithAuth, apiBaseUrl, logType, logSearch, logSeverity, logDateFrom, logDateTo]);
 
+    const fetchVisitorLogs = useCallback(async ({ ip, username, path, page } = {}) => {
+        setVisitorLoading(true);
+        try {
+            const params = new URLSearchParams();
+            if (ip ?? visitorIpFilter) params.append('ip', ip ?? visitorIpFilter);
+            if (username ?? visitorUsernameFilter) params.append('username', username ?? visitorUsernameFilter);
+            if (path ?? visitorPathFilter) params.append('path', path ?? visitorPathFilter);
+            params.append('page', page ?? visitorPage);
+            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/visitor-logs/?${params}`);
+            if (res.ok) { setVisitorLogs(await res.json()); }
+        } catch (err) { console.error('Visitor logs fetch error:', err); }
+        setVisitorLoading(false);
+    }, [fetchWithAuth, apiBaseUrl, visitorIpFilter, visitorUsernameFilter, visitorPathFilter, visitorPage]);
+
     return {
         loading, stats, detailedStats, liveActivities, securityAlerts,
         users, servers, logs, systemHealth, bannedUsers, dbStats, realtimeStats,
         systemLogs, logStats, logLoading,
+        visitorLogs, visitorIpFilter, setVisitorIpFilter, visitorUsernameFilter, setVisitorUsernameFilter,
+        visitorPathFilter, setVisitorPathFilter, visitorPage, setVisitorPage, visitorLoading,
         searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages,
         sortField, setSortField, sortOrder, setSortOrder, filterStatus, setFilterStatus,
         logType, setLogType, logSearch, setLogSearch, logSeverity, setLogSeverity,
         logDateFrom, setLogDateFrom, logDateTo, setLogDateTo,
         fetchDetailedStats, fetchLiveActivity, fetchSecurityAlerts, fetchStats,
         fetchUsers, fetchServers, fetchLogs, fetchSystemHealth,
-        fetchBannedUsers, fetchDbStats, fetchSystemLogs,
+        fetchBannedUsers, fetchDbStats, fetchSystemLogs, fetchVisitorLogs,
     };
 };
 

@@ -1,4 +1,4 @@
-// frontend/src/components/StatusPicker.js
+﻿// frontend/src/components/StatusPicker.js
 // 🔥 FEATURE 35: Status picker with presets
 // Quick status picker: online, idle, dnd, invisible + custom status
 
@@ -6,10 +6,10 @@ import { useState, memo, useCallback } from 'react';
 import { FaCircle, FaMoon, FaMinusCircle, FaEyeSlash, FaSmile, FaTimes, FaClock } from 'react-icons/fa';
 
 const STATUSES = [
-    { key: 'online', label: 'Çevrimiçi', icon: FaCircle, color: '#57f287' },
+    { key: 'online', label: 'Çevrimiçi', icon: FaCircle, color: '#23a559' },
     { key: 'idle', label: 'Boşta', icon: FaMoon, color: '#fee75c' },
-    { key: 'dnd', label: 'Rahatsız Etmeyin', icon: FaMinusCircle, color: '#ed4245', desc: 'Hiçbir bildirim almayacaksın' },
-    { key: 'invisible', label: 'Görünmez', icon: FaEyeSlash, color: '#747f8d', desc: 'Çevrimdışı görüneceksin' },
+    { key: 'dnd', label: 'Rahatsız Etmeyin', icon: FaMinusCircle, color: '#f23f42', desc: 'Hiçbir bildirim almayacaksın' },
+    { key: 'invisible', label: 'Görünmez', icon: FaEyeSlash, color: '#80848e', desc: 'Çevrimdışı görüneceksin' },
 ];
 
 const EXPIRE_OPTIONS = [
@@ -159,21 +159,21 @@ const S = {
         display: 'flex', alignItems: 'center', gap: 8,
         width: '100%', padding: '10px 14px', border: 'none',
         background: 'transparent', cursor: 'pointer',
-        color: '#dcddde', fontSize: 14, textAlign: 'left',
+        color: '#dbdee1', fontSize: 14, textAlign: 'left',
     },
     customPanel: {
         padding: '8px 14px', display: 'flex', flexDirection: 'column', gap: 8,
     },
     customInput: {
         display: 'flex', alignItems: 'center', gap: 8,
-        backgroundColor: '#1e1f22', borderRadius: 6, padding: '6px 10px',
+        backgroundColor: '#0d0e10', borderRadius: 6, padding: '6px 10px',
     },
     emojiPick: {
         fontSize: 20, cursor: 'pointer', userSelect: 'none',
     },
     input: {
         flex: 1, background: 'transparent', border: 'none', outline: 'none',
-        color: '#dcddde', fontSize: 14, fontFamily: 'inherit',
+        color: '#dbdee1', fontSize: 14, fontFamily: 'inherit',
     },
     expireRow: {
         display: 'flex', alignItems: 'center', gap: 6,
@@ -182,8 +182,8 @@ const S = {
         fontSize: 12, color: '#4e5058',
     },
     select: {
-        flex: 1, backgroundColor: '#1e1f22', border: 'none', borderRadius: 4,
-        color: '#dcddde', fontSize: 12, padding: '4px 6px', outline: 'none',
+        flex: 1, backgroundColor: '#0d0e10', border: 'none', borderRadius: 4,
+        color: '#dbdee1', fontSize: 12, padding: '4px 6px', outline: 'none',
     },
     saveBtn: {
         padding: '6px 14px', borderRadius: 4,
@@ -204,7 +204,7 @@ const S = {
         display: 'flex', flexDirection: 'column', gap: 1, flex: 1,
     },
     statusLabel: {
-        fontSize: 14, color: '#dcddde', fontWeight: 500,
+        fontSize: 14, color: '#dbdee1', fontWeight: 500,
     },
     statusDesc: {
         fontSize: 11, color: '#4e5058',

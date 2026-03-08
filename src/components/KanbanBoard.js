@@ -1,4 +1,4 @@
-// frontend/src/components/KanbanBoard.js
+﻿// frontend/src/components/KanbanBoard.js
 
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -182,7 +182,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
 
 
     return (
-        <div style={{ display: 'flex', height: '100%', overflowX: 'auto', padding: '20px', gap: '15px', backgroundColor: '#313338' }}>
+        <div style={{ display: 'flex', height: '100%', overflowX: 'auto', padding: '20px', gap: '15px', backgroundColor: '#17191c' }}>
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="board" type="COLUMN" direction="horizontal">
                     {(provided) => (
@@ -195,7 +195,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                             {...provided.draggableProps}
                                             style={{ ...provided.draggableProps.style, display: 'flex', flexDirection: 'column', minWidth: '280px', maxWidth: '280px' }}
                                         >
-                                            <div style={{ backgroundColor: '#2b2d31', padding: '10px', borderRadius: '8px', display: 'flex', flexDirection: 'column', maxHeight: '80vh' }}>
+                                            <div style={{ backgroundColor: '#111214', padding: '10px', borderRadius: '8px', display: 'flex', flexDirection: 'column', maxHeight: '80vh' }}>
                                                 {/* Column Header */}
                                                 <div
                                                     {...provided.dragHandleProps}
@@ -238,10 +238,10 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                                             onClick={() => openCardModal(card, col.title)}
                                                                             style={{
                                                                                 userSelect: 'none', padding: '10px', marginBottom: '8px',
-                                                                                backgroundColor: snapshot.isDragging ? '#40444b' : '#2f3136',
-                                                                                borderRadius: '4px', color: '#dcddde',
+                                                                                backgroundColor: snapshot.isDragging ? '#1e2024' : '#111214',
+                                                                                borderRadius: '4px', color: '#dbdee1',
                                                                                 boxShadow: '0 1px 0 rgba(0,0,0,0.25)',
-                                                                                border: '1px solid #202225',
+                                                                                border: '1px solid #0b0e1b',
                                                                                 cursor: 'pointer',
                                                                                 ...provided.draggableProps.style
                                                                             }}
@@ -284,7 +284,7 @@ const KanbanBoard = ({ roomSlug, apiBaseUrl, fetchWithAuth }) => {
                                                             value={newCardContent}
                                                             onChange={e => setNewCardContent(e.target.value)}
                                                             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAddCard(col.id); } }}
-                                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#202225', color: 'white', resize: 'none', boxSizing: 'border-box' }}
+                                                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: 'none', backgroundColor: '#0d0e10', color: 'white', resize: 'none', boxSizing: 'border-box' }}
                                                         />
                                                         <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
                                                             <button onClick={() => handleAddCard(col.id)} style={{ backgroundColor: '#5865f2', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '3px', cursor: 'pointer' }}>Add</button>

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import confirmDialog from '../../utils/confirmDialog';
 
-export const INITIAL_ROLE = { name: '', color: '#8b5cf6', hoist: false, mentionable: true, permissions: 0 };
+export const INITIAL_ROLE = { name: '', color: '#5865f2', hoist: false, mentionable: true, permissions: 0 };
 
 export const COLOR_PRESETS = [
-  { name: 'Purple', value: '#8b5cf6' }, { name: 'Blue', value: '#3b82f6' },
-  { name: 'Green', value: '#10b981' }, { name: 'Red', value: '#ef4444' },
+  { name: 'Purple', value: '#5865f2' }, { name: 'Blue', value: '#3b82f6' },
+  { name: 'Green', value: '#10b981' }, { name: 'Red', value: '#f23f42' },
   { name: 'Yellow', value: '#f59e0b' }, { name: 'Pink', value: '#ec4899' },
-  { name: 'Indigo', value: '#6366f1' }, { name: 'Teal', value: '#14b8a6' },
+  { name: 'Indigo', value: '#4752c4' }, { name: 'Teal', value: '#14b8a6' },
   { name: 'Orange', value: '#f97316' }, { name: 'Gray', value: '#6b7280' }
 ];
 

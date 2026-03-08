@@ -11,7 +11,7 @@ export const getHoverBg = (color) => hexToRgba(color, 0.2);
 export const FEATURE_SECTIONS = [
     {
         title: '⚙️ Genel Ayarlar',
-        color: '#7289da',
+        color: '#5865f2',
         items: [
             { icon: '⚙️', label: 'Kullanıcı Ayarları', modal: 'userSettings' },
             { icon: '⌨️', label: 'Kısayol Tuşları', modal: 'keyboardShortcuts' },
@@ -27,7 +27,7 @@ export const FEATURE_SECTIONS = [
     },
     {
         title: '🔐 Güvenlik & Gizlilik',
-        color: '#ed4245',
+        color: '#f23f42',
         items: [
             { icon: '🔐', label: 'Giriş Geçmişi', modal: 'loginHistory' },
             { icon: '🛡️', label: 'Güvenlik Ayarları', modal: 'securitySettings' },
@@ -54,7 +54,7 @@ export const FEATURE_SECTIONS = [
     },
     {
         title: '🏠 Sunucu Yönetimi',
-        color: '#faa61a',
+        color: '#f0b232',
         items: [
             { icon: '🤖', label: 'Otomatik Roller', modal: 'autoRoles' },
             { icon: '🎭', label: 'Tepki Rolleri', modal: 'reactionRoles' },
@@ -72,7 +72,7 @@ export const FEATURE_SECTIONS = [
     },
     {
         title: '🎮 Eğlence & Sosyal',
-        color: '#9b59b6',
+        color: '#5865f2',
         items: [
             { icon: '🏆', label: 'Başarımlar', modal: 'achievements' },
             { icon: '🎂', label: 'Doğum Günleri', modal: 'birthdaySystem' },

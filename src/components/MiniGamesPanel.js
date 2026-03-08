@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from 'react';
+﻿import { useState, useEffect, useCallback, memo } from 'react';
 import { FaTimes, FaGamepad, FaPlay, FaTrophy, FaUsers, FaCoins, FaDice, FaBrain } from 'react-icons/fa';
 import { toast } from '../utils/toast';
 
@@ -17,6 +17,7 @@ const MiniGamesPanel = memo(({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
     const fetchGames = async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/games/?server_id=${serverId}`);
+            if (!res.ok) return;
             const data = await res.json();
             setGames(data.games || []);
         } catch (error) {
@@ -27,6 +28,7 @@ const MiniGamesPanel = memo(({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
     const fetchLeaderboard = async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/games/leaderboard/?server_id=${serverId}`);
+            if (!res.ok) return;
             const data = await res.json();
             setLeaderboard(data.leaderboard || []);
         } catch (error) {
@@ -165,9 +167,64 @@ const MiniGamesPanel = memo(({ fetchWithAuth, apiBaseUrl, onClose, serverId }) =
 
 MiniGamesPanel.displayName = 'MiniGamesPanel';
 
+// Extracted sub-components with their own hooks (Rules of Hooks fix)
+const NumberGuessGame = memo(({ state, onAction }) => {
+    const [guess, setGuess] = useState('');
+    return (
+        <div style={styles.gameArea}>
+            <h3>Guess the Number (1-100)</h3>
+            <p>Guesses left: {state.max_guesses - (state.guesses?.length || 0)}</p>
+            {state.hints?.length > 0 && (
+                <p>Last hint: Go {state.hints[state.hints.length - 1]}</p>
+            )}
+            <input
+                type="number"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                style={styles.guessInput}
+                min="1"
+                max="100"
+            />
+            <button
+                onClick={() => { onAction('guess', { number: parseInt(guess) }); setGuess(''); }}
+                style={styles.guessButton}
+            >
+                Guess!
+            </button>
+        </div>
+    );
+});
+NumberGuessGame.displayName = 'NumberGuessGame';
+
+const HangmanGame = memo(({ state, onAction }) => {
+    const [letter, setLetter] = useState('');
+    return (
+        <div style={styles.gameArea}>
+            <h3>Hangman</h3>
+            <p style={styles.hangmanWord}>{state.display?.join(' ')}</p>
+            <p>Wrong guesses: {state.wrong_guesses}/{state.max_wrong}</p>
+            <p>Used: {state.guessed_letters?.join(', ')}</p>
+            <input
+                type="text"
+                value={letter}
+                onChange={(e) => setLetter(e.target.value.slice(-1).toUpperCase())}
+                style={styles.letterInput}
+                maxLength={1}
+            />
+            <button
+                onClick={() => { onAction('guess_letter', { letter }); setLetter(''); }}
+                style={styles.guessButton}
+            >
+                Guess Letter
+            </button>
+        </div>
+    );
+});
+HangmanGame.displayName = 'HangmanGame';
+
 // Game Renderer Component
 const GameRenderer = memo(({ game, onAction }) => {
-    const { game_type, state, players } = game;
+    const { game_type, state } = game;
 
     if (game_type === 'trivia') {
         const question = state.questions?.[state.current_question];
@@ -211,30 +268,7 @@ const GameRenderer = memo(({ game, onAction }) => {
     }
 
     if (game_type === 'number_guess') {
-        const [guess, setGuess] = useState('');
-        return (
-            <div style={styles.gameArea}>
-                <h3>Guess the Number (1-100)</h3>
-                <p>Guesses left: {state.max_guesses - (state.guesses?.length || 0)}</p>
-                {state.hints?.length > 0 && (
-                    <p>Last hint: Go {state.hints[state.hints.length - 1]}</p>
-                )}
-                <input
-                    type="number"
-                    value={guess}
-                    onChange={(e) => setGuess(e.target.value)}
-                    style={styles.guessInput}
-                    min="1"
-                    max="100"
-                />
-                <button
-                    onClick={() => { onAction('guess', { number: parseInt(guess) }); setGuess(''); }}
-                    style={styles.guessButton}
-                >
-                    Guess!
-                </button>
-            </div>
-        );
+        return <NumberGuessGame state={state} onAction={onAction} />;
     }
 
     if (game_type === 'rock_paper_scissors') {
@@ -258,28 +292,7 @@ const GameRenderer = memo(({ game, onAction }) => {
     }
 
     if (game_type === 'hangman') {
-        const [letter, setLetter] = useState('');
-        return (
-            <div style={styles.gameArea}>
-                <h3>Hangman</h3>
-                <p style={styles.hangmanWord}>{state.display?.join(' ')}</p>
-                <p>Wrong guesses: {state.wrong_guesses}/{state.max_wrong}</p>
-                <p>Used: {state.guessed_letters?.join(', ')}</p>
-                <input
-                    type="text"
-                    value={letter}
-                    onChange={(e) => setLetter(e.target.value.slice(-1).toUpperCase())}
-                    style={styles.letterInput}
-                    maxLength={1}
-                />
-                <button
-                    onClick={() => { onAction('guess_letter', { letter }); setLetter(''); }}
-                    style={styles.guessButton}
-                >
-                    Guess Letter
-                </button>
-            </div>
-        );
+        return <HangmanGame state={state} onAction={onAction} />;
     }
 
     return (
@@ -299,22 +312,22 @@ const styles = {
         justifyContent: 'center', alignItems: 'center', zIndex: 10000
     },
     modal: {
-        backgroundColor: '#2f3136', borderRadius: '12px', width: '700px',
+        backgroundColor: '#111214', borderRadius: '12px', width: '700px',
         maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column'
     },
     header: {
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '20px', borderBottom: '1px solid #40444b'
+        padding: '20px', borderBottom: '1px solid #182135'
     },
     headerLeft: { display: 'flex', alignItems: 'center' },
     title: { margin: 0, color: '#fff', fontSize: '20px' },
     closeButton: {
-        background: 'none', border: 'none', color: '#b9bbbe',
+        background: 'none', border: 'none', color: '#b5bac1',
         cursor: 'pointer', fontSize: '20px'
     },
     tabs: { display: 'flex', padding: '10px 20px', gap: '10px' },
     tab: {
-        background: '#40444b', border: 'none', color: '#b9bbbe',
+        background: '#1e2024', border: 'none', color: '#b5bac1',
         padding: '8px 16px', borderRadius: '6px', cursor: 'pointer',
         display: 'flex', alignItems: 'center', gap: '6px'
     },
@@ -326,15 +339,15 @@ const styles = {
     content: { padding: '20px', overflowY: 'auto', flex: 1 },
     gamesGrid: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px' },
     gameCard: {
-        background: '#40444b', borderRadius: '10px', padding: '15px',
+        background: '#1e2024', borderRadius: '10px', padding: '15px',
         textAlign: 'center'
     },
     gameIcon: { fontSize: '40px' },
     gameName: { color: '#fff', margin: '10px 0 5px' },
-    gameDesc: { color: '#b9bbbe', fontSize: '12px', marginBottom: '10px' },
+    gameDesc: { color: '#b5bac1', fontSize: '12px', marginBottom: '10px' },
     gameInfo: {
         display: 'flex', justifyContent: 'center', gap: '15px',
-        color: '#b9bbbe', fontSize: '12px', marginBottom: '10px'
+        color: '#b5bac1', fontSize: '12px', marginBottom: '10px'
     },
     playButton: {
         background: '#5865f2', border: 'none', color: '#fff',
@@ -345,7 +358,7 @@ const styles = {
     question: { fontSize: '18px', marginBottom: '20px' },
     options: { display: 'flex', flexDirection: 'column', gap: '10px' },
     optionButton: {
-        background: '#40444b', border: 'none', color: '#fff',
+        background: '#1e2024', border: 'none', color: '#fff',
         padding: '12px', borderRadius: '8px', cursor: 'pointer',
         fontSize: '14px', transition: 'background 0.2s'
     },
@@ -354,11 +367,11 @@ const styles = {
         width: '200px', margin: '20px auto'
     },
     ticTacToeCell: {
-        width: '60px', height: '60px', background: '#40444b',
+        width: '60px', height: '60px', background: '#1e2024',
         border: 'none', borderRadius: '8px', fontSize: '30px', cursor: 'pointer'
     },
     guessInput: {
-        background: '#40444b', border: 'none', color: '#fff',
+        background: '#1e2024', border: 'none', color: '#fff',
         padding: '10px', borderRadius: '6px', width: '100px',
         textAlign: 'center', fontSize: '18px'
     },
@@ -368,13 +381,13 @@ const styles = {
         marginLeft: '10px'
     },
     letterInput: {
-        background: '#40444b', border: 'none', color: '#fff',
+        background: '#1e2024', border: 'none', color: '#fff',
         padding: '10px', borderRadius: '6px', width: '50px',
         textAlign: 'center', fontSize: '24px', textTransform: 'uppercase'
     },
     rpsButtons: { display: 'flex', justifyContent: 'center', gap: '20px' },
     rpsButton: {
-        background: '#40444b', border: 'none', color: '#fff',
+        background: '#1e2024', border: 'none', color: '#fff',
         padding: '20px', borderRadius: '12px', cursor: 'pointer',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         gap: '5px', fontSize: '40px'
@@ -383,13 +396,13 @@ const styles = {
     leaderboard: { display: 'flex', flexDirection: 'column', gap: '10px' },
     leaderboardRow: {
         display: 'flex', alignItems: 'center', gap: '15px',
-        background: '#40444b', padding: '12px 15px', borderRadius: '8px'
+        background: '#1e2024', padding: '12px 15px', borderRadius: '8px'
     },
-    rank: { color: '#faa61a', fontWeight: 'bold', width: '40px' },
+    rank: { color: '#f0b232', fontWeight: 'bold', width: '40px' },
     playerName: { color: '#fff', flex: 1 },
-    wins: { color: '#57f287' },
-    totalScore: { color: '#b9bbbe' },
-    emptyText: { color: '#72767d', textAlign: 'center', padding: '40px' }
+    wins: { color: '#23a559' },
+    totalScore: { color: '#b5bac1' },
+    emptyText: { color: '#949ba4', textAlign: 'center', padding: '40px' }
 };
 
 export default MiniGamesPanel;

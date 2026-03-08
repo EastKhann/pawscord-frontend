@@ -44,9 +44,9 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                         <>
                             <div style={styles.statsRow}>
                                 <StatCard icon={<FaUsers />} label={`Toplam Üye`} value={analytics.member_growth?.total || 0} change={comparison?.change?.active_users} color="#5865f2" />
-                                <StatCard icon={<FaComments />} label="Toplam Mesaj" value={analytics.message_stats?.total || 0} subtext={`Günlük ort: ${analytics.message_stats?.daily_average || 0}`} change={comparison?.change?.messages} color="#43b581" />
-                                <StatCard icon={<FaUsers />} label={`Aktif Üye`} value={analytics.active_users?.total || 0} subtext={`%${analytics.active_users?.activity_rate || 0} aktivite`} color="#faa61a" />
-                                <StatCard icon={<FaClock />} label="En Yoğun Saat" value={analytics.peak_hours?.peak_hour_label || '-'} color="#f04747" />
+                                <StatCard icon={<FaComments />} label="Toplam Mesaj" value={analytics.message_stats?.total || 0} subtext={`Günlük ort: ${analytics.message_stats?.daily_average || 0}`} change={comparison?.change?.messages} color="#23a559" />
+                                <StatCard icon={<FaUsers />} label={`Aktif Üye`} value={analytics.active_users?.total || 0} subtext={`%${analytics.active_users?.activity_rate || 0} aktivite`} color="#f0b232" />
+                                <StatCard icon={<FaClock />} label="En Yoğun Saat" value={analytics.peak_hours?.peak_hour_label || '-'} color="#f23f42" />
                             </div>
 
                             <div style={styles.chartsRow}>
@@ -121,9 +121,9 @@ const ServerAnalyticsDashboard = ({ isOpen, onClose, serverId, serverName, fetch
                                         {analytics.content_breakdown && (
                                             <>
                                                 <ContentBar label="Metin" value={analytics.content_breakdown.text_only} total={analytics.message_stats?.total || 1} color="#5865f2" />
-                                                <ContentBar label="Resimli" value={analytics.content_breakdown.with_images} total={analytics.message_stats?.total || 1} color="#43b581" />
-                                                <ContentBar label="Dosyalı" value={analytics.content_breakdown.with_files} total={analytics.message_stats?.total || 1} color="#faa61a" />
-                                                <ContentBar label="Ses" value={analytics.content_breakdown.voice_messages} total={analytics.message_stats?.total || 1} color="#f04747" />
+                                                <ContentBar label="Resimli" value={analytics.content_breakdown.with_images} total={analytics.message_stats?.total || 1} color="#23a559" />
+                                                <ContentBar label="Dosyalı" value={analytics.content_breakdown.with_files} total={analytics.message_stats?.total || 1} color="#f0b232" />
+                                                <ContentBar label="Ses" value={analytics.content_breakdown.voice_messages} total={analytics.message_stats?.total || 1} color="#f23f42" />
                                             </>
                                         )}
                                     </div>

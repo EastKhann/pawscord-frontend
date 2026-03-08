@@ -4,7 +4,7 @@
     right: 0;
     width: 600px;
     height: 100vh;
-    background: var(--bg-modifier, #2f3136);
+    background: var(--bg-modifier, #111214);
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -23,9 +23,9 @@
 }
 
 .panel-header {
-    background: var(--bg-tertiary, #202225);
+    background: var(--bg-tertiary, #0d0e10);
     padding: var(--space-xl, 20px);
-    border-bottom: 1px solid var(--bg-primary, #1e1f22);
+    border-bottom: 1px solid var(--bg-primary, #0d0e10);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,7 +48,7 @@
 .close-btn {
     background: none;
     border: none;
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 24px;
     cursor: pointer;
     padding: 8px;
@@ -57,7 +57,7 @@
 }
 
 .close-btn:hover {
-    background: #40444b;
+    background: #182135;
     color: #fff;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .mod-section {
-    background: #40444b;
+    background: #182135;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -102,7 +102,7 @@
 }
 
 .form-group label {
-    color: var(--text-secondary, #b9bbbe);
+    color: var(--text-secondary, #b5bac1);
     font-size: var(--font-md, 13px);
     font-weight: var(--weight-semibold, 600);
     text-transform: uppercase;
@@ -115,8 +115,8 @@
 .criteria-select,
 .settings-input,
 .settings-select {
-    background: var(--bg-modifier, #2f3136);
-    border: 2px solid var(--bg-modifier, #2f3136);
+    background: var(--bg-modifier, #111214);
+    border: 2px solid var(--bg-modifier, #111214);
     color: #fff;
     padding: 10px var(--space-md, 12px);
     border-radius: var(--radius-md, 6px);
@@ -159,9 +159,9 @@
 }
 
 .preset-btn {
-    background: var(--bg-modifier, #2f3136);
-    border: 2px solid var(--bg-modifier, #2f3136);
-    color: var(--text-secondary, #b9bbbe);
+    background: var(--bg-modifier, #111214);
+    border: 2px solid var(--bg-modifier, #111214);
+    color: var(--text-secondary, #b5bac1);
     padding: 10px;
     border-radius: var(--radius-md, 6px);
     font-size: var(--font-md, 13px);
@@ -209,7 +209,7 @@
 }
 
 .btn-mass-action {
-    background: linear-gradient(135deg, #ed4245, #c93235);
+    background: linear-gradient(135deg, #f23f42, #c93235);
 }
 
 .btn-mass-action:hover:not(:disabled) {
@@ -230,7 +230,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #ed4245;
+    color: #f23f42;
     font-size: 13px;
 }
 
@@ -266,7 +266,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: #72767d;
+    background: #949ba4;
     transition: 0.3s;
     border-radius: 26px;
 }
@@ -298,7 +298,7 @@ input:checked+.slider:before {
 }
 
 .raid-settings {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
     padding: 16px;
     display: flex;
@@ -307,7 +307,7 @@ input:checked+.slider:before {
 }
 
 .input-hint {
-    color: #72767d;
+    color: #949ba4;
     font-size: 12px;
     margin-top: 4px;
 }
@@ -324,7 +324,7 @@ input:checked+.slider:before {
 .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: #72767d;
+    color: #949ba4;
 }
 
 .empty-state i {
@@ -339,13 +339,13 @@ input:checked+.slider:before {
 }
 
 .warning-item {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
     padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    border-left: 3px solid #faa61a;
+    border-left: 3px solid #f0b232;
 }
 
 .warning-header {
@@ -364,7 +364,7 @@ input:checked+.slider:before {
 }
 
 .warning-count {
-    background: #faa61a;
+    background: #f0b232;
     color: #000;
     font-size: 12px;
     font-weight: 700;
@@ -379,18 +379,18 @@ input:checked+.slider:before {
 }
 
 .warning-reason {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
 }
 
 .warning-time {
-    color: #72767d;
+    color: #949ba4;
     font-size: 11px;
 }
 
 .btn-clear-warnings {
     align-self: flex-start;
-    background: #ed4245;
+    background: #f23f42;
     border: none;
     color: #fff;
     padding: 6px 12px;
@@ -415,7 +415,7 @@ input:checked+.slider:before {
 }
 
 .log-item {
-    background: #2f3136;
+    background: #0e1222;
     border-radius: 6px;
     padding: 12px;
     display: flex;
@@ -424,7 +424,7 @@ input:checked+.slider:before {
 }
 
 .log-item:hover {
-    background: #36393f;
+    background: #121928;
 }
 
 .log-icon {
@@ -454,12 +454,12 @@ input:checked+.slider:before {
 }
 
 .log-details {
-    color: #b9bbbe;
+    color: #b5bac1;
     font-size: 13px;
 }
 
 .log-time {
-    color: #72767d;
+    color: #949ba4;
     font-size: 11px;
 }
 
@@ -479,7 +479,7 @@ input:checked+.slider:before {
 .panel-content::-webkit-scrollbar-thumb,
 .warnings-list::-webkit-scrollbar-thumb,
 .logs-list::-webkit-scrollbar-thumb {
-    background: #202225;
+    background: #0b0e1b;
     border-radius: 4px;
 }
 

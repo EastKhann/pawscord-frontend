@@ -26,7 +26,7 @@ const VoiceUserItem = ({
 
     const avatarBorder = userObj.is_talking ? '2px solid #4CAF50' : '2px solid transparent';
     const avatarShadow = userObj.is_talking ? '0 0 10px rgba(76, 175, 80, 0.6)' : 'none';
-    const badgeBg = userObj.is_deafened ? '#e74c3c' : userObj.is_mic_off ? '#e67e22' : '#43b581';
+    const badgeBg = userObj.is_deafened ? '#e74c3c' : userObj.is_mic_off ? '#e67e22' : '#23a559';
 
     const AvatarSection = () => (
         <div style={styles.avatarContainer}>
@@ -44,7 +44,7 @@ const VoiceUserItem = ({
                 <div style={styles.userInfo}>
                     <span className={isClientInThisChannel && isPttActive && !userObj.is_talking ? 'ptt-active' : ''}
                         style={{ ...styles.username, ...userStyle, fontWeight: 'bold' }}>
-                        {user} <span style={{ fontSize: '0.85em', color: '#99aab5' }}>(Sen)</span>
+                        {user} <span style={{ fontSize: '0.85em', color: '#949ba4' }}>(Sen)</span>
                     </span>
                     {userObj.is_sharing && <div style={styles.sharingIndicator}>{'🖥️'} Ekran Payla{'şı'}yor</div>}
                 </div>

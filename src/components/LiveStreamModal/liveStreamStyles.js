@@ -14,7 +14,7 @@ export const getStyles = (isMobile) => ({
     viewerCount: { position: 'absolute', top: '16px', right: '16px', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(10px)', borderRadius: '20px', fontSize: '14px', fontWeight: '600', color: 'white' },
     controls: { padding: '16px', background: 'rgba(0, 0, 0, 0.8)', borderTop: '1px solid rgba(218, 55, 60, 0.2)', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' },
     controlBtn: (active) => ({ padding: '12px 24px', borderRadius: '8px', fontSize: '15px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s ease', minHeight: '44px', background: active ? 'rgba(218, 55, 60, 0.3)' : 'rgba(88, 101, 242, 0.2)', color: active ? '#da373c' : 'rgba(255, 255, 255, 0.9)', border: `1px solid ${active ? 'rgba(218, 55, 60, 0.5)' : 'rgba(88, 101, 242, 0.4)'}` }),
-    startBtn: { padding: '12px 32px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #da373c, #f04747)', color: 'white', transition: 'all 0.2s ease', minHeight: '48px' },
+    startBtn: { padding: '12px 32px', borderRadius: '8px', border: 'none', fontSize: '16px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #da373c, #f23f42)', color: 'white', transition: 'all 0.2s ease', minHeight: '48px' },
     chatSection: { width: isMobile ? '100%' : '350px', maxHeight: isMobile ? '300px' : 'auto', background: 'rgba(0, 0, 0, 0.3)', borderLeft: isMobile ? 'none' : '1px solid rgba(218, 55, 60, 0.2)', display: 'flex', flexDirection: 'column' },
     chatHeader: { padding: '16px', borderBottom: '1px solid rgba(218, 55, 60, 0.2)', fontSize: '16px', fontWeight: '600', color: 'rgba(255, 255, 255, 0.9)' },
     chatMessages: { flex: 1, overflowY: 'auto', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' },
@@ -23,5 +23,5 @@ export const getStyles = (isMobile) => ({
     chatText: { color: 'rgba(255, 255, 255, 0.8)' },
     chatInputArea: { padding: '12px', borderTop: '1px solid rgba(218, 55, 60, 0.2)', display: 'flex', gap: '8px' },
     input: { flex: 1, padding: '12px', background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(218, 55, 60, 0.3)', borderRadius: '8px', color: 'rgba(255, 255, 255, 0.95)', fontSize: '14px', outline: 'none' },
-    sendBtn: { padding: '12px 20px', background: 'linear-gradient(135deg, #da373c, #f04747)', border: 'none', borderRadius: '8px', color: 'white', fontWeight: '600', cursor: 'pointer', minHeight: '44px' },
+    sendBtn: { padding: '12px 20px', background: 'linear-gradient(135deg, #da373c, #f23f42)', border: 'none', borderRadius: '8px', color: 'white', fontWeight: '600', cursor: 'pointer', minHeight: '44px' },
 });

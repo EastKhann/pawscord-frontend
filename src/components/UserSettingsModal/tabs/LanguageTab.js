@@ -38,7 +38,7 @@ const LanguageTab = () => {
                             textAlign: 'left', transition: 'background 0.15s',
                         }}>
                             <span style={{ fontSize: 20 }}>{lang.flag}</span>
-                            <span style={{ color: language === lang.code ? '#5865f2' : '#dcddde', fontSize: 14, fontWeight: language === lang.code ? 600 : 400 }}>
+                            <span style={{ color: language === lang.code ? '#5865f2' : '#dbdee1', fontSize: 14, fontWeight: language === lang.code ? 600 : 400 }}>
                                 {lang.label}
                             </span>
                             {language === lang.code && <FaCheck style={{ marginLeft: 'auto', color: '#5865f2', fontSize: 12 }} />}

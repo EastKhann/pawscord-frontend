@@ -35,7 +35,7 @@ const MessageMedia = ({
             {msg.poll && (
                 <div style={styles.pollContainer}>
                     <h4 style={{ marginTop: 0, marginBottom: 10 }}>{msg.poll.question}</h4>
-                    <div style={{ fontSize: '0.8em', color: '#b9bbbe', marginBottom: 8 }}>
+                    <div style={{ fontSize: '0.8em', color: '#b5bac1', marginBottom: 8 }}>
                         {msg.poll.allow_multiple_votes ? 'Çoklu Seçim' : 'Tek Seçim'} • {msg.poll.total_votes || 0} Oy
                     </div>
                     {msg.poll.options.map(opt => {
@@ -62,7 +62,7 @@ const MessageMedia = ({
                             </div>
                         );
                     })}
-                    {msg.poll.expires_at && <div style={{ fontSize: '0.75em', color: '#72767d', marginTop: 5 }}>Bitiş: {new Date(msg.poll.expires_at).toLocaleString()}</div>}
+                    {msg.poll.expires_at && <div style={{ fontSize: '0.75em', color: '#949ba4', marginTop: 5 }}>Bitiş: {new Date(msg.poll.expires_at).toLocaleString()}</div>}
                 </div>
             )}
 
@@ -74,7 +74,7 @@ const MessageMedia = ({
 
             {/* Voice Message */}
             {msg.is_voice_message && fullFileUrl && (
-                <Suspense fallback={<div style={{ padding: '12px', color: '#72767d', fontSize: '13px' }}>🎵 Ses yükleniyor...</div>}>
+                <Suspense fallback={<div style={{ padding: '12px', color: '#949ba4', fontSize: '13px' }}>🎵 Ses yükleniyor...</div>}>
                     <div>
                         <VoiceMessagePlayer
                             audioUrl={fullFileUrl}

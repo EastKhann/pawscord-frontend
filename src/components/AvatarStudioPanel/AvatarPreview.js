@@ -1,12 +1,12 @@
-const AvatarPreview = ({ avatar, parts, mini = false }) => {
+﻿const AvatarPreview = ({ avatar, parts, mini = false }) => {
   const size = mini ? 80 : 200;
-  const bgColor = parts.backgrounds?.find(b => b.id === avatar.background)?.color || '#36393f';
+  const bgColor = parts.backgrounds?.find(b => b.id === avatar.background)?.color || '#17191c';
   const skinColor = parts.skin_tones?.find(s => s.id === avatar.skin_tone)?.color || '#D2B48C';
   const hairColor = parts.hair_colors?.find(h => h.id === avatar.hair_color)?.color || '#1C1C1C';
   const eyeColor = parts.eye_colors?.find(e => e.id === avatar.eye_color)?.color || '#8B4513';
 
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', border: '4px solid #40444b' }}>
+    <div style={{ width: size, height: size, borderRadius: '50%', background: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', border: '4px solid #182135' }}>
       <div style={{
         width: size * 0.7, height: size * 0.8,
         borderRadius: avatar.face_shape === 'round' ? '50%' : avatar.face_shape === 'oval' ? '50% 50% 45% 45%' : avatar.face_shape === 'square' ? '10%' : '50%',

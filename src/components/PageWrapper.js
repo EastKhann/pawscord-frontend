@@ -1,4 +1,4 @@
-// frontend/src/components/PageWrapper.js
+﻿// frontend/src/components/PageWrapper.js
 import { Capacitor } from '@capacitor/core';
 
 const PageWrapper = ({ children }) => {
@@ -13,7 +13,7 @@ const PageWrapper = ({ children }) => {
             // 🔥 1. TEKNİK BOŞLUK: Sadece APK ise çentik payı bırak
             paddingTop: isNative ? 'max(35px, env(safe-area-inset-top))' : '0px',
 
-            backgroundColor: '#1e1f22',
+            backgroundColor: '#0d0e10',
 
             // 🔥 2. SCROLL BURADA OLACAK: İçindeki sayfalar scroll etmeyecek
             overflowY: 'auto',

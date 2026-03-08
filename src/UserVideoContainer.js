@@ -1,4 +1,4 @@
-// frontend/src/UserVideoContainer.js
+﻿// frontend/src/UserVideoContainer.js
 
 import React, { useEffect, useRef, useMemo, useState } from 'react';
 
@@ -238,7 +238,7 @@ const UserVideoContainer = ({ id, user, track, streamType, avatarUrl, isLocal, o
                             src={avatarUrl || "https://media.pawscord.com/assets/logo.png"}
                             style={{
                                 ...styles.avatarImage,
-                                border: user.is_talking ? '3px solid #3ba55c' : '2px solid #202225',
+                                border: user.is_talking ? '3px solid #3ba55c' : '2px solid #0b0e1b',
                                 transform: user.is_talking ? 'scale(1.1)' : 'scale(1)',
                                 transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                             }}
@@ -301,7 +301,7 @@ const styles = {
         flexGrow: 1,
         borderRadius: '12px',
         overflow: 'hidden', // ✅ Scroll çıkmasın
-        backgroundColor: '#2b2d31',
+        backgroundColor: '#111214',
         boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
         transition: 'all 0.2s ease-in-out',
         position: 'relative',
@@ -342,7 +342,7 @@ const styles = {
     avatarPlaceholder: {
         position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
         display: 'flex', justifyContent: 'center', alignItems: 'center',
-        backgroundColor: '#1e1f22',
+        backgroundColor: '#0d0e10',
     },
     avatarImage: {
         width: '65px', // Biraz büyüttüm

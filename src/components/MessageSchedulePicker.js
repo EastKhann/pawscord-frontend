@@ -1,4 +1,4 @@
-// frontend/src/components/MessageSchedulePicker.js
+﻿// frontend/src/components/MessageSchedulePicker.js
 // 📅 FEATURE — Message Schedule UI Picker
 // Calendar + time picker for scheduling messages
 
@@ -113,7 +113,7 @@ const S = {
         alignItems: 'center', justifyContent: 'center', zIndex: 5000,
     },
     modal: {
-        backgroundColor: '#2b2d31', borderRadius: 12, padding: 20,
+        backgroundColor: '#111214', borderRadius: 12, padding: 20,
         width: 380, maxWidth: '90vw',
         boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
     },
@@ -135,7 +135,7 @@ const S = {
     quickBtn: {
         padding: '6px 14px', backgroundColor: 'rgba(88,101,242,0.1)',
         border: '1px solid rgba(88,101,242,0.3)', borderRadius: 8,
-        color: '#dcddde', cursor: 'pointer', fontSize: 13, fontWeight: 500,
+        color: '#dbdee1', cursor: 'pointer', fontSize: 13, fontWeight: 500,
         transition: 'all 0.15s',
     },
     divider: {
@@ -150,7 +150,7 @@ const S = {
     inputs: { display: 'flex', gap: 10 },
     inputGroup: {
         flex: 1, display: 'flex', alignItems: 'center', gap: 8,
-        backgroundColor: '#1e1f22', borderRadius: 8, padding: '8px 12px',
+        backgroundColor: '#0d0e10', borderRadius: 8, padding: '8px 12px',
     },
     inputIcon: { color: '#949ba4', fontSize: 14, flexShrink: 0 },
     input: {

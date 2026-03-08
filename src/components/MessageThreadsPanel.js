@@ -1,4 +1,4 @@
-// frontend/src/components/MessageThreadsPanel.js
+﻿// frontend/src/components/MessageThreadsPanel.js
 import { useState, useEffect } from 'react';
 import { FaTimes, FaComments, FaThumbtack, FaBell, FaBellSlash, FaReply } from 'react-icons/fa';
 import toast from '../utils/toast';
@@ -164,7 +164,7 @@ const MessageThreadsPanel = ({ fetchWithAuth, apiBaseUrl, messageId, onClose }) 
                                     </div>
                                 </div>
                                 <div style={styles.threadActions}>
-                                    {thread.is_pinned && <FaThumbtack style={{ color: '#faa61a' }} />}
+                                    {thread.is_pinned && <FaThumbtack style={{ color: '#f0b232' }} />}
                                     <button
                                         onClick={() => subscribeToThread(thread.id)}
                                         style={styles.actionBtn}
@@ -245,7 +245,7 @@ const styles = {
     },
     createForm: {
         padding: '20px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderBottom: '1px solid #333'
     },
     input: {
@@ -260,7 +260,7 @@ const styles = {
     },
     saveBtn: {
         flex: 1,
-        backgroundColor: '#43b581',
+        backgroundColor: '#23a559',
         color: '#fff',
         border: 'none',
         padding: '10px',
@@ -289,7 +289,7 @@ const styles = {
         display: 'flex',
         gap: '15px',
         padding: '15px',
-        backgroundColor: '#2c2f33',
+        backgroundColor: '#111214',
         borderRadius: '8px',
         marginBottom: '10px',
         alignItems: 'center'
@@ -325,7 +325,7 @@ const styles = {
     actionBtn: {
         backgroundColor: 'transparent',
         border: 'none',
-        color: '#dcddde',
+        color: '#dbdee1',
         cursor: 'pointer',
         fontSize: '18px',
         padding: '8px'

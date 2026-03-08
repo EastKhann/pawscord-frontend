@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { createPortal } from 'react-dom';
 import useModalA11y from '../hooks/useModalA11y';
 
@@ -26,7 +26,7 @@ const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClo
             <div
                 {...dialogProps}
                 style={{
-                    backgroundColor: '#2b2d31',
+                    backgroundColor: '#0e1222',
                     borderRadius: '12px',
                     width: '400px',
                     maxHeight: '80vh',
@@ -37,13 +37,13 @@ const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClo
                 {/* Header */}
                 <div style={{
                     padding: '20px',
-                    borderBottom: '1px solid #3f4147',
+                    borderBottom: '1px solid #182135',
                     textAlign: 'center'
                 }}>
                     <h2 style={{ color: '#f2f3f5', margin: 0, fontSize: '18px' }}>
                         🎫 Sunucuya Davet Et
                     </h2>
-                    <p style={{ color: '#b9bbbe', margin: '8px 0 0', fontSize: '14px' }}>
+                    <p style={{ color: '#b5bac1', margin: '8px 0 0', fontSize: '14px' }}>
                         <strong>{inviteToServerModal.username}</strong> kullanıcısını hangi sunucuya davet etmek istiyorsunuz?
                     </p>
                 </div>
@@ -107,7 +107,7 @@ const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClo
                                 <div style={{ color: '#f2f3f5', fontWeight: '600' }}>
                                     {server.name}
                                 </div>
-                                <div style={{ color: '#b9bbbe', fontSize: '12px' }}>
+                                <div style={{ color: '#b5bac1', fontSize: '12px' }}>
                                     {server.member_count || server.categories?.length || 0} üye
                                 </div>
                             </div>
@@ -119,13 +119,13 @@ const InviteToServerModal = ({ inviteToServerModal, servers, onSendInvite, onClo
                 {/* Footer */}
                 <div style={{
                     padding: '16px 20px',
-                    borderTop: '1px solid #3f4147',
+                    borderTop: '1px solid #182135',
                     textAlign: 'center'
                 }}>
                     <button
                         onClick={onClose}
                         style={{
-                            backgroundColor: '#4f545c',
+                            backgroundColor: '#4e5058',
                             color: '#f2f3f5',
                             border: 'none',
                             padding: '10px 24px',
