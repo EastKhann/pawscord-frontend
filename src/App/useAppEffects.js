@@ -390,7 +390,11 @@ export default function useAppEffects({
     // 12. ACTIVITY POLLING (Spotify / Steam)
     // =========================================================================
     useEffect(() => {
-        if (!isAuthenticated || !username) return;
+        // 🔥 FIX: Wait until allUsers is populated before the first poll.
+        // If we poll before isInitialDataLoaded, setAllUsers(prev => prev.map(...))
+        // runs on an empty array, silently discards the activity, but prevActivityRef
+        // is already set — so all subsequent 30s polls see "no change" and skip.
+        if (!isAuthenticated || !username || !isInitialDataLoaded) return;
 
         const prevActivityRef = { current: null };
 
@@ -439,9 +443,15 @@ export default function useAppEffects({
                     const newStr = JSON.stringify(newActivity);
 
                     if (prevStr !== newStr) {
-                        // Update Local & Send WS
                         prevActivityRef.current = newActivity;
 
+                        // 🔥 FIX: Update own entry in allUsers immediately so the
+                        // current user can see their own activity in the sidebar/list
+                        setAllUsers(prev => prev.map(u =>
+                            u.username === username ? { ...u, current_activity: newActivity } : u
+                        ));
+
+                        // Also broadcast to others via status WebSocket
                         if (statusWsRef.current && statusWsRef.current.readyState === WebSocket.OPEN) {
                             statusWsRef.current.send(JSON.stringify({
                                 type: 'update_activity',
@@ -459,7 +469,7 @@ export default function useAppEffects({
         checkActivity(); // Initial check
 
         return () => clearInterval(interval);
-    }, [isAuthenticated, username, fetchWithAuth]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isAuthenticated, username, fetchWithAuth, isInitialDataLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // =========================================================================
     // 13. MAINTENANCE MODE POLLING

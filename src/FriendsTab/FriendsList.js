@@ -24,7 +24,7 @@ const isIgnoredApp = (appName) => {
 const STATUS_TEXT = { online: 'Çevrimiçi', idle: 'Boşta', dnd: 'Rahatsız Etmeyin', invisible: 'Görünmez', offline: 'Çevrimdışı' };
 const STATUS_COLOR = { online: '#23a559', idle: '#f0b232', dnd: '#f23f43', invisible: '#80848e', offline: '#80848e' };
 
-const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStartDM, handleRemoveFriend, setActiveTab }) => {
+const FriendsList = ({ friends, onlineUsers = [], allUsers = [], getDeterministicAvatar, onStartDM, handleRemoveFriend, setActiveTab }) => {
     const [search, setSearch] = useState('');
     const myUsername = localStorage.getItem('chat_username') || '';
 
@@ -32,10 +32,12 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
         const iAmSender = friend.sender_username === myUsername;
         const friendUsername = iAmSender ? friend.receiver_username : friend.sender_username;
         const displayAvatar = iAmSender ? friend.receiver_avatar : friend.sender_avatar;
-        const friendActivity = iAmSender ? friend.receiver_activity : friend.sender_activity;
+        // Prefer live activity from allUsers (real-time) over the stale DB snapshot on the friend object
+        const liveUser = allUsers.find(u => u.username === friendUsername);
+        const friendActivity = liveUser?.current_activity || (iAmSender ? friend.receiver_activity : friend.sender_activity);
         const isReallyOnline = Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
         return { ...friend, friendUsername, displayAvatar, friendActivity, isReallyOnline };
-    }), [friends, onlineUsers, myUsername]);
+    }), [friends, onlineUsers, allUsers, myUsername]);
 
     const filtered = useMemo(() => {
         const q = search.toLowerCase();
@@ -96,12 +98,12 @@ const FriendsList = ({ friends, onlineUsers = [], getDeterministicAvatar, onStar
                                 <div style={{ ...styles.status, color: statusColor }}>{statusText}</div>
                                 {friendActivity?.spotify && (
                                     <span style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                                        🎵 {friendActivity.spotify.track}
+                                        🎵 {friendActivity.spotify.track || friendActivity.spotify.name}
                                     </span>
                                 )}
-                                {friendActivity?.steam && !isIgnoredApp(friendActivity.steam.game) && (
+                                {friendActivity?.steam && !isIgnoredApp(friendActivity.steam.game || friendActivity.steam.name) && (
                                     <span style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                                        🎮 {friendActivity.steam.game}
+                                        🎮 {friendActivity.steam.game || friendActivity.steam.name}
                                     </span>
                                 )}
                             </div>

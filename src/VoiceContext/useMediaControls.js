@@ -186,9 +186,62 @@ export const useMediaControls = ({
         } catch (error) {
             console.error('[Camera] Error:', error);
             if (error.name === 'NotAllowedError') {
-                toast.warning('Kamera izni reddedildi. Lütfen tarayıcı ayarlarından kamera iznini açın.', 5000);
+                // Check whether the browser permission is granted or denied to give a precise message
+                try {
+                    const permStatus = await navigator.permissions.query({ name: 'camera' });
+                    if (permStatus.state === 'denied') {
+                        // Browser/site-level block — user explicitly denied in address bar
+                        toast.warning('Kamera izni tarayıcı tarafından engellendi. Adres çubuğundaki kilit simgesinden kamera iznini açın.', 7000);
+                    } else {
+                        // Permission shows "granted" or "prompt" but getUserMedia still failed
+                        // → OS-level block (Windows Settings → Privacy → Camera)
+                        toast.warning('İşletim sistemi kamera erişimini engelliyor. Windows Ayarlar → Gizlilik ve Güvenlik → Kamera bölümünden tarayıcıya izin verin.', 8000);
+                    }
+                } catch {
+                    // Permissions API not supported — show generic message
+                    toast.warning('Kamera izni reddedildi. Tarayıcı ayarlarından veya işletim sistemi gizlilik ayarlarından kamera iznini açın.', 6000);
+                }
             } else if (error.name === 'NotFoundError') {
                 toast.warning('Kamera bulunamadı. Lütfen bir kamera bağlayın.');
+            } else if (error.name === 'NotReadableError') {
+                toast.warning('Kamera başka bir uygulama tarafından kullanılıyor. Diğer uygulamaları kapatıp tekrar deneyin.', 5000);
+            } else if (error.name === 'OverconstrainedError') {
+                // Retry with no constraints — some webcams reject the ideal width/height/frameRate
+                console.warn('[Camera] OverconstrainedError, retrying without constraints...');
+                try {
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    if (!cameraToggleLockRef.current) {
+                        fallbackStream.getTracks().forEach(t => t.stop());
+                        return;
+                    }
+                    localCameraStreamRef.current = fallbackStream;
+                    setLocalCameraStream(fallbackStream);
+                    setIsVideoEnabled(true);
+                    const fallbackTrack = fallbackStream.getVideoTracks()[0];
+                    fallbackTrack.onended = () => {
+                        setLocalCameraStream(null);
+                        localCameraStreamRef.current = null;
+                        setIsVideoEnabled(false);
+                        if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
+                            voiceWsRef.current.send(JSON.stringify({ type: 'video_ended', streamType: 'camera' }));
+                        }
+                    };
+                    for (const [username, pc] of Object.entries(peerConnectionsRef.current)) {
+                        try {
+                            pc.addTrack(fallbackTrack, fallbackStream);
+                            const offer = await pc.createOffer();
+                            await pc.setLocalDescription(offer);
+                            sendSignal({ type: 'offer', sdp: pc.localDescription, target: username });
+                        } catch (e) { console.warn(`[Camera] Fallback renegotiation failed with ${username}:`, e); }
+                    }
+                    if (voiceWsRef.current?.readyState === WebSocket.OPEN) {
+                        voiceWsRef.current.send(JSON.stringify({ type: 'camera_state', is_camera_on: true }));
+                    }
+                    return; // success — skip the cleanup below
+                } catch (fallbackError) {
+                    console.error('[Camera] Fallback also failed:', fallbackError);
+                    toast.error('Kamera başlatılamadı: kamera bu çözünürlüğü desteklemiyor.');
+                }
             } else {
                 toast.error('Kamera başlatılamadı: ' + error.message);
             }

@@ -19,8 +19,9 @@ const UserFooter = ({
     currentUsername,
     getDeterministicAvatar,
     onProfileClick,
-    updateAvailable = false, // 🔥 YENİ: Güncelleme durumu
-    onUpdateClick, // 🔥 YENİ: Güncelleme butonu click handler
+    updateAvailable = false,
+    onUpdateClick,
+    ownActivity = null, // 🔥 Live Spotify/Steam activity for the current user
 }) => {
     // 🔥 DÜZELTME 1: URL Kontrolü
     let avatarUrl = currentUserProfile?.avatar || getDeterministicAvatar(currentUsername);
@@ -101,9 +102,17 @@ const UserFooter = ({
                     <span style={styles.usernameText}>
                         {currentUsername || 'Yükleniyor...'}
                     </span>
-                    <span style={styles.statusText}>
-                        #{friendCode}
-                    </span>
+                    {ownActivity?.spotify ? (
+                        <span style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
+                            🎵 {ownActivity.spotify.name || ownActivity.spotify.track}
+                        </span>
+                    ) : ownActivity?.steam ? (
+                        <span style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>
+                            🎮 {ownActivity.steam.name || ownActivity.steam.game}
+                        </span>
+                    ) : (
+                        <span style={styles.statusText}>#{friendCode}</span>
+                    )}
                 </div>
 
                 <button

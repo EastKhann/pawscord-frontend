@@ -21,7 +21,11 @@ export function isChunkLoadError(error) {
         msg.includes('Loading CSS chunk') ||
         msg.includes('ChunkLoadError') ||
         msg.includes('Importing a module script failed') ||
-        msg.includes('error loading dynamically imported module')
+        msg.includes('error loading dynamically imported module') ||
+        // Browser MIME-type rejection when a JS module request returns HTML (e.g.
+        // a stale index.html served instead of the missing chunk → text/html)
+        msg.includes('Expected a JavaScript') ||
+        msg.includes('MIME type')
     );
 }
 

@@ -18,11 +18,19 @@ const VoiceUserItem = ({
     const user = userObj.username;
     const { icon: statusIcon, style: userStyle } = getStatusInfo(userObj);
 
-    let avatarUrl = userObj.avatar || userObj.avatarUrl;
-    if (!avatarUrl) {
-        const foundUser = allUsers.find(u => u.username === user);
-        avatarUrl = foundUser?.avatar || getAvatar(user);
-    }
+    const foundUser = (allUsers || []).find(u => u.username === user) || {};
+    let avatarUrl = userObj.avatar || userObj.avatarUrl || foundUser.avatar || getAvatar(user);
+
+    // Rich presence activity
+    const activity = foundUser.current_activity;
+    const ActivityBadge = () => {
+        if (!activity) return null;
+        if (activity.spotify)
+            return <div style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px', marginTop: '2px' }}>🎵 {activity.spotify.name || activity.spotify.track}</div>;
+        if (activity.steam)
+            return <div style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px', marginTop: '2px' }}>🎮 {activity.steam.name || activity.steam.game}</div>;
+        return null;
+    };
 
     const avatarBorder = userObj.is_talking ? '2px solid #4CAF50' : '2px solid transparent';
     const avatarShadow = userObj.is_talking ? '0 0 10px rgba(76, 175, 80, 0.6)' : 'none';
@@ -47,6 +55,7 @@ const VoiceUserItem = ({
                         {user} <span style={{ fontSize: '0.85em', color: '#949ba4' }}>(Sen)</span>
                     </span>
                     {userObj.is_sharing && <div style={styles.sharingIndicator}>{'🖥️'} Ekran Payla{'şı'}yor</div>}
+                    <ActivityBadge />
                 </div>
             </div>
         );
@@ -72,6 +81,7 @@ const VoiceUserItem = ({
                     <span className={userObj.is_talking ? 'voice-user-item is-talking' : ''}
                         style={{ ...styles.username, ...userStyle }}>{user}</span>
                     {userObj.is_sharing && <div style={styles.sharingIndicator}>{'🖥️'} Ekran Payla{'şı'}yor</div>}
+                    <ActivityBadge />
                 </div>
             </div>
         </div>

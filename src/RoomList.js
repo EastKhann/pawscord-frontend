@@ -346,6 +346,7 @@ const RoomList = ({
                         currentUserProfile={currentUserProfile} currentUsername={currentUsername}
                         getDeterministicAvatar={getDeterministicAvatar} onProfileClick={onProfileClick}
                         updateAvailable={updateAvailable} onUpdateClick={onUpdateClick}
+                        ownActivity={allUsers?.find(u => u.username === currentUsername)?.current_activity || null}
                     />
                 </div>
             </div>

@@ -576,7 +576,7 @@ const AppContent = () => {
                             <SuspenseWithBoundary fallback={<LoadingSpinner size="medium" text="Arkadaşlar yükleniyor..." />} section="Arkadaşlar">
                                 <FriendsTab fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} onStartDM={handleDMClick}
                                     getDeterministicAvatar={getDeterministicAvatar} onClose={() => setActiveChat('welcome', 'welcome')}
-                                    onPendingCountChange={setPendingFriendRequests} onlineUsers={onlineUsers} />
+                                    onPendingCountChange={setPendingFriendRequests} onlineUsers={onlineUsers} allUsers={allUsers} />
                             </SuspenseWithBoundary>
                         </div>
                     ) : activeChat.type === 'welcome' ? (

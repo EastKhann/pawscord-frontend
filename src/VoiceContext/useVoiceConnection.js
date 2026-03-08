@@ -344,13 +344,14 @@ export function useVoiceConnection({
                 }
 
                 if (event.code === 1000) {
-                    if (isLeavingRef.current) { leaveVoiceRoom(); return; }
+                    if (isLeavingRef.current) { leaveVoiceRoomRef.current(); return; }
                     console.info('[VoiceWS] Normal close (1000) without intentional leave — attempting reconnect');
                 }
 
                 if (event.code === 4001 || event.code === 4003 || (!token && event.code === 1006)) {
                     console.warn(`[VoiceWS] Auth/origin rejection (code: ${event.code}), not retrying`);
-                    leaveVoiceRoom();
+                    setIsReconnecting(false);
+                    leaveVoiceRoomRef.current();
                     return;
                 }
 
@@ -363,9 +364,10 @@ export function useVoiceConnection({
                     if (currentAttempt > maxRetries) {
                         console.error(`[VoiceWS] Max retry limit reached (${maxRetries}), giving up`);
                         toast.error(`Sesli sohbet bağlantısı ${maxRetries} denemeden sonra kurulamadı.`, 5000);
-                        leaveVoiceRoom();
+                        setIsReconnecting(false);
                         wsReconnectAttemptRef.current = 0;
                         wsReconnectDelayRef.current = 1000;
+                        leaveVoiceRoomRef.current();
                         return;
                     }
 
@@ -379,12 +381,14 @@ export function useVoiceConnection({
                     wsReconnectTimeoutRef.current = setTimeout(() => {
                         if (!isLeavingRef.current && !isSwitchingRef.current && roomSlug) {
                             wsReconnectDelayRef.current = Math.min(wsReconnectDelayRef.current * 2, 30000);
-                            joinVoiceRoom(roomSlug).then(() => {
+                            // 🔥 FIX: Use ref — ensures latest token is used if token rotated
+                            joinVoiceRoomRef.current(roomSlug).then(() => {
                                 wsReconnectAttemptRef.current = 0;
                                 wsReconnectDelayRef.current = 1000;
                                 setIsReconnecting(false);
                             }).catch(err => {
                                 console.error('[VoiceWS] Reconnection failed:', err);
+                                setIsReconnecting(false);
                             });
                         } else {
                             setIsReconnecting(false);
@@ -393,7 +397,7 @@ export function useVoiceConnection({
                         }
                     }, delay);
                 } else {
-                    leaveVoiceRoom();
+                    leaveVoiceRoomRef.current();
                 }
             };
 

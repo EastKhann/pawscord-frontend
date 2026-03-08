@@ -14,8 +14,8 @@ const ConnectionsPanel = ({ onClose }) => {
     const popupIntervalRef = useRef(null);
     const popupTimeoutRef = useRef(null);
 
-    // Dinamik API URL
-    const API_URL = getApiBase().replace('/api', '');
+    // Dinamik API URL — getApiBase() already returns base without /api suffix
+    const API_URL = getApiBase();
 
     // Bağlantı platformları
     const platforms = [

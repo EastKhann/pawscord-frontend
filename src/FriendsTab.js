@@ -5,7 +5,7 @@ import FriendsList from './FriendsTab/FriendsList';
 import PendingRequests from './FriendsTab/PendingRequests';
 import styles from './FriendsTab/friendsTabStyles';
 
-const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStartDM, onClose, onPendingCountChange, onlineUsers = [] }) => {
+const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStartDM, onClose, onPendingCountChange, onlineUsers = [], allUsers = [] }) => {
     const api = useFriendsAPI({ fetchWithAuth, apiBaseUrl, onPendingCountChange });
 
     return (
@@ -55,7 +55,7 @@ const FriendsTab = ({ fetchWithAuth, apiBaseUrl, getDeterministicAvatar, onStart
                 {api.activeTab === 'all' && (
                     <div style={styles.listContainer}>
                         <h4 style={styles.listHeader}>ARKADA{'Ş'}LAR {'—'} {api.friends.length}</h4>
-                        <FriendsList friends={api.friends} onlineUsers={onlineUsers} getDeterministicAvatar={getDeterministicAvatar}
+                        <FriendsList friends={api.friends} onlineUsers={onlineUsers} allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
                             onStartDM={onStartDM} handleRemoveFriend={api.handleRemoveFriend} setActiveTab={api.setActiveTab} />
                     </div>
                 )}
