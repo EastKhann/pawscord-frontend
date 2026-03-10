@@ -313,8 +313,8 @@
 
 /* ─── SKIP NAVIGATION LINK ────────────────── */
 .skip-nav {
-    position: absolute;
-    top: -100%;
+    position: fixed;
+    top: -48px;
     left: var(--space-lg);
     z-index: var(--z-topmost);
     padding: var(--space-sm) var(--space-lg);
@@ -328,7 +328,7 @@
 }
 
 .skip-nav:focus {
-    top: 0;
+    top: 8px;
 }
 
 /* ─── SCREEN READER ONLY (A11y) ───────────── */

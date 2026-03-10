@@ -63,12 +63,8 @@
     --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
     --gradient-danger: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
 
-    /* Dark Theme ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â midnight blue (mavimsi) */
-    --bg-app: var(--bg-secondary);
-    --bg-primary: var(--bg-elevated);
-    --bg-secondary: var(--bg-secondary);
-    --bg-tertiary: var(--bg-primary);
-    --bg-elevated: var(--bg-input);
+    /* Dark Theme — midnight blue */
+    --bg-app: #0e1222;
     --bg-hover: rgba(88, 101, 242, 0.12);
     --bg-active: rgba(88, 101, 242, 0.22);
 
@@ -79,10 +75,7 @@
     --glass-border-hover: rgba(255, 255, 255, 0.15);
 
     /* Text Colors */
-    --text-primary: var(--color-white);
-    --text-secondary: var(--text-primary);
     --text-tertiary: #b8b9c7;
-    --text-muted: var(--text-muted);
 
     /* Shadows - Layered depth */
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -537,10 +530,7 @@ body {
     --background-modifier-active: rgba(79, 84, 92, 0.5);
     --background-mentioned: rgba(88, 101, 242, 0.1);
 
-    --text-primary: var(--text-primary);
-    /* Ana Metin */
     --text-secondary: var(--text-muted);
-    /* Yan Metin */
     --text-muted: #787f89;
     /* SÃƒÆ’Ã‚Â¶nÃƒÆ’Ã‚Â¼k Metin */
     --text-link: var(--color-info-sky);

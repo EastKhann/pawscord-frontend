@@ -455,8 +455,7 @@ const AppContent = () => {
     // --- MAIN APP ---
     return (
         <div style={{ ...styles.mainContainer }} className="dark-theme">
-            {/* Accessibility: Skip-to-content link for keyboard users */}
-            <a href="#main-content" className="skip-to-content">Ana içeriğe atla</a>
+            {/* Skip-nav is in main.jsx — no duplicate needed here */}
 
             {showSplash && <SplashScreen animationState={animationState} />}
             {maintenanceMode && <MaintenanceBanner message={maintenanceMode.message} endTime={maintenanceMode.endTime} level={maintenanceMode.level} onDismiss={handleDismissMaintenance} />}
