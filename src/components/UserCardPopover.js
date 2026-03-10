@@ -4,21 +4,38 @@
 
 import { useState, useRef, useCallback, useEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
+import { getFreshActivity } from '../utils/activityUtils';
 
 const UserCardPopover = ({
-    username,
-    avatar,
-    status,
+    // Support both: user object (Message.js style) and individual props
+    user,
+    username: usernameProp,
+    avatar: avatarProp,
+    status: statusProp,
     statusMessage,
-    customStatus,
-    roles = [],
+    customStatus: customStatusProp,
+    roles: rolesProp = [],
     joinedAt,
-    level,
+    level: levelProp,
     xp,
-    children,
+    // Activity (Spotify / Steam)
+    currentActivity,
+    // Callbacks — support both naming conventions
     onViewFullProfile,
+    onProfile,
     onStartDM,
+    onMessage,
+    children,
 }) => {
+    // Resolve from user object or individual props
+    const username = user?.username ?? usernameProp;
+    const avatar = user?.avatar ?? avatarProp;
+    const status = user?.status ?? statusProp;
+    const customStatus = user?.custom_status ?? customStatusProp;
+    const roles = user?.roles ?? rolesProp;
+    const level = user?.level ?? levelProp;
+    const handleViewProfile = onViewFullProfile || onProfile;
+    const handleStartDM = onStartDM || onMessage;
     const [show, setShow] = useState(false);
     const [pos, setPos] = useState({ top: 0, left: 0, side: 'right' });
     const triggerRef = useRef(null);
@@ -51,6 +68,42 @@ const UserCardPopover = ({
         }, 100);
     }, []);
 
+    // Keyboard: open on Enter/Space, close on Escape
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (!show && triggerRef.current) {
+                const rect = triggerRef.current.getBoundingClientRect();
+                const spaceRight = window.innerWidth - rect.right;
+                const side = spaceRight > 320 ? 'right' : 'left';
+                setPos({
+                    top: Math.min(rect.top, window.innerHeight - 360),
+                    left: side === 'right' ? rect.right + 12 : rect.left - 292,
+                    side,
+                });
+                setShow(true);
+            } else {
+                setShow(false);
+            }
+        } else if (e.key === 'Escape' && show) {
+            setShow(false);
+            triggerRef.current?.focus();
+        }
+    }, [show]);
+
+    // Close on Escape when popover is focused
+    useEffect(() => {
+        if (!show) return;
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                setShow(false);
+                triggerRef.current?.focus();
+            }
+        };
+        document.addEventListener('keydown', handleEsc);
+        return () => document.removeEventListener('keydown', handleEsc);
+    }, [show]);
+
     useEffect(() => {
         return () => clearTimeout(timerRef.current);
     }, []);
@@ -73,6 +126,7 @@ const UserCardPopover = ({
 
     const topRoles = roles.slice(0, 3);
     const memberSince = joinedAt ? new Date(joinedAt).toLocaleDateString('tr-TR', { month: 'short', year: 'numeric' }) : null;
+    const activity = getFreshActivity(currentActivity || user?.current_activity);
 
     return (
         <>
@@ -80,7 +134,13 @@ const UserCardPopover = ({
                 ref={triggerRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                style={{ display: 'inline-flex' }}
+                onKeyDown={handleKeyDown}
+                tabIndex={0}
+                role="button"
+                aria-haspopup="dialog"
+                aria-expanded={show}
+                aria-label={`View ${username}'s profile`}
+                style={{ display: 'inline-flex', outline: 'none' }}
             >
                 {children}
             </span>
@@ -88,6 +148,9 @@ const UserCardPopover = ({
             {show && ReactDOM.createPortal(
                 <div
                     ref={popoverRef}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={`${username}'s profile card`}
                     onMouseEnter={() => clearTimeout(timerRef.current)}
                     onMouseLeave={() => setShow(false)}
                     style={{ ...S.popover, top: pos.top, left: pos.left }}
@@ -118,8 +181,51 @@ const UserCardPopover = ({
                         {(statusMessage || customStatus) && (
                             <div style={S.statusMsg}>
                                 {customStatus?.emoji && <span>{customStatus.emoji}</span>}
-                                {statusMessage || customStatus?.text || ''}
+                                {statusMessage || customStatus?.text || customStatus || ''}
                             </div>
+                        )}
+
+                        {/* Activity: Spotify */}
+                        {activity?.spotify && (
+                            <>
+                                <div style={S.divider} />
+                                <div style={S.section}>
+                                    <span style={S.sectionLabel}>🎵 MÜZİK DİNLİYOR</span>
+                                    <div style={S.activityCard}>
+                                        {(activity.spotify.album_art) && (
+                                            <img
+                                                src={activity.spotify.album_art}
+                                                alt="album"
+                                                style={S.albumArt}
+                                                onError={(e) => { e.target.style.display = 'none'; }}
+                                            />
+                                        )}
+                                        <div style={S.activityInfo}>
+                                            <span style={S.activityTrack}>
+                                                {activity.spotify.name || activity.spotify.track || 'Bilinmiyor'}
+                                            </span>
+                                            <span style={S.activityArtist}>
+                                                {activity.spotify.details || activity.spotify.artist || ''}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
+                        {/* Activity: Steam / Gaming */}
+                        {activity?.steam && (
+                            <>
+                                <div style={S.divider} />
+                                <div style={S.section}>
+                                    <span style={S.sectionLabel}>🎮 OYUN OYNUYOR</span>
+                                    <div style={S.activityGame}>
+                                        <span style={S.activityTrack}>
+                                            {activity.steam.name || activity.steam.game || 'Bilinmiyor'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </>
                         )}
 
                         <div style={S.divider} />
@@ -150,13 +256,13 @@ const UserCardPopover = ({
 
                         {/* Actions */}
                         <div style={S.actions}>
-                            {onStartDM && (
-                                <button style={S.actionBtn} onClick={() => { setShow(false); onStartDM(username); }}>
+                            {handleStartDM && (
+                                <button style={S.actionBtn} onClick={() => { setShow(false); handleStartDM(username); }}>
                                     Mesaj Gönder
                                 </button>
                             )}
-                            {onViewFullProfile && (
-                                <button style={S.actionBtnSec} onClick={() => { setShow(false); onViewFullProfile(username); }}>
+                            {handleViewProfile && (
+                                <button style={S.actionBtnSec} onClick={() => { setShow(false); handleViewProfile(username); }}>
                                     Profili Gör
                                 </button>
                             )}
@@ -222,6 +328,13 @@ const S = {
     moreRoles: { fontSize: 11, color: '#949ba4' },
     memberSince: { color: '#b5bac1', fontSize: 12 },
     actions: { display: 'flex', gap: 8, marginTop: 12 },
+    // Activity styles
+    activityCard: { display: 'flex', alignItems: 'center', gap: 10, marginTop: 6, padding: '8px', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 8 },
+    albumArt: { width: 48, height: 48, borderRadius: 4, flexShrink: 0, objectFit: 'cover' },
+    activityInfo: { minWidth: 0, flex: 1 },
+    activityTrack: { color: '#fff', fontSize: 12, fontWeight: 600, display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+    activityArtist: { color: '#949ba4', fontSize: 11, display: 'block', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+    activityGame: { display: 'flex', alignItems: 'center', gap: 8, marginTop: 6, padding: '8px', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 8 },
     actionBtn: {
         flex: 1, padding: '8px 0', backgroundColor: '#5865f2', color: '#fff',
         border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600,

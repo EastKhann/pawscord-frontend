@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
 }
 
@@ -18,13 +18,13 @@
 
 .stage-info h2 {
     margin: 0 0 8px 0;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
 }
 
 .stage-info p {
     margin: 0;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 14px;
 }
 
@@ -49,7 +49,7 @@
 .listeners-section h3,
 .requests-section h3 {
     margin: 0;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 18px;
     display: flex;
     align-items: center;
@@ -57,7 +57,7 @@
 }
 
 .speakers-section h3 {
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .participants-grid {
@@ -104,14 +104,14 @@
     position: absolute;
     bottom: -4px;
     right: -4px;
-    background: #f23f42;
+    background: var(--color-danger);
     border-radius: 50%;
     width: 20px;
     height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 10px;
 }
 
@@ -124,7 +124,7 @@
 }
 
 .participant-name {
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
     font-size: 14px;
     overflow: hidden;
@@ -133,11 +133,11 @@
 }
 
 .moderator-badge {
-    background: linear-gradient(135deg, #f0b232 0%, #ff9500 100%);
+    background: linear-gradient(135deg, var(--color-warning) 0%, #ff9500 100%);
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 11px;
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -150,19 +150,19 @@
     border: none;
     border-radius: 8px;
     padding: 8px;
-    color: #ffffff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .action-btn.remove:hover {
     background: rgba(255, 59, 48, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .action-btn.invite:hover {
     background: rgba(88, 101, 242, 0.3);
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 /* Requests Section */
@@ -196,16 +196,16 @@
 
 .request-item span {
     flex: 1;
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
 }
 
 .btn-approve {
-    background: linear-gradient(135deg, #23a559 0%, #30d158 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, #30d158 100%);
     border: none;
     border-radius: 8px;
     padding: 8px 16px;
-    color: #ffffff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
@@ -226,11 +226,11 @@
 }
 
 .control-btn {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     border-radius: 12px;
     padding: 14px 28px;
-    color: #ffffff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 600;
@@ -241,7 +241,7 @@
 }
 
 .control-btn:hover {
-    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary) 100%);
     box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
 }
 
@@ -255,7 +255,7 @@
 }
 
 .control-btn.request {
-    background: linear-gradient(135deg, #f0b232 0%, #ff9500 100%);
+    background: linear-gradient(135deg, var(--color-warning) 0%, #ff9500 100%);
 }
 
 .control-btn.request:hover {

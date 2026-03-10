@@ -5,7 +5,7 @@ import { RTC_CONFIGURATION } from './constants';
 /**
  * 🔥 Opus SDP Bitrate Optimization
  * Varsayılan Opus bitrate ~32kbps — sesli sohbet için yetersiz.
- * SDP manipülasyonu ile 64kbps'ye çıkarıyoruz + FEC + DTX aktif.
+ * SDP manipülasyonu ile 96kbps'ye çıkarıyoruz + FEC + DTX aktif.
  */
 function optimizeOpusSdp(sdp) {
     if (!sdp) return sdp;
@@ -27,7 +27,7 @@ function optimizeOpusSdp(sdp) {
             });
 
             // 🔥 Profesyonel Opus ayarları
-            newParams.push('maxaveragebitrate=64000');   // 64kbps (varsayılan 32kbps'den 2x)
+            newParams.push('maxaveragebitrate=96000');   // 96kbps (daha yüksek kalite = daha net ses)
             newParams.push('stereo=0');                  // Mono (sesli sohbet için yeterli, bandwidth tasarrufu)
             newParams.push('sprop-stereo=0');
             newParams.push('useinbandfec=1');             // 🔥 Forward Error Correction — paket kaybında ses korunur
@@ -43,7 +43,7 @@ function optimizeOpusSdp(sdp) {
 /**
  * 🔥 Audio sender bitrate ayarla (SDP dışı yöntem — daha güvenilir)
  */
-async function setAudioBitrate(pc, maxBitrate = 64000) {
+async function setAudioBitrate(pc, maxBitrate = 96000) {
     try {
         const senders = pc.getSenders();
         const audioSender = senders.find(s => s.track?.kind === 'audio');
@@ -109,9 +109,9 @@ export function useWebRTC({
                 }
 
                 const qualitySettings = {
-                    low: { maxBitrate: 300000, maxFramerate: 15, audioBitrate: 32000 },
-                    medium: { maxBitrate: 800000, maxFramerate: 24, audioBitrate: 48000 },
-                    high: { maxBitrate: 2500000, maxFramerate: 30, audioBitrate: 64000 }
+                    low: { maxBitrate: 300000, maxFramerate: 15, audioBitrate: 48000 },    // 🔥 32k → 48k: düşük kalitede de ses net olsun
+                    medium: { maxBitrate: 800000, maxFramerate: 24, audioBitrate: 64000 }, // 🔥 48k → 64k: orta kalite iyileştirildi
+                    high: { maxBitrate: 2500000, maxFramerate: 30, audioBitrate: 96000 }   // 🔥 64k → 96k: SDP optimizasyonuyla tutarlı
                 };
 
                 const settings = qualitySettings[quality] || qualitySettings.medium;
@@ -126,10 +126,10 @@ export function useWebRTC({
                 setAudioBitrate(peerConnection, settings.audioBitrate);
             }
 
-            // 🔥 Video yoksa sadece audio bitrate ayarla
+            // 🔥 Video yoksa sadece audio bitrate ayarla (ses-only oda — daha yüksek bitrate)
             if (!videoSender) {
-                const audioBitrateMap = { low: 32000, medium: 48000, high: 64000 };
-                setAudioBitrate(peerConnection, audioBitrateMap[quality] || 64000);
+                const audioBitrateMap = { low: 48000, medium: 64000, high: 96000 };
+                setAudioBitrate(peerConnection, audioBitrateMap[quality] || 96000);
             }
         } catch (err) {
             console.warn('[Bandwidth] Error adjusting bandwidth:', err);
@@ -327,8 +327,8 @@ export function useWebRTC({
             console.warn('[Codec] setCodecPreferences not supported:', e.message);
         }
 
-        // 🔥 Audio bitrate'i hemen ayarla (64kbps)
-        setAudioBitrate(pc, 64000);
+        // 🔥 Audio bitrate'i hemen ayarla (96kbps — SDP optimizasyonuyla tutarlı)
+        setAudioBitrate(pc, 96000);
 
         pc.oniceconnectionstatechange = () => {
             if (pc.iceConnectionState === 'failed') {
@@ -365,7 +365,7 @@ export function useWebRTC({
             } else if (pc.iceConnectionState === 'connected') {
                 setIsReconnecting(false);
                 // 🔥 Bağlantı kurulunca hemen audio bitrate optimize et
-                setAudioBitrate(pc, 64000);
+                setAudioBitrate(pc, 96000);
 
                 // 🔥 2s sonra RTT ölç ve bandwidth ayarla
                 setTimeout(async () => {

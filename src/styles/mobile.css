@@ -1,24 +1,29 @@
 /* frontend/src/styles/mobile.css */
-/* 📱 MOBILE-FIRST RESPONSIVE STYLES */
+/* ðŸ“± MOBILE-FIRST RESPONSIVE STYLES */
 
 /* ========================================
    GLOBAL MOBILE OPTIMIZATIONS
    ======================================== */
 
 @media (max-width: 768px) {
-    /* 🔥 Prevent text selection on mobile (better UX) */
+
+    /* ðŸ”¥ Prevent text selection on mobile (better UX) */
     * {
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
     }
 
-    /* 🔥 Optimize touch targets (min 44x44px - Apple HIG) */
-    button, a, input, select, textarea {
+    /* ðŸ”¥ Optimize touch targets (min 44x44px - Apple HIG) */
+    button,
+    a,
+    input,
+    select,
+    textarea {
         min-height: 44px;
         min-width: 44px;
     }
 
-    /* 🔥 Smooth scrolling on iOS */
+    /* ðŸ”¥ Smooth scrolling on iOS */
     body {
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-y: contain;
@@ -29,7 +34,7 @@
    LAYOUT ADJUSTMENTS
    ======================================== */
 
-/* 📱 Mobile: Stack everything vertically */
+/* ðŸ“± Mobile: Stack everything vertically */
 @media (max-width: 768px) {
     .app-container {
         flex-direction: column !important;
@@ -68,7 +73,8 @@
     /* Main chat area: Full screen */
     .chat-container {
         width: 100% !important;
-        height: calc(100vh - 60px - 56px) !important; /* minus top bar and bottom nav */
+        height: calc(100vh - 60px - 56px) !important;
+        /* minus top bar and bottom nav */
         max-width: 100% !important;
     }
 
@@ -95,10 +101,12 @@
    ======================================== */
 
 @media (max-width: 768px) {
+
     /* Voice panel: Minimized by default on mobile */
     .voice-chat-panel {
         position: fixed !important;
-        bottom: 56px !important; /* above bottom nav */
+        bottom: 56px !important;
+        /* above bottom nav */
         left: 0 !important;
         right: 0 !important;
         width: 100% !important;
@@ -145,12 +153,13 @@
     }
 
     .message-input {
-        font-size: 16px !important; /* Prevent iOS zoom on focus */
+        font-size: 16px !important;
+        /* Prevent iOS zoom on focus */
         min-height: 44px !important;
         padding: 12px 16px !important;
     }
 
-    /* 🔥 YENİ: Sol ve sağ buton grupları için özel ayar */
+    /* ðŸ”¥ YENÄ°: Sol ve saÄŸ buton gruplarÄ± iÃ§in Ã¶zel ayar */
     .message-input-wrapper {
         gap: 4px !important;
     }
@@ -160,7 +169,7 @@
         gap: 2px !important;
     }
 
-    /* 🔥 YENİ: Butonları küçült */
+    /* ðŸ”¥ YENÄ°: ButonlarÄ± kÃ¼Ã§Ã¼lt */
     .message-input-actions-left button,
     .message-input-actions-right button {
         font-size: 16px !important;
@@ -169,7 +178,7 @@
         min-height: 32px !important;
     }
 
-    /* 🔥 YENİ: Textarea'ya daha fazla alan ver */
+    /* ðŸ”¥ YENÄ°: Textarea'ya daha fazla alan ver */
     .message-input textarea {
         flex: 1 !important;
         min-width: 0 !important;
@@ -177,7 +186,7 @@
         padding: 8px 10px !important;
     }
 
-    /* 🔥 YENİ: Gereksiz butonları gizle (template, schedule) */
+    /* ðŸ”¥ YENÄ°: Gereksiz butonlarÄ± gizle (template, schedule) */
     .message-input-template-btn,
     .message-input-schedule-btn {
         display: none !important;
@@ -207,9 +216,11 @@
    ======================================== */
 
 @media (max-width: 768px) {
+
     /* All modals: Full screen on mobile */
     .modal-overlay {
-        align-items: flex-end !important; /* slide from bottom */
+        align-items: flex-end !important;
+        /* slide from bottom */
     }
 
     .modal-content {
@@ -226,6 +237,7 @@
         from {
             transform: translateY(100%);
         }
+
         to {
             transform: translateY(0);
         }
@@ -250,6 +262,7 @@
    ======================================== */
 
 @media (min-width: 769px) and (max-width: 1024px) {
+
     /* Sidebar: Collapsible */
     .sidebar {
         width: 240px !important;
@@ -275,16 +288,16 @@
    ACCESSIBILITY
    ======================================== */
 
-/* 🔥 High contrast mode support */
+/* ðŸ”¥ High contrast mode support */
 @media (prefers-contrast: more) {
     :root {
-        --border-color: #ffffff !important;
-        --text-color: #ffffff !important;
+        --border-color: var(--color-white) !important;
+        --text-color: var(--color-white) !important;
         --bg-primary: #000000 !important;
     }
 }
 
-/* 🔥 Reduced motion support */
+/* ðŸ”¥ Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
@@ -298,6 +311,7 @@
    ======================================== */
 
 @media (max-width: 896px) and (orientation: landscape) {
+
     /* Remove bottom nav in landscape */
     .sidebar {
         display: none !important;
@@ -317,7 +331,7 @@
    SAFE AREA (iPhone Notch)
    ======================================== */
 
-/* Safe area padding sadece belirli elementlere uygulanmalı, tüm app-container'a değil */
+/* Safe area padding sadece belirli elementlere uygulanmalÄ±, tÃ¼m app-container'a deÄŸil */
 @supports (padding: max(0px)) {
     .mobile-header {
         padding-top: max(0px, env(safe-area-inset-top)) !important;
@@ -328,3 +342,40 @@
     }
 }
 
+/* ========================================
+   MODAL RESPONSIVE IMPROVEMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+
+    /* Modals full-width on mobile */
+    .jsm-modal,
+    [class*="Modal"]>div[style*="borderRadius"] {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Invite form stacks vertically on mobile */
+    .jsm-invite-form {
+        flex-direction: column !important;
+    }
+
+    /* Server rows compact on mobile */
+    .jsm-server-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    /* Modals slightly wider on tablet */
+    .jsm-modal {
+        width: 90vw !important;
+        max-width: 600px !important;
+    }
+}

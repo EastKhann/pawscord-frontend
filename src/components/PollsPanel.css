@@ -14,7 +14,7 @@
 }
 
 .polls-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 12px;
     width: 90%;
     max-width: 900px;
@@ -39,7 +39,7 @@
     margin: 0;
     font-size: 26px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--color-white);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -51,7 +51,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     cursor: pointer;
     display: flex;
@@ -78,8 +78,8 @@
 }
 
 .create-poll-btn {
-    background: linear-gradient(135deg, #4752c4 0%, #5865f2 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
+    color: var(--color-white);
     border: none;
     padding: 12px 24px;
     border-radius: 12px;
@@ -104,7 +104,7 @@
     width: 48px;
     height: 48px;
     border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top-color: #4752c4;
+    border-top-color: var(--color-primary-hover);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin: 0 auto 20px;
@@ -117,7 +117,7 @@
 }
 
 .loading-state p {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 15px;
 }
 
@@ -134,14 +134,14 @@
 }
 
 .empty-state p {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 18px;
     margin-bottom: 8px;
     font-weight: 600;
 }
 
 .empty-hint {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 14px;
 }
 
@@ -176,7 +176,7 @@
     margin: 0;
     font-size: 18px;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--color-white);
     flex: 1;
     line-height: 1.4;
 }
@@ -186,7 +186,7 @@
     border-radius: 8px;
     font-size: 12px;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--color-white);
     white-space: nowrap;
 }
 
@@ -205,18 +205,18 @@
 }
 
 .info-label {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
 .info-value {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 600;
 }
 
 .time-remaining {
-    color: #4752c4;
+    color: var(--color-primary-hover);
 }
 
 .poll-options {
@@ -252,7 +252,7 @@
 }
 
 .option-text {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 15px;
     font-weight: 500;
     margin-bottom: 8px;
@@ -265,7 +265,7 @@
 
 .winner-badge {
     font-size: 12px;
-    color: #10b981;
+    color: var(--color-success-modern);
     font-weight: 600;
 }
 
@@ -278,12 +278,12 @@
 }
 
 .option-votes {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
 .option-percentage {
-    color: #4752c4;
+    color: var(--color-primary-hover);
     font-size: 14px;
     font-weight: 600;
 }
@@ -298,13 +298,13 @@
 
 .option-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4752c4 0%, #5865f2 100%);
+    background: linear-gradient(90deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
     border-radius: 3px;
     transition: width 0.5s ease;
 }
 
 .poll-option.winner .option-bar-fill {
-    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(90deg, var(--color-success-modern) 0%, var(--color-emerald) 100%);
 }
 
 .poll-meta {
@@ -320,7 +320,7 @@
     border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 8px;
     font-size: 12px;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .poll-card-footer {
@@ -342,8 +342,8 @@
 }
 
 .end-poll-btn {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-success-modern) 0%, var(--color-emerald) 100%);
+    color: var(--color-white);
 }
 
 .end-poll-btn:hover {
@@ -353,7 +353,7 @@
 
 .delete-poll-btn {
     background: rgba(239, 68, 68, 0.2);
-    color: #f23f42;
+    color: var(--color-danger);
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
@@ -379,7 +379,7 @@
 }
 
 .create-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 12px;
     width: 90%;
     max-width: 600px;
@@ -403,7 +403,7 @@
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .modal-body {
@@ -417,7 +417,7 @@
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 600;
 }
@@ -429,7 +429,7 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 14px;
     transition: all 0.3s ease;
 }
@@ -437,7 +437,7 @@
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #4752c4;
+    border-color: var(--color-primary-hover);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
@@ -469,7 +469,7 @@
     background: rgba(239, 68, 68, 0.2);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 8px;
-    color: #f23f42;
+    color: var(--color-danger);
     font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -489,7 +489,7 @@
     background: rgba(99, 102, 241, 0.1);
     border: 1px dashed rgba(99, 102, 241, 0.3);
     border-radius: 10px;
-    color: #4752c4;
+    color: var(--color-primary-hover);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -512,7 +512,7 @@
 .poll-settings h4 {
     margin: 0 0 16px 0;
     font-size: 16px;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .setting-item {
@@ -537,14 +537,14 @@
 }
 
 .checkbox-label span {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 600;
 }
 
 .setting-hint {
     margin: 4px 0 0 28px;
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
@@ -561,7 +561,7 @@
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -574,10 +574,10 @@
 
 .submit-btn {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #4752c4 0%, #5865f2 100%);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
     border: none;
     border-radius: 10px;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;

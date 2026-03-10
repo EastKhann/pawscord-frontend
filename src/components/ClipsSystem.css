@@ -13,7 +13,7 @@
 }
 
 .clips-system-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 1000px;
@@ -26,7 +26,7 @@
 }
 
 .clips-system-header {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     padding: 20px 24px;
     display: flex;
     align-items: center;
@@ -72,7 +72,7 @@
 .tab-btn {
     background: transparent;
     border: none;
-    color: #a0aec0;
+    color: var(--text-light);
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 14px;
@@ -83,11 +83,11 @@
 
 .tab-btn:hover {
     background: rgba(88, 101, 242, 0.1);
-    color: #cbd5e0;
+    color: var(--text-mist);
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
 }
 
@@ -135,7 +135,7 @@
 }
 
 .record-btn {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     color: white;
     padding: 12px 28px;
@@ -154,7 +154,7 @@
 }
 
 .record-btn.recording {
-    background: linear-gradient(135deg, #f23f42 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-deep) 100%);
     animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -222,7 +222,7 @@
 .play-clip-btn {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     border-radius: 50%;
     font-size: 20px;
@@ -238,7 +238,7 @@
 }
 
 .play-clip-btn.playing {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    background: linear-gradient(135deg, var(--color-lime) 0%, #16a34a 100%);
 }
 
 .clip-info {
@@ -246,7 +246,7 @@
 }
 
 .clip-title {
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 8px 0;
     overflow: hidden;
@@ -260,7 +260,7 @@
     gap: 12px;
     margin-bottom: 8px;
     font-size: 12px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 .clip-author,
@@ -272,7 +272,7 @@
 
 .clip-stats {
     font-size: 12px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 .clip-views {
@@ -323,7 +323,7 @@
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 .empty-icon {
@@ -333,18 +333,18 @@
 
 .empty-state h3 {
     font-size: 20px;
-    color: #fff;
+    color: var(--color-white);
     margin-bottom: 8px;
 }
 
 .empty-state p {
     font-size: 14px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 .loading-spinner {
     text-align: center;
-    color: #a0aec0;
+    color: var(--text-light);
     padding: 40px;
     font-size: 16px;
 }

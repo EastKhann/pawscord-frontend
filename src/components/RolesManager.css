@@ -14,7 +14,7 @@
 }
 
 .roles-manager-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 800px;
@@ -38,7 +38,7 @@
 .roles-manager-header h2 {
     margin: 0;
     font-size: 20px;
-    background: linear-gradient(135deg, #5865f2, #ec4899);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-pink-modern));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -47,7 +47,7 @@
 .close-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
     width: 36px;
     height: 36px;
     border-radius: 8px;
@@ -79,7 +79,7 @@
 }
 
 .create-role-btn {
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
     border: none;
     color: white;
     padding: 12px 24px;
@@ -102,7 +102,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    color: #a0a0b0;
+    color: var(--text-silver);
     font-size: 14px;
 }
 
@@ -144,7 +144,7 @@
 }
 
 .role-drag-handle {
-    color: #6b7280;
+    color: var(--text-faint);
     font-size: 20px;
     cursor: grab;
     user-select: none;
@@ -184,13 +184,13 @@
 }
 
 .role-members {
-    color: #a0a0b0;
+    color: var(--text-silver);
     font-size: 13px;
 }
 
 .role-badge {
     background: rgba(88, 101, 242, 0.15);
-    color: #5865f2;
+    color: var(--color-primary);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 11px;
@@ -238,7 +238,7 @@
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #a0a0b0;
+    color: var(--text-silver);
 }
 
 .empty-icon {
@@ -250,7 +250,7 @@
 .empty-state h3 {
     margin: 0 0 8px 0;
     font-size: 20px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .empty-state p {
@@ -274,7 +274,7 @@
 }
 
 .role-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     padding: 24px;
     width: 90%;
@@ -286,7 +286,7 @@
 .role-modal h3 {
     margin: 0 0 24px 0;
     font-size: 20px;
-    background: linear-gradient(135deg, #5865f2, #ec4899);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-pink-modern));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -301,7 +301,7 @@
     margin-bottom: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: #dbdee1;
+    color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -319,7 +319,7 @@
 
 .form-group input[type="text"]:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
 }
@@ -379,13 +379,13 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
-    accent-color: #5865f2;
+    accent-color: var(--color-primary);
     margin-top: 2px;
     flex-shrink: 0;
 }
 
 .checkbox-label span {
-    color: #a0a0b0;
+    color: var(--text-silver);
     font-size: 14px;
     line-height: 1.5;
 }
@@ -411,7 +411,7 @@
 
 .cancel-btn {
     background: rgba(255, 255, 255, 0.05);
-    color: #a0a0b0;
+    color: var(--text-silver);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -422,7 +422,7 @@
 
 .save-btn,
 .create-btn {
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
     color: white;
 }
 
@@ -435,7 +435,7 @@
 .loading-spinner {
     text-align: center;
     padding: 60px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 16px;
 }
 

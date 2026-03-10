@@ -1,9 +1,9 @@
-﻿/* 🔍 Server Discovery Page Styles */
+/* Ã°Å¸â€Â Server Discovery Page Styles */
 .discovery-page {
     padding: 20px;
     background: linear-gradient(135deg, #000428 0%, #004e92 100%);
     min-height: 100vh;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .page-header {
@@ -37,7 +37,7 @@
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     backdrop-filter: blur(4px);
 }
@@ -57,14 +57,14 @@
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     cursor: pointer;
     backdrop-filter: blur(4px);
 }
 
 .filters-row select option {
-    background: #0b0e1b;
+    background: var(--bg-primary);
 }
 
 .featured-section {
@@ -103,8 +103,8 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    background: #ffd700;
-    color: #000;
+    background: var(--color-warning-gold);
+    color: var(--color-black);
     padding: 6px 12px;
     border-radius: 12px;
     font-size: 12px;
@@ -153,7 +153,7 @@
 .join-btn {
     width: 100%;
     padding: 14px;
-    background: #fff;
+    background: var(--color-white);
     color: #004e92;
     border: none;
     border-radius: 8px;
@@ -164,7 +164,7 @@
 }
 
 .join-btn:hover {
-    background: #ffd700;
+    background: var(--color-warning-gold);
     transform: scale(1.05);
 }
 
@@ -239,7 +239,7 @@
 
 .verified-badge {
     background: #00d4ff;
-    color: #000;
+    color: var(--color-black);
     padding: 4px 10px;
     border-radius: 12px;
     font-size: 11px;
@@ -261,7 +261,7 @@
 }
 
 .stat-item.online {
-    color: #00ff88;
+    color: var(--color-neon-green);
 }
 
 .server-tags {
@@ -282,7 +282,7 @@
     width: 100%;
     padding: 12px;
     background: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    color: var(--color-white);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     font-weight: 600;
@@ -291,7 +291,7 @@
 }
 
 .join-btn-small:hover {
-    background: #fff;
+    background: var(--color-white);
     color: #004e92;
 }
 

@@ -1,5 +1,5 @@
-﻿/* frontend/src/components/panels/ChannelAnalyticsPanel.css */
-/* 📈 Channel Analytics Panel Styles */
+/* frontend/src/components/panels/ChannelAnalyticsPanel.css */
+/* ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‹â€  Channel Analytics Panel Styles */
 
 .channel-analytics-overlay {
     position: fixed;
@@ -27,7 +27,7 @@
 }
 
 .channel-analytics-panel {
-    background: linear-gradient(145deg, #0d0e10, #0d0e10);
+    background: linear-gradient(145deg, var(--bg-void), var(--bg-void));
     border-radius: 18px;
     width: 95%;
     max-width: 950px;
@@ -55,7 +55,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 26px;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, var(--color-warning-amber), var(--color-warning-amber));
     flex-wrap: wrap;
     gap: 12px;
 }
@@ -93,7 +93,7 @@
 }
 
 .time-select option {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     color: white;
 }
 
@@ -155,12 +155,12 @@
     align-items: center;
     justify-content: center;
     font-size: 1.3rem;
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, var(--color-warning-amber), var(--color-warning-amber));
     color: white;
 }
 
 .card-icon.active {
-    background: linear-gradient(135deg, #f23f42, #dc2626);
+    background: linear-gradient(135deg, var(--color-danger), var(--color-danger-deep));
 }
 
 .card-content {
@@ -245,7 +245,7 @@
 }
 
 .channel-item.selected {
-    border-color: #f59e0b;
+    border-color: var(--color-warning-amber);
     background: rgba(245, 158, 11, 0.1);
 }
 
@@ -257,7 +257,7 @@
 }
 
 .channel-item .rank.top {
-    color: #f59e0b;
+    color: var(--color-warning-amber);
 }
 
 .channel-icon {
@@ -299,19 +299,19 @@
 }
 
 .channel-growth .positive {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .channel-growth .negative {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .growth-up {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .growth-down {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .growth-neutral {
@@ -328,7 +328,7 @@
 
 .channel-bar .bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #f59e0b, #d97706);
+    background: linear-gradient(90deg, var(--color-warning-amber), var(--color-warning-amber));
     border-radius: 3px;
     transition: width 0.5s ease;
 }
@@ -351,7 +351,7 @@
 
 .peak-rank {
     font-weight: 700;
-    color: #f59e0b;
+    color: var(--color-warning-amber);
     width: 30px;
 }
 
@@ -374,7 +374,7 @@
 
 .peak-bar .bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    background: linear-gradient(90deg, var(--color-warning-amber), var(--color-warning-bright));
     border-radius: 4px;
     transition: width 0.5s ease;
 }
@@ -429,11 +429,11 @@
 }
 
 .detail-value.positive {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .detail-value.negative {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 /* Loading & Empty States */
@@ -450,7 +450,7 @@
 .loading-state .spin {
     animation: spin 1s linear infinite;
     font-size: 2rem;
-    color: #f59e0b;
+    color: var(--color-warning-amber);
 }
 
 @keyframes spin {

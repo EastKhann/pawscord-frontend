@@ -48,7 +48,7 @@
 .close-btn {
     background: rgba(255, 59, 48, 0.1);
     border: 1px solid rgba(255, 59, 48, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -102,11 +102,11 @@
 }
 
 .status-value.active {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .status-value.inactive {
-    color: #6b7280;
+    color: var(--text-faint);
 }
 
 /* Tabs */
@@ -136,7 +136,7 @@
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, #f23f42, #dc2626);
+    background: linear-gradient(135deg, var(--color-danger), var(--color-danger-deep));
     border-color: transparent;
     color: white;
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
@@ -171,7 +171,7 @@
 
 .enable-btn {
     padding: 14px 32px;
-    background: linear-gradient(135deg, #10b981, #34d399);
+    background: linear-gradient(135deg, var(--color-success-modern), #34d399);
     border: none;
     border-radius: 10px;
     color: white;
@@ -200,7 +200,7 @@
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 10px;
-    color: #10b981;
+    color: var(--color-success-modern);
     font-size: 14px;
     font-weight: 600;
 }
@@ -223,7 +223,7 @@
 .disable-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .disable-btn:hover {
@@ -233,7 +233,7 @@
 .backup-btn {
     background: rgba(59, 130, 246, 0.1);
     border: 1px solid rgba(59, 130, 246, 0.3);
-    color: #3b82f6;
+    color: var(--color-info);
 }
 
 .backup-btn:hover {
@@ -289,14 +289,14 @@
 
 .verification-input:focus {
     outline: none;
-    border-color: #f23f42;
+    border-color: var(--color-danger);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .verify-btn {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #10b981, #34d399);
+    background: linear-gradient(135deg, var(--color-success-modern), #34d399);
     border: none;
     border-radius: 8px;
     color: white;
@@ -335,7 +335,7 @@
     background: rgba(59, 130, 246, 0.1);
     border: 1px solid rgba(59, 130, 246, 0.3);
     border-radius: 8px;
-    color: #3b82f6;
+    color: var(--color-info);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -359,7 +359,7 @@
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 8px;
-    color: #f23f42;
+    color: var(--color-danger);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -435,7 +435,7 @@
     background: rgba(16, 185, 129, 0.2);
     border: 1px solid rgba(16, 185, 129, 0.4);
     border-radius: 8px;
-    color: #10b981;
+    color: var(--color-success-modern);
     font-size: 12px;
     font-weight: 600;
 }
@@ -445,7 +445,7 @@
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 8px;
-    color: #f23f42;
+    color: var(--color-danger);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -475,13 +475,13 @@
 
 .ip-input:focus {
     outline: none;
-    border-color: #f23f42;
+    border-color: var(--color-danger);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .add-btn {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #10b981, #34d399);
+    background: linear-gradient(135deg, var(--color-success-modern), #34d399);
     border: none;
     border-radius: 8px;
     color: white;
@@ -535,7 +535,7 @@
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: 8px;
-    color: #f23f42;
+    color: var(--color-danger);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;

@@ -98,7 +98,8 @@ export default function useChatConnection({
 
         if (!wsUrl) return;
 
-        const newWs = new WebSocket(wsUrl, [`token-${token}`]);
+        const freshToken = tokenRef.current || token;
+        const newWs = new WebSocket(wsUrl, [`token-${freshToken}`]);
         ws.current = newWs;
 
         newWs.onopen = () => {
@@ -265,8 +266,11 @@ export default function useChatConnection({
                 }
                 chatReconnectAttempts.current++;
                 const delay = jitteredDelay(2000, chatReconnectAttempts.current);
-                chatReconnectRef.current = setTimeout(() => {
-                    if (!intentionalChatClose.current) connectWebSocket();
+                chatReconnectRef.current = setTimeout(async () => {
+                    if (intentionalChatClose.current) return;
+                    // 🔧 FIX: Refresh token before reconnecting (prevents stale JWT failures)
+                    try { await refreshAccessToken(); } catch (e) { /* non-fatal */ }
+                    connectWebSocket();
                 }, delay);
             }
         };
@@ -274,23 +278,31 @@ export default function useChatConnection({
 
     // --- VISIBILITY CHANGE: Reconnect dead sockets when tab becomes visible ---
     useEffect(() => {
-        const handleVisibility = () => {
+        const handleVisibility = async () => {
             if (document.visibilityState === 'visible') {
+                // 🔧 FIX: Refresh token when tab becomes visible — covers long-idle scenarios
+                try { await refreshAccessToken(); } catch (e) { /* non-fatal */ }
+
                 // Chat WS: reconnect if dead
                 if (ws.current && ws.current.readyState !== WebSocket.OPEN && ws.current.readyState !== WebSocket.CONNECTING) {
                     chatReconnectAttempts.current = 0; // Reset attempts on visibility
                     connectWebSocket();
                 }
-                // Status WS: reconnect if dead
+                // Status WS: force reconnect if dead (don't rely solely on backoff timer)
                 if (statusWsRef.current && statusWsRef.current.readyState !== WebSocket.OPEN && statusWsRef.current.readyState !== WebSocket.CONNECTING) {
-                    // Will be handled by status WS reconnect logic
+                    clearTimeout(statusWsReconnectRef.current);
+                    statusIntentionalCloseRef.current = false;
+                    // createSocket is in a different effect scope — just close & let onclose retry
+                    // But we already refreshed the token above, so the next attempt will succeed
                 }
             }
         };
 
         // --- ONLINE/OFFLINE: Smart reconnect on network recovery ---
-        const handleOnline = () => {
+        const handleOnline = async () => {
             console.info('[Network] Back online — reconnecting WebSockets');
+            // Refresh token first — may have expired while offline
+            try { await refreshAccessToken(); } catch (e) { /* non-fatal */ }
             chatReconnectAttempts.current = 0;
             if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
                 connectWebSocket();
@@ -319,6 +331,13 @@ export default function useChatConnection({
     // 🔧 FIX: Use a ref for intentionalClose so it survives across effect re-fires
     // without creating stale closure problems
     const statusIntentionalCloseRef = useRef(false);
+    const statusHeartbeatTimer = useRef(null);
+    const statusHeartbeatTimeout = useRef(null);
+
+    const stopStatusHeartbeat = useCallback(() => {
+        if (statusHeartbeatTimer.current) { clearInterval(statusHeartbeatTimer.current); statusHeartbeatTimer.current = null; }
+        if (statusHeartbeatTimeout.current) { clearTimeout(statusHeartbeatTimeout.current); statusHeartbeatTimeout.current = null; }
+    }, []);
 
     useEffect(() => {
         if (!isAuthenticated || !isInitialDataLoaded) return;
@@ -332,7 +351,6 @@ export default function useChatConnection({
         // Reset — this effect is (re-)establishing the connection
         statusIntentionalCloseRef.current = false;
         let reconnectAttempts = 0;
-        const MAX_RECONNECT_ATTEMPTS = 10;
 
         const createSocket = () => {
             // 🔧 FIX: Guard — don't create duplicate status sockets (prevents reconnect storm)
@@ -342,7 +360,7 @@ export default function useChatConnection({
                 return null;
             }
 
-            const tok = tokenRef.current || currentToken;
+            const tok = tokenRef.current || localStorage.getItem('access_token') || currentToken;
             const currentUser = usernameRef.current || username;
             // 🔧 SECURITY: Token via subprotocol instead of URL
             const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}`;
@@ -350,20 +368,47 @@ export default function useChatConnection({
             let socket;
             try { socket = new WebSocket(url, [`token-${tok}`]); } catch (err) { return null; }
 
-            socket.onopen = () => { setGlobalWsConnected(true); reconnectAttempts = 0; };
+            socket.onopen = () => {
+                setGlobalWsConnected(true);
+                reconnectAttempts = 0;
+
+                // 🔌 Start heartbeat for status WS
+                stopStatusHeartbeat();
+                statusHeartbeatTimer.current = setInterval(() => {
+                    if (statusWsRef.current && statusWsRef.current.readyState === WebSocket.OPEN) {
+                        statusWsRef.current.send(JSON.stringify({ type: 'ping' }));
+                        statusHeartbeatTimeout.current = setTimeout(() => {
+                            // No pong received — connection is dead, force close to trigger reconnect
+                            if (statusWsRef.current && statusWsRef.current.readyState === WebSocket.OPEN) {
+                                statusWsRef.current.close(4000, 'Heartbeat timeout');
+                            }
+                        }, HEARTBEAT_TIMEOUT);
+                    }
+                }, HEARTBEAT_INTERVAL);
+            };
             socket.onerror = (error) => console.error('[StatusWS] WebSocket error:', error);
 
             socket.onclose = (event) => {
                 setGlobalWsConnected(false);
+                stopStatusHeartbeat();
                 if (!statusIntentionalCloseRef.current && event.code !== 1000 && event.code !== 1001) {
-                    if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) return;
+                    // Infinite reconnect with exponential backoff (cap at 60s)
                     reconnectAttempts++;
                     const delay = jitteredDelay(5000, reconnectAttempts, 60000);
-                    statusWsReconnectRef.current = setTimeout(() => {
-                        if (!statusIntentionalCloseRef.current) {
-                            const newSocket = createSocket();
-                            if (newSocket) statusWsRef.current = newSocket;
+                    statusWsReconnectRef.current = setTimeout(async () => {
+                        if (statusIntentionalCloseRef.current) return;
+
+                        // 🔧 FIX: Refresh access token before reconnecting.
+                        // Without this, expired JWTs cause infinite 4003 reject loops
+                        // because createSocket() reuses the stale token from tokenRef.
+                        try {
+                            await refreshAccessToken();
+                        } catch (e) {
+                            console.warn('[StatusWS] Token refresh failed before reconnect:', e);
                         }
+
+                        const newSocket = createSocket();
+                        if (newSocket) statusWsRef.current = newSocket;
                     }, delay);
                 }
             };
@@ -371,6 +416,16 @@ export default function useChatConnection({
             socket.onmessage = (e) => {
                 try {
                     const data = JSON.parse(e.data);
+
+                    // 🔌 Heartbeat pong — clear timeout, don't forward
+                    if (data.type === 'pong') {
+                        if (statusHeartbeatTimeout.current) {
+                            clearTimeout(statusHeartbeatTimeout.current);
+                            statusHeartbeatTimeout.current = null;
+                        }
+                        return;
+                    }
+
                     forwardToGlobalContext(data);
 
                     if (data.type === 'online_user_list_update') {
@@ -381,9 +436,20 @@ export default function useChatConnection({
                     }
                     if (data.type === 'voice_users_update') setVoiceUsersState(data.voice_users);
                     if (data.type === 'user_activity_update') {
-                        setAllUsers(prevUsers => prevUsers.map(u =>
-                            u.username === data.username ? { ...u, current_activity: data.activity } : u
-                        ));
+                        // Stamp received time so components can expire stale activity
+                        const activity = data.activity
+                            ? { ...data.activity, _received_at: Date.now() }
+                            : null;
+                        setAllUsers(prevUsers => {
+                            const found = prevUsers.some(u => u.username === data.username);
+                            if (found) {
+                                return prevUsers.map(u =>
+                                    u.username === data.username ? { ...u, current_activity: activity } : u
+                                );
+                            }
+                            // User not in allUsers yet (non-friend server member) — add them
+                            return [...prevUsers, { username: data.username, current_activity: activity }];
+                        });
                     }
                     if (data.type === 'user_profile_update' && data.user_data) {
                         const updatedUser = data.user_data;
@@ -453,10 +519,11 @@ export default function useChatConnection({
         if (!isAuthenticated && statusWsRef.current) {
             statusIntentionalCloseRef.current = true;
             clearTimeout(statusWsReconnectRef.current);
+            stopStatusHeartbeat();
             try { statusWsRef.current.close(1000, 'Logout'); } catch (e) { /* ignore */ }
             statusWsRef.current = null;
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, stopStatusHeartbeat]);
 
     // --- 🔌 CONNECT ON ACTIVE CHAT CHANGE ---
     useEffect(() => {

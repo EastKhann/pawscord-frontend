@@ -254,15 +254,36 @@ function createWindow() {
     minHeight: 600,  // 🔥 Minimum yükseklik
     icon: path.join(__dirname, '../build/logo.png'),
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true,
-      webSecurity: false,
-      devTools: true,  // 🔥 DevTools her zaman açık (F12 ile erişim)
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      webSecurity: true,
+      sandbox: true,
+      preload: path.join(__dirname, 'preload.js'),
+      devTools: isDevelopment,
       partition: 'persist:pawscord',  // 🔥 localStorage persist için!
     },
     autoHideMenuBar: !isDevelopment, // 🔥 Production'da menu bar gizle
     show: true,  // 🔥 FIX: Pencereyi hemen göster (yükleniyor ekranında kalmasın)
+  });
+
+  // 🔒 SECURITY: Set Content-Security-Policy header
+  session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [
+          "default-src 'self'; " +
+          "script-src 'self'; " +
+          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+          "font-src 'self' https://fonts.gstatic.com; " +
+          "img-src 'self' data: blob: https:; " +
+          "media-src 'self' blob: https:; " +
+          "connect-src 'self' https://*.pawscord.com wss://*.pawscord.com https://accounts.google.com https://fonts.googleapis.com; " +
+          "frame-src 'none';"
+        ]
+      }
+    });
   });
 
   // 🔥 MENU BAR OLUŞTUR (DevTools için)
@@ -466,16 +487,20 @@ function createWindow() {
   mainWindow.webContents.on('will-navigate', (event, url) => {
     console.log('🔗 will-navigate (MainWindow):', url);
 
-    // ⚠️ SADECE MAIN WINDOW'DA Google URL'lerini Chrome'da aç
-    // Popup window'larda (authWindow) bu engelleme olmasın
-    // Eğer Google accounts, OAuth veya harici bir URL ise Chrome'da aç
-    if (url.includes('accounts.google.com') ||
-      url.includes('oauth') ||
-      url.includes('login') ||
-      (url.startsWith('http') && !url.includes('localhost') && !url.includes('127.0.0.1'))) {
-      event.preventDefault();
-      console.log('✅ Ana Pencereden Chrome\'da açılıyor:', url);
-      shell.openExternal(url);
+    // 🔒 SECURITY: Strict hostname check for external navigation
+    // Only open external browser for truly external URLs
+    try {
+      const navUrl = new URL(url);
+      const trustedHosts = ['localhost', '127.0.0.1', 'pawscord.com', 'www.pawscord.com'];
+      const isExternal = !trustedHosts.includes(navUrl.hostname) &&
+        !navUrl.hostname.endsWith('.pawscord.com');
+      if (isExternal) {
+        event.preventDefault();
+        console.log('✅ External URL → Chrome:', url);
+        shell.openExternal(url);
+      }
+    } catch (e) {
+      event.preventDefault(); // Block invalid URLs
     }
   });
 
@@ -506,25 +531,35 @@ function createWindow() {
         // React'e bitti bilgisini gönder
         mainWindow.webContents.send('download-complete');
 
-        // 🔥 SILENT INSTALL: /S flag ile sessiz kurulum (Next butonuna basma yok)
-        const { execFile } = require('child_process');
-        console.log('🔧 Silent install başlatılıyor:', filePath);
-        try {
-          const installer = execFile(filePath, ['/S', '--force-run'], {
-            detached: true,
-            windowsHide: false
-          });
-          installer.unref(); // Ana process'ten ayır
-          console.log('✅ Installer başlatıldı, uygulama kapanıyor...');
-          // Installer'ın başlaması için kısa bekleme, sonra çık
-          setTimeout(() => {
-            app.quit();
-          }, 2000);
-        } catch (execErr) {
-          console.error('❌ Silent install başlatılamadı, fallback:', execErr);
-          // Fallback: normal açış
-          shell.openPath(filePath);
-          setTimeout(() => app.quit(), 3000);
+        // � SECURITY: Only auto-install Pawscord updater from trusted domain
+        const downloadURL = item.getURL();
+        const isTrustedUpdate = downloadURL && (
+          downloadURL.startsWith('https://pawscord.com/') ||
+          downloadURL.startsWith('https://download.pawscord.com/') ||
+          downloadURL.startsWith('https://github.com/') && downloadURL.includes('pawscord')
+        );
+        const isPawscordInstaller = fileName.toLowerCase().includes('pawscord') &&
+          (fileName.endsWith('.exe') || fileName.endsWith('.msi'));
+
+        if (isTrustedUpdate && isPawscordInstaller) {
+          const { execFile } = require('child_process');
+          console.log('🔧 Trusted Pawscord update - silent install:', filePath);
+          try {
+            const installer = execFile(filePath, ['/S', '--force-run'], {
+              detached: true,
+              windowsHide: false
+            });
+            installer.unref();
+            console.log('✅ Installer başlatıldı, uygulama kapanıyor...');
+            setTimeout(() => { app.quit(); }, 2000);
+          } catch (execErr) {
+            console.error('❌ Silent install başlatılamadı:', execErr);
+            shell.openPath(filePath);
+            setTimeout(() => app.quit(), 3000);
+          }
+        } else {
+          console.log('📁 Download complete (not auto-install):', filePath);
+          shell.showItemInFolder(filePath);
         }
       } else {
         console.log(`İndirme başarısız: ${state}`);
@@ -558,9 +593,9 @@ ipcMain.on('start-google-login', (event, authUrl) => {
   console.log('💡 [Google] Giriş yaptıktan sonra pawscord:// deep link uygulamaya dönecek');
 });
 
-// 🔥 HTTP/2 ve SSL ayarları
-app.commandLine.appendSwitch('disable-http2');
-app.commandLine.appendSwitch('ignore-certificate-errors');
+// � SECURITY: HTTP/2 enabled, certificate validation enforced
+// Removed: app.commandLine.appendSwitch('disable-http2');
+// Removed: app.commandLine.appendSwitch('ignore-certificate-errors');
 
 app.whenReady().then(() => {
   // 🔥 Session persist ayarı (localStorage için)

@@ -331,7 +331,7 @@ const ChatArea = memo(function ChatArea({
 
             {/* MESSAGE LIST */}
             <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}
-                id="main-content" role="log" aria-live="polite" aria-relevant="additions" aria-label="Mesaj listesi"
+                id="chat-message-list" role="log" aria-live="polite" aria-relevant="additions" aria-label="Mesaj listesi"
                 onTouchStart={handleMsgBoxTouchStart}
                 onTouchMove={handleMsgBoxTouchMove}
                 onTouchEnd={handleMsgBoxTouchEnd}

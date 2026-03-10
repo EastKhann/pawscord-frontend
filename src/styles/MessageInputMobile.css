@@ -1,6 +1,6 @@
-/* MessageInput Mobil Açılır Menü Stilleri */
+/* MessageInput Mobil AÃ§Ä±lÄ±r MenÃ¼ Stilleri */
 
-/* Mobil menü hover efekti */
+/* Mobil menÃ¼ hover efekti */
 .mobile-menu-item:hover {
     background-color: rgba(88, 101, 242, 0.1) !important;
 }
@@ -10,7 +10,7 @@
     transform: scale(0.98);
 }
 
-/* Mobil menü animasyonu */
+/* Mobil menÃ¼ animasyonu */
 @keyframes slideUp {
     from {
         opacity: 0;
@@ -30,7 +30,7 @@
 /* Mobil buton aktif durumu */
 .mobile-plus-button-active {
     background-color: rgba(88, 101, 242, 0.2) !important;
-    color: #5865f2 !important;
+    color: var(--color-primary) !important;
 }
 
 /* Desktop'ta gizle */

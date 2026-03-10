@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     padding: 20px;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .status-icon.success {
-    background: #10b981;
+    background: var(--color-success-modern);
 }
 
 .status-icon.success svg {
@@ -42,7 +42,7 @@
 }
 
 .status-icon.error {
-    background: #f23f42;
+    background: var(--color-danger);
 }
 
 .status-icon.error svg {
@@ -54,8 +54,8 @@
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid #e5e7eb;
-    border-top-color: #5865f2;
+    border: 4px solid var(--text-light-neutral);
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -70,12 +70,12 @@
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #1f2937;
+    color: var(--bg-neutral-800);
 }
 
 .verification-card p {
     font-size: 16px;
-    color: #6b7280;
+    color: var(--text-faint);
     margin-bottom: 32px;
     line-height: 1.6;
 }
@@ -92,7 +92,7 @@
 }
 
 .btn-primary {
-    background: #5865f2;
+    background: var(--color-primary);
     color: white;
 }
 
@@ -102,8 +102,8 @@
 }
 
 .btn-secondary {
-    background: #e5e7eb;
-    color: #374151;
+    background: var(--text-light-neutral);
+    color: var(--bg-neutral-700);
 }
 
 .btn-secondary:hover {
@@ -114,20 +114,20 @@
 /* Dark theme */
 @media (prefers-color-scheme: dark) {
     .verification-card {
-        background: #1f2937;
+        background: var(--bg-neutral-800);
     }
 
     .verification-card h2 {
-        color: #f9fafb;
+        color: var(--text-snow);
     }
 
     .verification-card p {
-        color: #9ca3af;
+        color: var(--text-gray);
     }
 
     .btn-secondary {
-        background: #374151;
-        color: #e5e7eb;
+        background: var(--bg-neutral-700);
+        color: var(--text-light-neutral);
     }
 
     .btn-secondary:hover {

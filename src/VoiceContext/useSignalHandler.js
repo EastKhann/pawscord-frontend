@@ -420,6 +420,12 @@ export function useSignalHandler({
                 // 🔥 Gelen offer'daki Opus ayarlarını da optimize et
                 const optimizedRemoteSdp = { ...sdp, sdp: optimizeOpusSdp(sdp.sdp || sdp) };
                 await pc.setRemoteDescription(new RTCSessionDescription(optimizedRemoteSdp.type ? optimizedRemoteSdp : sdp));
+
+                // 🔥 FIX: Ensure local tracks are added BEFORE creating answer.
+                // createPeerConnection adds tracks only if localStreamRef is set at PC creation time.
+                // If the mic stream arrived after PC creation (race), tracks are missing → one-way audio.
+                addLocalStreamsToPeer(pc, senderUsername);
+
                 const answer = await pc.createAnswer();
                 // 🔥 Answer SDP'yi de optimize et
                 const optimizedAnswer = { ...answer, sdp: optimizeOpusSdp(answer.sdp) };

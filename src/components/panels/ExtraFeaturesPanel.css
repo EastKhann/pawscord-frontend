@@ -1,15 +1,15 @@
 /* frontend/src/components/panels/ExtraFeaturesPanel.css */
-/* 🚀 20 EK YENİ ÖZELLİK STİLLERİ - 26 Ocak 2026 */
+/* ÃƒÂ°Ã…Â¸Ã…Â¡Ã¢â€šÂ¬ 20 EK YENÃƒâ€žÃ‚Â° ÃƒÆ’Ã¢â‚¬â€œZELLÃƒâ€žÃ‚Â°K STÃƒâ€žÃ‚Â°LLERÃƒâ€žÃ‚Â° - 26 Ocak 2026 */
 
 /* ========================================
    BASE STYLES
 ======================================== */
 .extra-features-panel {
-    background: linear-gradient(145deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(145deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     padding: 24px;
     min-height: 500px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .extra-features-panel .panel-header {
@@ -23,7 +23,7 @@
 
 .extra-features-panel .panel-header h2 {
     font-size: 1.5rem;
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -51,7 +51,7 @@
 
 .extra-features-panel .feature-card:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
@@ -75,10 +75,10 @@
    FEATURE PANEL BASE
 ======================================== */
 .feature-panel {
-    background: linear-gradient(145deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(145deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     padding: 20px;
-    color: #fff;
+    color: var(--color-white);
     max-width: 500px;
     margin: 0 auto;
 }
@@ -100,7 +100,7 @@
 .feature-panel .close-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #fff;
+    color: var(--color-white);
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -166,15 +166,15 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 10px 12px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .scheduled-messages .add-scheduled button {
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     padding: 10px;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     font-weight: 600;
 }
@@ -290,11 +290,11 @@
 
 .server-templates .template-card button {
     width: 100%;
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     padding: 8px;
     border-radius: 6px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     font-weight: 600;
 }
@@ -337,15 +337,15 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 10px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .custom-commands .add-command button {
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     padding: 10px 20px;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
 }
 
@@ -370,7 +370,7 @@
     display: block;
     font-size: 1.75rem;
     font-weight: 700;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .server-analytics .stat-card .label {
@@ -433,7 +433,7 @@
 .member-levels .rank {
     font-weight: 700;
     min-width: 40px;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .member-levels .username {
@@ -473,7 +473,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 10px;
-    color: #fff;
+    color: var(--color-white);
     resize: vertical;
     margin-top: 8px;
 }
@@ -487,11 +487,11 @@
 
 .welcome-messages .save-btn {
     width: 100%;
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     padding: 12px;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     font-weight: 600;
     margin-top: 8px;
@@ -529,7 +529,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #fff;
+    background: var(--color-white);
     top: 2px;
     transition: all 0.3s;
 }
@@ -543,7 +543,7 @@
 }
 
 .privacy-settings .toggle.on {
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
 }
 
 .privacy-settings .toggle.on::after {
@@ -552,11 +552,11 @@
 
 .privacy-settings .save-btn {
     width: 100%;
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     padding: 12px;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     font-weight: 600;
     margin-top: 16px;
@@ -601,7 +601,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    color: #ff6b6b;
+    color: var(--color-coral-light);
     cursor: pointer;
 }
 
@@ -625,7 +625,7 @@
     padding: 12px;
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.2s;
     font-size: 0.8rem;
@@ -659,7 +659,7 @@
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid transparent;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -670,7 +670,7 @@
 
 .activity-status .type-btn.active {
     background: rgba(102, 126, 234, 0.2);
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .activity-status .type-btn span:first-child {
@@ -683,17 +683,17 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 12px;
-    color: #fff;
+    color: var(--color-white);
     margin-bottom: 8px;
 }
 
 .activity-status .save-btn {
     width: 100%;
-    background: linear-gradient(90deg, #5865f2, #4752c4);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     padding: 12px;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     font-weight: 600;
 }

@@ -1,8 +1,8 @@
-﻿.ocr-panel {
-    background: #0e1222;
+.ocr-panel {
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
-    color: #dbdee1;
+    color: var(--text-primary);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -10,11 +10,11 @@
 .ocr-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .ocr-header h2 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -23,8 +23,8 @@
 }
 
 .ocr-error {
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
     padding: 12px;
     border-radius: 4px;
     margin-bottom: 15px;
@@ -36,8 +36,8 @@
 
 .upload-area {
     display: block;
-    background: #182135;
-    border: 2px dashed #5865f2;
+    background: var(--bg-input);
+    border: 2px dashed var(--color-primary);
     border-radius: 8px;
     padding: 40px;
     text-align: center;
@@ -47,29 +47,29 @@
 }
 
 .upload-area:hover {
-    background: #121928;
-    border-color: #4752c4;
+    background: var(--bg-elevated);
+    border-color: var(--color-primary-hover);
 }
 
 .upload-placeholder {
-    color: #b5bac1;
+    color: var(--text-secondary);
 }
 
 .upload-icon {
     font-size: 48px;
-    color: #5865f2;
+    color: var(--color-primary);
     margin-bottom: 15px;
 }
 
 .upload-placeholder p {
     font-size: 16px;
     margin: 10px 0;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .upload-placeholder span {
     font-size: 13px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .image-preview {
@@ -80,8 +80,8 @@
 
 .extract-btn {
     width: 100%;
-    background: #5865f2;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--color-white);
     border: none;
     padding: 14px;
     border-radius: 4px;
@@ -92,7 +92,7 @@
 }
 
 .extract-btn:hover {
-    background: #4752c4;
+    background: var(--color-primary-hover);
 }
 
 .extract-btn:disabled {
@@ -102,7 +102,7 @@
 }
 
 .ocr-result {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 20px;
 }
@@ -113,11 +113,11 @@
     align-items: center;
     margin-bottom: 15px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #0e1222;
+    border-bottom: 1px solid var(--bg-secondary);
 }
 
 .result-header h3 {
-    color: #ffffff;
+    color: var(--color-white);
     margin: 0;
     font-size: 18px;
 }
@@ -129,8 +129,8 @@
 }
 
 .language-badge {
-    background: #5865f2;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--color-white);
     padding: 6px 12px;
     border-radius: 12px;
     font-size: 12px;
@@ -140,8 +140,8 @@
 }
 
 .copy-btn {
-    background: #23a559;
-    color: #ffffff;
+    background: var(--color-success);
+    color: var(--color-white);
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
@@ -159,7 +159,7 @@
 }
 
 .copy-btn.copied {
-    background: #23a559;
+    background: var(--color-success);
     animation: checkPulse 0.5s;
 }
 
@@ -176,10 +176,10 @@
 }
 
 .extracted-text {
-    background: #0e1222;
+    background: var(--bg-secondary);
     padding: 15px;
     border-radius: 4px;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     line-height: 1.6;
     white-space: pre-wrap;
@@ -192,10 +192,10 @@
 }
 
 .extracted-text::-webkit-scrollbar-track {
-    background: #182135;
+    background: var(--bg-input);
 }
 
 .extracted-text::-webkit-scrollbar-thumb {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 4px;
 }

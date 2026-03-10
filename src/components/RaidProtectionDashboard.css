@@ -1,4 +1,4 @@
-﻿/* RaidProtectionDashboard.css */
+/* RaidProtectionDashboard.css */
 .raid-dashboard-overlay {
     position: fixed;
     top: 0;
@@ -14,7 +14,7 @@
 }
 
 .raid-dashboard {
-    background: #0e1222;
+    background: var(--bg-secondary);
     border-radius: 12px;
     width: 95%;
     max-width: 1000px;
@@ -30,12 +30,12 @@
     align-items: center;
     gap: 16px;
     padding: 16px 20px;
-    background: linear-gradient(135deg, #da373c, #f23f42);
-    border-bottom: 1px solid #182135;
+    background: linear-gradient(135deg, var(--color-danger-dark), var(--color-danger));
+    border-bottom: 1px solid var(--bg-input);
 }
 
 .dashboard-header h2 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 18px;
     margin: 0;
     display: flex;
@@ -58,7 +58,7 @@
 
 .status-badge.active {
     background: rgba(35, 165, 89, 0.2);
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .status-badge.inactive {
@@ -68,7 +68,7 @@
 
 .status-badge.lockdown {
     background: rgba(218, 55, 60, 0.2);
-    color: #da373c;
+    color: var(--color-danger-dark);
     animation: pulse 2s infinite;
 }
 
@@ -90,7 +90,7 @@
     border-radius: 50%;
     border: none;
     background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -106,8 +106,8 @@
     display: flex;
     gap: 4px;
     padding: 12px 16px;
-    background: #0b0e1b;
-    border-bottom: 1px solid #182135;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--bg-input);
 }
 
 .nav-btn {
@@ -117,7 +117,7 @@
     padding: 10px 16px;
     background: transparent;
     border: none;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     cursor: pointer;
     border-radius: 6px;
@@ -126,21 +126,21 @@
 }
 
 .nav-btn:hover {
-    background: #182135;
-    color: #fff;
+    background: var(--bg-input);
+    color: var(--color-white);
 }
 
 .nav-btn.active {
-    background: #5865f2;
-    color: #fff;
+    background: var(--color-primary);
+    color: var(--color-white);
 }
 
 .nav-btn .badge {
     position: absolute;
     top: 4px;
     right: 4px;
-    background: #da373c;
-    color: #fff;
+    background: var(--color-danger-dark);
+    color: var(--color-white);
     font-size: 10px;
     min-width: 16px;
     height: 16px;
@@ -166,10 +166,10 @@
 .action-btn {
     flex: 1;
     padding: 16px;
-    border: 2px solid #182135;
+    border: 2px solid var(--bg-input);
     border-radius: 12px;
-    background: #0b0e1b;
-    color: #b5bac1;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -181,28 +181,28 @@
 }
 
 .action-btn:hover {
-    border-color: #5865f2;
-    color: #fff;
+    border-color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .action-btn.enabled {
-    border-color: #23a559;
-    color: #23a559;
+    border-color: var(--color-success);
+    color: var(--color-success);
 }
 
 .action-btn.lockdown {
-    border-color: #da373c;
+    border-color: var(--color-danger-dark);
 }
 
 .action-btn.lockdown:hover {
     background: rgba(218, 55, 60, 0.1);
-    border-color: #da373c;
+    border-color: var(--color-danger-dark);
 }
 
 .action-btn.lockdown.active {
     background: rgba(218, 55, 60, 0.2);
-    border-color: #da373c;
-    color: #da373c;
+    border-color: var(--color-danger-dark);
+    color: var(--color-danger-dark);
 }
 
 /* Stats Grid */
@@ -214,7 +214,7 @@
 }
 
 .stat-card {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -234,12 +234,12 @@
 
 .stat-icon.blocked {
     background: rgba(218, 55, 60, 0.2);
-    color: #da373c;
+    color: var(--color-danger-dark);
 }
 
 .stat-icon.verified {
     background: rgba(35, 165, 89, 0.2);
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .stat-icon.raids {
@@ -249,7 +249,7 @@
 
 .stat-icon.suspicious {
     background: rgba(88, 101, 242, 0.2);
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .stat-info {
@@ -258,19 +258,19 @@
 }
 
 .stat-value {
-    color: #fff;
+    color: var(--color-white);
     font-size: 28px;
     font-weight: 700;
 }
 
 .stat-label {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 /* Activity Section */
 .activity-section h3 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     margin: 0 0 12px 0;
     display: flex;
@@ -279,7 +279,7 @@
 }
 
 .activity-feed {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 12px;
     max-height: 300px;
     overflow-y: auto;
@@ -291,7 +291,7 @@
     gap: 12px;
     padding: 12px 16px;
     border-left: 3px solid transparent;
-    border-bottom: 1px solid #0e1222;
+    border-bottom: 1px solid var(--bg-secondary);
     transition: background 0.2s;
 }
 
@@ -300,7 +300,7 @@
 }
 
 .activity-item:hover {
-    background: #0e1222;
+    background: var(--bg-secondary);
 }
 
 .activity-icon {
@@ -312,30 +312,30 @@
 }
 
 .activity-user {
-    color: #fff;
+    color: var(--color-white);
     font-weight: 500;
     margin-right: 8px;
 }
 
 .activity-action {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
 }
 
 .activity-time {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 .no-activity {
     text-align: center;
     padding: 40px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 /* Verification View */
 .verify-view h3 {
-    color: #fff;
+    color: var(--color-white);
     margin: 0 0 20px 0;
     display: flex;
     align-items: center;
@@ -349,7 +349,7 @@
 }
 
 .verification-card {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 12px;
     padding: 16px;
     display: flex;
@@ -369,14 +369,14 @@
 }
 
 .user-info h4 {
-    color: #fff;
+    color: var(--color-white);
     margin: 0 0 4px 0;
 }
 
 .user-meta {
     display: flex;
     gap: 16px;
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
@@ -421,8 +421,8 @@
 }
 
 .approve-btn {
-    background: #23a559;
-    color: #fff;
+    background: var(--color-success);
+    color: var(--color-white);
 }
 
 .approve-btn:hover {
@@ -430,8 +430,8 @@
 }
 
 .reject-btn {
-    background: #da373c;
-    color: #fff;
+    background: var(--color-danger-dark);
+    color: var(--color-white);
 }
 
 .reject-btn:hover {
@@ -441,18 +441,18 @@
 .no-verifications {
     text-align: center;
     padding: 60px 20px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .no-verifications .empty-icon {
     font-size: 48px;
-    color: #1e2024;
+    color: var(--bg-neutral-dark);
     margin-bottom: 16px;
 }
 
 /* Logs View */
 .logs-view h3 {
-    color: #fff;
+    color: var(--color-white);
     margin: 0 0 20px 0;
     display: flex;
     align-items: center;
@@ -466,14 +466,14 @@
 }
 
 .log-item {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 8px;
     padding: 16px;
-    border-left: 4px solid #5865f2;
+    border-left: 4px solid var(--color-primary);
 }
 
 .log-item.high {
-    border-left-color: #da373c;
+    border-left-color: var(--color-danger-dark);
 }
 
 .log-item.medium {
@@ -481,7 +481,7 @@
 }
 
 .log-item.low {
-    border-left-color: #23a559;
+    border-left-color: var(--color-success);
 }
 
 .log-header {
@@ -492,41 +492,41 @@
 }
 
 .log-type {
-    color: #fff;
+    color: var(--color-white);
     font-weight: 500;
 }
 
 .log-time {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 .log-description {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     margin: 0 0 8px 0;
 }
 
 .affected-count {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 .no-logs {
     text-align: center;
     padding: 60px 20px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .no-logs .empty-icon {
     font-size: 48px;
-    color: #1e2024;
+    color: var(--bg-neutral-dark);
     margin-bottom: 16px;
 }
 
 /* Settings View */
 .settings-view h3 {
-    color: #fff;
+    color: var(--color-white);
     margin: 0 0 24px 0;
     display: flex;
     align-items: center;
@@ -534,18 +534,18 @@
 }
 
 .settings-section {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 16px;
 }
 
 .settings-section h4 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     margin: 0 0 16px 0;
     padding-bottom: 12px;
-    border-bottom: 1px solid #182135;
+    border-bottom: 1px solid var(--bg-input);
 }
 
 .setting-item {
@@ -553,7 +553,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 0;
-    border-bottom: 1px solid #0e1222;
+    border-bottom: 1px solid var(--bg-secondary);
 }
 
 .setting-item:last-child {
@@ -562,13 +562,13 @@
 
 .setting-info label {
     display: block;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     margin-bottom: 4px;
 }
 
 .setting-info p {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
     margin: 0;
 }
@@ -582,16 +582,16 @@
 .setting-control input[type="number"] {
     width: 70px;
     padding: 8px 12px;
-    background: #0e1222;
-    border: 1px solid #182135;
+    background: var(--bg-secondary);
+    border: 1px solid var(--bg-input);
     border-radius: 6px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     text-align: center;
 }
 
 .setting-control span {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
@@ -612,7 +612,7 @@
     position: absolute;
     cursor: pointer;
     inset: 0;
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 24px;
     transition: 0.3s;
 }
@@ -624,13 +624,13 @@
     width: 18px;
     left: 3px;
     bottom: 3px;
-    background: #fff;
+    background: var(--color-white);
     border-radius: 50%;
     transition: 0.3s;
 }
 
 .toggle-switch input:checked+.slider {
-    background: #23a559;
+    background: var(--color-success);
 }
 
 .toggle-switch input:checked+.slider::before {
@@ -645,10 +645,10 @@
 
 .save-btn {
     padding: 12px 32px;
-    background: #5865f2;
+    background: var(--color-primary);
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -656,7 +656,7 @@
 }
 
 .save-btn:hover {
-    background: #4752c4;
+    background: var(--color-primary-hover);
 }
 
 @keyframes fadeIn {

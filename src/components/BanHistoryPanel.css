@@ -1,4 +1,4 @@
-﻿.banhistory-overlay {
+.banhistory-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@
 }
 
 .banhistory-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 900px;
@@ -30,7 +30,7 @@
     align-items: center;
     gap: 15px;
     padding: 20px 24px;
-    background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+    background: linear-gradient(135deg, var(--color-danger-material) 0%, #c62828 100%);
     color: white;
 }
 
@@ -102,20 +102,20 @@
 .stat-item .stat-label {
     display: block;
     font-size: 0.75rem;
-    color: #888;
+    color: var(--text-silver);
     margin-top: 4px;
 }
 
 .stat-item.active .stat-value {
-    color: #f44336;
+    color: var(--color-danger-material);
 }
 
 .stat-item.expired .stat-value {
-    color: #ffc107;
+    color: var(--color-warning-material);
 }
 
 .stat-item.appealed .stat-value {
-    color: #4caf50;
+    color: var(--color-success-material);
 }
 
 /* Filters Bar */
@@ -141,7 +141,7 @@
 }
 
 .search-box svg {
-    color: #888;
+    color: var(--text-silver);
 }
 
 .search-box input {
@@ -158,7 +158,7 @@
 }
 
 .search-box input::placeholder {
-    color: #666;
+    color: var(--text-faint);
 }
 
 .filters-bar select {
@@ -171,7 +171,7 @@
 }
 
 .filters-bar select option {
-    background: #0b0e1b;
+    background: var(--bg-primary);
 }
 
 .export-btn {
@@ -182,7 +182,7 @@
     border: 1px solid rgba(244, 67, 54, 0.3);
     border-radius: 8px;
     padding: 10px 16px;
-    color: #f44336;
+    color: var(--color-danger-material);
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -202,7 +202,7 @@
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .empty-state svg {
@@ -231,16 +231,16 @@
 }
 
 .ban-card.active {
-    border-left: 3px solid #f44336;
+    border-left: 3px solid var(--color-danger-material);
 }
 
 .ban-card.expired {
-    border-left: 3px solid #ffc107;
+    border-left: 3px solid var(--color-warning-material);
     opacity: 0.8;
 }
 
 .ban-card.appealed {
-    border-left: 3px solid #4caf50;
+    border-left: 3px solid var(--color-success-material);
 }
 
 .ban-main {
@@ -261,7 +261,7 @@
 .user-avatar {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #f44336, #c62828);
+    background: linear-gradient(135deg, var(--color-danger-material), #c62828);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -287,7 +287,7 @@
 }
 
 .user-info .discriminator {
-    color: #666;
+    color: var(--text-faint);
     font-size: 0.8rem;
 }
 
@@ -301,7 +301,7 @@
 }
 
 .ban-reason svg {
-    color: #f44336;
+    color: var(--color-danger-material);
     flex-shrink: 0;
 }
 
@@ -324,17 +324,17 @@
 
 .status-badge.active {
     background: rgba(244, 67, 54, 0.2);
-    color: #f44336;
+    color: var(--color-danger-material);
 }
 
 .status-badge.expired {
     background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+    color: var(--color-warning-material);
 }
 
 .status-badge.appealed {
     background: rgba(76, 175, 80, 0.2);
-    color: #4caf50;
+    color: var(--color-success-material);
 }
 
 .appeal-badge {
@@ -345,24 +345,24 @@
 
 .appeal-badge.pending {
     background: rgba(33, 150, 243, 0.2);
-    color: #2196f3;
+    color: var(--color-info-material);
 }
 
 .appeal-badge.approved {
     background: rgba(76, 175, 80, 0.2);
-    color: #4caf50;
+    color: var(--color-success-material);
 }
 
 .appeal-badge.denied {
     background: rgba(244, 67, 54, 0.2);
-    color: #f44336;
+    color: var(--color-danger-material);
 }
 
 .ban-date {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     min-width: 140px;
 }
@@ -370,7 +370,7 @@
 .expand-btn {
     background: none;
     border: none;
-    color: #666;
+    color: var(--text-faint);
     cursor: pointer;
     padding: 8px;
     transition: all 0.3s;
@@ -399,7 +399,7 @@
 }
 
 .detail-row .label {
-    color: #888;
+    color: var(--text-silver);
     min-width: 120px;
 }
 
@@ -429,7 +429,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, #4caf50, #388e3c);
+    background: linear-gradient(135deg, var(--color-success-material), #388e3c);
     border: none;
     border-radius: 8px;
     padding: 10px 20px;

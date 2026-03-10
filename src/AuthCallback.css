@@ -5,7 +5,7 @@
     min-height: 100vh;
     background: radial-gradient(ellipse at 15% 20%, rgba(88, 101, 242, 0.16) 0%, transparent 50%),
         radial-gradient(ellipse at 85% 80%, rgba(124, 58, 237, 0.10) 0%, transparent 48%),
-        #0d0e10;
+        var(--bg-void);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
@@ -37,14 +37,14 @@
     margin: 0;
     opacity: 0.75;
     font-size: 16px;
-    color: #b5bac1;
+    color: var(--text-secondary);
 }
 
 .auth-spinner {
     width: 48px;
     height: 48px;
     border: 3px solid rgba(88, 101, 242, 0.25);
-    border-top-color: #5865f2;
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 0 auto;
@@ -64,7 +64,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #23a559, #2dc26e);
+    background: linear-gradient(135deg, var(--color-success), #2dc26e);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,7 +78,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #da373c, #f04747);
+    background: linear-gradient(135deg, var(--color-danger-dark), #f04747);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,7 +104,7 @@
     margin-top: 16px !important;
     font-size: 13px !important;
     opacity: 0.55 !important;
-    color: #80848e !important;
+    color: var(--status-offline) !important;
 }
 
 @keyframes authCardIn {

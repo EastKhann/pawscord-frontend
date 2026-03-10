@@ -1,29 +1,29 @@
 /* styles/theme.css */
-/* 🌓 Dark/Light Mode Theme Variables */
+/* ÃƒÂ°Ã…Â¸Ã…â€™Ã¢â‚¬Å“ Dark/Light Mode Theme Variables */
 
 :root[data-theme='dark'] {
-  /* Background Colors — midnight blue */
-  --bg-primary: #0b0e1b;
-  --bg-secondary: #0e1222;
-  --bg-tertiary: #121928;
-  --bg-chat: #182135;
+  /* Background Colors ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â midnight blue */
+  --bg-primary: var(--bg-primary);
+  --bg-secondary: var(--bg-secondary);
+  --bg-tertiary: var(--bg-elevated);
+  --bg-chat: var(--bg-input);
   --bg-hover: rgba(88, 101, 242, 0.09);
 
   /* Text Colors */
-  --text-primary: #FFFFFF;
-  --text-secondary: #b5bac1;
-  --text-muted: #949ba4;
+  --text-primary: var(--color-white);
+  --text-secondary: var(--text-secondary);
+  --text-muted: var(--text-muted);
   --text-link: #00AFF4;
 
   /* Brand Colors */
-  --brand-primary: #5865F2;
-  --brand-hover: #4752C4;
+  --brand-primary: var(--color-primary);
+  --brand-hover: var(--color-primary-hover);
   --brand-active: #3C45A5;
 
   /* Status Colors */
-  --success: #23a559;
-  --warning: #f0b232;
-  --danger: #f23f42;
+  --success: var(--color-success);
+  --warning: var(--color-warning);
+  --danger: var(--color-danger);
   --info: #00AFF4;
 
   /* Border Colors */
@@ -38,21 +38,21 @@
 
 :root[data-theme='light'] {
   /* Background Colors */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F2F3F5;
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--text-light-bg);
   --bg-tertiary: #E3E5E8;
-  --bg-chat: #F9FAFB;
+  --bg-chat: var(--text-snow);
   --bg-hover: rgba(0, 0, 0, 0.04);
 
   /* Text Colors */
   --text-primary: #060607;
-  --text-secondary: #4E5058;
-  --text-muted: #80848e;
+  --text-secondary: var(--text-disabled);
+  --text-muted: var(--status-offline);
   --text-link: #0068E0;
 
   /* Brand Colors */
-  --brand-primary: #5865F2;
-  --brand-hover: #4752C4;
+  --brand-primary: var(--color-primary);
+  --brand-hover: var(--color-primary-hover);
   --brand-active: #3C45A5;
 
   /* Status Colors */

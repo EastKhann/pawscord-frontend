@@ -16,7 +16,7 @@
 }
 
 .two-factor-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     max-width: 600px;
@@ -34,20 +34,20 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     position: sticky;
     top: 0;
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     z-index: 10;
 }
 
 .two-factor-header .header-icon {
     font-size: 28px;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .two-factor-header h2 {
     flex: 1;
     margin: 0;
     font-size: 22px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .close-btn {
@@ -57,7 +57,7 @@
     width: 36px;
     height: 36px;
     font-size: 20px;
-    color: #ffffff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -90,7 +90,7 @@
 
 .info-box h3 {
     font-size: 20px;
-    color: #ffffff;
+    color: var(--color-white);
     margin: 16px 0;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .benefits-list li {
-    color: #dbdee1;
+    color: var(--text-primary);
     padding: 8px 0;
     font-size: 15px;
 }
@@ -134,7 +134,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #5865f2;
+    color: var(--color-primary);
     margin: 0 0 12px 0;
     font-size: 18px;
 }
@@ -150,7 +150,7 @@
     justify-content: center;
     margin: 24px 0;
     padding: 20px;
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 12px;
 }
 
@@ -176,7 +176,7 @@
 
 .code-box code {
     flex: 1;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 14px;
     font-family: 'Courier New', monospace;
     letter-spacing: 2px;
@@ -187,7 +187,7 @@
     border: none;
     border-radius: 6px;
     padding: 8px 12px;
-    color: #5865f2;
+    color: var(--color-primary);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -204,7 +204,7 @@
     padding: 16px;
     font-size: 32px;
     text-align: center;
-    color: #ffffff;
+    color: var(--color-white);
     letter-spacing: 8px;
     font-family: 'Courier New', monospace;
     margin-bottom: 20px;
@@ -213,7 +213,7 @@
 
 .verify-input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2);
 }
 
@@ -231,12 +231,12 @@
 }
 
 .warning-box h3 {
-    color: #f0b232;
+    color: var(--color-warning);
     margin: 0 0 12px 0;
 }
 
 .warning-box p {
-    color: #dbdee1;
+    color: var(--text-primary);
     line-height: 1.6;
     margin: 0;
 }
@@ -256,7 +256,7 @@
 }
 
 .backup-code-item code {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 14px;
     font-family: 'Courier New', monospace;
     letter-spacing: 2px;
@@ -287,13 +287,13 @@
 }
 
 .success-box h3 {
-    color: #23a559;
+    color: var(--color-success);
     font-size: 20px;
     margin: 12px 0;
 }
 
 .success-box p {
-    color: #dbdee1;
+    color: var(--text-primary);
     margin: 0;
 }
 
@@ -318,7 +318,7 @@
 }
 
 .info-item strong {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 14px;
 }
 
@@ -346,8 +346,8 @@
 }
 
 .primary-btn {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    color: var(--color-white);
 }
 
 .primary-btn:hover:not(:disabled) {
@@ -362,7 +362,7 @@
 
 .secondary-btn {
     background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    color: var(--color-white);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -372,7 +372,7 @@
 
 .danger-btn {
     background: rgba(255, 59, 48, 0.1);
-    color: #f23f42;
+    color: var(--color-danger);
     border: 1px solid rgba(255, 59, 48, 0.3);
 }
 

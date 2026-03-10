@@ -1,4 +1,4 @@
-﻿/* frontend/src/components/PermissionsPanel.css */
+/* frontend/src/components/PermissionsPanel.css */
 
 .permissions-overlay {
     position: fixed;
@@ -16,7 +16,7 @@
 }
 
 .permissions-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     max-width: 1400px;
@@ -44,7 +44,7 @@
 
 .panel-header h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -56,7 +56,7 @@
     border: none;
     border-radius: 10px;
     padding: 12px;
-    color: #ffffff;
+    color: var(--color-white);
     cursor: pointer;
     font-size: 20px;
     transition: all 0.3s ease;
@@ -64,7 +64,7 @@
 
 .btn-close:hover {
     background: rgba(255, 59, 48, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 /* Layout */
@@ -86,7 +86,7 @@
 .roles-sidebar h3 {
     margin: 0;
     padding: 20px 16px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
@@ -117,7 +117,7 @@
 
 .role-item.active {
     background: rgba(88, 101, 242, 0.2);
-    border-left: 3px solid #5865f2;
+    border-left: 3px solid var(--color-primary);
 }
 
 .role-icon {
@@ -127,19 +127,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 18px;
 }
 
 .role-info h4 {
     margin: 0 0 4px 0;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 14px;
     font-weight: 600;
 }
 
 .role-members {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
@@ -160,13 +160,13 @@
 
 .editor-header h3 {
     margin: 0 0 4px 0;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
 }
 
 .editor-header p {
     margin: 0;
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
@@ -181,7 +181,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 8px 12px;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 13px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -194,8 +194,8 @@
 }
 
 .editor-actions select option {
-    background: #0b0e1b;
-    color: #ffffff;
+    background: var(--bg-primary);
+    color: var(--color-white);
 }
 
 /* Permissions Grid */
@@ -217,7 +217,7 @@
 
 .permission-category h4 {
     margin: 0 0 16px 0;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
@@ -252,14 +252,14 @@
 
 .permission-info h5 {
     margin: 0 0 4px 0;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 14px;
     font-weight: 600;
 }
 
 .permission-info p {
     margin: 0;
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
@@ -302,7 +302,7 @@
 }
 
 .permission-toggle input:checked+.toggle-slider {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
 }
 
 .permission-toggle input:checked+.toggle-slider:before {
@@ -318,7 +318,7 @@
     justify-content: center;
     padding: 80px 20px;
     text-align: center;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .no-role-selected svg {
@@ -327,7 +327,7 @@
 }
 
 .no-role-selected h3 {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 20px;
     margin: 0 0 8px 0;
 }
@@ -341,14 +341,14 @@
     width: 50px;
     height: 50px;
     border: 4px solid rgba(88, 101, 242, 0.2);
-    border-top-color: #5865f2;
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
 }
 
 .permissions-panel.loading p {
-    color: #5865f2;
+    color: var(--color-primary);
     font-weight: 600;
     margin: 0;
 }

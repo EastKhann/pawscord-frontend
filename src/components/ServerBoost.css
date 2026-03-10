@@ -14,7 +14,7 @@
 }
 
 .boost-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 1100px;
@@ -38,7 +38,7 @@
 .boost-header h2 {
     margin: 0;
     font-size: 20px;
-    background: linear-gradient(135deg, #5865f2, #ec4899);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-pink-modern));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -47,7 +47,7 @@
 .close-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
     width: 36px;
     height: 36px;
     border-radius: 8px;
@@ -91,7 +91,7 @@
 
 .tier-label {
     font-size: 12px;
-    color: #a0a0b0;
+    color: var(--text-silver);
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
@@ -103,19 +103,19 @@
 }
 
 .tier-number.tier-0 {
-    color: #6b7280;
+    color: var(--text-faint);
 }
 
 .tier-number.tier-1 {
-    color: #ec4899;
+    color: var(--color-pink-modern);
 }
 
 .tier-number.tier-2 {
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .tier-number.tier-3 {
-    background: linear-gradient(135deg, #5865f2, #ec4899, #f59e0b);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-pink-modern), var(--color-warning-amber));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -138,7 +138,7 @@
 .boost-number {
     font-size: 20px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .boost-progress {
@@ -150,7 +150,7 @@
     justify-content: space-between;
     margin-bottom: 8px;
     font-size: 14px;
-    color: #a0a0b0;
+    color: var(--text-silver);
 }
 
 .progress-bar {
@@ -164,7 +164,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #5865f2, #ec4899);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-pink-modern));
     border-radius: 6px;
     transition: width 0.5s ease;
     box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
@@ -173,7 +173,7 @@
 .max-tier-badge {
     margin-top: 16px;
     text-align: center;
-    background: linear-gradient(135deg, #5865f2, #ec4899);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-pink-modern));
     color: white;
     padding: 12px;
     border-radius: 8px;
@@ -189,7 +189,7 @@
 }
 
 .boost-server-btn {
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
     border: none;
     color: white;
     padding: 16px 48px;
@@ -209,7 +209,7 @@
 .boost-hint {
     margin-top: 12px;
     font-size: 13px;
-    color: #a0a0b0;
+    color: var(--text-silver);
 }
 
 /* Tiers Grid */
@@ -260,25 +260,25 @@
 
 .tier-badge.tier-1 {
     background: rgba(236, 72, 153, 0.2);
-    color: #ec4899;
+    color: var(--color-pink-modern);
     border: 1px solid rgba(236, 72, 153, 0.4);
 }
 
 .tier-badge.tier-2 {
     background: rgba(88, 101, 242, 0.2);
-    color: #5865f2;
+    color: var(--color-primary);
     border: 1px solid rgba(88, 101, 242, 0.4);
 }
 
 .tier-badge.tier-3 {
     background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(236, 72, 153, 0.2));
-    color: #f59e0b;
+    color: var(--color-warning-amber);
     border: 1px solid rgba(245, 158, 11, 0.4);
 }
 
 .tier-requirement {
     font-size: 13px;
-    color: #a0a0b0;
+    color: var(--text-silver);
     font-weight: 600;
 }
 
@@ -290,7 +290,7 @@
 
 .perk-item {
     font-size: 13px;
-    color: #dbdee1;
+    color: var(--text-primary);
     line-height: 1.5;
     display: flex;
     align-items: flex-start;
@@ -308,13 +308,13 @@
 .boost-history-section h3 {
     margin: 0 0 16px 0;
     font-size: 18px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .empty-history {
     text-align: center;
     padding: 40px 20px;
-    color: #a0a0b0;
+    color: var(--text-silver);
 }
 
 .empty-history p {
@@ -324,7 +324,7 @@
 
 .empty-hint {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--text-faint);
 }
 
 .history-list {
@@ -365,19 +365,19 @@
 .history-user {
     font-weight: 600;
     font-size: 14px;
-    color: #ffffff;
+    color: var(--color-white);
     margin-bottom: 2px;
 }
 
 .history-date {
     font-size: 12px;
-    color: #a0a0b0;
+    color: var(--text-silver);
 }
 
 .remove-boost-btn {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -407,7 +407,7 @@
 }
 
 .boost-confirm-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     padding: 32px;
     width: 90%;
@@ -425,7 +425,7 @@
 .boost-confirm-modal h3 {
     margin: 0 0 16px 0;
     font-size: 20px;
-    background: linear-gradient(135deg, #5865f2, #ec4899);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-pink-modern));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -433,7 +433,7 @@
 
 .boost-confirm-text {
     margin: 0 0 24px 0;
-    color: #a0a0b0;
+    color: var(--text-silver);
     font-size: 14px;
     line-height: 1.6;
 }
@@ -450,7 +450,7 @@
     margin: 0;
     font-size: 14px;
     font-weight: 600;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .modal-actions {
@@ -472,7 +472,7 @@
 
 .cancel-btn {
     background: rgba(255, 255, 255, 0.05);
-    color: #a0a0b0;
+    color: var(--text-silver);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -482,7 +482,7 @@
 }
 
 .confirm-boost-btn {
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
     color: white;
 }
 
@@ -494,7 +494,7 @@
 .loading-spinner {
     text-align: center;
     padding: 60px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 16px;
 }
 

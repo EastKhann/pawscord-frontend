@@ -2,32 +2,32 @@
 
 .rich-editor-wrapper {
     width: 100%;
-    /* Arka planı transparent yapıyoruz ki dış kutuya uysun */
+    /* Arka planÄ± transparent yapÄ±yoruz ki dÄ±ÅŸ kutuya uysun */
     background-color: transparent;
     display: flex;
     align-items: center;
-    padding: 0; /* İç padding'i sıfırlıyoruz */
+    padding: 0; /* Ä°Ã§ padding'i sÄ±fÄ±rlÄ±yoruz */
     cursor: text;
-    border: none; /* Varsa kenarlığı kaldır */
-    position: relative; /* Slash Menüsü için gerekli */
+    border: none; /* Varsa kenarlÄ±ÄŸÄ± kaldÄ±r */
+    position: relative; /* Slash MenÃ¼sÃ¼ iÃ§in gerekli */
 }
 
-/* TipTap'in varsayılan sınıfı */
+/* TipTap'in varsayÄ±lan sÄ±nÄ±fÄ± */
 .ProseMirror {
     outline: none;
     min-height: 24px;
-    max-height: 200px; /* Çok uzarsa scroll çıksın */
+    max-height: 200px; /* Ã‡ok uzarsa scroll Ã§Ä±ksÄ±n */
     overflow-y: auto;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 1rem;
     line-height: 1.375rem;
     width: 100%;
-    padding: 0 5px; /* Yazının kenarlara yapışmaması için hafif boşluk */
+    padding: 0 5px; /* YazÄ±nÄ±n kenarlara yapÄ±ÅŸmamasÄ± iÃ§in hafif boÅŸluk */
 }
 
 /* Placeholder Rengi */
 .ProseMirror p.is-editor-empty:first-child::before {
-    color: #949ba4; /* Daha yumuşak bir gri */
+    color: var(--text-muted); /* Daha yumuÅŸak bir gri */
     content: attr(data-placeholder);
     float: left;
     height: 0;

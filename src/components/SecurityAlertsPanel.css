@@ -1,4 +1,4 @@
-﻿/* SecurityAlertsPanel.css - Güvenlik Uyarıları Stilleri */
+/* SecurityAlertsPanel.css - GÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¼venlik UyarÃƒÆ’Ã¢â‚¬Å¾Ãƒâ€šÃ‚Â±larÃƒÆ’Ã¢â‚¬Å¾Ãƒâ€šÃ‚Â± Stilleri */
 
 .security-alerts-overlay {
     position: fixed;
@@ -18,7 +18,7 @@
     width: 90%;
     max-width: 900px;
     max-height: 90vh;
-    background: linear-gradient(145deg, #0d0e10, #0d0e10);
+    background: linear-gradient(145deg, var(--bg-void), var(--bg-void));
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -38,14 +38,14 @@
 .panel-header h2 {
     margin: 0;
     font-size: 1.3rem;
-    color: #fff;
+    color: var(--color-white);
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 .panel-header h2 svg {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .header-actions {
@@ -56,7 +56,7 @@
 .refresh-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #a0a0a0;
+    color: var(--text-silver);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -69,14 +69,14 @@
 
 .refresh-btn:hover {
     background: rgba(255, 255, 255, 0.2);
-    color: #fff;
+    color: var(--color-white);
     transform: rotate(180deg);
 }
 
 .close-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #fff;
+    color: var(--color-white);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -88,7 +88,7 @@
 }
 
 .close-btn:hover {
-    background: #f23f42;
+    background: var(--color-danger);
     transform: rotate(90deg);
 }
 
@@ -129,25 +129,25 @@
     display: block;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .stat-item.danger .stat-value {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .stat-item.critical .stat-value {
-    color: #4752c4;
+    color: var(--color-primary-hover);
 }
 
 .stat-item.success .stat-value {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .stat-label {
     display: block;
     font-size: 0.8rem;
-    color: #a0a0a0;
+    color: var(--text-silver);
     margin-top: 4px;
 }
 
@@ -171,14 +171,14 @@
 }
 
 .search-box svg {
-    color: #a0a0a0;
+    color: var(--text-silver);
 }
 
 .search-box input {
     flex: 1;
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.95rem;
     outline: none;
 }
@@ -193,7 +193,7 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    color: #a0a0a0;
+    color: var(--text-silver);
     cursor: pointer;
     font-size: 0.85rem;
     transition: all 0.2s;
@@ -201,12 +201,12 @@
 
 .filter-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .filter-btn.active {
-    background: linear-gradient(135deg, #f23f42, #4752c4);
-    color: #fff;
+    background: linear-gradient(135deg, var(--color-danger), var(--color-primary-hover));
+    color: var(--color-white);
     border-color: transparent;
 }
 
@@ -219,19 +219,19 @@
 .loading {
     text-align: center;
     padding: 40px;
-    color: #a0a0a0;
+    color: var(--text-silver);
 }
 
 /* Empty State */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #a0a0a0;
+    color: var(--text-silver);
 }
 
 .empty-state svg {
     font-size: 3.5rem;
-    color: #10b981;
+    color: var(--color-success-modern);
     margin-bottom: 15px;
 }
 
@@ -243,7 +243,7 @@
 
 .empty-state span {
     font-size: 0.9rem;
-    color: #888;
+    color: var(--text-silver);
 }
 
 /* Alerts List */
@@ -273,20 +273,20 @@
 }
 
 .alert-card.critical {
-    border-left: 3px solid #f23f42;
+    border-left: 3px solid var(--color-danger);
     animation: pulse-critical 2s infinite;
 }
 
 .alert-card.high {
-    border-left: 3px solid #4752c4;
+    border-left: 3px solid var(--color-primary-hover);
 }
 
 .alert-card.medium {
-    border-left: 3px solid #f59e0b;
+    border-left: 3px solid var(--color-warning-amber);
 }
 
 .alert-card.low {
-    border-left: 3px solid #3b82f6;
+    border-left: 3px solid var(--color-info);
 }
 
 @keyframes pulse-critical {
@@ -308,7 +308,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--color-white);
     flex-shrink: 0;
 }
 
@@ -327,12 +327,12 @@
 
 .alert-type {
     font-weight: 600;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.95rem;
 }
 
 .alert-time {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     display: flex;
     align-items: center;
@@ -352,7 +352,7 @@
     gap: 15px;
     margin-top: 10px;
     font-size: 0.8rem;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .alert-meta span {
@@ -366,7 +366,7 @@
 }
 
 .resolved-badge {
-    color: #10b981 !important;
+    color: var(--color-success-modern) !important;
 }
 
 .alert-actions {
@@ -391,32 +391,32 @@
 
 .view-btn {
     background: rgba(99, 102, 241, 0.2);
-    color: #4752c4;
+    color: var(--color-primary-hover);
 }
 
 .view-btn:hover {
-    background: #4752c4;
-    color: #fff;
+    background: var(--color-primary-hover);
+    color: var(--color-white);
 }
 
 .resolve-btn {
     background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .resolve-btn:hover {
-    background: #10b981;
-    color: #fff;
+    background: var(--color-success-modern);
+    color: var(--color-white);
 }
 
 .dismiss-btn {
     background: rgba(107, 114, 128, 0.2);
-    color: #6b7280;
+    color: var(--text-faint);
 }
 
 .dismiss-btn:hover {
-    background: #6b7280;
-    color: #fff;
+    background: var(--text-faint);
+    color: var(--color-white);
 }
 
 /* Modal */
@@ -434,7 +434,7 @@
 }
 
 .alert-detail-modal {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 14px;
     width: 90%;
     max-width: 600px;
@@ -460,7 +460,7 @@
     gap: 8px;
     padding: 8px 15px;
     border-radius: 12px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -468,7 +468,7 @@
 .close-modal {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #fff;
+    color: var(--color-white);
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -490,7 +490,7 @@
 
 .modal-content h3 {
     margin: 0 0 10px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1.15rem;
 }
 
@@ -506,7 +506,7 @@
 
 .detail-section h4 {
     margin: 0 0 12px;
-    color: #a0a0a0;
+    color: var(--text-silver);
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -528,13 +528,13 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     margin-bottom: 4px;
 }
 
 .detail-item span {
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.9rem;
 }
 
@@ -555,7 +555,7 @@
 
 .resolution-section h4 {
     margin: 0 0 12px;
-    color: #a0a0a0;
+    color: var(--text-silver);
     font-size: 0.9rem;
     text-transform: uppercase;
 }
@@ -572,7 +572,7 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    color: #a0a0a0;
+    color: var(--text-silver);
     cursor: pointer;
     font-size: 0.8rem;
     transition: all 0.2s;
@@ -580,13 +580,13 @@
 
 .quick-res-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .quick-res-btn.active {
     background: rgba(16, 185, 129, 0.2);
-    border-color: #10b981;
-    color: #10b981;
+    border-color: var(--color-success-modern);
+    color: var(--color-success-modern);
 }
 
 .resolution-section textarea {
@@ -595,7 +595,7 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 8px;
     padding: 12px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.9rem;
     resize: vertical;
     box-sizing: border-box;
@@ -603,7 +603,7 @@
 
 .resolution-section textarea:focus {
     outline: none;
-    border-color: #10b981;
+    border-color: var(--color-success-modern);
 }
 
 .modal-actions {
@@ -620,7 +620,7 @@
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
 }
 
@@ -632,7 +632,7 @@
     width: auto;
     height: auto;
     padding: 10px 25px;
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, var(--color-success-modern), var(--color-emerald));
     gap: 8px;
 }
 

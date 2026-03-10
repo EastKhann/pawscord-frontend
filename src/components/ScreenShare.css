@@ -1,4 +1,4 @@
-﻿.screen-share-overlay {
+.screen-share-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -31,7 +31,7 @@
 }
 
 .screen-share-header {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     padding: 20px 24px;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@
 }
 
 .live-badge {
-    background: linear-gradient(135deg, #f23f42 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-deep) 100%);
     color: white;
     padding: 12px 28px;
     border-radius: 24px;
@@ -99,7 +99,7 @@
 }
 
 .sharing-indicator p {
-    color: #cbd5e0;
+    color: var(--text-mist);
     font-size: 15px;
     margin: 0;
 }
@@ -121,7 +121,7 @@
 }
 
 .source-name {
-    color: #fff;
+    color: var(--color-white);
     font-size: 18px;
     font-weight: 600;
 }
@@ -142,20 +142,20 @@
 }
 
 .stat-label {
-    color: #a0aec0;
+    color: var(--text-light);
     font-size: 13px;
     display: block;
     margin-bottom: 4px;
 }
 
 .stat-value {
-    color: #fff;
+    color: var(--color-white);
     font-size: 15px;
     font-weight: 600;
 }
 
 .stop-share-btn {
-    background: linear-gradient(135deg, #f23f42, #dc2626);
+    background: linear-gradient(135deg, var(--color-danger), var(--color-danger-deep));
     border: none;
     color: white;
     padding: 14px 32px;
@@ -178,7 +178,7 @@
 }
 
 .source-selection h3 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 16px 0;
 }
@@ -227,7 +227,7 @@
 }
 
 .source-label {
-    color: #cbd5e0;
+    color: var(--text-mist);
     font-size: 13px;
     font-weight: 500;
     text-align: center;
@@ -240,7 +240,7 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
     width: 28px;
     height: 28px;
@@ -263,7 +263,7 @@
 }
 
 .share-settings h3 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 16px 0;
 }
@@ -277,7 +277,7 @@
 
 .setting-group label {
     display: block;
-    color: #cbd5e0;
+    color: var(--text-mist);
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 8px;
@@ -302,7 +302,7 @@
 }
 
 .setting-select option {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     color: white;
 }
 
@@ -333,11 +333,11 @@
     height: 18px;
     margin-right: 10px;
     cursor: pointer;
-    accent-color: #5865f2;
+    accent-color: var(--color-primary);
 }
 
 .audio-toggle span {
-    color: #cbd5e0;
+    color: var(--text-mist);
     font-size: 14px;
     font-weight: 500;
 }
@@ -349,7 +349,7 @@
 }
 
 .start-share-btn {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     color: white;
     padding: 14px 40px;
@@ -358,7 +358,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 0 #3b45c7, 0 8px 24px rgba(88, 101, 242, 0.40);
+    box-shadow: 0 4px 0 var(--color-primary-dark), 0 8px 24px rgba(88, 101, 242, 0.40);
 }
 
 .start-share-btn:hover:not(:disabled) {
@@ -373,7 +373,7 @@
 
 .loading-spinner {
     text-align: center;
-    color: #a0aec0;
+    color: var(--text-light);
     padding: 40px;
     font-size: 16px;
 }

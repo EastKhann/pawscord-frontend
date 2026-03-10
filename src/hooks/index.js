@@ -11,7 +11,6 @@ export { default as useModalA11y } from './useModalA11y';
 export { useErrorHandler } from './useErrorHandler';
 
 // ─── API & Data Hooks ───
-export { useApi, useLazyApi, useQuery, useMutation as useApiMutation } from './useApi';
 export { default as useAPICache, useInfiniteAPICache, useMutation as useCacheMutation, cacheUtils } from './useAPICache';
 export { default as useSafeAPI } from './useSafeAPI';
 

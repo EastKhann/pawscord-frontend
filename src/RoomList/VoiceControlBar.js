@@ -62,32 +62,36 @@ const VoiceControlBar = ({
             {/* Kontrol Butonları */}
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '5px' }}>
                 <button onClick={(e) => { e.stopPropagation(); toggleVideo(); }}
-                    style={ctrlBtn(isVideoEnabled)} title={isVideoEnabled ? "Kamerayı Kapat" : "Kamerayı Aç"}>
+                    style={ctrlBtn(isVideoEnabled)} title={isVideoEnabled ? "Kamerayı Kapat" : "Kamerayı Aç"}
+                    aria-label={isVideoEnabled ? "Kamerayı Kapat" : "Kamerayı Aç"} aria-pressed={isVideoEnabled}>
                     {isVideoEnabled ? <FaFilm size={16} /> : <FaVideoSlash size={16} />}
                 </button>
 
                 <button onClick={(e) => { e.stopPropagation(); toggleScreenShare(); }}
-                    style={ctrlBtn(isScreenSharing)} title={isScreenSharing ? "Paylaşımı Durdur" : "Ekran Paylaş"}>
+                    style={ctrlBtn(isScreenSharing)} title={isScreenSharing ? "Paylaşımı Durdur" : "Ekran Paylaş"}
+                    aria-label={isScreenSharing ? "Paylaşımı Durdur" : "Ekran Paylaş"} aria-pressed={isScreenSharing}>
                     <FaDesktop size={16} />
                 </button>
 
                 <button onClick={(e) => { e.stopPropagation(); toggleMute(); }}
-                    style={ctrlBtn(isMuted, '#da373c')} title={isMuted ? "Sesi Aç" : "Sessize Al"}>
+                    style={ctrlBtn(isMuted, '#da373c')} title={isMuted ? "Sesi Aç" : "Sessize Al"}
+                    aria-label={isMuted ? "Sesi Aç" : "Sessize Al"} aria-pressed={isMuted}>
                     {isMuted ? <FaMicrophoneSlash size={16} /> : <FaMicrophone size={16} />}
                 </button>
 
                 <button onClick={(e) => { e.stopPropagation(); toggleDeafened(); }}
-                    style={ctrlBtn(isDeafened, '#da373c')} title={isDeafened ? "Duy" : "Sağırlaştır"}>
+                    style={ctrlBtn(isDeafened, '#da373c')} title={isDeafened ? "Duy" : "Sağırlaştır"}
+                    aria-label={isDeafened ? "Duy" : "Sağırlaştır"} aria-pressed={isDeafened}>
                     {isDeafened ? <TbHeadphonesOff size={18} /> : <FaHeadphones size={16} />}
                 </button>
 
                 <button onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('openVoiceSettings')); }}
-                    style={ctrlBtn(false)} title="Ses Ayarları">
+                    style={ctrlBtn(false)} title="Ses Ayarları" aria-label="Ses Ayarları">
                     <FaCog size={16} />
                 </button>
 
                 <button onClick={(e) => { e.stopPropagation(); if (typeof leaveVoiceChat === 'function') leaveVoiceChat(); }}
-                    style={ctrlBtn(true, '#da373c')} title="Sesli Kanaldan Çık">
+                    style={ctrlBtn(true, '#da373c')} title="Sesli Kanaldan Çık" aria-label="Sesli Kanaldan Çık">
                     <FaPhoneSlash size={16} />
                 </button>
             </div>

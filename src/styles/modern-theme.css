@@ -1,34 +1,34 @@
 /* ================================================ */
-/* 🎨 PAWSCORD MODERN ELEGANT THEME */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â½Ãƒâ€šÃ‚Â¨ PAWSCORD MODERN ELEGANT THEME */
 /* ================================================ */
 
-/* 🔒 OPTIMIZED: Font import index.css'te - tekrar import etmeye gerek yok */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ OPTIMIZED: Font import index.css'te - tekrar import etmeye gerek yok */
 /* Noto Sans font is loaded in index.css, gg sans alias is also defined there */
 
 /* ================================================ */
-/* 🎯 MODERN COLOR SYSTEM */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â½Ãƒâ€šÃ‚Â¯ MODERN COLOR SYSTEM */
 /* ================================================ */
 
 :root {
   /* Primary Brand Colors - Elegant Purple Gradient */
-  --brand-primary: #5865f2;
-  --brand-secondary: #4752c4;
-  --brand-accent: #5865f2;
+  --brand-primary: var(--color-primary);
+  --brand-secondary: var(--color-primary-hover);
+  --brand-accent: var(--color-primary);
 
   /* Gradients - Premium Look */
-  --gradient-primary: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
   --gradient-danger: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);
-  --gradient-dark: linear-gradient(135deg, #080b18 0%, #0e1222 90%);
+  --gradient-dark: linear-gradient(135deg, #080b18 0%, var(--bg-secondary) 90%);
 
   /* Dark Theme - Midnight Blue */
-  --bg-app: #0e1222;
-  --bg-primary: #0b0e1b;
-  --bg-secondary: #0b0e1b;
+  --bg-app: var(--bg-secondary);
+  --bg-primary: var(--bg-primary);
+  --bg-secondary: var(--bg-primary);
   --bg-tertiary: #080b18;
-  --bg-elevated: #182135;
+  --bg-elevated: var(--bg-input);
   --bg-hover: rgba(88, 101, 242, 0.12);
   --bg-active: rgba(88, 101, 242, 0.22);
 
@@ -39,17 +39,17 @@
   --glass-border-hover: rgba(255, 255, 255, 0.15);
 
   /* Text Colors */
-  --text-primary: #ffffff;
-  --text-secondary: #dbdee1;
+  --text-primary: var(--color-white);
+  --text-secondary: var(--text-primary);
   --text-tertiary: #b8b9c7;
-  --text-muted: #949ba4;
+  --text-muted: var(--text-muted);
   --text-disabled: #4a4b58;
 
   /* Semantic Colors */
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #f23f42;
-  --info: #3b82f6;
+  --success: var(--color-success-modern);
+  --warning: var(--color-warning-amber);
+  --error: var(--color-danger);
+  --info: var(--color-info);
 
   /* Shadows - Layered depth */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -98,7 +98,7 @@
 }
 
 /* ================================================ */
-/* 🎨 GLASSMORPHISM COMPONENTS */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â½Ãƒâ€šÃ‚Â¨ GLASSMORPHISM COMPONENTS */
 /* ================================================ */
 
 .glass {
@@ -128,7 +128,7 @@
 }
 
 /* ================================================ */
-/* 🔘 MODERN BUTTON SYSTEM */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒâ€¹Ã…â€œ MODERN BUTTON SYSTEM */
 /* ================================================ */
 
 .btn {
@@ -217,7 +217,7 @@
 }
 
 /* ================================================ */
-/* 📝 MODERN INPUT SYSTEM */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â MODERN INPUT SYSTEM */
 /* ================================================ */
 
 .input {
@@ -252,7 +252,7 @@
 }
 
 /* ================================================ */
-/* 🎯 MODERN CARD SYSTEM */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â½Ãƒâ€šÃ‚Â¯ MODERN CARD SYSTEM */
 /* ================================================ */
 
 .card {
@@ -289,7 +289,7 @@
 }
 
 /* ================================================ */
-/* ✨ MODERN ANIMATIONS */
+/* ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“Ãƒâ€šÃ‚Â¨ MODERN ANIMATIONS */
 /* ================================================ */
 
 @keyframes fadeIn {
@@ -416,7 +416,7 @@
 }
 
 /* ================================================ */
-/* 🎨 UTILITY CLASSES */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â½Ãƒâ€šÃ‚Â¨ UTILITY CLASSES */
 /* ================================================ */
 
 .text-gradient {
@@ -445,8 +445,8 @@
   border-radius: inherit;
   padding: 1px;
   background: var(--gradient-primary);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(var(--color-white) 0 0) content-box, linear-gradient(var(--color-white) 0 0);
+  mask: linear-gradient(var(--color-white) 0 0) content-box, linear-gradient(var(--color-white) 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
@@ -479,7 +479,7 @@
 }
 
 /* ================================================ */
-/* 📱 RESPONSIVE DESIGN */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒâ€šÃ‚Â± RESPONSIVE DESIGN */
 /* ================================================ */
 
 @media (max-width: 768px) {
@@ -506,7 +506,7 @@
 }
 
 /* ================================================ */
-/* 🎯 MODERN SCROLLBAR */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â½Ãƒâ€šÃ‚Â¯ MODERN SCROLLBAR */
 /* ================================================ */
 
 ::-webkit-scrollbar {

@@ -1,5 +1,5 @@
 /* frontend/src/components/LanguageSelector.css */
-/* 🌐 LANGUAGE SELECTOR STYLES */
+/* ÃƒÂ°Ã…Â¸Ã…â€™Ã‚Â LANGUAGE SELECTOR STYLES */
 
 /* ========================================
    LANGUAGE SELECTOR DROPDOWN
@@ -15,14 +15,14 @@
     padding: 8px 12px;
     border: none;
     border-radius: 6px;
-    background: var(--bg-secondary, #17191c);
-    color: var(--text-primary, #fff);
+    background: var(--bg-secondary, var(--bg-charcoal));
+    color: var(--text-primary, var(--color-white));
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .language-toggle:hover {
-    background: var(--bg-tertiary, #4e5058);
+    background: var(--bg-tertiary, var(--text-disabled));
 }
 
 .language-selector.compact .language-toggle {
@@ -40,7 +40,7 @@
 
 .lang-arrow {
     font-size: 10px;
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
 }
 
 .language-dropdown {
@@ -49,7 +49,7 @@
     left: 0;
     min-width: 200px;
     margin-top: 4px;
-    background: var(--bg-primary, #111214);
+    background: var(--bg-primary, var(--bg-charcoal-deep));
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     z-index: 1000;
@@ -77,18 +77,18 @@
     padding: 10px 14px;
     border: none;
     background: transparent;
-    color: var(--text-primary, #fff);
+    color: var(--text-primary, var(--color-white));
     cursor: pointer;
     text-align: left;
     transition: background 0.2s;
 }
 
 .language-option:hover {
-    background: var(--bg-hover, #1e2024);
+    background: var(--bg-hover, var(--bg-neutral-dark));
 }
 
 .language-option.active {
-    background: var(--accent-color, #5865f2);
+    background: var(--accent-color, var(--color-primary));
 }
 
 .lang-check {
@@ -101,7 +101,7 @@
    LANGUAGE SETTINGS PANEL
    ======================================== */
 .language-settings-panel {
-    background: var(--bg-primary, #111214);
+    background: var(--bg-primary, var(--bg-charcoal-deep));
     border-radius: 12px;
     max-width: 600px;
     width: 100%;
@@ -117,21 +117,21 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color, #1e2024);
-    background: var(--bg-secondary, #17191c);
+    border-bottom: 1px solid var(--border-color, var(--bg-neutral-dark));
+    background: var(--bg-secondary, var(--bg-charcoal));
 }
 
 .panel-header h2 {
     margin: 0;
     font-size: 18px;
     font-weight: 600;
-    color: var(--text-primary, #fff);
+    color: var(--text-primary, var(--color-white));
 }
 
 .panel-header .close-btn {
     background: none;
     border: none;
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
     cursor: pointer;
     font-size: 18px;
     padding: 4px 8px;
@@ -140,8 +140,8 @@
 }
 
 .panel-header .close-btn:hover {
-    background: var(--bg-hover, #1e2024);
-    color: var(--text-primary, #fff);
+    background: var(--bg-hover, var(--bg-neutral-dark));
+    color: var(--text-primary, var(--color-white));
 }
 
 .panel-content {
@@ -151,7 +151,7 @@
 }
 
 .settings-desc {
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
     font-size: 14px;
     margin: 0 0 20px 0;
 }
@@ -171,21 +171,21 @@
     align-items: center;
     gap: 12px;
     padding: 14px;
-    border: 2px solid var(--border-color, #1e2024);
+    border: 2px solid var(--border-color, var(--bg-neutral-dark));
     border-radius: 10px;
-    background: var(--bg-secondary, #17191c);
+    background: var(--bg-secondary, var(--bg-charcoal));
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
 }
 
 .language-card:hover {
-    border-color: var(--accent-color, #5865f2);
+    border-color: var(--accent-color, var(--color-primary));
     transform: translateY(-2px);
 }
 
 .language-card.selected {
-    border-color: var(--accent-color, #5865f2);
+    border-color: var(--accent-color, var(--color-primary));
     background: rgba(88, 101, 242, 0.1);
 }
 
@@ -201,13 +201,13 @@
 .card-native {
     display: block;
     font-weight: 600;
-    color: var(--text-primary, #fff);
+    color: var(--text-primary, var(--color-white));
     font-size: 14px;
 }
 
 .card-name {
     font-size: 12px;
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
 }
 
 .rtl-badge {
@@ -215,8 +215,8 @@
     top: 8px;
     right: 8px;
     padding: 2px 6px;
-    background: var(--warning-color, #f0b232);
-    color: #000;
+    background: var(--warning-color, var(--color-warning));
+    color: var(--color-black);
     font-size: 10px;
     font-weight: 700;
     border-radius: 4px;
@@ -226,7 +226,7 @@
     position: absolute;
     bottom: 8px;
     right: 10px;
-    color: var(--accent-color, #5865f2);
+    color: var(--accent-color, var(--color-primary));
     font-size: 16px;
     font-weight: 700;
 }
@@ -235,7 +235,7 @@
    SETTINGS INFO
    ======================================== */
 .settings-info {
-    background: var(--bg-secondary, #17191c);
+    background: var(--bg-secondary, var(--bg-charcoal));
     border-radius: 8px;
     padding: 16px;
 }
@@ -245,7 +245,7 @@
     align-items: center;
     gap: 10px;
     padding: 8px 0;
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
     font-size: 13px;
 }
 
@@ -261,8 +261,8 @@
     justify-content: flex-end;
     gap: 12px;
     padding: 16px 20px;
-    border-top: 1px solid var(--border-color, #1e2024);
-    background: var(--bg-secondary, #17191c);
+    border-top: 1px solid var(--border-color, var(--bg-neutral-dark));
+    background: var(--bg-secondary, var(--bg-charcoal));
 }
 
 .btn-cancel,
@@ -277,16 +277,16 @@
 
 .btn-cancel {
     background: transparent;
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
 }
 
 .btn-cancel:hover {
-    color: var(--text-primary, #fff);
-    background: var(--bg-hover, #1e2024);
+    color: var(--text-primary, var(--color-white));
+    background: var(--bg-hover, var(--bg-neutral-dark));
 }
 
 .btn-save {
-    background: var(--accent-color, #5865f2);
+    background: var(--accent-color, var(--color-primary));
     color: white;
 }
 
@@ -308,19 +308,19 @@
     height: 32px;
     border: none;
     border-radius: 6px;
-    background: var(--bg-secondary, #17191c);
+    background: var(--bg-secondary, var(--bg-charcoal));
     cursor: pointer;
     font-size: 16px;
     transition: all 0.2s;
 }
 
 .inline-lang-btn:hover {
-    background: var(--bg-tertiary, #4e5058);
+    background: var(--bg-tertiary, var(--text-disabled));
     transform: scale(1.03);
 }
 
 .inline-lang-btn.active {
-    background: var(--accent-color, #5865f2);
+    background: var(--accent-color, var(--color-primary));
     box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.3);
 }
 

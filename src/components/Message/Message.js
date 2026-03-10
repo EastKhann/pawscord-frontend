@@ -61,7 +61,12 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
       onContextMenu={handleContextMenu} id={`message-${msg.id}`} onClick={handleMessageClick}>
 
       {!isGrouped && (
-        <UserCardPopover user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }} onMessage={handleViewProfile} onProfile={handleViewProfile}>
+        <UserCardPopover
+          user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }}
+          currentActivity={allUsers?.find(u => u.username === msg.username)?.current_activity}
+          onMessage={handleViewProfile}
+          onProfile={handleViewProfile}
+        >
           <div style={styles.avatarContainer}>
             <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar} onClick={handleAvatarClick} placeholder={getDeterministicAvatar(msg.username)} />
           </div>

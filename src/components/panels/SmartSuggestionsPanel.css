@@ -1,5 +1,5 @@
 /* frontend/src/components/panels/SmartSuggestionsPanel.css */
-/* 🤖 Smart Suggestions Panel Styles */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€šÃ‚Â¤ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ Smart Suggestions Panel Styles */
 
 .smart-suggestions-overlay {
     position: fixed;
@@ -55,7 +55,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    background: linear-gradient(135deg, #4752c4, #5865f2);
+    background: linear-gradient(135deg, var(--color-primary-hover), var(--color-primary));
 }
 
 .smart-suggestions-panel .header-info h2 {
@@ -169,8 +169,8 @@
 }
 
 .smart-suggestions-panel .tab.active {
-    color: #5865f2;
-    border-bottom-color: #5865f2;
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
 }
 
 /* Tab Content */
@@ -242,7 +242,7 @@
 .emoji-btn:hover {
     transform: scale(1.05);
     background: rgba(255, 255, 255, 0.15);
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 /* Replies List */
@@ -298,7 +298,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.75rem;
-    color: #fbbf24;
+    color: var(--color-warning-bright);
 }
 
 .reply-actions {
@@ -329,7 +329,7 @@
 }
 
 .action-btn.use {
-    background: linear-gradient(135deg, #4752c4, #5865f2);
+    background: linear-gradient(135deg, var(--color-primary-hover), var(--color-primary));
     color: white;
 }
 
@@ -356,7 +356,7 @@
 
 .topic-rank {
     font-weight: 700;
-    color: #5865f2;
+    color: var(--color-primary);
     width: 30px;
 }
 
@@ -381,15 +381,15 @@
 }
 
 .trend.up {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .trend.down {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .trend.stable {
-    color: #6b7280;
+    color: var(--text-faint);
 }
 
 /* Actions Tab */
@@ -428,22 +428,22 @@
 }
 
 .action-item.engagement .action-icon {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, var(--color-info), var(--color-info));
     color: white;
 }
 
 .action-item.helpful .action-icon {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, var(--color-success-modern), var(--color-emerald));
     color: white;
 }
 
 .action-item.growth .action-icon {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, var(--color-warning-amber), var(--color-warning-amber));
     color: white;
 }
 
 .action-item.moderation .action-icon {
-    background: linear-gradient(135deg, #5865f2, #7c3aed);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
     color: white;
 }
 
@@ -473,12 +473,12 @@
 
 .action-type.growth {
     background: rgba(245, 158, 11, 0.2);
-    color: #fbbf24;
+    color: var(--color-warning-bright);
 }
 
 .action-type.moderation {
     background: rgba(88, 101, 242, 0.2);
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 /* AI Tip */
@@ -493,7 +493,7 @@
 }
 
 .ai-tip svg {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 1.2rem;
     flex-shrink: 0;
     margin-top: 2px;
@@ -518,7 +518,7 @@
 
 .loading-state .pulse {
     font-size: 3rem;
-    color: #5865f2;
+    color: var(--color-primary);
     animation: pulse 1.5s ease-in-out infinite;
 }
 

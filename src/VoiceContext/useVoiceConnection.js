@@ -5,6 +5,44 @@ import { applyProfessionalAudioFilters } from './audioProcessing';
 import toast from '../utils/toast';
 
 /**
+ * Connect a WebSocket with retry logic.
+ * Retries up to `maxRetries` times with exponential backoff when the
+ * initial connection fails (timeout or error). This handles the case where
+ * a proxy/CDN intermittently strips WebSocket upgrade headers.
+ */
+function connectWebSocketWithRetry(url, { maxRetries = 3, timeout = 12000 } = {}) {
+    let attempt = 0;
+    const tryConnect = () => new Promise((resolve, reject) => {
+        attempt++;
+        const ws = new WebSocket(url);
+        const timer = setTimeout(() => {
+            try { ws.close(); } catch (_) { /* ignore */ }
+            reject(new Error(`WS timeout (attempt ${attempt}/${maxRetries})`));
+        }, timeout);
+        ws.onopen = () => { clearTimeout(timer); resolve(ws); };
+        ws.onerror = () => {
+            clearTimeout(timer);
+            reject(new Error(`WS error (attempt ${attempt}/${maxRetries})`));
+        };
+    });
+
+    return (async () => {
+        while (attempt < maxRetries) {
+            try {
+                return await tryConnect();
+            } catch (err) {
+                if (attempt >= maxRetries) throw err;
+                // Wait before retry: 500ms, 1500ms, ...
+                const delay = 500 + (attempt - 1) * 1000;
+                console.warn(`[VoiceWS] ${err.message}, retrying in ${delay}ms...`);
+                await new Promise(r => setTimeout(r, delay));
+            }
+        }
+        throw new Error('WS connection failed after retries');
+    })();
+}
+
+/**
  * Voice connection hook — manages joinVoiceRoom, leaveVoiceRoom,
  * WebSocket reconnection, and mic watchdog.
  */
@@ -161,10 +199,10 @@ export function useVoiceConnection({
         try {
             // 🔥 PERF: Lazy-fetch TURN credentials on voice join (not on app mount)
             await refreshIceServers();
-
-            if (iceServers && iceServers.length > 0) {
-                setRtcIceServers(iceServers);
-            }
+            // 🔥 FIX: refreshIceServers() already calls setRtcIceServers() internally
+            // with the fresh servers from the API response. Do NOT read the stale
+            // `iceServers` closure variable here — it was captured at render time and
+            // may be empty/default, overwriting the correct servers just set by refresh.
 
             // 🔥 FIX: AudioContext'i hemen resume et (user gesture içinde — autoplay policy bypass)
             initializeAudio();
@@ -178,12 +216,7 @@ export function useVoiceConnection({
                 processedStream = localStreamRef.current;
 
                 const wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/voice/${roomSlug}/?token=${token}`;
-                ws = new WebSocket(wsUrl);
-                await new Promise((resolve, reject) => {
-                    const timeout = setTimeout(() => reject(new Error('WS timeout')), 10000);
-                    ws.onopen = () => { clearTimeout(timeout); resolve(); };
-                    ws.onerror = (err) => { clearTimeout(timeout); reject(err); };
-                });
+                ws = await connectWebSocketWithRetry(wsUrl);
             } else {
                 // 🚀 PARALLEL: getUserMedia + WebSocket bağlantısını AYNI ANDA başlat
                 const micPromise = navigator.mediaDevices.getUserMedia({
@@ -206,12 +239,7 @@ export function useVoiceConnection({
                 });
 
                 const wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/voice/${roomSlug}/?token=${token}`;
-                const newWs = new WebSocket(wsUrl);
-                const wsOpenPromise = new Promise((resolve, reject) => {
-                    const timeout = setTimeout(() => reject(new Error('WS timeout')), 10000);
-                    newWs.onopen = () => { clearTimeout(timeout); resolve(newWs); };
-                    newWs.onerror = (err) => { clearTimeout(timeout); reject(err); };
-                });
+                const wsOpenPromise = connectWebSocketWithRetry(wsUrl);
 
                 // 🔥 PARALLEL: Mic + WS aynı anda (toplam süre = max(mic, ws))
                 const [stream, connectedWs] = await Promise.all([micPromise, wsOpenPromise]);

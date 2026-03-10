@@ -1,5 +1,5 @@
 /* frontend/src/components/panels/ServerHealthPanel.css */
-/* 🏥 Server Health Dashboard Styles */
+/* ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â¥ Server Health Dashboard Styles */
 
 .server-health-overlay {
     position: fixed;
@@ -27,7 +27,7 @@
 }
 
 .server-health-panel {
-    background: linear-gradient(145deg, #0f172a, #1e293b);
+    background: linear-gradient(145deg, #0f172a, var(--bg-neutral-600));
     border-radius: 12px;
     width: 95%;
     max-width: 1000px;
@@ -55,7 +55,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 28px;
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, var(--color-success-modern), var(--color-emerald));
     flex-wrap: wrap;
     gap: 12px;
 }
@@ -179,7 +179,7 @@
 
 .quick-stat .stat-icon {
     font-size: 1.6rem;
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 .quick-stat .stat-content {
@@ -362,7 +362,7 @@
 }
 
 .alert-stat.error svg {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .alert-stat.warning {
@@ -371,7 +371,7 @@
 }
 
 .alert-stat.warning svg {
-    color: #f59e0b;
+    color: var(--color-warning-amber);
 }
 
 .alert-stat.info {
@@ -380,7 +380,7 @@
 }
 
 .alert-stat.info svg {
-    color: #3b82f6;
+    color: var(--color-info);
 }
 
 .alert-stat svg {
@@ -412,7 +412,7 @@
 .loading-state .spin {
     animation: spin 1s linear infinite;
     font-size: 2rem;
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 @keyframes spin {

@@ -35,12 +35,12 @@
 
 .connection-banner.failed {
     background-color: #ed4245;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .connection-banner.connected {
     background-color: #3ba55c;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .banner-spinner {

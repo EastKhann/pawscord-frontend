@@ -1,5 +1,5 @@
 /* frontend/src/components/PremiumMarketplace.css */
-/* 💎 Premium Marketplace Styles */
+/* Ã°Å¸â€™Å½ Premium Marketplace Styles */
 
 .premium-marketplace {
     max-width: 1400px;
@@ -9,7 +9,7 @@
 
 /* Promotion Banner */
 .promotion-banner {
-    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    background: linear-gradient(135deg, var(--color-coral-light) 0%, #FF8E53 100%);
     color: white;
     padding: 30px;
     border-radius: 16px;
@@ -101,7 +101,7 @@
 }
 
 .premium-plan-card.featured {
-    border-color: #FFD700;
+    border-color: var(--color-warning-gold);
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(88, 101, 242, 0.1) 100%);
     transform: scale(1.05);
 }
@@ -111,7 +111,7 @@
     top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    background: linear-gradient(135deg, var(--color-warning-gold) 0%, #FFA500 100%);
     color: #1A1A1A;
     padding: 6px 20px;
     border-radius: 12px;
@@ -128,7 +128,7 @@
 .plan-header h3 {
     font-size: 1.8rem;
     margin-bottom: 15px;
-    background: linear-gradient(135deg, var(--primary-color) 0%, #7C3AED 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--color-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -197,7 +197,7 @@
 .purchase-btn {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, var(--primary-color) 0%, #7C3AED 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--color-purple) 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -214,7 +214,7 @@
 }
 
 .featured .purchase-btn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    background: linear-gradient(135deg, var(--color-warning-gold) 0%, #FFA500 100%);
     color: #1A1A1A;
 }
 

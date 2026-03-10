@@ -167,6 +167,7 @@ const RootApp = () => {
                 <GlobalWebSocketProvider>
                     <ErrorBoundary>
                         <HashRouter>
+                            <a href="#main-content" className="skip-nav">İçeriğe Atla</a>
                             <ConnectionStatusBanner />
                             <SignalNotification />
                             <PageTransitionWrapper>

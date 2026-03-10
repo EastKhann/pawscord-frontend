@@ -15,6 +15,7 @@
     --color-primary-hover: #4752c4;
     --color-primary-light: #5865f2;
     --color-primary-soft: #5e81f4;
+    --color-primary-dark: #3b45c7;
 
     /* ─── ACCENT / PURPLE ─────────────────────── */
     --color-accent: #5865f2;
@@ -48,6 +49,8 @@
     --color-warning-amber: #f59e0b;
     --color-warning-gold: #ffd700;
     --color-warning-material: #ffc107;
+    --color-warning-yellow: #facc15;
+    --color-warning-sun: #eab308;
 
     /* ─── INFO / BLUE ─────────────────────────── */
     --color-info: #3b82f6;
@@ -66,6 +69,17 @@
     /* ─── SPECIAL ─────────────────────────────── */
     --color-neon-green: #00ff88;
     --color-orange: #e67e22;
+    --color-success-material: #4caf50;
+    --color-purple: #7c3aed;
+    --color-link-bright: #58a6ff;
+    --color-neon-cyan: #00d9ff;
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-coral: #ff4757;
+    --color-coral-light: #ff6b6b;
+    --color-mint: #66d49c;
+    --color-emerald: #059669;
+    --color-lime: #22c55e;
 
     /* ─── BACKGROUND SHADES (mavimsi / midnight blue palette) ─── */
     --bg-deepest: #090c1a;
@@ -87,6 +101,15 @@
     --bg-input-alt: #182135;
     --bg-dark: #16203a;
     --bg-slate: #162240;
+
+    /* ─── NEUTRAL DARK GRAYS (non-blue tinted) ── */
+    --bg-void: #0d0e10;
+    --bg-charcoal-deep: #111214;
+    --bg-charcoal: #17191c;
+    --bg-neutral-dark: #1e2024;
+    --bg-neutral-800: #1f2937;
+    --bg-neutral-700: #374151;
+    --bg-neutral-600: #1e293b;
 
     /* ─── TRANSPARENT MODIFIERS ───────────────── */
     --bg-modifier-hover: rgba(79, 84, 92, 0.16);
@@ -120,6 +143,11 @@
     --text-light-alt: #dbdee1;
     --text-light-neutral: #e5e7eb;
     --text-link: #00b0f4;
+    --text-slate: #64748b;
+    --text-silver: #a0a0b0;
+    --text-mist: #cbd5e0;
+    --text-cloud: #8e9297;
+    --text-snow: #f9fafb;
 
     /* ─── STATUS INDICATORS ───────────────────── */
     --status-online: #23a559;
@@ -269,4 +297,49 @@
     --backdrop-blur: blur(4px);
     --backdrop-blur-lg: blur(20px);
     --bg-gradient-subtle: radial-gradient(circle at 50% 10%, rgba(88, 101, 242, 0.05) 0%, transparent 40%);
+}
+
+/* ─── GLOBAL FOCUS-VISIBLE (A11y) ─────────── */
+*:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ─── SKIP NAVIGATION LINK ────────────────── */
+.skip-nav {
+    position: absolute;
+    top: -100%;
+    left: var(--space-lg);
+    z-index: var(--z-topmost);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--color-primary);
+    color: var(--text-white);
+    border-radius: 0 0 var(--radius-base) var(--radius-base);
+    font-weight: var(--weight-semibold);
+    font-size: var(--font-base);
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-nav:focus {
+    top: 0;
+}
+
+/* ─── SCREEN READER ONLY (A11y) ───────────── */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

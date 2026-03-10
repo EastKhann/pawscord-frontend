@@ -4,7 +4,7 @@
     right: 0;
     width: 500px;
     height: 100vh;
-    background: #0e1222;
+    background: var(--bg-secondary);
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -61,16 +61,16 @@
 }
 
 .panel-header {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     padding: 20px;
-    border-bottom: 1px solid #0b0e1b;
+    border-bottom: 1px solid var(--bg-primary);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .panel-header h2 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 20px;
     font-weight: 600;
     margin: 0;
@@ -80,13 +80,13 @@
 }
 
 .panel-header h2 i {
-    color: #ffd700;
+    color: var(--color-warning-gold);
 }
 
 .close-btn {
     background: none;
     border: none;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 24px;
     cursor: pointer;
     padding: 8px;
@@ -95,8 +95,8 @@
 }
 
 .close-btn:hover {
-    background: #182135;
-    color: #fff;
+    background: var(--bg-input);
+    color: var(--color-white);
 }
 
 .panel-content {
@@ -111,7 +111,7 @@
 }
 
 .balance-card {
-    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    background: linear-gradient(135deg, var(--color-warning-gold), #ffed4e);
     border-radius: 12px;
     padding: 24px;
     box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
@@ -131,7 +131,7 @@
 }
 
 .balance-label {
-    color: #0d0e10;
+    color: var(--bg-void);
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
@@ -162,14 +162,14 @@
 }
 
 .amount {
-    color: #0d0e10;
+    color: var(--bg-void);
     font-size: 42px;
     font-weight: 800;
     line-height: 1;
 }
 
 .currency {
-    color: #0d0e10;
+    color: var(--bg-void);
     font-size: 18px;
     font-weight: 600;
     opacity: 0.8;
@@ -183,7 +183,7 @@
 .btn-daily {
     background: rgba(0, 0, 0, 0.2);
     border: none;
-    color: #0d0e10;
+    color: var(--bg-void);
     padding: 10px 16px;
     border-radius: 6px;
     font-size: 13px;
@@ -204,7 +204,7 @@
 .transfer-section,
 .leaderboard-section,
 .transactions-section {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -213,7 +213,7 @@
 .transfer-section h3,
 .leaderboard-section h3,
 .transactions-section h3 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 16px 0;
@@ -235,16 +235,16 @@
 }
 
 .form-group label {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .transfer-input {
-    background: #0e1222;
-    border: 2px solid #0e1222;
-    color: #fff;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-secondary);
+    color: var(--color-white);
     padding: 12px;
     border-radius: 6px;
     font-size: 14px;
@@ -253,7 +253,7 @@
 
 .transfer-input:focus {
     outline: none;
-    border-color: #ffd700;
+    border-color: var(--color-warning-gold);
 }
 
 .amount-input-container {
@@ -266,7 +266,7 @@
 .amount-input-container>i {
     position: absolute;
     left: 12px;
-    color: #ffd700;
+    color: var(--color-warning-gold);
     font-size: 16px;
 }
 
@@ -279,9 +279,9 @@
 .btn-max {
     position: absolute;
     right: 8px;
-    background: #ffd700;
+    background: var(--color-warning-gold);
     border: none;
-    color: #0d0e10;
+    color: var(--bg-void);
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 12px;
@@ -302,9 +302,9 @@
 }
 
 .quick-amount-btn {
-    background: #0e1222;
-    border: 2px solid #0e1222;
-    color: #b5bac1;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-secondary);
+    color: var(--text-secondary);
     padding: 8px;
     border-radius: 6px;
     font-size: 12px;
@@ -314,8 +314,8 @@
 }
 
 .quick-amount-btn:hover:not(:disabled) {
-    border-color: #ffd700;
-    color: #ffd700;
+    border-color: var(--color-warning-gold);
+    color: var(--color-warning-gold);
 }
 
 .quick-amount-btn:disabled {
@@ -325,10 +325,10 @@
 
 .error-message {
     background: rgba(237, 66, 69, 0.1);
-    border: 1px solid #f23f42;
+    border: 1px solid var(--color-danger);
     border-radius: 6px;
     padding: 10px;
-    color: #f23f42;
+    color: var(--color-danger);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -336,9 +336,9 @@
 }
 
 .btn-transfer {
-    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    background: linear-gradient(135deg, var(--color-warning-gold), #ffed4e);
     border: none;
-    color: #0d0e10;
+    color: var(--bg-void);
     padding: 14px;
     border-radius: 8px;
     font-size: 15px;
@@ -371,7 +371,7 @@
 }
 
 .leaderboard-item {
-    background: #0e1222;
+    background: var(--bg-secondary);
     border-radius: 6px;
     padding: 12px;
     display: flex;
@@ -382,12 +382,12 @@
 }
 
 .leaderboard-item:hover {
-    background: #121928;
+    background: var(--bg-elevated);
     transform: translateX(4px);
 }
 
 .leaderboard-item.rank-1 {
-    border-left-color: #ffd700;
+    border-left-color: var(--color-warning-gold);
     background: rgba(255, 215, 0, 0.1);
 }
 
@@ -408,11 +408,11 @@
     justify-content: center;
     font-size: 16px;
     font-weight: 700;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .rank i.gold {
-    color: #ffd700;
+    color: var(--color-warning-gold);
     font-size: 20px;
 }
 
@@ -437,11 +437,11 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #5865f2;
+    background: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--color-white);
     overflow: hidden;
 }
 
@@ -452,13 +452,13 @@
 }
 
 .username {
-    color: #fff;
+    color: var(--color-white);
     font-weight: 600;
     font-size: 14px;
 }
 
 .user-balance {
-    color: #ffd700;
+    color: var(--color-warning-gold);
     font-weight: 700;
     font-size: 14px;
     display: flex;
@@ -480,9 +480,9 @@
 }
 
 .filter-btn {
-    background: #0e1222;
+    background: var(--bg-secondary);
     border: none;
-    color: #b5bac1;
+    color: var(--text-secondary);
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 12px;
@@ -492,13 +492,13 @@
 }
 
 .filter-btn:hover {
-    background: #121928;
-    color: #fff;
+    background: var(--bg-elevated);
+    color: var(--color-white);
 }
 
 .filter-btn.active {
-    background: #5865f2;
-    color: #fff;
+    background: var(--color-primary);
+    color: var(--color-white);
 }
 
 .transactions-list {
@@ -512,7 +512,7 @@
 .empty-state {
     text-align: center;
     padding: 40px 20px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .empty-state i {
@@ -531,7 +531,7 @@
 }
 
 .transaction-item {
-    background: #0e1222;
+    background: var(--bg-secondary);
     border-radius: 6px;
     padding: 12px;
     display: flex;
@@ -542,7 +542,7 @@
 }
 
 .transaction-item:hover {
-    background: #121928;
+    background: var(--bg-elevated);
 }
 
 .transaction-item.green {
@@ -550,7 +550,7 @@
 }
 
 .transaction-item.red {
-    border-left-color: #f23f42;
+    border-left-color: var(--color-danger);
 }
 
 .transaction-icon {
@@ -571,7 +571,7 @@
 
 .transaction-item.red .transaction-icon {
     background: rgba(237, 66, 69, 0.2);
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .transaction-info {
@@ -582,28 +582,28 @@
 }
 
 .transaction-title {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
 .transaction-title strong {
-    color: #fff;
+    color: var(--color-white);
     font-weight: 600;
 }
 
 .transaction-note {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 12px;
     font-style: italic;
 }
 
 .transaction-time {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 11px;
 }
 
 .transaction-amount {
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     font-weight: 700;
     display: flex;
@@ -617,11 +617,11 @@
 }
 
 .transaction-item.red .transaction-amount {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .transaction-amount i {
-    color: #ffd700;
+    color: var(--color-warning-gold);
 }
 
 /* Info Section */
@@ -636,18 +636,18 @@
     padding: 16px;
     display: flex;
     gap: 15px;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
 }
 
 .info-card i {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 20px;
     flex-shrink: 0;
 }
 
 .info-card strong {
-    color: #fff;
+    color: var(--color-white);
     display: block;
     margin-bottom: 8px;
 }
@@ -674,7 +674,7 @@
 
 .panel-content::-webkit-scrollbar-thumb,
 .transactions-list::-webkit-scrollbar-thumb {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 4px;
 }
 

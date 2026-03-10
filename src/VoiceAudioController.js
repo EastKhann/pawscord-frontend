@@ -53,17 +53,17 @@ const VoiceAudioController = ({ remoteStreams, remoteVolumes, mutedUsers, isDeaf
 };
 
 // 🔥 BASE_GAIN: Incoming WebRTC audio is inherently weak (low signal level).
-// At 100% volume we apply 2.0× gain so the voice is clearly audible.
-// Volume range 0-200 maps to GainNode gain 0-4.0  (100% = 2.0, 200% = 4.0).
-// Reduced from 2.5 thanks to sender-side makeup gain fix.
-const BASE_GAIN = 2.0;
+// At 100% volume we apply 5.0× gain so the voice is clearly audible.
+// Volume range 0-200 maps to GainNode gain 0-10.0  (100% = 5.0, 200% = 10.0).
+// The sender-side compressor + filters eat more signal than makeup gain recovers,
+// so the receiver must compensate with a healthy base boost.
+const BASE_GAIN = 5.0;
 
 const AudioPlayer = ({ username, stream, volume, isMuted, isDeafened, globalEnabled }) => {
     const audioRef = useRef(null);
     const audioCtxRef = useRef(null);
     const sourceRef = useRef(null);
     const gainRef = useRef(null);
-    const compressorRef = useRef(null);
     const limiterRef = useRef(null);
     // Keep a ref to current volume so the GainNode can be initialised with
     // the right value the first time it is created (stream useEffect).
@@ -86,27 +86,26 @@ const AudioPlayer = ({ username, stream, volume, isMuted, isDeafened, globalEnab
             // 🔥 1. GAIN NODE — kullanıcı ses seviyesi kontrolü
             gainRef.current = audioCtxRef.current.createGain();
 
-            // 🔥 2. COMPRESSOR — farklı kullanıcıların ses seviyelerini dengele
-            // Yüksek sesli kullanıcıları kıs, düşük seslileri yükselt
-            compressorRef.current = audioCtxRef.current.createDynamicsCompressor();
-            compressorRef.current.threshold.value = -20;  // -20dB üstünü sıkıştır
-            compressorRef.current.knee.value = 12;        // Yumuşak geçiş
-            compressorRef.current.ratio.value = 3;        // 3:1 sıkıştırma (yumuşak)
-            compressorRef.current.attack.value = 0.003;   // 3ms — hızlı tepki
-            compressorRef.current.release.value = 0.25;   // 250ms — doğal ses
+            // Sender side already applies a full compressor + makeupGain chain in
+            // audioProcessing.js before transmitting. Adding a second compressor here
+            // caused double-compression pumping artifacts ("giggling"). Keeping only a
+            // brick-wall limiter to prevent clipping at high volume settings.
 
-            // 🔥 3. LIMITER — clipping önleme (volume 200%'de distorsiyon olmasın)
+            // 🔥 LIMITER — clipping protection (no distortion even at 200% volume)
+            // Old -0.5dB threshold + 20:1 ratio was a brick wall that made 100-200%
+            // volume indistinguishable — the limiter clamped everything to the same level.
+            // New settings: -6dB threshold + 6:1 ratio allows gain scaling to be audible
+            // while still preventing harsh digital clipping.
             limiterRef.current = audioCtxRef.current.createDynamicsCompressor();
-            limiterRef.current.threshold.value = -3;    // -3dB'de sert sınır
-            limiterRef.current.knee.value = 0;          // Sert diz (true limiter)
-            limiterRef.current.ratio.value = 20;        // 20:1 — neredeyse brick wall
-            limiterRef.current.attack.value = 0.001;    // 1ms — anında tepki
-            limiterRef.current.release.value = 0.1;     // 100ms release
+            limiterRef.current.threshold.value = -6;    // 🔥 -0.5 → -6dB: headroom for volume slider to work
+            limiterRef.current.knee.value = 6;          // 🔥 0 → 6dB: soft knee instead of brick wall
+            limiterRef.current.ratio.value = 6;         // 🔥 20:1 → 6:1: gentle limiting, volume slider audible
+            limiterRef.current.attack.value = 0.003;    // 3ms: fast enough to catch transients
+            limiterRef.current.release.value = 0.1;     // 🔥 50ms → 100ms: smoother recovery
 
-            // 🔥 Sinyal zinciri: source → gain → compressor → limiter → destination
+            // 🔥 Sinyal zinciri: source → gain → limiter → destination
             sourceRef.current.connect(gainRef.current);
-            gainRef.current.connect(compressorRef.current);
-            compressorRef.current.connect(limiterRef.current);
+            gainRef.current.connect(limiterRef.current);
             limiterRef.current.connect(audioCtxRef.current.destination);
 
             logger.audio(`[AudioPlayer] GainNode + Compressor + Limiter chain created for ${username}`);
@@ -183,8 +182,8 @@ const AudioPlayer = ({ username, stream, volume, isMuted, isDeafened, globalEnab
         if (!audio) return;
 
         // Volume range 0-200 → gain 0 – (2 * BASE_GAIN)
-        // 100% → BASE_GAIN (2.0×), 200% → 2 * BASE_GAIN (4.0×)
-        // Limiter at -3dB prevents clipping even at 200%
+        // 100% → BASE_GAIN (5.0×), 200% → 2 * BASE_GAIN (10.0×)
+        // Limiter at -6dB prevents clipping even at 200%
         const targetGain = (isMuted || isDeafened) ? 0 : (volume / 100) * BASE_GAIN;
 
         // 🔥 Always route through GainNode so we get the boost.
@@ -215,9 +214,6 @@ const AudioPlayer = ({ username, stream, volume, isMuted, isDeafened, globalEnab
             }
             if (gainRef.current) {
                 try { gainRef.current.disconnect(); } catch (e) { /* */ }
-            }
-            if (compressorRef.current) {
-                try { compressorRef.current.disconnect(); } catch (e) { /* */ }
             }
             if (limiterRef.current) {
                 try { limiterRef.current.disconnect(); } catch (e) { /* */ }

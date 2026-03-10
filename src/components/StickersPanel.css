@@ -13,7 +13,7 @@
 }
 
 .stickers-panel-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 900px;
@@ -26,7 +26,7 @@
 }
 
 .stickers-panel-header {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     padding: 20px 24px;
     display: flex;
     align-items: center;
@@ -72,7 +72,7 @@
 .tab-btn {
     background: transparent;
     border: none;
-    color: #a0aec0;
+    color: var(--text-light);
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 14px;
@@ -83,11 +83,11 @@
 
 .tab-btn:hover {
     background: rgba(88, 101, 242, 0.1);
-    color: #cbd5e0;
+    color: var(--text-mist);
 }
 
 .tab-btn.active {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
 }
 
@@ -108,7 +108,7 @@
 }
 
 .upload-sticker-btn {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     color: white;
     padding: 12px 24px;
@@ -126,7 +126,7 @@
 }
 
 .sticker-count {
-    color: #a0aec0;
+    color: var(--text-light);
     font-size: 14px;
     margin: 0;
 }
@@ -168,7 +168,7 @@
 .sticker-name {
     font-size: 13px;
     font-weight: 600;
-    color: #fff;
+    color: var(--color-white);
     text-align: center;
     word-break: break-word;
 }
@@ -241,20 +241,20 @@
 }
 
 .pack-info h3 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 18px;
     margin: 0 0 6px 0;
 }
 
 .pack-info p {
-    color: #a0aec0;
+    color: var(--text-light);
     font-size: 13px;
     margin: 0;
 }
 
 .install-pack-btn {
     width: 100%;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     color: white;
     padding: 10px;
@@ -280,7 +280,7 @@
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 .empty-icon {
@@ -290,13 +290,13 @@
 
 .empty-state h3 {
     font-size: 20px;
-    color: #fff;
+    color: var(--color-white);
     margin-bottom: 8px;
 }
 
 .empty-state p {
     font-size: 14px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 /* Upload Modal */
@@ -315,7 +315,7 @@
 }
 
 .upload-modal {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     padding: 28px;
     width: 90%;
@@ -325,7 +325,7 @@
 }
 
 .upload-modal h3 {
-    color: #fff;
+    color: var(--color-white);
     margin: 0 0 24px 0;
     font-size: 22px;
 }
@@ -336,7 +336,7 @@
 
 .form-group label {
     display: block;
-    color: #cbd5e0;
+    color: var(--text-mist);
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 8px;
@@ -385,14 +385,14 @@
 }
 
 .file-upload-area p {
-    color: #cbd5e0;
+    color: var(--text-mist);
     margin: 4px 0;
     font-size: 14px;
 }
 
 .upload-hint {
     font-size: 12px;
-    color: #a0aec0;
+    color: var(--text-light);
 }
 
 .upload-preview {
@@ -430,7 +430,7 @@
 }
 
 .upload-btn {
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
     box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
 }
@@ -447,7 +447,7 @@
 
 .loading-spinner {
     text-align: center;
-    color: #a0aec0;
+    color: var(--text-light);
     padding: 40px;
     font-size: 16px;
 }

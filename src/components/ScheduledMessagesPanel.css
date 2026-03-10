@@ -53,7 +53,7 @@
 
 .create-btn {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #5865f2, #4752c4);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     border-radius: 10px;
     color: white;
@@ -71,7 +71,7 @@
 .close-btn {
     background: rgba(255, 59, 48, 0.1);
     border: 1px solid rgba(255, 59, 48, 0.3);
-    color: #f23f42;
+    color: var(--color-danger);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -131,7 +131,7 @@
 
 .message-textarea:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
 }
 
@@ -157,7 +157,7 @@
 
 .form-input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.1);
 }
 
@@ -192,7 +192,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .submit-btn {
     padding: 10px 24px;
-    background: linear-gradient(135deg, #5865f2, #4752c4);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     border-radius: 8px;
     color: white;
@@ -238,26 +238,26 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     top: 0;
     bottom: 0;
     width: 4px;
-    background: linear-gradient(180deg, #5865f2, #4752c4);
+    background: linear-gradient(180deg, var(--color-primary), var(--color-primary-hover));
     transition: all 0.3s;
 }
 
 .scheduled-message-card.status-imminent::before {
-    background: linear-gradient(180deg, #f23f42, #ff6b6b);
+    background: linear-gradient(180deg, var(--color-danger), var(--color-coral-light));
 }
 
 .scheduled-message-card.status-soon::before {
-    background: linear-gradient(180deg, #f0b232, #ffc947);
+    background: linear-gradient(180deg, var(--color-warning), #ffc947);
 }
 
 .scheduled-message-card.status-sent::before {
-    background: linear-gradient(180deg, #10b981, #34d399);
+    background: linear-gradient(180deg, var(--color-success-modern), #34d399);
 }
 
 .scheduled-message-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(88, 101, 242, 0.3);
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .message-header {
@@ -278,7 +278,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background: rgba(88, 101, 242, 0.2);
     border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 8px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 13px;
     font-weight: 600;
 }
@@ -288,7 +288,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background: rgba(99, 102, 241, 0.2);
     border: 1px solid rgba(99, 102, 241, 0.3);
     border-radius: 8px;
-    color: #4752c4;
+    color: var(--color-primary-hover);
     font-size: 12px;
     font-weight: 600;
 }
@@ -296,7 +296,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .cancel-btn {
     background: rgba(255, 59, 48, 0.1);
     border: 1px solid rgba(255, 59, 48, 0.2);
-    color: #f23f42;
+    color: var(--color-danger);
     padding: 8px 12px;
     border-radius: 8px;
     cursor: pointer;
@@ -341,7 +341,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 .countdown-text {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 13px;
     font-weight: 600;
 }
@@ -351,7 +351,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 .status-imminent .countdown-text {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .status-soon .countdown {
@@ -359,7 +359,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 }
 
 .status-soon .countdown-text {
-    color: #f0b232;
+    color: var(--color-warning);
 }
 
 .sent-badge {
@@ -367,7 +367,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     background: rgba(16, 185, 129, 0.2);
     border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 8px;
-    color: #10b981;
+    color: var(--color-success-modern);
     font-size: 13px;
     font-weight: 600;
 }
@@ -402,7 +402,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .create-first-btn {
     padding: 12px 28px;
-    background: linear-gradient(135deg, #5865f2, #4752c4);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     border: none;
     border-radius: 10px;
     color: white;
@@ -431,7 +431,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     width: 48px;
     height: 48px;
     border: 4px solid rgba(88, 101, 242, 0.1);
-    border-top-color: #5865f2;
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin-bottom: 16px;

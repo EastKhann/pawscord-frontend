@@ -74,9 +74,16 @@ export function ConnectionStatusBanner() {
                     ? t('connection.lostRetrying', 'Bağlantı kesildi. Yeniden bağlanmaya çalışılıyor...')
                     : t('connection.reconnecting', 'Yeniden bağlanıyor...')}
             </span>
-            {reconnectAttempts > 0 && (
-                <span className="banner-attempts">({reconnectAttempts}. {t('connection.attempt', 'deneme')})</span>
-            )}
+            {reconnectAttempts > 0 && (() => {
+                const totalSec = reconnectAttempts * 3;
+                const min = Math.floor(totalSec / 60);
+                const sec = totalSec % 60;
+                return (
+                    <span className="banner-attempts">
+                        ({min > 0 ? `${min}m ${sec}s` : `${sec}s`})
+                    </span>
+                );
+            })()}
         </div>
     );
 }

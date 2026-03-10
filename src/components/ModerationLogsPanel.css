@@ -13,7 +13,7 @@
 }
 
 .moderation-logs-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 100%;
     max-width: 950px;
@@ -88,7 +88,7 @@
 
 .stat-item .stat-label {
     font-size: 0.75rem;
-    color: #888;
+    color: var(--text-silver);
     text-transform: uppercase;
 }
 
@@ -104,19 +104,19 @@
 }
 
 .stat-item.ban {
-    color: #f44336;
+    color: var(--color-danger-material);
 }
 
 .stat-item.kick {
-    color: #ff9800;
+    color: var(--color-orange);
 }
 
 .stat-item.timeout {
-    color: #2196f3;
+    color: var(--color-info-material);
 }
 
 .stat-item.warn {
-    color: #ffc107;
+    color: var(--color-warning-material);
 }
 
 /* Filters */
@@ -177,7 +177,7 @@
 
 .filter-group label {
     display: block;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     margin-bottom: 6px;
 }
@@ -212,7 +212,7 @@
     align-items: center;
     justify-content: center;
     padding: 60px;
-    color: #666;
+    color: var(--text-faint);
 }
 
 .empty-state svg {
@@ -258,17 +258,17 @@
 }
 
 .log-icon .action-ban {
-    color: #f44336;
+    color: var(--color-danger-material);
     background: rgba(244, 67, 54, 0.2);
 }
 
 .log-icon .action-kick {
-    color: #ff9800;
+    color: var(--color-orange);
     background: rgba(255, 152, 0, 0.2);
 }
 
 .log-icon .action-timeout {
-    color: #2196f3;
+    color: var(--color-info-material);
     background: rgba(33, 150, 243, 0.2);
 }
 
@@ -278,7 +278,7 @@
 }
 
 .log-icon .action-warn {
-    color: #ffc107;
+    color: var(--color-warning-material);
     background: rgba(255, 193, 7, 0.2);
 }
 
@@ -288,7 +288,7 @@
 }
 
 .log-icon .action-automod {
-    color: #4caf50;
+    color: var(--color-success-material);
     background: rgba(76, 175, 80, 0.2);
 }
 
@@ -348,17 +348,17 @@
 
 .action-badge.ban {
     background: rgba(244, 67, 54, 0.2);
-    color: #f44336;
+    color: var(--color-danger-material);
 }
 
 .action-badge.kick {
     background: rgba(255, 152, 0, 0.2);
-    color: #ff9800;
+    color: var(--color-orange);
 }
 
 .action-badge.timeout {
     background: rgba(33, 150, 243, 0.2);
-    color: #2196f3;
+    color: var(--color-info-material);
 }
 
 .action-badge.mute {
@@ -368,7 +368,7 @@
 
 .action-badge.warn {
     background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+    color: var(--color-warning-material);
 }
 
 .action-badge.delete_messages {
@@ -378,7 +378,7 @@
 
 .action-badge.automod {
     background: rgba(76, 175, 80, 0.2);
-    color: #4caf50;
+    color: var(--color-success-material);
 }
 
 .reverted-badge {
@@ -393,7 +393,7 @@
 }
 
 .log-time {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     display: flex;
     align-items: center;
@@ -430,7 +430,7 @@
 }
 
 .log-users .arrow {
-    color: #666;
+    color: var(--text-faint);
 }
 
 .log-reason {
@@ -446,7 +446,7 @@
 }
 
 .log-reason svg {
-    color: #666;
+    color: var(--text-faint);
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -455,7 +455,7 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     padding: 4px 8px;
     background: rgba(255, 255, 255, 0.05);
@@ -492,7 +492,7 @@
 .log-details .evidence ul {
     margin: 6px 0 0 16px;
     padding: 0;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
 }
 
@@ -505,7 +505,7 @@
 .log-actions button {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #888;
+    color: var(--text-silver);
     width: 36px;
     height: 36px;
     border-radius: 8px;
@@ -523,7 +523,7 @@
 
 .log-actions .revert-btn:hover {
     background: rgba(76, 175, 80, 0.3);
-    color: #4caf50;
+    color: var(--color-success-material);
 }
 
 .load-more-btn {

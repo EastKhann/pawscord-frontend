@@ -1,7 +1,7 @@
 ﻿// frontend/src/components/UserContextMenu.js
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
 import ReactDOM from 'react-dom'; // 🔥 Portal için
-import { FaUser, FaComments, FaVolumeUp, FaArrowRight, FaBan, FaUserShield, FaVolumeMute, FaEyeSlash, FaTrash, FaThumbtack } from 'react-icons/fa';
+import { FaUser, FaComments, FaArrowRight, FaBan, FaUserShield, FaVolumeMute } from 'react-icons/fa';
 
 const UserContextMenu = ({
     x,

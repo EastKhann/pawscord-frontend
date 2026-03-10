@@ -1,8 +1,8 @@
-﻿.spotify-panel {
-    background: #0e1222;
+.spotify-panel {
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
-    color: #dbdee1;
+    color: var(--text-primary);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -10,11 +10,11 @@
 .spotify-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .spotify-header h2 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -23,13 +23,13 @@
 }
 
 .spotify-icon {
-    color: #1DB954;
+    color: var(--color-spotify);
     font-size: 28px;
 }
 
 .spotify-error {
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
     padding: 12px;
     border-radius: 4px;
     margin-bottom: 15px;
@@ -48,7 +48,7 @@
 
 .spotify-logo {
     font-size: 120px;
-    color: #1DB954;
+    color: var(--color-spotify);
     animation: pulse 2s infinite;
 }
 
@@ -65,20 +65,20 @@
 }
 
 .spotify-connect h3 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 28px;
     margin-bottom: 10px;
 }
 
 .spotify-connect p {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 16px;
     margin-bottom: 30px;
 }
 
 .connect-btn {
-    background: #1DB954;
-    color: #ffffff;
+    background: var(--color-spotify);
+    color: var(--color-white);
     border: none;
     padding: 15px 40px;
     border-radius: 24px;
@@ -93,7 +93,7 @@
 }
 
 .connect-btn:hover {
-    background: #23a559;
+    background: var(--color-success);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(29, 185, 84, 0.4);
 }
@@ -119,12 +119,12 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
 .check-icon {
-    color: #1DB954;
+    color: var(--color-spotify);
     font-size: 18px;
 }
 
@@ -137,26 +137,26 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #182135;
+    background: var(--bg-input);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
 
 .status-icon {
-    color: #1DB954;
+    color: var(--color-spotify);
     font-size: 20px;
 }
 
 .connection-status span {
     flex: 1;
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
 }
 
 .disconnect-btn {
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
@@ -179,7 +179,7 @@
 }
 
 .activity-toggle {
-    background: #182135;
+    background: var(--bg-input);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -200,7 +200,7 @@
 .toggle-slider {
     width: 44px;
     height: 24px;
-    background: #949ba4;
+    background: var(--text-muted);
     border-radius: 12px;
     position: relative;
     transition: background 0.2s;
@@ -211,7 +211,7 @@
     position: absolute;
     width: 18px;
     height: 18px;
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 50%;
     top: 3px;
     left: 3px;
@@ -219,7 +219,7 @@
 }
 
 .toggle-label input:checked+.toggle-slider {
-    background: #1DB954;
+    background: var(--color-spotify);
 }
 
 .toggle-label input:checked+.toggle-slider::after {
@@ -227,17 +227,17 @@
 }
 
 .toggle-text {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 500;
 }
 
 /* Current Track */
 .current-track {
-    background: linear-gradient(135deg, #1DB954 0%, #23a559 100%);
+    background: linear-gradient(135deg, var(--color-spotify) 0%, var(--color-success) 100%);
     border-radius: 12px;
     padding: 20px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .track-header {
@@ -327,7 +327,7 @@
 
 .progress-bar {
     height: 100%;
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 2px;
     transition: width 1s linear;
 }
@@ -335,12 +335,12 @@
 .no-track {
     text-align: center;
     padding: 60px 20px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .no-track-icon {
     font-size: 64px;
-    color: #1e2024;
+    color: var(--bg-neutral-dark);
     margin-bottom: 15px;
 }
 

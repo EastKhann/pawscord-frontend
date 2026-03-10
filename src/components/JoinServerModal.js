@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { API_BASE_URL } from '../utils/apiEndpoints';
 import toast from '../utils/toast';
+import useModalA11y from '../hooks/useModalA11y';
 import './JoinServerModal.css';
 
 const JoinServerModal = ({ isOpen, onClose }) => {
@@ -53,13 +54,7 @@ const JoinServerModal = ({ isOpen, onClose }) => {
         }
     }, [isOpen, loadServers]);
 
-    // ESC ile kapat
-    useEffect(() => {
-        if (!isOpen) return;
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
-        document.addEventListener('keydown', handleEsc);
-        return () => document.removeEventListener('keydown', handleEsc);
-    }, [isOpen, onClose]);
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, isOpen, label: 'Sunucuya Katıl' });
 
     const handleJoinServer = async (serverId) => {
         setJoiningId(serverId);
@@ -115,8 +110,8 @@ const JoinServerModal = ({ isOpen, onClose }) => {
     );
 
     return createPortal(
-        <div onClick={onClose} style={overlay}>
-            <div onClick={e => e.stopPropagation()} style={modal} className="jsm-modal">
+        <div {...overlayProps} style={overlay}>
+            <div {...dialogProps} style={modal} className="jsm-modal">
                 {/* Header */}
                 <div style={header}>
                     <h3 style={{ color: '#fff', margin: 0, fontSize: '18px' }}>🌍 Sunucuya Katıl</h3>

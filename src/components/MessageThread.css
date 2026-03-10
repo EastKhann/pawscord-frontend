@@ -7,7 +7,7 @@
   bottom: 0;
   width: 400px;
   max-width: 90vw;
-  background: var(--bg-primary, #111214);
+  background: var(--bg-primary, var(--bg-charcoal-deep));
   border-left: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
   display: flex;
   flex-direction: column;
@@ -22,13 +22,13 @@
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
-  background: var(--bg-secondary, #0d0e10);
+  background: var(--bg-secondary, var(--bg-void));
 }
 
 .thread-title {
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-primary, #FFFFFF);
+  color: var(--text-primary, var(--color-white));
   display: flex;
   align-items: center;
   gap: 8px;
@@ -37,7 +37,7 @@
 .thread-close {
   background: transparent;
   border: none;
-  color: var(--text-secondary, #b5bac1);
+  color: var(--text-secondary, var(--text-secondary));
   cursor: pointer;
   padding: 8px;
   border-radius: 4px;
@@ -46,32 +46,32 @@
 
 .thread-close:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary, #FFFFFF);
+  color: var(--text-primary, var(--color-white));
 }
 
 .thread-parent {
   padding: 16px 20px;
-  background: var(--bg-secondary, #0d0e10);
-  border-bottom: 2px solid var(--brand-primary, #5865F2);
+  background: var(--bg-secondary, var(--bg-void));
+  border-bottom: 2px solid var(--brand-primary, var(--color-primary));
 }
 
 .parent-user {
   font-size: 14px;
   font-weight: 600;
-  color: var(--brand-primary, #5865F2);
+  color: var(--brand-primary, var(--color-primary));
   margin-bottom: 4px;
 }
 
 .parent-content {
   font-size: 14px;
-  color: var(--text-primary, #FFFFFF);
+  color: var(--text-primary, var(--color-white));
   margin-bottom: 8px;
   line-height: 1.4;
 }
 
 .parent-meta {
   font-size: 11px;
-  color: var(--text-muted, #949ba4);
+  color: var(--text-muted, var(--text-muted));
 }
 
 .thread-replies {
@@ -85,35 +85,35 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: var(--text-muted, #949ba4);
+  color: var(--text-muted, var(--text-muted));
 }
 
 .thread-reply {
   padding: 12px;
   margin-bottom: 8px;
-  background: var(--bg-tertiary, #17191c);
+  background: var(--bg-tertiary, var(--bg-charcoal));
   border-radius: 8px;
-  border-left: 3px solid var(--brand-primary, #5865F2);
+  border-left: 3px solid var(--brand-primary, var(--color-primary));
   animation: fadeIn 0.2s ease;
 }
 
 .reply-user {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-primary, #FFFFFF);
+  color: var(--text-primary, var(--color-white));
   margin-bottom: 4px;
 }
 
 .reply-content {
   font-size: 14px;
-  color: var(--text-secondary, #b5bac1);
+  color: var(--text-secondary, var(--text-secondary));
   margin-bottom: 6px;
   line-height: 1.4;
 }
 
 .reply-meta {
   font-size: 10px;
-  color: var(--text-muted, #949ba4);
+  color: var(--text-muted, var(--text-muted));
 }
 
 .thread-empty {
@@ -122,7 +122,7 @@
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: var(--text-muted, #949ba4);
+  color: var(--text-muted, var(--text-muted));
   text-align: center;
 }
 
@@ -134,7 +134,7 @@
 .thread-empty p {
   margin: 0 0 4px 0;
   font-size: 14px;
-  color: var(--text-secondary, #b5bac1);
+  color: var(--text-secondary, var(--text-secondary));
 }
 
 .thread-empty small {
@@ -146,36 +146,36 @@
   gap: 8px;
   padding: 16px;
   border-top: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
-  background: var(--bg-secondary, #0d0e10);
+  background: var(--bg-secondary, var(--bg-void));
 }
 
 .thread-input input {
   flex: 1;
   padding: 10px 12px;
-  background: var(--bg-tertiary, #17191c);
+  background: var(--bg-tertiary, var(--bg-charcoal));
   border: 1px solid var(--border-primary, rgba(255, 255, 255, 0.1));
   border-radius: 6px;
-  color: var(--text-primary, #FFFFFF);
+  color: var(--text-primary, var(--color-white));
   font-size: 14px;
   outline: none;
 }
 
 .thread-input input:focus {
-  border-color: var(--brand-primary, #5865F2);
+  border-color: var(--brand-primary, var(--color-primary));
 }
 
 .thread-input button {
   padding: 10px 16px;
-  background: var(--brand-primary, #5865F2);
+  background: var(--brand-primary, var(--color-primary));
   border: none;
   border-radius: 6px;
-  color: #FFFFFF;
+  color: var(--color-white);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .thread-input button:hover:not(:disabled) {
-  background: var(--brand-hover, #4752C4);
+  background: var(--brand-hover, var(--color-primary-hover));
 }
 
 .thread-input button:disabled {
@@ -187,8 +187,8 @@
   position: absolute;
   top: 16px;
   right: 60px;
-  background: var(--brand-primary, #5865F2);
-  color: #FFFFFF;
+  background: var(--brand-primary, var(--color-primary));
+  color: var(--color-white);
   padding: 4px 8px;
   border-radius: 10px;
   font-size: 11px;
@@ -201,10 +201,10 @@
   gap: 4px;
   padding: 4px 8px;
   background: rgba(88, 101, 242, 0.1);
-  border: 1px solid var(--brand-primary, #5865F2);
+  border: 1px solid var(--brand-primary, var(--color-primary));
   border-radius: 12px;
   font-size: 12px;
-  color: var(--brand-primary, #5865F2);
+  color: var(--brand-primary, var(--color-primary));
   cursor: pointer;
   margin-top: 8px;
   transition: all 0.2s;

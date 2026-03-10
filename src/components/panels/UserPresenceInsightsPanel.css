@@ -1,5 +1,5 @@
 /* frontend/src/components/panels/UserPresenceInsightsPanel.css */
-/* 👤 User Presence Insights Panel Styles */
+/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ËœÃ‚Â¤ User Presence Insights Panel Styles */
 
 .presence-insights-overlay {
     position: fixed;
@@ -55,7 +55,7 @@
     align-items: center;
     gap: 20px;
     padding: 24px;
-    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    background: linear-gradient(135deg, var(--color-info-teal), #06b6d4);
     position: relative;
 }
 
@@ -70,13 +70,13 @@
     width: 70px;
     height: 70px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #fff, #e0f2fe);
+    background: linear-gradient(135deg, var(--color-white), #e0f2fe);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
     font-weight: 700;
-    color: #0891b2;
+    color: var(--color-info-teal);
     position: relative;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -88,7 +88,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 3px solid #0891b2;
+    border: 3px solid var(--color-info-teal);
 }
 
 .user-info h2 {
@@ -190,7 +190,7 @@
 }
 
 .stats-bar .stat svg {
-    color: #22d3ee;
+    color: var(--color-info-cyan);
     font-size: 1.1rem;
     margin-bottom: 6px;
 }
@@ -236,8 +236,8 @@
 }
 
 .presence-insights-panel .tab.active {
-    color: #22d3ee;
-    border-bottom-color: #22d3ee;
+    color: var(--color-info-cyan);
+    border-bottom-color: var(--color-info-cyan);
 }
 
 /* Tab Content */
@@ -299,7 +299,7 @@
 }
 
 .peak-icon.day {
-    color: #fbbf24;
+    color: var(--color-warning-bright);
 }
 
 .peak-content {
@@ -385,7 +385,7 @@
 .day-bar .bar {
     width: 80%;
     max-width: 40px;
-    background: linear-gradient(to top, #0891b2, #22d3ee);
+    background: linear-gradient(to top, var(--color-info-teal), var(--color-info-cyan));
     border-radius: 6px 6px 0 0;
     min-height: 10px;
     transition: all 0.3s ease;
@@ -425,7 +425,7 @@
 .hour-bar {
     width: 100%;
     max-width: 20px;
-    background: linear-gradient(to top, #0891b2, #22d3ee);
+    background: linear-gradient(to top, var(--color-info-teal), var(--color-info-cyan));
     border-radius: 3px 3px 0 0;
     min-height: 5px;
     transition: all 0.3s ease;
@@ -433,7 +433,7 @@
 }
 
 .hour-bar.peak {
-    background: linear-gradient(to top, #f59e0b, #fbbf24);
+    background: linear-gradient(to top, var(--color-warning-amber), var(--color-warning-bright));
 }
 
 .hour-bar:hover {
@@ -466,11 +466,11 @@
     width: 12px;
     height: 12px;
     border-radius: 3px;
-    background: linear-gradient(135deg, #0891b2, #22d3ee);
+    background: linear-gradient(135deg, var(--color-info-teal), var(--color-info-cyan));
 }
 
 .legend-dot.peak {
-    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    background: linear-gradient(135deg, var(--color-warning-amber), var(--color-warning-bright));
 }
 
 .timezone-note {
@@ -484,7 +484,7 @@
 }
 
 .timezone-note svg {
-    color: #22d3ee;
+    color: var(--color-info-cyan);
 }
 
 .timezone-note span {
@@ -522,7 +522,7 @@
 
 .activity-rank {
     font-weight: 700;
-    color: #22d3ee;
+    color: var(--color-info-cyan);
     width: 30px;
 }
 
@@ -530,7 +530,7 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #0891b2, #22d3ee);
+    background: linear-gradient(135deg, var(--color-info-teal), var(--color-info-cyan));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -563,7 +563,7 @@
 
 .activity-bar .bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #0891b2, #22d3ee);
+    background: linear-gradient(90deg, var(--color-info-teal), var(--color-info-cyan));
     border-radius: 4px;
     transition: width 0.5s ease;
 }
@@ -582,7 +582,7 @@
 .loading-state .spin {
     animation: spin 1s linear infinite;
     font-size: 2rem;
-    color: #22d3ee;
+    color: var(--color-info-cyan);
 }
 
 @keyframes spin {

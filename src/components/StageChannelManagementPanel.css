@@ -1,4 +1,4 @@
-﻿.stage-overlay {
+.stage-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -13,7 +13,7 @@
 }
 
 .stage-panel {
-    background: linear-gradient(145deg, #0d0e10 0%, #16161f 100%);
+    background: linear-gradient(145deg, var(--bg-void) 0%, #16161f 100%);
     border-radius: 12px;
     width: 95%;
     max-width: 1200px;
@@ -27,7 +27,7 @@
 
 /* Header */
 .stage-panel .panel-header {
-    background: linear-gradient(135deg, #5865f2 0%, #8e44ad 50%, #6c3483 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #8e44ad 50%, #6c3483 100%);
     padding: 20px 25px;
     display: flex;
     justify-content: space-between;
@@ -160,7 +160,7 @@
 
 .stage-item.selected {
     background: rgba(155, 89, 182, 0.25);
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
 }
 
@@ -183,13 +183,13 @@
 
 .stage-status.live {
     background: rgba(231, 76, 60, 0.2);
-    color: #e74c3c;
+    color: var(--color-danger-legacy);
 }
 
 .stage-status .pulse {
     width: 8px;
     height: 8px;
-    background: #e74c3c;
+    background: var(--color-danger-legacy);
     border-radius: 50%;
     animation: pulse 1.5s infinite;
 }
@@ -210,7 +210,7 @@
 
 .stage-status.scheduled {
     background: rgba(155, 89, 182, 0.2);
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .stage-status.ended {
@@ -255,7 +255,7 @@
 }
 
 .stage-item .start-btn:hover {
-    background: #5865f2;
+    background: var(--color-primary);
 }
 
 /* Stage Details */
@@ -287,7 +287,7 @@
 }
 
 .end-stage-btn {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    background: linear-gradient(135deg, var(--color-danger-legacy), #c0392b);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -373,7 +373,7 @@
 .speaker-avatar {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #5865f2, #8e44ad);
+    background: linear-gradient(135deg, var(--color-primary), #8e44ad);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -389,7 +389,7 @@
     right: -2px;
     color: #f1c40f;
     font-size: 0.7rem;
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 50%;
     padding: 2px;
 }
@@ -425,12 +425,12 @@
 }
 
 .speaker-actions .mute-btn.muted {
-    color: #e74c3c;
+    color: var(--color-danger-legacy);
 }
 
 .speaker-actions .remove-btn:hover {
     background: rgba(231, 76, 60, 0.3);
-    color: #e74c3c;
+    color: var(--color-danger-legacy);
 }
 
 /* Hand Raises List */
@@ -466,7 +466,7 @@
 .hand-raise-item .user-avatar {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #5865f2, #6c3483);
+    background: linear-gradient(135deg, var(--color-primary), #6c3483);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -518,7 +518,7 @@
 
 .hand-raise-actions .deny-btn {
     background: rgba(231, 76, 60, 0.2);
-    color: #e74c3c;
+    color: var(--color-danger-legacy);
     border: none;
     width: 34px;
     height: 34px;
@@ -562,7 +562,7 @@
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    color: #5865f2;
+    color: var(--color-primary);
     margin-bottom: 20px;
 }
 
@@ -587,7 +587,7 @@
 }
 
 .start-now-btn {
-    background: linear-gradient(135deg, #5865f2, #8e44ad);
+    background: linear-gradient(135deg, var(--color-primary), #8e44ad);
     color: white;
     border: none;
     padding: 14px 28px;
@@ -643,7 +643,7 @@
 }
 
 .create-modal {
-    background: linear-gradient(145deg, #0d0e10 0%, #16161f 100%);
+    background: linear-gradient(145deg, var(--bg-void) 0%, #16161f 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 500px;
@@ -679,7 +679,7 @@
 }
 
 .modal-header button:hover {
-    color: #e74c3c;
+    color: var(--color-danger-legacy);
 }
 
 .modal-content {
@@ -714,7 +714,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
 }
 
@@ -752,7 +752,7 @@
 }
 
 .modal-footer .create-modal-btn {
-    background: linear-gradient(135deg, #5865f2, #8e44ad);
+    background: linear-gradient(135deg, var(--color-primary), #8e44ad);
     color: white;
     border: none;
     padding: 10px 22px;

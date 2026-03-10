@@ -6,6 +6,10 @@ const SupportButton = ({ onClick }) => {
     return (
         <div
             onClick={onClick}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+            role="button"
+            tabIndex={0}
+            aria-label="Support the developer"
             style={{
                 backgroundColor: '#0d0e10', padding: '10px 14px', margin: '0 8px 8px 8px',
                 borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px',

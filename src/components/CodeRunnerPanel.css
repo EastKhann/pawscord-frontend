@@ -19,7 +19,7 @@
 }
 
 .code-runner-panel {
-    background: linear-gradient(145deg, #0d0e10, #0f0f1a);
+    background: linear-gradient(145deg, var(--bg-void), #0f0f1a);
     border-radius: 16px;
     width: 100%;
     max-width: 1100px;
@@ -48,7 +48,7 @@
 }
 
 .panel-header h2 {
-    color: #66d49c;
+    color: var(--color-mint);
     font-size: 1.3rem;
     display: flex;
     align-items: center;
@@ -65,7 +65,7 @@
 .close-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #fff;
+    color: var(--color-white);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -77,7 +77,7 @@
 }
 
 .close-btn:hover {
-    background: #ff4757;
+    background: var(--color-coral);
     transform: rotate(90deg);
 }
 
@@ -119,13 +119,13 @@
 
 .lang-btn:hover {
     background: rgba(255, 255, 255, 0.05);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .lang-btn.active {
-    background: linear-gradient(135deg, #66d49c, #4cb88a);
+    background: linear-gradient(135deg, var(--color-mint), #4cb88a);
     border-color: transparent;
-    color: #0d0e10;
+    color: var(--bg-void);
     font-weight: 600;
 }
 
@@ -160,11 +160,11 @@
 
 .action-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .action-btn.clear {
-    color: #ff4757;
+    color: var(--color-coral);
     border-color: rgba(255, 71, 87, 0.3);
 }
 
@@ -231,7 +231,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    color: #66d49c;
+    color: var(--color-mint);
     font-size: 0.8rem;
 }
 
@@ -245,7 +245,7 @@
 }
 
 .output-actions button:hover {
-    color: #fff;
+    color: var(--color-white);
 }
 
 .code-editor {
@@ -254,7 +254,7 @@
     padding: 15px;
     background: transparent;
     border: none;
-    color: #e0e0e0;
+    color: var(--text-mist);
     font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
     font-size: 0.9rem;
     line-height: 1.6;
@@ -275,7 +275,7 @@
     margin: 0;
     padding: 15px;
     background: transparent;
-    color: #e0e0e0;
+    color: var(--text-mist);
     font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
     font-size: 0.85rem;
     line-height: 1.5;
@@ -285,7 +285,7 @@
 }
 
 .output-display.error {
-    color: #ff6b6b;
+    color: var(--color-coral-light);
 }
 
 /* Run Bar */
@@ -312,8 +312,8 @@
 }
 
 .run-btn {
-    background: linear-gradient(135deg, #66d49c, #4cb88a);
-    color: #0d0e10;
+    background: linear-gradient(135deg, var(--color-mint), #4cb88a);
+    color: var(--bg-void);
 }
 
 .run-btn:hover {
@@ -322,8 +322,8 @@
 }
 
 .stop-btn {
-    background: linear-gradient(135deg, #ff4757, #ff6b6b);
-    color: #fff;
+    background: linear-gradient(135deg, var(--color-coral), var(--color-coral-light));
+    color: var(--color-white);
 }
 
 .stop-btn:hover {
@@ -334,12 +334,12 @@
 .share-btn {
     background: rgba(88, 166, 255, 0.2);
     border: 1px solid rgba(88, 166, 255, 0.3);
-    color: #58a6ff;
+    color: var(--color-link-bright);
 }
 
 .share-btn:hover {
-    background: #58a6ff;
-    color: #fff;
+    background: var(--color-link-bright);
+    color: var(--color-white);
 }
 
 /* History Sidebar */
@@ -349,7 +349,7 @@
     right: 0;
     width: 320px;
     height: 100%;
-    background: linear-gradient(145deg, #1e1e32, #0d0e10);
+    background: linear-gradient(145deg, #1e1e32, var(--bg-void));
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
@@ -377,7 +377,7 @@
 }
 
 .sidebar-header h3 {
-    color: #66d49c;
+    color: var(--color-mint);
     margin: 0;
     font-size: 1rem;
     display: flex;
@@ -444,7 +444,7 @@
 
 .snippet-name {
     display: block;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.9rem;
 }
 
@@ -457,7 +457,7 @@
 .delete-snippet {
     background: none;
     border: none;
-    color: #ff4757;
+    color: var(--color-coral);
     cursor: pointer;
     opacity: 0;
     transition: all 0.3s;
@@ -488,7 +488,7 @@
 
 .history-lang {
     font-size: 0.75rem;
-    color: #66d49c;
+    color: var(--color-mint);
     text-transform: uppercase;
 }
 
@@ -497,11 +497,11 @@
 }
 
 .history-status.success {
-    color: #66d49c;
+    color: var(--color-mint);
 }
 
 .history-status.error {
-    color: #ff4757;
+    color: var(--color-coral);
 }
 
 .history-preview {
@@ -534,7 +534,7 @@
 }
 
 .save-modal {
-    background: linear-gradient(145deg, #1e1e32, #0d0e10);
+    background: linear-gradient(145deg, #1e1e32, var(--bg-void));
     border-radius: 16px;
     padding: 25px;
     width: 100%;
@@ -543,7 +543,7 @@
 }
 
 .save-modal h3 {
-    color: #66d49c;
+    color: var(--color-mint);
     margin: 0 0 20px 0;
     display: flex;
     align-items: center;
@@ -566,7 +566,7 @@
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     box-sizing: border-box;
 }
 
@@ -576,7 +576,7 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: #66d49c;
+    border-color: var(--color-mint);
 }
 
 .modal-actions {
@@ -591,7 +591,7 @@
     background: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -605,10 +605,10 @@
     align-items: center;
     gap: 6px;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #66d49c, #4cb88a);
+    background: linear-gradient(135deg, var(--color-mint), #4cb88a);
     border: none;
     border-radius: 8px;
-    color: #0d0e10;
+    color: var(--bg-void);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;

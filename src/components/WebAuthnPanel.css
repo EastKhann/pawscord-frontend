@@ -1,8 +1,8 @@
-﻿.webauthn-panel {
-    background: #0e1222;
+.webauthn-panel {
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
-    color: #dbdee1;
+    color: var(--text-primary);
     max-width: 700px;
     margin: 0 auto;
 }
@@ -10,11 +10,11 @@
 .webauthn-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .webauthn-header h2 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -23,18 +23,18 @@
 }
 
 .shield-icon {
-    color: #23a559;
+    color: var(--color-success);
     font-size: 28px;
 }
 
 .webauthn-info {
-    background: linear-gradient(135deg, #5865f2, #4752c4);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     border-radius: 8px;
     padding: 20px;
     display: flex;
     gap: 15px;
     margin-bottom: 25px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .info-icon {
@@ -54,30 +54,30 @@
 }
 
 .webauthn-error {
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
     padding: 12px;
     border-radius: 4px;
     margin-bottom: 15px;
 }
 
 .webauthn-success {
-    background: #23a559;
-    color: #ffffff;
+    background: var(--color-success);
+    color: var(--color-white);
     padding: 12px;
     border-radius: 4px;
     margin-bottom: 15px;
 }
 
 .register-key-section {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 25px;
 }
 
 .register-key-section h3 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 15px 0;
     display: flex;
@@ -93,9 +93,9 @@
 
 .key-input {
     flex: 1;
-    background: #0e1222;
-    border: 2px solid #0b0e1b;
-    color: #dbdee1;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
     padding: 12px;
     border-radius: 4px;
     font-size: 14px;
@@ -103,12 +103,12 @@
 
 .key-input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .register-btn {
-    background: #23a559;
-    color: #ffffff;
+    background: var(--color-success);
+    color: var(--color-white);
     border: none;
     padding: 12px 24px;
     border-radius: 4px;
@@ -143,10 +143,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     padding: 10px;
-    background: #0e1222;
+    background: var(--bg-secondary);
     border-radius: 4px;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .keys-list h3 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 16px;
     margin-bottom: 15px;
     display: flex;
@@ -166,12 +166,12 @@
 .empty-keys {
     text-align: center;
     padding: 40px;
-    color: #949ba4;
+    color: var(--text-muted);
     font-style: italic;
 }
 
 .key-item {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
@@ -182,7 +182,7 @@
 }
 
 .key-item:hover {
-    background: #121928;
+    background: var(--bg-elevated);
     transform: translateX(5px);
 }
 
@@ -194,24 +194,24 @@
 
 .key-icon {
     font-size: 20px;
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .key-name {
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
     font-size: 15px;
     margin-bottom: 4px;
 }
 
 .key-date {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 .remove-key-btn {
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
     border: none;
     padding: 8px 16px;
     border-radius: 4px;

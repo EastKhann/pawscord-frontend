@@ -1,8 +1,8 @@
-﻿.gift-premium-panel {
-    background: #0e1222;
+.gift-premium-panel {
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
-    color: #dbdee1;
+    color: var(--text-primary);
     max-width: 900px;
     margin: 0 auto;
 }
@@ -10,12 +10,12 @@
 .gift-header {
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
     text-align: center;
 }
 
 .gift-header h2 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 28px;
     display: flex;
     align-items: center;
@@ -25,13 +25,13 @@
 }
 
 .gift-header p {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 14px;
     margin: 0;
 }
 
 .gift-message-alert {
-    background: #182135;
+    background: var(--bg-input);
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 20px;
@@ -45,13 +45,13 @@
 }
 
 .form-section {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 20px;
 }
 
 .form-section h3 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 15px 0;
     display: flex;
@@ -66,15 +66,15 @@
 }
 
 .input-group label {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     font-weight: 600;
 }
 
 .form-input {
-    background: #0e1222;
-    border: 2px solid #0b0e1b;
-    color: #dbdee1;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
     padding: 12px;
     border-radius: 6px;
     font-size: 14px;
@@ -82,7 +82,7 @@
 
 .form-input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .plans-grid {
@@ -92,7 +92,7 @@
 }
 
 .plan-card {
-    background: #0e1222;
+    background: var(--bg-secondary);
     border: 3px solid transparent;
     border-radius: 12px;
     padding: 20px;
@@ -108,7 +108,7 @@
 }
 
 .plan-card.selected {
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     background: linear-gradient(135deg, rgba(88, 101, 242, 0.2), rgba(114, 137, 218, 0.2));
 }
 
@@ -116,8 +116,8 @@
     position: absolute;
     top: -10px;
     right: -10px;
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
     font-size: 11px;
     font-weight: 700;
     padding: 5px 10px;
@@ -125,29 +125,29 @@
 }
 
 .plan-duration {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 10px;
 }
 
 .plan-price {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 5px;
 }
 
 .plan-per-month {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 .message-textarea {
     width: 100%;
-    background: #0e1222;
-    border: 2px solid #0b0e1b;
-    color: #dbdee1;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
     padding: 12px;
     border-radius: 6px;
     font-size: 14px;
@@ -157,19 +157,19 @@
 
 .message-textarea:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .char-count {
     text-align: right;
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
     margin-top: 5px;
 }
 
 .gift-btn {
-    background: linear-gradient(135deg, #5865f2, #5865f2);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
+    color: var(--color-white);
     border: none;
     padding: 18px;
     border-radius: 8px;
@@ -195,14 +195,14 @@
 }
 
 .premium-features {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 20px;
     margin-top: 25px;
 }
 
 .premium-features h3 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 20px 0;
     text-align: center;
@@ -215,7 +215,7 @@
 }
 
 .feature-item {
-    background: #0e1222;
+    background: var(--bg-secondary);
     padding: 15px;
     border-radius: 8px;
     display: flex;
@@ -226,7 +226,7 @@
 
 .feature-item:hover {
     transform: translateX(5px);
-    background: #182135;
+    background: var(--bg-input);
 }
 
 .feature-icon {
@@ -235,21 +235,21 @@
 }
 
 .feature-text {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 600;
 }
 
 .info-box {
-    background: #182135;
+    background: var(--bg-input);
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #5865f2;
+    border-left: 4px solid var(--color-primary);
     margin-top: 20px;
 }
 
 .info-box h4 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 14px;
     margin: 0 0 12px 0;
 }
@@ -257,7 +257,7 @@
 .info-box ul {
     margin: 0;
     padding-left: 20px;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     line-height: 1.8;
 }

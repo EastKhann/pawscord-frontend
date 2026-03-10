@@ -1,13 +1,13 @@
 /* frontend/src/components/panels/NewFeaturesPanel.css */
-/* 🚀 20 YENİ ÖZELLİK STİLLERİ - 26 Ocak 2026 */
+/* ÃƒÆ’Ã‚Â°Ãƒâ€¦Ã‚Â¸Ãƒâ€¦Ã‚Â¡ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ 20 YENÃƒÆ’Ã¢â‚¬Å¾Ãƒâ€šÃ‚Â° ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ZELLÃƒÆ’Ã¢â‚¬Å¾Ãƒâ€šÃ‚Â°K STÃƒÆ’Ã¢â‚¬Å¾Ãƒâ€šÃ‚Â°LLERÃƒÆ’Ã¢â‚¬Å¾Ãƒâ€šÃ‚Â° - 26 Ocak 2026 */
 
 /* DASHBOARD */
 .new-features-dashboard {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     padding: 24px;
     min-height: 500px;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .new-features-dashboard .panel-header {
@@ -22,7 +22,7 @@
 .new-features-dashboard .panel-header h2 {
     margin: 0;
     font-size: 1.5rem;
-    background: linear-gradient(90deg, #00d9ff, #00ff88);
+    background: linear-gradient(90deg, var(--color-neon-cyan), var(--color-neon-green));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -49,7 +49,7 @@
 
 .feature-card:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: #00d9ff;
+    border-color: var(--color-neon-cyan);
     transform: translateY(-4px);
     box-shadow: 0 8px 32px rgba(0, 217, 255, 0.2);
 }
@@ -61,7 +61,7 @@
 .feature-name {
     font-size: 0.875rem;
     text-align: center;
-    color: #e0e0e0;
+    color: var(--text-mist);
 }
 
 /* FEATURE PANELS */
@@ -81,13 +81,13 @@
 .feature-panel .panel-header h3 {
     margin: 0;
     font-size: 1.25rem;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .close-btn {
     background: none;
     border: none;
-    color: #888;
+    color: var(--text-silver);
     font-size: 1.25rem;
     cursor: pointer;
     padding: 4px 8px;
@@ -97,7 +97,7 @@
 
 .close-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--color-white);
 }
 
 /* STATS GRID */
@@ -129,13 +129,13 @@
     display: block;
     font-size: 1.75rem;
     font-weight: 700;
-    color: #00d9ff;
+    color: var(--color-neon-cyan);
 }
 
 .stat-label {
     display: block;
     font-size: 0.75rem;
-    color: #888;
+    color: var(--text-silver);
     margin-top: 4px;
 }
 
@@ -152,7 +152,7 @@
 .top-list h4 {
     margin: 0 0 12px 0;
     font-size: 0.875rem;
-    color: #aaa;
+    color: var(--text-mist);
 }
 
 .room-stat,
@@ -169,18 +169,18 @@
 }
 
 .list-item .rank {
-    color: #00d9ff;
+    color: var(--color-neon-cyan);
     font-weight: 600;
     width: 30px;
 }
 
 .list-item .name {
     flex: 1;
-    color: #e0e0e0;
+    color: var(--text-mist);
 }
 
 .list-item .count {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.875rem;
 }
 
@@ -217,16 +217,16 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 10px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1rem;
 }
 
 .add-emoji button {
-    background: linear-gradient(135deg, #00d9ff, #00ff88);
+    background: linear-gradient(135deg, var(--color-neon-cyan), var(--color-neon-green));
     border: none;
     border-radius: 8px;
     padding: 10px 20px;
-    color: #000;
+    color: var(--color-black);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
@@ -243,7 +243,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 12px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.875rem;
     resize: vertical;
     min-height: 100px;
@@ -252,16 +252,16 @@
 
 .user-notes textarea:focus {
     outline: none;
-    border-color: #00d9ff;
+    border-color: var(--color-neon-cyan);
 }
 
 .user-notes button {
     width: 100%;
-    background: linear-gradient(135deg, #00d9ff, #00ff88);
+    background: linear-gradient(135deg, var(--color-neon-cyan), var(--color-neon-green));
     border: none;
     border-radius: 8px;
     padding: 12px;
-    color: #000;
+    color: var(--color-black);
     font-weight: 600;
     cursor: pointer;
 }
@@ -269,7 +269,7 @@
 .note-hint {
     text-align: center;
     font-size: 0.75rem;
-    color: #666;
+    color: var(--text-faint);
     margin-top: 8px;
 }
 
@@ -294,11 +294,11 @@
 }
 
 .activity-item.mention {
-    border-left: 3px solid #ff6b6b;
+    border-left: 3px solid var(--color-coral-light);
 }
 
 .activity-item.message {
-    border-left: 3px solid #00d9ff;
+    border-left: 3px solid var(--color-neon-cyan);
 }
 
 .activity-icon {
@@ -310,18 +310,18 @@
 }
 
 .activity-content strong {
-    color: #fff;
+    color: var(--color-white);
 }
 
 .activity-room {
-    color: #888;
+    color: var(--text-silver);
     margin-left: 8px;
     font-size: 0.875rem;
 }
 
 .activity-content p {
     margin: 4px 0 0;
-    color: #aaa;
+    color: var(--text-mist);
     font-size: 0.875rem;
 }
 
@@ -348,7 +348,7 @@
 
 .badge-name {
     font-size: 0.875rem;
-    color: #e0e0e0;
+    color: var(--text-mist);
 }
 
 /* FAVORITE ROOMS */
@@ -374,25 +374,25 @@
 
 .favorite-item .room-name {
     flex: 1;
-    color: #00d9ff;
+    color: var(--color-neon-cyan);
     cursor: pointer;
 }
 
 .favorite-item .server-name {
-    color: #666;
+    color: var(--text-faint);
     font-size: 0.75rem;
 }
 
 .favorite-item .remove-btn {
     background: none;
     border: none;
-    color: #666;
+    color: var(--text-faint);
     cursor: pointer;
     padding: 4px;
 }
 
 .favorite-item .remove-btn:hover {
-    color: #ff6b6b;
+    color: var(--color-coral-light);
 }
 
 /* ENGAGEMENT METRICS */
@@ -414,13 +414,13 @@
 .rank-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #ffd700;
+    color: var(--color-warning-gold);
     margin-top: 8px;
 }
 
 .rank-score {
     font-size: 0.875rem;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .metrics-grid {
@@ -444,14 +444,14 @@
 .metric-value {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-white);
     display: block;
     margin: 8px 0;
 }
 
 .metric-label {
     font-size: 0.75rem;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .top-message {
@@ -463,17 +463,17 @@
 
 .top-message h4 {
     margin: 0 0 12px 0;
-    color: #aaa;
+    color: var(--text-mist);
 }
 
 .top-message p {
-    color: #e0e0e0;
+    color: var(--text-mist);
     font-style: italic;
     margin: 0 0 8px 0;
 }
 
 .top-message span {
-    color: #00d9ff;
+    color: var(--color-neon-cyan);
     font-size: 0.875rem;
 }
 
@@ -507,12 +507,12 @@
 .streak-number {
     font-size: 4rem;
     font-weight: 800;
-    color: #ff6b6b;
+    color: var(--color-coral-light);
 }
 
 .streak-label {
     font-size: 1.25rem;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .streak-stats {
@@ -532,11 +532,11 @@
 
 .log-activity-btn {
     width: 100%;
-    background: linear-gradient(135deg, #ff6b6b, #ffa500);
+    background: linear-gradient(135deg, var(--color-coral-light), #ffa500);
     border: none;
     border-radius: 8px;
     padding: 16px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -572,7 +572,7 @@
 .effect-slider label {
     display: block;
     margin-bottom: 8px;
-    color: #aaa;
+    color: var(--text-mist);
 }
 
 .effect-slider input[type="range"] {
@@ -588,18 +588,18 @@
     -webkit-appearance: none;
     width: 18px;
     height: 18px;
-    background: #00d9ff;
+    background: var(--color-neon-cyan);
     border-radius: 50%;
     cursor: pointer;
 }
 
 .save-btn {
     width: 100%;
-    background: linear-gradient(135deg, #00d9ff, #00ff88);
+    background: linear-gradient(135deg, var(--color-neon-cyan), var(--color-neon-green));
     border: none;
     border-radius: 8px;
     padding: 14px;
-    color: #000;
+    color: var(--color-black);
     font-weight: 600;
     cursor: pointer;
     margin-top: 12px;
@@ -615,11 +615,11 @@
 }
 
 .growth-indicator .positive {
-    color: #00ff88;
+    color: var(--color-neon-green);
 }
 
 .growth-indicator .negative {
-    color: #ff6b6b;
+    color: var(--color-coral-light);
 }
 
 /* LOADING & EMPTY STATES */
@@ -628,13 +628,13 @@
     justify-content: center;
     align-items: center;
     padding: 40px;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .empty {
     text-align: center;
     padding: 40px;
-    color: #666;
+    color: var(--text-faint);
 }
 
 .empty small {

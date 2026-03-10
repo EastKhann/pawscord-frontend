@@ -1,6 +1,7 @@
 ﻿import React, { useState, useCallback } from 'react';
 import { FaCrown } from 'react-icons/fa';
 import { styles } from './chatUserListStyles';
+import { getFreshActivity } from '../utils/activityUtils';
 
 // Ignored apps (tools, utilities - not games)
 const IGNORED_APPS = new Set([
@@ -30,6 +31,7 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
     const statusColor = user.is_online ? '#23a559' : '#80848e';
     const isOwner = user.role === 'owner';
     const isModerator = user.role === 'moderator' || user.role === 'mod';
+    const activity = getFreshActivity(user.current_activity);
     // Faz 3.2: profile hover popup
     const [showPopup, setShowPopup] = useState(false);
 
@@ -97,19 +99,19 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                                 {user.custom_status}
                             </div>
                         )}
-                        {user.current_activity?.spotify && (
+                        {activity?.spotify && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '6px' }}>
                                 <span style={{ fontSize: '11px' }}>🎵</span>
                                 <span style={{ fontSize: '11px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
-                                    {user.current_activity.spotify.track || user.current_activity.spotify.name}
+                                    {activity.spotify.track || activity.spotify.name}
                                 </span>
                             </div>
                         )}
-                        {user.current_activity?.steam && !isIgnoredApp(user.current_activity.steam.game || user.current_activity.steam.name) && (
+                        {activity?.steam && !isIgnoredApp(activity.steam.game || activity.steam.name) && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginTop: '4px' }}>
                                 <span style={{ fontSize: '11px' }}>🎮</span>
                                 <span style={{ fontSize: '11px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>
-                                    {user.current_activity.steam.game || user.current_activity.steam.name}
+                                    {activity.steam.game || activity.steam.name}
                                 </span>
                             </div>
                         )}
@@ -143,26 +145,26 @@ const UserItem = ({ user, isCurrentUser, onClick, onContextMenu }) => {
                     <span style={styles.customStatus}>{user.custom_status}</span>
                 )}
                 {/* Spotify Activity */}
-                {user.current_activity?.spotify && (
+                {activity?.spotify && (
                     <div style={styles.activityRow}>
                         <span style={{ fontSize: '10px' }}>🎵</span>
                         <span style={{
                             fontSize: '10px', color: '#1db954',
                             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1
                         }}>
-                            {user.current_activity.spotify.track || user.current_activity.spotify.name}
+                            {activity.spotify.track || activity.spotify.name}
                         </span>
                     </div>
                 )}
                 {/* Steam Activity */}
-                {user.current_activity?.steam && !isIgnoredApp(user.current_activity.steam.game || user.current_activity.steam.name) && (
+                {activity?.steam && !isIgnoredApp(activity.steam.game || activity.steam.name) && (
                     <div style={styles.activityRow}>
                         <span style={{ fontSize: '10px' }}>🎮</span>
                         <span style={{
                             fontSize: '10px', color: '#66c0f4',
                             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1
                         }}>
-                            {user.current_activity.steam.game || user.current_activity.steam.name}
+                            {activity.steam.game || activity.steam.name}
                         </span>
                     </div>
                 )}

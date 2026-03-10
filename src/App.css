@@ -1,21 +1,21 @@
 /* ================================================ */
-/* 🎨 PAWSCORD - PROFESSIONAL DARK DESIGN SYSTEM   */
+/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¨ PAWSCORD - PROFESSIONAL DARK DESIGN SYSTEM   */
 /* ================================================ */
 
 :root {
   /* Brand Colors */
-  --blurple: #5865f2;
-  --blurple-hover: #4752c4;
+  --blurple: var(--color-primary);
+  --blurple-hover: var(--color-primary-hover);
   --blurple-glow: rgba(88, 101, 242, 0.25);
-  --primary-gradient: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
-  --secondary-gradient: linear-gradient(135deg, #eb459e 0%, #c2375a 100%);
-  --success-gradient: linear-gradient(135deg, #23a559 0%, #1a7d42 100%);
+  --primary-gradient: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  --secondary-gradient: linear-gradient(135deg, var(--color-pink) 0%, #c2375a 100%);
+  --success-gradient: linear-gradient(135deg, var(--color-success) 0%, #1a7d42 100%);
 
   /* Discord-accurate Surface Colors */
-  --bg-primary: #17191c;
-  --bg-secondary: #111214;
-  --bg-tertiary: #0d0e10;
-  --bg-elevated: #1e2024;
+  --bg-primary: var(--bg-charcoal);
+  --bg-secondary: var(--bg-charcoal-deep);
+  --bg-tertiary: var(--bg-void);
+  --bg-elevated: var(--bg-neutral-dark);
   --bg-floating: #090a0b;
 
   /* Glass Effect */
@@ -26,18 +26,18 @@
   --glass-shadow: rgba(0, 0, 0, 0.3);
 
   /* Text Colors */
-  --text-primary: #dbdee1;
-  --text-secondary: #b5bac1;
-  --text-muted: #949ba4;
-  --text-brand: #5865f2;
+  --text-primary: var(--text-primary);
+  --text-secondary: var(--text-secondary);
+  --text-muted: var(--text-muted);
+  --text-brand: var(--color-primary);
 
   /* Accent Colors */
-  --accent-blurple: #5865f2;
-  --accent-green: #23a559;
-  --accent-yellow: #f0b232;
-  --accent-red: #f23f42;
-  --accent-pink: #eb459e;
-  --accent-purple: #5865f2;
+  --accent-blurple: var(--color-primary);
+  --accent-green: var(--color-success);
+  --accent-yellow: var(--color-warning);
+  --accent-red: var(--color-danger);
+  --accent-pink: var(--color-pink);
+  --accent-purple: var(--color-primary);
 
   /* Shadows */
   --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.25);
@@ -71,7 +71,7 @@ body {
     'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0b0e1b;
+  background: var(--bg-primary);
   color: var(--text-primary);
   overflow-x: hidden;
   font-size: 16px;
@@ -80,7 +80,7 @@ body {
 
 .App {
   min-height: 100vh;
-  background: #0b0e1b;
+  background: var(--bg-primary);
   position: relative;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -163,7 +163,7 @@ body {
 }
 
 /* ================================================ */
-/* 📱 RESPONSIVE & MOBILE OPTIMIZATIONS */
+/* ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â± RESPONSIVE & MOBILE OPTIMIZATIONS */
 /* ================================================ */
 
 @media (max-width: 768px) {
@@ -201,7 +201,7 @@ body {
 }
 
 /* ================================================ */
-/* 🎨 MODERN CHAT INTERFACE */
+/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¨ MODERN CHAT INTERFACE */
 /* ================================================ */
 
 /* Chat Container */
@@ -232,7 +232,7 @@ body {
 
 .message-author {
   font-weight: 600;
-  color: #fff;
+  color: var(--color-white);
   margin-bottom: 2px;
   display: flex;
   align-items: center;
@@ -279,11 +279,11 @@ body {
 }
 
 /* ================================================ */
-/* 📊 SIDEBAR */
+/* ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â  SIDEBAR */
 /* ================================================ */
 
 .sidebar {
-  background: linear-gradient(180deg, #0f1012, #111214);
+  background: linear-gradient(180deg, #0f1012, var(--bg-charcoal-deep));
   border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -327,7 +327,7 @@ body {
 }
 
 /* ================================================ */
-/* 🎯 MODALS */
+/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¯ MODALS */
 /* ================================================ */
 
 .modal-overlay {
@@ -361,7 +361,7 @@ body {
 }
 
 /* ================================================ */
-/* ✨ USER CARDS */
+/* ÃƒÂ¢Ã…â€œÃ‚Â¨ USER CARDS */
 /* ================================================ */
 
 .user-card {
@@ -393,7 +393,7 @@ body {
 }
 
 /* ================================================ */
-/* 🌟 LOADING & SKELETON */
+/* ÃƒÂ°Ã…Â¸Ã…â€™Ã…Â¸ LOADING & SKELETON */
 /* ================================================ */
 
 .skeleton {
@@ -432,7 +432,7 @@ body {
 }
 
 /* ================================================ */
-/* 🎨 UTILITY CLASSES */
+/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¨ UTILITY CLASSES */
 /* ================================================ */
 
 .text-gradient {
@@ -443,7 +443,7 @@ body {
 }
 
 .text-gradient-purple {
-  background: linear-gradient(135deg, #5865f2, #5865f2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

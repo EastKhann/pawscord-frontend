@@ -1,4 +1,4 @@
-﻿/* 🎤 Voice Message Recorder - Discord Theme */
+/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¤ Voice Message Recorder - Discord Theme */
 .voice-message-container {
     padding: 16px;
     background: rgba(30, 31, 35, 0.88);
@@ -16,7 +16,7 @@
     gap: 10px;
     width: 100%;
     padding: 14px 20px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
     border: none;
     border-radius: 13px;
@@ -24,13 +24,13 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 0 #3b45c7, 0 8px 24px rgba(88, 101, 242, 0.40);
+    box-shadow: 0 4px 0 var(--color-primary-dark), 0 8px 24px rgba(88, 101, 242, 0.40);
 }
 
 .btn-start-recording:hover {
-    background: linear-gradient(135deg, #4752c4 0%, #5865f2 100%);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
     transform: translateY(-1px);
-    box-shadow: 0 5px 0 #3b45c7, 0 12px 32px rgba(88, 101, 242, 0.55);
+    box-shadow: 0 5px 0 var(--color-primary-dark), 0 12px 32px rgba(88, 101, 242, 0.55);
 }
 
 .btn-start-recording:active {
@@ -70,7 +70,7 @@
 
 .swipe-text {
     font-size: 12px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -95,7 +95,7 @@
     justify-content: center;
     gap: 8px;
     padding: 10px 16px;
-    background: linear-gradient(135deg, #23a559 0%, #3ba55c 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, #3ba55c 100%);
     color: white;
     border-radius: 8px;
     font-weight: 600;
@@ -123,7 +123,7 @@
 .waveform-bar {
     width: 4px;
     min-height: 4px;
-    background: linear-gradient(180deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border-radius: 2px;
     transition: height 0.1s ease-out;
 }
@@ -135,12 +135,12 @@
     gap: 10px;
     font-size: 18px;
     font-weight: 600;
-    color: #f2f3f5;
+    color: var(--text-light-bg);
 }
 
 .recording-indicator {
     animation: pulse 1s infinite;
-    color: #f23f42;
+    color: var(--color-danger);
     font-size: 12px;
 }
 
@@ -161,7 +161,7 @@
 .recording-time {
     font-variant-numeric: tabular-nums;
     font-family: 'Consolas', 'Monaco', monospace;
-    color: #dbdee1;
+    color: var(--text-primary);
 }
 
 .recording-controls,
@@ -185,33 +185,33 @@
 
 .btn-cancel {
     background: rgba(255, 255, 255, 0.06);
-    color: #dbdee1;
+    color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .btn-cancel:hover {
     background: rgba(255, 255, 255, 0.10);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .btn-stop {
-    background: linear-gradient(135deg, #f23f42 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-deep) 100%);
     color: white;
     box-shadow: 0 4px 0 #b91c1c, 0 8px 24px rgba(237, 66, 69, 0.40);
 }
 
 .btn-stop:hover {
-    background: linear-gradient(135deg, #d93235 0%, #f23f42 100%);
+    background: linear-gradient(135deg, #d93235 0%, var(--color-danger) 100%);
 }
 
 .btn-send {
-    background: linear-gradient(135deg, #23a559 0%, #1a8f4a 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, #1a8f4a 100%);
     color: white;
     box-shadow: 0 4px 0 #15803d, 0 8px 24px rgba(35, 165, 89, 0.40);
 }
 
 .btn-send:hover {
-    background: linear-gradient(135deg, #1d8f4a 0%, #23a559 100%);
+    background: linear-gradient(135deg, #1d8f4a 0%, var(--color-success) 100%);
 }
 
 .preview-ui {
@@ -224,27 +224,27 @@
     width: 100%;
     height: 40px;
     border-radius: 8px;
-    background: #0b0e1b;
+    background: var(--bg-primary);
 }
 
 /* Custom audio player styling */
 .preview-ui audio::-webkit-media-controls-panel {
-    background: #0b0e1b;
+    background: var(--bg-primary);
 }
 
 .preview-ui audio::-webkit-media-controls-play-button {
-    background-color: #5865f2;
+    background-color: var(--color-primary);
     border-radius: 50%;
 }
 
 .preview-ui audio::-webkit-media-controls-current-time-display,
 .preview-ui audio::-webkit-media-controls-time-remaining-display {
-    color: #dbdee1;
+    color: var(--text-primary);
 }
 
 .preview-info {
     text-align: center;
-    color: #80848e;
+    color: var(--status-offline);
     font-size: 14px;
 }
 

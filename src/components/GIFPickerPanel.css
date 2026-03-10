@@ -1,8 +1,8 @@
-﻿.gif-picker-panel {
-    background: #0e1222;
+.gif-picker-panel {
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
-    color: #dbdee1;
+    color: var(--text-primary);
     height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
@@ -14,11 +14,11 @@
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .gif-header h2 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -32,9 +32,9 @@
 }
 
 .view-btn {
-    background: #182135;
+    background: var(--bg-input);
     border: none;
-    color: #b5bac1;
+    color: var(--text-secondary);
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
@@ -42,13 +42,13 @@
 }
 
 .view-btn:hover {
-    background: var(--bg-elevated, #17191c);
-    color: #ffffff;
+    background: var(--bg-elevated, var(--bg-charcoal));
+    color: var(--color-white);
 }
 
 .view-btn.active {
-    background: var(--color-primary, #5865f2);
-    color: #ffffff;
+    background: var(--color-primary, var(--color-primary));
+    color: var(--color-white);
 }
 
 .gif-search {
@@ -61,14 +61,14 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .search-input {
     width: 100%;
-    background: #182135;
-    border: 2px solid #0b0e1b;
-    color: #dbdee1;
+    background: var(--bg-input);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
     padding: 12px 12px 12px 40px;
     border-radius: 4px;
     font-size: 14px;
@@ -76,7 +76,7 @@
 
 .search-input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .gif-categories {
@@ -88,9 +88,9 @@
 }
 
 .category-btn {
-    background: #182135;
+    background: var(--bg-input);
     border: none;
-    color: #dbdee1;
+    color: var(--text-primary);
     padding: 8px 16px;
     border-radius: 16px;
     cursor: pointer;
@@ -100,12 +100,12 @@
 }
 
 .category-btn:hover {
-    background: var(--bg-elevated, #17191c);
+    background: var(--bg-elevated, var(--bg-charcoal));
 }
 
 .category-btn.active {
-    background: var(--color-primary, #5865f2);
-    color: #ffffff;
+    background: var(--color-primary, var(--color-primary));
+    color: var(--color-white);
 }
 
 .gif-grid {
@@ -128,19 +128,19 @@
 
 .gif-loading {
     text-align: center;
-    color: #949ba4;
+    color: var(--text-muted);
     padding: 40px;
 }
 
 .empty-gifs {
     text-align: center;
-    color: #949ba4;
+    color: var(--text-muted);
     padding: 60px 20px;
 }
 
 .empty-icon {
     font-size: 64px;
-    color: #1e2024;
+    color: var(--bg-neutral-dark);
     margin-bottom: 15px;
 }
 
@@ -188,7 +188,7 @@
 .fav-btn {
     background: rgba(88, 101, 242, 0.9);
     border: none;
-    color: #ffffff;
+    color: var(--color-white);
     padding: 10px;
     border-radius: 50%;
     cursor: pointer;
@@ -197,13 +197,13 @@
 }
 
 .fav-btn:hover {
-    background: #5865f2;
+    background: var(--color-primary);
     transform: scale(1.03);
 }
 
 .fav-btn.favorited {
-    background: #f23f42;
-    color: #ffffff;
+    background: var(--color-danger);
+    color: var(--color-white);
 }
 
 .gif-grid::-webkit-scrollbar {
@@ -211,11 +211,11 @@
 }
 
 .gif-grid::-webkit-scrollbar-track {
-    background: #0e1222;
+    background: var(--bg-secondary);
 }
 
 .gif-grid::-webkit-scrollbar-thumb {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 4px;
 }
 
@@ -224,10 +224,10 @@
 }
 
 .gif-categories::-webkit-scrollbar-track {
-    background: #0e1222;
+    background: var(--bg-secondary);
 }
 
 .gif-categories::-webkit-scrollbar-thumb {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 3px;
 }

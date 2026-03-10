@@ -59,49 +59,49 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
     try {
         // 🔥 GÜRÜLTÜ ENGELLEMİE SEVİYESİNE GÖRE AYARLAR
         const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
-        const level = voiceSettings.audio?.noiseSuppressionLevel || 'high';
+        const level = voiceSettings.audio?.noiseSuppressionLevel || 'medium';
 
         // Seviyeye göre parametreler - � DENGELİ GÜRÜLTÜ ENGELLEMİE (ses seviyesi korunur)
         const levelSettings = {
             low: {
                 gateThreshold: -70,      // dB eşiği
-                compressorThreshold: -18,
-                compressorRatio: 2,
+                compressorThreshold: -15, // 🔥 -18 → -15dB: daha az sinyal sıkıştırılır
+                compressorRatio: 1.8,    // 🔥 2 → 1.8: daha yumuşak sıkıştırma
                 highPassFreq: 50,        // 50Hz altı kes (fan, AC sesi)
                 lowPassFreq: 14000,      // 14kHz üstü kes
                 gateRelease: 0.3,
                 speechThreshold: 18,     // Konuşma algılama eşiği
-                makeupGain: 1.3          // 🔥 Compressor sonrası telafi kazancı
+                makeupGain: 2.5          // 🔥 1.8 → 2.5: compressor kaybını tam telafi
             },
             medium: {
                 gateThreshold: -60,
-                compressorThreshold: -20,
-                compressorRatio: 2.5,    // 🔧 3'ten 2.5'e - daha az sıkıştırma
+                compressorThreshold: -16, // 🔥 -20 → -16dB: daha az sinyal yakalanır
+                compressorRatio: 2,      // 🔥 2.5 → 2: daha az sıkıştırma = daha yüksek ses
                 highPassFreq: 70,        // 🔧 80'den 70'e - daha fazla bas koruma
                 lowPassFreq: 13000,      // 🔧 12k'dan 13k'ya - daha fazla tiz koruma
                 gateRelease: 0.25,
                 speechThreshold: 22,     // 🔧 25'ten 22'ye - daha hassas algılama
-                makeupGain: 1.6          // 🔥 Compressor sonrası telafi kazancı
+                makeupGain: 3.0          // 🔥 2.2 → 3.0: ses seviyesi korunsun
             },
             high: {
                 gateThreshold: -50,
-                compressorThreshold: -24,
-                compressorRatio: 3,      // 🔧 4'ten 3'e - ses ezilmesin
+                compressorThreshold: -20, // 🔥 -24 → -20dB: çok fazla sıkıştırma önlendi
+                compressorRatio: 2.5,    // 🔥 3 → 2.5: ses ezilmesin
                 highPassFreq: 85,        // 🔧 100'den 85'e - erkek ses fundamentalleri korunsun
                 lowPassFreq: 11000,      // 🔧 10k'dan 11k'ya - daha doğal ses
                 gateRelease: 0.2,
                 speechThreshold: 28,     // 🔧 30'dan 28'e
-                makeupGain: 2.0          // 🔥 Compressor sonrası telafi kazancı
+                makeupGain: 3.5          // 🔥 2.8 → 3.5: compressor kaybını tam telafi
             },
             aggressive: {
                 gateThreshold: -45,
-                compressorThreshold: -28,
-                compressorRatio: 4,      // 🔧 6'dan 4'e - aşırı sıkıştırma önlenir
+                compressorThreshold: -24, // 🔥 -28 → -24dB: aşırı sıkıştırma önlendi
+                compressorRatio: 3,      // 🔥 4 → 3: daha az sıkıştırma
                 highPassFreq: 110,       // 🔧 120'den 110'a
                 lowPassFreq: 9000,       // 🔧 8k'dan 9k'ya
                 gateRelease: 0.15,
                 speechThreshold: 33,     // 🔧 35'ten 33'e
-                makeupGain: 2.5          // 🔥 Compressor sonrası telafi kazancı
+                makeupGain: 4.0          // 🔥 3.2 → 4.0: agresif sıkıştırma telafisi
             }
         };
 
@@ -136,7 +136,9 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         const GATE_THRESHOLD = settings.gateThreshold; // dB (seviyeye göre)
         const GATE_ATTACK = 0.005;  // Daha hızlı açılma
         const GATE_RELEASE = settings.gateRelease;  // Seviyeye göre
-        const GATE_FLOOR = 0.12; // 🔥 FIX: Minimum gain — 0.05'ten 0.12'ye, kısa sessizliklerde ses kaybolmasın
+        // 🔥 FIX: Near-zero floor — old 0.12 value let residual signal retrigger the
+        // gate on the very next frame, causing rapid open/close chatter ("giggling").
+        const GATE_FLOOR = 0.001;
 
         // 2️⃣ COMPRESSOR (Dinamik Sıkıştırma) - SEVİYEYE GÖRE
         // 🔥 CIZIRTIYI ÖNLE: Daha yumuşak sıkıştırma
@@ -178,7 +180,7 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         deEsser.type = 'peaking';
         deEsser.frequency.value = 6000;        // 6kHz (sibilant bölgesi)
         deEsser.Q.value = 1;                   // Geniş bant
-        deEsser.gain.value = -2;               // 🔧 -2dB azaltma (-3 çok agresifti, sesi kısıyordu)
+        deEsser.gain.value = -1;               // 🔥 -2 → -1dB: daha az sinyal kaybı, konuşma netliği korunsun
 
         // 🔥 7️⃣ PRESENCE BOOST — Ses netliği ve anlaşılırlığı artır
         // 2-5kHz bölgesi insan sesinin en anlaşılır kısmıdır (konsonantlar)
@@ -186,7 +188,7 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         presenceBoost.type = 'peaking';
         presenceBoost.frequency.value = 3000;   // 3kHz (konsonant enerji merkezi)
         presenceBoost.Q.value = 0.8;            // Geniş bant (doğal ses)
-        presenceBoost.gain.value = 2;           // +2dB netlik artışı
+        presenceBoost.gain.value = 3;           // 🔥 +2 → +3dB: konuşma netliği ve ses seviyesi artışı
 
         // 7️⃣ ADAPTIVE NOISE REDUCTION (Dinamik Gürültü Azaltma)
         // Sessiz anlarda gürültü profilini öğren ve çıkar
@@ -222,7 +224,17 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
         };
 
         // Noise Gate kontrolü (VAD tabanlı)
-        const speechThreshold = settings.speechThreshold || 25; // 🔥 Seviyeye göre eşik
+        const speechThreshold = settings.speechThreshold || 25; // 🔥 Seviyeye göre eşik        // 🔥 FIX: Hysteresis — separate open/close thresholds to prevent chatter.
+        // Without hysteresis, speech hovering near the threshold causes the gate to
+        // fire open/shut every 30ms (~33Hz), producing a "giggling" artifact.
+        // Close threshold is 55% of open threshold so the gate requires a clear drop
+        // before it shuts, and a clear rise before it opens again.
+        const GATE_OPEN_THRESHOLD = speechThreshold;
+        const GATE_CLOSE_THRESHOLD = speechThreshold * 0.55;
+        // 🔥 FIX: Hangover counter — keep gate open for at least N frames after
+        // speech drops. Prevents clipping short words / consonants at end of phrases.
+        let hangoverFrames = 0;
+        const GATE_HANGOVER = 10; // 10 × 30ms = 300ms minimum open after speech
         let gateGracePeriod = 100; // 🔥 FIX: İlk 100 frame (~3s) gate her zaman açık — öğrenme süresi
         const updateNoiseGate = () => {
             analyser.getByteFrequencyData(dataArray);
@@ -245,17 +257,32 @@ export function applyProfessionalAudioFilters(stream, globalAudioContextRef) {
             // Gürültü profili çıkarılmış sinyal
             const cleanSignal = speechLevel - (noiseProfile[50] || 0);
 
-            // Noise Gate mantığı - SEVİYEYE GÖRE AGRESİF
+            // 🔥 FIX: Hysteresis noise gate — use separate open/close thresholds
+            // to prevent rapid chatter when signal hovers near a single threshold.
+            // Hangover counter keeps the gate open briefly after speech ends so word
+            // endings / consonants are not clipped.
             const currentTime = audioContext.currentTime;
-            if (cleanSignal > speechThreshold) { // 🔥 Konuşma algılandı (seviyeye göre eşik)
-                if (!isGateOpen) {
+            if (isGateOpen) {
+                // Gate is open: only close when signal falls below CLOSE threshold
+                // AND hangover has expired
+                if (cleanSignal <= GATE_CLOSE_THRESHOLD) {
+                    if (hangoverFrames > 0) {
+                        hangoverFrames--;
+                        // stay open during hangover
+                    } else {
+                        noiseGateNode.gain.setTargetAtTime(GATE_FLOOR, currentTime, GATE_RELEASE);
+                        isGateOpen = false;
+                    }
+                } else {
+                    // Signal still above close threshold — reset hangover
+                    hangoverFrames = GATE_HANGOVER;
+                }
+            } else {
+                // Gate is closed: only open when signal rises above OPEN threshold
+                if (cleanSignal > GATE_OPEN_THRESHOLD) {
                     noiseGateNode.gain.setTargetAtTime(1.0, currentTime, GATE_ATTACK);
                     isGateOpen = true;
-                }
-            } else { // Sessizlik - 🔥 GATE_FLOOR'a düşür (tamamen kapama)
-                if (isGateOpen) {
-                    noiseGateNode.gain.setTargetAtTime(GATE_FLOOR, currentTime, GATE_RELEASE);
-                    isGateOpen = false;
+                    hangoverFrames = GATE_HANGOVER;
                 }
             }
 

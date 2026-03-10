@@ -4,7 +4,7 @@
  * Import once in index.css or main entry CSS.
  * ============================================= */
 
-/* ─── TEXT COLORS ──────────────────────────── */
+/* â”€â”€â”€ TEXT COLORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .text-primary {
     color: var(--text-primary);
 }
@@ -18,7 +18,7 @@
 }
 
 .text-white {
-    color: var(--text-white, #ffffff);
+    color: var(--text-white, var(--color-white));
 }
 
 .text-link {
@@ -37,7 +37,7 @@
     color: var(--color-warning);
 }
 
-/* ─── BACKGROUND COLORS ───────────────────── */
+/* â”€â”€â”€ BACKGROUND COLORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .bg-primary {
     background: var(--bg-primary);
 }
@@ -62,7 +62,7 @@
     background: var(--bg-input);
 }
 
-/* ─── SPACING (padding) ───────────────────── */
+/* â”€â”€â”€ SPACING (padding) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .p-0 {
     padding: var(--space-0);
 }
@@ -121,7 +121,7 @@
     padding-bottom: var(--space-lg);
 }
 
-/* ─── SPACING (margin) ────────────────────── */
+/* â”€â”€â”€ SPACING (margin) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .m-0 {
     margin: var(--space-0);
 }
@@ -162,7 +162,7 @@
     margin-bottom: var(--space-lg);
 }
 
-/* ─── GAP (flex/grid) ─────────────────────── */
+/* â”€â”€â”€ GAP (flex/grid) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .gap-xs {
     gap: var(--space-xs);
 }
@@ -179,7 +179,7 @@
     gap: var(--space-lg);
 }
 
-/* ─── BORDER RADIUS ───────────────────────── */
+/* â”€â”€â”€ BORDER RADIUS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .rounded-none {
     border-radius: var(--radius-none);
 }
@@ -212,7 +212,7 @@
     border-radius: var(--radius-pill);
 }
 
-/* ─── FONT SIZE ───────────────────────────── */
+/* â”€â”€â”€ FONT SIZE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .text-xs {
     font-size: var(--font-xs);
 }
@@ -241,7 +241,7 @@
     font-size: var(--font-3xl);
 }
 
-/* ─── FONT WEIGHT ─────────────────────────── */
+/* â”€â”€â”€ FONT WEIGHT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .font-normal {
     font-weight: var(--weight-normal);
 }
@@ -258,7 +258,7 @@
     font-weight: var(--weight-bold);
 }
 
-/* ─── SHADOWS ─────────────────────────────── */
+/* â”€â”€â”€ SHADOWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .shadow-none {
     box-shadow: var(--shadow-none);
 }
@@ -279,7 +279,7 @@
     box-shadow: var(--shadow-glow);
 }
 
-/* ─── TRANSITIONS ─────────────────────────── */
+/* â”€â”€â”€ TRANSITIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .transition-fast {
     transition: var(--transition-fast);
 }
@@ -292,7 +292,7 @@
     transition: var(--transition-slow);
 }
 
-/* ─── DISPLAY / FLEX ──────────────────────── */
+/* â”€â”€â”€ DISPLAY / FLEX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .flex {
     display: flex;
 }
@@ -313,7 +313,7 @@
     justify-content: space-between;
 }
 
-/* ─── MISC ────────────────────────────────── */
+/* â”€â”€â”€ MISC â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .truncate {
     overflow: hidden;
     text-overflow: ellipsis;

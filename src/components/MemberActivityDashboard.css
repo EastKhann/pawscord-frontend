@@ -13,7 +13,7 @@
 }
 
 .activity-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 95%;
     max-width: 1000px;
@@ -30,7 +30,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+    background: linear-gradient(135deg, var(--color-info-teal) 0%, #0097a7 100%);
     color: white;
 }
 
@@ -95,17 +95,17 @@
 }
 
 .stat-icon.messages {
-    color: #2196f3;
+    color: var(--color-info-material);
     background: rgba(33, 150, 243, 0.1);
 }
 
 .stat-icon.voice {
-    color: #4caf50;
+    color: var(--color-success-material);
     background: rgba(76, 175, 80, 0.1);
 }
 
 .stat-icon.reactions {
-    color: #ffc107;
+    color: var(--color-warning-material);
     background: rgba(255, 193, 7, 0.1);
 }
 
@@ -121,7 +121,7 @@
 }
 
 .stat-label {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
 }
 
@@ -133,12 +133,12 @@
 }
 
 .trend.up {
-    color: #4caf50;
+    color: var(--color-success-material);
     background: rgba(76, 175, 80, 0.1);
 }
 
 .trend.down {
-    color: #f44336;
+    color: var(--color-danger-material);
     background: rgba(244, 67, 54, 0.1);
 }
 
@@ -162,7 +162,7 @@
 }
 
 .search-box svg {
-    color: #888;
+    color: var(--text-silver);
 }
 
 .search-box input {
@@ -176,14 +176,14 @@
 }
 
 .search-box input::placeholder {
-    color: #666;
+    color: var(--text-faint);
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .filter-group select {
@@ -198,14 +198,14 @@
 
 .filter-group select:focus {
     outline: none;
-    border-color: #00bcd4;
+    border-color: var(--color-info-teal);
 }
 
 .export-btn {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: linear-gradient(135deg, #00bcd4, #0097a7);
+    background: linear-gradient(135deg, var(--color-info-teal), #0097a7);
     border: none;
     border-radius: 8px;
     padding: 10px 16px;
@@ -229,7 +229,7 @@
 .loading {
     text-align: center;
     padding: 40px 20px;
-    color: #888;
+    color: var(--text-silver);
 }
 
 /* Members Table */
@@ -247,7 +247,7 @@
 }
 
 .table-header .col {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -263,7 +263,7 @@
 
 .col.sortable:hover,
 .col.sortable.active {
-    color: #00bcd4;
+    color: var(--color-info-teal);
 }
 
 .col.sortable svg.asc {
@@ -318,12 +318,12 @@
 .table-row .col {
     display: flex;
     align-items: center;
-    color: #aaa;
+    color: var(--text-mist);
     font-size: 0.9rem;
 }
 
 .rank {
-    color: #666;
+    color: var(--text-faint);
     font-size: 0.8rem;
     min-width: 30px;
 }
@@ -336,7 +336,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #888;
+    color: var(--text-silver);
     margin-right: 10px;
 }
 
@@ -362,7 +362,7 @@
 
 .mini-chart .chart-bar {
     flex: 1;
-    background: linear-gradient(180deg, #00bcd4, #0097a7);
+    background: linear-gradient(180deg, var(--color-info-teal), #0097a7);
     border-radius: 2px 2px 0 0;
     min-height: 2px;
 }
@@ -372,11 +372,11 @@
 }
 
 .trend-icon.up {
-    color: #4caf50;
+    color: var(--color-success-material);
 }
 
 .trend-icon.down {
-    color: #f44336;
+    color: var(--color-danger-material);
 }
 
 /* Member Detail */
@@ -400,7 +400,7 @@
 .back-btn {
     background: none;
     border: none;
-    color: #00bcd4;
+    color: var(--color-info-teal);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0;
@@ -425,7 +425,7 @@
 }
 
 .last-active {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.85rem;
 }
 
@@ -446,7 +446,7 @@
 
 .detail-stat svg {
     font-size: 1.5rem;
-    color: #00bcd4;
+    color: var(--color-info-teal);
     margin-bottom: 10px;
 }
 
@@ -459,7 +459,7 @@
 }
 
 .detail-stat .label {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.8rem;
 }
 
@@ -472,7 +472,7 @@
 
 .activity-chart h4 {
     margin: 0 0 20px 0;
-    color: #aaa;
+    color: var(--text-mist);
     font-size: 0.95rem;
 }
 
@@ -493,7 +493,7 @@
 
 .chart-fill {
     width: 100%;
-    background: linear-gradient(180deg, #00bcd4, #0097a7);
+    background: linear-gradient(180deg, var(--color-info-teal), #0097a7);
     border-radius: 4px 4px 0 0;
     position: relative;
     display: flex;
@@ -504,12 +504,12 @@
 .chart-value {
     position: absolute;
     top: -24px;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.75rem;
 }
 
 .chart-label {
-    color: #666;
+    color: var(--text-faint);
     font-size: 0.7rem;
     margin-top: 8px;
 }

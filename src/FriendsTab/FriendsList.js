@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { FaCommentDots, FaTimes, FaSearch } from 'react-icons/fa';
 import LazyImage from '../components/LazyImage';
 import styles from './friendsTabStyles';
+import { getFreshActivity } from '../utils/activityUtils';
 
 const IGNORED_APPS = new Set([
     'fps monitor', 'msi afterburner', 'rivatuner', 'fraps', 'nvidia geforce experience',
@@ -34,7 +35,7 @@ const FriendsList = ({ friends, onlineUsers = [], allUsers = [], getDeterministi
         const displayAvatar = iAmSender ? friend.receiver_avatar : friend.sender_avatar;
         // Prefer live activity from allUsers (real-time) over the stale DB snapshot on the friend object
         const liveUser = allUsers.find(u => u.username === friendUsername);
-        const friendActivity = liveUser?.current_activity || (iAmSender ? friend.receiver_activity : friend.sender_activity);
+        const friendActivity = getFreshActivity(liveUser?.current_activity || (iAmSender ? friend.receiver_activity : friend.sender_activity));
         const isReallyOnline = Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
         return { ...friend, friendUsername, displayAvatar, friendActivity, isReallyOnline };
     }), [friends, onlineUsers, allUsers, myUsername]);

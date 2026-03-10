@@ -14,6 +14,9 @@ function initToastContainer() {
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.id = 'toast-container';
+        toastContainer.setAttribute('role', 'status');
+        toastContainer.setAttribute('aria-live', 'polite');
+        toastContainer.setAttribute('aria-atomic', 'false');
         toastContainer.style.cssText = `
             position: fixed;
             bottom: 20px;
@@ -46,6 +49,12 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
 
     const toast = document.createElement('div');
     toast.className = `toast toast-${type} toast-priority-${priority}`;
+
+    // Error/urgent toasts get role="alert" for immediate screen reader announcement
+    if (type === 'error' || priority === 'urgent') {
+        toast.setAttribute('role', 'alert');
+        toast.setAttribute('aria-live', 'assertive');
+    }
 
     // Icon seç
     let icon = 'ℹ️';
@@ -96,7 +105,7 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
     toast.innerHTML = `
         <span style="font-size: 20px;">${icon}</span>
         <span style="flex: 1;">${escapeHTML(message)}</span>
-        <button onclick="this.parentElement.remove()" style="
+        <button onclick="this.parentElement.remove()" aria-label="Dismiss notification" style="
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;

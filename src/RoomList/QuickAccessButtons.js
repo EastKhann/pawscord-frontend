@@ -46,7 +46,7 @@ const QuickAccessButtons = ({ handlers }) => {
                 if (!handler) return null;
                 return (
                     <button key={btn.key} onClick={handler} style={btnStyle(btn.gradient)}
-                        title={btn.title} onMouseEnter={hoverIn} onMouseLeave={hoverOut}>
+                        title={btn.title} aria-label={btn.title} onMouseEnter={hoverIn} onMouseLeave={hoverOut}>
                         {btn.emoji}
                     </button>
                 );

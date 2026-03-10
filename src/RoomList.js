@@ -304,7 +304,7 @@ const RoomList = ({
                 <div style={styles.bottomSection}>
                     {/* Admin Panel Button */}
                     {isAdmin && (
-                        <button onClick={onOpenAdminPanel} style={{
+                        <button onClick={onOpenAdminPanel} aria-label="Open Admin Panel" style={{
                             width: '100%', padding: '12px', marginBottom: '10px',
                             background: 'linear-gradient(135deg, #5865f2 0%, #4752c4 100%)',
                             border: 'none', borderRadius: '8px', color: 'white',

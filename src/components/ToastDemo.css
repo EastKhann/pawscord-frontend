@@ -3,7 +3,7 @@
 .toast-demo-container {
     padding: 40px 20px;
     min-height: 100vh;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,14 +20,14 @@
 
 .toast-demo-card h1 {
     text-align: center;
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     margin-bottom: 10px;
     font-size: 2.5em;
 }
 
 .toast-demo-card>p {
     text-align: center;
-    color: #6b7280;
+    color: var(--text-faint);
     margin-bottom: 40px;
     font-size: 1.1em;
 }
@@ -41,7 +41,7 @@
 }
 
 .toast-demo-section {
-    background: #f9fafb;
+    background: var(--text-snow);
     padding: 20px;
     border-radius: 12px;
     text-align: center;
@@ -50,19 +50,19 @@
 }
 
 .toast-demo-section:hover {
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .toast-demo-section h3 {
     margin: 0 0 10px 0;
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     font-size: 1.3em;
 }
 
 .toast-demo-section p {
-    color: #6b7280;
+    color: var(--text-faint);
     margin-bottom: 15px;
     font-size: 0.9em;
 }
@@ -87,19 +87,19 @@
 }
 
 .demo-btn.success {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, var(--color-success-modern), var(--color-emerald));
 }
 
 .demo-btn.error {
-    background: linear-gradient(135deg, #f23f42, #dc2626);
+    background: linear-gradient(135deg, var(--color-danger), var(--color-danger-deep));
 }
 
 .demo-btn.warning {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
+    background: linear-gradient(135deg, var(--color-warning-amber), var(--color-warning-amber));
 }
 
 .demo-btn.info {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    background: linear-gradient(135deg, var(--color-info), var(--color-info));
 }
 
 .demo-btn-large {
@@ -109,7 +109,7 @@
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    background: linear-gradient(135deg, #5865f2, #4752c4);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     color: white;
     transition: all 0.3s;
     margin-right: 15px;
@@ -122,8 +122,8 @@
 
 /* Code Examples */
 .code-example {
-    background: #1f2937;
-    color: #10b981;
+    background: var(--bg-neutral-800);
+    color: var(--color-success-modern);
     padding: 8px 12px;
     border-radius: 6px;
     font-family: 'Courier New', monospace;
@@ -132,19 +132,19 @@
 }
 
 .code-example code {
-    color: #10b981;
+    color: var(--color-success-modern);
 }
 
 /* Advanced Section */
 .toast-demo-advanced {
-    background: #f9fafb;
+    background: var(--text-snow);
     padding: 30px;
     border-radius: 12px;
     margin-bottom: 40px;
 }
 
 .toast-demo-advanced h2 {
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     margin-bottom: 20px;
     text-align: center;
 }
@@ -160,21 +160,21 @@
 }
 
 .advanced-row code {
-    color: #6b7280;
+    color: var(--text-faint);
     font-size: 13px;
     font-family: 'Courier New', monospace;
 }
 
 /* Usage Guide */
 .toast-usage-guide {
-    background: #f9fafb;
+    background: var(--text-snow);
     padding: 30px;
     border-radius: 12px;
     margin-bottom: 40px;
 }
 
 .toast-usage-guide h2 {
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     margin-bottom: 20px;
 }
 
@@ -186,14 +186,14 @@
 }
 
 .guide-step h4 {
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     margin-bottom: 10px;
     font-size: 1.1em;
 }
 
 .guide-step pre {
-    background: #1f2937;
-    color: #10b981;
+    background: var(--bg-neutral-800);
+    color: var(--color-success-modern);
     padding: 15px;
     border-radius: 6px;
     overflow-x: auto;
@@ -204,14 +204,14 @@
 
 /* Features */
 .toast-features {
-    background: #f9fafb;
+    background: var(--text-snow);
     padding: 30px;
     border-radius: 12px;
     margin-bottom: 40px;
 }
 
 .toast-features h2 {
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     margin-bottom: 20px;
 }
 
@@ -226,16 +226,16 @@
     margin-bottom: 10px;
     border-radius: 8px;
     font-size: 15px;
-    color: #374151;
+    color: var(--bg-neutral-700);
 }
 
 .toast-features li strong {
-    color: #1f2937;
+    color: var(--bg-neutral-800);
 }
 
 /* Comparison Table */
 .comparison-table {
-    background: #f9fafb;
+    background: var(--text-snow);
     padding: 30px;
     border-radius: 12px;
     margin-bottom: 40px;
@@ -243,7 +243,7 @@
 }
 
 .comparison-table h2 {
-    color: #1f2937;
+    color: var(--bg-neutral-800);
     margin-bottom: 20px;
 }
 
@@ -259,11 +259,11 @@
 .comparison-table td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--text-light-neutral);
 }
 
 .comparison-table th {
-    background: #1f2937;
+    background: var(--bg-neutral-800);
     color: white;
     font-weight: 600;
 }
@@ -273,12 +273,12 @@
 }
 
 .comparison-table tr:hover {
-    background: #f9fafb;
+    background: var(--text-snow);
 }
 
 /* Live Test Area */
 .live-test-area {
-    background: linear-gradient(135deg, #5865f2, #4752c4);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
     padding: 30px;
     border-radius: 12px;
     color: white;
@@ -325,7 +325,7 @@
     font-weight: 600;
     cursor: pointer;
     background: white;
-    color: #5865f2;
+    color: var(--color-primary);
     transition: all 0.3s;
 }
 

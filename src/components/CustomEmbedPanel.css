@@ -1,4 +1,4 @@
-﻿.custom-embed-overlay {
+.custom-embed-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@
 }
 
 .custom-embed-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 12px;
     width: 95%;
     max-width: 1400px;
@@ -39,7 +39,7 @@
     margin: 0;
     font-size: 26px;
     font-weight: 700;
-    color: #fff
+    color: var(--color-white)
 }
 
 .close-btn {
@@ -48,7 +48,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    color: #fff;
+    color: var(--color-white);
     font-size: 20px;
     cursor: pointer;
     display: flex;
@@ -71,10 +71,10 @@
 .create-embed-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     border-radius: 12px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
@@ -114,7 +114,7 @@
 .form-section h3 {
     margin: 0 0 16px 0;
     font-size: 16px;
-    color: #fff
+    color: var(--color-white)
 }
 
 .section-header {
@@ -133,7 +133,7 @@
     background: rgba(88, 101, 242, .2);
     border: 1px solid rgba(88, 101, 242, .3);
     border-radius: 8px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -157,7 +157,7 @@
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-weight: 600
 }
@@ -169,7 +169,7 @@
     background: rgba(255, 255, 255, .05);
     border: 1px solid rgba(255, 255, 255, .1);
     border-radius: 10px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     transition: all .3s ease;
     font-family: inherit
@@ -178,7 +178,7 @@
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(88, 101, 242, .1)
 }
 
@@ -210,14 +210,14 @@ input[type=color] {
 }
 
 .checkbox-label span {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 13px
 }
 
 .remove-field-btn {
     background: rgba(239, 68, 68, .2);
     border: 1px solid rgba(239, 68, 68, .3);
-    color: #f23f42;
+    color: var(--color-danger);
     padding: 10px 14px;
     border-radius: 8px;
     cursor: pointer;
@@ -231,10 +231,10 @@ input[type=color] {
 .save-embed-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     border: none;
     border-radius: 10px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -258,11 +258,11 @@ input[type=color] {
 .embed-preview h3 {
     margin: 0 0 16px 0;
     font-size: 16px;
-    color: #fff
+    color: var(--color-white)
 }
 
 .pawscord-embed {
-    background: #0e1222;
+    background: var(--bg-secondary);
     border-left: 4px solid;
     border-radius: 4px;
     padding: 16px;
@@ -283,20 +283,20 @@ input[type=color] {
 }
 
 .embed-author span {
-    color: #fff;
+    color: var(--color-white);
     font-size: 13px;
     font-weight: 600
 }
 
 .embed-title {
-    color: #fff;
+    color: var(--color-white);
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 8px
 }
 
 .embed-description {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     line-height: 1.5;
     margin-bottom: 12px
@@ -322,14 +322,14 @@ input[type=color] {
 }
 
 .field-name {
-    color: #fff;
+    color: var(--color-white);
     font-size: 13px;
     font-weight: 600;
     margin-bottom: 4px
 }
 
 .field-value {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 13px;
     line-height: 1.4
 }
@@ -358,7 +358,7 @@ input[type=color] {
 }
 
 .embed-footer span {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px
 }
 
@@ -371,7 +371,7 @@ input[type=color] {
     width: 48px;
     height: 48px;
     border: 4px solid rgba(255, 255, 255, .1);
-    border-top-color: #5865f2;
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin .8s linear infinite;
     margin: 0 auto 20px
@@ -384,7 +384,7 @@ input[type=color] {
 }
 
 .loading-state p {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 15px
 }
 
@@ -401,7 +401,7 @@ input[type=color] {
 }
 
 .empty-state p {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: 600
 }
@@ -434,12 +434,12 @@ input[type=color] {
 .embed-info h4 {
     margin: 0 0 8px 0;
     font-size: 16px;
-    color: #fff
+    color: var(--color-white)
 }
 
 .embed-info p {
     margin: 0;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     line-height: 1.5
 }
@@ -455,7 +455,7 @@ input[type=color] {
     background: rgba(255, 255, 255, .05);
     border: 1px solid rgba(255, 255, 255, .1);
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     font-size: 13px
 }
 
@@ -471,7 +471,7 @@ input[type=color] {
 
 .embed-actions button:first-of-type {
     background: rgba(88, 101, 242, .2);
-    color: #5865f2;
+    color: var(--color-primary);
     border: 1px solid rgba(88, 101, 242, .3)
 }
 
@@ -481,7 +481,7 @@ input[type=color] {
 
 .embed-actions button:last-child {
     background: rgba(239, 68, 68, .2);
-    color: #f23f42;
+    color: var(--color-danger);
     border: 1px solid rgba(239, 68, 68, .3)
 }
 

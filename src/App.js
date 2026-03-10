@@ -456,7 +456,7 @@ const AppContent = () => {
     return (
         <div style={{ ...styles.mainContainer }} className="dark-theme">
             {/* Accessibility: Skip-to-content link for keyboard users */}
-            <a href="#main-chat-area" className="skip-to-content">Ana içeriğe atla</a>
+            <a href="#main-content" className="skip-to-content">Ana içeriğe atla</a>
 
             {showSplash && <SplashScreen animationState={animationState} />}
             {maintenanceMode && <MaintenanceBanner message={maintenanceMode.message} endTime={maintenanceMode.endTime} level={maintenanceMode.level} onDismiss={handleDismissMaintenance} />}
@@ -564,7 +564,7 @@ const AppContent = () => {
                 )}
 
                 {/* ─── MAIN CONTENT ─── */}
-                <main id="main-chat-area" style={styles.mainContent} role="main" aria-label="Sohbet alanı">
+                <main id="main-content" style={styles.mainContent} role="main" aria-label="Sohbet alanı">
                     <div style={{ position: 'absolute', top: 60, left: 0, right: 0, zIndex: 90 }}>
                         <Suspense fallback={null}>
                             <StickyMessageBanner message={stickyMessage?.message} type={stickyMessage?.type} onDismiss={() => setStickyMessage(null)} />

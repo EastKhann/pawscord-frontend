@@ -12,7 +12,7 @@
 }
 
 .twofa-modal-content {
-    background: var(--background-primary, #17191c);
+    background: var(--background-primary, var(--bg-charcoal));
     border-radius: 8px;
     padding: 30px;
     max-width: 500px;
@@ -20,7 +20,7 @@
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    color: var(--text-normal, #dbdee1);
+    color: var(--text-normal, var(--text-primary));
 }
 
 .twofa-close-btn {
@@ -30,7 +30,7 @@
     background: transparent;
     border: none;
     font-size: 28px;
-    color: var(--text-muted, #949ba4);
+    color: var(--text-muted, var(--text-muted));
     cursor: pointer;
     width: 36px;
     height: 36px;
@@ -42,8 +42,8 @@
 }
 
 .twofa-close-btn:hover {
-    background: var(--background-modifier-hover, #4e5058);
-    color: var(--text-normal, #fff);
+    background: var(--background-modifier-hover, var(--text-disabled));
+    color: var(--text-normal, var(--color-white));
 }
 
 .twofa-modal-content h2 {
@@ -61,12 +61,12 @@
 .twofa-step h3 {
     margin: 0;
     font-size: 20px;
-    color: var(--text-normal, #fff);
+    color: var(--text-normal, var(--color-white));
 }
 
 .twofa-step p {
     margin: 0;
-    color: var(--text-muted, #b5bac1);
+    color: var(--text-muted, var(--text-secondary));
     line-height: 1.5;
 }
 
@@ -75,14 +75,14 @@
     height: 256px;
     margin: 20px auto;
     display: block;
-    border: 4px solid var(--background-secondary, #111214);
+    border: 4px solid var(--background-secondary, var(--bg-charcoal-deep));
     border-radius: 8px;
     padding: 10px;
     background: white;
 }
 
 .twofa-secret {
-    background: var(--background-secondary, #111214);
+    background: var(--background-secondary, var(--bg-charcoal-deep));
     padding: 15px;
     border-radius: 6px;
     text-align: center;
@@ -92,13 +92,13 @@
     display: block;
     font-size: 18px;
     font-family: 'Courier New', monospace;
-    color: var(--brand-experiment, #5865f2);
+    color: var(--brand-experiment, var(--color-primary));
     margin: 10px 0;
     letter-spacing: 2px;
 }
 
 .twofa-copy-btn {
-    background: var(--brand-experiment, #5865f2);
+    background: var(--brand-experiment, var(--color-primary));
     color: white;
     border: none;
     padding: 8px 16px;
@@ -110,7 +110,7 @@
 }
 
 .twofa-copy-btn:hover {
-    background: var(--brand-experiment-hover, #4752c4);
+    background: var(--brand-experiment-hover, var(--color-primary-hover));
 }
 
 .twofa-code-input {
@@ -119,16 +119,16 @@
     font-size: 32px;
     text-align: center;
     letter-spacing: 10px;
-    background: var(--background-secondary, #111214);
-    border: 2px solid var(--background-tertiary, #0d0e10);
+    background: var(--background-secondary, var(--bg-charcoal-deep));
+    border: 2px solid var(--background-tertiary, var(--bg-void));
     border-radius: 6px;
-    color: var(--text-normal, #fff);
+    color: var(--text-normal, var(--color-white));
     font-family: 'Courier New', monospace;
 }
 
 .twofa-code-input:focus {
     outline: none;
-    border-color: var(--brand-experiment, #5865f2);
+    border-color: var(--brand-experiment, var(--color-primary));
 }
 
 .twofa-buttons {
@@ -165,7 +165,7 @@
 }
 
 .twofa-verify-btn:disabled {
-    background: var(--background-modifier-accent, #4e5058);
+    background: var(--background-modifier-accent, var(--text-disabled));
     cursor: not-allowed;
     opacity: 0.5;
 }
@@ -174,33 +174,33 @@
     padding: 12px 24px;
     font-size: 16px;
     font-weight: 600;
-    border: 2px solid var(--background-tertiary, #0d0e10);
+    border: 2px solid var(--background-tertiary, var(--bg-void));
     background: transparent;
-    color: var(--text-normal, #fff);
+    color: var(--text-normal, var(--color-white));
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .twofa-back-btn:hover {
-    background: var(--background-modifier-hover, #4e5058);
+    background: var(--background-modifier-hover, var(--text-disabled));
 }
 
 .twofa-download-btn {
-    background: var(--brand-experiment, #5865f2);
+    background: var(--brand-experiment, var(--color-primary));
     color: white;
 }
 
 .twofa-download-btn:hover {
-    background: var(--brand-experiment-hover, #4752c4);
+    background: var(--brand-experiment-hover, var(--color-primary-hover));
 }
 
 .twofa-warning {
     background: rgba(250, 166, 26, 0.1);
-    border-left: 4px solid #f0b232;
+    border-left: 4px solid var(--color-warning);
     padding: 12px;
     border-radius: 4px;
-    color: #f0b232;
+    color: var(--color-warning);
     font-weight: 600;
 }
 
@@ -208,36 +208,36 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    background: var(--background-secondary, #111214);
+    background: var(--background-secondary, var(--bg-charcoal-deep));
     padding: 20px;
     border-radius: 6px;
 }
 
 .twofa-backup-code {
-    background: var(--background-tertiary, #0d0e10);
+    background: var(--background-tertiary, var(--bg-void));
     padding: 12px;
     border-radius: 4px;
     text-align: center;
     font-family: 'Courier New', monospace;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-normal, #fff);
+    color: var(--text-normal, var(--color-white));
     letter-spacing: 1px;
 }
 
 .twofa-loading {
     text-align: center;
     padding: 40px;
-    color: var(--text-muted, #949ba4);
+    color: var(--text-muted, var(--text-muted));
     font-size: 16px;
 }
 
 .twofa-error {
     background: rgba(237, 66, 69, 0.1);
-    border-left: 4px solid #f23f42;
+    border-left: 4px solid var(--color-danger);
     padding: 12px;
     border-radius: 4px;
-    color: #f23f42;
+    color: var(--color-danger);
     font-weight: 600;
 }
 

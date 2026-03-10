@@ -1,10 +1,10 @@
-﻿/* frontend/src/components/E2EESettingsPanel.css */
+/* frontend/src/components/E2EESettingsPanel.css */
 
 .e2ee-settings-panel {
     padding: 20px;
-    background-color: #0e1222;
+    background-color: var(--bg-secondary);
     border-radius: 8px;
-    color: #dbdee1;
+    color: var(--text-primary);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -15,11 +15,11 @@
     gap: 12px;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .e2ee-settings-header svg {
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .e2ee-settings-title {
@@ -29,11 +29,11 @@
 }
 
 .e2ee-status-card {
-    background-color: #0b0e1b;
+    background-color: var(--bg-primary);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 16px;
-    border: 2px solid #23a559;
+    border: 2px solid var(--color-success);
     transition: all 0.3s ease;
 }
 
@@ -51,7 +51,7 @@
 .e2ee-status-text {
     font-size: 18px;
     font-weight: bold;
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .e2ee-status-info {
@@ -65,19 +65,19 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #b5bac1;
+    color: var(--text-secondary);
 }
 
 .e2ee-warning-card {
     background-color: rgba(250, 166, 26, 0.15);
-    border: 2px solid #f0b232;
+    border: 2px solid var(--color-warning);
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 16px;
     display: flex;
     gap: 12px;
     align-items: flex-start;
-    color: #f0b232;
+    color: var(--color-warning);
     animation: pulse 2s infinite;
 }
 
@@ -102,7 +102,7 @@
 
 .e2ee-rotate-button {
     padding: 12px 20px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -117,7 +117,7 @@
 }
 
 .e2ee-rotate-button:hover {
-    background: linear-gradient(135deg, #4752c4 0%, #3c45a5 100%);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, #3c45a5 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
 }
@@ -134,7 +134,7 @@
 
 .e2ee-disable-button {
     padding: 12px 20px;
-    background: linear-gradient(135deg, #f23f42 0%, #c03537 100%);
+    background: linear-gradient(135deg, var(--color-danger) 0%, #c03537 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -161,7 +161,7 @@
 .e2ee-disabled-state {
     text-align: center;
     padding: 60px 20px;
-    color: #b5bac1;
+    color: var(--text-secondary);
 }
 
 .e2ee-disabled-state svg {
@@ -171,7 +171,7 @@
 .e2ee-disabled-state h4 {
     margin: 12px 0 8px 0;
     font-size: 18px;
-    color: #f0b232;
+    color: var(--color-warning);
 }
 
 .e2ee-disabled-state p {
@@ -181,7 +181,7 @@
 }
 
 .e2ee-info-section {
-    background-color: #0b0e1b;
+    background-color: var(--bg-primary);
     border-radius: 8px;
     padding: 20px;
 }
@@ -192,13 +192,13 @@
     gap: 8px;
     margin-bottom: 12px;
     font-size: 16px;
-    color: #dbdee1;
+    color: var(--text-primary);
 }
 
 .e2ee-info-list {
     margin: 0;
     padding-left: 20px;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 14px;
     line-height: 1.8;
 }

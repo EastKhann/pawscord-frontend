@@ -1,8 +1,8 @@
-﻿.economy-system-panel {
-    background: #0e1222;
+.economy-system-panel {
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 20px;
-    color: #dbdee1;
+    color: var(--text-primary);
     max-width: 800px;
     margin: 0 auto;
 }
@@ -10,11 +10,11 @@
 .economy-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 2px solid #182135;
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .economy-header h2 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 20px;
     display: flex;
     align-items: center;
@@ -23,7 +23,7 @@
 }
 
 .economy-message {
-    background: #182135;
+    background: var(--bg-input);
     padding: 12px;
     border-radius: 6px;
     margin-bottom: 20px;
@@ -35,7 +35,7 @@
 }
 
 .balance-card {
-    background: linear-gradient(135deg, #f0b232, #f0932b);
+    background: linear-gradient(135deg, var(--color-warning), #f0932b);
     padding: 30px;
     border-radius: 12px;
     display: flex;
@@ -61,7 +61,7 @@
 }
 
 .balance-amount {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 48px;
     font-weight: 700;
     display: flex;
@@ -75,7 +75,7 @@
 
 .transfer-section,
 .history-section {
-    background: #182135;
+    background: var(--bg-input);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
@@ -83,7 +83,7 @@
 
 .transfer-section h3,
 .history-section h3 {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 16px;
     margin: 0 0 15px 0;
     display: flex;
@@ -104,15 +104,15 @@
 }
 
 .form-group label {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     font-weight: 600;
 }
 
 .form-input {
-    background: #0e1222;
-    border: 2px solid #0b0e1b;
-    color: #dbdee1;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
     padding: 12px;
     border-radius: 4px;
     font-size: 14px;
@@ -120,7 +120,7 @@
 
 .form-input:focus {
     outline: none;
-    border-color: #f0b232;
+    border-color: var(--color-warning);
 }
 
 .amount-input-wrapper {
@@ -132,7 +132,7 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #f0b232;
+    color: var(--color-warning);
     font-size: 18px;
 }
 
@@ -143,14 +143,14 @@
 }
 
 .balance-hint {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
     margin-top: 4px;
 }
 
 .transfer-btn {
-    background: #f0b232;
-    color: #ffffff;
+    background: var(--color-warning);
+    color: var(--color-white);
     border: none;
     padding: 15px;
     border-radius: 6px;
@@ -176,19 +176,19 @@
 
 .loading {
     text-align: center;
-    color: #949ba4;
+    color: var(--text-muted);
     padding: 40px;
 }
 
 .empty-history {
     text-align: center;
-    color: #949ba4;
+    color: var(--text-muted);
     padding: 60px 20px;
 }
 
 .empty-icon {
     font-size: 64px;
-    color: #1e2024;
+    color: var(--bg-neutral-dark);
     margin-bottom: 15px;
 }
 
@@ -204,14 +204,14 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    background: #0e1222;
+    background: var(--bg-secondary);
     padding: 15px;
     border-radius: 8px;
     transition: all 0.2s;
 }
 
 .history-item:hover {
-    background: #121928;
+    background: var(--bg-elevated);
     transform: translateX(5px);
 }
 
@@ -234,11 +234,11 @@
 }
 
 .icon-sent {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .icon-received {
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .transaction-info {
@@ -246,20 +246,20 @@
 }
 
 .transaction-user {
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
     margin-bottom: 3px;
 }
 
 .transaction-note {
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 13px;
     font-style: italic;
     margin-bottom: 3px;
 }
 
 .transaction-date {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
@@ -272,11 +272,11 @@
 }
 
 .transaction-amount.sent {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .transaction-amount.received {
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .amount-coin {
@@ -288,10 +288,10 @@
 }
 
 .history-list::-webkit-scrollbar-track {
-    background: #0e1222;
+    background: var(--bg-secondary);
 }
 
 .history-list::-webkit-scrollbar-thumb {
-    background: #0b0e1b;
+    background: var(--bg-primary);
     border-radius: 4px;
 }

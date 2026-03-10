@@ -1,10 +1,10 @@
-﻿/* frontend/src/components/AIChatbotPanel.css */
+/* frontend/src/components/AIChatbotPanel.css */
 
 .ai-chatbot-panel {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: var(--bg-modifier, #111214);
+    background-color: var(--bg-modifier, var(--bg-charcoal-deep));
     border-radius: var(--radius-base, 8px);
     overflow: hidden;
 }
@@ -14,7 +14,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary) 100%);
     color: white;
 }
 
@@ -64,8 +64,8 @@
 
 .ai-tabs {
     display: flex;
-    background-color: #0b0e1b;
-    border-bottom: 2px solid #182135;
+    background-color: var(--bg-primary);
+    border-bottom: 2px solid var(--bg-input);
 }
 
 .ai-tabs button {
@@ -73,7 +73,7 @@
     padding: 12px 16px;
     background: none;
     border: none;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -86,14 +86,14 @@
 }
 
 .ai-tabs button:hover {
-    background-color: var(--bg-modifier, #111214);
-    color: var(--text-primary, #dbdee1);
+    background-color: var(--bg-modifier, var(--bg-charcoal-deep));
+    color: var(--text-primary, var(--text-primary));
 }
 
 .ai-tabs button.active {
-    color: var(--color-primary, #5865f2);
-    border-bottom-color: var(--color-primary, #5865f2);
-    background-color: var(--bg-modifier, #111214);
+    color: var(--color-primary, var(--color-primary));
+    border-bottom-color: var(--color-primary, var(--color-primary));
+    background-color: var(--bg-modifier, var(--bg-charcoal-deep));
 }
 
 .ai-chat-container {
@@ -117,11 +117,11 @@
 }
 
 .ai-messages::-webkit-scrollbar-track {
-    background: var(--bg-modifier, #111214);
+    background: var(--bg-modifier, var(--bg-charcoal-deep));
 }
 
 .ai-messages::-webkit-scrollbar-thumb {
-    background: var(--color-primary, #5865f2);
+    background: var(--color-primary, var(--color-primary));
     border-radius: var(--radius-sm, 4px);
 }
 
@@ -131,7 +131,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #949ba4;
+    color: var(--text-muted);
     text-align: center;
     gap: 12px;
     padding: 40px;
@@ -139,7 +139,7 @@
 
 .ai-empty-state h4 {
     margin: 12px 0 8px 0;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 18px;
 }
 
@@ -157,7 +157,7 @@
 
 .ai-suggestions button {
     padding: 8px 16px;
-    background-color: #5865f2;
+    background-color: var(--color-primary);
     color: white;
     border: none;
     border-radius: 6px;
@@ -167,7 +167,7 @@
 }
 
 .ai-suggestions button:hover {
-    background-color: #4752c4;
+    background-color: var(--color-primary-hover);
     transform: translateY(-2px);
 }
 
@@ -193,7 +193,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #5865f2 0%, #5865f2 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -202,7 +202,7 @@
 }
 
 .ai-message.user .ai-message-avatar {
-    background: linear-gradient(135deg, #23a559 0%, #2ecc71 100%);
+    background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
 }
 
 .ai-message-content {
@@ -218,73 +218,73 @@
 }
 
 .ai-message-header strong {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
 .ai-message-time {
     font-size: 11px;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .ai-message-text {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     line-height: 1.6;
     word-wrap: break-word;
 }
 
 .ai-code-block {
-    background-color: #0b0e1b;
+    background-color: var(--bg-primary);
     border-radius: 6px;
     padding: 12px;
     margin: 8px 0;
     overflow-x: auto;
-    border-left: 3px solid #5865f2;
+    border-left: 3px solid var(--color-primary);
 }
 
 .ai-code-block code {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 13px;
 }
 
 .ai-message.error .ai-message-text {
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .ai-input-form {
     display: flex;
     gap: 12px;
     padding: 16px 20px;
-    background-color: #0b0e1b;
-    border-top: 1px solid #182135;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--bg-input);
 }
 
 .ai-input {
     flex: 1;
     padding: 12px 16px;
-    background-color: #182135;
+    background-color: var(--bg-input);
     border: none;
     border-radius: 6px;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     outline: none;
     transition: background-color 0.2s;
 }
 
 .ai-input:focus {
-    background-color: #4e5058;
-    box-shadow: 0 0 0 2px #5865f2;
+    background-color: var(--text-disabled);
+    box-shadow: 0 0 0 2px var(--color-primary);
 }
 
 .ai-input::placeholder {
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .ai-send-btn {
     padding: 12px 20px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -297,7 +297,7 @@
 }
 
 .ai-send-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, #4752c4 0%, #3c45a5 100%);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, #3c45a5 100%);
     transform: scale(1.05);
 }
 
@@ -317,11 +317,11 @@
 
 .ai-feature-header {
     text-align: center;
-    color: #dbdee1;
+    color: var(--text-primary);
 }
 
 .ai-feature-header svg {
-    color: #5865f2;
+    color: var(--color-primary);
     margin-bottom: 12px;
 }
 
@@ -332,13 +332,13 @@
 
 .ai-feature-header p {
     margin: 0;
-    color: #b5bac1;
+    color: var(--text-secondary);
     font-size: 14px;
 }
 
 .ai-action-btn {
     padding: 14px 24px;
-    background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
     color: white;
     border: none;
     border-radius: 8px;
@@ -353,7 +353,7 @@
 }
 
 .ai-action-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, #4752c4 0%, #3c45a5 100%);
+    background: linear-gradient(135deg, var(--color-primary-hover) 0%, #3c45a5 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
 }
@@ -364,14 +364,14 @@
 }
 
 .ai-smart-replies {
-    background-color: #0b0e1b;
+    background-color: var(--bg-primary);
     border-radius: 8px;
     padding: 20px;
 }
 
 .ai-smart-replies h5 {
     margin: 0 0 12px 0;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
@@ -381,23 +381,23 @@
     align-items: center;
     padding: 12px;
     margin-bottom: 8px;
-    background-color: #0e1222;
+    background-color: var(--bg-secondary);
     border-radius: 6px;
     transition: background-color 0.2s;
 }
 
 .ai-smart-reply-item:hover {
-    background-color: #182135;
+    background-color: var(--bg-input);
 }
 
 .ai-smart-reply-item span {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
 }
 
 .ai-smart-reply-item button {
     padding: 6px 16px;
-    background-color: #5865f2;
+    background-color: var(--color-primary);
     color: white;
     border: none;
     border-radius: 4px;
@@ -407,7 +407,7 @@
 }
 
 .ai-smart-reply-item button:hover {
-    background-color: #4752c4;
+    background-color: var(--color-primary-hover);
 }
 
 .ai-code-form {
@@ -418,10 +418,10 @@
 
 .ai-code-textarea {
     padding: 12px 16px;
-    background-color: #0b0e1b;
-    border: 2px solid #182135;
+    background-color: var(--bg-primary);
+    border: 2px solid var(--bg-input);
     border-radius: 6px;
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 14px;
     font-family: inherit;
     outline: none;
@@ -430,11 +430,11 @@
 }
 
 .ai-code-textarea:focus {
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .ai-code-textarea::placeholder {
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 /* Responsive */

@@ -1,4 +1,4 @@
-﻿/* Integration Hub Panel Styles */
+/* Integration Hub Panel Styles */
 
 .integration-hub-overlay {
     position: fixed;
@@ -15,7 +15,7 @@
 }
 
 .integration-hub-panel {
-    background: linear-gradient(145deg, #0d0e10, #0d0e10);
+    background: linear-gradient(145deg, var(--bg-void), var(--bg-void));
     border-radius: 16px;
     width: 100%;
     max-width: 900px;
@@ -37,7 +37,7 @@
 }
 
 .panel-header h2 {
-    color: #58a6ff;
+    color: var(--color-link-bright);
     font-size: 1.4rem;
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@
 .close-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #fff;
+    color: var(--color-white);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -60,7 +60,7 @@
 }
 
 .close-btn:hover {
-    background: #ff4757;
+    background: var(--color-coral);
     transform: rotate(90deg);
 }
 
@@ -92,13 +92,13 @@
 
 .tab:hover {
     background: rgba(255, 255, 255, 0.05);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .tab.active {
-    background: linear-gradient(135deg, #58a6ff, #4c8edc);
+    background: linear-gradient(135deg, var(--color-link-bright), #4c8edc);
     border-color: transparent;
-    color: #fff;
+    color: var(--color-white);
     font-weight: 600;
 }
 
@@ -120,7 +120,7 @@
     flex: 1;
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 0.95rem;
 }
 
@@ -188,7 +188,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: #fff;
+    color: var(--color-white);
 }
 
 .integration-info {
@@ -196,7 +196,7 @@
 }
 
 .integration-info h4 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 1.1rem;
     margin: 0 0 5px 0;
 }
@@ -251,12 +251,12 @@
 
 .action-btn.sync {
     background: rgba(88, 166, 255, 0.2);
-    color: #58a6ff;
+    color: var(--color-link-bright);
 }
 
 .action-btn.sync:hover {
-    background: #58a6ff;
-    color: #fff;
+    background: var(--color-link-bright);
+    color: var(--color-white);
 }
 
 .action-btn.config {
@@ -266,19 +266,19 @@
 
 .action-btn.config:hover {
     background: #ffce54;
-    color: #0d0e10;
+    color: var(--bg-void);
 }
 
 .action-btn.disconnect,
 .action-btn.delete {
     background: rgba(255, 71, 87, 0.2);
-    color: #ff4757;
+    color: var(--color-coral);
 }
 
 .action-btn.disconnect:hover,
 .action-btn.delete:hover {
-    background: #ff4757;
-    color: #fff;
+    background: var(--color-coral);
+    color: var(--color-white);
 }
 
 /* Available Integrations */
@@ -323,7 +323,7 @@
 }
 
 .integration-card.available h4 {
-    color: #fff;
+    color: var(--color-white);
     font-size: 1.1rem;
     margin: 10px 0 8px 0;
 }
@@ -362,10 +362,10 @@
     width: 100%;
     justify-content: center;
     padding: 10px;
-    background: linear-gradient(135deg, #58a6ff, #4c8edc);
+    background: linear-gradient(135deg, var(--color-link-bright), #4c8edc);
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
@@ -402,7 +402,7 @@
     background: linear-gradient(135deg, #00d26a, #00a550);
     border: none;
     border-radius: 10px;
-    color: #fff;
+    color: var(--color-white);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
@@ -437,7 +437,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #58a6ff;
+    color: var(--color-link-bright);
     overflow: hidden;
 }
 
@@ -452,7 +452,7 @@
 }
 
 .webhook-info h4 {
-    color: #fff;
+    color: var(--color-white);
     margin: 0 0 3px 0;
 }
 
@@ -482,14 +482,14 @@
     border: none;
     padding: 4px 10px;
     border-radius: 4px;
-    color: #58a6ff;
+    color: var(--color-link-bright);
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .webhook-url button:hover {
-    background: #58a6ff;
-    color: #fff;
+    background: var(--color-link-bright);
+    color: var(--color-white);
 }
 
 /* Modals */
@@ -508,7 +508,7 @@
 
 .webhook-modal,
 .config-modal {
-    background: linear-gradient(145deg, #1e1e32, #0d0e10);
+    background: linear-gradient(145deg, #1e1e32, var(--bg-void));
     border-radius: 16px;
     padding: 25px;
     width: 100%;
@@ -518,7 +518,7 @@
 
 .webhook-modal h3,
 .config-modal h3 {
-    color: #58a6ff;
+    color: var(--color-link-bright);
     margin: 0 0 20px 0;
     display: flex;
     align-items: center;
@@ -542,18 +542,18 @@
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     box-sizing: border-box;
 }
 
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #58a6ff;
+    border-color: var(--color-link-bright);
 }
 
 .form-group select option {
-    background: #0b0e1b;
+    background: var(--bg-primary);
 }
 
 .config-section {
@@ -571,7 +571,7 @@
 .checkbox-label input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #58a6ff;
+    accent-color: var(--color-link-bright);
 }
 
 .modal-actions {
@@ -586,7 +586,7 @@
     background: rgba(255, 255, 255, 0.1);
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -601,10 +601,10 @@
     align-items: center;
     gap: 6px;
     padding: 10px 20px;
-    background: linear-gradient(135deg, #58a6ff, #4c8edc);
+    background: linear-gradient(135deg, var(--color-link-bright), #4c8edc);
     border: none;
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-white);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;

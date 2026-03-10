@@ -48,19 +48,19 @@
 }
 
 .swipe-action.primary {
-    background: #5865f2;
+    background: var(--color-primary);
 }
 
 .swipe-action.danger {
-    background: #f23f42;
+    background: var(--color-danger);
 }
 
 .swipe-action.success {
-    background: #10b981;
+    background: var(--color-success-modern);
 }
 
 .swipe-action.warning {
-    background: #f59e0b;
+    background: var(--color-warning-amber);
 }
 
 .action-icon {
@@ -75,6 +75,6 @@
 /* Dark theme */
 @media (prefers-color-scheme: dark) {
     .swipe-content {
-        background: #1f2937;
+        background: var(--bg-neutral-800);
     }
 }

@@ -1,4 +1,4 @@
-/* 🔗 ConnectionsPanel Modal Styles */
+/* Ã°Å¸â€â€” ConnectionsPanel Modal Styles */
 
 /* Modal Overlay - Must be higher than ALL other panels including UserProfilePanel */
 .connections-modal-overlay {
@@ -32,7 +32,7 @@
     width: 90%;
     max-width: 800px;
     max-height: 85vh;
-    background: var(--bg-primary, #0d0e10);
+    background: var(--bg-primary, var(--bg-void));
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     overflow: hidden;
@@ -61,7 +61,7 @@
     border-radius: 50%;
     border: none;
     background: rgba(255, 255, 255, 0.1);
-    color: var(--text-secondary, #b5bac1);
+    color: var(--text-secondary, var(--text-secondary));
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -80,10 +80,10 @@
 /* Panel Content */
 .connections-panel {
     padding: 24px;
-    background: var(--bg-primary, #0d0e10);
+    background: var(--bg-primary, var(--bg-void));
     max-height: 85vh;
     overflow-y: auto;
-    color: var(--text-primary, #dbdee1);
+    color: var(--text-primary, var(--text-primary));
 }
 
 .connections-panel.loading {
@@ -215,7 +215,7 @@
 }
 
 .status-icon.success {
-    color: #23a559;
+    color: var(--color-success);
 }
 
 .connection-data {
@@ -288,9 +288,9 @@
 }
 
 .disconnect-btn:hover:not(:disabled) {
-    background: #f23f42;
+    background: var(--color-danger);
     color: white;
-    border-color: #f23f42;
+    border-color: var(--color-danger);
 }
 
 .connect-btn:disabled,

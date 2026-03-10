@@ -2,6 +2,7 @@
 import { FaCog, FaDownload } from 'react-icons/fa';
 import { styles } from '../SidebarStyles';
 import { PRODUCTION_URL } from '../utils/constants';
+import { getFreshActivity } from '../utils/activityUtils';
 
 /**
  * Sidebar footer showing the current user's avatar, username and friend code.
@@ -21,8 +22,9 @@ const UserFooter = ({
     onProfileClick,
     updateAvailable = false,
     onUpdateClick,
-    ownActivity = null, // 🔥 Live Spotify/Steam activity for the current user
+    ownActivity: rawOwnActivity = null, // 🔥 Live Spotify/Steam activity for the current user
 }) => {
+    const ownActivity = getFreshActivity(rawOwnActivity);
     // 🔥 DÜZELTME 1: URL Kontrolü
     let avatarUrl = currentUserProfile?.avatar || getDeterministicAvatar(currentUsername);
 

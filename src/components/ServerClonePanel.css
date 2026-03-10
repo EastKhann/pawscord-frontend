@@ -13,7 +13,7 @@
 }
 
 .serverclone-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 16px;
     width: 90%;
     max-width: 550px;
@@ -30,7 +30,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 24px;
-    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    background: linear-gradient(135deg, var(--color-info-material) 0%, #1976d2 100%);
     color: white;
 }
 
@@ -80,7 +80,7 @@
 .loading {
     text-align: center;
     padding: 40px 20px;
-    color: #888;
+    color: var(--text-silver);
 }
 
 .section {
@@ -88,7 +88,7 @@
 }
 
 .section h3 {
-    color: #aaa;
+    color: var(--text-mist);
     font-size: 0.9rem;
     margin: 0 0 12px 0;
 }
@@ -105,7 +105,7 @@
 
 .section>input:focus {
     outline: none;
-    border-color: #2196f3;
+    border-color: var(--color-info-material);
 }
 
 /* Options Grid */
@@ -145,7 +145,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #2196f3;
+    color: var(--color-info-material);
     font-size: 1.1rem;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .option-count {
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.75rem;
 }
 
@@ -169,7 +169,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    color: #2196f3;
+    color: var(--color-info-material);
     font-size: 0.9rem;
 }
 
@@ -193,7 +193,7 @@
 .preview-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #2196f3, #1976d2);
+    background: linear-gradient(135deg, var(--color-info-material), #1976d2);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -218,7 +218,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #888;
+    color: var(--text-silver);
     font-size: 0.85rem;
     margin-top: 2px;
 }
@@ -236,12 +236,12 @@
     background: rgba(255, 255, 255, 0.05);
     padding: 6px 12px;
     border-radius: 12px;
-    color: #aaa;
+    color: var(--text-mist);
     font-size: 0.8rem;
 }
 
 .preview-item svg {
-    color: #2196f3;
+    color: var(--color-info-material);
 }
 
 /* Warning Box */
@@ -252,7 +252,7 @@
     border: 1px solid rgba(255, 193, 7, 0.3);
     border-radius: 10px;
     padding: 14px;
-    color: #ffc107;
+    color: var(--color-warning-material);
     font-size: 0.85rem;
 }
 
@@ -273,7 +273,7 @@
 
 .progress-icon {
     font-size: 3rem;
-    color: #2196f3;
+    color: var(--color-info-material);
     margin-bottom: 20px;
 }
 
@@ -306,20 +306,20 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #2196f3, #64b5f6);
+    background: linear-gradient(90deg, var(--color-info-material), #64b5f6);
     border-radius: 4px;
     transition: width 0.3s ease;
 }
 
 .progress-status {
     display: block;
-    color: #aaa;
+    color: var(--text-mist);
     font-size: 0.9rem;
     margin-bottom: 8px;
 }
 
 .progress-percent {
-    color: #2196f3;
+    color: var(--color-info-material);
     font-size: 1.2rem;
     font-weight: 600;
 }
@@ -339,7 +339,7 @@
     border: none;
     border-radius: 8px;
     padding: 12px 24px;
-    color: #aaa;
+    color: var(--text-mist);
     cursor: pointer;
     transition: all 0.3s;
 }
@@ -352,7 +352,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, #2196f3, #1976d2);
+    background: linear-gradient(135deg, var(--color-info-material), #1976d2);
     border: none;
     border-radius: 8px;
     padding: 12px 24px;

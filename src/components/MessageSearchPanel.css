@@ -16,7 +16,7 @@
 }
 
 .message-search-panel {
-    background: linear-gradient(135deg, #0d0e10 0%, #0d0e10 100%);
+    background: linear-gradient(135deg, var(--bg-void) 0%, var(--bg-void) 100%);
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     max-width: 800px;
@@ -37,14 +37,14 @@
 
 .search-header .header-icon {
     font-size: 20px;
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 .search-header h2 {
     flex: 1;
     margin: 0;
     font-size: 20px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .search-input-container {
@@ -57,7 +57,7 @@
 }
 
 .search-input-container .search-icon {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 18px;
 }
 
@@ -67,14 +67,14 @@
     border: 2px solid rgba(88, 101, 242, 0.3);
     border-radius: 12px;
     padding: 12px 16px;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 15px;
     transition: all 0.3s ease;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.2);
 }
 
@@ -84,14 +84,14 @@
     border: none;
     border-radius: 8px;
     padding: 10px;
-    color: #ffffff;
+    color: var(--color-white);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .clear-btn:hover {
     background: rgba(255, 59, 48, 0.2);
-    color: #f23f42;
+    color: var(--color-danger);
 }
 
 .filter-toggle-btn:hover {
@@ -100,7 +100,7 @@
 
 .filter-toggle-btn.active {
     background: rgba(88, 101, 242, 0.3);
-    color: #5865f2;
+    color: var(--color-primary);
 }
 
 /* Filters Section */
@@ -129,7 +129,7 @@
 }
 
 .filter-group label {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 13px;
     font-weight: 600;
     display: flex;
@@ -143,27 +143,27 @@
     border: 1px solid rgba(88, 101, 242, 0.3);
     border-radius: 8px;
     padding: 10px 12px;
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 14px;
 }
 
 .filter-group input:focus {
     outline: none;
-    border-color: #5865f2;
+    border-color: var(--color-primary);
 }
 
 .checkbox-label {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #dbdee1;
+    color: var(--text-primary);
     cursor: pointer;
 }
 
 .checkbox-label input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #5865f2;
+    accent-color: var(--color-primary);
 }
 
 /* Search Results */
@@ -174,7 +174,7 @@
 }
 
 .results-count {
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 16px;
@@ -225,19 +225,19 @@
 }
 
 .author-name {
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 600;
     font-size: 14px;
 }
 
 .message-date {
-    color: #949ba4;
+    color: var(--text-muted);
     font-size: 12px;
 }
 
 .channel-tag {
     background: rgba(88, 101, 242, 0.2);
-    color: #5865f2;
+    color: var(--color-primary);
     padding: 4px 10px;
     border-radius: 6px;
     font-size: 12px;
@@ -245,7 +245,7 @@
 }
 
 .message-content {
-    color: #dbdee1;
+    color: var(--text-primary);
     line-height: 1.6;
     font-size: 14px;
     word-break: break-word;
@@ -253,14 +253,14 @@
 
 .message-content mark {
     background: rgba(250, 166, 26, 0.3);
-    color: #f0b232;
+    color: var(--color-warning);
     padding: 2px 4px;
     border-radius: 3px;
 }
 
 .message-attachments {
     margin-top: 12px;
-    color: #5865f2;
+    color: var(--color-primary);
     font-size: 13px;
     display: flex;
     align-items: center;
@@ -275,7 +275,7 @@
     justify-content: center;
     padding: 60px 20px;
     text-align: center;
-    color: #949ba4;
+    color: var(--text-muted);
 }
 
 .empty-state svg {
@@ -284,7 +284,7 @@
 }
 
 .empty-state h3 {
-    color: #dbdee1;
+    color: var(--text-primary);
     font-size: 20px;
     margin: 0 0 8px 0;
 }
@@ -308,7 +308,7 @@
 }
 
 .search-tips li::before {
-    content: '💡';
+    content: 'Ã°Å¸â€™Â¡';
     position: absolute;
     left: 0;
 }
@@ -326,14 +326,14 @@
     width: 40px;
     height: 40px;
     border: 4px solid rgba(88, 101, 242, 0.2);
-    border-top-color: #5865f2;
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
 }
 
 .loading-state p {
-    color: #5865f2;
+    color: var(--color-primary);
     font-weight: 600;
 }
 

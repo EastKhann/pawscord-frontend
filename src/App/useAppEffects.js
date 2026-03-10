@@ -415,13 +415,15 @@ export default function useAppEffects({
                         const activityTime = new Date(timestamp);
                         const now = new Date();
                         const diffMinutes = (now - activityTime) / 1000 / 60;
-                        return diffMinutes < 2; // Only show if less than 2 minutes old
+                        return diffMinutes < 5; // 🔥 5 dakika freshness — geçici API timeout'larında aktivite kaybolmasın
                     };
 
                     if (data.spotify && isTimestampFresh(data.spotify.timestamp)) {
                         newActivity.spotify = {
                             type: 'listening',
+                            track: data.spotify.track,
                             name: data.spotify.track,
+                            artist: data.spotify.artist,
                             details: data.spotify.artist,
                             album_art: data.spotify.album_art
                         };
@@ -430,6 +432,7 @@ export default function useAppEffects({
                     if (data.steam && isTimestampFresh(data.steam.timestamp)) {
                         newActivity.steam = {
                             type: 'playing',
+                            game: data.steam.game,
                             name: data.steam.game,
                             state: data.steam.state
                         };
@@ -447,8 +450,9 @@ export default function useAppEffects({
 
                         // 🔥 FIX: Update own entry in allUsers immediately so the
                         // current user can see their own activity in the sidebar/list
+                        const stamped = newActivity ? { ...newActivity, _received_at: Date.now() } : null;
                         setAllUsers(prev => prev.map(u =>
-                            u.username === username ? { ...u, current_activity: newActivity } : u
+                            u.username === username ? { ...u, current_activity: stamped } : u
                         ));
 
                         // Also broadcast to others via status WebSocket
@@ -465,7 +469,7 @@ export default function useAppEffects({
             }
         };
 
-        const interval = setInterval(checkActivity, 30000); // 30s interval
+        const interval = setInterval(checkActivity, 15000); // 🔥 15s interval — daha hızlı Spotify/Steam güncellemesi
         checkActivity(); // Initial check
 
         return () => clearInterval(interval);
