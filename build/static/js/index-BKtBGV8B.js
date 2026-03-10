@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./web-hF3-Q8Yq.js","./electron-DaV7QCC-.js","../css/electron-CAmt-R8b.css"])))=>i.map(i=>d[i]);
+var t=Object.defineProperty;var e=(r,o)=>t(r,"name",{value:o,configurable:!0});import{dI as _,_ as i}from"./electron-DaV7QCC-.js";const w=_("Browser",{web:e(()=>i(()=>import("./web-hF3-Q8Yq.js"),__vite__mapDeps([0,1,2]),import.meta.url).then(r=>new r.BrowserWeb),"web")});export{w as Browser};
