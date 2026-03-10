@@ -1322,14 +1322,15 @@ div:hover>div>.delete-chat-btn {
 }
 
 /* Skip-to-content link (shows on keyboard focus) */
-.skip-to-content {
+.skip-to-content,
+.skip-nav {
     position: fixed;
     top: -48px;
     left: var(--space-sm, 8px);
     z-index: 99999;
     padding: var(--space-sm, 8px) var(--space-lg, 16px);
-    background: var(--color-primary, var(--color-primary));
-    color: var(--color-white);
+    background: var(--color-primary, #5865f2);
+    color: #fff;
     border-radius: var(--radius-sm, 4px);
     font-size: var(--font-base, 14px);
     font-weight: var(--weight-semibold, 600);
@@ -1337,7 +1338,8 @@ div:hover>div>.delete-chat-btn {
     transition: top 0.15s ease;
 }
 
-.skip-to-content:focus {
+.skip-to-content:focus,
+.skip-nav:focus {
     top: 8px;
 }
 
