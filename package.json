@@ -1,6 +1,6 @@
 {
     "name": "pawscord",
-    "version": "1.1.231",
+    "version": "1.1.232",
     "description": "Pawscord Sohbet Uygulamasi",
     "author": "Eastkhan",
     "private": true,
@@ -147,13 +147,10 @@
         "productName": "Pawscord",
         "files": [
             "build/**/*",
-            "node_modules/**/*",
             "public/electron.js",
             "package.json"
         ],
-        "asarUnpack": [
-            "build/**/*"
-        ],
+        "compression": "store",
         "extraMetadata": {
             "main": "public/electron.js"
         },

@@ -12,7 +12,7 @@
   Pop $0
   
   ; 2. Dosya kilitlerinin açılması için kısa bekleme
-  Sleep 1500
+  Sleep 200
   
   ; 3. Eski kurulum — sadece sessiz uninstall dene, takılırsa atla
   ;    Timeout ile çalıştır (ExecWait yerine nsExec — hang olmaz)

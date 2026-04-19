@@ -7,6 +7,7 @@
    ======================================== */
 
 @media (min-width: 769px) and (max-width: 1024px) {
+
     /* Adjust sidebar widths for tablet */
     .server-list {
         width: 60px;
@@ -42,6 +43,7 @@
    ======================================== */
 
 @media (max-width: 768px) {
+
     /* ðŸ”¥ Prevent text selection on mobile (better UX) */
     * {
         -webkit-tap-highlight-color: transparent;
@@ -72,62 +74,62 @@
 /* ðŸ“± Mobile: Stack everything vertically */
 @media (max-width: 768px) {
     .app-container {
-        flex-direction: column !important;
+        flex-direction: column;
     }
 
     /* Server list: Horizontal scrollable bar */
     .server-list {
-        width: 100% !important;
-        height: 60px !important;
-        flex-direction: row !important;
-        overflow-x: auto !important;
-        overflow-y: hidden !important;
-        padding: 8px 4px !important;
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 8px 4px;
     }
 
     .server-icon {
-        width: 48px !important;
-        height: 48px !important;
-        margin: 0 4px !important;
+        width: 48px;
+        height: 48px;
+        margin: 0 4px;
     }
 
     /* Sidebar: Bottom navigation */
     .sidebar {
-        position: fixed !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        flex-direction: row !important;
-        z-index: var(--z-modal, 1000) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-right: none !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        z-index: var(--z-modal, 1000);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: none;
     }
 
     /* Main chat area: Full screen */
     .chat-container {
-        width: 100% !important;
-        height: calc(100vh - 60px - 56px) !important;
+        width: 100%;
+        height: calc(100vh - 60px - 56px);
         /* minus top bar and bottom nav */
-        max-width: 100% !important;
+        max-width: 100%;
     }
 
     /* User list: Slide-in drawer */
     .user-list {
-        position: fixed !important;
-        top: 60px !important;
-        right: -100% !important;
-        width: 80% !important;
-        max-width: 320px !important;
-        height: calc(100vh - 60px) !important;
-        transition: right 0.3s ease !important;
-        z-index: var(--z-dropdown, 999) !important;
-        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3) !important;
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        width: 80%;
+        max-width: 320px;
+        height: calc(100vh - 60px);
+        transition: right 0.3s ease;
+        z-index: var(--z-dropdown, 999);
+        box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
     }
 
     .user-list.open {
-        right: 0 !important;
+        right: 0;
     }
 }
 
@@ -137,69 +139,69 @@
 
 @media (max-width: 768px) {
     .message-input-container {
-        position: sticky !important;
-        bottom: 0 !important;
-        background: var(--bg-tertiary) !important;
-        padding: 8px !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        position: sticky;
+        bottom: 0;
+        background: var(--bg-tertiary);
+        padding: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .message-input {
-        font-size: 16px !important;
+        font-size: 16px;
         /* Prevent iOS zoom on focus */
-        min-height: 44px !important;
-        padding: 12px 16px !important;
+        min-height: 44px;
+        padding: 12px 16px;
     }
 
     /* ðŸ”¥ YENÄ°: Sol ve saÄŸ buton gruplarÄ± iÃ§in Ã¶zel ayar */
     .message-input-wrapper {
-        gap: 4px !important;
+        gap: 4px;
     }
 
     .message-input-actions-left,
     .message-input-actions-right {
-        gap: 2px !important;
+        gap: 2px;
     }
 
     /* ðŸ”¥ YENÄ°: ButonlarÄ± kÃ¼Ã§Ã¼lt */
     .message-input-actions-left button,
     .message-input-actions-right button {
-        font-size: 16px !important;
-        padding: 6px !important;
-        min-width: 32px !important;
-        min-height: 32px !important;
+        font-size: 16px;
+        padding: 6px;
+        min-width: 32px;
+        min-height: 32px;
     }
 
     /* ðŸ”¥ YENÄ°: Textarea'ya daha fazla alan ver */
     .message-input textarea {
-        flex: 1 !important;
-        min-width: 0 !important;
-        font-size: 14px !important;
-        padding: 8px 10px !important;
+        flex: 1;
+        min-width: 0;
+        font-size: 14px;
+        padding: 8px 10px;
     }
 
     /* ðŸ”¥ YENÄ°: Gereksiz butonlarÄ± gizle (template, schedule) */
     .message-input-template-btn,
     .message-input-schedule-btn {
-        display: none !important;
+        display: none;
     }
 
     /* Action buttons: Larger touch targets */
     .message-actions button {
-        width: 44px !important;
-        height: 44px !important;
-        font-size: 20px !important;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
     }
 
     /* Emoji picker: Full width on mobile */
     .emoji-picker {
-        position: fixed !important;
-        bottom: 56px !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        max-height: 50vh !important;
-        border-radius: 16px 16px 0 0 !important;
+        position: fixed;
+        bottom: 56px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-height: 50vh;
+        border-radius: 16px 16px 0 0;
     }
 }
 
@@ -208,20 +210,21 @@
    ======================================== */
 
 @media (max-width: 768px) {
+
     /* All modals: Full screen on mobile */
     .modal-overlay {
-        align-items: flex-end !important;
+        align-items: flex-end;
         /* slide from bottom */
     }
 
     .modal-content {
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 90vh !important;
-        max-height: 90vh !important;
-        border-radius: 16px 16px 0 0 !important;
-        margin: 0 !important;
-        animation: slideUpMobile 0.3s ease !important;
+        width: 100%;
+        max-width: 100%;
+        height: 90vh;
+        max-height: 90vh;
+        border-radius: 16px 16px 0 0;
+        margin: 0;
+        animation: slideUpMobile 0.3s ease;
     }
 
     @keyframes slideUpMobile {
@@ -236,15 +239,15 @@
 
     /* Context menus: Bottom sheet */
     .context-menu {
-        position: fixed !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        top: auto !important;
-        width: 100% !important;
-        border-radius: 16px 16px 0 0 !important;
-        max-height: 60vh !important;
-        overflow-y: auto !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 60vh;
+        overflow-y: auto;
     }
 }
 
@@ -253,24 +256,25 @@
    ======================================== */
 
 @media (min-width: 769px) and (max-width: 1024px) {
+
     /* Sidebar: Collapsible */
     .sidebar {
-        width: 240px !important;
-        transition: width 0.3s ease !important;
+        width: 240px;
+        transition: width 0.3s ease;
     }
 
     .sidebar.collapsed {
-        width: 72px !important;
+        width: 72px;
     }
 
     /* User list: Smaller */
     .user-list {
-        width: 200px !important;
+        width: 200px;
     }
 
     /* Voice panel: Smaller video grid */
     .video-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -301,18 +305,19 @@
    ======================================== */
 
 @media (max-width: 896px) and (orientation: landscape) {
+
     /* Remove bottom nav in landscape */
     .sidebar {
-        display: none !important;
+        display: none;
     }
 
     .chat-container {
-        height: 100vh !important;
+        height: 100vh;
     }
 
     /* Compact voice panel */
     .voice-chat-panel {
-        max-height: 40vh !important;
+        max-height: 40vh;
     }
 }
 
@@ -336,9 +341,10 @@
    ======================================== */
 
 @media (max-width: 768px) {
+
     /* Modals full-width on mobile */
     .jsm-modal,
-    [class*='Modal'] > div[style*='borderRadius'] {
+    [class*='Modal']>div[style*='borderRadius'] {
         width: 100vw !important;
         max-width: 100vw !important;
         max-height: 100vh !important;
@@ -360,6 +366,7 @@
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
+
     /* Modals slightly wider on tablet */
     .jsm-modal {
         width: 90vw !important;
