@@ -24,7 +24,9 @@
     /* Başlangıçta gizli */
     visibility: hidden;
     /* Başlangıçta gizli */
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
     /* Yumuşak geçiş */
     border: 1px solid var(--border-color);
     /* Hafif bir kenarlık */
@@ -55,7 +57,9 @@
     justify-content: center;
     border-radius: 3px;
     /* Butonların hafif yuvarlak köşeleri */
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
     /* Hover geçişleri */
 }
 

@@ -60,14 +60,13 @@ self.addEventListener('message', (event) => {
         self.postMessage({
             id,
             type: 'SUCCESS',
-            result
+            result,
         });
-
     } catch (error) {
         self.postMessage({
             id,
             type: 'ERROR',
-            error: error.message
+            error: error.message,
         });
     }
 });
@@ -76,16 +75,19 @@ self.addEventListener('message', (event) => {
  * Filter messages
  */
 function filterMessages({ messages, filters }) {
-    return messages.filter(msg => {
+    return messages.filter((msg) => {
         if (filters.userId && msg.userId !== filters.userId) return false;
         if (filters.channelId && msg.channelId !== filters.channelId) return false;
-        if (filters.startDate && new Date(msg.timestamp) < new Date(filters.startDate)) return false;
+        if (filters.startDate && new Date(msg.timestamp) < new Date(filters.startDate))
+            return false;
         if (filters.endDate && new Date(msg.timestamp) > new Date(filters.endDate)) return false;
         if (filters.hasAttachments && !msg.attachments?.length) return false;
         if (filters.query) {
             const query = filters.query.toLowerCase();
-            return msg.content.toLowerCase().includes(query) ||
-                msg.username?.toLowerCase().includes(query);
+            return (
+                msg.content.toLowerCase().includes(query) ||
+                msg.username?.toLowerCase().includes(query)
+            );
         }
         return true;
     });
@@ -161,7 +163,7 @@ function calculateSearchScore(message, query) {
 
     // Word match
     const words = query.split(' ');
-    words.forEach(word => {
+    words.forEach((word) => {
         if (content.includes(word)) score += 10;
         if (username.includes(word)) score += 10;
     });
@@ -213,7 +215,7 @@ function groupByKey(items, key) {
  */
 function deduplicateData(items) {
     const seen = new Set();
-    return items.filter(item => {
+    return items.filter((item) => {
         const key = JSON.stringify(item);
         if (seen.has(key)) return false;
         seen.add(key);
@@ -297,11 +299,11 @@ function parseMarkdown({ text }) {
  * Generate thumbnails metadata
  */
 function generateThumbnails({ images, maxWidth = 200, maxHeight = 200 }) {
-    return images.map(img => ({
+    return images.map((img) => ({
         ...img,
         thumbnailWidth: Math.min(img.width, maxWidth),
         thumbnailHeight: Math.min(img.height, maxHeight),
-        aspectRatio: img.width / img.height
+        aspectRatio: img.width / img.height,
     }));
 }
 
@@ -309,12 +311,9 @@ function generateThumbnails({ images, maxWidth = 200, maxHeight = 200 }) {
  * Array diff
  */
 function diffArrays({ oldArray, newArray }) {
-    const added = newArray.filter(item => !oldArray.includes(item));
-    const removed = oldArray.filter(item => !newArray.includes(item));
-    const unchanged = oldArray.filter(item => newArray.includes(item));
+    const added = newArray.filter((item) => !oldArray.includes(item));
+    const removed = oldArray.filter((item) => !newArray.includes(item));
+    const unchanged = oldArray.filter((item) => newArray.includes(item));
 
     return { added, removed, unchanged };
 }
-
-
-

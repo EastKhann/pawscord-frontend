@@ -3,6 +3,7 @@
 // Connection quality, echo detection, network monitoring, volume normalization, talking indicators
 
 import { useState, useEffect, useRef } from 'react';
+import logger from '../utils/logger';
 
 /**
  * Custom hook for voice chat monitoring effects.
@@ -29,6 +30,7 @@ export default function useVoiceMonitoring({
 
     // Connection Quality Monitoring
     const [connectionQuality, setConnectionQuality] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     // Echo Detection
     const [hasEchoRisk, setHasEchoRisk] = useState(false);
@@ -58,37 +60,46 @@ export default function useVoiceMonitoring({
         if (!isInVoice) return;
 
         const monitorConnections = async () => {
-            // VoiceContext'ten peer connections'a erişmek için global reference kullan
+            // Use global reference to access peer connections from VoiceContext
             const peerConnections = window.__pawscord_peer_connections__ || {};
 
             for (const [username, pc] of Object.entries(peerConnections)) {
                 if (pc && pc.getStats) {
                     try {
                         const stats = await pc.getStats();
-                        stats.forEach(report => {
+                        stats.forEach((report) => {
                             if (report.type === 'candidate-pair' && report.state === 'succeeded') {
-                                setConnectionQuality(prev => ({
+                                setConnectionQuality((prev) => ({
                                     ...prev,
                                     [username]: {
                                         rtt: Math.round((report.currentRoundTripTime || 0) * 1000), // ms
-                                        packetLoss: report.packetsLost && report.packetsSent
-                                            ? Math.round((report.packetsLost / report.packetsSent) * 100 * 10) / 10
-                                            : 0,
-                                        quality: (report.currentRoundTripTime || 0) < 0.1 ? 'excellent' :
-                                            (report.currentRoundTripTime || 0) < 0.2 ? 'good' : 'poor'
-                                    }
+                                        packetLoss:
+                                            report.packetsLost && report.packetsSent
+                                                ? Math.round(
+                                                      (report.packetsLost / report.packetsSent) *
+                                                          100 *
+                                                          10
+                                                  ) / 10
+                                                : 0,
+                                        quality:
+                                            (report.currentRoundTripTime || 0) < 0.1
+                                                ? 'excellent'
+                                                : (report.currentRoundTripTime || 0) < 0.2
+                                                  ? 'good'
+                                                  : 'poor',
+                                    },
                                 }));
                             }
                         });
                     } catch (err) {
-                        console.warn('[Quality] Failed to get stats for', username, err);
+                        logger.warn('[Quality] Failed to get stats for', username, err);
                     }
                 }
             }
         };
 
         const interval = setInterval(monitorConnections, 3000);
-        monitorConnections(); // İlk çalıştırma
+        monitorConnections(); // First run
 
         return () => clearInterval(interval);
     }, [isInVoice]);
@@ -130,19 +141,20 @@ export default function useVoiceMonitoring({
             const detectEcho = () => {
                 analyser.getByteFrequencyData(dataArray);
 
-                // Yüksek frekanslı feedback tespiti (2-4 kHz arası)
+                // High frequency feedback detection (2-4 kHz range)
                 const highFreqRange = dataArray.slice(80, 160);
                 const highFreqPeak = Math.max(...highFreqRange);
                 const highFreqAvg = highFreqRange.reduce((a, b) => a + b, 0) / highFreqRange.length;
 
-                // Düşük frekanslı (kendi sesimiz)
+                // Low frequency (our own voice)
                 const lowFreqRange = dataArray.slice(10, 40);
                 const lowFreqAvg = lowFreqRange.reduce((a, b) => a + b, 0) / lowFreqRange.length;
 
-                // Echo riski: Yüksek frekans çok yüksek VE düşük frekansa göre orantısız
+                // Echo risk: High frequency too loud AND disproportionate to low frequency
                 if (highFreqPeak > 180 && highFreqAvg > 100 && highFreqAvg > lowFreqAvg * 1.5) {
                     consecutiveHighReadings++;
-                    if (consecutiveHighReadings > 3) { // 3 saniye üst üste
+                    if (consecutiveHighReadings > 3) {
+                        // 3 seconds in a row
                         setHasEchoRisk(true);
                     }
                 } else {
@@ -161,7 +173,7 @@ export default function useVoiceMonitoring({
                 audioContext.close();
             };
         } catch (err) {
-            console.warn('[Echo] Detection failed:', err);
+            logger.warn('[Echo] Detection failed:', err);
         }
     }, [localAudioStream, isMuted, isInVoice]);
 
@@ -171,7 +183,8 @@ export default function useVoiceMonitoring({
         if (!isInVoice) return;
 
         // Check if Network Information API is available
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const connection =
+            navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
         const updateNetworkQuality = () => {
             if (!connection) {
@@ -194,7 +207,12 @@ export default function useVoiceMonitoring({
                 quality = 'excellent';
             } else if (effectiveType === 'slow-2g' || downlink < 1 || rtt > 300) {
                 quality = 'poor';
-            } else if (effectiveType === '2g' || effectiveType === '3g' || downlink < 3 || rtt > 150) {
+            } else if (
+                effectiveType === '2g' ||
+                effectiveType === '3g' ||
+                downlink < 3 ||
+                rtt > 150
+            ) {
                 quality = 'good';
             } else {
                 quality = 'excellent';
@@ -241,7 +259,7 @@ export default function useVoiceMonitoring({
             const levels = {};
             const newGains = { ...normalizedGains };
 
-            remoteAudios.forEach(audio => {
+            remoteAudios.forEach((audio) => {
                 const username = audio.getAttribute('data-username');
                 if (!username) return;
 
@@ -277,7 +295,7 @@ export default function useVoiceMonitoring({
                     audioContext.close();
                 } catch (err) {
                     // Ignore errors for already connected sources
-                    console.debug('Audio analysis error (expected):', err.message);
+                    logger.debug('Audio analysis error (expected):', err.message);
                 }
             });
 

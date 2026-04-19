@@ -1,46 +1,66 @@
-import React, { useCallback } from 'react';
+﻿import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import styles from '../styles';
 import useModalA11y from '../../../hooks/useModalA11y';
+import { useTranslation } from 'react-i18next';
+import css from '../tabs/AdminTabs.module.css';
 
-const ActionConfirmationModal = ({ actionModal, handleUserAction, setActionModal, setSelectedUser }) => {
+const S = {
+    txt: { color: '#9ca3af', lineHeight: '1.6' },
+};
+
+const ActionConfirmationModal = ({
+    actionModal,
+    handleUserAction,
+    setActionModal,
+    setSelectedUser,
+}) => {
+    const { t } = useTranslation();
+
     const onClose = useCallback(() => setActionModal(null), [setActionModal]);
-    const { modalRef, overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Action Confirmation' });
+    const { modalRef, overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Eylem Onayı' });
     return (
-        <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex',
-            justifyContent: 'center', alignItems: 'center', zIndex: 10
-        }} {...overlayProps}>
-            <div style={{
-                backgroundColor: '#1a1a1e', borderRadius: '12px',
-                padding: '24px', width: '420px', border: '1px solid #2a2a2e'
-            }} {...dialogProps}>
-                <h3 style={{ color: actionModal.type === 'delete' ? '#dc2626' : '#f0b132', marginTop: 0 }}>
-                    {actionModal.type === 'delete' ? '🗑️ Kullanıcıyı Sil' :
-                        actionModal.type === 'ban' ? '⛔ Kullanıcıyı Yasakla' :
-                            '⚠️ İşlem Onayla'}
-                </h3>
-                <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
-                    <strong style={{ color: '#fff' }}>{actionModal.user?.username}</strong>
+        <div aria-label="Eylem onayı modalı" className={css.absoOverlay8} {...overlayProps}>
+            <div className={css.modalCard420} {...dialogProps}>
+                <h3
+                    style={{
+                        color: actionModal.type === 'delete' ? '#dc2626' : '#f0b132',
+                        marginTop: 0,
+                    }}
+                >
                     {actionModal.type === 'delete'
-                        ? ' kullanıcısını kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz! Tüm mesajları, sunucu üyelikleri ve profili silinecektir.'
+                        ? t('ui.useryi_delete')
                         : actionModal.type === 'ban'
-                            ? ' kullanıcısını yasaklamak istediğinizden emin misiniz? Kullanıcı giriş yapamayacaktır.'
-                            : ' üzerinde bu işlemi yapmak istediğinizden emin misiniz?'
-                    }
+                          ? t('ui.useryi_ban')
+                          : `⚠️ ${t('adminActions.actionConfirm')}`}
+                </h3>
+                <p style={S.txt}>
+                    <strong className="text-white">{actionModal.user?.username}</strong>
+                    {actionModal.type === 'delete'
+                        ? ` ${t('adminActions.deleteConfirmMsg')}`
+                        : actionModal.type === 'ban'
+                          ? ` ${t('adminActions.banConfirmMsg')}`
+                          : ` ${t('adminActions.generalConfirmMsg')}`}
                 </p>
-                <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+                <div className="flex-gap-8-mt16">
                     <button
-                        style={styles.actionBtn(actionModal.type === 'delete' ? '#dc2626' : '#e74c3c')}
+                        style={styles.actionBtn(
+                            actionModal.type === 'delete' ? '#dc2626' : '#e74c3c'
+                        )}
                         onClick={() => {
                             handleUserAction(actionModal.type, actionModal.user?.id);
                             setSelectedUser(null);
                         }}
                     >
-                        {actionModal.type === 'delete' ? '🗑️ Kalıcı Olarak Sil' : 'Onayla'}
+                        {actionModal.type === 'delete'
+                            ? t('ui.kalici_olarak_delete')
+                            : t('adminActions.confirm')}
                     </button>
-                    <button style={styles.actionBtn('#6b7280')} onClick={() => setActionModal(null)}>
-                        İptal
+                    <button
+                        style={styles.actionBtn('#6b7280')}
+                        onClick={() => setActionModal(null)}
+                    >
+                        {t('common.cancel')}
                     </button>
                 </div>
             </div>
@@ -48,4 +68,10 @@ const ActionConfirmationModal = ({ actionModal, handleUserAction, setActionModal
     );
 };
 
+ActionConfirmationModal.propTypes = {
+    actionModal: PropTypes.object,
+    handleUserAction: PropTypes.func,
+    setActionModal: PropTypes.func,
+    setSelectedUser: PropTypes.func,
+};
 export default ActionConfirmationModal;

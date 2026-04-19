@@ -12,15 +12,16 @@ import { getApiBase, getMediaBase, API_BASE_URL as _API_BASE_URL } from '../util
 const API_URL_BASE = getApiBase();
 
 export const isElectron = typeof window !== 'undefined' && typeof window.require === 'function';
-export const isNative = typeof window !== 'undefined' && window.Capacitor && window.Capacitor.isNativePlatform();
+export const isNative =
+    typeof window !== 'undefined' && window.Capacitor && window.Capacitor.isNativePlatform();
 export const isProductionBuild = import.meta.env.PROD || process.env.NODE_ENV === 'production';
 
 // Re-export the centralized base URL (single source of truth)
 export const API_URL_BASE_STRING = API_URL_BASE;
 
-// Media dosyaları için ayrı URL (EXE/APK'da production URL kullan)
+// Media fileları for ayrı URL (EXE/APK'da production URL kullan)
 export const MEDIA_BASE_URL = (() => {
-    if (isElectron || isNative) return "https://www.pawscord.com";
+    if (isElectron || isNative) return 'https://www.pawscord.com';
     return API_URL_BASE_STRING;
 })();
 

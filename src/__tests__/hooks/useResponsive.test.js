@@ -9,8 +9,16 @@ describe('useResponsive', () => {
     let originalInnerHeight;
 
     const setWindowSize = (width, height) => {
-        Object.defineProperty(window, 'innerWidth', { value: width, writable: true, configurable: true });
-        Object.defineProperty(window, 'innerHeight', { value: height, writable: true, configurable: true });
+        Object.defineProperty(window, 'innerWidth', {
+            value: width,
+            writable: true,
+            configurable: true,
+        });
+        Object.defineProperty(window, 'innerHeight', {
+            value: height,
+            writable: true,
+            configurable: true,
+        });
     };
 
     beforeEach(() => {
@@ -44,7 +52,9 @@ describe('useResponsive', () => {
         const { result } = renderHook(() => useResponsive());
 
         // Advance past debounce
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.isMobile).toBe(true);
         expect(result.current.isTablet).toBe(false);
@@ -56,7 +66,9 @@ describe('useResponsive', () => {
         setWindowSize(800, 1024);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.isMobile).toBe(false);
         expect(result.current.isTablet).toBe(true);
@@ -67,7 +79,9 @@ describe('useResponsive', () => {
         setWindowSize(1440, 900);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.isMobile).toBe(false);
         expect(result.current.isTablet).toBe(false);
@@ -79,7 +93,9 @@ describe('useResponsive', () => {
         setWindowSize(2560, 1080);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.isUltrawide).toBe(true);
         expect(result.current.isDesktop).toBe(false);
@@ -90,7 +106,9 @@ describe('useResponsive', () => {
         setWindowSize(375, 812);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.orientation).toBe('portrait');
     });
@@ -100,7 +118,9 @@ describe('useResponsive', () => {
         setWindowSize(1920, 1080);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.orientation).toBe('landscape');
     });
@@ -110,7 +130,9 @@ describe('useResponsive', () => {
         setWindowSize(1920, 1080);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
         expect(result.current.isDesktop).toBe(true);
 
         // Simulate resize to mobile
@@ -129,7 +151,9 @@ describe('useResponsive', () => {
         setWindowSize(500, 800);
         const { result } = renderHook(() => useResponsive());
 
-        act(() => { vi.advanceTimersByTime(200); });
+        act(() => {
+            vi.advanceTimersByTime(200);
+        });
 
         expect(result.current.isSmallScreen).toBe(true);
         expect(result.current.isLargeScreen).toBe(false);
@@ -143,14 +167,14 @@ describe('useResponsive', () => {
         expect(result.current.breakpoints.desktop).toBe(1920);
     });
 
-    // ── 11. Cleans up listeners on unmount ──
-    it('should clean up resize and orientationchange listeners on unmount', () => {
+    // ── 11. Cleans up listners on unmount ──
+    it('should clean up resize and orientationchange listners on unmount', () => {
         const removeSpy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useResponsive());
 
         unmount();
 
-        const calls = removeSpy.mock.calls.map(c => c[0]);
+        const calls = removeSpy.mock.calls.map((c) => c[0]);
         expect(calls).toContain('resize');
         expect(calls).toContain('orientationchange');
     });

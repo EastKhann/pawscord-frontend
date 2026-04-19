@@ -6,7 +6,12 @@ let toastContainer = null;
 // Escape HTML to prevent XSS
 function escapeHTML(str) {
     if (typeof str !== 'string') return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 // Toast container'ı initialize et
@@ -35,9 +40,9 @@ function initToastContainer() {
 
 /**
  * Modern toast notification gösterir
- * @param {string} message - Gösterilecek mesaj
+ * @param {string} message - Gösterilecek message
  * @param {string} type - 'success', 'error', 'warning', 'info'
- * @param {number} duration - Milisaniye cinsinden görünme süresi (varsayılan: 3000)
+ * @param {number} duration - Milisaniye cinsinden görünme süresi (varsailan: 3000)
  * @param {string} priority - 'silent' | 'normal' | 'urgent'  (varsayılan: 'normal')
  */
 export function showToast(message, type = 'info', duration = 3000, priority = 'normal') {
@@ -105,7 +110,7 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
     toast.innerHTML = `
         <span style="font-size: 20px;">${icon}</span>
         <span style="flex: 1;">${escapeHTML(message)}</span>
-        <button onclick="this.parentElement.remove()" aria-label="Dismiss notification" style="
+        <button onclick="this.parentElement.remove()" aria-label="Dismiss notification" style=">
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;
@@ -124,7 +129,7 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
 
     container.appendChild(toast);
 
-    // Animasyon ekle
+    // Animasyon add
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
@@ -153,7 +158,7 @@ export function showToast(message, type = 'info', duration = 3000, priority = 'n
         document.head.appendChild(style);
     }
 
-    // Otomatik kaldır
+    // Auto kaldır
     setTimeout(() => {
         toast.style.animation = 'slideOut 0.3s ease-out';
         setTimeout(() => toast.remove(), 300);
@@ -166,7 +171,7 @@ export const toast = {
     error: (message, duration) => showToast(message, 'error', duration),
     warning: (message, duration) => showToast(message, 'warning', duration),
     info: (message, duration) => showToast(message, 'info', duration),
-    // Öncelik tabanlı kısa yollar
+    // Priority tabanlı kısa yollar
     silent: (message, type = 'info') => showToast(message, type, 2000, 'silent'),
     urgent: (message, type = 'error') => showToast(message, type, 5000, 'urgent'),
 };
@@ -178,5 +183,3 @@ if (typeof window !== 'undefined') {
 }
 
 export default toast;
-
-

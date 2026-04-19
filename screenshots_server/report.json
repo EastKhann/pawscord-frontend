@@ -1,0 +1,85 @@
+{
+  "report": [
+    {
+      "idx": 1,
+      "label": "00_home",
+      "file": "001_00_home.png"
+    },
+    {
+      "idx": 2,
+      "label": "01_pawpaw_default",
+      "file": "002_01_pawpaw_default.png"
+    },
+    {
+      "idx": 3,
+      "label": "02_pawpaw_genel_chat",
+      "file": "003_02_pawpaw_genel_chat.png"
+    },
+    {
+      "idx": 4,
+      "label": "03_pawpaw_ai_chat",
+      "file": "004_03_pawpaw_ai_chat.png"
+    },
+    {
+      "idx": 5,
+      "label": "04_pawpaw_sinyal_bot_chat",
+      "file": "005_04_pawpaw_sinyal_bot_chat.png"
+    },
+    {
+      "idx": 6,
+      "label": "05_pawpaw_kanban",
+      "file": "006_05_pawpaw_kanban.png"
+    },
+    {
+      "idx": 7,
+      "label": "06_pawpaw_voice_sohbet",
+      "file": "007_06_pawpaw_voice_sohbet.png"
+    },
+    {
+      "idx": 8,
+      "label": "07_aaaa_default",
+      "file": "008_07_aaaa_default.png"
+    },
+    {
+      "idx": 9,
+      "label": "08_aaaa_genel_chat",
+      "file": "009_08_aaaa_genel_chat.png"
+    },
+    {
+      "idx": 10,
+      "label": "09_aaaa_voice_chat",
+      "file": "010_09_aaaa_voice_chat.png"
+    },
+    {
+      "idx": 11,
+      "label": "10_home_dm_view",
+      "file": "011_10_home_dm_view.png"
+    }
+  ],
+  "jsErrors": [
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()"
+  ],
+  "elapsed": "44.0"
+}

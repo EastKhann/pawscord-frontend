@@ -13,20 +13,20 @@ export const gameEventsApi = {
     createEvent: async (serverId, data) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/events/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     rsvp: async (eventId, status) => {
         return await apiFetch(`${API_BASE}/api/events/${eventId}/rsvp/`, {
             method: 'POST',
-            body: JSON.stringify({ status })
+            body: JSON.stringify({ status }),
         });
     },
     cancelRsvp: async (eventId) => {
         return await apiFetch(`${API_BASE}/api/events/${eventId}/rsvp/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -42,14 +42,14 @@ export const emergencyBroadcastApi = {
     createBroadcast: async (serverId, data) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/emergency/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     acknowledge: async (broadcastId) => {
         return await apiFetch(`${API_BASE}/api/emergency/${broadcastId}/ack/`, {
-            method: 'POST'
+            method: 'POST',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -62,19 +62,19 @@ export const customThemesApi = {
     createTheme: async (data) => {
         return await apiFetch(`${API_BASE}/api/themes/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     installTheme: async (themeId) => {
         return await apiFetch(`${API_BASE}/api/themes/${themeId}/install/`, {
-            method: 'POST'
+            method: 'POST',
         });
     },
     uninstallTheme: async (themeId) => {
         return await apiFetch(`${API_BASE}/api/themes/${themeId}/install/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -87,7 +87,7 @@ export const notificationScheduleApi = {
     createSchedule: async (scheduleData) => {
         return await apiFetch(`${API_BASE}/api/notifications/schedules/`, {
             method: 'POST',
-            body: JSON.stringify(scheduleData)
+            body: JSON.stringify(scheduleData),
         });
     },
     getFocusMode: async () => {
@@ -96,14 +96,14 @@ export const notificationScheduleApi = {
     updateFocusMode: async (settings) => {
         return await apiFetch(`${API_BASE}/api/focus-mode/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
     },
     toggleFocusMode: async () => {
         return await apiFetch(`${API_BASE}/api/focus-mode/`, {
-            method: 'POST'
+            method: 'POST',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -116,7 +116,7 @@ export const miniGamesApi = {
     createMatch: async (gameId, roomId = null) => {
         return await apiFetch(`${API_BASE}/api/games/match/`, {
             method: 'POST',
-            body: JSON.stringify({ game_id: gameId, room_id: roomId })
+            body: JSON.stringify({ game_id: gameId, room_id: roomId }),
         });
     },
     getMatch: async (matchId) => {
@@ -125,23 +125,25 @@ export const miniGamesApi = {
     joinMatch: async (matchId) => {
         return await apiFetch(`${API_BASE}/api/games/matches/${matchId}/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'join' })
+            body: JSON.stringify({ action: 'join' }),
         });
     },
     makeMove: async (matchId, move) => {
         return await apiFetch(`${API_BASE}/api/games/matches/${matchId}/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'move', move })
+            body: JSON.stringify({ action: 'move', move }),
         });
     },
     endMatch: async (matchId, winnerId = null, isDraw = false) => {
         return await apiFetch(`${API_BASE}/api/games/matches/${matchId}/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'end', winner_id: winnerId, is_draw: isDraw })
+            body: JSON.stringify({ action: 'end', winner_id: winnerId, is_draw: isDraw }),
         });
     },
     getStats: async (gameId = null) => {
-        const url = gameId ? `${API_BASE}/api/games/stats/${gameId}/` : `${API_BASE}/api/games/stats/`;
+        const url = gameId
+            ? `${API_BASE}/api/games/stats/${gameId}/`
+            : `${API_BASE}/api/games/stats/`;
         return await apiFetch(url);
     },
     getTournaments: async (serverId) => {
@@ -150,12 +152,12 @@ export const miniGamesApi = {
     createTournament: async (serverId, tournamentData) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/games/tournaments/`, {
             method: 'POST',
-            body: JSON.stringify(tournamentData)
+            body: JSON.stringify(tournamentData),
         });
     },
     joinTournament: async (tournamentId) => {
         return await apiFetch(`${API_BASE}/api/games/tournaments/${tournamentId}/join/`, {
-            method: 'POST'
+            method: 'POST',
         });
-    }
+    },
 };

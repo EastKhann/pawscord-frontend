@@ -2,6 +2,7 @@
 // HOCs and utilities for optimizing React components
 
 import React, { memo, forwardRef, useCallback, useMemo, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 // =====================================
 // 🎯 SMART MEMO: Deep comparison memo
@@ -39,11 +40,7 @@ const deepCompare = (prevProps, nextProps) => {
 
 // Smart memo HOC
 export const smartMemo = (Component, options = {}) => {
-    const {
-        displayName,
-        compareProps = deepCompare,
-        debug = false
-    } = options;
+    const { displayName, compareProps = deepCompare, debug = false } = options;
 
     const MemoizedComponent = memo(Component, (prev, next) => {
         const areEqual = compareProps(prev, next);
@@ -54,7 +51,8 @@ export const smartMemo = (Component, options = {}) => {
         return areEqual;
     });
 
-    MemoizedComponent.displayName = displayName || `SmartMemo(${Component.displayName || Component.name})`;
+    MemoizedComponent.displayName =
+        displayName || `SmartMemo(${Component.displayName || Component.name})`;
 
     return MemoizedComponent;
 };
@@ -78,33 +76,35 @@ export const lazyWithPreload = (factory) => {
 
 // Prevent unnecessary re-renders from parent
 export const withStableProps = (Component, stableKeys = []) => {
-    return memo(forwardRef((props, ref) => {
-        const stablePropsRef = useRef({});
+    return memo(
+        forwardRef((props, ref) => {
+            const stablePropsRef = useRef({});
 
-        // Only update stable props if they actually changed
-        stableKeys.forEach(key => {
-            if (props[key] !== undefined) {
-                const prev = stablePropsRef.current[key];
-                const next = props[key];
+            // Only update stable props if they actually changed
+            stableKeys.forEach((key) => {
+                if (props[key] !== undefined) {
+                    const prev = stablePropsRef.current[key];
+                    const next = props[key];
 
-                if (typeof prev === 'object' && typeof next === 'object') {
-                    if (JSON.stringify(prev) !== JSON.stringify(next)) {
+                    if (typeof prev === 'object' && typeof next === 'object') {
+                        if (JSON.stringify(prev) !== JSON.stringify(next)) {
+                            stablePropsRef.current[key] = next;
+                        }
+                    } else if (prev !== next) {
                         stablePropsRef.current[key] = next;
                     }
-                } else if (prev !== next) {
-                    stablePropsRef.current[key] = next;
                 }
-            }
-        });
+            });
 
-        const mergedProps = {
-            ...props,
-            ...stablePropsRef.current,
-            ref
-        };
+            const mergedProps = {
+                ...props,
+                ...stablePropsRef.current,
+                ref,
+            };
 
-        return <Component {...mergedProps} />;
-    }));
+            return <Component {...mergedProps} />;
+        })
+    );
 };
 
 // =====================================
@@ -125,7 +125,7 @@ export const withRenderTracker = (Component, componentName) => {
 
             // Find changed props
             const changedProps = [];
-            Object.keys(props).forEach(key => {
+            Object.keys(props).forEach((key) => {
                 if (prevProps.current[key] !== props[key]) {
                     changedProps.push(key);
                 }
@@ -206,11 +206,14 @@ export const useDerivedState = (props, deriveState) => {
 // =====================================
 
 // Optimized list item wrapper
-export const ListItem = memo(({ item, renderItem, index }) => {
-    return renderItem(item, index);
-}, (prev, next) => {
-    return prev.item === next.item && prev.index === next.index;
-});
+export const ListItem = memo(
+    ({ item, renderItem, index }) => {
+        return renderItem(item, index);
+    },
+    (prev, next) => {
+        return prev.item === next.item && prev.index === next.index;
+    }
+);
 
 // Keyed list renderer
 export const KeyedList = memo(({ items, renderItem, keyExtractor, emptyComponent }) => {
@@ -250,7 +253,7 @@ export const useBatchedUpdates = () => {
             updatesRef.current = [];
 
             React.unstable_batchedUpdates(() => {
-                updates.forEach(fn => fn());
+                updates.forEach((fn) => fn());
             });
 
             forceUpdate({});
@@ -271,5 +274,18 @@ export default {
     useDerivedState,
     ListItem,
     KeyedList,
-    useBatchedUpdates
+    useBatchedUpdates,
+};
+
+ListItem.propTypes = {
+    item: PropTypes.object,
+    renderItem: PropTypes.func,
+    index: PropTypes.number,
+};
+
+KeyedList.propTypes = {
+    items: PropTypes.array,
+    renderItem: PropTypes.func,
+    keyExtractor: PropTypes.func,
+    emptyComponent: PropTypes.node,
 };

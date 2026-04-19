@@ -1,76 +1,78 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../utils/toast';
+import logger from '../utils/logger';
+import confirmDialog from '../utils/confirmDialog';
 
 const useDMActions = ({ apiUrl, fetchWithAuth, servers, onViewUserProfile }) => {
+    const { t } = useTranslation();
     const [dmContextMenu, setDmContextMenu] = useState(null); // { x, y, conversation }
     const [inviteToServerModal, setInviteToServerModal] = useState(null); // { username: string, isOpen: boolean }
 
-    // --- DM TEMİZLEME / GİZLEME ---
+    // --- DM CLEAR / HIDE ---
     const handleClearDM = async (conversationId) => {
-        if (!confirm('Bu konuşmadaki tüm mesajları silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')) {
+        if (!(await confirmDialog(t('dm.confirmClearAll')))) {
             return;
         }
 
         try {
             const res = await fetchWithAuth(`${apiUrl}/conversations/${conversationId}/clear/`, {
-                method: 'POST'
+                method: 'POST',
             });
 
             if (res.ok) {
-                toast.success('✅ Konuşma temizlendi!');
-                // WebSocket state'i otomatik güncelleyecek
+                toast.success(t('dm.conversationCleared'));
             } else {
                 const data = await res.json();
-                toast.error(`❌ Hata: ${data.error || 'Konuşma temizlenemedi'}`);
+                toast.error(data.error || t('dm.couldNotClear'));
             }
         } catch (error) {
-            console.error('❌ DM clear error:', error);
-            toast.error('❌ Bağlantı hatası');
+            logger.error('DM clear error:', error);
+            toast.error(t('dm.connectionError'));
         }
 
         setDmContextMenu(null);
     };
 
     const handleHideDM = async (conversationId) => {
-        if (!confirm('Bu konuşmayı gizlemek istediğinizden emin misiniz?')) {
+        if (!(await confirmDialog(t('dm.confirmHide')))) {
             return;
         }
 
         try {
             const res = await fetchWithAuth(`${apiUrl}/conversations/${conversationId}/hide/`, {
-                method: 'POST'
+                method: 'POST',
             });
 
             if (res.ok) {
-                toast.success('✅ Konuşma gizlendi!');
-                // WebSocket state'i otomatik güncelleyecek
+                toast.success(t('dm.conversationHidden'));
             } else {
                 const data = await res.json();
-                toast.error(`❌ Hata: ${data.error || 'Konuşma gizlenemedi'}`);
+                toast.error(data.error || t('dm.couldNotHide'));
             }
         } catch (error) {
-            console.error('❌ DM hide error:', error);
-            toast.error('❌ Bağlantı hatası');
+            logger.error('DM hide error:', error);
+            toast.error(t('dm.connectionError'));
         }
 
         setDmContextMenu(null);
     };
 
-    // --- DM CONTEXT MENU FONKSİYONLARI ---
+    // --- DM CONTEXT MENU FUNCTIONS ---
     const handleViewProfile = (username) => {
         // 🔥 FIX: onViewUserProfile callback kullan
         if (onViewUserProfile) {
             onViewUserProfile(username);
         } else {
-            toast.info(`👤 ${username} profili görüntülenemiyor`);
+            toast.info(t('dm.cannotViewProfile', { username }));
         }
         setDmContextMenu(null);
     };
 
     const handleInviteToServer = (username) => {
-        // 🔥 FIX: Sunucu seçme modal'ını aç
+        // 🔥 FIX: Open server selection modal
         if (!servers || servers.length === 0) {
-            toast.error('❌ Davet edebileceğiniz sunucu bulunmuyor');
+            toast.error(t('dm.noServerToInvite'));
             setDmContextMenu(null);
             return;
         }
@@ -80,151 +82,151 @@ const useDMActions = ({ apiUrl, fetchWithAuth, servers, onViewUserProfile }) => 
 
     const handleSendServerInvite = async (serverId, username) => {
         try {
-            // Sunucu davetiyesi oluştur
+            // Create server invite
             const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/invite/`, {
                 method: 'POST',
-                body: JSON.stringify({ target_username: username })
+                body: JSON.stringify({ target_username: username }),
             });
 
             if (res.ok) {
                 const data = await res.json();
-                toast.success(`🎫 ${username} kullanıcısına davetiye gönderildi!`);
+                toast.success(t('dm.inviteSent', { username }));
             } else {
                 const data = await res.json();
-                toast.error(`❌ ${data.error || 'Davet gönderilemedi'}`);
+                toast.error(data.error || t('dm.inviteFailed'));
             }
         } catch (error) {
-            console.error('❌ Invite error:', error);
-            toast.error('❌ Bağlantı hatası');
+            logger.error('❌ Invite error:', error);
+            toast.error(t('dm.connectionError'));
         }
         setInviteToServerModal(null);
     };
 
     const handleMuteUser = async (username, conversationId) => {
-        // 🔥 FIX: Kullanıcıyı sessize alma - localStorage + API
+        // 🔥 FIX: Mute user - localStorage + API
         try {
             const mutedUsers = JSON.parse(localStorage.getItem('mutedDMUsers') || '{}');
 
             if (mutedUsers[username]) {
-                // Zaten sessiz, sesini aç
+                // Zaten sessiz, sesini open
                 delete mutedUsers[username];
                 localStorage.setItem('mutedDMUsers', JSON.stringify(mutedUsers));
-                toast.success(`🔊 ${username} artık sessize alınmadı`);
+                toast.success(t('dm.unmuted', { username }));
             } else {
                 // Sessize al
                 mutedUsers[username] = { timestamp: Date.now(), conversationId };
                 localStorage.setItem('mutedDMUsers', JSON.stringify(mutedUsers));
-                toast.success(`🔇 ${username} sessize alındı. Bildirimleri almayacaksınız.`);
+                toast.success(t('dm.muted', { username }));
             }
         } catch (error) {
-            console.error('❌ Mute error:', error);
-            toast.error('❌ Sessize alma hatası');
+            logger.error('❌ Mute error:', error);
+            toast.error(t('dm.muteError'));
         }
         setDmContextMenu(null);
     };
 
     const handlePinConversation = async (conversationId) => {
-        // 🔥 FIX: Konuşmayı sabitleme - localStorage
+        // 🔥 FIX: Pin conversation - localStorage
         try {
             const pinnedConvs = JSON.parse(localStorage.getItem('pinnedConversations') || '[]');
 
             if (pinnedConvs.includes(conversationId)) {
-                // Zaten sabit, sabitlemeyi kaldır
-                const newPinned = pinnedConvs.filter(id => id !== conversationId);
+                // Already pinned, unpin it
+                const newPinned = pinnedConvs.filter((id) => id !== conversationId);
                 localStorage.setItem('pinnedConversations', JSON.stringify(newPinned));
-                toast.success('📌 Konuşma sabitleme kaldırıldı');
+                toast.success(t('dm.unpinned'));
             } else {
-                // Sabitle (max 5)
+                // Pin (max 5)
                 if (pinnedConvs.length >= 5) {
-                    toast.warning('⚠️ En fazla 5 konuşma sabitleyebilirsiniz');
+                    toast.warning(t('dm.maxPinned'));
                 } else {
                     pinnedConvs.push(conversationId);
                     localStorage.setItem('pinnedConversations', JSON.stringify(pinnedConvs));
-                    toast.success('📌 Konuşma sabitlendi!');
+                    toast.success(t('dm.pinned'));
                 }
             }
         } catch (error) {
-            console.error('❌ Pin error:', error);
-            toast.error('❌ Sabitleme hatası');
+            logger.error('❌ Pin error:', error);
+            toast.error(t('dm.pinError'));
         }
         setDmContextMenu(null);
     };
 
     const handleBlockUser = async (username) => {
-        if (!confirm(`${username} kullanıcısını engellemek istediğinizden emin misiniz?`)) {
+        if (!(await confirmDialog(t('dm.confirmBlock', { username })))) {
             return;
         }
 
         try {
-            const res = await fetchWithAuth(`${apiUrl}/users/${username}/block/`, {
-                method: 'POST'
+            const res = await fetchWithAuth(`${apiUrl}/blocks/block/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username }),
             });
 
             if (res.ok) {
-                toast.success(`✅ ${username} engellendi!`);
-                // WebSocket otomatik güncelleyecek
+                toast.success(t('dm.blocked', { username }));
+                // WebSocket otomatik daycelleyecek
             } else {
-                toast.error('❌ Kullanıcı engellenemedi');
+                toast.error(t('dm.blockFailed'));
             }
         } catch (error) {
-            console.error('❌ Block error:', error);
-            toast.error('❌ Bağlantı hatası');
+            logger.error('❌ Block error:', error);
+            toast.error(t('dm.connectionError'));
         }
 
         setDmContextMenu(null);
     };
 
-    // 🔥 YENİ: ARKADAŞ EKLEME
+    // 🔥 NEW: ADD FRIEND
     const handleAddFriend = async (username) => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/friends/send/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                body: JSON.stringify({ username }),
             });
 
             if (res.ok) {
-
-                // 🔥 YENİ: Bildirim göster
+                // 🔥 NEW: Show notification
                 if (window.Notification && Notification.permission === 'granted') {
-                    new Notification('Arkadaşlık İsteği Gönderildi', {
-                        body: `${username} kullanıcısına arkadaşlık isteği gönderildi!`,
-                        icon: '/logo192.png'
+                    new Notification(t('dm.friendRequestSent'), {
+                        body: t('dm.friendRequestSentBody', { username }),
+                        icon: '/logo192.png',
                     });
                 }
             } else {
                 const error = await res.json();
-                console.error(`❌ Arkadaşlık isteği hatası: ${error.error || 'Bilinmeyen hata'}`);
+                logger.error(`❌ Friend request error: ${error.error || t('common.unknownError')}`);
             }
         } catch (error) {
-            console.error('❌ Arkadaş ekleme hatası:', error);
+            logger.error('❌ Add friend error:', error);
         }
     };
 
-    // 🔥 YENİ: ARKADAŞ ÇIKARMA
+    // 🔥 NEW: REMOVE FRIEND
     const handleRemoveFriend = async (username) => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/friends/remove/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                body: JSON.stringify({ username }),
             });
 
             if (res.ok) {
-
-                // Bildirim göster
+                // Show notification
                 if (window.Notification && Notification.permission === 'granted') {
-                    new Notification('Arkadaş Çıkarıldı', {
-                        body: `${username} arkadaş listesinden çıkarıldı.`,
-                        icon: '/logo192.png'
+                    new Notification(t('dm.friendRemoved'), {
+                        body: t('dm.friendRemovedBody', { username }),
+                        icon: '/logo192.png',
                     });
                 }
             } else {
                 const error = await res.json();
-                console.error(`❌ Arkadaş çıkarma hatası: ${error.error || 'Bilinmeyen hata'}`);
+                logger.error(`❌ Remove friend error: ${error.error || t('common.unknownError')}`);
             }
         } catch (error) {
-            console.error('❌ Arkadaş çıkarma hatası:', error);
+            logger.error('❌ Remove friend error:', error);
         }
     };
 

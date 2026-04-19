@@ -26,7 +26,7 @@ const useAsyncError = <T = unknown>(): UseAsyncErrorResult<T> => {
             setData(result);
             return result;
         } catch (err) {
-            const errorMessage = err.message || 'Bir hata oluştu';
+            const errorMessage = err.message || 'An error occurred';
             setError(errorMessage);
             logger.error('useAsyncError caught:', err);
             throw err; // Re-throw if caller wants to handle
@@ -46,11 +46,8 @@ const useAsyncError = <T = unknown>(): UseAsyncErrorResult<T> => {
         loading,
         error,
         data,
-        reset
+        reset,
     };
 };
 
 export default useAsyncError;
-
-
-

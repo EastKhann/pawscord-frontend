@@ -1,10 +1,12 @@
 // frontend/src/hooks/useVoiceRecording.js
 // Extracted from MessageInput.js — voice recording state cluster
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../utils/toast';
+import logger from '../utils/logger';
 
 const LOCK_THRESHOLD = 140; // px upward slide to lock (higher = harder to accidentally lock)
-const LOCK_DELAY_MS = 500;  // ms after recording starts before lock gesture is active
+const LOCK_DELAY_MS = 500; // ms after recording starts before lock gesture is active
 const CANCEL_THRESHOLD = 80; // px left slide to cancel
 
 const useVoiceRecording = (onFileUpload) => {
@@ -13,6 +15,7 @@ const useVoiceRecording = (onFileUpload) => {
     const [recordingTime, setRecordingTime] = useState(0);
     const [slideProgress, setSlideProgress] = useState(0);
     const [cancelProgress, setCancelProgress] = useState(0);
+    const { t } = useTranslation();
 
     const mediaRecorderRef = useRef(null);
     const recordingTimerRef = useRef(null);
@@ -131,7 +134,7 @@ const useVoiceRecording = (onFileUpload) => {
                 if (onFileUpload) {
                     onFileUpload(file);
                 }
-                stream.getTracks().forEach(track => track.stop());
+                stream.getTracks().forEach((track) => track.stop());
             };
 
             mediaRecorderRef.current.start();
@@ -140,11 +143,11 @@ const useVoiceRecording = (onFileUpload) => {
             recordingStartTimeRef.current = Date.now();
 
             recordingTimerRef.current = setInterval(() => {
-                setRecordingTime(t => t + 1);
+                setRecordingTime((prev) => prev + 1);
             }, 1000);
         } catch (err) {
-            console.error('Mikrofon erişim hatası:', err);
-            toast.error('❌ Mikrofona erişim reddedildi!');
+            logger.error('Mikrofon erişim hatası:', err);
+            toast.error(t('chat.micDenied'));
         }
     };
 
@@ -162,9 +165,10 @@ const useVoiceRecording = (onFileUpload) => {
             const stream = mediaRecorderRef.current.stream;
             mediaRecorderRef.current.onstop = null; // Prevent file upload
             mediaRecorderRef.current.stop();
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach((track) => track.stop());
             // Faz 2.3: Haptic feedback — cancel pattern
-            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([30, 50, 30]);
+            if (typeof navigator !== 'undefined' && navigator.vibrate)
+                navigator.vibrate([30, 50, 30]);
             setIsRecording(false);
             setIsRecordingLocked(false);
             clearInterval(recordingTimerRef.current);
@@ -198,6 +202,17 @@ const useVoiceRecording = (onFileUpload) => {
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
+
+    // Cleanup on unmount — stop recording and clear interval
+    useEffect(() => {
+        return () => {
+            if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+            if (mediaRecorderRef.current?.state === 'recording') {
+                mediaRecorderRef.current.stream.getTracks().forEach((t) => t.stop());
+                mediaRecorderRef.current.stop();
+            }
+        };
+    }, []);
 
     return {
         isRecording,

@@ -137,7 +137,10 @@ describe('useUserStore', () => {
     // ─── FRIENDS ───
     describe('Friends management', () => {
         it('setFriends should replace list', () => {
-            const friends = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
+            const friends = [
+                { id: 1, name: 'Alice' },
+                { id: 2, name: 'Bob' },
+            ];
             useUserStore.getState().setFriends(friends);
             expect(useUserStore.getState().friends).toHaveLength(2);
         });

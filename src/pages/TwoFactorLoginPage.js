@@ -1,11 +1,16 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 // frontend/src/pages/TwoFactorLoginPage.js
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FaShieldAlt, FaArrowLeft, FaKey } from 'react-icons/fa';
 import { API_BASE_URL } from '../utils/constants';
 import { useAuth } from '../AuthContext';
+import logger from '../utils/logger';
 
 const TwoFactorLoginPage = () => {
+    const { t } = useTranslation();
     const { login } = useAuth();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -21,7 +26,7 @@ const TwoFactorLoginPage = () => {
     useEffect(() => {
         if (!tempToken) {
             // Redirect to login if no temp_token
-            console.warn('🔐 [2FA] No temp_token found, redirecting to login');
+            logger.warn('🔐 [2FA] No temp_token found, redirecting to login');
             navigate('/login');
         }
     }, [tempToken, navigate]);
@@ -47,12 +52,12 @@ const TwoFactorLoginPage = () => {
             const response = await fetch(`${API_BASE_URL}/security/2fa/verify-login/`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     temp_token: tempToken,
-                    code: codeToSend
-                })
+                    code: codeToSend,
+                }),
             });
 
             const data = await response.json();
@@ -62,11 +67,11 @@ const TwoFactorLoginPage = () => {
                 login(data.access, data.refresh);
                 navigate('/');
             } else {
-                console.error('❌ [2FA] Verification failed:', data);
-                setError(data.error || 'Geçersiz kod');
+                logger.error('❌ [2FA] Verification failed:', data);
+                setError(data.error || t('common.invalidCode'));
             }
         } catch (error) {
-            console.error('❌ [2FA] Network error:', error);
+            logger.error('❌ [2FA] Network error:', error);
             setError('Bağlantı hatası oluştu');
         } finally {
             setLoading(false);
@@ -76,19 +81,24 @@ const TwoFactorLoginPage = () => {
     return (
         <div style={styles.container}>
             <div style={styles.card}>
-                <button onClick={() => navigate('/login')} style={styles.backButton}>
-                    <FaArrowLeft /> Geri
+                <button
+                    onClick={() => navigate('/login')}
+                    style={styles.backButton}
+                    aria-label={t('common.back')}
+                >
+                    <FaArrowLeft /> {t('common.back')}
                 </button>
 
                 <FaShieldAlt style={styles.icon} />
-                <h2 style={styles.title}>İki Faktörlü Doğrulama</h2>
+                <h2 style={styles.title}>{t('auth.twoFactorAuth')}</h2>
                 <p style={styles.subtitle}>
-                    {useBackupCode ? 'Yedek kodunuzu girin' : 'Authenticator uygulamanızdaki 6 haneli kodu girin'}
+                    {useBackupCode ? t('auth.enterBackupCode') : t('auth.twoFactorDesc')}
                 </p>
 
                 <form onSubmit={handleSubmit} style={styles.form}>
                     {!useBackupCode ? (
                         <>
+                            {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                             <input
                                 type="text"
                                 maxLength={6}
@@ -107,15 +117,17 @@ const TwoFactorLoginPage = () => {
                                 type="button"
                                 onClick={() => setUseBackupCode(true)}
                                 style={styles.backupLink}
+                                aria-label={t('auth.useBackupCode')}
                             >
-                                <FaKey /> Yedek kod kullan
+                                <FaKey /> {t('auth.useBackupCode')}
                             </button>
                         </>
                     ) : (
                         <>
+                            {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                             <input
                                 type="text"
-                                placeholder="Yedek kod"
+                                placeholder={t('auth.backupCodePlaceholder')}
                                 value={backupCode}
                                 onChange={(e) => setBackupCode(e.target.value)}
                                 style={styles.backupInput}
@@ -127,14 +139,15 @@ const TwoFactorLoginPage = () => {
                                 type="button"
                                 onClick={() => setUseBackupCode(false)}
                                 style={styles.backupLink}
+                                aria-label={t('auth.useTOTP')}
                             >
-                                ← Authenticator kodu kullan
+                                ← {t('auth.useTOTP')}
                             </button>
                         </>
                     )}
 
                     {error && (
-                        <div style={styles.error}>
+                        <div style={styles.error} role="alert">
                             ❌ {error}
                         </div>
                     )}
@@ -142,18 +155,33 @@ const TwoFactorLoginPage = () => {
                     <button
                         type="submit"
                         style={styles.submitButton}
-                        disabled={loading || (!useBackupCode && code.length !== 6) || (useBackupCode && !backupCode)}
+                        disabled={
+                            loading ||
+                            (!useBackupCode && code.length !== 6) ||
+                            (useBackupCode && !backupCode)
+                        }
+                        aria-label={t('auth.verifyCode')}
                     >
-                        {loading ? 'Doğrulanıyor...' : 'Giriş Yap'}
+                        {loading ? t('auth.verifying') : t('auth.verifyCode')}
                     </button>
                 </form>
 
                 <div style={styles.info}>
-                    <p style={styles.infoTitle}>💡 İpuçları:</p>
+                    <p style={styles.infoTitle}>💡 {t('common.info')}:</p>
                     <ul style={styles.infoList}>
-                        <li>Kod sürekli değişir (30 saniyede bir)</li>
-                        <li>Telefonunuzu kaybettiyseniz yedek kod kullanın</li>
-                        <li>Her yedek kod sadece bir kere kullanılabilir</li>
+                        <li>{t('auth.codeRotates', 'Code changes every 30 seconds')}</li>
+                        <li>
+                            {t(
+                                'auth.useBackupIfLostPhone',
+                                'Use backup code if you lost your phone'
+                            )}
+                        </li>
+                        <li>
+                            {t(
+                                'auth.backupCodeSingleUse',
+                                'Each backup code can only be used once'
+                            )}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -167,8 +195,9 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'radial-gradient(ellipse at 15% 20%, rgba(88,101,242,0.16) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(124,58,237,0.10) 0%, transparent 48%), #0d0e10',
-        padding: '20px'
+        background:
+            'radial-gradient(ellipse at 15% 20%, rgba(88,101,242,0.16) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(124,58,237,0.10) 0%, transparent 48%), #0d0e10',
+        padding: '20px',
     },
     card: {
         background: 'rgba(30, 31, 35, 0.88)',
@@ -179,9 +208,10 @@ const styles = {
         maxWidth: '500px',
         width: '100%',
         border: '1px solid rgba(255,255,255,0.07)',
-        boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.06)',
+        boxShadow:
+            '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.06)',
         position: 'relative',
-        animation: 'authCardIn 0.5s cubic-bezier(0.22,1,0.36,1)'
+        animation: 'authCardIn 0.5s cubic-bezier(0.22,1,0.36,1)',
     },
     backButton: {
         position: 'absolute',
@@ -198,14 +228,14 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        transition: 'all 0.2s'
+        transition: 'all 0.2s',
     },
     icon: {
         fontSize: '64px',
         color: '#5865f2',
         display: 'block',
         margin: '0 auto 20px',
-        filter: 'drop-shadow(0 4px 20px rgba(88,101,242,0.55))'
+        filter: 'drop-shadow(0 4px 20px rgba(88,101,242,0.55))',
     },
     title: {
         background: 'linear-gradient(135deg, #ffffff 30%, #9ba5ff)',
@@ -215,18 +245,18 @@ const styles = {
         fontSize: '28px',
         fontWeight: '800',
         textAlign: 'center',
-        margin: '0 0 10px 0'
+        margin: '0 0 10px 0',
     },
     subtitle: {
         color: '#b5bac1',
         fontSize: '16px',
         textAlign: 'center',
-        marginBottom: '30px'
+        marginBottom: '30px',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px'
+        gap: '15px',
     },
     codeInput: {
         background: 'rgba(255,255,255,0.05)',
@@ -239,7 +269,7 @@ const styles = {
         letterSpacing: '8px',
         fontFamily: 'monospace',
         outline: 'none',
-        boxShadow: '0 0 0 4px rgba(88,101,242,0.12), 0 4px 20px rgba(88,101,242,0.18)'
+        boxShadow: '0 0 0 4px rgba(88,101,242,0.12), 0 4px 20px rgba(88,101,242,0.18)',
     },
     backupInput: {
         background: 'rgba(255,255,255,0.05)',
@@ -250,7 +280,7 @@ const styles = {
         fontSize: '16px',
         textAlign: 'center',
         fontFamily: 'monospace',
-        outline: 'none'
+        outline: 'none',
     },
     backupLink: {
         background: 'rgba(88,101,242,0.08)',
@@ -265,7 +295,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         gap: '6px',
-        transition: 'all 0.2s'
+        transition: 'all 0.2s',
     },
     error: {
         backgroundColor: '#da373c',
@@ -273,7 +303,7 @@ const styles = {
         padding: '12px',
         borderRadius: '6px',
         fontSize: '14px',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     submitButton: {
         background: 'linear-gradient(135deg, #5865f2 0%, #4549c4 100%)',
@@ -285,30 +315,28 @@ const styles = {
         fontWeight: 'bold',
         cursor: 'pointer',
         transition: 'opacity 0.2s, transform 0.15s',
-        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
     },
     info: {
         background: 'rgba(88,101,242,0.07)',
         border: '1px solid rgba(88,101,242,0.20)',
         borderRadius: '12px',
         padding: '15px',
-        marginTop: '20px'
+        marginTop: '20px',
     },
     infoTitle: {
         color: '#fff',
         fontSize: '14px',
         fontWeight: 'bold',
-        margin: '0 0 10px 0'
+        margin: '0 0 10px 0',
     },
     infoList: {
         color: '#b5bac1',
         fontSize: '14px',
         margin: 0,
-        paddingLeft: '20px'
-    }
+        paddingLeft: '20px',
+    },
 };
 
+TwoFactorLoginPage.propTypes = {};
 export default TwoFactorLoginPage;
-
-
-

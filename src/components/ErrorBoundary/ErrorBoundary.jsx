@@ -1,3 +1,4 @@
+﻿import { getToken } from '../../utils/tokenStorage';
 /**
  * 🛡️ Error Boundary Component
  * Catch React errors and show fallback UI
@@ -7,6 +8,11 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import './ErrorBoundary.css';
 
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import logger from '../../utils/logger';
+import * as Sentry from '@sentry/react';
+
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +20,7 @@ class ErrorBoundary extends React.Component {
             hasError: false,
             error: null,
             errorInfo: null,
-            errorCount: 0
+            errorCount: 0,
         };
     }
 
@@ -49,19 +55,26 @@ class ErrorBoundary extends React.Component {
 
     componentDidCatch(error, errorInfo) {
         // Log to error reporting service (e.g., Sentry)
-        console.error('Error Boundary caught error:', error, errorInfo);
+        logger.error('Error Boundary caught error:', error, errorInfo);
 
         this.setState({
             error,
             errorInfo,
-            errorCount: this.state.errorCount + 1
+            errorCount: this.state.errorCount + 1,
+        });
+
+        // Capture in Sentry with component stack context
+        Sentry.captureException(error, {
+            contexts: {
+                react: { componentStack: errorInfo.componentStack },
+            },
         });
 
         // Send to error tracking service
         if (window.gtag) {
             window.gtag('event', 'exception', {
                 description: error.toString(),
-                fatal: false
+                fatal: false,
             });
         }
 
@@ -71,10 +84,11 @@ class ErrorBoundary extends React.Component {
 
     reportError = async (error, errorInfo) => {
         try {
-            const apiBase = (typeof window !== 'undefined' && window.__PAWSCORD_API_BASE__)
-                || import.meta.env?.VITE_API_BASE_URL
-                || 'https://api.pawscord.com/api';
-            const token = localStorage.getItem('access_token');
+            const apiBase =
+                (typeof window !== 'undefined' && window.__PAWSCORD_API_BASE__) ||
+                import.meta.env?.VITE_API_BASE_URL ||
+                'https://api.pawscord.com/api';
+            const token = getToken();
             const headers = { 'Content-Type': 'application/json' };
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
@@ -86,11 +100,11 @@ class ErrorBoundary extends React.Component {
                     stack: errorInfo.componentStack,
                     url: window.location.href,
                     userAgent: navigator.userAgent,
-                    timestamp: new Date().toISOString()
-                })
+                    timestamp: new Date().toISOString(),
+                }),
             });
         } catch (err) {
-            // Silently fail — error reporting should never cause more errors
+            // Swithntly fail — error reporting should never cause more errors
         }
     };
 
@@ -98,7 +112,7 @@ class ErrorBoundary extends React.Component {
         this.setState({
             hasError: false,
             error: null,
-            errorInfo: null
+            errorInfo: null,
         });
     };
 
@@ -109,7 +123,12 @@ class ErrorBoundary extends React.Component {
 
             if (this.state.errorCount > 3) {
                 return (
-                    <div className="error-boundary critical">
+                    <div
+                        aria-label="use error handler"
+                        className="error-boundary critical"
+                        role="alert"
+                        aria-live="assertive"
+                    >
                         <div className="error-content">
                             <h1>⚠️ {t('errors.criticalError')}</h1>
                             <p>{t('errors.multipleErrors')}</p>
@@ -122,7 +141,7 @@ class ErrorBoundary extends React.Component {
             }
 
             return (
-                <div className="error-boundary">
+                <div className="error-boundary" role="alert" aria-live="assertive">
                     <div className="error-content">
                         <div className="error-icon">😕</div>
                         <h1>{t('errors.somethingWrong')}</h1>
@@ -132,9 +151,11 @@ class ErrorBoundary extends React.Component {
 
                         {process.env.NODE_ENV === 'development' && this.state.error && (
                             <details className="error-details">
-                                <summary>Error Details (Development Only)</summary>
+                                <summary>{t('error_details_development_only')}</summary>
                                 <div className="error-stack">
-                                    <p><strong>Error:</strong> {this.state.error.toString()}</p>
+                                    <p>
+                                        <strong>{t('error')}</strong> {this.state.error.toString()}
+                                    </p>
                                     <pre>{this.state.errorInfo?.componentStack}</pre>
                                 </div>
                             </details>
@@ -144,7 +165,10 @@ class ErrorBoundary extends React.Component {
                             <button onClick={this.handleReset} className="btn-retry">
                                 {t('errors.tryAgain')}
                             </button>
-                            <button onClick={() => window.location.href = '/'} className="btn-home">
+                            <button
+                                onClick={() => (window.location.href = '/')}
+                                className="btn-home"
+                            >
                                 {t('errors.goHome')}
                             </button>
                         </div>
@@ -171,5 +195,7 @@ export const useErrorHandler = () => {
 
     return setError;
 };
+
+ErrorBoundary.propTypes = {};
 
 export default withTranslation()(ErrorBoundary);

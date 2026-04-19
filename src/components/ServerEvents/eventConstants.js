@@ -1,4 +1,14 @@
-import { FaCalendarAlt, FaMicrophone, FaExternalLinkAlt, FaGamepad, FaTv, FaTrophy, FaUsers } from 'react-icons/fa';
+/* eslint-disable no-undef */
+import {
+    FaCalendarAlt,
+    FaMicrophone,
+    FaExternalLinkAlt,
+    FaGamepad,
+    FaTv,
+    FaTrophy,
+    FaUsers,
+} from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 
 export const EVENT_ICONS = {
     voice: <FaMicrophone />,
@@ -23,12 +33,12 @@ export const EVENT_COLORS = {
 };
 
 export const EVENT_TYPES = [
-    { value: 'voice', label: '🎤 Sesli Etkinlik' },
-    { value: 'stage', label: '🎙️ Sahne Etkinliği' },
+    { value: 'voice', label: '🎤 Sesli Event' },
+    { value: 'stage', label: t('ui.sahne_etkinligi') },
     { value: 'game', label: '🎮 Oyun Gecesi' },
-    { value: 'watch', label: '📺 İzleme Partisi' },
+    { value: 'watch', label: '📺 Watch Party' },
     { value: 'tournament', label: '🏆 Turnuva' },
-    { value: 'meetup', label: '👥 Buluşma' },
-    { value: 'external', label: '🌐 Harici Etkinlik' },
-    { value: 'other', label: '📌 Diğer' },
+    { value: 'meetup', label: t('ui.bulusma') },
+    { value: 'external', label: '🌐 Harici Event' },
+    { value: 'other', label: '📌 Other' },
 ];

@@ -39,17 +39,20 @@ const useDragDrop = (onFilesDropped?: (files: File[]) => void): UseDragDropResul
         }
     }, []);
 
-    const handleDrop = useCallback((e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dragCounter.current = 0;
-        setIsDragging(false);
+    const handleDrop = useCallback(
+        (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter.current = 0;
+            setIsDragging(false);
 
-        const files = Array.from(e.dataTransfer?.files || []);
-        if (files.length > 0 && onFilesDropped) {
-            onFilesDropped(files);
-        }
-    }, [onFilesDropped]);
+            const files = Array.from(e.dataTransfer?.files || []);
+            if (files.length > 0 && onFilesDropped) {
+                onFilesDropped(files);
+            }
+        },
+        [onFilesDropped]
+    );
 
     const dragHandlers = {
         onDragEnter: handleDragEnter,

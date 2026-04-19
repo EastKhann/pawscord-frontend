@@ -1,3 +1,4 @@
+export { default } from '../social/TicketSystemPanel';
 // Barrel export for TicketSystemPanel
 export { default as TicketConfig } from './TicketConfig';
 export { default as TicketDetail } from './TicketDetail';

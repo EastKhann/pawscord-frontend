@@ -1,31 +1,39 @@
+﻿// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
+import PropTypes from 'prop-types';
+import logger from '../../utils/logger';
 
 const useRaidProtection = (serverId, fetchWithAuth, apiBaseUrl) => {
+    const { t } = useTranslation();
     const [protection, setProtection] = useState({
         enabled: false,
         join_rate_limit: 10,
         new_account_age: 7,
         verification_level: 'medium',
         auto_kick_suspicious: true,
-        lockdown_mode: false
+        lockdown_mode: false,
     });
     const [raidActivity, setRaidActivity] = useState([]);
     const [stats, setStats] = useState({
         blocked_joins: 0,
         kicked_users: 0,
         raid_attempts: 0,
-        last_raid: null
+        last_raid: null,
     });
     const [loading, setLoading] = useState(true);
 
     const loadProtection = async () => {
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/moderation/raid-protection/${serverId}/`);
+            const res = await fetchWithAuth(
+                `${apiBaseUrl}/moderation/raid-protection/${serverId}/`
+            );
             if (res.ok) setProtection(await res.json());
         } catch (error) {
-            console.error('Failed to load raid protection:', error);
+            logger.error('Failed to load raid protection:', error);
         }
         setLoading(false);
     };
@@ -34,17 +42,17 @@ const useRaidProtection = (serverId, fetchWithAuth, apiBaseUrl) => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/moderation/raid-protection/check/`, {
                 method: 'POST',
-                body: JSON.stringify({ server_id: serverId })
+                body: JSON.stringify({ server_id: serverId }),
             });
             if (res.ok) {
                 const data = await res.json();
                 setRaidActivity(data.recent_activity || []);
                 if (data.raid_detected) {
-                    toast.error(`⚠️ RAID DETECTED!\n${data.message}\n\nAutomatic protection activated.`);
+                    toast.error(t('raidProtection.detected'));
                 }
             }
         } catch (error) {
-            console.error('Failed to check raid activity:', error);
+            logger.error('Failed to check raid activity:', error);
         }
     };
 
@@ -59,11 +67,11 @@ const useRaidProtection = (serverId, fetchWithAuth, apiBaseUrl) => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/moderation/raid-protection/enable/`, {
                 method: 'POST',
-                body: JSON.stringify({ server_id: serverId, enabled: !protection.enabled })
+                body: JSON.stringify({ server_id: serverId, enabled: !protection.enabled }),
             });
             if (res.ok) setProtection({ ...protection, enabled: !protection.enabled });
         } catch (error) {
-            console.error('Failed to toggle raid protection:', error);
+            logger.error('Failed to toggle raid protection:', error);
         }
     };
 
@@ -73,27 +81,41 @@ const useRaidProtection = (serverId, fetchWithAuth, apiBaseUrl) => {
         try {
             await fetchWithAuth(`${apiBaseUrl}/moderation/raid-protection/update/`, {
                 method: 'POST',
-                body: JSON.stringify({ server_id: serverId, ...updated })
+                body: JSON.stringify({ server_id: serverId, ...updated }),
             });
         } catch (error) {
-            console.error('Failed to update setting:', error);
+            logger.error('Failed to update setting:', error);
         }
     };
 
     const activateLockdown = async () => {
-        if (!await confirmDialog('⚠️ LOCKDOWN MODE\n\nThis will:\n- Block all new joins\n- Require manual approval for each user\n- Kick suspicious accounts\n\nActivate?')) return;
+        if (
+            !(await confirmDialog(
+                '⚠️ LOCKDOWN MODE\n\nThis will:\n- Block all new joins\n- Require manual approval for each user\n- Kick suspicious accounts\n\nActivate?'
+            ))
+        )
+            return;
         try {
             await updateSetting('lockdown_mode', true);
-            toast.success('🔒 Lockdown Mode Activated!');
+            toast.success(t('raidProtection.lockdownActivated'));
         } catch (error) {
-            console.error('Failed to activate lockdown:', error);
+            logger.error('Failed to activate lockdown:', error);
         }
     };
 
     return {
-        protection, raidActivity, stats, loading,
-        toggleProtection, updateSetting, activateLockdown
+        protection,
+        raidActivity,
+        stats,
+        loading,
+        toggleProtection,
+        updateSetting,
+        activateLockdown,
     };
 };
 
 export default useRaidProtection;
+
+useRaidProtection.propTypes = {
+    serverId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};

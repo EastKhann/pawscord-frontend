@@ -1,46 +1,48 @@
 // frontend/src/hooks/useNetworkStatus.js
-// Lightweight online/offline hook (re-exports from useCustomHooks for convenience)
-// The full implementation lives in useCustomHooks.ts
-
-import { useState, useEffect, useRef } from 'react';
+// Tracks online/offline status using @capacitor/network on native, navigator.onLine on web.
+import { useEffect, useState } from 'react';
+import { Capacitor } from '@capacitor/core';
 
 /**
- * useNetworkStatus — tracks navigator.onLine and exposes wasOffline flag.
- *
- * @returns {{ isOnline: boolean, wasOffline: boolean }}
+ * Returns { isOnline: boolean } — reacts to network changes on both web and native.
  */
-export const useNetworkStatus = () => {
+export function useNetworkStatus() {
     const [isOnline, setIsOnline] = useState(
         typeof navigator !== 'undefined' ? navigator.onLine : true
     );
-    const wasOfflineRef = useRef(false);
-    const [wasOffline, setWasOffline] = useState(false);
 
     useEffect(() => {
-        const goOnline = () => {
-            setIsOnline(true);
-            if (wasOfflineRef.current) {
-                setWasOffline(true);
-                // Auto-clear the flag after 5 s
-                setTimeout(() => setWasOffline(false), 5000);
-            }
-        };
+        let removeListener = null;
 
-        const goOffline = () => {
-            setIsOnline(false);
-            wasOfflineRef.current = true;
-        };
+        if (Capacitor.isNativePlatform()) {
+            // Native: use @capacitor/network for reliable status
+            import('@capacitor/network').then(({ Network }) => {
+                // Get initial status
+                Network.getStatus().then(({ connected }) => setIsOnline(connected));
 
-        window.addEventListener('online', goOnline);
-        window.addEventListener('offline', goOffline);
+                // Subscribe to changes
+                Network.addListener('networkStatusChange', ({ connected }) => {
+                    setIsOnline(connected);
+                }).then((handle) => {
+                    removeListener = () => handle.remove();
+                });
+            });
+        } else {
+            // Web: browser events
+            const goOnline = () => setIsOnline(true);
+            const goOffline = () => setIsOnline(false);
+            window.addEventListener('online', goOnline);
+            window.addEventListener('offline', goOffline);
+            removeListener = () => {
+                window.removeEventListener('online', goOnline);
+                window.removeEventListener('offline', goOffline);
+            };
+        }
 
         return () => {
-            window.removeEventListener('online', goOnline);
-            window.removeEventListener('offline', goOffline);
+            removeListener?.();
         };
     }, []);
 
-    return { isOnline, wasOffline };
-};
-
-export default useNetworkStatus;
+    return { isOnline };
+}

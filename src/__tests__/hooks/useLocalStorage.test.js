@@ -101,7 +101,7 @@ describe('useLocalStorage', () => {
     it('should return initialValue when localStorage has invalid JSON', () => {
         localStorage.setItem('corrupt-key', 'not-valid-json{{{');
         // Suppress console.error from the hook
-        vi.spyOn(console, 'error').mockImplementation(() => { });
+        vi.spyOn(console, 'error').mockImplementation(() => {});
 
         const { result } = renderHook(() => useLocalStorage('corrupt-key', 'fallback'));
         const [value] = result.current;

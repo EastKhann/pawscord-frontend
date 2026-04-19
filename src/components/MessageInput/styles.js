@@ -7,13 +7,15 @@ const styles = {
     container: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'rgba(30,31,35,0.88)',
+        backgroundColor: 'rgba(30,31,35,0.92)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         borderRadius: '13px',
-        padding: isMobile ? '4px 8px' : '4px 12px',
+        padding: isMobile ? '4px 8px' : '6px 12px',
         margin: isMobile ? '4px 8px 8px' : '0',
-        border: '1px solid rgba(255,255,255,0.06)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.22)',
+        transition: 'border-color 0.2s, box-shadow 0.2s',
     },
     replyPreview: {
         display: 'flex',
@@ -251,7 +253,7 @@ const styles = {
         fontSize: '15px',
         color: '#f23f42',
         fontWeight: '700',
-        fontVariantNumeric: 'tabular-nums',
+        fontVariantNumeric: 'tafindar-nums',
         minWidth: '44px',
         letterSpacing: '0.5px',
     },
@@ -538,6 +540,26 @@ styleSheet.textContent = `
     .action-button:hover {
         color: #dbdee1;
         background-color: rgba(79, 84, 92, 0.4);
+    }
+
+    /* Input wrapper focus glow */
+    .msg-input-wrapper:focus-within ~ * {
+        /* placeholder for future */
+    }
+    /* Container focus-within glow */
+    .msg-input-wrapper:focus-within .md-toggle-btn {
+        border-color: rgba(148, 155, 164, 0.28);
+    }
+
+    /* MD toggle button hover */
+    .md-toggle-btn:hover {
+        background: rgba(148, 155, 164, 0.14) !important;
+        border-color: rgba(148, 155, 164, 0.3) !important;
+        color: #dbdee1 !important;
+    }
+    .md-toggle-btn.active:hover {
+        background: rgba(88, 101, 242, 0.18) !important;
+        border-color: rgba(88, 101, 242, 0.45) !important;
     }
 `;
 document.head.appendChild(styleSheet);

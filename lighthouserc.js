@@ -32,17 +32,17 @@ module.exports = {
                 'cumulative-layout-shift': ['warn', { maxNumericValue: 0.15 }],
                 'speed-index': ['warn', { maxNumericValue: 4500 }],
 
-                // Accessibility — fail CI if below 80%
-                'categories:accessibility': ['error', { minScore: 0.8 }],
+                // Accessibility — fail CI if below 90%
+                'categories:accessibility': ['error', { minScore: 0.9 }],
 
                 // Best practices — warn if below 90%
                 'categories:best-practices': ['warn', { minScore: 0.9 }],
 
-                // SEO — warn if below 80%
-                'categories:seo': ['warn', { minScore: 0.8 }],
+                // SEO — warn if below 85%
+                'categories:seo': ['warn', { minScore: 0.85 }],
 
-                // Performance — warn if below 60% (SPA first paint is often slow)
-                'categories:performance': ['warn', { minScore: 0.6 }],
+                // Performance — warn if below 70% (SPA first paint is often slow)
+                'categories:performance': ['warn', { minScore: 0.7 }],
             },
         },
         upload: {

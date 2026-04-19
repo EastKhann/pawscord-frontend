@@ -50,7 +50,7 @@ describe('AuthContext', () => {
         });
 
         it('should be authenticated if valid token in localStorage', () => {
-            const futureExp = (Date.now() / 1000) + 3600; // 1h future
+            const futureExp = Date.now() / 1000 + 3600; // 1h future
             window.localStorage.getItem.mockImplementation((key) => {
                 if (key === 'access_token') return 'valid-token';
                 if (key === 'chat_username') return 'testuser';
@@ -64,7 +64,7 @@ describe('AuthContext', () => {
         });
 
         it('should be unauthenticated if stored token is expired', () => {
-            const pastExp = (Date.now() / 1000) - 3600; // 1h ago
+            const pastExp = Date.now() / 1000 - 3600; // 1h ago
             window.localStorage.getItem.mockImplementation((key) => {
                 if (key === 'access_token') return 'expired-token';
                 return null;
@@ -80,7 +80,7 @@ describe('AuthContext', () => {
     // ─── LOGIN ───
     describe('login', () => {
         it('should store tokens and set user on login', () => {
-            mockJwtDecode.mockReturnValue({ exp: (Date.now() / 1000) + 3600, username: 'alice' });
+            mockJwtDecode.mockReturnValue({ exp: Date.now() / 1000 + 3600, username: 'alice' });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
             act(() => {
@@ -90,13 +90,19 @@ describe('AuthContext', () => {
             expect(result.current.isAuthenticated).toBe(true);
             expect(result.current.user).toEqual({ username: 'alice' });
             expect(result.current.token).toBe('access-token-123');
-            expect(window.localStorage.setItem).toHaveBeenCalledWith('access_token', 'access-token-123');
-            expect(window.localStorage.setItem).toHaveBeenCalledWith('refresh_token', 'refresh-token-456');
+            expect(window.localStorage.setItem).toHaveBeenCalledWith(
+                'access_token',
+                'access-token-123'
+            );
+            expect(window.localStorage.setItem).toHaveBeenCalledWith(
+                'refresh_token',
+                'refresh-token-456'
+            );
             expect(window.localStorage.setItem).toHaveBeenCalledWith('chat_username', 'alice');
         });
 
         it('should decode JWT to extract username', () => {
-            mockJwtDecode.mockReturnValue({ exp: (Date.now() / 1000) + 3600, username: 'bob' });
+            mockJwtDecode.mockReturnValue({ exp: Date.now() / 1000 + 3600, username: 'bob' });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
             act(() => {
@@ -108,7 +114,9 @@ describe('AuthContext', () => {
         });
 
         it('should call logout if jwtDecode throws', () => {
-            mockJwtDecode.mockImplementation(() => { throw new Error('Invalid token'); });
+            mockJwtDecode.mockImplementation(() => {
+                throw new Error('Invalid token');
+            });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
             act(() => {
@@ -124,11 +132,15 @@ describe('AuthContext', () => {
     // ─── LOGOUT ───
     describe('logout', () => {
         it('should clear all auth state', () => {
-            mockJwtDecode.mockReturnValue({ exp: (Date.now() / 1000) + 3600, username: 'testuser' });
+            mockJwtDecode.mockReturnValue({ exp: Date.now() / 1000 + 3600, username: 'testuser' });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
-            act(() => { result.current.login('token', 'refresh'); });
-            act(() => { result.current.logout(); });
+            act(() => {
+                result.current.login('token', 'refresh');
+            });
+            act(() => {
+                result.current.logout();
+            });
 
             expect(result.current.isAuthenticated).toBe(false);
             expect(result.current.user).toBeNull();
@@ -146,11 +158,15 @@ describe('AuthContext', () => {
                 if (key === 'refresh_token') return 'valid-refresh';
                 return null;
             });
-            mockJwtDecode.mockReturnValue({ exp: (Date.now() / 1000) + 3600, username: 'refreshed-user' });
+            mockJwtDecode.mockReturnValue({
+                exp: Date.now() / 1000 + 3600,
+                username: 'refreshed-user',
+            });
 
             global.fetch.mockResolvedValueOnce({
                 ok: true,
-                json: () => Promise.resolve({ access: 'new-access-token', refresh: 'new-refresh-token' }),
+                json: () =>
+                    Promise.resolve({ access: 'new-access-token', refresh: 'new-refresh-token' }),
             });
 
             const { result } = renderHook(() => useAuth(), { wrapper });
@@ -160,8 +176,14 @@ describe('AuthContext', () => {
             });
 
             expect(refreshResult).toBe(true);
-            expect(window.localStorage.setItem).toHaveBeenCalledWith('access_token', 'new-access-token');
-            expect(window.localStorage.setItem).toHaveBeenCalledWith('refresh_token', 'new-refresh-token');
+            expect(window.localStorage.setItem).toHaveBeenCalledWith(
+                'access_token',
+                'new-access-token'
+            );
+            expect(window.localStorage.setItem).toHaveBeenCalledWith(
+                'refresh_token',
+                'new-refresh-token'
+            );
         });
 
         it('should logout if no refresh_token stored', async () => {

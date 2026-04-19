@@ -1,7 +1,11 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../../utils/toast';
+import logger from '../../../utils/logger';
+import confirmDialog from '../../../utils/confirmDialog';
 
 export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
+    const { t } = useTranslation();
     const [tournaments, setTournaments] = useState([]);
     const [activeTournament, setActiveTournament] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -16,7 +20,7 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
                 setTournaments(data.tournaments || []);
             }
         } catch (error) {
-            console.error('Tournament load error:', error);
+            logger.error('Tournament load error:', error);
         }
     };
 
@@ -25,7 +29,7 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
             const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(tournamentData)
+                body: JSON.stringify(tournamentData),
             });
 
             if (res.ok) {
@@ -34,35 +38,35 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
                 setShowCreateModal(false);
             }
         } catch (error) {
-            console.error('Tournament create error:', error);
+            logger.error('Tournament create error:', error);
         }
     };
 
     const joinTournament = async (tournamentId) => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournamentId}/join/`, {
-                method: 'POST'
+                method: 'POST',
             });
 
             if (res.ok) {
-                toast.success('✅ Turnuvaya katıldınız!');
+                toast.success(t('tournament.joined'));
                 loadTournaments();
             }
         } catch (error) {
-            console.error('Join error:', error);
+            logger.error('Join error:', error);
         }
     };
 
     const leaveTournament = async (tournamentId) => {
-        if (!confirm('Turnuvadan ayrılmak istediğinize emin misiniz?')) return;
+        if (!(await confirmDialog(t('tournament.leaveConfirm')))) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/tournaments/${tournamentId}/leave/`, {
-                method: 'POST'
+                method: 'POST',
             });
             loadTournaments();
         } catch (error) {
-            console.error('Leave error:', error);
+            logger.error('Leave error:', error);
         }
     };
 
@@ -77,6 +81,6 @@ export const useTournament = ({ fetchWithAuth, apiBaseUrl }) => {
         loadTournaments,
         createTournament,
         joinTournament,
-        leaveTournament
+        leaveTournament,
     };
 };

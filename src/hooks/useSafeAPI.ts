@@ -12,57 +12,69 @@ import logger from '../utils/logger';
 export const useSafeAPI = () => {
     const { execute, loading, error, data, reset } = useAsyncError();
 
-    const safeFetch = useCallback(async (url, options = {}) => {
-        try {
-            const result = await execute(async () => {
-                logger.log('🌐 API Call:', url);
+    const safeFetch = useCallback(
+        async (url, options = {}) => {
+            try {
+                const result = await execute(async () => {
+                    logger.log('🌐 API Call:', url);
 
-                const response = await fetch(url, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    ...options
+                    const response = await fetch(url, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...options.headers,
+                        },
+                        ...options,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    logger.log('✅ API Response:', url, data);
+                    return data;
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
+                return result;
+            } catch (err) {
+                logger.error('❌ API Error:', url, err);
+                throw err;
+            }
+        },
+        [execute]
+    );
 
-                const data = await response.json();
-                logger.log('✅ API Response:', url, data);
-                return data;
+    const safePost = useCallback(
+        async (url, body, options = {}) => {
+            return safeFetch(url, {
+                method: 'POST',
+                body: JSON.stringify(body),
+                ...options,
             });
+        },
+        [safeFetch]
+    );
 
-            return result;
-        } catch (err) {
-            logger.error('❌ API Error:', url, err);
-            throw err;
-        }
-    }, [execute]);
+    const safePut = useCallback(
+        async (url, body, options = {}) => {
+            return safeFetch(url, {
+                method: 'PUT',
+                body: JSON.stringify(body),
+                ...options,
+            });
+        },
+        [safeFetch]
+    );
 
-    const safePost = useCallback(async (url, body, options = {}) => {
-        return safeFetch(url, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            ...options
-        });
-    }, [safeFetch]);
-
-    const safePut = useCallback(async (url, body, options = {}) => {
-        return safeFetch(url, {
-            method: 'PUT',
-            body: JSON.stringify(body),
-            ...options
-        });
-    }, [safeFetch]);
-
-    const safeDelete = useCallback(async (url, options = {}) => {
-        return safeFetch(url, {
-            method: 'DELETE',
-            ...options
-        });
-    }, [safeFetch]);
+    const safeDelete = useCallback(
+        async (url, options = {}) => {
+            return safeFetch(url, {
+                method: 'DELETE',
+                ...options,
+            });
+        },
+        [safeFetch]
+    );
 
     return {
         // HTTP methods
@@ -80,11 +92,8 @@ export const useSafeAPI = () => {
         // Utils
         isLoading: loading,
         hasError: !!error,
-        isSuccess: !loading && !error && data !== null
+        isSuccess: !loading && !error && data !== null,
     };
 };
 
 export default useSafeAPI;
-
-
-

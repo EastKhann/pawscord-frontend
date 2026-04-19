@@ -9,7 +9,7 @@ import { API_BASE, apiFetch } from './shared';
 export const socialAnalyticsApi = {
     getStats: async (days = 30) => {
         return await apiFetch(`${API_BASE}/api/analytics/social/?days=${days}`);
-    }
+    },
 };
 
 // ==========================================
@@ -31,7 +31,7 @@ export const userAnalyticsApi = {
         let url = `${API_BASE}/api/analytics/user/wordcloud/?days=${days}`;
         if (userId) url += `&user_id=${userId}`;
         return await apiFetch(url);
-    }
+    },
 };
 
 // ==========================================
@@ -46,7 +46,7 @@ export const serverGrowthApi = {
     },
     getConversionFunnel: async (serverId, days = 30) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/funnel/?days=${days}`);
-    }
+    },
 };
 
 // ==========================================
@@ -59,7 +59,7 @@ export const dataExportApi = {
     createRequest: async (data) => {
         return await apiFetch(`${API_BASE}/api/export/requests/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     download: async (exportId) => {
@@ -71,15 +71,15 @@ export const dataExportApi = {
     createScheduled: async (data) => {
         return await apiFetch(`${API_BASE}/api/export/scheduled/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     deleteScheduled: async (scheduleId) => {
         return await apiFetch(`${API_BASE}/api/export/scheduled/`, {
             method: 'DELETE',
-            body: JSON.stringify({ schedule_id: scheduleId })
+            body: JSON.stringify({ schedule_id: scheduleId }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -101,7 +101,7 @@ export const performanceApi = {
     resolveError: async (errorId, note = '') => {
         return await apiFetch(`${API_BASE}/api/admin/errors/${errorId}/resolve/`, {
             method: 'POST',
-            body: JSON.stringify({ note })
+            body: JSON.stringify({ note }),
         });
     },
     getEndpointMetrics: async (days = 7) => {
@@ -109,5 +109,5 @@ export const performanceApi = {
     },
     getHealthStatus: async () => {
         return await apiFetch(`${API_BASE}/api/admin/health/`);
-    }
+    },
 };

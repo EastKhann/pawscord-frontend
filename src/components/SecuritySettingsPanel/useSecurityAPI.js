@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
+import { getToken } from '../../utils/tokenStorage';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { getApiBase } from '../../utils/apiEndpoints';
 import confirmDialog from '../../utils/confirmDialog';
+import logger from '../../utils/logger';
 
 const useSecurityAPI = () => {
+    const { t } = useTranslation();
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
     const [twoFactorMethods, setTwoFactorMethods] = useState([]);
     const [sessions, setSessions] = useState([]);
@@ -15,9 +19,9 @@ const useSecurityAPI = () => {
     const [securityStatus, setSecurityStatus] = useState(null);
     const [activeTab, setActiveTab] = useState('2fa');
     const apiBaseUrl = getApiBase();
-    const token = localStorage.getItem('access_token');
+    const token = getToken();
 
-    const headers = { 'Authorization': `Bearer ${token}` };
+    const headers = { Authorization: `Bearer ${token}` };
     const postHeaders = { ...headers, 'Content-Type': 'application/json' };
 
     const fetchSecurityStatus = async () => {
@@ -26,7 +30,9 @@ const useSecurityAPI = () => {
             const data = await res.json();
             setSecurityStatus(data);
             setTwoFactorEnabled(data.two_factor_enabled || false);
-        } catch (error) { console.error('Error fetching security status:', error); }
+        } catch (error) {
+            logger.error('Error fetching security status:', error);
+        }
     };
 
     const fetch2FAMethods = async () => {
@@ -34,7 +40,9 @@ const useSecurityAPI = () => {
             const res = await fetch(`${apiBaseUrl}/2fa/methods/`, { headers });
             const data = await res.json();
             setTwoFactorMethods(data.methods || []);
-        } catch (error) { console.error('Error fetching 2FA methods:', error); }
+        } catch (error) {
+            logger.error('Error fetching 2FA methods:', error);
+        }
     };
 
     const fetchSessions = async () => {
@@ -42,7 +50,9 @@ const useSecurityAPI = () => {
             const res = await fetch(`${apiBaseUrl}/security/sessions/`, { headers });
             const data = await res.json();
             setSessions(data.sessions || []);
-        } catch (error) { console.error('Error fetching sessions:', error); }
+        } catch (error) {
+            logger.error('Error fetching sessions:', error);
+        }
     };
 
     const fetchIPWhitelist = async () => {
@@ -50,91 +60,175 @@ const useSecurityAPI = () => {
             const res = await fetch(`${apiBaseUrl}/security/ip-whitelist/`, { headers });
             const data = await res.json();
             setIpWhitelist(data.whitelist || []);
-        } catch (error) { console.error('Error fetching IP whitelist:', error); }
+        } catch (error) {
+            logger.error('Error fetching IP whitelist:', error);
+        }
     };
 
     const enable2FA = async () => {
         try {
-            const res = await fetch(`${apiBaseUrl}/security/2fa/enable/`, { method: 'POST', headers: postHeaders });
+            const res = await fetch(`${apiBaseUrl}/security/2fa/enable/`, {
+                method: 'POST',
+                headers: postHeaders,
+            });
             const data = await res.json();
             if (res.ok) {
                 setQrCode(data.qr_code || '');
                 setBackupCodes(data.backup_codes || []);
-                toast.info('ℹ️ QR kodu tarayın ve doğrulama kodunu girin');
-            } else { toast.error(`❌ ${data.error || '2FA etkinleştirilemedi'}`); }
-        } catch (error) { console.error('Error enabling 2FA:', error); toast.error('❌ 2FA etkinleştirme hatası'); }
+                toast.info(t('ui.qr_kodu_tarayin_ve_dogrulama_kodunu_giri'));
+            } else {
+                toast.error(data.error || t('security.2faEnableFailed'));
+            }
+        } catch (error) {
+            logger.error('Error enabling 2FA:', error);
+            toast.error(t('ui.2fa_etkinlestirme_hatasi'));
+        }
     };
 
     const verify2FASetup = async () => {
         try {
             const res = await fetch(`${apiBaseUrl}/security/2fa/verify-setup/`, {
-                method: 'POST', headers: postHeaders, body: JSON.stringify({ code: verificationCode })
+                method: 'POST',
+                headers: postHeaders,
+                body: JSON.stringify({ code: verificationCode }),
             });
             const data = await res.json();
             if (res.ok) {
-                toast.success('✅ 2FA başarıyla etkinleştirildi!');
-                setTwoFactorEnabled(true); setQrCode(''); setVerificationCode('');
+                toast.success(t('auth.2faEnabled'));
+                setTwoFactorEnabled(true);
+                setQrCode('');
+                setVerificationCode('');
                 fetchSecurityStatus();
-            } else { toast.error(`❌ ${data.error || 'Geçersiz kod'}`); }
-        } catch (error) { console.error('Error verifying 2FA:', error); toast.error('❌ Doğrulama hatası'); }
+            } else {
+                toast.error(data.error || t('common.invalidCode'));
+            }
+        } catch (error) {
+            logger.error('Error verifying 2FA:', error);
+            toast.error(t('security.validationError'));
+        }
     };
 
     const disable2FA = async () => {
-        if (!await confirmDialog('2FA\'yı devre dışı bırakmak istediğinizden emin misiniz?')) return;
+        if (!(await confirmDialog("2FA'are you sure you want to disable?"))) return;
         try {
-            const res = await fetch(`${apiBaseUrl}/security/2fa/disable/`, { method: 'POST', headers: postHeaders });
+            const res = await fetch(`${apiBaseUrl}/security/2fa/disable/`, {
+                method: 'POST',
+                headers: postHeaders,
+            });
             const data = await res.json();
-            if (res.ok) { toast.info('ℹ️ 2FA devre dışı bırakıldı'); setTwoFactorEnabled(false); fetchSecurityStatus(); }
-            else { toast.error(`❌ ${data.error || '2FA devre dışı bırakılamadı'}`); }
-        } catch (error) { console.error('Error disabling 2FA:', error); toast.error('❌ 2FA devre dışı bırakma hatası'); }
+            if (res.ok) {
+                toast.info(t('ui.2fa_devre_disi_birakildi_2'));
+                setTwoFactorEnabled(false);
+                fetchSecurityStatus();
+            } else {
+                toast.error(data.error || t('ui.2fa_devre_disi_birakilamadi'));
+            }
+        } catch (error) {
+            logger.error('Error disabling 2FA:', error);
+            toast.error(t('ui.2fa_devre_disi_birakma_hatasi'));
+        }
     };
 
     const getBackupCodes = async () => {
         try {
-            const res = await fetch(`${apiBaseUrl}/security/2fa/backup-codes/`, { method: 'POST', headers: postHeaders });
+            const res = await fetch(`${apiBaseUrl}/security/2fa/backup-codes/`, {
+                method: 'POST',
+                headers: postHeaders,
+            });
             const data = await res.json();
-            if (res.ok) { setBackupCodes(data.backup_codes || []); toast.success('✅ Yedek kodlar oluşturuldu'); }
-            else { toast.error(`❌ ${data.error || 'Yedek kodlar oluşturulamadı'}`); }
-        } catch (error) { console.error('Error getting backup codes:', error); toast.error('❌ Yedek kod hatası'); }
+            if (res.ok) {
+                setBackupCodes(data.backup_codes || []);
+                toast.success(t('security.backupCodesCreated'));
+            } else {
+                toast.error(data.error || t('ui.yedek_kodlar_olusturulamadi'));
+            }
+        } catch (error) {
+            logger.error('Error getting backup codes:', error);
+            toast.error(t('ui.yedek_kod_hatasi'));
+        }
     };
 
     const revokeSession = async (sessionId) => {
         try {
-            const res = await fetch(`${apiBaseUrl}/security/sessions/${sessionId}/revoke/`, { method: 'POST', headers: postHeaders });
+            const res = await fetch(`${apiBaseUrl}/security/sessions/${sessionId}/revoke/`, {
+                method: 'POST',
+                headers: postHeaders,
+            });
             const data = await res.json();
-            if (res.ok) { toast.success('✅ Oturum sonlandırıldı'); fetchSessions(); }
-            else { toast.error(`❌ ${data.error || 'Oturum sonlandırılamadı'}`); }
-        } catch (error) { console.error('Error revoking session:', error); toast.error('❌ Oturum sonlandırma hatası'); }
+            if (res.ok) {
+                toast.success(t('auth.sessionEnded'));
+                fetchSessions();
+            } else {
+                toast.error(data.error || t('ui.oturum_sonlandirilamadi_2'));
+            }
+        } catch (error) {
+            logger.error('Error revoking session:', error);
+            toast.error(t('ui.oturum_sonlandirma_hatasi'));
+        }
     };
 
     const revokeAllSessions = async () => {
-        if (!await confirmDialog('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')) return;
+        if (!(await confirmDialog('Tüm oturumları sonlandırmak istediğinizden emin misiniz?')))
+            return;
         try {
-            const res = await fetch(`${apiBaseUrl}/security/sessions/revoke-all/`, { method: 'POST', headers: postHeaders });
+            const res = await fetch(`${apiBaseUrl}/security/sessions/revoke-all/`, {
+                method: 'POST',
+                headers: postHeaders,
+            });
             const data = await res.json();
-            if (res.ok) { toast.success('✅ Tüm oturumlar sonlandırıldı'); fetchSessions(); }
-            else { toast.error(`❌ ${data.error || 'Oturumlar sonlandırılamadı'}`); }
-        } catch (error) { console.error('Error revoking all sessions:', error); toast.error('❌ Toplu sonlandırma hatası'); }
+            if (res.ok) {
+                toast.success(t('ui.tum_oturumlar_sonlandirildi'));
+                fetchSessions();
+            } else {
+                toast.error(data.error || t('ui.oturumlar_sonlandirilamadi'));
+            }
+        } catch (error) {
+            logger.error('Error revoking all sessions:', error);
+            toast.error(t('ui.toplu_sonlandirma_hatasi'));
+        }
     };
 
     const addIPToWhitelist = async () => {
-        if (!newIp.trim()) { toast.error('❌ IP adresi gerekli'); return; }
+        if (!newIp.trim()) {
+            toast.error(t('security.ipRequired'));
+            return;
+        }
         try {
             const res = await fetch(`${apiBaseUrl}/security/ip-whitelist/add/`, {
-                method: 'POST', headers: postHeaders, body: JSON.stringify({ ip_address: newIp })
+                method: 'POST',
+                headers: postHeaders,
+                body: JSON.stringify({ ip_address: newIp }),
             });
             const data = await res.json();
-            if (res.ok) { toast.success('✅ IP beyaz listeye eklendi'); setNewIp(''); fetchIPWhitelist(); }
-            else { toast.error(`❌ ${data.error || 'IP eklenemedi'}`); }
-        } catch (error) { console.error('Error adding IP:', error); toast.error('❌ IP ekleme hatası'); }
+            if (res.ok) {
+                toast.success(t('security.ipAdded'));
+                setNewIp('');
+                fetchIPWhitelist();
+            } else {
+                toast.error(data.error || t('security.ipAddFailed'));
+            }
+        } catch (error) {
+            logger.error('Error adding IP:', error);
+            toast.error(t('ui.ip_addme_hatasi'));
+        }
     };
 
     const removeIPFromWhitelist = async (whitelistId) => {
         try {
-            const res = await fetch(`${apiBaseUrl}/security/ip-whitelist/${whitelistId}/`, { method: 'DELETE', headers });
-            if (res.ok) { toast.success('✅ IP beyaz listeden kaldırıldı'); fetchIPWhitelist(); }
-            else { toast.error('❌ IP kaldırılamadı'); }
-        } catch (error) { console.error('Error removing IP:', error); toast.error('❌ IP kaldırma hatası'); }
+            const res = await fetch(`${apiBaseUrl}/security/ip-whitelist/${whitelistId}/`, {
+                method: 'DELETE',
+                headers,
+            });
+            if (res.ok) {
+                toast.success(t('security.ipRemoved'));
+                fetchIPWhitelist();
+            } else {
+                toast.error(t('ui.ip_kaldirilamadi'));
+            }
+        } catch (error) {
+            logger.error('Error removing IP:', error);
+            toast.error(t('ui.ip_kaldirma_hatasi'));
+        }
     };
 
     const downloadBackupCodes = () => {
@@ -146,20 +240,39 @@ const useSecurityAPI = () => {
         a.download = `pawscord_backup_codes_${new Date().toISOString()}.txt`;
         a.click();
         window.URL.revokeObjectURL(url);
-        toast.success('✅ Yedek kodlar indirildi');
+        toast.success(t('security.backupCodesDownloaded'));
     };
 
     useEffect(() => {
-        fetchSecurityStatus(); fetch2FAMethods(); fetchSessions(); fetchIPWhitelist();
+        fetchSecurityStatus();
+        fetch2FAMethods();
+        fetchSessions();
+        fetchIPWhitelist();
     }, []);
 
     return {
-        twoFactorEnabled, twoFactorMethods, sessions, ipWhitelist,
-        backupCodes, qrCode, verificationCode, setVerificationCode,
-        newIp, setNewIp, securityStatus, activeTab, setActiveTab,
-        enable2FA, verify2FASetup, disable2FA, getBackupCodes, downloadBackupCodes,
-        revokeSession, revokeAllSessions,
-        addIPToWhitelist, removeIPFromWhitelist
+        twoFactorEnabled,
+        twoFactorMethods,
+        sessions,
+        ipWhitelist,
+        backupCodes,
+        qrCode,
+        verificationCode,
+        setVerificationCode,
+        newIp,
+        setNewIp,
+        securityStatus,
+        activeTab,
+        setActiveTab,
+        enable2FA,
+        verify2FASetup,
+        disable2FA,
+        getBackupCodes,
+        downloadBackupCodes,
+        revokeSession,
+        revokeAllSessions,
+        addIPToWhitelist,
+        removeIPFromWhitelist,
     };
 };
 

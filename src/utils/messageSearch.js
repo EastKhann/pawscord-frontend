@@ -1,19 +1,20 @@
+import logger from '../utils/logger';
 // frontend/src/utils/messageSearch.js
 
 /**
  * 🔍 Message Search Utility
- * Mesaj arama ve filtreleme fonksiyonları
+ * Mesaj search ve filterleme fonksiyonları
  */
 
 /**
- * Mesajlarda arama yap (fuzzy search)
+ * Mesajlarda search yap (fuzzy search)
  */
 export const searchMessages = (messages, query, options = {}) => {
     const {
         caseSensitive = false,
         searchInFiles = true,
         searchInUsernames = true,
-        maxResults = 50
+        maxResults = 50,
     } = options;
 
     if (!query || query.trim().length === 0) {
@@ -27,28 +28,28 @@ export const searchMessages = (messages, query, options = {}) => {
         let score = 0;
         let matchedText = '';
 
-        // 📝 Mesaj içeriğinde ara
-        const content = caseSensitive ?
-            (msg.content || msg.message || '') :
-            (msg.content || msg.message || '').toLowerCase();
+        // 📝 Mesaj içeriğinde search
+        const content = caseSensitive
+            ? msg.content || msg.message || ''
+            : (msg.content || msg.message || '').toLowerCase();
 
         if (content.includes(searchQuery)) {
             score += 10;
             matchedText = content;
         }
 
-        // 👤 Kullanıcı adında ara
+        // 👤 Usernamenda search
         if (searchInUsernames && msg.sender) {
-            const username = caseSensitive ?
-                (msg.sender.username || msg.sender.display_name || '') :
-                (msg.sender.username || msg.sender.display_name || '').toLowerCase();
+            const username = caseSensitive
+                ? msg.sender.username || msg.sender.display_name || ''
+                : (msg.sender.username || msg.sender.display_name || '').toLowerCase();
 
             if (username.includes(searchQuery)) {
                 score += 5;
             }
         }
 
-        // 📎 Dosya adında ara
+        // 📎 File adında search
         if (searchInFiles && msg.file_name) {
             const fileName = caseSensitive ? msg.file_name : msg.file_name.toLowerCase();
             if (fileName.includes(searchQuery)) {
@@ -56,24 +57,24 @@ export const searchMessages = (messages, query, options = {}) => {
             }
         }
 
-        // ⭐ Eşleşme varsa sonuçlara ekle
+        // ⭐ Eşleşme varsa resultlsearch add
         if (score > 0) {
             results.push({
                 ...msg,
                 _searchScore: score,
-                _matchedText: matchedText
+                _matchedText: matchedText,
             });
 
             if (results.length >= maxResults) break;
         }
     }
 
-    // Skorlara göre sırala (en yüksek önce)
+    // Skorlsearch göre sırala (en yüksek önce)
     return results.sort((a, b) => b._searchScore - a._searchScore);
 };
 
 /**
- * Mesajları filtrele
+ * Mesajları filterle
  */
 export const filterMessages = (messages, filters) => {
     const {
@@ -84,26 +85,26 @@ export const filterMessages = (messages, filters) => {
         isPinned,
         hasReactions,
         dateRange,
-        messageType
+        messageType,
     } = filters;
 
-    return messages.filter(msg => {
-        // 👤 Kullanıcıya göre filtrele
+    return messages.filter((msg) => {
+        // 👤 Userya göre filterle
         if (fromUser && msg.sender?.id !== fromUser) {
             return false;
         }
 
-        // 📎 Dosya içeren mesajlar
+        // 📎 File içeren messagelar
         if (hasFiles && !msg.file_name) {
             return false;
         }
 
-        // 🖼️ Resim içeren mesajlar
+        // 🖼️ Image içeren messagelar
         if (hasImages && !msg.image) {
             return false;
         }
 
-        // 🔗 Link içeren mesajlar
+        // 🔗 Link içeren messagelar
         if (hasLinks) {
             const urlRegex = /(https?:\/\/[^\s]+)/g;
             const content = msg.content || msg.message || '';
@@ -112,17 +113,17 @@ export const filterMessages = (messages, filters) => {
             }
         }
 
-        // 📌 Sabitlenmiş mesajlar
+        // 📌 Pinned messagelar
         if (isPinned && !msg.is_pinned) {
             return false;
         }
 
-        // 😊 Reaction içeren mesajlar
+        // 😊 Reaction içeren messagelar
         if (hasReactions && (!msg.reactions || msg.reactions.length === 0)) {
             return false;
         }
 
-        // 📅 Tarih aralığı
+        // 📅 Date searchlığı
         if (dateRange) {
             const msgDate = new Date(msg.created_at);
             if (dateRange.start && msgDate < new Date(dateRange.start)) {
@@ -151,7 +152,7 @@ export const filterMessages = (messages, filters) => {
 };
 
 /**
- * Mesaj içinde highlight yap
+ * Mesaj forde highlight yap
  */
 export const highlightText = (text, query, caseSensitive = false) => {
     if (!query || !text) return text;
@@ -170,20 +171,20 @@ export const highlightText = (text, query, caseSensitive = false) => {
         before,
         match,
         after,
-        hasMatch: true
+        hasMatch: true,
     };
 };
 
 /**
- * Mesaj içinde kaç kere geçtiğini say
+ * Mesaj forde kopen kere geçtiğini say
  */
 export const countOccurrences = (messages, query, caseSensitive = false) => {
     let count = 0;
 
     for (const msg of messages) {
-        const content = caseSensitive ?
-            (msg.content || msg.message || '') :
-            (msg.content || msg.message || '').toLowerCase();
+        const content = caseSensitive
+            ? msg.content || msg.message || ''
+            : (msg.content || msg.message || '').toLowerCase();
 
         const searchQuery = caseSensitive ? query : query.toLowerCase();
 
@@ -195,7 +196,7 @@ export const countOccurrences = (messages, query, caseSensitive = false) => {
 };
 
 /**
- * İlk/son eşleşen mesajı bul
+ * İlk/son eşleşen mesajı find
  */
 export const findFirstMatch = (messages, query, caseSensitive = false) => {
     const results = searchMessages(messages, query, { caseSensitive, maxResults: 1 });
@@ -203,18 +204,18 @@ export const findFirstMatch = (messages, query, caseSensitive = false) => {
 };
 
 export const findLastMatch = (messages, query, caseSensitive = false) => {
-    const results = searchMessages([...messages].reverse(), query, { caseSensitive, maxResults: 1 });
+    const results = searchMessages([...messages].reverse(), query, {
+        caseSensitive,
+        maxResults: 1,
+    });
     return results[0] || null;
 };
 
 /**
- * Gelişmiş arama (regex destekli)
+ * Gelişmiş search (regex destekli)
  */
 export const advancedSearch = (messages, pattern, options = {}) => {
-    const {
-        isRegex = false,
-        maxResults = 50
-    } = options;
+    const { isRegex = false, maxResults = 50 } = options;
 
     if (!pattern) return messages;
 
@@ -224,7 +225,7 @@ export const advancedSearch = (messages, pattern, options = {}) => {
     try {
         regex = isRegex ? new RegExp(pattern, 'gi') : null;
     } catch (e) {
-        console.error('Invalid regex pattern:', e);
+        logger.error('Invalid regex pattern:', e);
         return [];
     }
 
@@ -243,7 +244,7 @@ export const advancedSearch = (messages, pattern, options = {}) => {
 };
 
 /**
- * Arama history'si yönet
+ * Search history'si yönet
  */
 export class SearchHistory {
     constructor(maxSize = 20) {
@@ -255,9 +256,9 @@ export class SearchHistory {
         if (!query || query.trim().length === 0) return;
 
         // Aynı query varsa kaldır
-        this.history = this.history.filter(q => q !== query);
+        this.history = this.history.filter((q) => q !== query);
 
-        // Başa ekle
+        // Başa add
         this.history.unshift(query);
 
         // Max boyutu aş varsa kırp
@@ -281,7 +282,7 @@ export class SearchHistory {
         try {
             localStorage.setItem('message_search_history', JSON.stringify(this.history));
         } catch (e) {
-            console.error('Failed to save search history:', e);
+            logger.error('Failed to save search history:', e);
         }
     }
 
@@ -290,7 +291,7 @@ export class SearchHistory {
             const stored = localStorage.getItem('message_search_history');
             return stored ? JSON.parse(stored) : [];
         } catch (e) {
-            console.error('Failed to load search history:', e);
+            logger.error('Failed to load search history:', e);
             return [];
         }
     }
@@ -304,7 +305,5 @@ export default {
     findFirstMatch,
     findLastMatch,
     advancedSearch,
-    SearchHistory
+    SearchHistory,
 };
-
-

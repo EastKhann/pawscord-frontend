@@ -1,0 +1,176 @@
+/* ==============================================
+   RTL (Right-to-Left) Support — Pawscord
+   Covers: Arabic, Hebrew, Persian, Urdu
+   Selector: [dir="rtl"] on <html> element
+   ============================================== */
+
+/* ── Global Defaults ── */
+[dir='rtl'] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir='rtl'] input,
+[dir='rtl'] textarea {
+    text-align: right;
+}
+
+/* ── App Layout ── */
+[dir='rtl'] .chat-container {
+    border-left: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+[dir='rtl'] .sidebar {
+    border-right: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Messages ── */
+[dir='rtl'] .message-timestamp {
+    margin-left: 0;
+    margin-right: 8px;
+}
+
+[dir='rtl'] .message-actions {
+    right: auto;
+    left: 0;
+}
+
+[dir='rtl'] .message-action-button {
+    margin-right: 0;
+    margin-left: 5px;
+}
+
+/* ── Sidebar Items ── */
+[dir='rtl'] .sidebar-item {
+    margin: 1px 8px;
+    text-align: right;
+}
+
+/* ── Blockquotes ── */
+[dir='rtl'] blockquote,
+[dir='rtl'] .blockquote {
+    border-left: none;
+    border-right: 4px solid var(--color-primary, #5865f2);
+    padding-left: 0;
+    padding-right: var(--space-md, 12px);
+}
+
+/* ── Ordered/Unordered Lists ── */
+[dir='rtl'] ol,
+[dir='rtl'] ul {
+    padding-left: 0;
+    padding-right: 24px;
+}
+
+[dir='rtl'] .text-left {
+    text-align: right;
+}
+
+/* ── Quick Switcher / Command Palette ── */
+[dir='rtl'] .qs-icon {
+    left: auto;
+    right: 28px;
+}
+
+[dir='rtl'] .qs-clear-btn {
+    right: auto;
+    left: 24px;
+}
+
+[dir='rtl'] .command-palette-icon {
+    left: auto;
+    right: 12px;
+}
+
+/* ── Notifications ── */
+[dir='rtl'] .notification-badge {
+    right: auto;
+    left: -4px;
+}
+
+[dir='rtl'] .notification-item {
+    padding-left: 0;
+    padding-right: 16px;
+}
+
+/* ── Profile Card ── */
+[dir='rtl'] .profile-badge-corner {
+    right: auto;
+    left: 8px;
+}
+
+/* ── Login / Auth Pages ── */
+[dir='rtl'] .login-input-icon {
+    left: auto;
+    right: 16px;
+}
+
+[dir='rtl'] .login-input {
+    padding-left: 16px;
+    padding-right: 44px;
+}
+
+/* ── Modal Dialogs ── */
+[dir='rtl'] .modal-close-btn {
+    right: auto;
+    left: 16px;
+}
+
+/* ── Mobile Navigation ── */
+[dir='rtl'] .mobile-nav {
+    direction: rtl;
+}
+
+/* ── Tooltip Positioning ── */
+[dir='rtl'] .tooltip-left {
+    left: auto;
+    right: 100%;
+}
+
+[dir='rtl'] .tooltip-right {
+    right: auto;
+    left: 100%;
+}
+
+/* ── Admin Panel ── */
+[dir='rtl'] .admin-sidebar {
+    border-right: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Thread Indentation ── */
+[dir='rtl'] .thread-indent {
+    margin-left: 0;
+    margin-right: 24px;
+    border-left: none;
+    border-right: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ── Utility mirror helpers ── */
+[dir='rtl'] .ms-auto {
+    margin-right: auto !important;
+    margin-left: unset !important;
+}
+
+[dir='rtl'] .me-auto {
+    margin-left: auto !important;
+    margin-right: unset !important;
+}
+
+/* ── Chevron / Arrow icons ── */
+[dir='rtl'] .chevron-right,
+[dir='rtl'] .arrow-right {
+    transform: scaleX(-1);
+}
+
+[dir='rtl'] .chevron-left,
+[dir='rtl'] .arrow-left {
+    transform: scaleX(-1);
+}
+
+/* ── Language Selector (supplement existing rules) ── */
+[dir='rtl'] .language-selector-container {
+    text-align: right;
+}

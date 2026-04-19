@@ -1,51 +1,64 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FaCog, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import useModalA11y from '../../hooks/useModalA11y';
 
+import { useTranslation } from 'react-i18next';
+import { API_BASE_URL } from '../../utils/apiEndpoints';
 const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) => {
-    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Entegrasyon Ayarları' });
+    const { t } = useTranslation();
+    const { overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Integration Settings' });
     const [config, setConfig] = useState({
         notifications_enabled: true,
         notification_channel: '',
         auto_sync: true,
-        sync_interval: 30
+        sync_interval: 30,
     });
 
     const handleSave = async () => {
         try {
-            const response = await fetch(`/api/servers/${serverId}/integrations/${integration.id}/configure/`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(config)
-            });
+            const response = await fetch(
+                `${API_BASE_URL}/servers/${serverId}/integrations/${integration.id}/configure/`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(config),
+                }
+            );
 
             if (response.ok) {
-                toast.success('Ayarlar kaydedildi');
+                toast.success(t('configModal.saved'));
                 onSave();
                 onClose();
             }
         } catch (error) {
-            toast.error('Ayarlar kaydedilemedi');
+            toast.error(t('configModal.saveFailed'));
         }
     };
 
     return (
         <div className="modal-overlay" {...overlayProps}>
             <div className="config-modal" {...dialogProps}>
-                <h3><FaCog /> {integration.name} Ayarları</h3>
+                <h3>
+                    <FaCog /> {integration.name} Ayarları
+                </h3>
 
                 <div className="config-section">
                     <label className="checkbox-label">
                         <input
                             type="checkbox"
                             checked={config.notifications_enabled}
-                            onChange={(e) => setConfig({ ...config, notifications_enabled: e.target.checked })}
+                            onChange={(e) =>
+                                setConfig({ ...config, notifications_enabled: e.target.checked })
+                            }
                         />
-                        Bildirimleri Etkinleştir
+                        Notificationsi Enable
                     </label>
                 </div>
 
@@ -56,17 +69,19 @@ const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) =
                             checked={config.auto_sync}
                             onChange={(e) => setConfig({ ...config, auto_sync: e.target.checked })}
                         />
-                        Otomatik Senkronizasyon
+                        Auto Senkronizasyon
                     </label>
                 </div>
 
                 {config.auto_sync && (
                     <div className="form-group">
-                        <label>Senkronizasyon Aralığı (dakika)</label>
+                        <label>{t('sync_interval_minutes')}</label>
                         <input
                             type="number"
                             value={config.sync_interval}
-                            onChange={(e) => setConfig({ ...config, sync_interval: parseInt(e.target.value) })}
+                            onChange={(e) =>
+                                setConfig({ ...config, sync_interval: parseInt(e.target.value) })
+                            }
                             min={5}
                             max={1440}
                         />
@@ -74,7 +89,9 @@ const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) =
                 )}
 
                 <div className="modal-actions">
-                    <button className="cancel-btn" onClick={onClose}>İptal</button>
+                    <button className="cancel-btn" onClick={onClose}>
+                        {t('common.cancel')}
+                    </button>
                     <button className="save-btn" onClick={handleSave}>
                         <FaCheck /> Kaydet
                     </button>
@@ -84,4 +101,11 @@ const ConfigurationModal = ({ integration, serverId, token, onClose, onSave }) =
     );
 };
 
+ConfigurationModal.propTypes = {
+    integration: PropTypes.object,
+    serverId: PropTypes.string,
+    token: PropTypes.string,
+    onClose: PropTypes.func,
+    onSave: PropTypes.func,
+};
 export default ConfigurationModal;

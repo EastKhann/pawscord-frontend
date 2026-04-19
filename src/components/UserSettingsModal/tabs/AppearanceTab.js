@@ -1,43 +1,78 @@
 ﻿import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaCheck } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 import SettingSection from '../components/SettingSection';
 import ToggleSwitch from '../components/ToggleSwitch';
-import S from '../styles';
+import importedS from '../styles';
+import ut from './UserTabs.module.css';
+
+const S = {
+    ...importedS,
+    txt: { color: '#fff', fontSize: 14, fontWeight: 600, minWidth: 40 },
+    abs: { color: '#5865f2', position: 'absolute', top: 4, right: 4, fontSize: 10 },
+    flex: { display: 'flex', gap: 12 },
+};
 
 const AppearanceTab = () => {
+    const { t } = useTranslation();
     const [theme, setTheme] = useState('dark');
     const [fontSize, setFontSize] = useState(16);
     const [compact, setCompact] = useState(false);
 
     return (
         <div>
-            <SettingSection title="Tema">
-                <div style={{ display: 'flex', gap: 12 }}>
-                    {['dark', 'light', 'amoled'].map(t => (
-                        <button key={t} type="button" onClick={() => setTheme(t)} style={{
-                            ...S.themeBtn,
-                            borderColor: theme === t ? '#5865f2' : 'rgba(255,255,255,0.1)',
-                            backgroundColor: t === 'dark' ? '#17191c' : t === 'light' ? '#fff' : '#000',
-                        }}>
-                            <span style={{ color: t === 'light' ? '#000' : '#fff', fontSize: 12, fontWeight: 600 }}>
-                                {t === 'dark' ? 'Koyu' : t === 'light' ? 'Açık' : 'AMOLED'}
+            <SettingSection title={t('settings.tabs.appearance.theme')}>
+                <div style={S.flex}>
+                    {['dark', 'light', 'amoled'].map((tm) => (
+                        <button
+                            key={tm}
+                            type="button"
+                            onClick={() => setTheme(tm)}
+                            style={{
+                                ...S.themeBtn,
+                                borderColor: theme === tm ? '#5865f2' : 'rgba(255,255,255,0.1)',
+                                backgroundColor:
+                                    tm === 'dark' ? '#17191c' : tm === 'light' ? '#fff' : '#000',
+                            }}
+                        >
+                            <span
+                                style={{
+                                    color: tm === 'light' ? '#000' : '#fff',
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                }}
+                            >
+                                {t('settings.tabs.appearance.' + tm)}
                             </span>
-                            {theme === t && <FaCheck style={{ color: '#5865f2', position: 'absolute', top: 4, right: 4, fontSize: 10 }} />}
+                            {theme === tm && <FaCheck style={S.abs} />}
                         </button>
                     ))}
                 </div>
             </SettingSection>
-            <SettingSection title="Yazı Boyutu">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <span style={{ color: '#949ba4', fontSize: 12 }}>12px</span>
-                    <input type="range" min={12} max={24} value={fontSize} onChange={e => setFontSize(+e.target.value)} style={{ flex: 1, accentColor: '#5865f2' }} />
-                    <span style={{ color: '#949ba4', fontSize: 12 }}>24px</span>
-                    <span style={{ color: '#fff', fontSize: 14, fontWeight: 600, minWidth: 40 }}>{fontSize}px</span>
+            <SettingSection title={t('settings.tabs.appearance.fontSize')}>
+                <div className={ut.flexAlignGap12}>
+                    <span className={ut.mutedSm}>{t('12px')}</span>
+                    <input
+                        type="range"
+                        min={12}
+                        max={24}
+                        value={fontSize}
+                        onChange={(e) => setFontSize(+e.target.value)}
+                        className={ut.rangeAccent}
+                    />
+                    <span className={ut.mutedSm}>{t('24px')}</span>
+                    <span style={S.txt}>{fontSize}px</span>
                 </div>
             </SettingSection>
-            <ToggleSwitch label="Kompakt Mod" value={compact} onChange={setCompact} />
+            <ToggleSwitch
+                label={t('settings.tabs.appearance.compactMode')}
+                value={compact}
+                onChange={setCompact}
+            />
         </div>
     );
 };
 
+AppearanceTab.propTypes = {};
 export default AppearanceTab;

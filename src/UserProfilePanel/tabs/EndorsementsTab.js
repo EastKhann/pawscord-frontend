@@ -1,55 +1,81 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import profileStyles from '../styles';
 
-const EndorsementsTab = ({ endorsements }) => {
-  const styles = profileStyles;
+// -- extracted inline style constants --
+const _st1 = {
+    padding: '48px',
+    textAlign: 'center',
+    background: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: '12px',
+};
+const _st2 = { fontSize: '64px', marginBottom: '16px' };
+const _st3 = { color: '#fff', margin: '0 0 8px 0' };
+const _st4 = { color: '#b5bac1', margin: 0 };
+const _st5 = { display: 'flex', flexDirection: 'column', gap: '12px' };
+const _st6 = {
+    padding: '16px',
+    background: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: '8px',
+    borderLeft: '4px solid #ffd700',
+};
+const _st7 = { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' };
+const _st8 = { width: '32px', height: '32px', borderRadius: '50%' };
+const _st9 = { flex: 1 };
+const _st10 = { color: '#b5bac1', fontSize: '12px' };
+const _st11 = { color: '#dbdee1', margin: 0, fontSize: '14px', fontStyle: 'italic' };
 
-  return (
-    <div style={styles.card}>
-      <h3 style={styles.sectionTitle}>⭐ Kullanıcı Onayları</h3>
+const EndorsementsTab = ({ endorsements: rawEnd }) => {
+    const endorsements = rawEnd || [];
+    const styles = profileStyles;
+    const { t } = useTranslation();
+    const [error, setError] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
 
-      {endorsements.length === 0 ? (
-        <div style={{ padding: '48px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '16px' }}>⭐</div>
-          <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Henüz onay yok</h4>
-          <p style={{ color: '#b5bac1', margin: 0 }}>Diğer kullanıcılar sizi onayladığında burada görünecek</p>
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {endorsements.map((endorsement, idx) => (
-            <div
-              key={idx}
-              style={{
-                padding: '16px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                borderRadius: '8px',
-                borderLeft: '4px solid #ffd700',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <img
-                  src={endorsement.endorser_avatar || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Crect fill="%235865f2" width="32" height="32" rx="16"/%3E%3Ctext x="16" y="16" font-size="14" text-anchor="middle" dy=".35em" fill="white" font-family="Arial"%3E👤%3C/text%3E%3C/svg%3E'}
-                  alt={endorsement.endorser_name}
-                  style={{ width: '32px', height: '32px', borderRadius: '50%' }}
-                />
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>{endorsement.endorser_name}</h4>
-                  <span style={{ color: '#b5bac1', fontSize: '12px' }}>
-                    {new Date(endorsement.created_at).toLocaleString('tr-TR')}
-                  </span>
+    return (
+        <div aria-label="endorsements tab" style={styles.card}>
+            <h3 style={styles.sectionTitle}>{t('endorsements.title')}</h3>
+
+            {endorsements.length === 0 ? (
+                <div style={_st1}>
+                    <div style={_st2}>⭐</div>
+                    <h4 style={_st3}>{t('endorsements.noEndorsements')}</h4>
+                    <p style={_st4}>{t('endorsements.emptyMessage')}</p>
                 </div>
-              </div>
-              {endorsement.message && (
-                <p style={{ color: '#dbdee1', margin: 0, fontSize: '14px', fontStyle: 'italic' }}>
-                  "{endorsement.message}"
-                </p>
-              )}
-            </div>
-          ))}
+            ) : (
+                <div style={_st5}>
+                    {endorsements.map((endorsement, idx) => (
+                        <div key={`item-${idx}`} style={_st6}>
+                            <div style={_st7}>
+                                <img
+                                    src={
+                                        endorsement.endorser_avatar ||
+                                        'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Crect fill="%235865f2" width="32" height="32" rx="16"/%3E%3Ctext x="16" y="16" font-size="14" text-anchor="middle" dy=".35em" fill="white" font-family="Arial"%3E👤%3C/text%3E%3C/svg%3E'
+                                    }
+                                    alt={endorsement.endorser_name}
+                                    style={_st8}
+                                />
+                                <div style={_st9}>
+                                    <h4 style={styles.settingRowTitle}>
+                                        {endorsement.endorser_name}
+                                    </h4>
+                                    <span style={_st10}>
+                                        {new Date(endorsement.created_at).toLocaleString('tr-TR')}
+                                    </span>
+                                </div>
+                            </div>
+                            {endorsement.message && <p style={_st11}>"{endorsement.message}"</p>}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
+EndorsementsTab.propTypes = {
+    endorsements: PropTypes.array,
+};
 export default EndorsementsTab;

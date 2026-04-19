@@ -331,7 +331,9 @@
 .resource-bar .bar-fill {
     height: 100%;
     border-radius: 4px;
-    transition: width 0.5s ease, background-color 0.3s ease;
+    transition:
+        width 0.5s ease,
+        background-color 0.3s ease;
 }
 
 /* Alerts Section */
@@ -414,17 +416,6 @@
     font-size: 2rem;
     color: var(--color-success-modern);
 }
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 /* Mobile Responsive */
 @media (max-width: 480px) {
     .resources-grid {

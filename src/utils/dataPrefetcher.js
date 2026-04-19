@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/dataPrefetcher.js
 
 /**
@@ -27,7 +29,7 @@ class DataPrefetcher {
      */
     init() {
         // Track user activity
-        ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+        ['mousemove', 'keydown', 'scroll', 'touchstart'].forEach((event) => {
             document.addEventListener(event, () => this.resetIdleTimer());
         });
 
@@ -65,11 +67,7 @@ class DataPrefetcher {
      * Prefetch data
      */
     prefetch(key, fetchFn, options = {}) {
-        const {
-            priority = 'normal',
-            cache = true,
-            immediate = false
-        } = options;
+        const { priority = 'normal', cache = true, immediate = false } = options;
 
         // Check if already cached
         if (this.prefetchedData.has(key)) {
@@ -77,7 +75,7 @@ class DataPrefetcher {
         }
 
         // Check if already in queue
-        if (this.prefetchQueue.find(item => item.key === key)) {
+        if (this.prefetchQueue.find((item) => item.key === key)) {
             return;
         }
 
@@ -86,7 +84,7 @@ class DataPrefetcher {
             fetchFn,
             priority,
             cache,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         };
 
         // Add to queue based on priority
@@ -126,7 +124,7 @@ class DataPrefetcher {
                 setTimeout(() => this.processPrefetchQueue(), this.prefetchDelay);
             }
         } catch (error) {
-            console.error(`Failed to prefetch ${item.key}:`, error);
+            logger.error(`Failed to prefetch ${item.key}:`, error);
         }
     }
 
@@ -142,7 +140,7 @@ class DataPrefetcher {
 
         this.prefetchedData.set(key, {
             data,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
     }
 
@@ -193,26 +191,29 @@ class DataPrefetcher {
     prefetchVisible(elements, options = {}) {
         const { rootMargin = '50px', threshold = 0.1 } = options;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const key = entry.target.dataset.prefetch;
-                    const url = entry.target.dataset.prefetchUrl;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const key = entry.target.dataset.prefetch;
+                        const url = entry.target.dataset.prefetchUrl;
 
-                    if (key && url) {
-                        this.prefetch(key, () => fetch(url).then(r => r.json()), {
-                            priority: 'normal'
-                        });
+                        if (key && url) {
+                            this.prefetch(key, () => fetch(url).then((r) => r.json()), {
+                                priority: 'normal',
+                            });
 
-                        observer.unobserve(entry.target);
+                            observer.unobserve(entry.target);
+                        }
                     }
-                }
-            });
-        }, { rootMargin, threshold });
+                });
+            },
+            { rootMargin, threshold }
+        );
 
-        elements.forEach(el => observer.observe(el));
+        elements.forEach((el) => observer.observe(el));
 
-        return () => elements.forEach(el => observer.unobserve(el));
+        return () => elements.forEach((el) => observer.unobserve(el));
     }
 
     /**
@@ -294,7 +295,7 @@ class DataPrefetcher {
             cacheSize: this.prefetchedData.size,
             queueLength: this.prefetchQueue.length,
             historySize: this.navigationHistory.length,
-            isIdle: this.isIdle
+            isIdle: this.isIdle,
         };
     }
 }
@@ -335,5 +336,3 @@ export const usePrefetchOnHover = (key, fetchFn, options = {}) => {
 };
 
 export default DataPrefetcher;
-
-

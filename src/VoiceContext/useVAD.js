@@ -2,18 +2,22 @@ import { useEffect, useRef } from 'react';
 
 /**
  * Voice Activity Detection hook — 10/10 kalite.
- * 
- * İyileştirmeler:
- * - Hysteresis: konuşma başlama/bitme için farklı eşikler (false-positive ↓)
- * - Multi-band analiz: düşük (300-800Hz), orta (800-2kHz), yüksek (2k-4kHz) ses bantları
+ *
+ * İyleştirmeler:
+ * - Hysteresis: konuşma başlama/bitme for farklı eşikler (false-positive ↓)
+ * - Multi-band analiz: düşük (300-800Hz), orta (800-2kHz), yüksek (2k-4kHz) audio bantları
  * - Ağırlıklı skor: insan sesi frekanslarına (800-2kHz) daha fazla ağırlık
  * - Adaptif eşik: ortam gürültüsüne göre eşik otomatik ayarlanır
  * - Hangover timer: kısa sessizliklerde konuşma kesilmez (daha doğal)
  * - Energy + spectral flatness detection
  */
 export function useVAD({
-    localAudioStream, isInVoice, isMuted, vadSensitivity,
-    setIsTalking, globalAudioContextRef
+    localAudioStream,
+    isInVoice,
+    isMuted,
+    vadSensitivity,
+    setIsTalking,
+    globalAudioContextRef,
 }) {
     // 🔥 Refs for adaptive noise floor tracking
     const noiseFloorRef = useRef(0);
@@ -34,7 +38,7 @@ export function useVAD({
 
         const audioContext = globalAudioContextRef.current;
         const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 2048;  // 1024 bins @ 48kHz → ~23Hz resolution
+        analyser.fftSize = 2048; // 1024 bins @ 48kHz → ~23Hz resolution
         analyser.smoothingTimeConstant = 0.8;
         const bufferLength = analyser.frequencyBinCount;
         const freqData = new Uint8Array(bufferLength);
@@ -48,26 +52,26 @@ export function useVAD({
         const binHz = sampleRate / analyser.fftSize;
 
         // Multi-band frequency ranges (bin indices)
-        const lowStart = Math.floor(300 / binHz);   // ~300Hz
-        const lowEnd = Math.floor(800 / binHz);   // ~800Hz
-        const midStart = Math.floor(800 / binHz);   // ~800Hz
-        const midEnd = Math.floor(2000 / binHz);  // ~2kHz
-        const highStart = Math.floor(2000 / binHz);  // ~2kHz
-        const highEnd = Math.floor(4000 / binHz);  // ~4kHz
+        const lowStart = Math.floor(300 / binHz); // ~300Hz
+        const lowEnd = Math.floor(800 / binHz); // ~800Hz
+        const midStart = Math.floor(800 / binHz); // ~800Hz
+        const midEnd = Math.floor(2000 / binHz); // ~2kHz
+        const highStart = Math.floor(2000 / binHz); // ~2kHz
+        const highEnd = Math.floor(4000 / binHz); // ~4kHz
 
         // Hysteresis thresholds — derived from user's vadSensitivity
         const BASE_THRESHOLD = vadSensitivity;
-        const SPEAK_START_THRESHOLD = BASE_THRESHOLD;         // Konuşma başlama eşiği
-        const SPEAK_STOP_THRESHOLD = BASE_THRESHOLD * 0.6;   // Konuşma bitme eşiği (daha düşük)
+        const SPEAK_START_THRESHOLD = BASE_THRESHOLD; // Konuşma başlama eşiği
+        const SPEAK_STOP_THRESHOLD = BASE_THRESHOLD * 0.6; // Konuşma bitme eşiği (daha düşük)
 
         // Hangover: konuşma bittikten sonra X frame bekle
-        const HANGOVER_FRAMES = 8;  // 8 × 25ms = 200ms — kısa sessizlikleri atla
+        const HANGOVER_FRAMES = 8; // 8 × 25ms = 200ms — kısa sessizlikleri atla
         let hangoverCounter = 0;
 
         // Adaptive noise floor
         let noiseFloor = noiseFloorRef.current || 0;
-        const NOISE_ADAPT_RATE_UP = 0.01;    // Gürültü artışına yavaş uyum
-        const NOISE_ADAPT_RATE_DOWN = 0.05;  // Gürültü azalışına hızlı uyum
+        const NOISE_ADAPT_RATE_UP = 0.01; // Gürültü artışına yavaş uyum
+        const NOISE_ADAPT_RATE_DOWN = 0.05; // Gürültü azalışına hızlı uyum
         let frameCount = 0;
 
         // Band energy helper
@@ -83,7 +87,7 @@ export function useVAD({
             let crossings = 0;
             const mid = 128; // Uint8 center
             for (let i = 1; i < data.length; i++) {
-                if ((data[i] >= mid) !== (data[i - 1] >= mid)) crossings++;
+                if (data[i] >= mid !== data[i - 1] >= mid) crossings++;
             }
             return crossings / data.length;
         };
@@ -99,15 +103,16 @@ export function useVAD({
             const highEnergy = bandEnergy(freqData, highStart, highEnd);
 
             // Ağırlıklı skor: orta frekanslar (insan sesi) 2× ağırlık
-            const weightedScore = (lowEnergy * 0.25) + (midEnergy * 0.5) + (highEnergy * 0.25);
+            const weightedScore = lowEnergy * 0.25 + midEnergy * 0.5 + highEnergy * 0.25;
 
-            // Zero-crossing rate: konuşma genelde 0.02-0.15 arası, gürültü daha yüksek
+            // Zero-crossing rate: konuşma genelde 0.02-0.15 searchsı, gürültü daha yüksek
             const zcr = zeroCrossingRate(timeData);
             const isSpeechLikeZCR = zcr > 0.01 && zcr < 0.25;
 
-            // 🔥 Adaptif gürültü tabanı güncelle (sadece konuşma yokken)
+            // 🔥 Adaptif gürültü tabanı daycelle (sadece konuşma yokken)
             frameCount++;
-            if (!isTalkingRef.current && frameCount > 40) { // İlk 1 saniye atla (başlangıç)
+            if (!isTalkingRef.current && frameCount > 40) {
+                // İlk 1 saniye atla (başlangıç)
                 if (weightedScore > noiseFloor) {
                     noiseFloor += NOISE_ADAPT_RATE_UP * (weightedScore - noiseFloor);
                 } else {
@@ -122,7 +127,10 @@ export function useVAD({
             // 🔥 Hysteresis kararı
             if (isTalkingRef.current) {
                 // Zaten konuşuyor — dur eşiği daha düşük
-                if (effectiveScore > SPEAK_STOP_THRESHOLD || (effectiveScore > SPEAK_STOP_THRESHOLD * 0.8 && isSpeechLikeZCR)) {
+                if (
+                    effectiveScore > SPEAK_STOP_THRESHOLD ||
+                    (effectiveScore > SPEAK_STOP_THRESHOLD * 0.8 && isSpeechLikeZCR)
+                ) {
                     hangoverCounter = HANGOVER_FRAMES;
                 } else {
                     hangoverCounter--;
@@ -143,7 +151,11 @@ export function useVAD({
 
         return () => {
             clearInterval(vadIntervalId);
-            try { source.disconnect(); } catch (e) { /* */ }
+            try {
+                source.disconnect();
+            } catch (e) {
+                /* */
+            }
         };
     }, [localAudioStream, isInVoice, isMuted, vadSensitivity]);
 }

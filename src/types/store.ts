@@ -31,7 +31,11 @@ export interface ChatState {
 }
 
 export interface ChatActions {
-    setActiveChat: (typeOrObj: string | Partial<ActiveChat>, id?: string | number, targetUser?: string | null) => void;
+    setActiveChat: (
+        typeOrObj: string | Partial<ActiveChat>,
+        id?: string | number,
+        targetUser?: string | null
+    ) => void;
     addMessage: (message: Message) => void;
     updateMessage: (id: number, updates: Partial<Message>) => void;
     setMessages: (messages: Message[] | ((prev: Message[]) => Message[])) => void;
@@ -244,7 +248,7 @@ export interface VoiceState {
     isCameraOn: boolean;
     isScreenSharing: boolean;
     voiceUsers: Record<number, VoiceUserData>;
-    speakingUsers: Set<number>;
+    speakingUsers: string[];
     inputDevice: string;
     outputDevice: string;
     inputVolume: number;

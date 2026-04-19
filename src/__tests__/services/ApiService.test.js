@@ -1,6 +1,7 @@
 // frontend/src/__tests__/services/ApiService.test.js
 // ApiService Unit Tests
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { API_BASE_URL } from '../../utils/apiEndpoints';
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -72,7 +73,7 @@ describe('ApiService', () => {
                 headers: new Headers({ 'content-type': 'application/json' }),
             });
 
-            const response = await fetch('/api/test');
+            const response = await fetch(`${API_BASE_URL}/test`);
             const data = await response.json();
             expect(data).toEqual({ data: 'test' });
         });
@@ -84,14 +85,14 @@ describe('ApiService', () => {
                 json: () => Promise.resolve({ detail: 'Unauthorized' }),
             });
 
-            const response = await fetch('/api/protected');
+            const response = await fetch(`${API_BASE_URL}/protected`);
             expect(response.status).toBe(401);
         });
 
         it('should handle network error', async () => {
             mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
 
-            await expect(fetch('/api/test')).rejects.toThrow('Failed to fetch');
+            await expect(fetch(`${API_BASE_URL}/test`)).rejects.toThrow('Failed to fetch');
         });
 
         it('should handle 500 server error', async () => {
@@ -101,7 +102,7 @@ describe('ApiService', () => {
                 json: () => Promise.resolve({ error: 'Internal Server Error' }),
             });
 
-            const response = await fetch('/api/test');
+            const response = await fetch(`${API_BASE_URL}/test`);
             expect(response.ok).toBe(false);
             expect(response.status).toBe(500);
         });
@@ -156,13 +157,13 @@ describe('ApiService', () => {
             const generateKey = (url, params) => {
                 const sorted = params
                     ? JSON.stringify(
-                        Object.keys(params)
-                            .sort()
-                            .reduce((obj, key) => {
-                                obj[key] = params[key];
-                                return obj;
-                            }, {})
-                    )
+                          Object.keys(params)
+                              .sort()
+                              .reduce((obj, key) => {
+                                  obj[key] = params[key];
+                                  return obj;
+                              }, {})
+                      )
                     : '';
                 return `${url}:${sorted}`;
             };

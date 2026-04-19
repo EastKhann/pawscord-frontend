@@ -16,6 +16,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import logger from '../utils/logger';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -88,7 +89,9 @@ export function useErrorRecovery<T>(
 
     useEffect(() => {
         isMountedRef.current = true;
-        return () => { isMountedRef.current = false; };
+        return () => {
+            isMountedRef.current = false;
+        };
     }, []);
 
     useEffect(() => {
@@ -122,9 +125,9 @@ export function useErrorRecovery<T>(
 
                 if (currentAttempt < maxRetries) {
                     const delay = computeDelay(currentAttempt, baseDelay, maxDelay, jitter);
-                    console.warn(
+                    logger.warn(
                         `[useErrorRecovery] Attempt ${currentAttempt + 1}/${maxRetries + 1} failed — ` +
-                        `retrying in ${Math.round(delay)}ms. Error: ${errObj.message}`
+                            `retrying in ${Math.round(delay)}ms. Error: ${errObj.message}`
                     );
                     timeoutId = setTimeout(() => run(currentAttempt + 1), delay);
                 } else {
@@ -143,8 +146,7 @@ export function useErrorRecovery<T>(
             clearTimeout(timeoutId);
         };
         // retryKey triggers re-run on manual retry
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [retryKey, immediate, maxRetries, baseDelay, maxDelay, jitter]);
+    }, [retryKey, immediate, maxRetries, baseDelay, maxDelay, jitter]); // INTENTIONAL: asyncFn accessed via ref
 
     const retry = useCallback(() => {
         setError(null);

@@ -10,12 +10,12 @@ export const feedbackApi = {
     sendFeedback: async (data) => {
         return await apiFetch(`${API_BASE}/api/feedback/send/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getMyFeedbacks: async () => {
         return await apiFetch(`${API_BASE}/api/feedback/`);
-    }
+    },
 };
 
 // ==========================================
@@ -28,9 +28,9 @@ export const timeCapsuleApi = {
     createCapsule: async (data) => {
         return await apiFetch(`${API_BASE}/api/time-capsule/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -40,12 +40,12 @@ export const qrCodeApi = {
     generate: async (data) => {
         return await apiFetch(`${API_BASE}/api/qr/generate/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     scan: async (code) => {
         return await apiFetch(`${API_BASE}/api/qr/${code}/`);
-    }
+    },
 };
 
 // ==========================================
@@ -58,20 +58,20 @@ export const threadingApi = {
     updateSettings: async (threadId, data) => {
         return await apiFetch(`${API_BASE}/api/threads/${threadId}/settings/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     subscribe: async (threadId, level = 'all') => {
         return await apiFetch(`${API_BASE}/api/threads/${threadId}/subscribe/`, {
             method: 'POST',
-            body: JSON.stringify({ notification_level: level })
+            body: JSON.stringify({ notification_level: level }),
         });
     },
     unsubscribe: async (threadId) => {
         return await apiFetch(`${API_BASE}/api/threads/${threadId}/subscribe/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -87,9 +87,9 @@ export const messageTemplatesApi = {
     createTemplate: async (data) => {
         return await apiFetch(`${API_BASE}/api/templates/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -99,9 +99,9 @@ export const advancedSearchApi = {
     search: async (query, filters = {}) => {
         return await apiFetch(`${API_BASE}/api/search/advanced/`, {
             method: 'POST',
-            body: JSON.stringify({ query, filters })
+            body: JSON.stringify({ query, filters }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -114,9 +114,9 @@ export const autoDeleteApi = {
     updateSettings: async (data) => {
         return await apiFetch(`${API_BASE}/api/settings/auto-delete/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -126,9 +126,9 @@ export const linkPreviewApi = {
     fetchPreview: async (url) => {
         return await apiFetch(`${API_BASE}/api/link-preview/`, {
             method: 'POST',
-            body: JSON.stringify({ url })
+            body: JSON.stringify({ url }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -141,9 +141,9 @@ export const ttsApi = {
     updateSettings: async (data) => {
         return await apiFetch(`${API_BASE}/api/tts/settings/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -156,9 +156,9 @@ export const messageBundlesApi = {
     createBundle: async (data) => {
         return await apiFetch(`${API_BASE}/api/bundles/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -174,9 +174,9 @@ export const ephemeralApi = {
     updateSettings: async (data) => {
         return await apiFetch(`${API_BASE}/api/ephemeral/settings/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -186,7 +186,7 @@ export const translationApi = {
     translate: async (text, targetLanguage = 'en') => {
         return await apiFetch(`${API_BASE}/api/translate/`, {
             method: 'POST',
-            body: JSON.stringify({ text, target_language: targetLanguage })
+            body: JSON.stringify({ text, target_language: targetLanguage }),
         });
     },
     getPreference: async () => {
@@ -195,9 +195,9 @@ export const translationApi = {
     updatePreference: async (data) => {
         return await apiFetch(`${API_BASE}/api/translation/preference/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -210,14 +210,14 @@ export const smartPinApi = {
     createPin: async (roomId, messageId, options = {}) => {
         return await apiFetch(`${API_BASE}/api/rooms/${roomId}/pins/`, {
             method: 'POST',
-            body: JSON.stringify({ message_id: messageId, ...options })
+            body: JSON.stringify({ message_id: messageId, ...options }),
         });
     },
     deletePin: async (pinId) => {
         return await apiFetch(`${API_BASE}/api/pins/${pinId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -230,14 +230,19 @@ export const messageSchedulingApi = {
     scheduleMessage: async (roomId, content, scheduledAt, recurrence = {}) => {
         return await apiFetch(`${API_BASE}/api/scheduled-messages/`, {
             method: 'POST',
-            body: JSON.stringify({ room_id: roomId, content, scheduled_at: scheduledAt, ...recurrence })
+            body: JSON.stringify({
+                room_id: roomId,
+                content,
+                scheduled_at: scheduledAt,
+                ...recurrence,
+            }),
         });
     },
     cancelScheduled: async (messageId) => {
         return await apiFetch(`${API_BASE}/api/scheduled-messages/${messageId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -246,5 +251,5 @@ export const messageSchedulingApi = {
 export const mentionSuggestionApi = {
     getSuggestions: async (roomId, query = '') => {
         return await apiFetch(`${API_BASE}/api/rooms/${roomId}/mention-suggestions/?q=${query}`);
-    }
+    },
 };

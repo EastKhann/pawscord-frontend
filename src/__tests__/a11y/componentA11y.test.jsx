@@ -11,7 +11,7 @@ async function checkA11y(container, opts = {}) {
     const results = await axe.run(container, {
         rules: {
             'color-contrast': { enabled: false },
-            'region': { enabled: false },
+            region: { enabled: false },
             ...opts.rules,
         },
         ...opts,
@@ -57,7 +57,12 @@ function TabPanel({ tabs }) {
 function AlertDialog({ open, title, message, onConfirm, onCancel }) {
     if (!open) return null;
     return (
-        <div role="alertdialog" aria-modal="true" aria-labelledby="alert-title" aria-describedby="alert-desc">
+        <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="alert-title"
+            aria-describedby="alert-desc"
+        >
             <h2 id="alert-title">{title}</h2>
             <p id="alert-desc">{message}</p>
             <button onClick={onCancel}>Cancel</button>
@@ -117,7 +122,9 @@ describe('Tab panel accessibility', () => {
     it('has no critical a11y violations', async () => {
         const { container } = render(<TabPanel tabs={tabs} />);
         const violations = await checkA11y(container);
-        const critical = violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
+        const critical = violations.filter(
+            (v) => v.impact === 'critical' || v.impact === 'serious'
+        );
         expect(critical).toEqual([]);
     });
 
@@ -144,21 +151,35 @@ describe('Tab panel accessibility', () => {
 describe('Alert dialog accessibility', () => {
     it('has no critical a11y violations', async () => {
         const { container } = render(
-            <AlertDialog open title="Delete?" message="This cannot be undone." onConfirm={() => { }} onCancel={() => { }} />
+            <AlertDialog
+                open
+                title="Delete?"
+                message="This cannot be undone."
+                onConfirm={() => {}}
+                onCancel={() => {}}
+            />
         );
         const violations = await checkA11y(container);
-        const critical = violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
+        const critical = violations.filter(
+            (v) => v.impact === 'critical' || v.impact === 'serious'
+        );
         expect(critical).toEqual([]);
     });
 
     it('has role="alertdialog"', () => {
-        render(<AlertDialog open title="T" message="M" onConfirm={() => { }} onCancel={() => { }} />);
+        render(<AlertDialog open title="T" message="M" onConfirm={() => {}} onCancel={() => {}} />);
         expect(screen.getByRole('alertdialog')).toBeDefined();
     });
 
     it('renders nothing when not open', () => {
         const { container } = render(
-            <AlertDialog open={false} title="T" message="M" onConfirm={() => { }} onCancel={() => { }} />
+            <AlertDialog
+                open={false}
+                title="T"
+                message="M"
+                onConfirm={() => {}}
+                onCancel={() => {}}
+            />
         );
         expect(container.innerHTML).toBe('');
     });
@@ -184,12 +205,12 @@ describe('Progress bar accessibility', () => {
 
 describe('Toggle switch accessibility', () => {
     it('has role="switch"', () => {
-        render(<ToggleSwitch label="Dark mode" checked={false} onChange={() => { }} />);
+        render(<ToggleSwitch label="Dark mode" checked={false} onChange={() => {}} />);
         expect(screen.getByRole('switch')).toBeDefined();
     });
 
     it('has correct aria-checked', () => {
-        render(<ToggleSwitch label="Dark mode" checked={true} onChange={() => { }} />);
+        render(<ToggleSwitch label="Dark mode" checked={true} onChange={() => {}} />);
         expect(screen.getByRole('switch').getAttribute('aria-checked')).toBe('true');
     });
 
@@ -217,7 +238,9 @@ describe('Toolbar accessibility', () => {
     it('has no critical a11y violations', async () => {
         const { container } = render(<Toolbar />);
         const violations = await checkA11y(container);
-        const critical = violations.filter((v) => v.impact === 'critical' || v.impact === 'serious');
+        const critical = violations.filter(
+            (v) => v.impact === 'critical' || v.impact === 'serious'
+        );
         expect(critical).toEqual([]);
     });
 });

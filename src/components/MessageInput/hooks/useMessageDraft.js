@@ -1,5 +1,8 @@
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
 // frontend/src/components/MessageInput/hooks/useMessageDraft.js
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 const useMessageDraft = (activeChat, fetchWithAuth, apiBaseUrl, message, setMessage) => {
     const [draftSaved, setDraftSaved] = useState(false);
@@ -12,7 +15,8 @@ const useMessageDraft = (activeChat, fetchWithAuth, apiBaseUrl, message, setMess
 
         const loadDraft = async () => {
             try {
-                const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
+                const chatKey =
+                    activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
                 const response = await fetchWithAuth(`${apiBaseUrl}/api/drafts/${chatKey}/`);
                 if (response.ok) {
                     const data = await response.json();
@@ -21,7 +25,9 @@ const useMessageDraft = (activeChat, fetchWithAuth, apiBaseUrl, message, setMess
                         setDraftSaved(true);
                     }
                 }
-            } catch (error) { /* silent */ }
+            } catch (error) {
+                /* silent */
+            }
         };
 
         loadDraft();
@@ -37,25 +43,38 @@ const useMessageDraft = (activeChat, fetchWithAuth, apiBaseUrl, message, setMess
 
         draftTimerRef.current = setTimeout(async () => {
             try {
-                const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
+                const chatKey =
+                    activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
                 await fetchWithAuth(`${apiBaseUrl}/api/drafts/save/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_key: chatKey, content: message })
+                    body: JSON.stringify({ chat_key: chatKey, content: message }),
                 });
                 setDraftSaved(true);
                 setTimeout(() => setDraftSaved(false), 1000);
-            } catch (error) { /* silent */ }
+            } catch (error) {
+                /* silent */
+            }
         }, 2000);
 
-        return () => { if (draftTimerRef.current) clearTimeout(draftTimerRef.current); };
+        return () => {
+            if (draftTimerRef.current) clearTimeout(draftTimerRef.current);
+        };
     }, [message, activeChat, fetchWithAuth, apiBaseUrl]);
 
     // Delete draft on send
     const clearDraft = () => {
-        if (activeChat && fetchWithAuth && apiBaseUrl && (activeChat.type === 'room' || activeChat.type === 'dm')) {
-            const chatKey = activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
-            fetchWithAuth(`${apiBaseUrl}/api/drafts/${chatKey}/`, { method: 'DELETE' }).catch(console.error);
+        if (
+            activeChat &&
+            fetchWithAuth &&
+            apiBaseUrl &&
+            (activeChat.type === 'room' || activeChat.type === 'dm')
+        ) {
+            const chatKey =
+                activeChat.type === 'room' ? `room_${activeChat.id}` : `dm_${activeChat.id}`;
+            fetchWithAuth(`${apiBaseUrl}/api/drafts/${chatKey}/`, { method: 'DELETE' }).catch(
+                console.error
+            );
         }
     };
 
@@ -63,3 +82,7 @@ const useMessageDraft = (activeChat, fetchWithAuth, apiBaseUrl, message, setMess
 };
 
 export default useMessageDraft;
+
+useMessageDraft.propTypes = {
+    activeChat: PropTypes.bool,
+};

@@ -28,7 +28,7 @@ export const useRoomManager = ({
     setActiveRoom,
     setActiveConversation,
     fetchMessages,
-    joinRoom
+    joinRoom,
 }: UseRoomManagerOptions): UseRoomManagerResult => {
     // Handle room changes
     useEffect(() => {
@@ -68,9 +68,6 @@ export const useRoomManager = ({
         switchToDM: useCallback((conversationId) => {
             logger.log('🔄 Switching to DM:', conversationId);
             // Implement DM switching logic
-        }, [])
+        }, []),
     };
 };
-
-
-

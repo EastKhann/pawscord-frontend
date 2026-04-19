@@ -1,16 +1,19 @@
 // PaymentPanel/hooks/usePayment.js
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../../utils/toast';
+import logger from '../../../utils/logger';
 
 export const COIN_PACKAGES = [
     { amount: 100, price: 0.99, bonus: 0 },
     { amount: 500, price: 4.99, bonus: 50 },
     { amount: 1000, price: 9.99, bonus: 150 },
     { amount: 2500, price: 19.99, bonus: 500 },
-    { amount: 5000, price: 39.99, bonus: 1000 }
+    { amount: 5000, price: 39.99, bonus: 1000 },
 ];
 
 const usePayment = (fetchWithAuth, apiBaseUrl) => {
+    const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('balance');
     const [balance, setBalance] = useState(0);
     const [transactions, setTransactions] = useState([]);
@@ -24,11 +27,14 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     const loadBalance = useCallback(async () => {
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/users/balance/`);
-            if (!response.ok) { setBalance(0); return; }
+            if (!response.ok) {
+                setBalance(0);
+                return;
+            }
             const data = await response.json();
             setBalance(data.balance || 0);
         } catch (error) {
-            console.error('Failed to load balance:', error);
+            logger.error('Failed to load balance:', error);
         } finally {
             setLoading(false);
         }
@@ -41,7 +47,7 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
             const data = await response.json();
             setTransactions(data.transactions || []);
         } catch (error) {
-            console.error('Failed to load transactions:', error);
+            logger.error('Failed to load transactions:', error);
         }
     }, [fetchWithAuth, apiBaseUrl]);
 
@@ -51,14 +57,23 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     }, [loadBalance, loadTransactions]);
 
     const handlePurchase = async () => {
-        if (amount < 100) { toast.error('Minimum purchase is 100 coins'); return; }
-        if (!paymentMethod) { toast.error('Please select a payment method'); return; }
+        if (amount < 100) {
+            toast.error(t('payment.minCoins'));
+            return;
+        }
+        if (!paymentMethod) {
+            toast.error(t('payment.selectMethod'));
+            return;
+        }
 
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/payments/coins/purchase/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ coin_amount: parseInt(amount), payment_method: paymentMethod })
+                body: JSON.stringify({
+                    coin_amount: parseInt(amount),
+                    payment_method: paymentMethod,
+                }),
             });
 
             if (!response.ok) {
@@ -69,31 +84,31 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
             const data = await response.json();
             if (data.success) {
                 if (data.redirect_url) {
-                    toast.info('Redirecting to payment page...');
+                    toast.info(t('payment.redirecting'));
                     window.location.href = data.redirect_url;
                 } else if (data.payment_page_url) {
-                    toast.info('Redirecting to payment page...');
+                    toast.info(t('payment.redirecting'));
                     window.location.href = data.payment_page_url;
                 } else {
-                    toast.success('Payment initiated!');
+                    toast.success(t('payment.initiated'));
                 }
             } else {
-                toast.error(data.error || 'Payment failed');
+                toast.error(data.error || t('payment.failed'));
             }
         } catch (error) {
-            console.error('Payment error:', error);
-            toast.error(error.message || 'Payment processing failed');
+            logger.error('Payment error:', error);
+            toast.error(error.message || t('payment.processingFailed'));
         }
     };
 
     const handleTransfer = async () => {
         if (!transferRecipient || !transferAmount) {
-            toast.error('Please fill in all fields');
+            toast.error(t('payment.fillFields'));
             return;
         }
         const amt = parseInt(transferAmount);
         if (amt <= 0 || amt > balance) {
-            toast.error('Invalid transfer amount');
+            toast.error(t('payment.invalidAmount'));
             return;
         }
 
@@ -101,11 +116,17 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
             const response = await fetchWithAuth(`${apiBaseUrl}/coins/transfer/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ recipient: transferRecipient, amount: amt, note: transferNote })
+                body: JSON.stringify({
+                    recipient: transferRecipient,
+                    amount: amt,
+                    note: transferNote,
+                }),
             });
             const data = await response.json();
             if (data.success) {
-                toast.success(`Transferred ${amt} coins to ${transferRecipient}`);
+                toast.success(
+                    t('payment.transferred', { amount: amt, recipient: transferRecipient })
+                );
                 loadBalance();
                 loadTransactions();
                 setTransferRecipient('');
@@ -113,21 +134,32 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
                 setTransferNote('');
                 setActiveTab('balance');
             } else {
-                toast.error(data.error || 'Transfer failed');
+                toast.error(data.error || t('payment.transferFailed'));
             }
         } catch (error) {
-            console.error('Transfer error:', error);
-            toast.error('Transfer failed');
+            logger.error('Transfer error:', error);
+            toast.error(t('payment.transferFailed'));
         }
     };
 
     return {
-        activeTab, setActiveTab, balance, transactions, loading,
-        amount, setAmount, paymentMethod, setPaymentMethod,
-        transferRecipient, setTransferRecipient,
-        transferAmount, setTransferAmount,
-        transferNote, setTransferNote,
-        handlePurchase, handleTransfer
+        activeTab,
+        setActiveTab,
+        balance,
+        transactions,
+        loading,
+        amount,
+        setAmount,
+        paymentMethod,
+        setPaymentMethod,
+        transferRecipient,
+        setTransferRecipient,
+        transferAmount,
+        setTransferAmount,
+        transferNote,
+        setTransferNote,
+        handlePurchase,
+        handleTransfer,
     };
 };
 

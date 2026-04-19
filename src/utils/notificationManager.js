@@ -1,9 +1,17 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/notificationManager.js
 
 // Escape HTML to prevent XSS in notifications
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
 function escapeHTML(str) {
     if (typeof str !== 'string') return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 /**
@@ -54,7 +62,7 @@ class NotificationManager {
             closeButton = true,
             pauseOnHover = true,
             onClick,
-            onClose
+            onClose,
         } = options;
 
         const id = ++this.notificationId;
@@ -70,7 +78,7 @@ class NotificationManager {
             pauseOnHover,
             onClick,
             onClose,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         };
 
         // Remove oldest if max reached
@@ -141,7 +149,7 @@ class NotificationManager {
             success: '✓',
             error: '✕',
             warning: '⚠',
-            info: 'ℹ'
+            info: 'ℹ',
         };
 
         const iconElement = notification.icon || iconMap[notification.type];
@@ -152,23 +160,34 @@ class NotificationManager {
       <div class="notification__content">
         ${notification.title ? `<div class="notification__title">${escapeHTML(notification.title)}</div>` : ''}
         <div class="notification__message">${escapeHTML(notification.message)}</div>
-        ${notification.actions.length > 0 ? `
+        ${
+            notification.actions.length > 0
+                ? `
           <div class="notification__actions">
-            ${notification.actions.map((action, i) => `
+            ${notification.actions
+                .map(
+                    (action, i) => `
               <button class="notification__action" data-action-index="${i}">
                 ${escapeHTML(action.label)}
               </button>
-            `).join('')}
+            `
+                )
+                .join('')}
           </div>
-        ` : ''}
+        `
+                : ''
+        }
       </div>
-      ${notification.closeButton ? '<button class="notification__close" aria-label="Close">&times;</button>' : ''}
+      ${notification.closeButton ? '<button class="notification__close" aria-label={t("common.close")}>&times;</button>' : ''}
     `;
 
-        // Event listeners
+        // Event listners
         if (notification.onClick) {
             element.addEventListener('click', (e) => {
-                if (!e.target.closest('.notification__close') && !e.target.closest('.notification__action')) {
+                if (
+                    !e.target.closest('.notification__close') &&
+                    !e.target.closest('.notification__action')
+                ) {
                     notification.onClick(notification);
                 }
             });
@@ -221,7 +240,7 @@ class NotificationManager {
      * Remove notification
      */
     remove(id) {
-        const notification = this.notifications.find(n => n.id === id);
+        const notification = this.notifications.find((n) => n.id === id);
         if (!notification) return;
 
         // Clear timeout
@@ -246,14 +265,14 @@ class NotificationManager {
         }
 
         // Remove from array
-        this.notifications = this.notifications.filter(n => n.id !== id);
+        this.notifications = this.notifications.filter((n) => n.id !== id);
     }
 
     /**
      * Remove all notifications
      */
     clear() {
-        this.notifications.forEach(n => this.remove(n.id));
+        this.notifications.forEach((n) => this.remove(n.id));
     }
 
     /**
@@ -262,15 +281,17 @@ class NotificationManager {
     playSound(type) {
         const audio = new Audio();
         const sounds = {
-            success: 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZijcIF2m98OScTgwOUqjk77RgGwU7k9rx0IItBSh+zPLajjgKFmS67uugUhELSKHh8bllHAU6k9r01JEtBylz0O7v',
+            success:
+                'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZijcIF2m98OScTgwOUqjk77RgGwU7k9rx0IItBSh+zPLajjgKFmS67uugUhELSKHh8bllHAU6k9r01JEtBylz0O7v',
             error: 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAgYKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKC',
-            warning: 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAAB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/'
+            warning:
+                'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAAB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/',
         };
 
         if (sounds[type]) {
             audio.src = sounds[type];
             audio.volume = 0.3;
-            audio.play().catch(() => { }); // Ignore errors
+            audio.play().catch(() => {}); // Ignore errors
         }
     }
 
@@ -279,7 +300,7 @@ class NotificationManager {
      */
     async requestPermission() {
         if (!('Notification' in window)) {
-            console.warn('Push notifications not supported');
+            logger.warn('Push notifications not supported');
             return false;
         }
 
@@ -301,10 +322,12 @@ class NotificationManager {
                 if (options.isMention && prefs.mentions === false) return;
                 if (options.isEveryone && prefs.everyone === false) return;
             }
-        } catch { /* ignore parse errors */ }
+        } catch {
+            /* ignore parse errors */
+        }
 
         if (!('Notification' in window)) {
-            console.warn('Push notifications not supported');
+            logger.warn('Push notifications not supported');
             return;
         }
 
@@ -321,7 +344,7 @@ class NotificationManager {
             data: options.data,
             requireInteraction: options.requireInteraction || false,
             silent: options.silent || false,
-            vibrate: options.vibrate || [200, 100, 200]
+            vibrate: options.vibrate || [200, 100, 200],
         });
 
         notification.onclick = () => {
@@ -350,14 +373,14 @@ class NotificationManager {
                 actions: [
                     {
                         label: options.confirmLabel || 'Confirm',
-                        onClick: () => resolve(true)
+                        onClick: () => resolve(true),
                     },
                     {
                         label: options.cancelLabel || 'Cancel',
-                        onClick: () => resolve(false)
-                    }
+                        onClick: () => resolve(false),
+                    },
                 ],
-                onClose: () => resolve(false)
+                onClose: () => resolve(false),
             });
         });
     }
@@ -371,7 +394,7 @@ class NotificationManager {
             type: 'info',
             duration: 0,
             icon: '<div class="notification__spinner"></div>',
-            closeButton: false
+            closeButton: false,
         });
     }
 
@@ -379,7 +402,7 @@ class NotificationManager {
      * Update notification
      */
     update(id, updates) {
-        const notification = this.notifications.find(n => n.id === id);
+        const notification = this.notifications.find((n) => n.id === id);
         if (!notification) return;
 
         Object.assign(notification, updates);
@@ -410,7 +433,7 @@ export const notificationManager = new NotificationManager({
     position: 'top-right',
     maxNotifications: 5,
     defaultDuration: 5000,
-    soundEnabled: true
+    soundEnabled: true,
 });
 
 // Shortcuts
@@ -461,10 +484,8 @@ export const useNotification = () => {
         warning: showWarning,
         info: showInfo,
         loading: showLoading,
-        confirm: confirmDialog
+        confirm: confirmDialog,
     };
 };
 
 export default NotificationManager;
-
-

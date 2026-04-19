@@ -32,7 +32,7 @@ const MockServerPanel = ({
     if (!servers) return null;
 
     const server = servers.find(s => s.id === selectedServerId);
-    if (!server) return <div data-testid="no-server">Sunucu bulunamadı</div>;
+    if (!server) return <div data-testid="no-server">Server not found</div>;
 
     const isOwner = server.owner_username === currentUsername || isAdmin;
 
@@ -45,7 +45,7 @@ const MockServerPanel = ({
                     <button data-testid="invite-button" onClick={(e) => handleCreateInvite(e, server)}>Davet</button>
                     {isOwner && (
                         <button data-testid="add-category-button" onClick={() => handleCreateCategory(null, server.id)}>
-                            Kategori Ekle
+                            Category Ekle
                         </button>
                     )}
                     {isOwner && (
@@ -69,8 +69,7 @@ const MockServerPanel = ({
                             tabIndex={0}
                             aria-expanded={!isCollapsed}
                             onClick={() => toggleCategory(cat.id)}
-                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleCategory(cat.id)}
-                        >
+                            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && toggleCategory(cat.id)}>
                             <span data-testid={`chevron-${cat.id}`} style={{
                                 transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                                 transition: 'transform 0.2s'
@@ -79,8 +78,7 @@ const MockServerPanel = ({
                             {isOwner && (
                                 <button
                                     data-testid={`add-room-${cat.id}`}
-                                    onClick={(e) => { e.stopPropagation(); handleCreateRoom(e, cat.id); }}
-                                >
+                                    onClick={(e) => { e.stopPropagation(); handleCreateRoom(e, cat.id); }}>
                                     +
                                 </button>
                             )}
@@ -100,8 +98,7 @@ const MockServerPanel = ({
                                             role="button"
                                             tabIndex={0}
                                             onClick={() => onRoomSelect(room)}
-                                            onKeyDown={(e) => (e.key === 'Enter') && onRoomSelect(room)}
-                                        >
+                                            onKeyDown={(e) => (e.key === 'Enter') && onRoomSelect(room)}>
                                             <span data-testid={`room-icon-${room.id}`}>
                                                 {room.room_type === 'voice' ? '🔊' : '#'}
                                             </span>
@@ -112,9 +109,8 @@ const MockServerPanel = ({
                                             {room.room_type === 'voice' && (
                                                 <button
                                                     data-testid={`join-voice-${room.id}`}
-                                                    onClick={(e) => { e.stopPropagation(); joinVoiceChat(room); }}
-                                                >
-                                                    Katıl
+                                                    onClick={(e) => { e.stopPropagation(); joinVoiceChat(room); }}>
+                                                    Join
                                                 </button>
                                             )}
                                         </div>
@@ -137,7 +133,7 @@ describe('ServerPanel Component', () => {
         categories: [
             {
                 id: 101,
-                name: 'Genel',
+                name: 'General',
                 rooms: [
                     { id: 201, name: 'sohbet', slug: 'sohbet', room_type: 'text' },
                     { id: 202, name: 'duyurular', slug: 'duyurular', room_type: 'text' },
@@ -147,12 +143,12 @@ describe('ServerPanel Component', () => {
                 id: 102,
                 name: 'Ses Kanalları',
                 rooms: [
-                    { id: 203, name: 'Genel Ses', slug: 'genel-ses', room_type: 'voice' },
+                    { id: 203, name: 'General Ses', slug: 'genel-audio', room_type: 'voice' },
                 ],
             },
             {
                 id: 103,
-                name: 'Boş Kategori',
+                name: 'Boş Category',
                 rooms: [],
             },
         ],
@@ -261,7 +257,7 @@ describe('ServerPanel Component', () => {
                 <MockServerPanel
                     servers={[mockServer]}
                     selectedServerId={1}
-                    collapsedCategories={{ 101: true }}
+                    collapsedCategories={{ 101: true }}>
                     {...handlers}
                 />
             );
@@ -296,7 +292,7 @@ describe('ServerPanel Component', () => {
                 <MockServerPanel
                     servers={[mockServer]}
                     selectedServerId={1}
-                    safeUnreadCounts={{ 'room-sohbet': 5 }}
+                    safeUnreadCounts={{ 'room-sohbet': 5 }}>
                     {...handlers}
                 />
             );

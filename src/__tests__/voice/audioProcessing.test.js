@@ -9,15 +9,15 @@ vi.mock('../../utils/logger', () => ({
         warn: vi.fn(),
         error: vi.fn(),
         signal: vi.fn(),
-        webrtc: vi.fn()
-    }
+        webrtc: vi.fn(),
+    },
 }));
 
 describe('Audio Processing', () => {
     describe('applyNoiseSuppression', () => {
         it('should return original stream if no audio tracks', async () => {
             const emptyStream = {
-                getAudioTracks: () => []
+                getAudioTracks: () => [],
             };
             const result = await applyNoiseSuppression(emptyStream);
             expect(result).toBe(emptyStream);
@@ -25,10 +25,10 @@ describe('Audio Processing', () => {
 
         it('should apply constraints to audio track when supported', async () => {
             const mockTrack = {
-                applyConstraints: vi.fn().mockResolvedValue(undefined)
+                applyConstraints: vi.fn().mockResolvedValue(undefined),
             };
             const stream = {
-                getAudioTracks: () => [mockTrack]
+                getAudioTracks: () => [mockTrack],
             };
 
             const result = await applyNoiseSuppression(stream);
@@ -38,12 +38,13 @@ describe('Audio Processing', () => {
 
         it('should fallback to basic constraints on error', async () => {
             const mockTrack = {
-                applyConstraints: vi.fn()
+                applyConstraints: vi
+                    .fn()
                     .mockRejectedValueOnce(new Error('Not supported'))
-                    .mockResolvedValueOnce(undefined)
+                    .mockResolvedValueOnce(undefined),
             };
             const stream = {
-                getAudioTracks: () => [mockTrack]
+                getAudioTracks: () => [mockTrack],
             };
 
             const result = await applyNoiseSuppression(stream);
@@ -60,7 +61,7 @@ describe('Audio Processing', () => {
         it('should return original stream if track has no applyConstraints', async () => {
             const mockTrack = {}; // No applyConstraints method
             const stream = {
-                getAudioTracks: () => [mockTrack]
+                getAudioTracks: () => [mockTrack],
             };
 
             const result = await applyNoiseSuppression(stream);

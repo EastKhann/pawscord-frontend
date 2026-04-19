@@ -2,15 +2,15 @@
 // 10/10 Edition: Batched sends, room cleanup, bounded state, dedup, timeout cleanup
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-const MAX_TRACKED_MESSAGES = 500;  // Limit state size to prevent memory leak
-const VISIBILITY_DELAY_MS = 800;   // Time message must be visible before marking read
-const BATCH_INTERVAL_MS = 1200;    // Batch read receipts every 1.2s
+const MAX_TRACKED_MESSAGES = 500; // Limit state size to prevent memory leak
+const VISIBILITY_DELAY_MS = 800; // Time message must be visible before marking read
+const BATCH_INTERVAL_MS = 1200; // Batch read receipts every 1.2s
 
 const useReadReceipts = (ws, currentRoom, currentUser) => {
     const [messageStatuses, setMessageStatuses] = useState({});
     const observerRef = useRef(null);
-    const sentReceiptIds = useRef(new Set());  // Track what we've already sent to prevent duplicate sends
-    const pendingReads = useRef([]);           // Batch buffer
+    const sentReceiptIds = useRef(new Set()); // Track what we've already sent to prevent duplicate sends
+    const pendingReads = useRef([]); // Batch buffer
     const batchTimerRef = useRef(null);
     const visibilityTimers = useRef(new Map()); // Track individual message visibility timers
 
@@ -29,7 +29,7 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
                     // Don't track own reads
                     if (username === currentUser) return;
 
-                    setMessageStatuses(prev => {
+                    setMessageStatuses((prev) => {
                         const current = prev[message_id] || { status: 'sent', readBy: [] };
                         const readBy = current.readBy || [];
                         // Dedup reader
@@ -40,8 +40,8 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
                             [message_id]: {
                                 status: 'read',
                                 readBy: [...readBy, username],
-                                readAt: read_at
-                            }
+                                readAt: read_at,
+                            },
                         };
 
                         // Prune oldest entries if beyond max
@@ -59,9 +59,9 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
                 if (data.type === 'chat_message' || data.type === 'dm_message') {
                     const { id, username } = data;
                     if (username === currentUser && id) {
-                        setMessageStatuses(prev => ({
+                        setMessageStatuses((prev) => ({
                             ...prev,
-                            [id]: { status: 'sent', readBy: [] }
+                            [id]: { status: 'sent', readBy: [] },
                         }));
                     }
                 }
@@ -88,44 +88,49 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
 
         // Send each as individual message_read via WS
         for (const { messageId } of toSend) {
-            ws.send(JSON.stringify({
-                type: 'message_read',
-                message_id: messageId,
-                room: currentRoom,
-            }));
+            ws.send(
+                JSON.stringify({
+                    type: 'message_read',
+                    message_id: messageId,
+                    room: currentRoom,
+                })
+            );
         }
     }, [ws, currentRoom]);
 
     // Send read receipt when message is visible (batched + deduped)
-    const markMessageAsRead = useCallback((messageId, messageUsername) => {
-        if (!ws || !currentRoom || ws.readyState !== WebSocket.OPEN) return;
-        // Don't send read receipt for own messages
-        if (messageUsername === currentUser) return;
-        // Dedup: don't send again for this message
-        if (sentReceiptIds.current.has(messageId)) return;
+    const markMessageAsRead = useCallback(
+        (messageId, messageUsername) => {
+            if (!ws || !currentRoom || ws.readyState !== WebSocket.OPEN) return;
+            // Don't send read receipt for own messages
+            if (messageUsername === currentUser) return;
+            // Dedup: don't send again for this message
+            if (sentReceiptIds.current.has(messageId)) return;
 
-        sentReceiptIds.current.add(messageId);
+            sentReceiptIds.current.add(messageId);
 
-        // Add to batch buffer
-        pendingReads.current.push({ messageId });
+            // Add to batch buffer
+            pendingReads.current.push({ messageId });
 
-        // Schedule batch flush
-        if (!batchTimerRef.current) {
-            batchTimerRef.current = setTimeout(() => {
-                batchTimerRef.current = null;
-                flushBatch();
-            }, BATCH_INTERVAL_MS);
-        }
-
-        // Optimistic update
-        setMessageStatuses(prev => ({
-            ...prev,
-            [messageId]: {
-                ...prev[messageId],
-                status: 'delivered'
+            // Schedule batch flush
+            if (!batchTimerRef.current) {
+                batchTimerRef.current = setTimeout(() => {
+                    batchTimerRef.current = null;
+                    flushBatch();
+                }, BATCH_INTERVAL_MS);
             }
-        }));
-    }, [ws, currentRoom, currentUser, flushBatch]);
+
+            // Optimistic update
+            setMessageStatuses((prev) => ({
+                ...prev,
+                [messageId]: {
+                    ...prev[messageId],
+                    status: 'delivered',
+                },
+            }));
+        },
+        [ws, currentRoom, currentUser, flushBatch]
+    );
 
     // Intersection Observer for auto-marking messages as read
     useEffect(() => {
@@ -133,7 +138,7 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
 
         observerRef.current = new IntersectionObserver(
             (entries) => {
-                entries.forEach(entry => {
+                entries.forEach((entry) => {
                     const messageId = entry.target.dataset?.messageId;
                     const messageUsername = entry.target.dataset?.messageUsername;
 
@@ -161,7 +166,7 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
             },
             {
                 threshold: 0.5,
-                rootMargin: '0px'
+                rootMargin: '0px',
             }
         );
 
@@ -198,19 +203,19 @@ const useReadReceipts = (ws, currentRoom, currentUser) => {
     }, []);
 
     // Get status for a message
-    const getMessageStatus = useCallback((messageId) => {
-        return messageStatuses[messageId] || { status: 'sent', readBy: [] };
-    }, [messageStatuses]);
+    const getMessageStatus = useCallback(
+        (messageId) => {
+            return messageStatuses[messageId] || { status: 'sent', readBy: [] };
+        },
+        [messageStatuses]
+    );
 
     return {
         messageStatuses,
         getMessageStatus,
         markMessageAsRead,
-        observeMessage
+        observeMessage,
     };
 };
 
 export default useReadReceipts;
-
-
-

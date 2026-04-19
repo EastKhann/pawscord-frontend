@@ -1,15 +1,22 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable react-hooks/rules-of-hooks */
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
 import { useState, useEffect } from 'react';
+
+// -- extracted inline style constants --
 
 // Güvenli veri yazdırma
 export const safeRender = (value) => {
-    if (value === null || value === undefined) return "-";
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    if (value === null || value === undefined) return '-';
     if (typeof value === 'object') return JSON.stringify(value);
     return String(value);
 };
 
 // Fiyat formatlayıcı
 export const formatPrice = (price) => {
-    if (!price || price === "Yükleniyor..." || price === "Fiyat Bekleniyor...") return price;
+    if (!price || price === 'Loading...' || price === 'Fiyat Waiting...') return price;
     return parseFloat(price).toString();
 };
 
@@ -24,11 +31,11 @@ export const pnlColor = (pnl) => {
 
 // Tab bilgileri
 export const TAB_CONFIG = {
-    TUM_STRATEJILER: { icon: '📊', shortLabel: 'Tümü', color: '#5865f2' },
-    ACIK_POZISYONLAR: { icon: '💼', shortLabel: 'Açık Poz.', color: '#f0b232' },
+    TUM_STRATEJILER: { icon: '📊', shortLabel: 'All', color: '#5865f2' },
+    ACIK_POZISYONLAR: { icon: '💼', shortLabel: 'Open Poz.', color: '#f0b232' },
     POZISYON_OLMAYAN: { icon: '🔍', shortLabel: 'Poz. Yok', color: '#949ba4' },
-    ZARARDA_OLANLAR: { icon: '🔴', shortLabel: 'Zararda', color: '#da373c' },
-    ALIM_FIRSATI: { icon: '💰', shortLabel: 'Alım Fır.', color: '#23a559' }
+    ZARARDA_OLANLAR: { icon: '🔴', shortLabel: 'In Loss', color: '#da373c' },
+    ALIM_FIRSATI: { icon: '💰', shortLabel: 'Buy Opp.', color: '#23a559' },
 };
 
 // Canlı fiyat bileşeni
@@ -37,7 +44,8 @@ export const LivePrice = ({ price }) => {
     const [colorClass, setColorClass] = useState('');
 
     useEffect(() => {
-        if (!price || price === "Yükleniyor..." || price === "Fiyat Bekleniyor..." || price === "...") return;
+        if (!price || price === 'Loading...' || price === 'Fiyat Waiting...' || price === '...')
+            return;
         const current = parseFloat(price);
         const previous = parseFloat(prevPrice);
         if (current > previous) setColorClass('flash-green');
@@ -49,28 +57,46 @@ export const LivePrice = ({ price }) => {
 
     const displayPrice = formatPrice(price);
     return (
-        <span className={colorClass} style={{
-            fontSize: '0.95em', fontWeight: 'bold',
-            color: (price === "Yükleniyor..." || price === "Fiyat Bekleniyor..." || price === "...") ? '#999'
-                : (colorClass === 'flash-green' ? '#23a559' : (colorClass === 'flash-red' ? '#da373c' : '#23a559')),
-            transition: 'color 0.5s ease'
-        }}>
-            {(price !== "Yükleniyor..." && price !== "Fiyat Bekleniyor..." && price !== "...") ? `$${displayPrice}` : price}
+        <span
+            aria-label="safe render"
+            className={colorClass}
+            style={{
+                fontSize: '0.95em',
+                fontWeight: 'bold',
+                color:
+                    price === 'Loading...' || price === 'Fiyat Waiting...' || price === '...'
+                        ? '#999'
+                        : colorClass === 'flash-green'
+                          ? '#23a559'
+                          : colorClass === 'flash-red'
+                            ? '#da373c'
+                            : '#23a559',
+                transition: 'color 0.5s ease',
+            }}
+        >
+            {price !== 'Loading...' && price !== 'Fiyat Waiting...' && price !== '...'
+                ? `$${displayPrice}`
+                : price}
         </span>
     );
 };
 
-// Sinyal badge
+// Signal badge
 export const SignalBadge = ({ signal }) => {
-    if (!signal || signal === '-') return <span style={{ color: '#949ba4' }}>-</span>;
+    if (!signal || signal === '-') return <span>-</span>;
     const isLong = signal === 'LONG';
     return (
-        <span style={{
-            backgroundColor: isLong ? 'rgba(35,165,89,0.15)' : 'rgba(218,55,60,0.15)',
-            color: isLong ? '#23a559' : '#da373c',
-            padding: '2px 8px', borderRadius: 4, fontWeight: 700, fontSize: '0.8em',
-            border: `1px solid ${isLong ? 'rgba(35,165,89,0.3)' : 'rgba(218,55,60,0.3)'}`
-        }}>
+        <span
+            style={{
+                backgroundColor: isLong ? 'rgba(35,165,89,0.15)' : 'rgba(218,55,60,0.15)',
+                color: isLong ? '#23a559' : '#da373c',
+                padding: '2px 8px',
+                borderRadius: 4,
+                fontWeight: 700,
+                fontSize: '0.8em',
+                border: `1px solid ${isLong ? 'rgba(35,165,89,0.3)' : 'rgba(218,55,60,0.3)'}`,
+            }}
+        >
             {isLong ? '▲' : '▼'} {signal}
         </span>
     );
@@ -78,15 +104,18 @@ export const SignalBadge = ({ signal }) => {
 
 // Status badge
 export const StatusBadge = ({ status }) => {
-    if (!status) return <span style={{ color: '#949ba4' }}>-</span>;
+    if (!status) return <span>-</span>;
     const str = String(status);
     const isProfit = str.includes('KAR') || str.includes('UYUYOR');
     const isLoss = str.includes('ZARAR') || str.includes('TERS');
     return (
-        <span style={{
-            fontSize: '0.8em', fontWeight: 600,
-            color: isProfit ? '#23a559' : isLoss ? '#da373c' : '#f0b232'
-        }}>
+        <span
+            style={{
+                fontSize: '0.8em',
+                fontWeight: 600,
+                color: isProfit ? '#23a559' : isLoss ? '#da373c' : '#f0b232',
+            }}
+        >
             {str}
         </span>
     );

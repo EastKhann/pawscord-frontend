@@ -1,5 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './CustomStatus.css';
+import { useTranslation } from 'react-i18next';
+
 
 // Preset status emojis
 const PRESET_EMOJIS = [
@@ -12,7 +16,7 @@ const PRESET_EMOJIS = [
 const PRESET_STATUSES = [
     { emoji: '🎮', text: 'Oyun oynuyor' },
     { emoji: '💻', text: 'Kod yazıyor' },
-    { emoji: '📚', text: 'Çalışıyor' },
+    { emoji: '📚', text: 'Çalıyor' },
     { emoji: '🎵', text: 'Müzik dinliyor' },
     { emoji: '💤', text: 'AFK' },
     { emoji: '🚫', text: 'Rahatsız etmeyin' },
@@ -26,6 +30,8 @@ const CustomStatus = ({
     maxLength = 128,
     showPresets = true
 }) => {
+    const { t } = useTranslation();
+
     const [isEditing, setIsEditing] = useState(false);
     const [emoji, setEmoji] = useState(currentStatus?.emoji || '');
     const [text, setText] = useState(currentStatus?.text || '');
@@ -82,17 +88,17 @@ const CustomStatus = ({
     };
 
     const clearAfterOptions = [
-        { value: 'never', label: 'Temizleme' },
-        { value: '30min', label: '30 dakika' },
-        { value: '1hour', label: '1 saat' },
-        { value: '4hours', label: '4 saat' },
-        { value: 'today', label: 'Bugün' },
-        { value: '1week', label: '1 hafta' }
+        { value: 'never', label: 'Clearme' },
+        { value: '30min', label: '30 minute' },
+        { value: '1hour', label: '1 hour' },
+        { value: '4hours', label: '4 hour' },
+        { value: 'today', label: 'Today' },
+        { value: '1week', label: '1 week' }
     ];
 
     if (!isEditing) {
         return (
-            <div className="custom-status-display" onClick={() => setIsEditing(true)}>
+            <div className="custom-status-display" role="button" tabIndex={0} onClick={() => setIsEditing(true)} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
                 {currentStatus ? (
                     <>
                         <span className="status-emoji">{currentStatus.emoji}</span>
@@ -100,104 +106,106 @@ const CustomStatus = ({
                         <button className="status-clear-btn" onClick={(e) => {
                             e.stopPropagation();
                             handleClear();
-                        }}>
+                        }}
                             ✕
-                        </button>
-                    </>
-                ) : (
-                    <span className="status-placeholder">Özel durum ayarla</span>
-                )}
-            </div>
+                    </button>
+            </>
+        ) : (
+            <span className="status-placeholder">{t('private_durum_ayarla')}</span>
+        )
+    }
+            </div >
         );
     }
 
-    return (
-        <div className="custom-status-editor">
-            <div className="status-header">
-                <h3>Özel Durum Ayarla</h3>
-                <button className="close-btn" onClick={() => setIsEditing(false)}>✕</button>
-            </div>
+return (
+    <div className="custom-status-editor">
+        <div className="status-header">
+            <h3>{t('private_status_ayarla')}</h3>
+            <button className="close-btn" onClick={() => setIsEditing(false)}>✕</button>
+        </div>
 
-            <div className="status-input-row">
-                <div
-                    className="emoji-selector"
-                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                >
-                    {emoji || '😀'}
-                </div>
-                <input
-                    ref={inputRef}
-                    type="text"
-                    className="status-input"
-                    placeholder="Ne yapıyorsun?"
-                    value={text}
-                    onChange={(e) => setText(e.target.value.slice(0, maxLength))}
-                    onKeyDown={handleKeyDown}
-                />
-            </div>
+        <div className="status-input-row">
+            <div
+                className="emoji-selector"
+                role="button"
+                tabIndex={0}
 
-            {showEmojiPicker && (
-                <div className="emoji-picker">
-                    {PRESET_EMOJIS.map((e, i) => (
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
+                {emoji || '😀'}
+            </div>
+            <input
+                ref={inputRef}
+                type="text"
+                className="status-input"
+                placeholder={t('ne_yapıyorsun')}
+                value={text}
+                onChange={(e) => setText(e.target.value.slice(0, maxLength))}
+                onKeyDown={handleKeyDown}
+            />
+        </div>
+
+        {showEmojiPicker && (
+            <div className="emoji-picker">
+                {PRESET_EMOJIS.map((e, i) => (
+                    <button
+                        key={`item-${i}`}
+                        className="emoji-btn"
+                        onClick={() => {
+                            setEmoji(e);
+                            setShowEmojiPicker(false);
+                        }}
+                    >
+                        {e}
+                    </button>
+                ))}
+            </div>
+        )}
+
+        <div className="character-count">
+            {text.length}/{maxLength}
+        </div>
+
+        {showPresets && (
+            <div className="preset-statuses">
+                <span className="preset-label">{t('hızlı_seçim')}</span>
+                <div className="preset-list">
+                    {PRESET_STATUSES.map((preset, i) => (
                         <button
-                            key={i}
-                            className="emoji-btn"
-                            onClick={() => {
-                                setEmoji(e);
-                                setShowEmojiPicker(false);
-                            }}
-                        >
-                            {e}
+                            key={`item-${i}`}
+                            className="preset-btn"
+                            onClick={() => handlePresetClick(preset)}>
+                            {preset.emoji} {preset.text}
                         </button>
                     ))}
                 </div>
-            )}
-
-            <div className="character-count">
-                {text.length}/{maxLength}
             </div>
+        )}
 
-            {showPresets && (
-                <div className="preset-statuses">
-                    <span className="preset-label">Hızlı seçim:</span>
-                    <div className="preset-list">
-                        {PRESET_STATUSES.map((preset, i) => (
-                            <button
-                                key={i}
-                                className="preset-btn"
-                                onClick={() => handlePresetClick(preset)}
-                            >
-                                {preset.emoji} {preset.text}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            <div className="clear-after-section">
-                <label>Şu süre sonra temizle:</label>
-                <select
-                    value={clearAfter}
-                    onChange={(e) => setClearAfter(e.target.value)}
-                >
-                    {clearAfterOptions.map(opt => (
-                        <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="status-actions">
-                <button className="btn-secondary" onClick={handleClear}>
-                    Durumu Temizle
-                </button>
-                <button className="btn-primary" onClick={handleSave}>
-                    Kaydet
-                </button>
-            </div>
+        <div className="clear-after-section">
+            <label>{t('şu_süre_sonra_temizle')}</label>
+            <select
+                value={clearAfter}
+                onChange={(e) => setClearAfter(e.target.value)}>
+                {clearAfterOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                    </option>
+                ))}
+            </select>
         </div>
-    );
+
+        <div className="status-actions">
+            <button className="btn-secondary" onClick={handleClear}>
+                Statusu Temizle
+            </button>
+            <button className="btn-primary" onClick={handleSave}>
+                Kaydet
+            </button>
+        </div>
+    </div>
+);
 };
 
 // Status display for user cards/profiles
@@ -295,6 +303,24 @@ export const useCustomStatus = (userId) => {
     };
 
     return [status, updateStatus];
+};
+
+CustomStatus.propTypes = {
+    currentStatus: PropTypes.array,
+    onStatusChange: PropTypes.func,
+    maxLength: PropTypes.number,
+    showPresets: PropTypes.bool,
+};
+
+StatusBadge.propTypes = {
+    status: PropTypes.array,
+    size: PropTypes.number,
+};
+
+
+StatusIndicator.propTypes = {
+    status: PropTypes.array,
+    onlineStatus: PropTypes.func,
 };
 
 export default CustomStatus;

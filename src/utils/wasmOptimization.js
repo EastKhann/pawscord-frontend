@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // ⚡ WEBASSEMBLY OPTIMIZATION UTILITIES
 // For heavy computations that can benefit from WASM
 
@@ -18,7 +19,7 @@ export async function loadWasmModule(wasmPath) {
         const instance = await WebAssembly.instantiate(module);
         return instance;
     } catch (error) {
-        console.error('Failed to load WASM module:', error);
+        logger.error('Failed to load WASM module:', error);
         throw error;
     }
 }
@@ -39,7 +40,7 @@ export class WasmHasher {
             // this.wasmInstance = await loadWasmModule('/wasm/hasher.wasm');
             this.initialized = true;
         } catch (error) {
-            console.warn('WASM not available, using JS fallback');
+            logger.warn('WASM not available, using JS fallback');
             this.initialized = true;
         }
     }
@@ -62,7 +63,7 @@ export class WasmHasher {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
+            hash = (hash << 5) - hash + char;
             hash = hash & hash; // Convert to 32bit integer
         }
         return Math.abs(hash);

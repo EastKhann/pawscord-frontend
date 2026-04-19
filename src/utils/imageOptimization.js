@@ -2,7 +2,7 @@
 
 /**
  * 🖼️ Image Optimization Utilities
- * Resim yükleme ve optimizasyon işlemleri
+ * Image load ve optimizasyon işlemleri
  */
 
 /**
@@ -19,20 +19,15 @@ export const supportsWebP = (() => {
 })();
 
 /**
- * Resim URL'sine WebP desteğine göre format ekle
- * @param {string} url - Resim URL
+ * Image URL'sine WebP desteğine göre format add
+ * @param {string} url - Image URL
  * @param {object} options - Opsiyonlar
  * @returns {string} Optimize edilmiş URL
  */
 export const getOptimizedImageUrl = (url, options = {}) => {
     if (!url) return '';
 
-    const {
-        width,
-        height,
-        quality = 85,
-        format = 'auto'
-    } = options;
+    const { width, height, quality = 85, format = 'auto' } = options;
 
     // Zaten optimize edilmiş URL ise olduğu gibi dön
     if (url.includes('?')) return url;
@@ -52,7 +47,7 @@ export const getOptimizedImageUrl = (url, options = {}) => {
 };
 
 /**
- * Lazy image loader component için intersection observer
+ * Lazy image loader component for intersection observer
  */
 export class LazyImageLoader {
     constructor(options = {}) {
@@ -60,7 +55,7 @@ export class LazyImageLoader {
             root: null,
             rootMargin: '50px',
             threshold: 0.01,
-            ...options
+            ...options,
         };
 
         this.observer = null;
@@ -73,7 +68,7 @@ export class LazyImageLoader {
         }
 
         this.observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     this.loadImage(entry.target);
                     this.observer.unobserve(entry.target);
@@ -86,7 +81,7 @@ export class LazyImageLoader {
         if (this.observer) {
             this.observer.observe(element);
         } else {
-            // Fallback: IntersectionObserver yoksa direkt yükle
+            // Fallback: IntersectionObserver yoksa direkt upload
             this.loadImage(element);
         }
     }
@@ -116,17 +111,17 @@ export class LazyImageLoader {
 }
 
 /**
- * Resim boyutunu optimize et
- * @param {File} file - Resim dosyası
+ * Image boyutunu optimize et
+ * @param {File} file - Image dosyası
  * @param {object} options - Opsiyonlar
- * @returns {Promise<Blob>} Optimize edilmiş resim
+ * @returns {Promise<Blob>} Optimize edilmiş image
  */
 export const optimizeImage = async (file, options = {}) => {
     const {
         maxWidth = 1920,
         maxHeight = 1080,
         quality = 0.85,
-        outputFormat = 'image/jpeg'
+        outputFormat = 'image/jpeg',
     } = options;
 
     return new Promise((resolve, reject) => {
@@ -140,7 +135,7 @@ export const optimizeImage = async (file, options = {}) => {
                 let width = img.width;
                 let height = img.height;
 
-                // Boyut kontrolü
+                // Size kontrolü
                 if (width > maxWidth || height > maxHeight) {
                     const ratio = Math.min(maxWidth / width, maxHeight / height);
                     width = width * ratio;
@@ -158,7 +153,7 @@ export const optimizeImage = async (file, options = {}) => {
                         if (blob) {
                             resolve(blob);
                         } else {
-                            reject(new Error('Canvas toBlob başarısız'));
+                            reject(new Error('Canvas toBlob failed'));
                         }
                     },
                     outputFormat,
@@ -166,17 +161,17 @@ export const optimizeImage = async (file, options = {}) => {
                 );
             };
 
-            img.onerror = () => reject(new Error('Resim yüklenemedi'));
+            img.onerror = () => reject(new Error('Image yüklenemedi'));
             img.src = e.target.result;
         };
 
-        reader.onerror = () => reject(new Error('Dosya okunamadı'));
+        reader.onerror = () => reject(new Error('File okunamadı'));
         reader.readAsDataURL(file);
     });
 };
 
 /**
- * Progressive image loading için blur hash oluştur (basit versiyon)
+ * Progressive image loading for blur hash oluştur (basit versiyon)
  */
 export const generatePlaceholder = (width = 10, height = 10) => {
     const canvas = document.createElement('canvas');
@@ -199,7 +194,7 @@ export const generatePlaceholder = (width = 10, height = 10) => {
  */
 export const generateSrcSet = (baseUrl, sizes = [320, 640, 960, 1280, 1920]) => {
     return sizes
-        .map(size => `${getOptimizedImageUrl(baseUrl, { width: size })} ${size}w`)
+        .map((size) => `${getOptimizedImageUrl(baseUrl, { width: size })} ${size}w`)
         .join(', ');
 };
 
@@ -219,7 +214,7 @@ export const preloadImage = (src) => {
  * Multiple images preload
  */
 export const preloadImages = async (srcs) => {
-    return Promise.all(srcs.map(src => preloadImage(src)));
+    return Promise.all(srcs.map((src) => preloadImage(src)));
 };
 
 export default {
@@ -230,7 +225,5 @@ export default {
     generatePlaceholder,
     generateSrcSet,
     preloadImage,
-    preloadImages
+    preloadImages,
 };
-
-

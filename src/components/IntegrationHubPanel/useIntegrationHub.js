@@ -1,11 +1,26 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable no-undef */
 import { useState, useEffect } from 'react';
+import { getToken } from '../../utils/tokenStorage';
 import {
-    FaPlug, FaGithub, FaSpotify, FaTwitch, FaYoutube,
-    FaSlack, FaGoogle, FaTwitter,
-    FaCode, FaMusic, FaGamepad, FaCloud
+    FaPlug,
+    FaGithub,
+    FaSpotify,
+    FaTwitch,
+    FaYoutube,
+    FaSlack,
+    FaGoogle,
+    FaTwitter,
+    FaCode,
+    FaMusic,
+    FaGamepad,
+    FaCloud,
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import confirmDialog from '../../utils/confirmDialog';
+import { useTranslation } from 'react-i18next';
+import logger from '../../utils/logger';
+import { API_BASE_URL } from '../../utils/apiEndpoints';
 
 export const integrationIcons = {
     github: FaGithub,
@@ -14,7 +29,7 @@ export const integrationIcons = {
     youtube: FaYoutube,
     slack: FaSlack,
     google: FaGoogle,
-    twitter: FaTwitter
+    twitter: FaTwitter,
 };
 
 export const integrationColors = {
@@ -24,16 +39,21 @@ export const integrationColors = {
     youtube: '#ff0000',
     slack: '#4a154b',
     google: '#4285f4',
-    twitter: '#1da1f2'
+    twitter: '#1da1f2',
 };
 
 export const getCategoryIcon = (category) => {
     switch (category) {
-        case 'development': return <FaCode />;
-        case 'entertainment': return <FaMusic />;
-        case 'streaming': return <FaGamepad />;
-        case 'productivity': return <FaCloud />;
-        default: return <FaPlug />;
+        case 'development':
+            return <FaCode />;
+        case 'entertainment':
+            return <FaMusic />;
+        case 'streaming':
+            return <FaGamepad />;
+        case 'productivity':
+            return <FaCloud />;
+        default:
+            return <FaPlug />;
     }
 };
 
@@ -44,7 +64,7 @@ const useIntegrationHub = (serverId) => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [configModal, setConfigModal] = useState({ show: false, integration: null });
-    const token = localStorage.getItem('access_token');
+    const token = getToken();
 
     useEffect(() => {
         fetchIntegrations();
@@ -54,12 +74,12 @@ const useIntegrationHub = (serverId) => {
         setLoading(true);
         try {
             const [connectedRes, availableRes] = await Promise.all([
-                fetch(`/api/servers/${serverId}/integrations/`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                fetch(`${API_BASE_URL}/servers/${serverId}/integrations/`, {
+                    headers: { Authorization: `Bearer ${token}` },
                 }),
-                fetch(`/api/integrations/available/`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                })
+                fetch(`${API_BASE_URL}/integrations/available/`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                }),
             ]);
 
             if (connectedRes.ok) {
@@ -74,7 +94,7 @@ const useIntegrationHub = (serverId) => {
                 setAvailableIntegrations([]);
             }
         } catch (error) {
-            console.error('Error fetching integrations:', error);
+            logger.error('Error fetching integrations:', error);
             setAvailableIntegrations([]);
         }
         setLoading(false);
@@ -82,83 +102,111 @@ const useIntegrationHub = (serverId) => {
 
     const handleConnect = async (integrationId) => {
         try {
-            const response = await fetch(`/api/servers/${serverId}/integrations/connect/`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ integration_type: integrationId })
-            });
+            const response = await fetch(
+                `${API_BASE_URL}/servers/${serverId}/integrations/connect/`,
+                {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ integration_type: integrationId }),
+                }
+            );
 
             if (response.ok) {
                 const data = await response.json();
                 if (data.oauth_url) {
-                    window.open(data.oauth_url, '_blank', 'width=500,height=600');
+                    const popup = window.open(data.oauth_url, '_blank', 'width=500,height=600');
+                    // Close popup when OAuth completes (postMessage from success page)
+                    const handleMessage = (event) => {
+                        if (event.data?.type === 'oauth_success') {
+                            try {
+                                popup?.close();
+                            } catch (e) {}
+                            window.removeEventListener('message', handleMessage);
+                            fetchIntegrations();
+                        }
+                    };
+                    window.addEventListener('message', handleMessage);
+                    // Fallback: clean up listner after 5 minutes
+                    setTimeout(() => window.removeEventListener('message', handleMessage), 300000);
+                } else {
+                    toast.success(t('integrations.started', { id: integrationId }));
+                    fetchIntegrations();
                 }
-                toast.success(`${integrationId} entegrasyon başlatıldı`);
-                fetchIntegrations();
             } else {
-                toast.error('Bağlantı başlatılamadı');
+                toast.error(t('ui.baglanti_baslatilamadi'));
             }
         } catch (error) {
-            toast.error('Bağlantı hatası');
+            toast.error(t('common.connectionError'));
         }
     };
 
     const handleDisconnect = async (integrationId) => {
-        if (!await confirmDialog('Bu entegrasyonu kaldırmak istediğinize emin misiniz?')) return;
+        if (!(await confirmDialog('Bu entegrasyonu kaldırmak istediğinizden emin misiniz?')))
+            return;
 
         try {
-            const response = await fetch(`/api/servers/${serverId}/integrations/${integrationId}/disconnect/`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const response = await fetch(
+                `${API_BASE_URL}/servers/${serverId}/integrations/${integrationId}/disconnect/`,
+                {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
 
             if (response.ok) {
-                toast.success('Entegrasyon kaldırıldı');
+                toast.success(t('integrations.removed'));
                 fetchIntegrations();
             }
         } catch (error) {
-            toast.error('Entegrasyon kaldırılamadı');
+            toast.error(t('ui.entegrasyon_kaldirilamadi'));
         }
     };
 
     const handleSync = async (integrationId) => {
         try {
-            const response = await fetch(`/api/servers/${serverId}/integrations/${integrationId}/sync/`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const response = await fetch(
+                `${API_BASE_URL}/servers/${serverId}/integrations/${integrationId}/sync/`,
+                {
+                    method: 'POST',
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
 
             if (response.ok) {
-                toast.success('Senkronizasyon başlatıldı');
+                toast.success(t('ui.senkronizasyon_baslatildi'));
             }
         } catch (error) {
-            toast.error('Senkronizasyon başarısız');
+            toast.error(t('ui.sync_failed'));
         }
     };
 
-    const filteredAvailable = availableIntegrations.filter(int =>
-        int.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        int.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredAvailable = availableIntegrations.filter(
+        (int) =>
+            int.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            int.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const connectedIds = integrations.map(i => i.type);
-    const notConnected = filteredAvailable.filter(a => !connectedIds.includes(a.id));
+    const connectedIds = integrations.map((i) => i.type);
+    const notConnected = filteredAvailable.filter((a) => !connectedIds.includes(a.id));
 
     return {
-        activeTab, setActiveTab,
+        activeTab,
+        setActiveTab,
         integrations,
         notConnected,
         loading,
-        searchTerm, setSearchTerm,
-        configModal, setConfigModal,
+        searchTerm,
+        setSearchTerm,
+        configModal,
+        setConfigModal,
         token,
         handleConnect,
         handleDisconnect,
         handleSync,
-        fetchIntegrations
+        fetchIntegrations,
     };
 };
 

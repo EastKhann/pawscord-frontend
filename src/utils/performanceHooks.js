@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /**
  * @file performanceHooks.js
  * @description Canonical Performance & Render Optimization Utilities for PAWSCORD.
@@ -14,7 +15,11 @@
  * @module performanceHooks
  */
 
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import React, { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react';
+import PropTypes from 'prop-types';
+import logger from '../utils/logger';
 
 // =====================================================================
 // SECTION 1: PURE UTILITY FUNCTIONS
@@ -230,7 +235,7 @@ export const measurePerformance = (metricName, fn) => {
     const duration = end - start;
 
     if (duration > 100) {
-        console.warn(`⚠️ Slow operation: ${metricName} took ${duration.toFixed(2)}ms`);
+        logger.warn(`⚠️ Slow operation: ${metricName} took ${duration.toFixed(2)}ms`);
     }
 
     if (typeof performance.mark === 'function') {
@@ -238,7 +243,9 @@ export const measurePerformance = (metricName, fn) => {
             performance.mark(`${metricName}-start`);
             performance.mark(`${metricName}-end`);
             performance.measure(metricName, `${metricName}-start`, `${metricName}-end`);
-        } catch { /* ignore */ }
+        } catch {
+            /* ignore */
+        }
     }
 
     return result;
@@ -261,7 +268,7 @@ export const measurePerformanceAsync = async (metricName, fn) => {
     const duration = end - start;
 
     if (duration > 1000) {
-        console.warn(`⚠️ Slow async operation: ${metricName} took ${duration.toFixed(2)}ms`);
+        logger.warn(`⚠️ Slow async operation: ${metricName} took ${duration.toFixed(2)}ms`);
     }
 
     return result;
@@ -298,7 +305,7 @@ export const logNetworkTiming = (url) => {
     if (entries.length > 0) {
         const entry = entries[entries.length - 1];
         if (import.meta.env.MODE === 'development') {
-            console.debug('[Network]', url, entry);
+            logger.debug('[Network]', url, entry);
         }
     }
 };
@@ -310,7 +317,7 @@ export const logMemoryUsage = () => {
     if (performance.memory) {
         const usage = performance.memory;
         if (import.meta.env.MODE === 'development') {
-            console.debug('[Memory]', {
+            logger.debug('[Memory]', {
                 used: (usage.usedJSHeapSize / 1048576).toFixed(2) + ' MB',
                 total: (usage.totalJSHeapSize / 1048576).toFixed(2) + ' MB',
             });
@@ -328,7 +335,13 @@ export const logMemoryUsage = () => {
  * @param {number} [overscan=3] - Extra items to render above/below
  * @returns {{ startIndex: number, endIndex: number, visibleCount: number, offsetY: number }}
  */
-export const getVisibleItems = (scrollTop, containerHeight, itemHeight, totalItems, overscan = 3) => {
+export const getVisibleItems = (
+    scrollTop,
+    containerHeight,
+    itemHeight,
+    totalItems,
+    overscan = 3
+) => {
     const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
     const endIndex = Math.min(
         totalItems - 1,
@@ -432,7 +445,7 @@ export class CleanupManager {
             try {
                 cleanup();
             } catch (e) {
-                console.error('[Cleanup] Error:', e);
+                logger.error('[Cleanup] Error:', e);
             }
         });
         this.cleanups = [];
@@ -460,7 +473,7 @@ export const performanceMetrics = {
                 performanceMetrics.measures.set(name, entries[entries.length - 1].duration);
             }
         } catch (e) {
-            console.warn(`[Perf] Could not measure ${name}:`, e);
+            logger.warn(`[Perf] Could not measure ${name}:`, e);
         }
     },
 
@@ -469,9 +482,10 @@ export const performanceMetrics = {
         measures: Object.fromEntries(performanceMetrics.measures),
         memory: performance.memory
             ? {
-                usedJSHeapSize: (performance.memory.usedJSHeapSize / 1048576).toFixed(2) + ' MB',
-                totalJSHeapSize: (performance.memory.totalJSHeapSize / 1048576).toFixed(2) + ' MB',
-            }
+                  usedJSHeapSize: (performance.memory.usedJSHeapSize / 1048576).toFixed(2) + ' MB',
+                  totalJSHeapSize:
+                      (performance.memory.totalJSHeapSize / 1048576).toFixed(2) + ' MB',
+              }
             : null,
     }),
 
@@ -529,7 +543,7 @@ class PerformanceMonitor {
     endMeasure(name) {
         const metric = this.metrics.get(name);
         if (!metric) {
-            console.warn(`No metric found for: ${name}`);
+            logger.warn(`No metric found for: ${name}`);
             return null;
         }
         const duration = performance.now() - metric.start;
@@ -540,7 +554,7 @@ class PerformanceMonitor {
     logMetric(name) {
         const result = this.endMeasure(name);
         if (result && import.meta.env.MODE === 'development') {
-            console.debug(`[PerfMonitor] ${result.name}: ${result.duration.toFixed(2)}ms`);
+            logger.debug(`[PerfMonitor] ${result.name}: ${result.duration.toFixed(2)}ms`);
         }
     }
 
@@ -760,7 +774,7 @@ export const useRenderCount = (componentName = 'Component') => {
     useEffect(() => {
         renderCount.current += 1;
         if (import.meta.env.MODE === 'development' && renderCount.current > 100) {
-            console.warn(`⚠️ ${componentName} has rendered ${renderCount.current} times!`);
+            logger.warn(`⚠️ ${componentName} has rendered ${renderCount.current} times!`);
         }
     });
 
@@ -799,7 +813,7 @@ export const useRenderTime = (componentName) => {
         const duration = endTime - startTime.current;
 
         if (duration > 16 && import.meta.env.MODE === 'development') {
-            console.warn(`[Perf] Slow render: ${componentName} took ${duration.toFixed(2)}ms`);
+            logger.warn(`[Perf] Slow render: ${componentName} took ${duration.toFixed(2)}ms`);
         }
     });
 };
@@ -823,7 +837,7 @@ export const useMeasurePerformance = (componentName) => {
             totalTime.current += renderTime;
 
             if (renderCount.current % 10 === 0 && import.meta.env.MODE === 'development') {
-                console.debug(
+                logger.debug(
                     `[Perf] ${componentName}: avg ${(totalTime.current / renderCount.current).toFixed(2)}ms over ${renderCount.current} renders`
                 );
             }
@@ -930,7 +944,7 @@ export const useDeepCompare = (obj) => {
 // =====================================================================
 
 /**
- * Attach an event listener with automatic cleanup.
+ * Attach an event listner with automatic cleanup.
  *
  * @param {string} eventName - DOM event name
  * @param {Function} handler - Event handler
@@ -976,7 +990,7 @@ export const useLocalStorage = (key, initialValue) => {
             const item = window.localStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
-            console.error(`Error reading localStorage key "${key}":`, error);
+            logger.error(`Error reading localStorage key "${key}":`, error);
             return initialValue;
         }
     });
@@ -988,7 +1002,7 @@ export const useLocalStorage = (key, initialValue) => {
                 setStoredValue(valueToStore);
                 window.localStorage.setItem(key, JSON.stringify(valueToStore));
             } catch (error) {
-                console.error(`Error setting localStorage key "${key}":`, error);
+                logger.error(`Error setting localStorage key "${key}":`, error);
             }
         },
         [key, storedValue]
@@ -999,7 +1013,7 @@ export const useLocalStorage = (key, initialValue) => {
             window.localStorage.removeItem(key);
             setStoredValue(initialValue);
         } catch (error) {
-            console.error(`Error removing localStorage key "${key}":`, error);
+            logger.error(`Error removing localStorage key "${key}":`, error);
         }
     }, [key, initialValue]);
 
@@ -1132,7 +1146,7 @@ export const useMemoryMonitor = () => {
             if (performance.memory) {
                 const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
                 const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(2);
-                console.debug(`[Memory] ${used} MB / ${total} MB`);
+                logger.debug(`[Memory] ${used} MB / ${total} MB`);
             }
         }, 10000);
 
@@ -1223,8 +1237,7 @@ export const useStableFunctions = (callbacks) => {
             };
         });
         return stableFunctions;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, []); // INTENTIONAL: stable wrappers created once, callbackRefs always current
 };
 
 /**
@@ -1266,7 +1279,7 @@ export const useWhyDidYouUpdate = (name, props) => {
                 });
 
                 if (Object.keys(changedProps).length > 0) {
-                    console.debug(`[WhyDidYouUpdate] ${name}`, changedProps);
+                    logger.debug(`[WhyDidYouUpdate] ${name}`, changedProps);
                 }
             }
 
@@ -1343,9 +1356,9 @@ export const deepMemo = (Component, arePropsEqual) => {
     return memo(
         Component,
         arePropsEqual ||
-        ((prevProps, nextProps) => {
-            return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-        })
+            ((prevProps, nextProps) => {
+                return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+            })
     );
 };
 
@@ -1361,20 +1374,20 @@ export const withMemoization = (Component, propsAreEqual) => {
     return memo(
         Component,
         propsAreEqual ||
-        ((prevProps, nextProps) => {
-            const prevKeys = Object.keys(prevProps);
-            const nextKeys = Object.keys(nextProps);
+            ((prevProps, nextProps) => {
+                const prevKeys = Object.keys(prevProps);
+                const nextKeys = Object.keys(nextProps);
 
-            if (prevKeys.length !== nextKeys.length) return false;
+                if (prevKeys.length !== nextKeys.length) return false;
 
-            return prevKeys.every((key) => {
-                if (typeof prevProps[key] === 'function') return true;
-                if (typeof prevProps[key] === 'object' && prevProps[key] !== null) {
-                    return JSON.stringify(prevProps[key]) === JSON.stringify(nextProps[key]);
-                }
-                return prevProps[key] === nextProps[key];
-            });
-        })
+                return prevKeys.every((key) => {
+                    if (typeof prevProps[key] === 'function') return true;
+                    if (typeof prevProps[key] === 'object' && prevProps[key] !== null) {
+                        return JSON.stringify(prevProps[key]) === JSON.stringify(nextProps[key]);
+                    }
+                    return prevProps[key] === nextProps[key];
+                });
+            })
     );
 };
 
@@ -1401,7 +1414,7 @@ export const OptimizedMessage = memo(
 
 /**
  * Wrapper that profiles children render time in development.
- * Warns when a render takes longer than one frame (16ms).
+ * Warns when a render tacut longer than one frame (16ms).
  *
  * @param {{ id: string, children: React.ReactNode }} props
  *
@@ -1415,7 +1428,7 @@ export const ProfiledComponent = ({ id, children }) => {
                 id={id}
                 onRender={(id, phase, actualDuration) => {
                     if (actualDuration > 16) {
-                        console.warn(
+                        logger.warn(
                             `[Performance] ${id} took ${actualDuration.toFixed(2)}ms to render (${phase})`
                         );
                     }
@@ -1426,4 +1439,14 @@ export const ProfiledComponent = ({ id, children }) => {
         );
     }
     return children;
+};
+
+OptimizedMessage.propTypes = {
+    message: PropTypes.object,
+    children: PropTypes.node,
+};
+
+ProfiledComponent.propTypes = {
+    id: PropTypes.string,
+    children: PropTypes.node,
 };

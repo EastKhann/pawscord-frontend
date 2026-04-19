@@ -3,23 +3,39 @@
  * Extracted from App.js: header, message list, drag overlay, input container
  */
 import React, { Suspense, memo, useCallback, useMemo, useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { FaBell, FaUsers, FaSearch } from 'react-icons/fa';
-import LoadingSpinner from '../components/LoadingSpinner';
-import ScrollToBottomButton from '../components/ScrollToBottomButton';
-import MessageDateDivider from '../components/MessageDateDivider';
-import TypingIndicatorEnhanced from '../components/TypingIndicatorEnhanced';
-import ImageGalleryGroup from '../components/ImageGalleryGroup';
-import {
-    Message, VirtualMessageList, MessageInput, NotificationDropdown,
-} from './lazyImports';
+import LoadingSpinner from '../components/shared/LoadingSpinner';
+import ScrollToBottomButton from '../components/chat/ScrollToBottomButton';
+import MessageDateDivider from '../components/chat/MessageDateDivider';
+import TypingIndicatorEnhanced from '../components/chat/TypingIndicatorEnhanced';
+import ImageGalleryGroup from '../components/shared/ImageGalleryGroup';
+import { Message, VirtualMessageList, MessageInput, NotificationDropdown } from './lazyImports';
 import ToolbarMenu from './ToolbarMenu';
-import MessageSkeleton from '../components/MessageSkeleton';
+import MessageSkeleton from '../components/chat/MessageSkeleton';
 import styles from '../styles/appStyles';
+import '../styles/chat-area.css';
+
+import { useTranslation } from 'react-i18next';
+import logger from '../utils/logger';
+
+// -- dynamic style helpers (pass 2) --
+
+// -- extracted inline style constants --
+
+const _st1054 = styles.chatArea;
+const _st1055 = styles.chatHeader;
+const _st1056 = styles.mobileMenuButton;
+const _st1057 = styles.mobileMenuButton;
+const _st1058 = styles.systemMessage;
 
 const isImageOnlyMessage = (msg) => {
     if (!msg) return false;
     const hasImage = !!(msg.image_url || msg.image);
-    const hasFileImage = !!(msg.file_url || msg.file) && !msg.is_voice_message && /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(msg.file_name || '');
+    const hasFileImage =
+        !!(msg.file_url || msg.file) &&
+        !msg.is_voice_message &&
+        /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i.test(msg.file_name || '');
     const hasContent = !!(msg.content && msg.content.trim());
     return (hasImage || hasFileImage) && !hasContent && !msg.poll && !msg.reply_to;
 };
@@ -40,45 +56,77 @@ const isImageOnlyMessage = (msg) => {
  */
 const ChatArea = memo(function ChatArea({
     // Layout
-    isMobile, isNative, safeAreaBottom, mobileWebPadding,
-    isLeftSidebarVisible, setIsLeftSidebarVisible,
-    isRightSidebarVisible, setIsRightSidebarVisible,
+    isMobile,
+    isNative,
+    safeAreaBottom,
+    mobileWebPadding,
+    isLeftSidebarVisible,
+    setIsLeftSidebarVisible,
+    isRightSidebarVisible,
+    setIsRightSidebarVisible,
     // Chat state
-    activeChat, setActiveChat, chatTitle, isConnected,
-    optimizedMessages, messageHistoryLoading, hasMoreMessages,
-    showScrollToBottom, setShowScrollToBottom,
+    activeChat,
+    setActiveChat,
+    chatTitle,
+    isConnected,
+    optimizedMessages,
+    messageHistoryLoading,
+    hasMoreMessages,
+    showScrollToBottom,
+    setShowScrollToBottom,
     // Search
-    searchQuery, setSearchQuery, debouncedSearchQuery, searchInputRef,
+    searchQuery,
+    setSearchQuery,
+    debouncedSearchQuery,
+    searchInputRef,
     // Selection
-    isSelectionMode, selectedMessages, setSelectedMessages,
+    isSelectionMode,
+    selectedMessages,
+    setSelectedMessages,
     // User
-    username, isAdmin, allUsers,
+    username,
+    isAdmin,
+    allUsers,
     // Messages state (for optimistic reaction updates)
     setMessages,
     // Encryption
     hasKey,
     // Modals
-    modals, openModal, closeModal, toggleModal,
+    modals,
+    openModal,
+    closeModal,
+    toggleModal,
     // Typing
     activeTypingUsers,
     // Sound & Voice
-    soundSettings, isInVoice,
+    soundSettings,
+    isInVoice,
     // Handlers
-    messageHandlers, fileUpload,
-    scrollToBottom, throttledHandleMessageScroll,
-    handleCopyLink, toggleNotifications,
+    messageHandlers,
+    fileUpload,
+    scrollToBottom,
+    throttledHandleMessageScroll,
+    handleCopyLink,
+    toggleNotifications,
     getDeterministicAvatar,
     // Viewer setters
-    setZoomedImage, setViewingProfile, setEditingMessage,
-    setReplyingTo, setForwardingMessage, setGalleryData,
+    setZoomedImage,
+    setViewingProfile,
+    setEditingMessage,
+    setReplyingTo,
+    setForwardingMessage,
+    setGalleryData,
     setChartSymbol,
     // Refs
-    messageBoxRef, messagesEndRef,
+    messageBoxRef,
+    messagesEndRef,
     // Config
-    ABSOLUTE_HOST_URL, fetchWithAuth,
+    ABSOLUTE_HOST_URL,
+    fetchWithAuth,
     // WebSocket ref (for typing indicator)
     ws = null,
 }) {
+    const { t } = useTranslation();
     // Stable callback references
     const handleDragOver = useCallback((e) => e.preventDefault(), []);
 
@@ -89,7 +137,7 @@ const ChatArea = memo(function ChatArea({
         const prev = prevMsgCountRef.current;
         const curr = optimizedMessages.length;
         if (curr > prev && showScrollToBottom) {
-            setNewMsgCount(c => c + (curr - prev));
+            setNewMsgCount((c) => c + (curr - prev));
         }
         prevMsgCountRef.current = curr;
     }, [optimizedMessages.length, showScrollToBottom]);
@@ -102,24 +150,32 @@ const ChatArea = memo(function ChatArea({
     const [isPullRefreshing, setIsPullRefreshing] = useState(false);
     const pullStartYRef = useRef(-1);
     const MAX_PULL = 80;
-    const handleMsgBoxTouchStart = useCallback((e) => {
-        if (messageBoxRef.current?.scrollTop === 0 && hasMoreMessages) {
-            pullStartYRef.current = e.touches[0].clientY;
-        } else {
-            pullStartYRef.current = -1;
-        }
-    }, [messageBoxRef, hasMoreMessages]);
-    const handleMsgBoxTouchMove = useCallback((e) => {
-        if (pullStartYRef.current < 0 || isPullRefreshing) return;
-        const dy = e.touches[0].clientY - pullStartYRef.current;
-        if (dy > 0 && messageBoxRef.current?.scrollTop === 0) {
-            setPullDistance(Math.min(dy * 0.5, MAX_PULL));
-        }
-    }, [isPullRefreshing, messageBoxRef]);
+    const handleMsgBoxTouchStart = useCallback(
+        (e) => {
+            if (messageBoxRef.current?.scrollTop === 0 && hasMoreMessages) {
+                pullStartYRef.current = e.touches[0].clientY;
+            } else {
+                pullStartYRef.current = -1;
+            }
+        },
+        [messageBoxRef, hasMoreMessages]
+    );
+    const handleMsgBoxTouchMove = useCallback(
+        (e) => {
+            if (pullStartYRef.current < 0 || isPullRefreshing) return;
+            const dy = e.touches[0].clientY - pullStartYRef.current;
+            if (dy > 0 && messageBoxRef.current?.scrollTop === 0) {
+                setPullDistance(Math.min(dy * 0.5, MAX_PULL));
+            }
+        },
+        [isPullRefreshing, messageBoxRef]
+    );
     const handleMsgBoxTouchEnd = useCallback(async () => {
         if (pullDistance >= MAX_PULL * 0.85 && hasMoreMessages && !messageHistoryLoading) {
             setIsPullRefreshing(true);
-            try { await messageHandlers.fetchMessageHistory?.(); } catch (_) { }
+            try {
+                await messageHandlers.fetchMessageHistory?.();
+            } catch (_) {}
             setIsPullRefreshing(false);
         }
         setPullDistance(0);
@@ -141,79 +197,166 @@ const ChatArea = memo(function ChatArea({
         window.visualViewport.addEventListener('resize', handleViewportResize);
         return () => window.visualViewport.removeEventListener('resize', handleViewportResize);
     }, [isMobile, scrollToBottom]);
-    const handleOpenLeftSidebar = useCallback(() => setIsLeftSidebarVisible(true), [setIsLeftSidebarVisible]);
+    const handleOpenLeftSidebar = useCallback(
+        () => setIsLeftSidebarVisible(true),
+        [setIsLeftSidebarVisible]
+    );
     const handleBackToWelcome = useCallback(() => {
         setActiveChat('welcome', 'welcome');
         setIsLeftSidebarVisible(false);
         setIsRightSidebarVisible(false);
     }, [setActiveChat, setIsLeftSidebarVisible, setIsRightSidebarVisible]);
-    const handleSearchSubmit = useCallback((e) => messageHandlers.handleSearchMessages(e, debouncedSearchQuery), [messageHandlers, debouncedSearchQuery]);
+    const handleSearchSubmit = useCallback(
+        (e) => messageHandlers.handleSearchMessages(e, debouncedSearchQuery),
+        [messageHandlers, debouncedSearchQuery]
+    );
     const handleSearchChange = useCallback((e) => setSearchQuery(e.target.value), [setSearchQuery]);
-    const handleToggleNotifications = useCallback(() => toggleModal('notifications'), [toggleModal]);
+    const handleToggleNotifications = useCallback(
+        () => toggleModal('notifications'),
+        [toggleModal]
+    );
     const handleCloseNotifications = useCallback(() => closeModal('notifications'), [closeModal]);
     const handleToggleToolbar = useCallback(() => toggleModal('toolbarMenu'), [toggleModal]);
-    const handleOpenRightSidebar = useCallback(() => setIsRightSidebarVisible(true), [setIsRightSidebarVisible]);
-    const handleToggleReaction = useCallback(async (messageId, emoji) => {
-        if (!messageId || !emoji) return;
-        // Optimistic update: toggle reaction in local state immediately
-        setMessages(prev => prev.map(msg => {
-            if (msg.id !== messageId) return msg;
-            const reactions = Array.isArray(msg.reactions) ? msg.reactions : [];
-            const existing = reactions.find(r => r.emoji === emoji && r.user_id === msg._currentUserId);
-            const optimisticR = existing
-                ? reactions.filter(r => !(r.emoji === emoji && r.user_id === msg._currentUserId))
-                : [...reactions, { emoji, user_id: username, username, user: { username, display_name: username } }];
-            return { ...msg, reactions: optimisticR };
-        }));
-        try {
-            await fetchWithAuth(`${ABSOLUTE_HOST_URL}/api/messages/react/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message_id: messageId, emoji }),
-            });
-        } catch (e) {
-            // Rollback: re-fetch is handled by WS; log error only
-            console.error('[Reaction] toggle failed:', e);
-        }
-    }, [setMessages, fetchWithAuth, ABSOLUTE_HOST_URL, username]);
-    const handleToggleSelection = useCallback((id) => {
-        setSelectedMessages(prev => { const s = new Set(prev); if (s.has(id)) s.delete(id); else s.add(id); return s; });
-    }, [setSelectedMessages]);
-    const handleViewProfile = useCallback((u) => { const usr = Array.isArray(allUsers) ? allUsers.find(a => a.username === u) : null; setViewingProfile(usr || { username: u }); }, [setViewingProfile, allUsers]);
-    const handleOpenGallery = useCallback((images, startIndex) => setGalleryData({ images, startIndex }), [setGalleryData]);
-    const handleScrollToBottom = useCallback(() => { scrollToBottom('smooth'); setShowScrollToBottom(false); setNewMsgCount(0); }, [scrollToBottom, setShowScrollToBottom]);
+    const handleOpenRightSidebar = useCallback(
+        () => setIsRightSidebarVisible(true),
+        [setIsRightSidebarVisible]
+    );
+    const handleToggleReaction = useCallback(
+        async (messageId, emoji) => {
+            if (!messageId || !emoji) return;
+            // Optimistic update: toggle reaction in local state immediately
+            setMessages((prev) =>
+                prev.map((msg) => {
+                    if (msg.id !== messageId) return msg;
+                    const reactions = Array.isArray(msg.reactions) ? msg.reactions : [];
+                    const existing = reactions.find(
+                        (r) => r.emoji === emoji && r.user_id === msg._currentUserId
+                    );
+                    const optimisticR = existing
+                        ? reactions.filter(
+                              (r) => !(r.emoji === emoji && r.user_id === msg._currentUserId)
+                          )
+                        : [
+                              ...reactions,
+                              {
+                                  emoji,
+                                  user_id: username,
+                                  username,
+                                  user: { username, display_name: username },
+                              },
+                          ];
+                    return { ...msg, reactions: optimisticR };
+                })
+            );
+            try {
+                await fetchWithAuth(`${ABSOLUTE_HOST_URL}/api/messages/react/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message_id: messageId, emoji }),
+                });
+            } catch (e) {
+                // Rolelback: re-fetch is handled by WS; log error only
+                logger.error('[Reaction] toggle failed:', e);
+            }
+        },
+        [setMessages, fetchWithAuth, ABSOLUTE_HOST_URL, username]
+    );
+    const handleToggleSelection = useCallback(
+        (id) => {
+            setSelectedMessages((prev) =>
+                prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+            );
+        },
+        [setSelectedMessages]
+    );
+    const handleViewProfile = useCallback(
+        (u) => {
+            const usr = Array.isArray(allUsers) ? allUsers.find((a) => a.username === u) : null;
+            setViewingProfile(usr || { username: u });
+        },
+        [setViewingProfile, allUsers]
+    );
+    const handleOpenGallery = useCallback(
+        (images, startIndex) => setGalleryData({ images, startIndex }),
+        [setGalleryData]
+    );
+    const handleScrollToBottom = useCallback(() => {
+        scrollToBottom('smooth');
+        setShowScrollToBottom(false);
+        setNewMsgCount(0);
+    }, [scrollToBottom, setShowScrollToBottom]);
     const handleShowCodeSnippet = useCallback(() => openModal('snippetModal'), [openModal]);
-    const handleClearPendingFiles = useCallback(() => fileUpload.setPendingFilesFromDrop([]), [fileUpload]);
+    const handleClearPendingFiles = useCallback(
+        () => fileUpload.setPendingFilesFromDrop([]),
+        [fileUpload]
+    );
 
     // Stable render callback for VirtualMessageList
-    const renderVirtualMessage = useCallback((msg, index) => {
-        const prevMsg = index > 0 ? optimizedMessages[index - 1] : null;
-        const sameUser = prevMsg && prevMsg.username === msg.username;
-        const sameDay = prevMsg && msg.timestamp && prevMsg.timestamp &&
-            new Date(msg.timestamp).toDateString() === new Date(prevMsg.timestamp).toDateString();
-        const withinGroupTime = sameDay && msg.timestamp && prevMsg.timestamp &&
-            (new Date(msg.timestamp) - new Date(prevMsg.timestamp)) < 5 * 60 * 1000;
-        const isGrouped = sameUser && withinGroupTime && !msg.reply_to && !prevMsg.reply_to && !msg.is_pinned;
-        return (
-            <Message key={msg.id || msg.temp_id || index} msg={msg} currentUser={username}
-                absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
-                allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
-                onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                onToggleReaction={handleToggleReaction} onStartForward={setForwardingMessage}
-                isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
-                onToggleSelection={handleToggleSelection}
-                onScrollToMessage={messageHandlers.scrollToMessage}
-                onViewProfile={handleViewProfile}
-                onTogglePin={messageHandlers.handleTogglePin}
-                onVisible={messageHandlers.handleMessageVisible}
-                isGrouped={isGrouped} />
-        );
-    }, [username, ABSOLUTE_HOST_URL, isAdmin, setZoomedImage, fetchWithAuth, allUsers,
-        getDeterministicAvatar, setChartSymbol, messageHandlers, setEditingMessage,
-        setReplyingTo, handleToggleReaction, setForwardingMessage, isSelectionMode,
-        selectedMessages, handleToggleSelection, handleViewProfile]);
+    const renderVirtualMessage = useCallback(
+        (msg, index) => {
+            const prevMsg = index > 0 ? optimizedMessages[index - 1] : null;
+            const sameUser = prevMsg && prevMsg.username === msg.username;
+            const sameDay =
+                prevMsg &&
+                msg.timestamp &&
+                prevMsg.timestamp &&
+                new Date(msg.timestamp).toDateString() ===
+                    new Date(prevMsg.timestamp).toDateString();
+            const withinGroupTime =
+                sameDay &&
+                msg.timestamp &&
+                prevMsg.timestamp &&
+                new Date(msg.timestamp) - new Date(prevMsg.timestamp) < 5 * 60 * 1000;
+            const isGrouped =
+                sameUser && withinGroupTime && !msg.reply_to && !prevMsg.reply_to && !msg.is_pinned;
+            return (
+                <Message
+                    key={msg.id || msg.temp_id || index}
+                    msg={msg}
+                    currentUser={username}
+                    absoluteHostUrl={ABSOLUTE_HOST_URL}
+                    isAdmin={isAdmin}
+                    onImageClick={setZoomedImage}
+                    fetchWithAuth={fetchWithAuth}
+                    allUsers={allUsers}
+                    getDeterministicAvatar={getDeterministicAvatar}
+                    onShowChart={setChartSymbol}
+                    onDelete={messageHandlers.handleDeleteMessage}
+                    onStartEdit={setEditingMessage}
+                    onSetReply={setReplyingTo}
+                    onToggleReaction={handleToggleReaction}
+                    onStartForward={setForwardingMessage}
+                    isSelectionMode={isSelectionMode}
+                    isSelected={selectedMessages.has(msg.id)}
+                    onToggleSelection={handleToggleSelection}
+                    onScrollToMessage={messageHandlers.scrollToMessage}
+                    onViewProfile={handleViewProfile}
+                    onTogglePin={messageHandlers.handleTogglePin}
+                    onVisible={messageHandlers.handleMessageVisible}
+                    isGrouped={isGrouped}
+                />
+            );
+        },
+        [
+            username,
+            ABSOLUTE_HOST_URL,
+            isAdmin,
+            setZoomedImage,
+            fetchWithAuth,
+            allUsers,
+            getDeterministicAvatar,
+            setChartSymbol,
+            messageHandlers,
+            setEditingMessage,
+            setReplyingTo,
+            handleToggleReaction,
+            setForwardingMessage,
+            isSelectionMode,
+            selectedMessages,
+            handleToggleSelection,
+            handleViewProfile,
+        ]
+    );
 
     // Memoized message list with gallery grouping
     const GROUP_MS = 5 * 60 * 1000;
@@ -225,152 +368,327 @@ const ChatArea = memo(function ChatArea({
             const msg = optimizedMessages[i];
             const key = msg.id || msg.temp_id || i;
             const prevMsg = i > 0 ? optimizedMessages[i - 1] : null;
-            const showDateDivider = !prevMsg || (msg.timestamp && prevMsg.timestamp && new Date(msg.timestamp).toDateString() !== new Date(prevMsg.timestamp).toDateString());
+            const showDateDivider =
+                !prevMsg ||
+                (msg.timestamp &&
+                    prevMsg.timestamp &&
+                    new Date(msg.timestamp).toDateString() !==
+                        new Date(prevMsg.timestamp).toDateString());
             // Grouping: same user, same day, within 5 min, no date divider, no reply, no pin
-            const isGrouped = !showDateDivider && lastRealMsg &&
+            const isGrouped =
+                !showDateDivider &&
+                lastRealMsg &&
                 lastRealMsg.username === msg.username &&
-                !msg.reply_to && !lastRealMsg.reply_to &&
+                !msg.reply_to &&
+                !lastRealMsg.reply_to &&
                 !msg.is_pinned &&
-                msg.timestamp && lastRealMsg.timestamp &&
-                (new Date(msg.timestamp) - new Date(lastRealMsg.timestamp)) < GROUP_MS;
+                msg.timestamp &&
+                lastRealMsg.timestamp &&
+                new Date(msg.timestamp) - new Date(lastRealMsg.timestamp) < GROUP_MS;
             if (isImageOnlyMessage(msg)) {
                 const galleryMsgs = [msg];
                 let j = i + 1;
-                while (j < optimizedMessages.length && isImageOnlyMessage(optimizedMessages[j]) && optimizedMessages[j].username === msg.username && msg.timestamp && optimizedMessages[j].timestamp && Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) < 300000) { galleryMsgs.push(optimizedMessages[j]); j++; }
+                while (
+                    j < optimizedMessages.length &&
+                    isImageOnlyMessage(optimizedMessages[j]) &&
+                    optimizedMessages[j].username === msg.username &&
+                    msg.timestamp &&
+                    optimizedMessages[j].timestamp &&
+                    Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) <
+                        300000
+                ) {
+                    galleryMsgs.push(optimizedMessages[j]);
+                    j++;
+                }
                 if (galleryMsgs.length >= 2) {
                     elements.push(
-                        <React.Fragment key={`gallery-${galleryMsgs.map(m => m.id || m.temp_id).join('-')}`}>
-                            {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
-                            <ImageGalleryGroup messages={galleryMsgs} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                                onOpenGallery={handleOpenGallery} onViewProfile={handleViewProfile}
-                                onDelete={messageHandlers.handleDeleteMessage} allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                                fetchWithAuth={fetchWithAuth} onVisible={messageHandlers.handleMessageVisible} />
+                        <React.Fragment
+                            key={`gallery-${galleryMsgs.map((m) => m.id || m.temp_id).join('-')}`}
+                        >
+                            {showDateDivider && msg.timestamp && (
+                                <MessageDateDivider date={msg.timestamp} />
+                            )}
+                            <ImageGalleryGroup
+                                messages={galleryMsgs}
+                                currentUser={username}
+                                absoluteHostUrl={ABSOLUTE_HOST_URL}
+                                isAdmin={isAdmin}
+                                onOpenGallery={handleOpenGallery}
+                                onViewProfile={handleViewProfile}
+                                onDelete={messageHandlers.handleDeleteMessage}
+                                allUsers={allUsers}
+                                getDeterministicAvatar={getDeterministicAvatar}
+                                fetchWithAuth={fetchWithAuth}
+                                onVisible={messageHandlers.handleMessageVisible}
+                            />
                         </React.Fragment>
                     );
                     lastRealMsg = galleryMsgs[galleryMsgs.length - 1];
-                    i = j; continue;
+                    i = j;
+                    continue;
                 }
             }
             elements.push(
                 <React.Fragment key={key}>
-                    {showDateDivider && msg.timestamp && <MessageDateDivider date={msg.timestamp} />}
-                    <Message msg={msg} currentUser={username} absoluteHostUrl={ABSOLUTE_HOST_URL} isAdmin={isAdmin}
-                        onImageClick={setZoomedImage} fetchWithAuth={fetchWithAuth}
-                        allUsers={allUsers} getDeterministicAvatar={getDeterministicAvatar}
-                        onShowChart={setChartSymbol} onDelete={messageHandlers.handleDeleteMessage}
-                        onStartEdit={setEditingMessage} onSetReply={setReplyingTo}
-                        onToggleReaction={handleToggleReaction} onStartForward={setForwardingMessage}
-                        isSelectionMode={isSelectionMode} isSelected={selectedMessages.has(msg.id)}
+                    {showDateDivider && msg.timestamp && (
+                        <MessageDateDivider date={msg.timestamp} />
+                    )}
+                    <Message
+                        msg={msg}
+                        currentUser={username}
+                        absoluteHostUrl={ABSOLUTE_HOST_URL}
+                        isAdmin={isAdmin}
+                        onImageClick={setZoomedImage}
+                        fetchWithAuth={fetchWithAuth}
+                        allUsers={allUsers}
+                        getDeterministicAvatar={getDeterministicAvatar}
+                        onShowChart={setChartSymbol}
+                        onDelete={messageHandlers.handleDeleteMessage}
+                        onStartEdit={setEditingMessage}
+                        onSetReply={setReplyingTo}
+                        onToggleReaction={handleToggleReaction}
+                        onStartForward={setForwardingMessage}
+                        isSelectionMode={isSelectionMode}
+                        isSelected={selectedMessages.includes(msg.id)}
                         onToggleSelection={handleToggleSelection}
                         onScrollToMessage={messageHandlers.scrollToMessage}
                         onViewProfile={handleViewProfile}
                         onTogglePin={messageHandlers.handleTogglePin}
                         onVisible={messageHandlers.handleMessageVisible}
-                        isGrouped={!!isGrouped} />
+                        isGrouped={!!isGrouped}
+                    />
                 </React.Fragment>
             );
             lastRealMsg = msg;
             i++;
         }
         return elements;
-    }, [optimizedMessages, selectedMessages, isSelectionMode, username, ABSOLUTE_HOST_URL, isAdmin,
-        setZoomedImage, fetchWithAuth, allUsers, getDeterministicAvatar, setChartSymbol,
-        messageHandlers, setEditingMessage, setReplyingTo, handleToggleReaction, setForwardingMessage,
-        handleToggleSelection, handleViewProfile, handleOpenGallery]);
+    }, [
+        optimizedMessages,
+        selectedMessages,
+        isSelectionMode,
+        username,
+        ABSOLUTE_HOST_URL,
+        isAdmin,
+        setZoomedImage,
+        fetchWithAuth,
+        allUsers,
+        getDeterministicAvatar,
+        setChartSymbol,
+        messageHandlers,
+        setEditingMessage,
+        setReplyingTo,
+        handleToggleReaction,
+        setForwardingMessage,
+        handleToggleSelection,
+        handleViewProfile,
+        handleOpenGallery,
+    ]);
 
     return (
-        <div style={{ ...styles.chatArea, position: 'relative', paddingTop: mobileWebPadding, boxSizing: 'border-box' }}
-            onDrop={fileUpload.handleChatDrop} onDragOver={handleDragOver}
-            onDragEnter={fileUpload.handleChatDragEnter} onDragLeave={fileUpload.handleChatDragLeave}>
-
+        <div
+            style={_st1054}
+            className="chat-area-root"
+            onDrop={fileUpload.handleChatDrop}
+            onDragOver={handleDragOver}
+            onDragEnter={fileUpload.handleChatDragEnter}
+            onDragLeave={fileUpload.handleChatDragLeave}
+        >
             {/* CHAT HEADER */}
-            <div style={{ ...styles.chatHeader, justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden', gap: '8px' }}>
-                    {isMobile && !isLeftSidebarVisible && <button onClick={handleOpenLeftSidebar} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }}>☰</button>}
-                    {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
-                        <button onClick={handleBackToWelcome} style={{ ...styles.mobileMenuButton, fontSize: '1.2em' }}>←</button>
+            <div style={_st1055} className="chat-header-elevated">
+                <div>
+                    {isMobile && !isLeftSidebarVisible && (
+                        <button onClick={handleOpenLeftSidebar} style={_st1056}>
+                            ☰
+                        </button>
                     )}
-                    <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: 0, fontSize: isMobile ? '1em' : '1rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontFamily: "'gg sans', 'Noto Sans', sans-serif" }}>
-                        {activeChat.type === 'room' && <span style={{ color: '#949ba4', fontWeight: 500 }}>#</span>}
+                    {isMobile && (activeChat.type === 'dm' || activeChat.type === 'room') && (
+                        <button onClick={handleBackToWelcome} style={_st1057}>
+                            ←
+                        </button>
+                    )}
+                    <h2
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            margin: 0,
+                            fontSize: isMobile ? '1em' : '1rem',
+                            fontWeight: 600,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontFamily: "'gg sans', 'Noto Sans', sans-serif",
+                        }}
+                    >
+                        {activeChat.type === 'room' && <span>#</span>}
                         {chatTitle}
                     </h2>
-                    {!isConnected && <div style={styles.connectionPillOffline}>Bağlanıyor...</div>}
+                    {!isConnected && (
+                        <div style={styles.connectionPillOffline}>{t('chat.connecting')}</div>
+                    )}
                 </div>
-                <div style={{ display: 'flex', gap: isMobile ? '5px' : '10px', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', position: 'relative' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        gap: isMobile ? '5px' : '10px',
+                        alignItems: 'center',
+                        flexWrap: isMobile ? 'nowrap' : 'wrap',
+                        position: 'relative',
+                    }}
+                >
                     <form onSubmit={handleSearchSubmit} style={styles.searchForm}>
-                        <input type="text" placeholder="Ara..." value={searchQuery} onChange={handleSearchChange} style={styles.searchInput} ref={searchInputRef} />
+                        <input
+                            type="text"
+                            placeholder={t('common.search')}
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            style={styles.searchInput}
+                            ref={searchInputRef}
+                        />
                         <FaSearch style={styles.searchIcon} />
                     </form>
-                    {!isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
-                    {isMobile && activeTypingUsers.length > 0 && <TypingIndicatorEnhanced users={activeTypingUsers} />}
-                    <button onClick={handleToggleNotifications} style={{ ...styles.iconButton, color: modals.notifications ? '#5865f2' : '#b5bac1', position: 'relative' }} title="Bildirimler" aria-label="Notifications" aria-expanded={!!modals.notifications}><FaBell /></button>
+                    {activeTypingUsers.length > 0 && (
+                        <TypingIndicatorEnhanced users={activeTypingUsers} />
+                    )}
+                    <button
+                        onClick={handleToggleNotifications}
+                        style={{
+                            ...styles.iconButton,
+                            color: modals.notifications ? '#5865f2' : '#b5bac1',
+                            position: 'relative',
+                        }}
+                        title={t('chat.notifications')}
+                        aria-label={t('chat.notifications')}
+                        aria-expanded={!!modals.notifications}
+                    >
+                        <FaBell />
+                    </button>
                     {modals.notifications && (
-                        <div style={{ position: 'absolute', top: '54px', right: '20px', zIndex: 1000 }}>
+                        <div>
                             <Suspense fallback={<LoadingSpinner size="small" text="" />}>
-                                <NotificationDropdown currentUser={username} onClose={handleCloseNotifications} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />
+                                <NotificationDropdown
+                                    currentUser={username}
+                                    onClose={handleCloseNotifications}
+                                    fetchWithAuth={fetchWithAuth}
+                                    apiBaseUrl={ABSOLUTE_HOST_URL}
+                                />
                             </Suspense>
                         </div>
                     )}
-                    <div className="toolbar-menu-container" style={{ position: 'relative' }}>
-                        <button onClick={handleToggleToolbar} style={{ ...styles.iconButton, color: modals.toolbarMenu ? '#5865f2' : '#b5bac1', fontSize: '1.2em', fontWeight: 'bold' }} title="Daha Fazla" aria-label="More options" aria-expanded={!!modals.toolbarMenu}>⋮</button>
+                    <div className="toolbar-menu-container">
+                        <button
+                            onClick={handleToggleToolbar}
+                            style={{
+                                ...styles.iconButton,
+                                color: modals.toolbarMenu ? '#5865f2' : '#b5bac1',
+                                fontSize: '1.2em',
+                                fontWeight: 'bold',
+                            }}
+                            title={t('chat.moreOptions')}
+                            aria-label={t('chat.moreOptions')}
+                            aria-expanded={!!modals.toolbarMenu}
+                        >
+                            ⋮
+                        </button>
                         {modals.toolbarMenu && (
                             <ToolbarMenu
-                                activeChat={activeChat} hasKey={hasKey} modals={modals}
-                                soundSettings={soundSettings} isInVoice={isInVoice} username={username}
-                                openModal={openModal} closeModal={closeModal} toggleModal={toggleModal}
-                                handleCopyLink={handleCopyLink} toggleNotifications={toggleNotifications}
+                                activeChat={activeChat}
+                                hasKey={hasKey}
+                                modals={modals}
+                                soundSettings={soundSettings}
+                                isInVoice={isInVoice}
+                                username={username}
+                                openModal={openModal}
+                                closeModal={closeModal}
+                                toggleModal={toggleModal}
+                                handleCopyLink={handleCopyLink}
+                                toggleNotifications={toggleNotifications}
                                 handleSummarize={messageHandlers.handleSummarize}
                                 handleClearChat={messageHandlers.handleClearChat}
-                                handleAdminDeleteConversation={messageHandlers.handleAdminDeleteConversation}
+                                handleAdminDeleteConversation={
+                                    messageHandlers.handleAdminDeleteConversation
+                                }
                             />
                         )}
                     </div>
-                    {isMobile && !isRightSidebarVisible && <button onClick={handleOpenRightSidebar} style={{ ...styles.mobileMenuButton, fontSize: '1.3em' }} aria-label="Open members panel"><FaUsers /></button>}
+                    {isMobile && !isRightSidebarVisible && (
+                        <button
+                            onClick={handleOpenRightSidebar}
+                            style={_st1056}
+                            aria-label="Üyeler panelini aç"
+                        >
+                            <FaUsers />
+                        </button>
+                    )}
                 </div>
             </div>
 
             {/* MESSAGE LIST */}
-            <div style={styles.messageBox} ref={messageBoxRef} onScroll={throttledHandleMessageScroll}
-                id="chat-message-list" role="log" aria-live="polite" aria-relevant="additions" aria-label="Mesaj listesi"
+            <div
+                style={styles.messageBox}
+                ref={messageBoxRef}
+                onScroll={throttledHandleMessageScroll}
+                className="chat-message-box"
+                id="chat-message-list"
+                role="log"
+                aria-live="polite"
+                aria-relevant="additions"
+                aria-label="Mesaj listesi"
                 onTouchStart={handleMsgBoxTouchStart}
                 onTouchMove={handleMsgBoxTouchMove}
                 onTouchEnd={handleMsgBoxTouchEnd}
             >
                 {/* Faz 4.1: Pull-to-refresh indicator */}
                 {(pullDistance > 10 || isPullRefreshing) && (
-                    <div className="pull-refresh-indicator" style={{ opacity: isPullRefreshing ? 1 : pullDistance / MAX_PULL }}>
+                    <div
+                        className="pull-refresh-indicator"
+                        style={{ opacity: isPullRefreshing ? 1 : pullDistance / MAX_PULL }}
+                    >
                         <div className="spinner" />
-                        {isPullRefreshing ? 'Yükleniyor...' : pullDistance >= MAX_PULL * 0.85 ? 'Bırak → Yükle' : 'Çek → Eski mesajlar'}
+                        {isPullRefreshing
+                            ? t('chat.pullRefreshing')
+                            : pullDistance >= MAX_PULL * 0.85
+                              ? t('chat.pullRelease')
+                              : t('chat.pullDrag')}
                     </div>
                 )}
-                <Suspense fallback={<p style={styles.systemMessage}>Mesajlar yükleniyor...</p>}>
+                <Suspense
+                    fallback={<p style={styles.systemMessage}>{t('chat.loadingMessages')}</p>}
+                >
                     {messageHistoryLoading && optimizedMessages.length === 0 ? (
                         <MessageSkeleton count={6} />
                     ) : optimizedMessages.length === 0 && !messageHistoryLoading ? (
-                        /* Empty state illustration */
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', userSelect: 'none', gap: '4px' }}>
-                            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'linear-gradient(135deg, rgba(88,101,242,0.15) 0%, rgba(139,92,246,0.15) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '12px' }}>
-                                <span style={{ fontSize: '36px' }}>🐾</span>
+                        /* Empty state */
+                        <div className="chat-empty-state">
+                            <div className="chat-empty-icon-ring">
+                                <span>🐾</span>
                             </div>
-                            <div style={{ color: '#f2f3f5', fontSize: '1.3em', fontWeight: 700, fontFamily: "'gg sans', 'Noto Sans', sans-serif" }}>Sohbete hoş geldin!</div>
-                            <div style={{ color: '#949ba4', fontSize: '0.95em', fontWeight: 400, marginTop: '2px' }}>İlk mesajı göndererek sohbeti başlat 💬</div>
+                            <div className="chat-empty-title">{t('chat.welcomeTitle')}</div>
+                            <div className="chat-empty-subtitle">{t('chat.welcomeSubtitle')}</div>
                         </div>
                     ) : optimizedMessages.length > 50 ? (
-                        <VirtualMessageList messages={optimizedMessages} scrollToBottom={true}
-                            renderMessage={renderVirtualMessage} />
+                        <VirtualMessageList
+                            messages={optimizedMessages}
+                            scrollToBottom={true}
+                            renderMessage={renderVirtualMessage}
+                        />
                     ) : (
                         <>
-                            {/* Faz 2.4: Infinite scroll load-more row with animated indicator */}
                             {hasMoreMessages && optimizedMessages.length > 0 && (
-                                <div style={{ textAlign: 'center', padding: '8px 0' }}>
-                                    {messageHistoryLoading
-                                        ? <div className="pull-refresh-indicator"><div className="spinner" />Eski mesajlar yükleniyor...</div>
-                                        : <p style={{ ...styles.systemMessage, opacity: 0.55, fontSize: '0.85em', margin: 0 }}>⬆ Yukarı kaydırarak eski mesajları yükleyin</p>
-                                    }
+                                <div className="load-more-row">
+                                    {messageHistoryLoading ? (
+                                        <div className="pull-refresh-indicator">
+                                            <div className="spinner" />
+                                            {t('chat.loadingOlderMessages')}
+                                        </div>
+                                    ) : (
+                                        <p style={_st1058}>{t('chat.scrollOlderMessages')}</p>
+                                    )}
                                 </div>
                             )}
                             {renderedMessages}
-                            <div ref={messagesEndRef} style={{ float: "left", clear: "both", height: 1 }} />
+                            <div ref={messagesEndRef} />
                         </>
                     )}
                 </Suspense>
@@ -378,34 +696,62 @@ const ChatArea = memo(function ChatArea({
 
             {/* DRAG OVERLAY */}
             {fileUpload.isDragging && (
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(30, 31, 34, 0.92)', border: '3px dashed #5865f2', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', zIndex: 1000, animation: 'dropZoneFadeIn 0.18s ease' }}>
-                    <div style={{ fontSize: '56px', marginBottom: '14px', animation: 'dropIconBounce 0.4s cubic-bezier(0.175,0.885,0.32,1.275)' }}>📁</div>
-                    <div style={{ color: '#5865f2', fontSize: '1.4em', fontWeight: 700, letterSpacing: '0.2px' }}>Dosyaları buraya bırakın</div>
-                    <div style={{ color: '#949ba4', fontSize: '0.85em', marginTop: '6px' }}>PNG, JPG, GIF, MP4, PDF ve daha fazlası</div>
+                <div className="chat-drop-overlay">
+                    <div className="chat-drop-icon">📁</div>
+                    <div className="chat-drop-title">{t('chat.dropFilesHere')}</div>
+                    <div className="chat-drop-sub">{t('chat.dropFilesDesc')}</div>
                 </div>
             )}
 
-            {showScrollToBottom && <ScrollToBottomButton onClick={handleScrollToBottom} unreadCount={newMsgCount} />}
+            {showScrollToBottom && (
+                <ScrollToBottomButton onClick={handleScrollToBottom} unreadCount={newMsgCount} />
+            )}
 
-            <div style={{ ...styles.inputContainer, paddingBottom: isNative ? `calc(16px + ${safeAreaBottom})` : (isMobile ? '25px' : '16px') }}>
+            <div
+                style={{
+                    ...styles.inputContainer,
+                    paddingBottom: isNative
+                        ? `calc(16px + ${safeAreaBottom})`
+                        : isMobile
+                          ? '25px'
+                          : '20px',
+                }}
+                className="chat-input-outer"
+            >
                 {fileUpload.isUploading && fileUpload.uploadProgress > 0 && (
-                    <div style={{ position: 'absolute', top: '-40px', left: '16px', right: '16px', backgroundColor: '#111214', borderRadius: '8px', padding: '8px 12px', boxShadow: '0 2px 10px rgba(0,0,0,0.3)', zIndex: 1001 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <span style={{ color: '#b5bac1', fontSize: '12px', whiteSpace: 'nowrap' }}>📤 Yükleniyor: {fileUpload.uploadProgress}%</span>
-                            <div style={{ flex: 1, height: '6px', backgroundColor: '#1e2024', borderRadius: '3px', overflow: 'hidden' }}>
-                                <div style={{ width: `${fileUpload.uploadProgress}%`, height: '100%', backgroundColor: '#5865f2', borderRadius: '3px', transition: 'width 0.3s ease' }} />
-                            </div>
+                    <div className="upload-progress-wrap">
+                        <span className="upload-progress-label">
+                            {t('chat.uploading', { progress: fileUpload.uploadProgress })}
+                        </span>
+                        <div className="upload-progress-track">
+                            <div
+                                className="upload-progress-fill"
+                                style={{ width: `${fileUpload.uploadProgress}%` }}
+                            />
                         </div>
                     </div>
                 )}
-                <Suspense fallback={<div style={{ padding: '12px', color: '#949ba4' }}>Yükleniyor...</div>}>
-                    <MessageInput onSendMessage={messageHandlers.sendMessage} onFileUpload={fileUpload.uploadFile}
+                <Suspense fallback={<div>{t('common.loading')}</div>}>
+                    <MessageInput
+                        onSendMessage={messageHandlers.sendMessage}
+                        onFileUpload={fileUpload.uploadFile}
                         onShowCodeSnippet={handleShowCodeSnippet}
-                        placeholder={chatTitle ? (activeChat.type === 'dm' ? `${chatTitle} kullanıcısına mesaj gönder` : `#${chatTitle} kanalına mesaj gönder`) : 'Mesaj yaz...'}
-                        disabled={fileUpload.isUploading} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL}
-                        activeChat={activeChat} pendingFilesFromDrop={fileUpload.pendingFilesFromDrop}
+                        placeholder={
+                            chatTitle
+                                ? activeChat.type === 'dm'
+                                    ? t('chat.dmPlaceholder', { name: chatTitle })
+                                    : t('chat.channelPlaceholder', { name: chatTitle })
+                                : t('chat.typeMessage')
+                        }
+                        disabled={fileUpload.isUploading}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        activeChat={activeChat}
+                        pendingFilesFromDrop={fileUpload.pendingFilesFromDrop}
                         onClearPendingFiles={handleClearPendingFiles}
-                        ws={ws} username={username} />
+                        ws={ws}
+                        username={username}
+                    />
                 </Suspense>
             </div>
         </div>
@@ -414,4 +760,46 @@ const ChatArea = memo(function ChatArea({
 
 ChatArea.displayName = 'ChatArea';
 
+ChatArea.propTypes = {
+    isNative: PropTypes.bool,
+    safeAreaBottom: PropTypes.object,
+    mobileWebPadding: PropTypes.object,
+    isLeftSidebarVisible: PropTypes.bool,
+    setIsLeftSidebarVisible: PropTypes.func,
+    isRightSidebarVisible: PropTypes.bool,
+    setIsRightSidebarVisible: PropTypes.func,
+    setActiveChat: PropTypes.func,
+    chatTitle: PropTypes.string,
+    isConnected: PropTypes.bool,
+    optimizedMessages: PropTypes.array,
+    messageHistoryLoading: PropTypes.string,
+    hasMoreMessages: PropTypes.bool,
+    showScrollToBottom: PropTypes.bool,
+    setShowScrollToBottom: PropTypes.func,
+    setSearchQuery: PropTypes.func,
+    debouncedSearchQuery: PropTypes.object,
+    searchInputRef: PropTypes.string,
+    selectedMessages: PropTypes.object,
+    setSelectedMessages: PropTypes.func,
+    isAdmin: PropTypes.bool,
+    allUsers: PropTypes.array,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    toggleModal: PropTypes.func,
+    isInVoice: PropTypes.bool,
+    fileUpload: PropTypes.object,
+    scrollToBottom: PropTypes.func,
+    throttledHandleMessageScroll: PropTypes.object,
+    handleCopyLink: PropTypes.func,
+    toggleNotifications: PropTypes.func,
+    getDeterministicAvatar: PropTypes.func,
+    setViewingProfile: PropTypes.func,
+    setEditingMessage: PropTypes.func,
+    setReplyingTo: PropTypes.func,
+    setForwardingMessage: PropTypes.func,
+    setGalleryData: PropTypes.func,
+    setChartSymbol: PropTypes.func,
+    messagesEndRef: PropTypes.object,
+    fetchWithAuth: PropTypes.func,
+};
 export default ChatArea;

@@ -1,7 +1,9 @@
 import { useEffect, useCallback } from 'react';
+import logger from '../utils/logger';
 
 // reCAPTCHA v3 Site Key (.env'den alınıyor)
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4';
+const RECAPTCHA_SITE_KEY =
+    import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4';
 
 // Load reCAPTCHA script
 export const loadRecaptcha = () => {
@@ -38,7 +40,7 @@ export const executeRecaptcha = async (action = 'submit') => {
         const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action });
         return token;
     } catch (error) {
-        console.error('reCAPTCHA error:', error);
+        logger.error('reCAPTCHA error:', error);
         return null;
     }
 };
@@ -46,8 +48,8 @@ export const executeRecaptcha = async (action = 'submit') => {
 // React Hook for reCAPTCHA
 export const useRecaptcha = () => {
     useEffect(() => {
-        loadRecaptcha().catch(err => {
-            console.warn('reCAPTCHA load failed:', err);
+        loadRecaptcha().catch((err) => {
+            logger.warn('reCAPTCHA load failed:', err);
         });
     }, []);
 
@@ -64,15 +66,15 @@ export const verifyRecaptchaToken = async (token, apiBaseUrl) => {
         const response = await fetch(`${apiBaseUrl}/auth/recaptcha/verify/`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ token })
+            body: JSON.stringify({ token }),
         });
 
         const data = await response.json();
         return data.success && data.score >= 0.5; // Minimum score threshold
     } catch (error) {
-        console.error('reCAPTCHA verification error:', error);
+        logger.error('reCAPTCHA verification error:', error);
         return false;
     }
 };
@@ -82,7 +84,5 @@ export default {
     executeRecaptcha,
     useRecaptcha,
     verifyRecaptchaToken,
-    RECAPTCHA_SITE_KEY
+    RECAPTCHA_SITE_KEY,
 };
-
-

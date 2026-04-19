@@ -1,10 +1,13 @@
-/* frontend/src/index.css (MODERN ELEGANT TEMA) */
+﻿/* frontend/src/index.css (MODERN ELEGANT TEMA) */
 
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬â„¢ OPTIMIZED: Font import - gg sans equivalent + Inter fallback */
-/* gg sans is Discord's font; Noto Sans is the closest public equivalent */
+/* All @import rules must be first (CSS spec) */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import './styles/designTokens.css';
+@import './styles/utilities.css';
+@import './styles/mobile.css';
+@import './styles/rtl.css';
 
-/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¯ gg sans ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Noto Sans alias (Discord'un fontu public deÃƒâ€žÃ…Â¸il, Noto Sans en yakÃƒâ€žÃ‚Â±n alternatif) */
+/* gg sans -> Noto Sans alias */
 @font-face {
     font-family: 'gg sans';
     src: local('Noto Sans'), local('NotoSans');
@@ -37,15 +40,6 @@
     font-display: swap;
 }
 
-/* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¨ DESIGN TOKENS ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â single source of truth for colors, spacing, radii, etc. */
-@import './styles/designTokens.css';
-
-/* ÃƒÂ°Ã…Â¸Ã‚Â§Ã‚Â° UTILITY CLASSES ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â token-based helpers (.text-primary, .p-sm, .rounded-mdÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦) */
-@import './styles/utilities.css';
-
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â± MOBILE RESPONSIVE STYLES */
-@import './styles/mobile.css';
-
 /* ================================================ */
 /* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¨ PAWSCORD MODERN COLOR SYSTEM */
 /* ================================================ */
@@ -57,7 +51,9 @@
     --brand-accent: var(--color-primary);
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+    --gradient-primary: linear-gradient(135deg,
+            var(--color-primary) 0%,
+            var(--color-primary-hover) 100%);
     --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
@@ -165,7 +161,7 @@
 
 /* ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â¬ Message hover highlight (Discord-style) */
 .chat-msg:hover {
-    background-color: rgba(4, 4, 5, 0.07) !important;
+    background-color: rgba(4, 4, 5, 0.07);
 }
 
 .chat-msg .msg-actions {
@@ -203,11 +199,11 @@
 /* Button press feedback */
 button:active:not(:disabled) {
     transform: scale(0.96);
-    transition: transform 0.08s ease !important;
+    transition: transform 0.08s ease;
 }
 
 /* Faz 3.4: Modal / dialog fade-in */
-[role="dialog"],
+[role='dialog'],
 .modal-overlay,
 .modal-backdrop {
     animation: modalFadeIn 0.18s ease-out;
@@ -299,7 +295,6 @@ body::before {
     z-index: 0;
 }
 
-
 /* ================================================ */
 /* ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¨ MODERN GLASSMORPHISM COMPONENTS */
 /* ================================================ */
@@ -371,9 +366,9 @@ body::before {
 /* ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â MODERN INPUT SYSTEM */
 /* ================================================ */
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
+input[type='text'],
+input[type='email'],
+input[type='password'],
 textarea,
 select {
     background: var(--glass-bg);
@@ -495,7 +490,15 @@ select:focus {
 /* ================================================ */
 body {
     margin: 0;
-    font-family: 'gg sans', 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-family:
+        'gg sans',
+        'Noto Sans',
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        'Roboto',
+        'Helvetica Neue',
+        sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
@@ -600,9 +603,9 @@ select option {
     /* Touch target sizes - minimum 44x44px */
     button,
     a,
-    [role="button"],
-    input[type="checkbox"],
-    input[type="radio"] {
+    [role='button'],
+    input[type='checkbox'],
+    input[type='radio'] {
         min-width: 44px;
         min-height: 44px;
         padding: 12px;
@@ -694,8 +697,19 @@ select option {
 button,
 a,
 input,
-[role="button"] {
+[role='button'] {
     transition: all 0.2s ease-in-out;
+}
+
+/* Global focus-visible styles for keyboard accessibility (WCAG 2.1 AA) */
+:focus-visible {
+    outline: 2px solid var(--color-primary, #5865f2);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
 }
 
 button:active {
@@ -861,297 +875,7 @@ button:active {
     background-color: var(--color-primary-hover);
 }
 
-/* --- CANLI LOGIN SAYFASI STÃƒâ€žÃ‚Â°LLERÃƒâ€žÃ‚Â° --- */
-
-/* Hareketli Arka Plan */
-.login-container {
-    width: 100%;
-    height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    background-color: var(--bg-primary);
-    padding: 0;
-    /* TÃƒÆ’Ã‚Â¼m padding'i kaldÃƒâ€žÃ‚Â±r */
-}
-
-/* Mobil cihazlar iÃƒÆ’Ã‚Â§in */
-@media (max-width: 768px) {
-    .login-container {
-        padding: 0;
-        height: 100dvh;
-        /* dvh viewport height kullan */
-    }
-
-    .login-card {
-        margin: 0;
-        padding: 30px 20px;
-        /* Card iÃƒÆ’Ã‚Â§i padding'i azalt */
-        max-width: 90%;
-        /* EkranÃƒâ€žÃ‚Â±n %90'Ãƒâ€žÃ‚Â±nÃƒâ€žÃ‚Â± kullan */
-    }
-}
-
-.background-animate {
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(ellipse at 20% 30%, rgba(88, 101, 242, 0.22) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 70%, rgba(88, 101, 242, 0.10) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 100%, rgba(35, 165, 89, 0.06) 0%, transparent 45%);
-    z-index: 0;
-    pointer-events: none;
-}
-
-@keyframes gradientBG {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-@keyframes loginBgPulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.85;
-    }
-}
-
-/* Glassmorphism Kart */
-.login-card {
-    position: relative;
-    z-index: 1;
-    background: rgba(30, 31, 34, 0.82);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    padding: 44px 40px;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    text-align: center;
-    animation: slideUpFade 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@keyframes slideUpFade {
-    from {
-        opacity: 0;
-        transform: translateY(24px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* logo-circle: solid blurple with glow */
-.logo-circle {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(145deg, var(--color-primary), var(--color-primary-hover));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px auto;
-    box-shadow: 0 4px 24px rgba(88, 101, 242, 0.45), 0 0 0 4px rgba(88, 101, 242, 0.12);
-}
-
-.logo-header h1 {
-    color: white;
-    margin: 0;
-    font-size: 2em;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.logo-header p {
-    color: var(--text-secondary, var(--text-secondary));
-    margin-top: 5px;
-    font-size: 0.95em;
-}
-
-/* Input AlanlarÃƒâ€žÃ‚Â± */
-.input-group {
-    position: relative;
-    margin-bottom: 15px;
-}
-
-.input-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary, var(--text-secondary));
-    z-index: 2;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 13px 15px 13px 45px;
-    background: rgba(0, 0, 0, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 0.975em;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-    font-family: inherit;
-}
-
-.input-group input:focus {
-    background: rgba(0, 0, 0, 0.42);
-    border-color: var(--color-primary);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.22), 0 2px 8px rgba(0, 0, 0, 0.2);
-    color: var(--text-light-bg);
-}
-
-.input-group input::placeholder {
-    color: var(--text-disabled);
-}
-
-/* Butonlar */
-.submit-btn {
-    width: 100%;
-    padding: 13px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-top: 12px;
-    letter-spacing: 0.2px;
-    box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
-}
-
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(88, 101, 242, 0.5);
-    background: linear-gradient(135deg, #6470f3 0%, var(--color-primary) 100%);
-}
-
-.submit-btn:active {
-    transform: translateY(0) scale(0.99);
-    box-shadow: 0 2px 8px rgba(88, 101, 242, 0.35);
-}
-
-/* AyÃƒâ€žÃ‚Â±rÃƒâ€žÃ‚Â±cÃƒâ€žÃ‚Â± */
-.divider {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
-    color: var(--text-muted);
-    font-size: 0.85em;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.divider span {
-    padding: 0 10px;
-}
-
-/* Toggle Mode Link */
-.toggle-mode {
-    margin-top: 20px;
-    font-size: 0.9em;
-    color: var(--text-secondary, var(--text-secondary));
-}
-
-.toggle-mode span {
-    color: var(--text-link, var(--color-info-sky));
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.toggle-mode span:hover {
-    text-decoration: underline;
-}
-
-/* Hata MesajÃƒâ€žÃ‚Â± */
-.error-message {
-    background: rgba(242, 63, 66, 0.2);
-    border: 1px solid var(--color-danger, var(--color-danger));
-    color: var(--color-danger, var(--color-danger));
-    padding: var(--space-lg, 10px);
-    border-radius: var(--radius-base, 8px);
-    margin-bottom: 15px;
-    font-size: 0.9em;
-}
-
-.spinner-white {
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    border-top-color: var(--color-white);
-    animation: spin-white 0.8s linear infinite;
-    margin: 0 auto;
-    display: inline-block;
-}
-
-@keyframes spin-white {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Google Butonunu DÃƒÆ’Ã‚Â¼zenleyen CSS */
-.google-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    /* ÃƒÆ’Ã…â€œst boÃƒâ€¦Ã…Â¸luÃƒâ€žÃ…Â¸u azalttÃƒâ€žÃ‚Â±k */
-
-    /* Butonu ortalayÃƒâ€žÃ‚Â±p %85 oranÃƒâ€žÃ‚Â±nda kÃƒÆ’Ã‚Â¼ÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Â¼ltÃƒÆ’Ã‚Â¼yoruz */
-    transform: scale(0.95);
-    transform-origin: center;
-
-    /* BeyazlÃƒâ€žÃ‚Â±klarÃƒâ€žÃ‚Â± gizlemek iÃƒÆ’Ã‚Â§in */
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-
-    /* KÃƒÆ’Ã‚Â¶Ãƒâ€¦Ã…Â¸eleri daha yumuÃƒâ€¦Ã…Â¸ak kÃƒâ€žÃ‚Â±rp */
-    border-radius: 50px;
-    overflow: hidden;
-
-    /* Arka planÃƒâ€žÃ‚Â± Ãƒâ€¦Ã…Â¸effaf yapÃƒâ€žÃ‚Â±yoruz ki beyaz kutu ÃƒÆ’Ã‚Â§Ãƒâ€žÃ‚Â±kmasÃƒâ€žÃ‚Â±n */
-    background-color: transparent !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    /* Hafif gÃƒÆ’Ã‚Â¶lge ekledik */
-}
-
-/* EÃƒâ€žÃ…Â¸er Google'Ãƒâ€žÃ‚Â±n kendi iframe'ine etki edebilirsek (Bazen ÃƒÆ’Ã‚Â§alÃƒâ€žÃ‚Â±Ãƒâ€¦Ã…Â¸Ãƒâ€žÃ‚Â±r) */
-.google-btn-wrapper iframe {
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 24px !important;
-}
+/* Login page styles are in LoginPage.css (code-split, loaded after this file) */
 
 /* --- YAZIYOR ANÃƒâ€žÃ‚Â°MASYONU --- */
 .typing-indicator {
@@ -1218,25 +942,24 @@ div:hover>div>.delete-chat-btn {
 }
 
 .delete-chat-btn:hover {
-    opacity: 1 !important;
-    color: var(--color-danger, var(--color-danger-dark)) !important;
+    opacity: 1;
+    color: var(--color-danger, var(--color-danger-dark));
 }
 
 /* ================================================ */
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ CONTEXT MENU - ABSOLUTE MAXIMUM Z-INDEX */
+/* Context Menu Layering */
 /* ================================================ */
 
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ PORTAL ROOT - MUST BE ABSOLUTE TOP LAYER */
+/* Portal root stays above the app, but uses named tokens instead of max-int hacks. */
 #portal-root {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    pointer-events: none !important;
-    z-index: 2147483647 !important;
-    /* MAX SAFE INTEGER */
-    overflow: visible !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: var(--z-portal-root, var(--z-topmost));
+    overflow: visible;
 }
 
 /* Portal children must be clickable */
@@ -1245,61 +968,56 @@ div:hover>div>.delete-chat-btn {
     position: fixed !important;
 }
 
-/* Context menu backdrop - tÃƒÆ’Ã‚Â¼m varyasyonlar */
-#portal-root>div[style*="background: transparent"],
-#portal-root>div[style*="background:transparent"] {
-    z-index: 2147483646 !important;
+/* Context menu backdrop */
+#portal-root>div[style*='background: transparent'],
+#portal-root>div[style*='background:transparent'] {
+    z-index: var(--z-context-menu-backdrop, var(--z-tooltip)) !important;
     pointer-events: auto !important;
     position: fixed !important;
     inset: 0 !important;
-    /* modern shorthand for top/left/right/bottom */
 }
 
-/* Context menu itself - ABSOLUTE TOP - tÃƒÆ’Ã‚Â¼m selector varyasyonlarÃƒâ€žÃ‚Â± */
-#portal-root [role="menu"],
-#portal-root div[role="menu"],
-#portal-root>div>div[role="menu"] {
-    z-index: 2147483647 !important;
+/* Context menu itself */
+#portal-root [role='menu'],
+#portal-root div[role='menu'],
+#portal-root>div>div[role='menu'] {
+    z-index: var(--z-context-menu, var(--z-tooltip)) !important;
     pointer-events: auto !important;
     position: fixed !important;
     overflow: visible !important;
 }
 
 /* Context menu items must be clickable */
-#portal-root [role="menuitem"],
-#portal-root [role="menuitem"] * {
+#portal-root [role='menuitem'],
+#portal-root [role='menuitem'] * {
     pointer-events: auto !important;
     cursor: pointer !important;
 }
 
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ OVERRIDE: Voice Island should be BELOW context menu */
+/* Keep floating voice UI below context menus. */
 .voice-island,
-[class*="floating"],
-[class*="FloatingVoiceIsland"] {
-    z-index: 9998 !important;
-    /* Below portal */
+[class*='floating'],
+[class*='FloatingVoiceIsland'] {
+    z-index: var(--z-floating-voice, var(--z-popover)) !important;
 }
 
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ OVERRIDE: Sidebars should be BELOW context menu */
+/* Sidebars stay under overlays and menus. */
 .sidebar-wrapper,
 .chat-user-list-panel,
-[class*="sidebar"] {
-    z-index: 100 !important;
-    /* Way below portal */
+[class*='sidebar'] {
+    z-index: var(--z-dropdown, 100) !important;
 }
 
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ OVERRIDE: Modals should be BELOW context menu */
-[class*="modal"],
-[role="dialog"] {
-    z-index: 1000 !important;
-    /* Below portal */
+/* Modals remain below the global portal root. */
+[class*='modal'],
+[role='dialog'] {
+    z-index: var(--z-modal, 1000) !important;
 }
 
-/* ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ‚Â¥ OVERRIDE: Voice Chat Panel should be BELOW context menu */
-[class*="VoiceChat"],
-[class*="voicePanel"] {
-    z-index: 9999 !important;
-    /* Below portal */
+/* Voice panels remain above modals but below context menus. */
+[class*='VoiceChat'],
+[class*='voicePanel'] {
+    z-index: var(--z-tooltip, 9999) !important;
 }
 
 /* ================================================ */
@@ -1327,7 +1045,7 @@ div:hover>div>.delete-chat-btn {
     position: fixed;
     top: -48px;
     left: var(--space-sm, 8px);
-    z-index: 99999;
+    z-index: var(--z-topmost);
     padding: var(--space-sm, 8px) var(--space-lg, 16px);
     background: var(--color-primary, #5865f2);
     color: #fff;
@@ -1341,6 +1059,23 @@ div:hover>div>.delete-chat-btn {
 .skip-to-content:focus,
 .skip-nav:focus {
     top: 8px;
+}
+
+/* 📱 Hide skip-nav on touch-only devices (Android/iOS native WebView).
+   Focus-based reveal is meaningless without a physical keyboard and
+   can show a stray pill in the top-left on mobile. */
+@media (hover: none) and (pointer: coarse) {
+
+    .skip-to-content,
+    .skip-nav {
+        display: none !important;
+    }
+}
+
+/* Also hide when running inside Capacitor native WebView */
+html.capacitor-native .skip-to-content,
+html.capacitor-native .skip-nav {
+    display: none !important;
 }
 
 /* Reduced motion: respect user preference */
@@ -1432,7 +1167,9 @@ div:hover>div>.delete-chat-btn {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
     transition-delay: 0s;
     z-index: 9999;
 }
@@ -1460,7 +1197,9 @@ div:hover>div>.delete-chat-btn {
     font-weight: 700;
     font-family: 'gg sans', 'Noto Sans', sans-serif;
     letter-spacing: 0.5px;
-    transition: border-radius 0.2s ease, background 0.2s ease;
+    transition:
+        border-radius 0.2s ease,
+        background 0.2s ease;
     cursor: pointer;
     user-select: none;
     flex-shrink: 0;
@@ -1690,7 +1429,7 @@ div:hover>div>.delete-chat-btn {
 /* ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
    FAZ 3.1 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â LIGHT THEME
    ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â */
-[data-theme="light"] {
+[data-theme='light'] {
     --dc-background-primary: var(--color-white);
     --dc-background-secondary: var(--text-light-bg);
     --dc-background-secondary-alt: #eaecef;
@@ -1720,8 +1459,8 @@ div:hover>div>.delete-chat-btn {
     --dc-status-danger: var(--color-danger-dark);
 }
 
-[data-theme="light"] .app-container,
-[data-theme="light"] body {
+[data-theme='light'] .app-container,
+[data-theme='light'] body {
     background: var(--dc-background-primary);
     color: var(--dc-text-normal);
 }
@@ -1729,7 +1468,7 @@ div:hover>div>.delete-chat-btn {
 /* ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
    FAZ 3.1 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â AMOLED THEME
    ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â */
-[data-theme="amoled"] {
+[data-theme='amoled'] {
     --dc-background-primary: #000000;
     --dc-background-secondary: #0a0a0a;
     --dc-background-secondary-alt: #111111;
@@ -1759,8 +1498,8 @@ div:hover>div>.delete-chat-btn {
     --dc-status-danger: #f23f43;
 }
 
-[data-theme="amoled"] .app-container,
-[data-theme="amoled"] body {
+[data-theme='amoled'] .app-container,
+[data-theme='amoled'] body {
     background: var(--dc-background-primary);
 }
 
@@ -1805,7 +1544,9 @@ div:hover>div>.delete-chat-btn {
     justify-content: center;
     cursor: pointer;
     font-size: 16px;
-    transition: transform 0.15s, background 0.15s;
+    transition:
+        transform 0.15s,
+        background 0.15s;
     flex-shrink: 0;
 }
 
@@ -1829,11 +1570,15 @@ div:hover>div>.delete-chat-btn {
 
     0%,
     100% {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(237, 66, 69, 0.4);
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            0 0 0 0 rgba(237, 66, 69, 0.4);
     }
 
     50% {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 0 6px rgba(237, 66, 69, 0);
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            0 0 0 6px rgba(237, 66, 69, 0);
     }
 }
 
@@ -1867,7 +1612,9 @@ div:hover>div>.delete-chat-btn {
     overflow: hidden;
     cursor: pointer;
     scroll-snap-align: start;
-    transition: transform 0.15s, outline 0.15s;
+    transition:
+        transform 0.15s,
+        outline 0.15s;
     outline: 2px solid transparent;
     position: relative;
 }

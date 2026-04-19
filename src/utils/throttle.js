@@ -1,9 +1,10 @@
+import logger from '../utils/logger';
 // frontend/src/utils/throttle.js
 
 /**
- * 🚀 Throttle fonksiyonu - Belirli aralıklarla çalışır
- * Örnek: Kullanıcı her tuşa bastığında değil, 2 saniyede bir "typing" gönder
- * 
+ * 🚀 Throttle fonksiyonu - Belirli searchlıklarla çalışır
+ * Örnek: User her tuşa bastığında değil, 2 saniyede bir "typing" gönder
+ *
  * @param {Function} func - Çalıştırılacak fonksiyon
  * @param {number} delay - Minimum bekleme süresi (ms)
  * @returns {Function} Throttle edilmiş fonksiyon
@@ -16,7 +17,7 @@ export const throttle = (func, delay = 1000) => {
         const now = Date.now();
         const timeSinceLastCall = now - lastCall;
 
-        // İlk çağrı veya yeterli süre geçtiyse
+        // İlk çağrı or yeterli süre geçtiyse
         if (timeSinceLastCall >= delay) {
             lastCall = now;
             func.apply(this, args);
@@ -33,8 +34,8 @@ export const throttle = (func, delay = 1000) => {
 
 /**
  * 🕐 Debounce fonksiyonu - Son çağrıdan sonra belirli süre bekler
- * Örnek: Arama kutusunda kullanıcı yazmayı bitirdikten 500ms sonra ara
- * 
+ * Örnek: Search kutusunda kullanıcı yazmayı bitirdikten 500ms sonra search
+ *
  * @param {Function} func - Çalıştırılacak fonksiyon
  * @param {number} delay - Bekleme süresi (ms)
  * @returns {Function} Debounce edilmiş fonksiyon
@@ -53,7 +54,7 @@ export const debounce = (func, delay = 500) => {
 
 /**
  * 🎯 Leading throttle - İlk çağrıda hemen çalışır, sonra throttle
- * Örnek: Buton tıklamaları - İlk tık hemen, sonrakiler throttle
+ * Örnek: Buton tıklamaları - İlk tık hemen, nextler throttle
  */
 export const throttleLeading = (func, delay = 1000) => {
     let lastCall = 0;
@@ -94,7 +95,7 @@ export const rateLimit = (func, maxCalls = 3, timeWindow = 1000) => {
             calls.push(now);
             func.apply(this, args);
         } else {
-            console.warn(`Rate limit aşıldı: ${maxCalls} çağrı/${timeWindow}ms`);
+            logger.warn(`Rate limit aşıldı: ${maxCalls} çağrı/${timeWindow}ms`);
         }
     };
 };
@@ -103,7 +104,5 @@ export default {
     throttle,
     debounce,
     throttleLeading,
-    rateLimit
+    rateLimit,
 };
-
-

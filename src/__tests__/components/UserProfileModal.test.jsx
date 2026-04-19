@@ -25,8 +25,8 @@ const MockUserProfileModal = ({
     const isFriend = friendsList.some(f => f.username === user.username);
 
     return (
-        <div data-testid="profile-modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-            <div data-testid="profile-modal" role="dialog" aria-label={`${user.username} profili`}>
+        <div data-testid="profile-modal-overlay" role="button" tabIndex={0} onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
+            <div data-testid="profile-modal" role="dialog" aria-label={`${user.username} profilei`}>
                 {/* Close button */}
                 <button data-testid="close-button" onClick={onClose} aria-label="Kapat">✕</button>
 
@@ -34,7 +34,7 @@ const MockUserProfileModal = ({
                 <div data-testid="profile-banner" />
 
                 {/* Avatar */}
-                <div data-testid="avatar-container" onClick={() => onImageClick(avatarUrl)}>
+                <div data-testid="avatar-container" role="button" tabIndex={0} onClick={() => onImageClick(avatarUrl)} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
                     <img data-testid="user-avatar" src={avatarUrl} alt={user.username} />
                 </div>
 
@@ -50,7 +50,7 @@ const MockUserProfileModal = ({
 
                 {/* Online status indicator */}
                 <div data-testid="status-indicator" className={user.is_online ? 'online' : 'offline'}>
-                    {user.is_online ? 'Çevrimiçi' : 'Çevrimdışı'}
+                    {user.is_online ? 'Online' : 'Offline'}
                 </div>
 
                 {/* Bio */}
@@ -61,10 +61,10 @@ const MockUserProfileModal = ({
                     {!isSelf && (
                         <>
                             <button data-testid="dm-button" onClick={() => onStartDM(user.username)}>
-                                Mesaj Gönder
+                                Send Message
                             </button>
                             <button data-testid="add-friend-button">
-                                {isFriend ? 'Arkadaşsınız ✓' : 'Arkadaş Ekle'}
+                                {isFriend ? 'Friendsınız ✓' : 'Add Friend'}
                             </button>
                         </>
                     )}
@@ -167,12 +167,12 @@ describe('UserProfileModal Component', () => {
 
         it('should show online status indicator', () => {
             render(<MockUserProfileModal user={mockUser} {...handlers} />);
-            expect(screen.getByTestId('status-indicator')).toHaveTextContent('Çevrimiçi');
+            expect(screen.getByTestId('status-indicator')).toHaveTextContent('Online');
         });
 
         it('should show offline status', () => {
             render(<MockUserProfileModal user={mockOfflineUser} {...handlers} />);
-            expect(screen.getByTestId('status-indicator')).toHaveTextContent('Çevrimdışı');
+            expect(screen.getByTestId('status-indicator')).toHaveTextContent('Offline');
         });
     });
 
@@ -208,21 +208,21 @@ describe('UserProfileModal Component', () => {
             expect(handlers.onStartDM).toHaveBeenCalledWith('TestUser');
         });
 
-        it('should show "Arkadaş Ekle" for non-friends', () => {
+        it('should show "Add Friend" for non-friends', () => {
             render(<MockUserProfileModal user={mockUser} currentUser="otherUser" friendsList={[]} {...handlers} />);
-            expect(screen.getByTestId('add-friend-button')).toHaveTextContent('Arkadaş Ekle');
+            expect(screen.getByTestId('add-friend-button')).toHaveTextContent('Add Friend');
         });
 
-        it('should show "Arkadaşsınız" for friends', () => {
+        it('should show "Friendsınız" for friends', () => {
             render(
                 <MockUserProfileModal
                     user={mockUser}
                     currentUser="otherUser"
-                    friendsList={[{ username: 'TestUser' }]}
+                    friendsList={[{ username: 'TestUser' }]}>
                     {...handlers}
                 />
             );
-            expect(screen.getByTestId('add-friend-button')).toHaveTextContent('Arkadaşsınız ✓');
+            expect(screen.getByTestId('add-friend-button')).toHaveTextContent('Friendsınız ✓');
         });
 
         it('should NOT show DM/friend buttons for self', () => {

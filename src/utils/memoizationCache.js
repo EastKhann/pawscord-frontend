@@ -1,3 +1,4 @@
+import React from 'react';
 // frontend/src/utils/memoizationCache.js
 
 /**
@@ -47,7 +48,7 @@ export function memoizeAsync(fn, options = {}) {
     const {
         maxSize = 100,
         ttl = 300000, // 5 minutes
-        keyGenerator = JSON.stringify
+        keyGenerator = JSON.stringify,
     } = options;
 
     const memoized = async function (...args) {
@@ -67,8 +68,9 @@ export function memoizeAsync(fn, options = {}) {
             return pending.get(key);
         }
 
-        const promise = fn.apply(this, args)
-            .then(result => {
+        const promise = fn
+            .apply(this, args)
+            .then((result) => {
                 // LRU eviction
                 if (cache.size >= maxSize) {
                     const firstKey = cache.keys().next().value;
@@ -77,13 +79,13 @@ export function memoizeAsync(fn, options = {}) {
 
                 cache.set(key, {
                     value: result,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
                 });
 
                 pending.delete(key);
                 return result;
             })
-            .catch(error => {
+            .catch((error) => {
                 pending.delete(key);
                 throw error;
             });
@@ -138,7 +140,7 @@ export function memoizeTimed(fn, ttl = 5000) {
         const result = fn.apply(this, args);
         cache.set(key, {
             value: result,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
 
         return result;
@@ -235,7 +237,7 @@ export class MemoizationCache {
 
         this.cache.set(key, {
             value,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
     }
 
@@ -262,7 +264,7 @@ export class MemoizationCache {
             maxSize: this.maxSize,
             hits: this.hits,
             misses: this.misses,
-            hitRate: this.hits / (this.hits + this.misses) || 0
+            hitRate: this.hits / (this.hits + this.misses) || 0,
         };
     }
 }
@@ -285,7 +287,7 @@ export const useMemoizeAsync = (fn, deps = []) => {
 
         setLoading(true);
 
-        fn().then(data => {
+        fn().then((data) => {
             cacheRef.current.set(key, data);
             setResult(data);
             setLoading(false);
@@ -337,7 +339,7 @@ export function Memoize(options = {}) {
 // Global memoization cache
 export const globalMemoCache = new MemoizationCache({
     maxSize: 1000,
-    ttl: 3600000
+    ttl: 3600000,
 });
 
 export default {
@@ -348,7 +350,5 @@ export default {
     memoizeWithDeps,
     memoizeMultiKey,
     MemoizationCache,
-    globalMemoCache
+    globalMemoCache,
 };
-
-

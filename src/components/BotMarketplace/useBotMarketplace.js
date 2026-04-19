@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_BASE_URL } from '../../utils/apiEndpoints';
+import logger from '../../utils/logger';
 
 const useBotMarketplace = () => {
     const [bots, setBots] = useState([]);
@@ -21,7 +22,7 @@ const useBotMarketplace = () => {
             const params = new URLSearchParams({
                 page,
                 sort: sortBy,
-                limit: 20
+                limit: 20,
             });
             if (selectedCategory) params.append('category', selectedCategory);
             if (searchQuery) params.append('search', searchQuery);
@@ -33,7 +34,7 @@ const useBotMarketplace = () => {
                 setTotalPages(data.pages || 1);
             }
         } catch (e) {
-            console.error('Failed to load bots:', e);
+            logger.error('Failed to load bots:', e);
         }
     }, [API_URL, page, sortBy, selectedCategory, searchQuery]);
 
@@ -43,7 +44,7 @@ const useBotMarketplace = () => {
             const [categoriesRes, featuredRes, trendingRes] = await Promise.all([
                 fetch(`${API_URL}/bots/categories/`),
                 fetch(`${API_URL}/bots/featured/`),
-                fetch(`${API_URL}/bots/trending/`)
+                fetch(`${API_URL}/bots/trending/`),
             ]);
 
             if (categoriesRes.ok) {
@@ -59,7 +60,7 @@ const useBotMarketplace = () => {
                 setTrendingBots(data.bots || []);
             }
         } catch (e) {
-            console.error('Failed to load initial data:', e);
+            logger.error('Failed to load initial data:', e);
         }
         setLoading(false);
     }, [API_URL]);
@@ -72,21 +73,35 @@ const useBotMarketplace = () => {
                 setSelectedBot(data);
             }
         } catch (e) {
-            console.error('Failed to load bot detail:', e);
+            logger.error('Failed to load bot detail:', e);
         }
     };
 
-    useEffect(() => { loadInitialData(); }, [loadInitialData]);
-    useEffect(() => { loadBots(); }, [loadBots]);
+    useEffect(() => {
+        loadInitialData();
+    }, [loadInitialData]);
+    useEffect(() => {
+        loadBots();
+    }, [loadBots]);
 
     return {
-        bots, featuredBots, trendingBots, categories, loading,
-        selectedCategory, setSelectedCategory,
-        searchQuery, setSearchQuery,
-        sortBy, setSortBy,
-        selectedBot, setSelectedBot,
-        page, setPage, totalPages,
-        loadBotDetail
+        bots,
+        featuredBots,
+        trendingBots,
+        categories,
+        loading,
+        selectedCategory,
+        setSelectedCategory,
+        searchQuery,
+        setSearchQuery,
+        sortBy,
+        setSortBy,
+        selectedBot,
+        setSelectedBot,
+        page,
+        setPage,
+        totalPages,
+        loadBotDetail,
     };
 };
 

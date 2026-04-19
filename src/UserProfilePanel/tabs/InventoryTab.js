@@ -1,85 +1,133 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
+import PropTypes from 'prop-types';
 import profileStyles from '../styles';
+const _s = (o) => o;
 
-const InventoryTab = ({ equipItem, equippedItems, inventory, unequipItem }) => {
-  const styles = profileStyles;
-
-  return (
-    <div style={styles.card}>
-      <h3 style={styles.sectionTitle}>🎒 Envanter & Ekipman</h3>
-
-      <div style={{ marginBottom: '24px' }}>
-        <h4 style={{ color: '#fff', marginBottom: '12px' }}>⚡ Ekipli İtemler</h4>
-        {equippedItems.length === 0 ? (
-          <p style={{ color: '#b5bac1', fontSize: '14px' }}>Henüz ekipli item yok.</p>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-            {equippedItems.map((item, idx) => (
-              <div
-                key={idx}
-                style={{
-                  padding: '16px',
-                  background: 'linear-gradient(135deg, rgba(67, 181, 129, 0.2) 0%, rgba(67, 181, 129, 0.05) 100%)',
-                  border: '2px solid #23a559',
-                  borderRadius: '12px',
-                  textAlign: 'center',
-                }}
-              >
-                <div style={{ fontSize: '48px', marginBottom: '8px' }}>{item.icon || '🎁'}</div>
-                <h5 style={{ color: '#fff', margin: '0 0 4px 0', fontSize: '14px' }}>{item.name}</h5>
-                <button
-                  style={{ ...styles.button('secondary'), padding: '6px 12px', fontSize: '12px', marginTop: '8px' }}
-                  onClick={() => unequipItem(item.id)}
-                >
-                  ❌ Çıkar
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div>
-        <h4 style={{ color: '#fff', marginBottom: '12px' }}>📦 Tüm İtemler</h4>
-        {inventory.length === 0 ? (
-          <div style={{ padding: '48px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px' }}>
-            <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎒</div>
-            <h4 style={{ color: '#fff', margin: '0 0 8px 0' }}>Envanter boş</h4>
-            <p style={{ color: '#b5bac1', margin: 0 }}>Premium Store'dan item satın alabilirsiniz</p>
-          </div>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-            {inventory.map((item, idx) => (
-              <div
-                key={idx}
-                style={{
-                  padding: '16px',
-                  background: item.is_equipped
-                    ? 'linear-gradient(135deg, rgba(67, 181, 129, 0.2) 0%, rgba(67, 181, 129, 0.05) 100%)'
-                    : 'rgba(255, 255, 255, 0.05)',
-                  border: item.is_equipped ? '2px solid #23a559' : '1px solid rgba(255, 255, 255, 0.1)',
-                  borderRadius: '12px',
-                  textAlign: 'center',
-                }}
-              >
-                <div style={{ fontSize: '48px', marginBottom: '8px' }}>{item.icon || '🎁'}</div>
-                <h5 style={{ color: '#fff', margin: '0 0 4px 0', fontSize: '14px' }}>{item.name}</h5>
-                <p style={{ color: '#b5bac1', margin: '4px 0', fontSize: '12px' }}>{item.description}</p>
-                {!item.is_equipped && (
-                  <button
-                    style={{ ...styles.button('primary'), padding: '6px 12px', fontSize: '12px', marginTop: '8px' }}
-                    onClick={() => equipItem(item.id)}
-                  >
-                    ✅ Ekip
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+// -- dynamic style helpers (pass 2) --
+const _st1112 = {
+    ...profileStyles.button('secondary'),
+    padding: '6px 12px',
+    fontSize: '12px',
+    marginTop: '8px',
+};
+const _st1113 = {
+    ...profileStyles.button('primary'),
+    padding: '6px 12px',
+    fontSize: '12px',
+    marginTop: '8px',
 };
 
+// -- extracted inline style constants --
+const _st1 = { marginBottom: '24px' };
+const _st2 = { color: '#fff', marginBottom: '12px' };
+const _st3 = { color: '#b5bac1', fontSize: '14px' };
+const _st4 = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' };
+const _st5 = {
+    padding: '16px',
+    background:
+        'linear-gradient(135deg, rgba(67, 181, 129, 0.2) 0%, rgba(67, 181, 129, 0.05) 100%)',
+    border: '2px solid #23a559',
+    borderRadius: '12px',
+    textAlign: 'center',
+};
+const _st6 = { fontSize: '48px', marginBottom: '8px' };
+const _st7 = { color: '#fff', margin: '0 0 4px 0', fontSize: '14px' };
+const _st8 = {
+    padding: '48px',
+    textAlign: 'center',
+    background: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: '12px',
+};
+const _st9 = { fontSize: '64px', marginBottom: '16px' };
+const _st10 = { color: '#fff', margin: '0 0 8px 0' };
+const _st11 = { color: '#b5bac1', margin: 0 };
+const _st12 = { color: '#b5bac1', margin: '4px 0', fontSize: '12px' };
+
+const InventoryTab = ({ equipItem, equippedItems: rawEq, inventory: rawInv, unequipItem }) => {
+    const equippedItems = rawEq || [];
+    const inventory = rawInv || [];
+    const styles = profileStyles;
+    const [error, setError] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    return (
+        <div style={styles.card}>
+            <h3 style={styles.sectionTitle}>🎒 Envanter & Ekipman</h3>
+
+            <div style={_st1}>
+                <h4 style={_st2}>⚡ Equipped Items</h4>
+                {equippedItems.length === 0 ? (
+                    <p style={_st3}>Henüz donanımlı eşya yok.</p>
+                ) : (
+                    <div style={_st4}>
+                        {equippedItems.map((item, idx) => (
+                            <div key={`item-${idx}`} style={_st5}>
+                                <div style={_st6}>{item.icon || '🎁'}</div>
+                                <h5 style={_st7}>{item.name}</h5>
+                                <button
+                                    style={_st1112}
+                                    aria-label="action-button"
+                                    onClick={() => unequipItem(item.id)}
+                                >
+                                    ❌ Remove
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            <div>
+                <h4 style={_st2}>📦 Tüm Ürünler</h4>
+                {inventory.length === 0 ? (
+                    <div style={_st8}>
+                        <div style={_st9}>🎒</div>
+                        <h4 style={_st10}>Envanter boş</h4>
+                        <p style={_st11}>Premium Mağaza'dan ürün satın alabilirsiniz</p>
+                    </div>
+                ) : (
+                    <div style={_st4}>
+                        {inventory.map((item, idx) => (
+                            <div
+                                key={`item-${idx}`}
+                                style={_s({
+                                    padding: '16px',
+                                    background: item.is_equipped
+                                        ? 'linear-gradient(135deg, rgba(67, 181, 129, 0.2) 0%, rgba(67, 181, 129, 0.05) 100%)'
+                                        : 'rgba(255, 255, 255, 0.05)',
+                                    border: item.is_equipped
+                                        ? '2px solid #23a559'
+                                        : '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '12px',
+                                    textAlign: 'center',
+                                })}
+                            >
+                                <div style={_st6}>{item.icon || '🎁'}</div>
+                                <h5 style={_st7}>{item.name}</h5>
+                                <p style={_st12}>{item.description}</p>
+                                {!item.is_equipped && (
+                                    <button
+                                        style={_st1113}
+                                        aria-label="action-button"
+                                        onClick={() => equipItem(item.id)}
+                                    >
+                                        ✅ Ekip
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+InventoryTab.propTypes = {
+    equipItem: PropTypes.object,
+    equippedItems: PropTypes.array,
+    inventory: PropTypes.object,
+    unequipItem: PropTypes.object,
+};
 export default InventoryTab;

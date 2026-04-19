@@ -1,5 +1,14 @@
-import { memo } from 'react';
+﻿import { memo, useState } from 'react';
+import PropTypes from 'prop-types';
 import { LazyVideo, FileAttachment } from './MediaComponents';
+
+
+// -- dynamic style helpers (pass 2) --
+
+const S = {
+  txt: {color: '#b5bac1', fontSize: '12px', marginTop: '4px', opacity: 0.7},
+  border: {width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0},
+};
 
 const getMediaUrl = (m, absoluteHostUrl) => {
   const url = m.image_url || m.image || m.file_url || m.file;
@@ -30,21 +39,22 @@ const getGridStyle = (count) => {
 };
 
 export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, absoluteHostUrl }) => {
+  const [error, setError] = useState(null);
   const imageItems = galleryGroup.filter(m => isImageItem(m) || isVideoItem(m));
   const fileItems = galleryGroup.filter(m => !isImageItem(m) && !isVideoItem(m));
   const count = imageItems.length;
 
   return (
-    <div>
+    <div aria-label="get media url">
       {imageItems.length > 0 && (
-        <div style={{ display: 'grid', gap: '4px', marginTop: '8px', borderRadius: '12px', overflow: 'hidden', ...getGridStyle(count) }}>
+        <div>
           {imageItems.map((item, idx) => {
             const url = getMediaUrl(item, absoluteHostUrl);
             if (!url) return null;
             if (isVideoItem(item)) {
               return (
                 <div key={item.id || idx} style={{ position: 'relative', backgroundColor: '#000', minHeight: count > 4 ? '120px' : '180px' }}>
-                  <LazyVideo src={url} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 0 }} />
+                  <LazyVideo src={url} style={S.border}/>
                 </div>
               );
             }
@@ -59,12 +69,12 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
                 onLoad={idx === 0 ? onContentLoad : undefined}
               />
             );
-          })}
+          })}>
         </div>
       )}
       {imageItems.length > 0 && (
-        <div style={{ color: '#b5bac1', fontSize: '12px', marginTop: '4px', opacity: 0.7 }}>
-          {'📎'} {count} medya
+        <div style={S.txt}>
+          📎 {count} media
         </div>
       )}
       {fileItems.map((item, idx) => (
@@ -75,4 +85,11 @@ export const GalleryGrid = memo(({ galleryGroup, onImageClick, onContentLoad, ab
 });
 
 GalleryGrid.displayName = 'GalleryGrid';
+GalleryGrid.propTypes = {
+    galleryGroup: PropTypes.object,
+    onImageClick: PropTypes.func,
+    onContentLoad: PropTypes.func,
+    absoluteHostUrl: PropTypes.string,
+};
+
 export default GalleryGrid;

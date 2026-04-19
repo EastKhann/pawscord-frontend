@@ -584,17 +584,6 @@
     font-size: 2rem;
     color: var(--color-info-cyan);
 }
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .empty-state {
     text-align: center;
     padding: 40px;

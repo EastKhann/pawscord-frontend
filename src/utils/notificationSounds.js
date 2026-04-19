@@ -1,7 +1,8 @@
 // frontend/src/utils/notificationSounds.js
 // 🔔 FEATURE 1: Notification Sound Manager
-// Farklı event'ler için farklı sesler çalar
+// Farklı event'ler for farklı sesler çalar
 import { CDN_BASE_URL } from './constants';
+import logger from '../utils/logger';
 
 const SOUND_URLS = {
     message: `${CDN_BASE_URL}/sounds/message.mp3`,
@@ -47,22 +48,35 @@ class NotificationSoundManager {
                 this.quietHours = parsed.quietHours || null;
                 this.perEvent = parsed.perEvent || {};
             }
-        } catch (e) { /* ignore */ }
+        } catch (e) {
+            /* ignore */
+        }
     }
 
     saveSettings() {
         try {
-            localStorage.setItem('pawscord_sound_settings', JSON.stringify({
-                enabled: this.enabled,
-                volume: this.volume,
-                quietHours: this.quietHours,
-                perEvent: this.perEvent || {},
-            }));
-        } catch (e) { /* ignore */ }
+            localStorage.setItem(
+                'pawscord_sound_settings',
+                JSON.stringify({
+                    enabled: this.enabled,
+                    volume: this.volume,
+                    quietHours: this.quietHours,
+                    perEvent: this.perEvent || {},
+                })
+            );
+        } catch (e) {
+            /* ignore */
+        }
     }
 
-    setEnabled(val) { this.enabled = val; this.saveSettings(); }
-    setVolume(val) { this.volume = Math.max(0, Math.min(1, val)); this.saveSettings(); }
+    setEnabled(val) {
+        this.enabled = val;
+        this.saveSettings();
+    }
+    setVolume(val) {
+        this.volume = Math.max(0, Math.min(1, val));
+        this.saveSettings();
+    }
     setQuietHours(start, end) {
         this.quietHours = start && end ? { start, end } : null;
         this.saveSettings();
@@ -106,14 +120,26 @@ class NotificationSoundManager {
 
                 if (config.ramp === 'up') {
                     osc.frequency.setValueAtTime(config.freq * 0.7, ctx.currentTime + delay);
-                    osc.frequency.linearRampToValueAtTime(config.freq, ctx.currentTime + delay + config.duration);
+                    osc.frequency.linearRampToValueAtTime(
+                        config.freq,
+                        ctx.currentTime + delay + config.duration
+                    );
                 } else if (config.ramp === 'down') {
                     osc.frequency.setValueAtTime(config.freq, ctx.currentTime + delay);
-                    osc.frequency.linearRampToValueAtTime(config.freq * 0.7, ctx.currentTime + delay + config.duration);
+                    osc.frequency.linearRampToValueAtTime(
+                        config.freq * 0.7,
+                        ctx.currentTime + delay + config.duration
+                    );
                 }
 
-                gain.gain.setValueAtTime((config.volume || 0.15) * this.volume, ctx.currentTime + delay);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + config.duration);
+                gain.gain.setValueAtTime(
+                    (config.volume || 0.15) * this.volume,
+                    ctx.currentTime + delay
+                );
+                gain.gain.exponentialRampToValueAtTime(
+                    0.001,
+                    ctx.currentTime + delay + config.duration
+                );
 
                 osc.connect(gain);
                 gain.connect(ctx.destination);
@@ -126,7 +152,7 @@ class NotificationSoundManager {
                 play(i * (config.duration + 0.06));
             }
         } catch (e) {
-            console.warn('Sound playback failed:', e);
+            logger.warn('Sound playback failed:', e);
         }
     }
 
@@ -153,7 +179,9 @@ class NotificationSoundManager {
                 audio.currentTime = 0; // Reset to start for re-play
                 await audio.play();
                 return;
-            } catch (e) { /* fallback to tone */ }
+            } catch (e) {
+                /* fallback to tone */
+            }
         }
 
         const tone = FALLBACK_TONES[eventType];
@@ -163,10 +191,10 @@ class NotificationSoundManager {
     // 🔧 FIX: Cleanup method to release AudioContext and cached Audio elements
     destroy() {
         if (this.audioContext) {
-            this.audioContext.close().catch(() => { });
+            this.audioContext.close().catch(() => {});
             this.audioContext = null;
         }
-        Object.keys(this.audioCache).forEach(key => {
+        Object.keys(this.audioCache).forEach((key) => {
             this.audioCache[key].src = '';
             delete this.audioCache[key];
         });

@@ -48,7 +48,7 @@ describe('api.get', () => {
                 method: 'GET',
                 headers: expect.objectContaining({ 'Content-Type': 'application/json' }),
                 credentials: 'include',
-            }),
+            })
         );
     });
 
@@ -113,7 +113,11 @@ describe('api.get', () => {
     });
 
     it('uses default error message when error field is missing', async () => {
-        mockAuthFetch.mockResolvedValueOnce({ ok: false, status: 500, json: () => Promise.resolve({}) });
+        mockAuthFetch.mockResolvedValueOnce({
+            ok: false,
+            status: 500,
+            json: () => Promise.resolve({}),
+        });
 
         await expect(api.get('/api/broken/')).rejects.toThrow('Request failed');
     });

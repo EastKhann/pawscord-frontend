@@ -10,7 +10,7 @@
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10000,
-        padding: '20px'
+        padding: '20px',
     },
     panel: {
         backgroundColor: '#111214',
@@ -19,28 +19,28 @@
         maxWidth: '1200px',
         maxHeight: '90vh',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     header: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     headerLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     headerActions: {
         display: 'flex',
-        gap: '12px'
+        gap: '12px',
     },
     title: {
         margin: 0,
         fontSize: '20px',
-        color: '#ffffff'
+        color: '#ffffff',
     },
     createButton: {
         display: 'flex',
@@ -52,20 +52,20 @@
         padding: '8px 16px',
         borderRadius: '4px',
         cursor: 'pointer',
-        fontSize: '14px'
+        fontSize: '14px',
     },
     closeButton: {
         background: 'none',
         border: 'none',
         color: '#b5bac1',
         cursor: 'pointer',
-        padding: '8px'
+        padding: '8px',
     },
     filters: {
         display: 'flex',
         gap: '8px',
         padding: '16px 20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     filterButton: {
         padding: '8px 16px',
@@ -73,22 +73,22 @@
         border: 'none',
         color: '#ffffff',
         cursor: 'pointer',
-        fontSize: '13px'
+        fontSize: '13px',
     },
     content: {
         flex: 1,
         overflowY: 'auto',
-        padding: '20px'
+        padding: '20px',
     },
     empty: {
         textAlign: 'center',
         padding: '60px 20px',
-        color: '#b5bac1'
+        color: '#b5bac1',
     },
     tournamentGrid: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: '16px'
+        gap: '16px',
     },
     tournamentCard: {
         backgroundColor: '#17191c',
@@ -96,18 +96,18 @@
         padding: '16px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px'
+        gap: '12px',
     },
     cardHeader: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'start'
+        alignItems: 'start',
     },
     tournamentName: {
         color: '#ffffff',
         fontSize: '16px',
         fontWeight: 'bold',
-        flex: 1
+        flex: 1,
     },
     statusBadge: {
         padding: '4px 8px',
@@ -115,24 +115,24 @@
         fontSize: '11px',
         color: '#ffffff',
         textTransform: 'uppercase',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     cardBody: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'
+        gap: '8px',
     },
     cardInfo: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
         color: '#b5bac1',
-        fontSize: '13px'
+        fontSize: '13px',
     },
     cardFooter: {
         display: 'flex',
         gap: '8px',
-        marginTop: 'auto'
+        marginTop: 'auto',
     },
     viewButton: {
         flex: 1,
@@ -142,7 +142,7 @@
         padding: '8px',
         borderRadius: '4px',
         cursor: 'pointer',
-        fontSize: '13px'
+        fontSize: '13px',
     },
     joinButton: {
         flex: 1,
@@ -153,7 +153,7 @@
         borderRadius: '4px',
         cursor: 'pointer',
         fontSize: '13px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     leaveButton: {
         flex: 1,
@@ -163,7 +163,7 @@
         padding: '8px',
         borderRadius: '4px',
         cursor: 'pointer',
-        fontSize: '13px'
+        fontSize: '13px',
     },
     modalOverlay: {
         position: 'fixed',
@@ -175,7 +175,7 @@
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 10001
+        zIndex: 10001,
     },
     modal: {
         backgroundColor: '#17191c',
@@ -184,16 +184,16 @@
         width: '90%',
         maxWidth: '500px',
         maxHeight: '80vh',
-        overflowY: 'auto'
+        overflowY: 'auto',
     },
     modalTitle: {
         color: '#ffffff',
-        marginBottom: '16px'
+        marginBottom: '16px',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px'
+        gap: '12px',
     },
     input: {
         width: '100%',
@@ -203,13 +203,13 @@
         padding: '10px',
         borderRadius: '4px',
         fontSize: '14px',
-        outline: 'none'
+        outline: 'none',
     },
     modalButtons: {
         display: 'flex',
         gap: '8px',
         justifyContent: 'flex-end',
-        marginTop: '16px'
+        marginTop: '16px',
     },
     cancelButton: {
         backgroundColor: 'transparent',
@@ -217,7 +217,7 @@
         border: 'none',
         padding: '8px 16px',
         borderRadius: '4px',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     submitButton: {
         backgroundColor: '#5865f2',
@@ -226,40 +226,40 @@
         padding: '8px 16px',
         borderRadius: '4px',
         cursor: 'pointer',
-        fontWeight: '500'
+        fontWeight: '500',
     },
     modalHeader: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '16px'
+        marginBottom: '16px',
     },
     modalClose: {
         background: 'none',
         border: 'none',
         color: '#b5bac1',
         cursor: 'pointer',
-        padding: '4px'
+        padding: '4px',
     },
     modalContent: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px'
+        gap: '16px',
     },
     detailSection: {
         backgroundColor: '#111214',
         padding: '16px',
-        borderRadius: '8px'
+        borderRadius: '8px',
     },
     bracketInfo: {
         textAlign: 'center',
         padding: '20px',
-        color: '#b5bac1'
+        color: '#b5bac1',
     },
     participantList: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-        gap: '8px'
+        gap: '8px',
     },
     participant: {
         backgroundColor: '#17191c',
@@ -268,12 +268,12 @@
         color: '#dbdee1',
         fontSize: '13px',
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     seed: {
         color: '#f0b232',
-        fontWeight: 'bold'
-    }
+        fontWeight: 'bold',
+    },
 };
 
 export default styles;

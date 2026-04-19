@@ -2,7 +2,10 @@
 export const styles = {
     overlay: {
         position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundColor: 'rgba(0,0,0,0.82)',
         display: 'flex',
         alignItems: 'center',
@@ -99,10 +102,10 @@ export const styles = {
         color: '#c9cfff',
         fontWeight: '800',
         letterSpacing: '4px',
-        fontFamily: "'Fira Code', 'Cascadia Code', monospace"
+        fontFamily: "'Fira Code', 'Cascadia Code', monospace",
     },
     section: {
-        marginTop: '18px'
+        marginTop: '18px',
     },
     sectionTitle: {
         color: '#72767d',
@@ -123,12 +126,12 @@ export const styles = {
         padding: '10px 14px',
         background: 'rgba(255,255,255,0.04)',
         borderRadius: '8px',
-        borderLeft: '3px solid #5865f2'
+        borderLeft: '3px solid #5865f2',
     },
     linksContainer: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '6px'
+        gap: '6px',
     },
     linkButton: {
         display: 'flex',
@@ -145,12 +148,12 @@ export const styles = {
         width: 'auto',
         cursor: 'pointer',
         textAlign: 'left',
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
     },
     linkText: {
         marginLeft: '10px',
         fontWeight: '500',
-        color: '#c9cdd2'
+        color: '#c9cdd2',
     },
     tabsContainer: {
         display: 'flex',
@@ -187,7 +190,7 @@ export const styles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
-        marginTop: '12px'
+        marginTop: '12px',
     },
     presenceEntry: {
         display: 'flex',
@@ -197,36 +200,36 @@ export const styles = {
         backgroundColor: 'rgba(255,255,255,0.04)',
         borderRadius: '8px',
         border: '1px solid rgba(255,255,255,0.06)',
-        transition: 'background-color 0.15s ease'
+        transition: 'background-color 0.15s ease',
     },
     presenceStatus: {
         width: '10px',
         height: '10px',
         borderRadius: '50%',
         flexShrink: 0,
-        boxShadow: '0 0 6px currentColor'
+        boxShadow: '0 0 6px currentColor',
     },
     presenceDetails: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        flex: 1
+        flex: 1,
     },
     presenceStatusText: {
         color: '#dbdee1',
         fontWeight: '500',
-        fontSize: '0.9em'
+        fontSize: '0.9em',
     },
     presenceTime: {
         color: '#72767d',
         fontSize: '0.8em',
-        fontVariantNumeric: 'tabular-nums'
+        fontVariantNumeric: 'tafindar-nums',
     },
     noDataText: {
         color: '#72767d',
         textAlign: 'center',
         padding: '28px 20px',
         fontStyle: 'italic',
-        fontSize: '0.9em'
-    }
+        fontSize: '0.9em',
+    },
 };

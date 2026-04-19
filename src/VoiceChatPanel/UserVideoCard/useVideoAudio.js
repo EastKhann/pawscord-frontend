@@ -2,12 +2,13 @@
 // 🎤 Custom hook for video/audio stream management with WebAudio GainNode amplification
 
 import { useRef, useEffect } from 'react';
+import logger from '../../utils/logger';
 
 /**
  * useVideoAudio Hook
  * Manages video and audio stream binding with volume control.
  * Supports >100% volume via WebAudio API GainNode amplification.
- * 
+ *
  * @param {MediaStream} stream - The media stream to bind
  * @param {Object} user - User object with isLocal, volume, username
  * @returns {{ videoRef: React.RefObject, audioRef: React.RefObject }}
@@ -43,20 +44,22 @@ const useVideoAudio = (stream, user) => {
                         }
                         audio._gainNode.gain.value = Math.max(0, targetVolume);
                     } catch (e) {
-                        console.warn('[Volume] GainNode volume set failed:', e);
+                        logger.warn('[Volume] GainNode volume set failed:', e);
                     }
                 } else if (volumePercent > 100) {
                     // >100% — create Web Audio API GainNode chain for amplification
                     audio.volume = 1.0;
                     try {
-                        audio._audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        audio._audioContext = new (
+                            window.AudioContext || window.webkitAudioContext
+                        )();
                         audio._sourceNode = audio._audioContext.createMediaElementSource(audio);
                         audio._gainNode = audio._audioContext.createGain();
                         audio._sourceNode.connect(audio._gainNode);
                         audio._gainNode.connect(audio._audioContext.destination);
                         audio._gainNode.gain.value = targetVolume;
                     } catch (e) {
-                        console.warn('[Volume] GainNode amplification failed:', e);
+                        logger.warn('[Volume] GainNode amplification failed:', e);
                     }
                 } else {
                     // Normal range (0-100%): no GainNode yet, use native volume

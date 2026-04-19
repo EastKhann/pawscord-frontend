@@ -1,43 +1,47 @@
 // VoiceContext Constants Tests
 import { describe, it, expect } from 'vitest';
-import { DEFAULT_ICE_SERVERS, RTC_CONFIGURATION, setRtcIceServers } from '../../VoiceContext/constants';
+import {
+    DEFAULT_ICE_SERVERS,
+    RTC_CONFIGURATION,
+    setRtcIceServers,
+} from '../../VoiceContext/constants';
 
 describe('VoiceContext Constants', () => {
     describe('DEFAULT_ICE_SERVERS', () => {
         it('should have STUN servers', () => {
-            const stunServers = DEFAULT_ICE_SERVERS.filter(s =>
-                typeof s.urls === 'string' && s.urls.startsWith('stun:')
+            const stunServers = DEFAULT_ICE_SERVERS.filter(
+                (s) => typeof s.urls === 'string' && s.urls.startsWith('stun:')
             );
             expect(stunServers.length).toBeGreaterThanOrEqual(5);
         });
 
         it('should have fallback TURN servers', () => {
-            const turnServers = DEFAULT_ICE_SERVERS.filter(s =>
-                typeof s.urls === 'string' && s.urls.startsWith('turn:')
+            const turnServers = DEFAULT_ICE_SERVERS.filter(
+                (s) => typeof s.urls === 'string' && s.urls.startsWith('turn:')
             );
             expect(turnServers.length).toBeGreaterThanOrEqual(1);
         });
 
         it('TURN servers should have credentials', () => {
-            const turnServers = DEFAULT_ICE_SERVERS.filter(s =>
-                typeof s.urls === 'string' && s.urls.startsWith('turn:')
+            const turnServers = DEFAULT_ICE_SERVERS.filter(
+                (s) => typeof s.urls === 'string' && s.urls.startsWith('turn:')
             );
-            turnServers.forEach(server => {
+            turnServers.forEach((server) => {
                 expect(server.username).toBeDefined();
                 expect(server.credential).toBeDefined();
             });
         });
 
         it('should include Google STUN servers', () => {
-            const googleStun = DEFAULT_ICE_SERVERS.filter(s =>
-                typeof s.urls === 'string' && s.urls.includes('google.com')
+            const googleStun = DEFAULT_ICE_SERVERS.filter(
+                (s) => typeof s.urls === 'string' && s.urls.includes('google.com')
             );
             expect(googleStun.length).toBeGreaterThanOrEqual(4);
         });
 
         it('should include Cloudflare STUN', () => {
-            const cfStun = DEFAULT_ICE_SERVERS.find(s =>
-                typeof s.urls === 'string' && s.urls.includes('cloudflare')
+            const cfStun = DEFAULT_ICE_SERVERS.find(
+                (s) => typeof s.urls === 'string' && s.urls.includes('cloudflare')
             );
             expect(cfStun).toBeDefined();
         });

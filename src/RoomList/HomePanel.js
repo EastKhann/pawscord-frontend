@@ -1,82 +1,194 @@
 ﻿// frontend/src/RoomList/HomePanel.js
 import React, { useCallback, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { FaUserFriends, FaRobot, FaChartLine, FaCompass } from '../utils/iconOptimization';
-import LazyImage from '../components/LazyImage';
-import { styles } from '../SidebarStyles';
+import LazyImage from '../components/shared/LazyImage';
+import { styles } from '../styles/SidebarStyles';
+
+const homeStyles = {
+    channelsContainer: {
+        padding: '0 8px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2px',
+    },
+    channelItem: {
+        ...styles.roomItem,
+        marginBottom: 0,
+    },
+    channelIcon: {
+        ...styles.hashtagIcon,
+        fontSize: '14px',
+    },
+    discoverSection: {
+        padding: '0 8px 8px',
+    },
+    discoverButton: {
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        padding: '10px 12px',
+        borderRadius: '10px',
+        border: '1px solid rgba(88, 101, 242, 0.3)',
+        background: 'rgba(88, 101, 242, 0.15)',
+        color: '#d7dbff',
+        cursor: 'pointer',
+        fontSize: '13px',
+        fontWeight: '600',
+    },
+    friendsButton: {
+        ...styles.addDmButton,
+        flexShrink: 0,
+    },
+    pendingBadge: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: '18px',
+        height: '18px',
+        padding: '0 5px',
+        borderRadius: '999px',
+        background: 'linear-gradient(135deg, #f23f42, #e03437)',
+        color: '#fff',
+        fontSize: '10px',
+        fontWeight: '700',
+        boxShadow: '0 1px 6px rgba(242, 63, 66, 0.4)',
+    },
+    emptyState: {
+        margin: '4px 0 0',
+        padding: '12px',
+        borderRadius: '10px',
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.05)',
+        color: '#949ba4',
+        fontSize: '12px',
+        lineHeight: '1.5',
+    },
+    dmAvatarWrap: {
+        position: 'relative',
+        marginRight: '10px',
+        flexShrink: 0,
+    },
+    dmMeta: {
+        ...styles.userInfo,
+        gap: '2px',
+    },
+    dmName: (hasUnread) => ({
+        ...styles.usernameText,
+        fontWeight: hasUnread ? '700' : '600',
+    }),
+    activityText: {
+        ...styles.statusText,
+        display: 'block',
+    },
+};
 
 const HomePanel = ({
-    conversations, currentConversationId, currentUsername,
-    onRoomSelect, onDMSelect, onPrefetchChat, onFriendsClick, pendingFriendRequests,
-    safeUnreadCounts, onlineUsers, allUsers,
-    getAvatarUrl, setDmContextMenu, onDiscoverClick, servers
+    conversations,
+    currentConversationId,
+    currentUsername,
+    onRoomSelect,
+    onDMSelect,
+    onPrefetchChat,
+    onFriendsClick,
+    pendingFriendRequests,
+    safeUnreadCounts,
+    onlineUsers,
+    allUsers,
+    getAvatarUrl,
+    setDmContextMenu,
+    onDiscoverClick,
+    servers,
 }) => {
     const hasNoServers = !servers || servers.length === 0;
-    // 🚀 Prefetch top DM conversations when HomePanel mounts
+    const { t } = useTranslation();
+    // ?? Prefetch top DM conversations when HomePanel mounts
     useEffect(() => {
         if (!onPrefetchChat || !conversations || conversations.length === 0) return;
         // Prefetch first 4 DM conversations, staggered
         conversations.slice(0, 4).forEach((conv, i) => {
             setTimeout(() => onPrefetchChat('dm', conv.id), i * 150);
         });
-    }, [conversations?.length]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [conversations?.length]); // INTENTIONAL: prefetch only depends on conversation count change
 
     return (
         <div style={styles.topSection}>
-            <div style={styles.headerTitle}>Ana Sayfa</div>
+            <div style={styles.headerTitle}>{t('nav.home', 'Ana Sayfa')}</div>
 
-            {/* Sunucuya Katıl / Keşfet butonu — sadece hiç sunucu yoksa göster */}
+            {/* Join Server button — only shown when no servers exist */}
             {onDiscoverClick && hasNoServers && (
-                <button
-                    onClick={onDiscoverClick}
-                    style={{
-                        display: 'flex', alignItems: 'center', gap: '8px',
-                        width: 'calc(100% - 24px)', margin: '8px 12px 4px',
-                        padding: '10px 14px', borderRadius: '6px', border: 'none',
-                        background: 'linear-gradient(135deg, #23a559 0%, #1a7a40 100%)',
-                        color: 'white', fontSize: '13px', fontWeight: '600',
-                        cursor: 'pointer', textAlign: 'left',
-                    }}
-                    aria-label="Sunucuya Katıl"
-                >
-                    <FaCompass size={16} />
-                    Sunucuya Katıl
-                </button>
+                <div style={homeStyles.discoverSection}>
+                    <button
+                        onClick={onDiscoverClick}
+                        aria-label={t('server.joinServer', 'Sunucu Keşfet')}
+                        style={homeStyles.discoverButton}
+                    >
+                        <FaCompass size={16} />
+                        {t('server.joinServer', 'Sunucu Keşfet')}
+                    </button>
+                </div>
             )}
 
-            <div style={styles.channelsContainer}>
-                <div style={{ ...styles.roomItem, marginBottom: 5 }} role="button" tabIndex={0} onClick={() => onRoomSelect('ai')} onKeyDown={e => e.key === 'Enter' && onRoomSelect('ai')} aria-label="PawPaw AI kanalı">
-                    <div style={styles.channelContent}><FaRobot style={{ marginRight: 8 }} /> <span>PawPaw AI</span></div>
+            <div style={homeStyles.channelsContainer}>
+                <div
+                    style={homeStyles.channelItem}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onRoomSelect('ai')}
+                    onKeyDown={(e) => e.key === 'Enter' && onRoomSelect('ai')}
+                    aria-label={t('home.pawpawChannel', 'PawPaw AI channel')}
+                >
+                    <div style={styles.channelContent}>
+                        <FaRobot style={homeStyles.channelIcon} />
+                        <span style={styles.channelNameText}>PawPaw AI</span>
+                    </div>
                 </div>
-                <div style={{ ...styles.roomItem, marginBottom: 15 }} role="button" tabIndex={0} onClick={() => onRoomSelect('sinyal-bot')} onKeyDown={e => e.key === 'Enter' && onRoomSelect('sinyal-bot')} aria-label="Sinyal Bot kanalı">
-                    <div style={styles.channelContent}><FaChartLine style={{ marginRight: 8 }} /> <span>Sinyal Bot</span></div>
+                <div
+                    style={homeStyles.channelItem}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => onRoomSelect('sinyal-bot')}
+                    onKeyDown={(e) => e.key === 'Enter' && onRoomSelect('sinyal-bot')}
+                    aria-label={t('home.signalBotChannel', 'Signal Bot channel')}
+                >
+                    <div style={styles.channelContent}>
+                        <FaChartLine style={homeStyles.channelIcon} />
+                        <span style={styles.channelNameText}>
+                            {t('home.signalBot', 'Sinyal Bot')}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div style={styles.dmListContainer}>
                 <div style={styles.groupHeader}>
-                    <span>ÖZEL MESAJLAR</span>
-                    <button onClick={onFriendsClick} style={{ ...styles.addDmButton, position: 'relative' }}>
-                        <FaUserFriends /> Ekle
+                    <span>{t('home.directMessages', 'DOĞRUDAN MESAJLAR')}</span>
+                    <button
+                        aria-label={t('home.addFriend', 'Arkadaş ekle')}
+                        onClick={onFriendsClick}
+                        style={homeStyles.friendsButton}
+                    >
+                        <FaUserFriends /> {t('common.add', 'Ekle')}
                         {pendingFriendRequests > 0 && (
-                            <div style={{
-                                position: 'absolute', top: '-6px', right: '-6px',
-                                backgroundColor: '#f23f42', color: 'white', borderRadius: '50%',
-                                width: '18px', height: '18px', display: 'flex',
-                                alignItems: 'center', justifyContent: 'center',
-                                fontSize: '11px', fontWeight: 'bold',
-                                border: '2px solid #0e1222', zIndex: 1
-                            }}>
+                            <span style={homeStyles.pendingBadge}>
                                 {pendingFriendRequests > 9 ? '9+' : pendingFriendRequests}
-                            </div>
+                            </span>
                         )}
                     </button>
                 </div>
                 {!conversations || conversations.length === 0 ? (
-                    <div style={{ padding: '20px', textAlign: 'center', color: '#949ba4', fontSize: '0.9em' }}>
-                        Henüz özel mesaj yok.<br />Arkadaş ekle butonuna tıklayarak başla!
+                    <div style={homeStyles.emptyState}>
+                        {t('home.noDMs', 'Henüz doğrudan mesaj yok.')}
+                        <br />
+                        {t('home.noDMsHint', 'Başlamak için Arkadaş Ekle butonuna tıkla!')}
                     </div>
                 ) : (
-                    conversations.map(conv => {
-                        const otherUser = conv.participants.find(p => p.username !== currentUsername);
+                    conversations.map((conv) => {
+                        const otherUser = conv.participants.find(
+                            (p) => p.username !== currentUsername
+                        );
                         if (!otherUser) return null;
                         const unread = safeUnreadCounts[`dm-${conv.id}`] || 0;
                         return (
@@ -104,20 +216,31 @@ const HomePanel = ({
 
 // DM Item sub-component
 const DMItem = ({
-    conv, otherUser, unread, isActive, currentUsername,
-    onDMSelect, onPrefetchChat, setDmContextMenu, getAvatarUrl, onlineUsers, allUsers
+    conv,
+    otherUser,
+    unread,
+    isActive,
+    onDMSelect,
+    onPrefetchChat,
+    setDmContextMenu,
+    getAvatarUrl,
+    onlineUsers,
+    allUsers,
 }) => {
     const isOnline = onlineUsers.includes(otherUser.username);
     const statusColor = isOnline ? '#23a559' : '#80848e';
     const hoverTimerRef = useRef(null);
 
-    // 🚀 Hover prefetch: 200ms debounce
+    // ?? Hover prefetch: 200ms debounce
     const handlePointerEnter = useCallback(() => {
         if (!onPrefetchChat) return;
         hoverTimerRef.current = setTimeout(() => onPrefetchChat('dm', conv.id), 200);
     }, [onPrefetchChat, conv.id]);
     const handlePointerLeave = useCallback(() => {
-        if (hoverTimerRef.current) { clearTimeout(hoverTimerRef.current); hoverTimerRef.current = null; }
+        if (hoverTimerRef.current) {
+            clearTimeout(hoverTimerRef.current);
+            hoverTimerRef.current = null;
+        }
     }, []);
 
     return (
@@ -125,20 +248,35 @@ const DMItem = ({
             style={{
                 ...styles.dmItem,
                 backgroundColor: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
-                position: 'relative'
+                position: 'relative',
             }}
             onClick={() => onDMSelect(conv.id, otherUser.username)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && onDMSelect(conv.id, otherUser.username)}
             onPointerEnter={handlePointerEnter}
             onPointerLeave={handlePointerLeave}
             onContextMenu={(e) => {
                 e.preventDefault();
                 setDmContextMenu({ x: e.clientX, y: e.clientY, conversation: conv });
             }}
-            onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); e.currentTarget.style.backgroundColor = 'rgba(88, 101, 242, 0.3)'; }}
-            onDragLeave={(e) => { e.preventDefault(); e.currentTarget.style.backgroundColor = isActive ? 'rgba(255,255,255,0.1)' : 'transparent'; }}
+            onDragOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                e.currentTarget.style.backgroundColor = 'rgba(88, 101, 242, 0.3)';
+            }}
+            onDragLeave={(e) => {
+                e.preventDefault();
+                e.currentTarget.style.backgroundColor = isActive
+                    ? 'rgba(255,255,255,0.1)'
+                    : 'transparent';
+            }}
             onDrop={(e) => {
-                e.preventDefault(); e.stopPropagation();
-                e.currentTarget.style.backgroundColor = isActive ? 'rgba(255,255,255,0.1)' : 'transparent';
+                e.preventDefault();
+                e.stopPropagation();
+                e.currentTarget.style.backgroundColor = isActive
+                    ? 'rgba(255,255,255,0.1)'
+                    : 'transparent';
                 const files = e.dataTransfer.files;
                 if (files && files.length > 0) {
                     onDMSelect(conv.id, otherUser.username);
@@ -155,15 +293,28 @@ const DMItem = ({
                 }
             }}
         >
-            <div style={{ position: 'relative', width: 32, height: 32 }}>
-                <LazyImage src={getAvatarUrl(otherUser.avatar, otherUser.username)} style={{ ...styles.avatarSmall, width: 32, height: 32 }} alt="" />
-                <div style={{
-                    position: 'absolute', bottom: -2, right: -2, width: 12, height: 12,
-                    borderRadius: '50%', backgroundColor: statusColor, border: '2px solid #0e1222'
-                }} />
+            <div style={homeStyles.dmAvatarWrap}>
+                <LazyImage
+                    src={getAvatarUrl(otherUser.avatar, otherUser.username)}
+                    alt={otherUser.username}
+                    size="small"
+                    style={styles.avatarSmall}
+                />
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: -2,
+                        right: -2,
+                        width: 12,
+                        height: 12,
+                        borderRadius: '50%',
+                        backgroundColor: statusColor,
+                        border: '2px solid #0e1222',
+                    }}
+                />
             </div>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginLeft: 8, overflow: 'hidden' }}>
-                <span style={{ fontWeight: unread ? 'bold' : 'normal', color: '#dbdee1' }}>{otherUser.username}</span>
+            <div style={homeStyles.dmMeta}>
+                <span style={homeStyles.dmName(unread > 0)}>{otherUser.username}</span>
                 <ActivityDisplay otherUser={otherUser} allUsers={allUsers} />
             </div>
             {unread > 0 && <span style={styles.unreadBadge}>{unread}</span>}
@@ -173,25 +324,62 @@ const DMItem = ({
 
 // Activity display sub-component
 const ActivityDisplay = ({ otherUser, allUsers }) => {
-    const liveUser = allUsers?.find(u => u.username === otherUser.username) || otherUser;
+    const { t } = useTranslation();
+    const liveUser = allUsers?.find((u) => u.username === otherUser.username) || otherUser;
     const activity = liveUser.current_activity;
     if (!activity) return null;
 
-    const els = [];
     if (activity.steam) {
-        els.push(<span key="steam" style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎮 {activity.steam.name}</span>);
+        return (
+            <span style={homeStyles.activityText}>
+                Steam:{' '}
+                {activity.steam.name || activity.steam.game || t('activity.gaming', 'Gaming')}
+            </span>
+        );
     }
     if (activity.spotify) {
-        els.push(<span key="spotify" style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎵 {activity.spotify.name}</span>);
+        return (
+            <span style={homeStyles.activityText}>
+                Spotify:{' '}
+                {activity.spotify.name ||
+                    activity.spotify.track ||
+                    t('activity.listening', 'Listening')}
+            </span>
+        );
     }
-    if (els.length === 0) {
-        if (activity.type === 'listening') {
-            els.push(<span key="leg-sp" style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎵 {activity.name}</span>);
-        } else if (activity.type === 'playing') {
-            els.push(<span key="leg-st" style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>🎮 {activity.name}</span>);
-        }
+    if (activity.type === 'listening') {
+        return (
+            <span style={homeStyles.activityText}>
+                {t('activity.listening', 'Listening')}: {activity.name}
+            </span>
+        );
     }
-    return <>{els}</>;
+    if (activity.type === 'playing') {
+        return (
+            <span style={homeStyles.activityText}>
+                {t('activity.playing', 'Playing')}: {activity.name}
+            </span>
+        );
+    }
+
+    return null;
 };
 
+HomePanel.propTypes = {
+    conversations: PropTypes.array,
+    currentConversationId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    currentUsername: PropTypes.string,
+    onRoomSelect: PropTypes.func,
+    onDMSelect: PropTypes.func,
+    onPrefetchChat: PropTypes.func,
+    onFriendsClick: PropTypes.func,
+    pendingFriendRequests: PropTypes.number,
+    safeUnreadCounts: PropTypes.object,
+    onlineUsers: PropTypes.array,
+    allUsers: PropTypes.array,
+    getAvatarUrl: PropTypes.func,
+    setDmContextMenu: PropTypes.func,
+    onDiscoverClick: PropTypes.func,
+    servers: PropTypes.array,
+};
 export default React.memo(HomePanel);

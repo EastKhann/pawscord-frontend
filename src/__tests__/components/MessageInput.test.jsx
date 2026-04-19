@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/__tests__/components/MessageInput.test.jsx
 // 🧪 MessageInput Component Tests
 
@@ -42,17 +43,21 @@ const MockMessageInput = ({
     return (
         <div data-testid="message-input-container" role="form" aria-label="Mesaj gönderme alanı">
             {replyingTo && (
-                <div data-testid="reply-preview" role="status" aria-label="Yanıtlanan mesaj">
+                <div data-testid="reply-preview" role="status" aria-label="Replynan message">
                     <strong>@{replyingTo.author}</strong>
                     <span>{replyingTo.content?.substring(0, 50)}...</span>
-                    <button data-testid="cancel-reply" onClick={onCancelReply}>✕</button>
+                    <button data-testid="cancel-reply" onClick={onCancelReply}>
+                        ✕
+                    </button>
                 </div>
             )}
 
             {editingMessage && (
-                <div data-testid="edit-preview" role="status" aria-label="Mesaj düzenleniyor">
-                    <span>📝 Mesaj düzenleniyor</span>
-                    <button data-testid="cancel-edit" onClick={onCancelEdit}>✕</button>
+                <div data-testid="edit-preview" role="status" aria-label="Mesaj editniyor">
+                    <span>📝 Mesaj editniyor</span>
+                    <button data-testid="cancel-edit" onClick={onCancelEdit}>
+                        ✕
+                    </button>
                 </div>
             )}
 
@@ -72,7 +77,7 @@ const MockMessageInput = ({
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
                     disabled={disabled}
-                    aria-label={editingMessage ? 'Mesaj düzenle' : placeholder}
+                    aria-label={editingMessage ? 'Mesaj edit' : placeholder}
                     rows={1}
                 />
 
@@ -84,7 +89,6 @@ const MockMessageInput = ({
                 >
                     Gönder
                 </button>
-
                 <label data-testid="file-upload-label">
                     <input
                         data-testid="file-input"
@@ -100,8 +104,24 @@ const MockMessageInput = ({
 
             {showEmojiPicker && (
                 <div data-testid="emoji-picker-popover">
-                    <button data-testid="emoji-option-smile" onClick={() => { setMessage(m => m + '😊'); setShowEmojiPicker(false); }}>😊</button>
-                    <button data-testid="emoji-option-heart" onClick={() => { setMessage(m => m + '❤️'); setShowEmojiPicker(false); }}>❤️</button>
+                    <button
+                        data-testid="emoji-option-smile"
+                        onClick={() => {
+                            setMessage((m) => m + '😊');
+                            setShowEmojiPicker(false);
+                        }}
+                    >
+                        😊
+                    </button>
+                    <button
+                        data-testid="emoji-option-heart"
+                        onClick={() => {
+                            setMessage((m) => m + '❤️');
+                            setShowEmojiPicker(false);
+                        }}
+                    >
+                        ❤️
+                    </button>
                 </div>
             )}
         </div>

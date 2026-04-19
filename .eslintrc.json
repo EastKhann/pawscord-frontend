@@ -8,6 +8,7 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
+        "plugin:jsx-a11y/recommended",
         "plugin:prettier/recommended"
     ],
     "parserOptions": {
@@ -19,7 +20,8 @@
     },
     "plugins": [
         "react",
-        "react-hooks"
+        "react-hooks",
+        "jsx-a11y"
     ],
     "settings": {
         "react": {
@@ -59,8 +61,90 @@
         "react-hooks/rules-of-hooks": "error",
         "no-empty": "warn",
         "no-constant-condition": "warn",
-        "prettier/prettier": "warn"
+        "prettier/prettier": "warn",
+        "react/prop-types": [
+            "warn",
+            {
+                "skipUndeclared": true
+            }
+        ],
+        "react/forbid-dom-props": [
+            "warn",
+            {
+                "forbid": [
+                    {
+                        "propName": "style",
+                        "message": "Use CSS modules or className instead of inline styles. See CONTRIBUTING.md#styling-guide"
+                    }
+                ]
+            }
+        ],
+        "react/jsx-no-constructed-context-values": "warn",
+        "react/no-array-index-key": "warn",
+        "jsx-a11y/label-has-associated-control": [
+            "warn",
+            {
+                "labelAttributes": [
+                    "label"
+                ],
+                "controlComponents": [
+                    "input",
+                    "select",
+                    "textarea"
+                ],
+                "assert": "either",
+                "depth": 3
+            }
+        ],
+        "jsx-a11y/media-has-caption": "warn",
+        "jsx-a11y/no-autofocus": "warn",
+        "react-hooks/preserve-manual-memoization": "off",
+        "react-hooks/immutability": "off",
+        "react-hooks/purity": "off",
+        "react-hooks/refs": "off",
+        "react-hooks/set-state-in-effect": "off",
+        "react-hooks/static-components": "off",
+        "react-hooks/use-memo": "off",
+        "react-hooks/component-hook-factories": "off",
+        "react-hooks/config": "off",
+        "react-hooks/error-boundaries": "off",
+        "react-hooks/fbt": "off",
+        "react-hooks/fire": "off",
+        "react-hooks/gating": "off",
+        "react-hooks/globals": "off",
+        "react-hooks/incompatible-library": "off",
+        "react-hooks/unsupported-syntax": "off"
     },
+    "overrides": [
+        {
+            "files": [
+                "**/*.test.js",
+                "**/*.test.jsx",
+                "**/*.spec.js",
+                "**/*.spec.jsx",
+                "**/__tests__/**/*.js",
+                "**/__tests__/**/*.jsx",
+                "**/tests/**/*.js",
+                "**/tests/**/*.jsx"
+            ],
+            "env": {
+                "jest": true,
+                "node": true
+            },
+            "globals": {
+                "vi": "readonly",
+                "vitest": "readonly",
+                "expect": "readonly",
+                "test": "readonly",
+                "it": "readonly",
+                "describe": "readonly",
+                "beforeAll": "readonly",
+                "afterAll": "readonly",
+                "beforeEach": "readonly",
+                "afterEach": "readonly"
+            }
+        }
+    ],
     "ignorePatterns": [
         "dist/",
         "build/",

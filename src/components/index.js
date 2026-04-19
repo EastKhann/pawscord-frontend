@@ -7,51 +7,59 @@
 // imported directly from their own directory for better code-splitting.
 
 // ─── Error Boundaries ───
-export { default as ErrorBoundary, EnhancedErrorBoundary, useError, withErrorBoundary } from './ErrorBoundary';
-export { default as FeatureErrorBoundary } from './FeatureErrorBoundary';
-export { default as RouteErrorBoundary } from './RouteErrorBoundary';
-export { default as SuspenseWithBoundary, SectionErrorBoundary } from './SuspenseWithBoundary';
+export { default as ErrorBoundary } from './shared/ErrorBoundary';
+export {
+    default as EnhancedErrorBoundary,
+    useError,
+    withErrorBoundary,
+} from './ErrorBoundary/EnhancedErrorBoundary';
+export { default as FeatureErrorBoundary } from './shared/FeatureErrorBoundary';
+export { default as RouteErrorBoundary } from './shared/RouteErrorBoundary';
+export {
+    default as SuspenseWithBoundary,
+    SectionErrorBoundary,
+} from './shared/SuspenseWithBoundary';
 
 // ─── Loading & Feedback ───
-export { default as LoadingSpinner } from './LoadingSpinner';
-export { default as LoadingSkeleton } from './LoadingSkeleton';
-export { default as ConnectionStatusBar } from './ConnectionStatusBar';
-export { default as MaintenanceBanner } from './MaintenanceBanner';
+export { default as LoadingSpinner } from './shared/LoadingSpinner';
+export { default as LoadingSkeleton } from './shared/LoadingSkeleton';
+export { default as ConnectionStatusBar } from './profile/ConnectionStatusBar';
+export { default as MaintenanceBanner } from './shared/MaintenanceBanner';
 
 // ─── Modals & Dialogs ───
-export { default as ConfirmModal } from './ConfirmModal';
-export { default as AppModals } from './AppModals';
-export { default as PremiumModal } from './PremiumModal';
-export { default as DownloadModal } from './DownloadModal';
-export { default as KeyboardShortcutsModal } from './KeyboardShortcutsModal';
+export { default as ConfirmModal } from './shared/ConfirmModal';
+export { default as AppModals } from './shared/AppModals';
+export { default as PremiumModal } from './premium/PremiumModal';
+export { default as DownloadModal } from './shared/DownloadModal';
+export { default as KeyboardShortcutsModal } from './shared/KeyboardShortcutsModal';
 
 // ─── Chat UI ───
-export { default as MessageDateDivider } from './MessageDateDivider';
-export { default as NewMessagesDivider } from './NewMessagesDivider';
-export { default as ScrollToBottomButton } from './ScrollToBottomButton';
-export { default as MessageSkeleton } from './MessageSkeleton';
-export { default as MessageReactions } from './MessageReactions';
-export { default as MessageContextMenu } from './MessageContextMenu';
-export { BookmarkButton, StarButton, ReadLaterButton } from './BookmarkButton';
+export { default as MessageDateDivider } from './chat/MessageDateDivider';
+export { default as NewMessagesDivider } from './chat/NewMessagesDivider';
+export { default as ScrollToBottomButton } from './chat/ScrollToBottomButton';
+export { default as MessageSkeleton } from './chat/MessageSkeleton';
+export { default as MessageReactions } from './chat/MessageReactions';
+export { default as MessageContextMenu } from './chat/MessageContextMenu';
+export { BookmarkButton, StarButton, ReadLaterButton } from './chat/BookmarkButton';
 
 // ─── User UI ───
-export { default as UserFooter } from './UserFooter';
-export { default as UserContextMenu } from './UserContextMenu';
-export { default as StatusPicker } from './StatusPicker';
-export { default as NotificationDropdown } from './NotificationDropdown';
+export { default as UserFooter } from './profile/UserFooter';
+export { default as UserContextMenu } from './profile/UserContextMenu';
+export { default as StatusPicker } from './profile/StatusPicker';
+export { default as NotificationDropdown } from './notifications/NotificationDropdown';
 
 // ─── Media ───
-export { default as LazyImage } from './LazyImage';
-export { default as CodeBlock } from './CodeBlock';
-export { default as ImageLightbox } from './ImageLightbox';
-export { default as VoiceMessage } from './VoiceMessage';
+export { default as LazyImage } from './shared/LazyImage';
+export { default as CodeBlock } from './chat/CodeBlock';
+export { default as ImageLightbox } from './shared/ImageLightbox';
+export { default as VoiceMessage } from './chat/VoiceMessage';
 
 // ─── Navigation ───
-export { default as MobileNav } from './MobileNav';
-export { default as ProtectedRoute } from './ProtectedRoute';
-export { default as PageWrapper } from './PageWrapper';
+export { default as MobileNav } from './shared/MobileNav';
+export { default as ProtectedRoute } from './shared/ProtectedRoute';
+export { default as PageWrapper } from './shared/PageWrapper';
 
 // ─── Layout Helpers ───
-export { default as Spoiler } from './Spoiler';
-export { default as ReadReceipt } from './ReadReceipt';
-export { default as StickyMessageBanner } from './StickyMessageBanner';
+export { default as Spoiler } from './chat/Spoiler';
+export { default as ReadReceipt } from './chat/ReadReceipt';
+export { default as StickyMessageBanner } from './shared/StickyMessageBanner';

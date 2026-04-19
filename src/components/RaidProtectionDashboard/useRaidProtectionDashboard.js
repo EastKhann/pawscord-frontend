@@ -1,27 +1,49 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable no-undef */
 import { useState, useEffect, useRef } from 'react';
+import { getToken } from '../../utils/tokenStorage';
 import toast from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import logger from '../../utils/logger';
 
 export const getActivityIcon = (type) => {
     switch (type) {
-        case 'join': return '👋';
-        case 'leave': return '🚪';
-        case 'kick': return '👢';
-        case 'ban': return '🔨';
-        case 'suspicious': return '⚠️';
-        case 'raid_detected': return '🚨';
-        case 'verified': return '✅';
-        default: return '📋';
+        case 'join':
+            return '👋';
+        case 'leave':
+            return '🚪';
+        case 'kick':
+            return '👢';
+        case 'ban':
+            return '🔨';
+        case 'suspicious':
+            return '⚠️';
+        case 'raid_detected':
+            return '🚨';
+        case 'verified':
+            return '✅';
+        default:
+            return '📋';
     }
 };
 
 export const getActivityColor = (type) => {
     switch (type) {
-        case 'join': return '#23a559';
-        case 'leave': return '#f0b132';
-        case 'kick': case 'ban': return '#da373c';
-        case 'suspicious': case 'raid_detected': return '#f0b132';
-        case 'verified': return '#5865f2';
-        default: return '#949ba4';
+        case 'join':
+            return '#23a559';
+        case 'leave':
+            return '#f0b132';
+        case 'kick':
+        case 'ban':
+            return '#da373c';
+        case 'suspicious':
+        case 'raid_detected':
+            return '#f0b132';
+        case 'verified':
+            return '#5865f2';
+        default:
+            return '#949ba4';
     }
 };
 
@@ -32,7 +54,10 @@ export const formatTime = (timestamp) => {
 
 const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
     const [view, setView] = useState('overview');
-    const [protectionStatus, setProtectionStatus] = useState({ enabled: false, lockdown_active: false });
+    const [protectionStatus, setProtectionStatus] = useState({
+        enabled: false,
+        lockdown_active: false,
+    });
     const [recentActivity, setRecentActivity] = useState([]);
     const [pendingVerifications, setPendingVerifications] = useState([]);
     const [raidLogs, setRaidLogs] = useState([]);
@@ -44,23 +69,26 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
         new_account_threshold: 7,
         auto_ban_suspicious: false,
         captcha_on_join: false,
-        dm_on_join_warning: true
+        dm_on_join_warning: true,
     });
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({
         blocked_today: 0,
         verified_today: 0,
         raids_detected: 0,
-        suspicious_accounts: 0
+        suspicious_accounts: 0,
     });
     const activityRef = useRef(null);
 
     const fetchProtectionStatus = async () => {
         try {
-            const token = localStorage.getItem('access_token');
-            const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/status/?server_id=${serverId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const token = getToken();
+            const response = await fetch(
+                `${apiBaseUrl}/moderation/raid-protection/status/?server_id=${serverId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
             if (response.ok) {
                 const data = await response.json();
                 setProtectionStatus(data.status || data);
@@ -68,52 +96,61 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
                 if (data.stats) setStats(data.stats);
             }
         } catch (error) {
-            console.error('Fetch protection status error:', error);
+            logger.error('Fetch protection status error:', error);
         }
     };
 
     const fetchRecentActivity = async () => {
         try {
-            const token = localStorage.getItem('access_token');
-            const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/activity/?server_id=${serverId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const token = getToken();
+            const response = await fetch(
+                `${apiBaseUrl}/moderation/raid-protection/activity/?server_id=${serverId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
             if (response.ok) {
                 const data = await response.json();
                 setRecentActivity(data.activities || []);
             }
         } catch (error) {
-            console.error('Fetch activity error:', error);
+            logger.error('Fetch activity error:', error);
         }
     };
 
     const fetchPendingVerifications = async () => {
         try {
-            const token = localStorage.getItem('access_token');
-            const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/pending/?server_id=${serverId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const token = getToken();
+            const response = await fetch(
+                `${apiBaseUrl}/moderation/raid-protection/pending/?server_id=${serverId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
             if (response.ok) {
                 const data = await response.json();
                 setPendingVerifications(data.pending || []);
             }
         } catch (error) {
-            console.error('Fetch pending error:', error);
+            logger.error('Fetch pending error:', error);
         }
     };
 
     const fetchRaidLogs = async () => {
         try {
-            const token = localStorage.getItem('access_token');
-            const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/logs/?server_id=${serverId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const token = getToken();
+            const response = await fetch(
+                `${apiBaseUrl}/moderation/raid-protection/logs/?server_id=${serverId}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
             if (response.ok) {
                 const data = await response.json();
                 setRaidLogs(data.logs || []);
             }
         } catch (error) {
-            console.error('Fetch logs error:', error);
+            logger.error('Fetch logs error:', error);
         }
     };
 
@@ -124,7 +161,7 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
                 fetchProtectionStatus(),
                 fetchRecentActivity(),
                 fetchPendingVerifications(),
-                fetchRaidLogs()
+                fetchRaidLogs(),
             ]);
             setLoading(false);
         };
@@ -136,107 +173,120 @@ const useRaidProtectionDashboard = (serverId, apiBaseUrl) => {
 
     const handleToggleProtection = async () => {
         try {
-            const token = localStorage.getItem('access_token');
+            const token = getToken();
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/toggle/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ server_id: serverId, enabled: !protectionStatus.enabled })
+                body: JSON.stringify({ server_id: serverId, enabled: !protectionStatus.enabled }),
             });
 
             if (response.ok) {
                 setProtectionStatus({ ...protectionStatus, enabled: !protectionStatus.enabled });
-                toast.success(protectionStatus.enabled ? '⚠️ Koruma kapatıldı' : '🛡️ Koruma aktif!');
+                toast.success(protectionStatus.enabled ? '⚠️ Koruma muted' : '🛡️ Koruma aktif!');
             }
         } catch (error) {
-            console.error('Toggle protection error:', error);
+            logger.error('Toggle protection error:', error);
         }
     };
 
     const handleLockdown = async () => {
         try {
-            const token = localStorage.getItem('access_token');
+            const token = getToken();
             const endpoint = protectionStatus.lockdown_active ? 'unlock' : 'lockdown';
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/${endpoint}/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ server_id: serverId })
+                body: JSON.stringify({ server_id: serverId }),
             });
 
             if (response.ok) {
-                setProtectionStatus({ ...protectionStatus, lockdown_active: !protectionStatus.lockdown_active });
-                toast.success(protectionStatus.lockdown_active ? '🔓 Sunucu kilidi açıldı' : '🔒 Sunucu kilitlendi!');
+                setProtectionStatus({
+                    ...protectionStatus,
+                    lockdown_active: !protectionStatus.lockdown_active,
+                });
+                toast.success(
+                    protectionStatus.lockdown_active
+                        ? t('ui.server_kilidi_acildi')
+                        : '🔒 Server kilitlendi!'
+                );
             }
         } catch (error) {
-            console.error('Lockdown error:', error);
+            logger.error('Lockdown error:', error);
         }
     };
 
     const handleVerifyUser = async (userId, action) => {
         try {
-            const token = localStorage.getItem('access_token');
+            const token = getToken();
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/verify/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     server_id: serverId,
                     user_id: userId,
-                    action: action
-                })
+                    action: action,
+                }),
             });
 
             if (response.ok) {
-                setPendingVerifications(pendingVerifications.filter(u => u.id !== userId));
-                toast.success(action === 'approve' ? '✅ Kullanıcı onaylandı' : '❌ Kullanıcı reddedildi');
+                setPendingVerifications(pendingVerifications.filter((u) => u.id !== userId));
+                toast.success(action === 'approve' ? '✅ User approved' : '❌ User rejected');
             }
         } catch (error) {
-            console.error('Verify user error:', error);
+            logger.error('Verify user error:', error);
         }
     };
 
     const handleSaveSettings = async () => {
         try {
-            const token = localStorage.getItem('access_token');
+            const token = getToken();
             const response = await fetch(`${apiBaseUrl}/moderation/raid-protection/settings/`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ server_id: serverId, ...settings })
+                body: JSON.stringify({ server_id: serverId, ...settings }),
             });
 
             if (response.ok) {
-                toast.success('✅ Ayarlar kaydedildi!');
+                toast.success(t('raidProtection.settingsSaved'));
             }
         } catch (error) {
-            console.error('Save settings error:', error);
+            logger.error('Save settings error:', error);
         }
     };
 
     return {
-        view, setView,
+        view,
+        setView,
         protectionStatus,
         recentActivity,
         pendingVerifications,
         raidLogs,
-        settings, setSettings,
+        settings,
+        setSettings,
         loading,
         stats,
         activityRef,
         handleToggleProtection,
         handleLockdown,
         handleVerifyUser,
-        handleSaveSettings
+        handleSaveSettings,
     };
 };
 
 export default useRaidProtectionDashboard;
+
+useRaidProtectionDashboard.propTypes = {
+    type: PropTypes.string,
+};

@@ -1,8 +1,20 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../utils/toast';
 import confirmDialog from '../utils/confirmDialog';
+import logger from '../utils/logger';
 
-const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, selectedServerId, setSelectedServerId, onWelcomeClick, onMoveServer }) => {
+const useServerActions = ({
+    apiUrl,
+    fetchWithAuth,
+    servers,
+    currentUsername,
+    selectedServerId,
+    setSelectedServerId,
+    onWelcomeClick,
+    onMoveServer,
+}) => {
+    const { t } = useTranslation();
     const [publicServers, setPublicServers] = useState([]);
     const [newServerName, setNewServerName] = useState('');
     const [newCategoryName, setNewCategoryName] = useState('');
@@ -18,46 +30,46 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
 
     // 🆕 SUNUCUDAN AYRIL
     const handleLeaveServer = async (serverId) => {
-        // Owner kontrolü - eğer owner ise sunucuyu silmesi gerektiğini söyle
-        const server = servers.find(s => s.id === serverId);
+        // Owner check - if owner, tell them to delete the server
+        const server = servers.find((s) => s.id === serverId);
         if (server && server.owner_username === currentUsername) {
-            toast.warning('Sunucu sahibi sunucudan ayrılamaz!\n\nSunucuyu silmek için:\n1. Sunucuya sağ tıklayın\n2. "Sunucuyu Sil" seçeneğini tıklayın\n\nVeya önce sahipliği başka birine devredin.', 7000);
+            toast.warning(t('server.ownerCannotLeave'), 7000);
             return;
         }
 
-        // Styled modal ile onayla
+        // Styled modal with confirm
         setLeaveServerModal({ server, isOpen: true });
     };
 
-    // Gerçek leave işlemi - modal onayından sonra çağrılır
+    // Actual leave operation - called after modal confirmation
     const executeLeaveServer = async (serverId) => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/leave/`, {
-                method: 'POST'
+                method: 'POST',
             });
 
             if (res.ok) {
                 const data = await res.json();
 
-                // Ana sayfaya dön
+                // Return to main page
                 setSelectedServerId('home');
                 onWelcomeClick();
 
-                // WebSocket sunucu listesini otomatik güncelleyecek
-                toast.success('✅ Sunucudan başarıyla ayrıldınız!');
+                // WebSocket sunucu listsini otomatik daycelleyecek
+                toast.success(t('server.leftSuccess'));
             } else {
                 const error = await res.json();
-                const errorMessage = error.error || 'Sunucudan ayrılırken hata oluştu';
-                console.error('❌ Sunucudan ayrılma hatası:', errorMessage);
-                toast.error(`❌ Hata: ${errorMessage}`);
+                const errorMessage = error.error || 'Error leaving server';
+                logger.error('❌ Error leaving server:', errorMessage);
+                toast.error(errorMessage);
             }
         } catch (error) {
-            console.error('❌ Sunucudan ayrılma hatası:', error);
-            toast.error('❌ Sunucudan ayrılırken bir hata oluştu. Lütfen tekrar deneyin.');
+            logger.error('❌ Error leaving server:', error);
+            toast.error(t('server.leaveFailed'));
         }
     };
 
-    // 🆕 SUNUCU İKONU DEĞİŞTİRME
+    // 🆕 SERVER ICON CHANGE
     const handleChangeServerIcon = async (serverId) => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -67,9 +79,9 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
             const file = e.target.files[0];
             if (!file) return;
 
-            // Dosya boyutu kontrolü (max 5MB)
+            // File size check (max 5MB)
             if (file.size > 5 * 1024 * 1024) {
-                toast.warning('Dosya boyutu çok büyük! Maksimum 5MB olmalıdır.');
+                toast.warning(t('server.fileTooLarge'));
                 return;
             }
 
@@ -79,36 +91,36 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
             try {
                 const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/icon/`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
                 });
 
                 if (res.ok) {
                     const data = await res.json();
-                    // WebSocket güncelleme gönderecek, sayfa otomatik yenilenecek
+                    // WebSocket update will be sent, page will refresh automatically
                 } else {
                     const error = await res.json();
-                    toast.error(`İkon güncellenirken hata: ${error.error || 'Bilinmeyen hata'}`);
+                    toast.error(error.error || t('common.unknownError'));
                 }
             } catch (error) {
-                console.error('❌ İkon yükleme hatası:', error);
-                toast.error('İkon yüklenirken bir hata oluştu.');
+                logger.error('❌ Icon upload error:', error);
+                toast.error(t('server.iconUploadFailed'));
             }
         };
 
         input.click();
     };
 
-    // 🆕 SUNUCU GİZLİLİK AYARI DEĞİŞTİRME
+    // 🆕 SERVER PRIVACY SETTING CHANGE
     const handleChangeServerPrivacy = async (serverId) => {
-        const server = servers.find(s => s.id === serverId);
+        const server = servers.find((s) => s.id === serverId);
         if (!server) return;
 
         const newPrivacy = !server.is_public;
         const message = newPrivacy
-            ? 'Sunucuyu herkese açık yapmak istediğinize emin misiniz? Herkes bu sunucuyu bulabilir ve katılabilir.'
-            : 'Sunucuyu özel yapmak istediğinize emin misiniz? Sadece davet edilen kişiler katılabilir.';
+            ? 'Are you sure you want to make this server public? Anyone can discover and join it.'
+            : 'Are you sure you want to make this server private? Only invited users can join.';
 
-        if (!await confirmDialog(message)) {
+        if (!(await confirmDialog(message))) {
             return;
         }
 
@@ -116,23 +128,23 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
             const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/privacy/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ is_public: newPrivacy })
+                body: JSON.stringify({ is_public: newPrivacy }),
             });
 
             if (res.ok) {
                 const data = await res.json();
-                // WebSocket güncelleme gönderecek
+                // WebSocket update will be sent
             } else {
                 const error = await res.json();
-                toast.error(`Gizlilik ayarı değiştirilirken hata: ${error.error || 'Bilinmeyen hata'}`);
+                toast.error(error.error || t('common.unknownError'));
             }
         } catch (error) {
-            console.error('❌ Gizlilik ayarı hatası:', error);
-            toast.error('Gizlilik ayarı değiştirilirken bir hata oluştu.');
+            logger.error('❌ Privacy setting error:', error);
+            toast.error(t('server.privacyFailed'));
         }
     };
 
-    // 🆕 DAVET LİNKİ KOPYALA
+    // 🆕 COPY INVITE LINK
     const handleCopyServerInvite = async (serverId) => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/invites/create/`, {
@@ -141,16 +153,18 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
                 body: JSON.stringify({
                     server_id: serverId,
                     max_uses: 0,
-                    expires_hours: 0
-                })
+                    expires_hours: 0,
+                }),
             });
 
             if (res.ok) {
                 const data = await res.json();
 
                 // 🔥 FIX: Production URL belirleme
-                const productionUrl = import.meta.env.VITE_PRODUCTION_URL || 'https://www.pawscord.com';
-                const isProduction = import.meta.env.MODE === 'production' ||
+                const productionUrl =
+                    import.meta.env.VITE_PRODUCTION_URL || 'https://www.pawscord.com';
+                const isProduction =
+                    import.meta.env.MODE === 'production' ||
                     window.location.hostname === 'pawscord.com' ||
                     window.location.hostname === 'www.pawscord.com';
 
@@ -159,14 +173,14 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
                 const inviteUrl = `${baseUrl}/#/invite/${data.code}`;
 
                 await navigator.clipboard.writeText(inviteUrl);
-                toast.success(`Davet linki kopyalandı!\n\n${inviteUrl}`, 4000);
+                toast.success(t('server.inviteUrlCopied', { url: inviteUrl }), 4000);
             } else {
                 const error = await res.json();
-                console.error('❌ Davet oluşturma hatası:', error.error || 'Davet oluşturulamadı');
-                toast.error(`Hata: ${error.error || 'Davet oluşturulamadı'}`);
+                logger.error('❌ Invite creation error:', error.error || 'Could not create invite');
+                toast.error(error.error || t('invite.createFailed'));
             }
         } catch (error) {
-            console.error('❌ Davet kopyalama hatası:', error);
+            logger.error('❌ Copy invite error:', error);
         }
     };
 
@@ -181,16 +195,16 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
         try {
             const res = await fetchWithAuth(`${apiUrl}/servers/create/`, {
                 method: 'POST',
-                body: JSON.stringify({ name: serverName, is_public: !!serverPublic })
+                body: JSON.stringify({ name: serverName, is_public: !!serverPublic }),
             });
             if (res.ok) {
-                toast.success(`✅ "${serverName}" sunucusu oluşturuldu!`);
+                toast.success(t('server.serverCreated', { name: serverName }));
             } else {
                 const data = await res.json().catch(() => ({}));
-                toast.error(data.error || 'Sunucu oluşturulamadı.');
+                toast.error(data.error || 'Failed to create server.');
             }
         } catch (e) {
-            toast.error('Bağlantı hatası. Sunucu oluşturulamadı.');
+            toast.error(t('server.createConnectionError'));
         }
         setNewServerName('');
         setIsNewServerPublic(false);
@@ -199,7 +213,10 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
     const handleCreateCategory = async (e, serverId) => {
         e.preventDefault();
         if (!newCategoryName.trim()) return;
-        await fetchWithAuth(`${apiUrl}/categories/create/`, { method: 'POST', body: JSON.stringify({ server_id: serverId, name: newCategoryName }) });
+        await fetchWithAuth(`${apiUrl}/categories/create/`, {
+            method: 'POST',
+            body: JSON.stringify({ server_id: serverId, name: newCategoryName }),
+        });
         setNewCategoryName('');
         setActiveServerIdForCategory(null);
     };
@@ -207,7 +224,10 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
     const handleCreateRoom = async (e, categoryId) => {
         e.preventDefault();
         if (!newRoomName.trim()) return;
-        await fetchWithAuth(`${apiUrl}/categories/${categoryId}/create_room/`, { method: 'POST', body: JSON.stringify({ name: newRoomName, channel_type: newRoomType }) });
+        await fetchWithAuth(`${apiUrl}/categories/${categoryId}/create_room/`, {
+            method: 'POST',
+            body: JSON.stringify({ name: newRoomName, channel_type: newRoomType }),
+        });
         setNewRoomName('');
         setActiveCategoryIdForRoom(null);
     };
@@ -215,39 +235,46 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
     const handleRenameCategory = async (e, catId) => {
         e.preventDefault();
         await fetchWithAuth(`${apiUrl}/categories/${catId}/rename/`, {
-            method: 'POST', body: JSON.stringify({ new_name: editName })
+            method: 'POST',
+            body: JSON.stringify({ new_name: editName }),
         });
         setEditingItemId(null);
     };
 
     const handleDeleteCategory = async (e, catId) => {
         e.stopPropagation();
-        if (!await confirmDialog("Kategoriyi silmek istediğine emin misin? İçindeki odalar da silinecek!")) return;
+        if (
+            !(await confirmDialog(
+                'Are you sure you want to delete this category? All rooms inside will also be deleted!'
+            ))
+        )
+            return;
         await fetchWithAuth(`${apiUrl}/categories/${catId}/delete/`, { method: 'POST' });
     };
 
     const handleRenameRoom = async (e, slug) => {
         e.preventDefault();
         await fetchWithAuth(`${apiUrl}/rooms/${slug}/rename/`, {
-            method: 'POST', body: JSON.stringify({ new_name: editName })
+            method: 'POST',
+            body: JSON.stringify({ new_name: editName }),
         });
         setEditingItemId(null);
     };
 
     const handleDeleteRoom = async (e, slug) => {
         e.stopPropagation();
-        if (!await confirmDialog("Kanalı silmek istediğine emin misin?")) return;
+        if (!(await confirmDialog('Are you sure you want to delete this channel?'))) return;
         await fetchWithAuth(`${apiUrl}/rooms/${slug}/delete/`, { method: 'POST' });
     };
 
-    // 🆕 SUNUCU SIRASI DEĞİŞTİRME
+    // 🆕 SERVER ORDER CHANGE
     const handleMoveServer = (serverId, direction) => {
         if (onMoveServer) {
             onMoveServer(serverId, direction);
         }
     };
 
-    // 🆕 KULLANICIYI BAŞKA KANALA TAŞI
+    // 🆕 MOVE USER TO ANOTHER CHANNEL
     const handleMoveUserToChannel = async (username, fromChannel, toChannel) => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/voice/move_user/`, {
@@ -256,18 +283,18 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
                 body: JSON.stringify({
                     username: username,
                     from_channel: fromChannel,
-                    to_channel: toChannel
-                })
+                    to_channel: toChannel,
+                }),
             });
 
             if (res.ok) {
                 const data = await res.json();
             } else {
                 const error = await res.json();
-                console.error(`❌ ${error.error || 'Kullanıcı taşınamadı'}`);
+                logger.error(`❌ ${error.error || 'Could not move user'}`);
             }
         } catch (error) {
-            console.error('❌ Kullanıcı taşıma hatası:', error);
+            logger.error('❌ User move error:', error);
         }
     };
 
@@ -279,41 +306,43 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     username: username,
-                    channel: channel
-                })
+                    channel: channel,
+                }),
             });
 
             if (res.ok) {
                 const data = await res.json();
             } else {
                 const error = await res.json();
-                console.error(`❌ ${error.error || 'Kullanıcı atılamadı'}`);
+                logger.error(`❌ ${error.error || 'Could not kick user'}`);
             }
         } catch (error) {
-            console.error('❌ Kullanıcı atma hatası:', error);
+            logger.error('❌ User kick error:', error);
         }
     };
 
-    // --- KEŞFETME İŞLEMLERİ ---
+    // --- DISCOVERY OPERATIONS ---
     const handleOpenDiscovery = async () => {
         try {
             const res = await fetchWithAuth(`${apiUrl}/servers/public/`);
             const data = await res.json();
-            // Backend paginated response ({ results: [...] }) veya düz dizi her ikisini destekle
-            setPublicServers(Array.isArray(data) ? data : (data.results || []));
+            // Backend paginated response ({ results: [...] }) or plain array, both supported
+            setPublicServers(Array.isArray(data) ? data : data.results || []);
         } catch (e) {
-            console.error("Sunucular çekilemedi", e);
+            logger.error('Could not load servers', e);
         }
     };
 
     const handleJoinServer = async (serverId) => {
         try {
-            const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/join/`, { method: 'POST' });
+            const res = await fetchWithAuth(`${apiUrl}/servers/${serverId}/join/`, {
+                method: 'POST',
+            });
             if (res.ok) {
-                toast.success('✅ Sunucuya başarıyla katıldın!');
+                toast.success(t('server.joinedSuccess'));
             }
         } catch (e) {
-            console.error("❌ Sunucuya katılma hatası:", e);
+            logger.error('❌ Error joining server:', e);
         }
     };
 
@@ -322,16 +351,16 @@ const useServerActions = ({ apiUrl, fetchWithAuth, servers, currentUsername, sel
         try {
             const res = await fetchWithAuth(`${apiUrl}/invites/join/`, {
                 method: 'POST',
-                body: JSON.stringify({ code })
+                body: JSON.stringify({ code }),
             });
             const data = await res.json();
             if (res.ok) {
-                toast.success(`✅ "${data.server_name}" sunucusuna katıldın!`);
+                toast.success(t('server.joinedNamed', { name: data.server_name }));
             } else {
-                console.error("❌ Sunucuya katılma hatası:", data.error || "Sunucuya katılınamadı.");
+                logger.error('❌ Error joining server:', data.error || 'Failed to join server.');
             }
         } catch (error) {
-            console.error("❌ Davet kodu hatası:", error);
+            logger.error('❌ Invite code error:', error);
         }
     };
 

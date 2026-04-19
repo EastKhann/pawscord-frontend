@@ -7,15 +7,15 @@ import React, { useState, useCallback } from 'react';
 
 // --- Mock EmojiPicker (replicates core emoji selection behavior) ---
 const MOCK_CATEGORIES = {
-    'Son Kullanılan ⏱️': ['😀', '😂', '❤️'],
-    'Yüzler': ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂'],
-    'Kalpler': ['❤️', '🧡', '💛', '💚', '💙', '💜'],
-    'Hayvanlar': ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊'],
-    'Yiyecek': ['🍏', '🍎', '🍐', '🍊', '🍋', '🍌'],
+    'Recently Used ⏱️': ['😀', '😂', '❤️'],
+    Faces: ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂'],
+    Kalpler: ['❤️', '🧡', '💛', '💚', '💙', '💜'],
+    Hayvanlar: ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊'],
+    Yiyecek: ['🍏', '🍎', '🍐', '🍊', '🍋', '🍌'],
 };
 
 const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
-    const [activeCategory, setActiveCategory] = useState('Yüzler');
+    const [activeCategory, setActiveCategory] = useState('Faces');
     const [searchTerm, setSearchTerm] = useState('');
     const [favorites, setFavorites] = useState([]);
     const [contextMenu, setContextMenu] = useState(null);
@@ -23,12 +23,15 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
     const allEmojis = Object.values(MOCK_CATEGORIES).flat();
 
     const filteredEmojis = searchTerm
-        ? allEmojis.filter(emoji => emoji.includes(searchTerm))
+        ? allEmojis.filter((emoji) => emoji.includes(searchTerm))
         : MOCK_CATEGORIES[activeCategory] || [];
 
-    const handleSelect = useCallback((emoji) => {
-        onSelect(emoji);
-    }, [onSelect]);
+    const handleSelect = useCallback(
+        (emoji) => {
+            onSelect(emoji);
+        },
+        [onSelect]
+    );
 
     const handleContextMenu = useCallback((e, emoji) => {
         e.preventDefault();
@@ -36,9 +39,8 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
     }, []);
 
     const handleToggleFav = useCallback((emoji) => {
-        setFavorites(prev => prev.includes(emoji)
-            ? prev.filter(e => e !== emoji)
-            : [...prev, emoji]
+        setFavorites((prev) =>
+            prev.includes(emoji) ? prev.filter((e) => e !== emoji) : [...prev, emoji]
         );
         setContextMenu(null);
     }, []);
@@ -50,17 +52,17 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
                 <input
                     data-testid="emoji-search-input"
                     type="text"
-                    placeholder="Emoji ara..."
+                    placeholder="Emoji search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    aria-label="Emoji ara"
+                    aria-label="Emoji search"
                 />
             </div>
 
             {/* Category Tabs */}
             {!searchTerm && (
                 <div data-testid="category-tabs">
-                    {Object.keys(MOCK_CATEGORIES).map(category => (
+                    {Object.keys(MOCK_CATEGORIES).map((category) => (
                         <button
                             key={category}
                             data-testid={`category-${category}`}
@@ -90,7 +92,7 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
                 ))}
                 {filteredEmojis.length === 0 && (
                     <div data-testid="empty-state">
-                        {searchTerm ? '🔍 Sonuç bulunamadı' : '⏱️ Henüz emoji kullanılmadı'}
+                        {searchTerm ? '🔍 No results found' : '⏱️ Not yet emoji kullanılmadı'}
                     </div>
                 )}
             </div>
@@ -98,8 +100,13 @@ const MockEmojiPicker = ({ onSelect = vi.fn() }) => {
             {/* Context Menu */}
             {contextMenu && (
                 <div data-testid="emoji-context-menu">
-                    <button data-testid="toggle-fav-button" onClick={() => handleToggleFav(contextMenu.emoji)}>
-                        {favorites.includes(contextMenu.emoji) ? '💔 Favorilerden Çıkar' : '⭐ Favorilere Ekle'}
+                    <button
+                        data-testid="toggle-fav-button"
+                        onClick={() => handleToggleFav(contextMenu.emoji)}
+                    >
+                        {favorites.includes(contextMenu.emoji)
+                            ? '💔 Favorilerden Çıkar'
+                            : '⭐ Favorilere Ekle'}
                     </button>
                 </div>
             )}
@@ -122,7 +129,7 @@ describe('EmojiPicker Component', () => {
 
         it('should render the search input', () => {
             render(<MockEmojiPicker onSelect={mockOnSelect} />);
-            expect(screen.getByPlaceholderText('Emoji ara...')).toBeInTheDocument();
+            expect(screen.getByPlaceholderText('Emoji search...')).toBeInTheDocument();
         });
 
         it('should render category tabs', () => {
@@ -135,9 +142,9 @@ describe('EmojiPicker Component', () => {
             expect(screen.getByTestId('emoji-grid')).toBeInTheDocument();
         });
 
-        it('should default to Yüzler category', () => {
+        it('should default to Faces category', () => {
             render(<MockEmojiPicker onSelect={mockOnSelect} />);
-            // Yüzler has 9 emojis
+            // Faces has 9 emojis
             const grid = screen.getByTestId('emoji-grid');
             expect(grid.querySelectorAll('[role="gridcell"]').length).toBe(9);
         });
@@ -171,7 +178,7 @@ describe('EmojiPicker Component', () => {
 
         it('should call onSelect with the correct emoji', () => {
             render(<MockEmojiPicker onSelect={mockOnSelect} />);
-            // Click on the first emoji in Yüzler: 😀
+            // Click on the first emoji in Faces: 😀
             fireEvent.click(screen.getByTestId('emoji-😀-0'));
             expect(mockOnSelect).toHaveBeenCalledWith('😀');
         });
@@ -191,14 +198,18 @@ describe('EmojiPicker Component', () => {
 
         it('should hide category tabs during search', () => {
             render(<MockEmojiPicker onSelect={mockOnSelect} />);
-            fireEvent.change(screen.getByTestId('emoji-search-input'), { target: { value: 'test' } });
+            fireEvent.change(screen.getByTestId('emoji-search-input'), {
+                target: { value: 'test' },
+            });
             expect(screen.queryByTestId('category-tabs')).not.toBeInTheDocument();
         });
 
         it('should show empty state for no results', () => {
             render(<MockEmojiPicker onSelect={mockOnSelect} />);
-            fireEvent.change(screen.getByTestId('emoji-search-input'), { target: { value: 'zzzzxxx' } });
-            expect(screen.getByTestId('empty-state')).toHaveTextContent('🔍 Sonuç bulunamadı');
+            fireEvent.change(screen.getByTestId('emoji-search-input'), {
+                target: { value: 'zzzzxxx' },
+            });
+            expect(screen.getByTestId('empty-state')).toHaveTextContent('🔍 No results found');
         });
     });
 

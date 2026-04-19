@@ -18,10 +18,9 @@ describe('useDebounce', () => {
     });
 
     it('should debounce value changes', () => {
-        const { result, rerender } = renderHook(
-            ({ value, delay }) => useDebounce(value, delay),
-            { initialProps: { value: 'initial', delay: 500 } }
-        );
+        const { result, rerender } = renderHook(({ value, delay }) => useDebounce(value, delay), {
+            initialProps: { value: 'initial', delay: 500 },
+        });
 
         expect(result.current).toBe('initial');
 
@@ -39,10 +38,9 @@ describe('useDebounce', () => {
     });
 
     it('should cancel previous timeout on rapid changes', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value, 300),
-            { initialProps: { value: 'a' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value, 300), {
+            initialProps: { value: 'a' },
+        });
 
         rerender({ value: 'b' });
         act(() => vi.advanceTimersByTime(100));
@@ -58,10 +56,9 @@ describe('useDebounce', () => {
     });
 
     it('should use custom delay', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value, 100),
-            { initialProps: { value: 'fast' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value, 100), {
+            initialProps: { value: 'fast' },
+        });
 
         rerender({ value: 'faster' });
 
@@ -71,10 +68,9 @@ describe('useDebounce', () => {
 
     // ── 5. Should use default 500ms delay ──
     it('should default to 500ms delay when no delay is provided', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value),
-            { initialProps: { value: 'start' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value), {
+            initialProps: { value: 'start' },
+        });
 
         rerender({ value: 'end' });
 
@@ -89,10 +85,9 @@ describe('useDebounce', () => {
 
     // ── 6. Should handle number values ──
     it('should work with number values', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value, 200),
-            { initialProps: { value: 0 } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value, 200), {
+            initialProps: { value: 0 },
+        });
 
         rerender({ value: 42 });
         expect(result.current).toBe(0);
@@ -106,10 +101,9 @@ describe('useDebounce', () => {
         const initial = { q: '' };
         const updated = { q: 'search' };
 
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value, 300),
-            { initialProps: { value: initial } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value, 300), {
+            initialProps: { value: initial },
+        });
 
         rerender({ value: updated });
         act(() => vi.advanceTimersByTime(300));
@@ -118,10 +112,9 @@ describe('useDebounce', () => {
 
     // ── 8. Should not update before delay elapses ──
     it('should not update value halfway through delay', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value, 1000),
-            { initialProps: { value: 'old' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value, 1000), {
+            initialProps: { value: 'old' },
+        });
 
         rerender({ value: 'new' });
 
@@ -134,10 +127,9 @@ describe('useDebounce', () => {
 
     // ── 9. Should handle falsy values (null, undefined, 0, '') ──
     it('should handle falsy values correctly', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useDebounce(value, 100),
-            { initialProps: { value: 'truthy' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useDebounce(value, 100), {
+            initialProps: { value: 'truthy' },
+        });
 
         rerender({ value: null });
         act(() => vi.advanceTimersByTime(100));
@@ -154,10 +146,9 @@ describe('useDebounce', () => {
 
     // ── 10. Should clean up timeout on unmount ──
     it('should clean up timeout on unmount without errors', () => {
-        const { result, rerender, unmount } = renderHook(
-            ({ value }) => useDebounce(value, 500),
-            { initialProps: { value: 'a' } }
-        );
+        const { result, rerender, unmount } = renderHook(({ value }) => useDebounce(value, 500), {
+            initialProps: { value: 'a' },
+        });
 
         rerender({ value: 'b' });
 

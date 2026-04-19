@@ -1,4 +1,7 @@
+/* eslint-disable no-prototype-builtins */
+import React from 'react';
 import { getApiBase } from '../utils/apiEndpoints';
+import logger from '../utils/logger';
 // frontend/src/utils/resourceHints.js
 
 /**
@@ -135,17 +138,20 @@ class ResourceHintsManager {
         if (!('IntersectionObserver' in window)) return;
 
         // Observe links
-        this.observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const href = entry.target.getAttribute('href');
-                    if (href && href.startsWith('/')) {
-                        // Prefetch route chunk
-                        this.prefetchRoute(href);
+        this.observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const href = entry.target.getAttribute('href');
+                        if (href && href.startsWith('/')) {
+                            // Prefetch route chunk
+                            this.prefetchRoute(href);
+                        }
                     }
-                }
-            });
-        }, { rootMargin: '50px' });
+                });
+            },
+            { rootMargin: '50px' }
+        );
 
         // Observe all internal links
         this.observeLinks();
@@ -156,7 +162,7 @@ class ResourceHintsManager {
      */
     observeLinks() {
         const links = document.querySelectorAll('a[href^="/"]');
-        links.forEach(link => {
+        links.forEach((link) => {
             this.observer?.observe(link);
         });
     }
@@ -200,7 +206,8 @@ class ResourceHintsManager {
      * Smart prefetch based on connection speed
      */
     smartPrefetch(url, options = {}) {
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const connection =
+            navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
         if (!connection) {
             this.prefetch(url, options);
@@ -232,12 +239,12 @@ class ResourceHintsManager {
         // Fonts
         this.preload('/fonts/Inter-Regular.woff2', 'font', {
             type: 'font/woff2',
-            crossorigin: 'anonymous'
+            crossorigin: 'anonymous',
         });
 
         this.preload('/fonts/Inter-Bold.woff2', 'font', {
             type: 'font/woff2',
-            crossorigin: 'anonymous'
+            crossorigin: 'anonymous',
         });
 
         // Critical images
@@ -283,7 +290,7 @@ class ResourceHintsManager {
             dnsPrefetch: 0,
             preload: 0,
             prefetch: 0,
-            modulepreload: 0
+            modulepreload: 0,
         };
 
         this.hints.forEach((_, key) => {
@@ -322,7 +329,7 @@ export const useResourceHint = (type, url, options = {}) => {
                 resourceHints.modulepreload(url, options);
                 break;
             default:
-                console.warn(`Unknown resource hint type: ${type}`);
+                logger.warn(`Unknown resource hint type: ${type}`);
         }
     }, [type, url, options]);
 };
@@ -342,5 +349,3 @@ export const usePrefetchOnHover = (url) => {
 };
 
 export default ResourceHintsManager;
-
-

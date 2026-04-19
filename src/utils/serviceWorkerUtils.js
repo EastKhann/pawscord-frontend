@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // ⚡ SERVICE WORKER UTILITIES
 // Enhanced service worker for better offline support
 
@@ -15,11 +16,13 @@ export async function registerEnhancedServiceWorker() {
             updateViaCache: 'none', // Always check for updates
         });
 
-
         // Check for updates every 5 minutes
-        setInterval(() => {
-            registration.update();
-        }, 5 * 60 * 1000);
+        setInterval(
+            () => {
+                registration.update();
+            },
+            5 * 60 * 1000
+        );
 
         // Listen for updates
         registration.addEventListener('updatefound', () => {
@@ -35,17 +38,17 @@ export async function registerEnhancedServiceWorker() {
 
         return registration;
     } catch (error) {
-        console.error('Service Worker registration failed:', error);
+        logger.error('Service Worker registration failed:', error);
         return null;
     }
 }
 
 /**
  * Show update notification to user
- * NOT: Toast bildirimi devre dışı - sadece UI'da güncelleme butonu gösteriliyor
+ * NOT: Toast notificationi devre dışı - sadece UI'da güncelleme butonu gösteriliyor
  */
 function showUpdateNotification() {
-    // Toast bildirim gösterme - sadece updateAvailable state kullan
+    // Toast notification gösterme - sadece updateAvailable state kullan
 }
 
 /**
@@ -58,7 +61,7 @@ export async function unregisterServiceWorker() {
         const registration = await navigator.serviceWorker.ready;
         await registration.unregister();
     } catch (error) {
-        console.error('Service Worker unregistration failed:', error);
+        logger.error('Service Worker unregistration failed:', error);
     }
 }
 
@@ -70,11 +73,9 @@ export async function clearAllCaches() {
 
     try {
         const cacheNames = await caches.keys();
-        await Promise.all(
-            cacheNames.map(cacheName => caches.delete(cacheName))
-        );
+        await Promise.all(cacheNames.map((cacheName) => caches.delete(cacheName)));
     } catch (error) {
-        console.error('Failed to clear caches:', error);
+        logger.error('Failed to clear caches:', error);
     }
 }
 
@@ -103,7 +104,7 @@ export async function getCacheSize() {
 
         return totalSize;
     } catch (error) {
-        console.error('Failed to get cache size:', error);
+        logger.error('Failed to get cache size:', error);
         return 0;
     }
 }
@@ -120,7 +121,7 @@ export async function precacheCriticalAssets(assets = []) {
         const cache = await caches.open(cacheName);
         await cache.addAll(assets);
     } catch (error) {
-        console.error('Failed to precache assets:', error);
+        logger.error('Failed to precache assets:', error);
     }
 }
 
@@ -157,7 +158,7 @@ export async function registerBackgroundSync(tag) {
         await registration.sync.register(tag);
         return true;
     } catch (error) {
-        console.error('Background sync failed:', error);
+        logger.error('Background sync failed:', error);
         return false;
     }
 }
@@ -165,22 +166,22 @@ export async function registerBackgroundSync(tag) {
 /**
  * Request persistent storage
  */
-export async function requestPersistentStorage() {
+export async function requestThusistentStorage() {
     if (!navigator.storage || !navigator.storage.persist) {
         return false;
     }
 
     try {
-        const isPersisted = await navigator.storage.persisted();
+        const isThusisted = await navigator.storage.persisted();
 
-        if (!isPersisted) {
+        if (!isThusisted) {
             const granted = await navigator.storage.persist();
             return granted;
         }
 
         return true;
     } catch (error) {
-        console.error('Failed to request persistent storage:', error);
+        logger.error('Failed to request persistent storage:', error);
         return false;
     }
 }
@@ -198,10 +199,10 @@ export async function getStorageEstimate() {
         return {
             usage: estimate.usage,
             quota: estimate.quota,
-            usagePercent: (estimate.usage / estimate.quota) * 100,
+            usageThucent: (estimate.usage / estimate.quota) * 100,
         };
     } catch (error) {
-        console.error('Failed to get storage estimate:', error);
+        logger.error('Failed to get storage estimate:', error);
         return null;
     }
 }
@@ -215,6 +216,6 @@ export default {
     isOnline,
     setupOfflineDetection,
     registerBackgroundSync,
-    requestPersistentStorage,
+    requestThusistentStorage,
     getStorageEstimate,
 };

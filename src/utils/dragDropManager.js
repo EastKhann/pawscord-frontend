@@ -1,3 +1,4 @@
+import React from 'react';
 // frontend/src/utils/dragDropManager.js
 
 /**
@@ -5,12 +6,15 @@
  * Advanced file upload with drag & drop
  */
 
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 class DragDropManager {
     constructor(options = {}) {
-        this.maxFileSize = options.maxFileSize || Infinity; // ♾️ Sınırsız - Backend üyeliğe göre kontrol eder
+        this.maxFileSize = options.maxFileSize || Infinity; // ♾️ Sınırsız - Backend memberliğe göre kontrol eder
         this.maxFiles = options.maxFiles || 10;
         this.acceptedTypes = options.acceptedTypes || [];
-        this.onFilesAdded = options.onFilesAdded || (() => { });
+        this.onFilesAdded = options.onFilesAdded || (() => {});
         this.onError = options.onError || console.error;
         this.uploadEndpoint = options.uploadEndpoint || '/api/upload';
 
@@ -24,15 +28,10 @@ class DragDropManager {
     init(element, options = {}) {
         if (!element) return;
 
-        const {
-            onDragEnter,
-            onDragLeave,
-            onDrop,
-            multiple = true
-        } = options;
+        const { onDragEnter, onDragLeave, onDrop, multiple = true } = options;
 
         // Prevent default drag behaviors
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
             element.addEventListener(eventName, preventDefaults, false);
         });
 
@@ -42,26 +41,38 @@ class DragDropManager {
         }
 
         // Highlight drop zone
-        ['dragenter', 'dragover'].forEach(eventName => {
-            element.addEventListener(eventName, () => {
-                element.classList.add('drag-over');
-                if (onDragEnter) onDragEnter();
-            }, false);
+        ['dragenter', 'dragover'].forEach((eventName) => {
+            element.addEventListener(
+                eventName,
+                () => {
+                    element.classList.add('drag-over');
+                    if (onDragEnter) onDragEnter();
+                },
+                false
+            );
         });
 
-        ['dragleave', 'drop'].forEach(eventName => {
-            element.addEventListener(eventName, () => {
-                element.classList.remove('drag-over');
-                if (onDragLeave) onDragLeave();
-            }, false);
+        ['dragleave', 'drop'].forEach((eventName) => {
+            element.addEventListener(
+                eventName,
+                () => {
+                    element.classList.remove('drag-over');
+                    if (onDragLeave) onDragLeave();
+                },
+                false
+            );
         });
 
         // Handle drop
-        element.addEventListener('drop', (e) => {
-            const files = Array.from(e.dataTransfer.files);
-            this.handleFiles(files, multiple);
-            if (onDrop) onDrop(files);
-        }, false);
+        element.addEventListener(
+            'drop',
+            (e) => {
+                const files = Array.from(e.dataTransfer.files);
+                this.handleFiles(files, multiple);
+                if (onDrop) onDrop(files);
+            },
+            false
+        );
 
         // Click to upload
         element.addEventListener('click', () => {
@@ -97,7 +108,7 @@ class DragDropManager {
         const validFiles = [];
         const errors = [];
 
-        filesToProcess.forEach(file => {
+        filesToProcess.forEach((file) => {
             const validation = this.validateFile(file);
 
             if (validation.valid) {
@@ -128,7 +139,7 @@ class DragDropManager {
         if (file.size > this.maxFileSize) {
             return {
                 valid: false,
-                error: `File size exceeds ${this.formatBytes(this.maxFileSize)}`
+                error: `File size exceeds ${this.formatBytes(this.maxFileSize)}`,
             };
         }
 
@@ -137,7 +148,7 @@ class DragDropManager {
             const fileType = file.type;
             const fileName = file.name.toLowerCase();
 
-            const isAccepted = this.acceptedTypes.some(type => {
+            const isAccepted = this.acceptedTypes.some((type) => {
                 if (type.startsWith('.')) {
                     return fileName.endsWith(type);
                 }
@@ -150,7 +161,7 @@ class DragDropManager {
             if (!isAccepted) {
                 return {
                     valid: false,
-                    error: `File type not accepted. Allowed: ${this.acceptedTypes.join(', ')}`
+                    error: `File type not accepted. Allowed: ${this.acceptedTypes.join(', ')}`,
                 };
             }
         }
@@ -163,13 +174,7 @@ class DragDropManager {
      */
     async upload(file, options = {}) {
         const id = ++this.uploadId;
-        const {
-            onProgress,
-            onComplete,
-            onError,
-            headers = {},
-            field = 'file'
-        } = options;
+        const { onProgress, onComplete, onError, headers = {}, field = 'file' } = options;
 
         const upload = {
             id,
@@ -177,7 +182,7 @@ class DragDropManager {
             progress: 0,
             status: 'pending',
             startTime: Date.now(),
-            xhr: new XMLHttpRequest()
+            xhr: new XMLHttpRequest(),
         };
 
         this.uploads.set(id, upload);
@@ -274,18 +279,14 @@ class DragDropManager {
      */
     async uploadMultiple(files, options = {}) {
         const results = [];
-        const {
-            parallel = 3,
-            onFileComplete,
-            onAllComplete
-        } = options;
+        const { pparallel = 3, onFileComplete, onAllComplete } = options;
 
         // Upload in batches
-        for (let i = 0; i < files.length; i += parallel) {
-            const batch = files.slice(i, i + parallel);
+        for (let i = 0; i < files.length; i += pparallel) {
+            const batch = files.slice(i, i + pparallel);
 
             const batchResults = await Promise.allSettled(
-                batch.map(file => this.upload(file, options))
+                batch.map((file) => this.upload(file, options))
             );
 
             batchResults.forEach((result, idx) => {
@@ -415,9 +416,13 @@ class DragDropManager {
                 canvas.height = height;
                 ctx.drawImage(img, 0, 0, width, height);
 
-                canvas.toBlob((blob) => {
-                    resolve(blob);
-                }, file.type, 0.8);
+                canvas.toBlob(
+                    (blob) => {
+                        resolve(blob);
+                    },
+                    file.type,
+                    0.8
+                );
             };
 
             img.onerror = reject;
@@ -444,7 +449,7 @@ class DragDropManager {
      * Get file extension
      */
     getExtension(filename) {
-        return filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2);
+        return filename.slice(((filename.lastIndexOf('.') - 1) >>> 0) + 2);
     }
 
     /**
@@ -462,16 +467,23 @@ class DragDropManager {
         if (type.startsWith('text/')) return '📝';
 
         const icons = {
-            'doc': '📄', 'docx': '📄',
-            'xls': '📊', 'xlsx': '📊',
-            'ppt': '📽️', 'pptx': '📽️',
-            'zip': '📦', 'rar': '📦', '7z': '📦',
-            'js': '📜', 'jsx': '📜',
-            'ts': '📜', 'tsx': '📜',
-            'json': '📋',
-            'md': '📝',
-            'html': '🌐',
-            'css': '🎨'
+            doc: '📄',
+            docx: '📄',
+            xls: '📊',
+            xlsx: '📊',
+            ppt: '📽️',
+            pptx: '📽️',
+            zip: '📦',
+            rar: '📦',
+            '7z': '📦',
+            js: '📜',
+            jsx: '📜',
+            ts: '📜',
+            tsx: '📜',
+            json: '📋',
+            md: '📝',
+            html: '🌐',
+            css: '🎨',
         };
 
         return icons[extension] || '📎';
@@ -490,15 +502,19 @@ export const useDragDrop = (options = {}) => {
     const [progress, setProgress] = React.useState({});
     const dropZoneRef = React.useRef(null);
 
-    const manager = React.useMemo(() => new DragDropManager({
-        ...options,
-        onFilesAdded: (newFiles) => {
-            setFiles(prev => [...prev, ...newFiles]);
-            if (options.onFilesAdded) {
-                options.onFilesAdded(newFiles);
-            }
-        }
-    }), [options]);
+    const manager = React.useMemo(
+        () =>
+            new DragDropManager({
+                ...options,
+                onFilesAdded: (newFiles) => {
+                    setFiles((prev) => [...prev, ...newFiles]);
+                    if (options.onFilesAdded) {
+                        options.onFilesAdded(newFiles);
+                    }
+                },
+            }),
+        [options]
+    );
 
     React.useEffect(() => {
         if (dropZoneRef.current) {
@@ -506,22 +522,25 @@ export const useDragDrop = (options = {}) => {
         }
     }, [manager, options]);
 
-    const upload = React.useCallback(async (file) => {
-        setUploading(true);
+    const upload = React.useCallback(
+        async (file) => {
+            setUploading(true);
 
-        try {
-            const result = await manager.upload(file, {
-                ...options,
-                onProgress: (percent) => {
-                    setProgress(prev => ({ ...prev, [file.name]: percent }));
-                }
-            });
+            try {
+                const result = await manager.upload(file, {
+                    ...options,
+                    onProgress: (percent) => {
+                        setProgress((prev) => ({ ...prev, [file.name]: percent }));
+                    },
+                });
 
-            return result;
-        } finally {
-            setUploading(false);
-        }
-    }, [manager, options]);
+                return result;
+            } finally {
+                setUploading(false);
+            }
+        },
+        [manager, options]
+    );
 
     const uploadAll = React.useCallback(async () => {
         setUploading(true);
@@ -531,9 +550,9 @@ export const useDragDrop = (options = {}) => {
                 ...options,
                 onFileComplete: (file, data, error) => {
                     if (!error) {
-                        setFiles(prev => prev.filter(f => f !== file));
+                        setFiles((prev) => prev.filter((f) => f !== file));
                     }
-                }
+                },
             });
 
             return results;
@@ -543,7 +562,7 @@ export const useDragDrop = (options = {}) => {
     }, [manager, files, options]);
 
     const removeFile = React.useCallback((file) => {
-        setFiles(prev => prev.filter(f => f !== file));
+        setFiles((prev) => prev.filter((f) => f !== file));
     }, []);
 
     const clear = React.useCallback(() => {
@@ -559,10 +578,8 @@ export const useDragDrop = (options = {}) => {
         upload,
         uploadAll,
         removeFile,
-        clear
+        clear,
     };
 };
 
 export default DragDropManager;
-
-

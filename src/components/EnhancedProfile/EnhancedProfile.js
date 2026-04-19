@@ -1,48 +1,71 @@
 // frontend/src/components/EnhancedProfile/EnhancedProfile.js
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
-    FaEdit, FaTimes, FaClock,
-    FaMapMarkerAlt, FaUserFriends, FaServer, FaStar, FaGamepad
+    FaEdit,
+    FaTimes,
+    FaClock,
+    FaMapMarkerAlt,
+    FaUserFriends,
+    FaServer,
+    FaStar,
+    FaGamepad,
 } from 'react-icons/fa';
 import useEnhancedProfile, { SOCIAL_ICONS } from './useEnhancedProfile';
 import ProfileEditForm from './ProfileEditForm';
 import './EnhancedProfile.css';
+import { useTranslation } from 'react-i18next';
 
 const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
+    const { t } = useTranslation();
+
     const {
-        profile, extendedProfile, showcases, mutualConnections,
-        profileNote, setProfileNote,
-        isLoading, isEditing, setIsEditing,
-        editData, setEditData,
-        activeTab, setActiveTab,
-        saveExtendedProfile, saveProfileNote, getSocialLinks
+        profile,
+        extendedProfile,
+        showcases,
+        mutualConnections,
+        profileNote,
+        setProfileNote,
+        isLoading,
+        isEditing,
+        setIsEditing,
+        editData,
+        setEditData,
+        activeTab,
+        setActiveTab,
+        saveExtendedProfile,
+        saveProfileNote,
+        getSocialLinks,
     } = useEnhancedProfile(userId, isOwn);
 
     if (isLoading) {
         return (
-            <div className="enhanced-profile-modal">
+            <div aria-label="enhanced profile" className="enhanced-profile-modal">
                 <div className="profile-loading">
                     <div className="loading-spinner" />
-                    <span>Profil yükleniyor...</span>
+                    <span>{t('profil_yükleniyor')}</span>
                 </div>
             </div>
         );
     }
 
     const socialLinks = getSocialLinks();
+    const bannerStyle = {
+        backgroundImage: extendedProfile?.banner_url
+            ? `url(${extendedProfile.banner_url})`
+            : undefined,
+        backgroundColor: extendedProfile?.banner_color || '#5865F2',
+    };
+    const avatarBorderStyle = { borderColor: extendedProfile?.accent_color || '#5865F2' };
 
     return (
         <div className="enhanced-profile-modal">
             <div className="enhanced-profile-container">
                 {/* Banner */}
-                <div
-                    className="profile-banner"
-                    style={{
-                        backgroundImage: extendedProfile?.banner_url ? `url(${extendedProfile.banner_url})` : undefined,
-                        backgroundColor: extendedProfile?.banner_color || '#5865F2'
-                    }}
-                >
-                    <button className="close-button" onClick={onClose}><FaTimes /></button>
+                <div className="profile-banner" style={bannerStyle}>
+                    <button className="close-button" onClick={onClose}>
+                        <FaTimes />
+                    </button>
                 </div>
 
                 {/* Avatar & Basic Info */}
@@ -52,30 +75,49 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                             src={profile?.avatar || '/default-avatar.png'}
                             alt={profile?.username}
                             className="profile-avatar"
-                            style={{ borderColor: extendedProfile?.accent_color || '#5865F2' }}
+                            style={avatarBorderStyle}
                         />
-                        {profile?.status && <span className={`status-indicator status-${profile.status}`} />}
+                        {profile?.status && (
+                            <span className={`status-indicator status-${profile.status}`} />
+                        )}
                     </div>
                     <div className="profile-info">
                         <h2 className="profile-username">
                             {profile?.display_name || profile?.username}
-                            {extendedProfile?.pronouns && <span className="pronouns">({extendedProfile.pronouns})</span>}
+                            {extendedProfile?.pronouns && (
+                                <span className="pronouns">({extendedProfile.pronouns})</span>
+                            )}
                         </h2>
                         <span className="profile-tag">@{profile?.username}</span>
                     </div>
                     {isOwn && !isEditing && (
                         <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>
-                            <FaEdit /> Profili Düzenle
+                            <FaEdit /> Profili Edit
                         </button>
                     )}
                 </div>
 
                 {/* Tabs */}
                 <div className="profile-tabs">
-                    <button className={activeTab === 'about' ? 'active' : ''} onClick={() => setActiveTab('about')}>Hakkında</button>
-                    <button className={activeTab === 'activity' ? 'active' : ''} onClick={() => setActiveTab('activity')}>Aktivite</button>
+                    <button
+                        className={activeTab === 'about' ? 'active' : ''}
+                        onClick={() => setActiveTab('about')}
+                    >
+                        {t('about')}
+                    </button>
+                    <button
+                        className={activeTab === 'activity' ? 'active' : ''}
+                        onClick={() => setActiveTab('activity')}
+                    >
+                        {t('aktivite')}
+                    </button>
                     {!isOwn && (
-                        <button className={activeTab === 'notes' ? 'active' : ''} onClick={() => setActiveTab('notes')}>Notlarım</button>
+                        <button
+                            className={activeTab === 'notes' ? 'active' : ''}
+                            onClick={() => setActiveTab('notes')}
+                        >
+                            {t('notlarım')}
+                        </button>
                     )}
                 </div>
 
@@ -95,7 +137,7 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                 <div className="about-tab">
                                     {extendedProfile?.bio && (
                                         <div className="profile-section">
-                                            <h3>Hakkımda</h3>
+                                            <h3>{t('hakkımda')}</h3>
                                             <p className="bio-text">{extendedProfile.bio}</p>
                                         </div>
                                     )}
@@ -110,10 +152,22 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                     {mutualConnections && !isOwn && (
                                         <div className="mutual-connections">
                                             {mutualConnections.mutual_friends_count > 0 && (
-                                                <div className="mutual-item"><FaUserFriends /><span>{mutualConnections.mutual_friends_count} ortak arkadaş</span></div>
+                                                <div className="mutual-item">
+                                                    <FaUserFriends />
+                                                    <span>
+                                                        {mutualConnections.mutual_friends_count}{' '}
+                                                        mutual friends
+                                                    </span>
+                                                </div>
                                             )}
                                             {mutualConnections.mutual_servers_count > 0 && (
-                                                <div className="mutual-item"><FaServer /><span>{mutualConnections.mutual_servers_count} ortak sunucu</span></div>
+                                                <div className="mutual-item">
+                                                    <FaServer />
+                                                    <span>
+                                                        {mutualConnections.mutual_servers_count}{' '}
+                                                        mutual servers
+                                                    </span>
+                                                </div>
                                             )}
                                         </div>
                                     )}
@@ -124,9 +178,19 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                             {socialLinks.map((link, index) => {
                                                 const social = SOCIAL_ICONS[link.type];
                                                 const Icon = social.icon;
+                                                const socialLinkStyle = {
+                                                    '--social-color': social.color,
+                                                };
                                                 return (
-                                                    <a key={index} href={link.url} target="_blank" rel="noopener noreferrer"
-                                                        className="social-link" title={social.label} style={{ '--social-color': social.color }}>
+                                                    <a
+                                                        key={`item-${index}`}
+                                                        href={link.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="social-link"
+                                                        title={social.label}
+                                                        style={socialLinkStyle}
+                                                    >
                                                         <Icon />
                                                     </a>
                                                 );
@@ -137,17 +201,41 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                     {/* Showcases */}
                                     {showcases.length > 0 && (
                                         <div className="profile-showcases">
-                                            <h3><FaStar /> Vitrin</h3>
+                                            <h3>
+                                                <FaStar />
+                                                {t('vitrin')}
+                                            </h3>
                                             <div className="showcase-grid">
                                                 {showcases.map((item, index) => (
-                                                    <div key={index} className={`showcase-item showcase-${item.showcase_type}`}>
-                                                        {item.image_url && <img src={item.image_url} alt={item.title} />}
+                                                    <div
+                                                        key={`item-${index}`}
+                                                        className={`showcase-item showcase-${item.showcase_type}`}
+                                                    >
+                                                        {item.image_url && (
+                                                            <img
+                                                                src={item.image_url}
+                                                                alt={item.title}
+                                                            />
+                                                        )}
                                                         <div className="showcase-info">
-                                                            <span className="showcase-title">{item.title}</span>
-                                                            {item.description && <span className="showcase-desc">{item.description}</span>}
+                                                            <span className="showcase-title">
+                                                                {item.title}
+                                                            </span>
+                                                            {item.description && (
+                                                                <span className="showcase-desc">
+                                                                    {item.description}
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         {item.link_url && (
-                                                            <a href={item.link_url} target="_blank" rel="noopener noreferrer" className="showcase-link">Görüntüle</a>
+                                                            <a
+                                                                href={item.link_url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="showcase-link"
+                                                            >
+                                                                {t('view')}
+                                                            </a>
                                                         )}
                                                     </div>
                                                 ))}
@@ -159,9 +247,15 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                     <div className="profile-section member-since">
                                         <FaClock />
                                         <span>
-                                            {new Date(profile?.date_joined).toLocaleDateString('tr-TR', {
-                                                year: 'numeric', month: 'long', day: 'numeric'
-                                            })} tarihinden beri üye
+                                            {new Date(profile?.date_joined).toLocaleDateString(
+                                                'tr-TR',
+                                                {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                }
+                                            )}{' '}
+                                            tarihinden beri member
                                         </span>
                                     </div>
                                 </div>
@@ -173,16 +267,22 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
                                         <div className="current-activity">
                                             <FaGamepad />
                                             <div className="activity-info">
-                                                <span className="activity-type">{profile.current_activity.type}</span>
-                                                <span className="activity-name">{profile.current_activity.name}</span>
+                                                <span className="activity-type">
+                                                    {profile.current_activity.type}
+                                                </span>
+                                                <span className="activity-name">
+                                                    {profile.current_activity.name}
+                                                </span>
                                                 {profile.current_activity.details && (
-                                                    <span className="activity-details">{profile.current_activity.details}</span>
+                                                    <span className="activity-details">
+                                                        {profile.current_activity.details}
+                                                    </span>
                                                 )}
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="no-activity">
-                                            <span>Şu anda aktif bir aktivite yok</span>
+                                            <span>{t('şu_anda_aktif_bir_aktivite_yok')}</span>
                                         </div>
                                     )}
                                 </div>
@@ -190,13 +290,17 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
 
                             {activeTab === 'notes' && !isOwn && (
                                 <div className="notes-tab">
-                                    <h3>Bu kullanıcı hakkında notum</h3>
-                                    <p className="notes-info">Bu not sadece sana özeldir. Diğer kullanıcılar göremez.</p>
+                                    <h3>{t('this_user_hakkında_notum')}</h3>
+                                    <p className="notes-info">
+                                        {t(
+                                            'bu_not_sadece_sana_privatedir_other_kullanıcılar_göremez'
+                                        )}
+                                    </p>
                                     <textarea
                                         value={profileNote}
                                         onChange={(e) => setProfileNote(e.target.value)}
                                         onBlur={saveProfileNote}
-                                        placeholder="Bu kullanıcı hakkında bir not yaz..."
+                                        placeholder={t('this_user_hakkında_bir_not_yaz')}
                                         maxLength={256}
                                     />
                                 </div>
@@ -209,4 +313,9 @@ const EnhancedProfile = ({ userId, onClose, isOwn = false }) => {
     );
 };
 
+EnhancedProfile.propTypes = {
+    userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    onClose: PropTypes.func,
+    isOwn: PropTypes.bool,
+};
 export default EnhancedProfile;

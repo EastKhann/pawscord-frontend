@@ -48,15 +48,23 @@ describe('useNetworkStatus (standalone hook)', () => {
 
     it('transitions back to online on "online" event', () => {
         const { result } = renderHook(() => useNetworkStatus());
-        act(() => { window.dispatchEvent(new Event('offline')); });
-        act(() => { window.dispatchEvent(new Event('online')); });
+        act(() => {
+            window.dispatchEvent(new Event('offline'));
+        });
+        act(() => {
+            window.dispatchEvent(new Event('online'));
+        });
         expect(result.current.isOnline).toBe(true);
     });
 
     it('sets wasOffline flag after reconnection', () => {
         const { result } = renderHook(() => useNetworkStatus());
-        act(() => { window.dispatchEvent(new Event('offline')); });
-        act(() => { window.dispatchEvent(new Event('online')); });
+        act(() => {
+            window.dispatchEvent(new Event('offline'));
+        });
+        act(() => {
+            window.dispatchEvent(new Event('online'));
+        });
         expect(result.current.wasOffline).toBe(true);
     });
 
@@ -65,11 +73,11 @@ describe('useNetworkStatus (standalone hook)', () => {
         expect(result.current.wasOffline).toBe(false);
     });
 
-    it('cleans up event listeners on unmount', () => {
+    it('cleans up event listners on unmount', () => {
         const removeSpy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useNetworkStatus());
         unmount();
-        const calls = removeSpy.mock.calls.map(c => c[0]);
+        const calls = removeSpy.mock.calls.map((c) => c[0]);
         expect(calls).toContain('online');
         expect(calls).toContain('offline');
     });

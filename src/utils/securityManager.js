@@ -1,16 +1,44 @@
+import React from 'react';
 // frontend/src/utils/securityManager.js
 
 /**
  * 🔒 Security Manager
  * XSS protection, CSP, input sanitization, and security utilities
+ * Uses DOMPurify for HTML sanitization (industry-standard, battle-tested).
  */
+
+import DOMPurify from 'dompurify';
 
 class SecurityManager {
     constructor(options = {}) {
         this.cspEnabled = options.cspEnabled !== false;
         this.xssProtection = options.xssProtection !== false;
-        this.allowedTags = options.allowedTags || ['b', 'i', 'em', 'strong', 'a', 'p', 'br'];
-        this.allowedAttributes = options.allowedAttributes || ['href', 'title', 'target'];
+        this.allowedTags = options.allowedTags || [
+            'b',
+            'i',
+            'em',
+            'strong',
+            'a',
+            'p',
+            'br',
+            'code',
+            'pre',
+            'ul',
+            'ol',
+            'li',
+            'blockquote',
+            'h1',
+            'h2',
+            'h3',
+            'span',
+        ];
+        this.allowedAttributes = options.allowedAttributes || [
+            'href',
+            'title',
+            'target',
+            'rel',
+            'class',
+        ];
 
         this.init();
     }
@@ -47,7 +75,7 @@ class SecurityManager {
             "object-src 'none'",
             "base-uri 'self'",
             "worker-src 'self' blob:",
-            "frame-ancestors 'none'"
+            "frame-ancestors 'none'",
         ].join('; ');
 
         document.head.appendChild(meta);
@@ -65,55 +93,13 @@ class SecurityManager {
     }
 
     /**
-     * Sanitize HTML
+     * Sanitize HTML using DOMPurify (safe, comprehensive, widely audited).
      */
     sanitizeHTML(html) {
-        const div = document.createElement('div');
-        div.innerHTML = html;
-
-        this.sanitizeNode(div);
-
-        return div.innerHTML;
-    }
-
-    /**
-     * Sanitize DOM node
-     */
-    sanitizeNode(node) {
-        // Remove script tags
-        const scripts = node.querySelectorAll('script');
-        scripts.forEach(script => script.remove());
-
-        // Remove event handlers
-        const allElements = node.querySelectorAll('*');
-        allElements.forEach(el => {
-            // Remove on* attributes
-            Array.from(el.attributes).forEach(attr => {
-                if (attr.name.startsWith('on')) {
-                    el.removeAttribute(attr.name);
-                }
-            });
-
-            // Remove javascript: URLs
-            if (el.hasAttribute('href')) {
-                const href = el.getAttribute('href');
-                if (href.toLowerCase().startsWith('javascript:')) {
-                    el.removeAttribute('href');
-                }
-            }
-
-            // Check allowed tags
-            if (!this.allowedTags.includes(el.tagName.toLowerCase())) {
-                el.remove();
-                return;
-            }
-
-            // Check allowed attributes
-            Array.from(el.attributes).forEach(attr => {
-                if (!this.allowedAttributes.includes(attr.name.toLowerCase())) {
-                    el.removeAttribute(attr.name);
-                }
-            });
+        return DOMPurify.sanitize(html, {
+            ALLOWED_TAGS: this.allowedTags,
+            ALLOWED_ATTR: this.allowedAttributes,
+            ALLOW_DATA_ATTR: false,
         });
     }
 
@@ -163,7 +149,7 @@ class SecurityManager {
     generateCSRFToken() {
         const array = new Uint8Array(32);
         crypto.getRandomValues(array);
-        return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
     }
 
     /**
@@ -174,7 +160,7 @@ class SecurityManager {
         const data = encoder.encode(password + salt);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
     }
 
     /**
@@ -201,7 +187,7 @@ class SecurityManager {
 
         return {
             iv: Array.from(iv),
-            data: Array.from(new Uint8Array(encrypted))
+            data: Array.from(new Uint8Array(encrypted)),
         };
     }
 
@@ -236,10 +222,12 @@ class SecurityManager {
         const now = Date.now();
         const storageKey = `rate_limit_${key}`;
 
-        let data = JSON.parse(localStorage.getItem(storageKey) || '{"requests": [], "blocked": false}');
+        let data = JSON.parse(
+            localStorage.getItem(storageKey) || '{"requests": [], "blocked": false}'
+        );
 
         // Clean old requests
-        data.requests = data.requests.filter(time => now - time < windowMs);
+        data.requests = data.requests.filter((time) => now - time < windowMs);
 
         // Check if blocked
         if (data.blocked && now - data.blockedAt < windowMs) {
@@ -274,10 +262,10 @@ class SecurityManager {
             /<embed/i,
             /<object/i,
             /eval\(/i,
-            /expression\(/i
+            /expression\(/i,
         ];
 
-        return xssPatterns.some(pattern => pattern.test(input));
+        return xssPatterns.some((pattern) => pattern.test(input));
     }
 
     /**
@@ -286,7 +274,7 @@ class SecurityManager {
     generateSecureRandom(length = 32) {
         const array = new Uint8Array(length);
         crypto.getRandomValues(array);
-        return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        return Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
     }
 
     /**
@@ -298,7 +286,7 @@ class SecurityManager {
             uppercase: /[A-Z]/.test(password),
             lowercase: /[a-z]/.test(password),
             numbers: /[0-9]/.test(password),
-            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
         };
 
         const score = Object.values(checks).filter(Boolean).length;
@@ -306,7 +294,7 @@ class SecurityManager {
         return {
             score,
             strength: score <= 2 ? 'weak' : score <= 4 ? 'medium' : 'strong',
-            checks
+            checks,
         };
     }
 
@@ -342,7 +330,7 @@ export const useSanitize = () => {
     return {
         sanitizeHTML,
         sanitizeInput,
-        escapeHTML
+        escapeHTML,
     };
 };
 
@@ -368,5 +356,3 @@ export const useCSRFToken = () => {
 };
 
 export default SecurityManager;
-
-

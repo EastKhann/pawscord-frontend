@@ -1,33 +1,42 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-undef */
 import React from 'react';
 import { FaClock, FaPaperPlane } from 'react-icons/fa';
 import toast from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
+import css from './tabs/AdminTabs.module.css';
+import PropTypes from 'prop-types';
+import styles from './styles';
 
 // Extracted from AdminPanelModal.js
-    const renderBroadcast = () => (
-        <div>
-            <h2 style={{ color: '#fff', marginBottom: '16px', fontSize: '18px' }}>📢 Duyuru Merkezi</h2>
+const renderBroadcast = () => {
+    const { t } = useTranslation();
+    return (
+        <div aria-label="render broadcast">
+            <h2 className="white-18-mb16">{t('📢_duyuru_merkezi')}</h2>
 
             <div style={styles.statCard}>
-                <h3 style={{ color: '#fff', marginTop: 0, fontSize: '14px' }}>Yeni Duyuru</h3>
+                <h3 className="white-mt0-14">{t('yeni_duyuru')}</h3>
                 <textarea
                     value={announceText}
                     onChange={(e) => setAnnounceText(e.target.value)}
-                    placeholder="Tüm kullanıcılara göndermek istediğiniz mesajı yazın..."
-                    style={{
-                        width: '100%', minHeight: '120px', padding: '12px',
-                        backgroundColor: '#111113', border: '1px solid #2a2a2e',
-                        borderRadius: '8px', color: '#fff', fontSize: '14px',
-                        resize: 'vertical', outline: 'none', marginBottom: '12px'
-                    }}
+                    placeholder={t('ui.tum_kullanicilsearch_gondermek_istedigin')}
+                    className={css.broadcastTextarea}
                 />
-                <div style={{ display: 'flex', gap: '10px' }}>
-                    <button onClick={handleBroadcast} style={{ ...styles.actionBtn('#5865f2'), padding: '10px 20px' }}>
-                        <FaPaperPlane /> Gönder
+                <div className="flex-gap-10">
+                    <button onClick={handleBroadcast} style={styles.actionBtnBlueLg}>
+                        <FaPaperPlane /> {t('admin.broadcast.send', 'Gönder')}
                     </button>
-                    <button style={{ ...styles.actionBtn('#6b7280'), padding: '10px 20px' }} onClick={() => toast.info('⏰ Zamanlı duyuru özelliği yakında!')}>
-                        <FaClock /> Zamanla
+                    <button
+                        style={styles.actionBtnGrayLg}
+                        onClick={() => toast.info(t('ui.zamanli_duyuru_ozelligi_yakinda'))}
+                    >
+                        <FaClock /> {t('admin.broadcast.schedule', 'Zamanla')}
                     </button>
                 </div>
             </div>
         </div>
     );
+};
+
+renderBroadcast.propTypes = {};

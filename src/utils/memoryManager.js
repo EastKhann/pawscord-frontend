@@ -1,3 +1,4 @@
+﻿import logger from '../utils/logger';
 // frontend/src/utils/memoryManager.js
 
 /**
@@ -24,7 +25,7 @@ class MemoryManager {
     startMonitoring() {
         if (this.isMonitoring) return;
         if (!performance.memory) {
-            console.warn('⚠️ [Memory] Performance.memory API not available');
+            logger.warn('⚠️ [Memory] Performance.memory API not available');
             return;
         }
 
@@ -40,7 +41,9 @@ class MemoryManager {
 
             // Bellek kullanımı %80'i geçtiyse uyar
             if (usage > 80) {
-                console.warn(`⚠️ [Memory] High usage: ${usedMB}MB / ${limitMB}MB (${usage.toFixed(1)}%)`);
+                logger.warn(
+                    `⚠️ [Memory] High usage: ${usedMB}MB / ${limitMB}MB (${usage.toFixed(1)}%)`
+                );
                 this.cleanup();
             } else if (import.meta.env.MODE === 'development') {
             }
@@ -48,9 +51,10 @@ class MemoryManager {
     }
 
     /**
-     * Cache ekle
+     * Cache add
      */
-    set(key, value, ttl = 300000) { // Default 5 dakika
+    set(key, value, ttl = 300000) {
+        // Default 5 minute
         const size = this.estimateSize(value);
 
         // Cache limiti aşılırsa eski cache'leri temizle
@@ -63,12 +67,11 @@ class MemoryManager {
             size,
             timestamp: Date.now(),
             ttl,
-            hits: 0
+            hits: 0,
         };
 
         this.caches.set(key, cacheItem);
         this.currentCacheSize += size;
-
     }
 
     /**
@@ -93,7 +96,7 @@ class MemoryManager {
     }
 
     /**
-     * Cache sil
+     * Cache delete
      */
     delete(key) {
         const item = this.caches.get(key);
@@ -115,28 +118,25 @@ class MemoryManager {
      * En eski cache'leri temizle (LRU)
      */
     evictOldest() {
-        const sorted = Array.from(this.caches.entries())
-            .sort((a, b) => {
-                // Hit count düşük olanlar önce
-                const scoreA = a[1].hits / (Date.now() - a[1].timestamp);
-                const scoreB = b[1].hits / (Date.now() - b[1].timestamp);
-                return scoreA - scoreB;
-            });
+        const sorted = Array.from(this.caches.entries()).sort((a, b) => {
+            // Hit count düşük that islar önce
+            const scoreA = a[1].hits / (Date.now() - a[1].timestamp);
+            const scoreB = b[1].hits / (Date.now() - b[1].timestamp);
+            return scoreA - scoreB;
+        });
 
         // İlk %25'i temizle
         const toRemove = Math.ceil(sorted.length * 0.25);
         for (let i = 0; i < toRemove; i++) {
             this.delete(sorted[i][0]);
         }
-
     }
 
     /**
-     * Genel temizlik
+     * General temizlik
      */
     cleanup() {
-
-        // Süresi dolmuş cache'leri temizle
+        // Durationsi dolmuş cache'leri temizle
         const now = Date.now();
         for (const [key, item] of this.caches.entries()) {
             if (now - item.timestamp > item.ttl) {
@@ -167,7 +167,7 @@ class MemoryManager {
             size: (this.currentCacheSize / 1024 / 1024).toFixed(2) + ' MB',
             maxSize: (this.maxCacheSize / 1024 / 1024).toFixed(2) + ' MB',
             usage: ((this.currentCacheSize / this.maxCacheSize) * 100).toFixed(1) + '%',
-            mostHit: this.getMostHitCache()
+            mostHit: this.getMostHitCache(),
         };
     }
 
@@ -189,33 +189,33 @@ class MemoryManager {
 export const memoryManager = new MemoryManager();
 
 /**
- * Smart Cache - TTL ve LRU ile otomatik cache
+ * Smart Cache - TTL ve LRU with otomatik cache
  */
 export class SmartCache {
     constructor(name, options = {}) {
         this.name = name;
         this.options = {
-            maxAge: options.maxAge || 300000, // 5 dakika
+            maxAge: options.maxAge || 300000, // 5 minute
             maxSize: options.maxSize || 100, // Max item sayısı
-            ...options
+            ...options,
         };
         this.cache = new Map();
     }
 
     /**
-     * Cache'e ekle
+     * Cache'e add
      */
     set(key, value) {
         // Max size kontrolü
         if (this.cache.size >= this.options.maxSize) {
-            // En eski item'i sil
+            // En eski item'i delete
             const firstKey = this.cache.keys().next().value;
             this.cache.delete(firstKey);
         }
 
         this.cache.set(key, {
             value,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
     }
 
@@ -267,7 +267,7 @@ export class SmartCache {
 }
 
 /**
- * IndexedDB Cache Manager (offline ve büyük data için)
+ * IndexedDB Cache Manager (offline ve büyük data for)
  */
 export class IndexedDBCache {
     constructor(dbName = 'PawscordCache', version = 1) {
@@ -277,7 +277,7 @@ export class IndexedDBCache {
     }
 
     /**
-     * DB'yi aç
+     * DB'yi open
      */
     async open() {
         return new Promise((resolve, reject) => {
@@ -313,7 +313,7 @@ export class IndexedDBCache {
                 key,
                 value,
                 timestamp: Date.now(),
-                ttl
+                ttl,
             });
 
             request.onsuccess = () => resolve();
@@ -390,5 +390,3 @@ export const createSmartCache = (name, options) => new SmartCache(name, options)
 export const createIndexedDBCache = (dbName, version) => new IndexedDBCache(dbName, version);
 
 export default MemoryManager;
-
-

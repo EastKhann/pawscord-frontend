@@ -10,7 +10,7 @@
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10000,
-        backdropFilter: 'blur(5px)'
+        backdropFilter: 'blur(5px)',
     },
     panel: {
         backgroundColor: '#111214',
@@ -21,29 +21,29 @@
         display: 'flex',
         flexDirection: 'column',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     headerLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     headerIcon: {
         fontSize: '24px',
-        color: '#f0b132'
+        color: '#f0b132',
     },
     title: {
         margin: 0,
         color: '#fff',
         fontSize: '24px',
-        fontWeight: '600'
+        fontWeight: '600',
     },
     closeButton: {
         background: 'none',
@@ -51,48 +51,48 @@
         color: '#b5bac1',
         cursor: 'pointer',
         fontSize: '24px',
-        padding: '8px'
+        padding: '8px',
     },
     statsGrid: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
         gap: '16px',
         padding: '20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     statCard: {
         backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     statIcon: {
         fontSize: '32px',
-        marginBottom: '8px'
+        marginBottom: '8px',
     },
     statValue: {
         fontSize: '28px',
         fontWeight: 'bold',
         color: '#fff',
-        marginBottom: '4px'
+        marginBottom: '4px',
     },
     statLabel: {
         fontSize: '13px',
-        color: '#b5bac1'
+        color: '#b5bac1',
     },
     filters: {
         padding: '16px 20px',
         borderBottom: '1px solid #0b0e1b',
-        backgroundColor: '#0d0e10'
+        backgroundColor: '#0d0e10',
     },
     filterGroup: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     filterIcon: {
         color: '#b5bac1',
-        fontSize: '16px'
+        fontSize: '16px',
     },
     filterSelect: {
         backgroundColor: '#111214',
@@ -101,28 +101,28 @@
         padding: '8px 12px',
         color: '#fff',
         fontSize: '14px',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     reportsList: {
         flex: 1,
         overflowY: 'auto',
-        padding: '20px'
+        padding: '20px',
     },
     loading: {
         textAlign: 'center',
         color: '#b5bac1',
         padding: '40px',
-        fontSize: '14px'
+        fontSize: '14px',
     },
     empty: {
         textAlign: 'center',
         color: '#b5bac1',
-        padding: '60px'
+        padding: '60px',
     },
     emptyIcon: {
         fontSize: '48px',
         marginBottom: '16px',
-        opacity: 0.5
+        opacity: 0.5,
     },
     reportCard: {
         backgroundColor: '#0d0e10',
@@ -132,38 +132,38 @@
         cursor: 'pointer',
         transition: 'background-color 0.2s',
         ':hover': {
-            backgroundColor: '#111214'
-        }
+            backgroundColor: '#111214',
+        },
     },
     reportHeader: {
         display: 'flex',
         alignItems: 'flex-start',
         gap: '12px',
-        marginBottom: '12px'
+        marginBottom: '12px',
     },
     reportIcon: {
         fontSize: '20px',
         color: '#f0b132',
-        marginTop: '4px'
+        marginTop: '4px',
     },
     reportInfo: {
-        flex: 1
+        flex: 1,
     },
     reportTitle: {
         color: '#fff',
         fontSize: '16px',
         fontWeight: '600',
-        marginBottom: '4px'
+        marginBottom: '4px',
     },
     reportMeta: {
         color: '#949ba4',
         fontSize: '13px',
         display: 'flex',
-        gap: '8px'
+        gap: '8px',
     },
     reportBadges: {
         display: 'flex',
-        gap: '8px'
+        gap: '8px',
     },
     badge: {
         padding: '4px 8px',
@@ -171,29 +171,29 @@
         fontSize: '11px',
         fontWeight: '600',
         color: '#fff',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
     },
     reportContent: {
-        paddingLeft: '32px'
+        paddingLeft: '32px',
     },
     reportText: {
         color: '#b5bac1',
         fontSize: '14px',
-        margin: '0 0 12px 0'
+        margin: '0 0 12px 0',
     },
     reportedContent: {
         backgroundColor: '#111214',
         padding: '12px',
         borderRadius: '6px',
         borderLeft: '3px solid #f23f42',
-        marginBottom: '12px'
+        marginBottom: '12px',
     },
     reportedUser: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
         color: '#b5bac1',
-        fontSize: '13px'
+        fontSize: '13px',
     },
     modalOverlay: {
         position: 'fixed',
@@ -205,7 +205,7 @@
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 10001
+        zIndex: 10001,
     },
     modal: {
         backgroundColor: '#111214',
@@ -215,32 +215,32 @@
         maxHeight: '80vh',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     modalHeader: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     modalTitle: {
         margin: 0,
         color: '#fff',
         fontSize: '20px',
-        fontWeight: '600'
+        fontWeight: '600',
     },
     modalClose: {
         background: 'none',
         border: 'none',
         color: '#b5bac1',
         cursor: 'pointer',
-        fontSize: '20px'
+        fontSize: '20px',
     },
     modalContent: {
         flex: 1,
         overflowY: 'auto',
-        padding: '20px'
+        padding: '20px',
     },
     detailRow: {
         display: 'flex',
@@ -249,16 +249,16 @@
         padding: '12px 0',
         borderBottom: '1px solid #0b0e1b',
         color: '#fff',
-        fontSize: '14px'
+        fontSize: '14px',
     },
     detailSection: {
-        marginTop: '20px'
+        marginTop: '20px',
     },
     detailText: {
         color: '#b5bac1',
         fontSize: '14px',
         marginTop: '8px',
-        lineHeight: '1.5'
+        lineHeight: '1.5',
     },
     messageBox: {
         backgroundColor: '#0d0e10',
@@ -267,14 +267,14 @@
         borderLeft: '3px solid #f23f42',
         color: '#fff',
         fontSize: '14px',
-        marginTop: '8px'
+        marginTop: '8px',
     },
     modalActions: {
         display: 'flex',
         gap: '12px',
         padding: '16px 20px',
         borderTop: '1px solid #0b0e1b',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     actionBtn: {
         flex: 1,
@@ -290,8 +290,8 @@
         alignItems: 'center',
         justifyContent: 'center',
         gap: '8px',
-        minWidth: '120px'
-    }
+        minWidth: '120px',
+    },
 };
 
 export default styles;

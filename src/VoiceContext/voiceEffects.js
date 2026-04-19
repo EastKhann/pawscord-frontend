@@ -23,7 +23,7 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             const waveshaper = audioContext.createWaveShaper();
 
             oscillator.type = 'sawtooth';
-            oscillator.frequency.value = 50 + (normalizedIntensity * 100); // 50-150 Hz
+            oscillator.frequency.value = 50 + normalizedIntensity * 100; // 50-150 Hz
 
             // Ring modulation: oscillator controls the gain of the voice
             // This multiplies voice × oscillator = classic robot effect
@@ -32,7 +32,7 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             // Waveshaper for metallic distortion
             const curve = new Float32Array(256);
             for (let i = 0; i < 256; i++) {
-                const x = (i / 128) - 1;
+                const x = i / 128 - 1;
                 curve[i] = Math.tanh(x * (1 + normalizedIntensity * 3));
             }
             waveshaper.curve = curve;
@@ -40,8 +40,8 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             // Dry/wet mix
             const dryGain = audioContext.createGain();
             const wetGain = audioContext.createGain();
-            dryGain.gain.value = 1 - (normalizedIntensity * 0.7);
-            wetGain.gain.value = 0.3 + (normalizedIntensity * 0.7);
+            dryGain.gain.value = 1 - normalizedIntensity * 0.7;
+            wetGain.gain.value = 0.3 + normalizedIntensity * 0.7;
 
             // Voice → modGain (AM) → waveshaper → wet → destination
             source.connect(modGain);
@@ -67,10 +67,10 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             const wetGain = audioContext.createGain();
             const dryGain = audioContext.createGain();
 
-            delay.delayTime.value = 0.1 + (normalizedIntensity * 0.4); // 100-500ms
-            feedback.gain.value = 0.2 + (normalizedIntensity * 0.5); // 20-70% feedback
-            wetGain.gain.value = 0.3 + (normalizedIntensity * 0.4);
-            dryGain.gain.value = 1 - (normalizedIntensity * 0.3);
+            delay.delayTime.value = 0.1 + normalizedIntensity * 0.4; // 100-500ms
+            feedback.gain.value = 0.2 + normalizedIntensity * 0.5; // 20-70% feedback
+            wetGain.gain.value = 0.3 + normalizedIntensity * 0.4;
+            dryGain.gain.value = 1 - normalizedIntensity * 0.3;
 
             source.connect(dryGain);
             source.connect(delay);
@@ -95,20 +95,20 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             // Stage 1: Strong low-shelf boost
             lowBoost.type = 'lowshelf';
             lowBoost.frequency.value = 300;
-            lowBoost.gain.value = 12 + (normalizedIntensity * 18); // +12 to +30 dB
+            lowBoost.gain.value = 12 + normalizedIntensity * 18; // +12 to +30 dB
 
             // Stage 2: Peaking bass resonance for "chest voice" feel
             lowBoost2.type = 'peaking';
-            lowBoost2.frequency.value = 150 - (normalizedIntensity * 50); // 100-150 Hz
+            lowBoost2.frequency.value = 150 - normalizedIntensity * 50; // 100-150 Hz
             lowBoost2.Q.value = 1.5;
-            lowBoost2.gain.value = 6 + (normalizedIntensity * 10);
+            lowBoost2.gain.value = 6 + normalizedIntensity * 10;
 
             // Stage 3: Cut high frequencies to remove "bright" quality
             highCut.type = 'lowpass';
-            highCut.frequency.value = 3500 - (normalizedIntensity * 1500); // 2000-3500 Hz
+            highCut.frequency.value = 3500 - normalizedIntensity * 1500; // 2000-3500 Hz
 
             // Slight volume boost to compensate
-            gainNode.gain.value = 1.0 + (normalizedIntensity * 0.3);
+            gainNode.gain.value = 1.0 + normalizedIntensity * 0.3;
 
             source.connect(lowBoost);
             lowBoost.connect(lowBoost2);
@@ -132,23 +132,23 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             // Stage 1: High-shelf boost for brightness
             highBoost.type = 'highshelf';
             highBoost.frequency.value = 2000;
-            highBoost.gain.value = 10 + (normalizedIntensity * 15); // +10 to +25 dB
+            highBoost.gain.value = 10 + normalizedIntensity * 15; // +10 to +25 dB
 
             // Stage 2: Peaking at formant range to shift perceived pitch
             highBoost2.type = 'peaking';
-            highBoost2.frequency.value = 3000 + (normalizedIntensity * 1000); // 3000-4000 Hz
+            highBoost2.frequency.value = 3000 + normalizedIntensity * 1000; // 3000-4000 Hz
             highBoost2.Q.value = 2.0;
-            highBoost2.gain.value = 8 + (normalizedIntensity * 8);
+            highBoost2.gain.value = 8 + normalizedIntensity * 8;
 
             // Stage 3: Cut bass to remove "body" of voice
             bassCut.type = 'highpass';
-            bassCut.frequency.value = 200 + (normalizedIntensity * 300); // 200-500 Hz
+            bassCut.frequency.value = 200 + normalizedIntensity * 300; // 200-500 Hz
 
             // Stage 4: Presence boost for clarity
             presenceBoost.type = 'peaking';
             presenceBoost.frequency.value = 5000;
             presenceBoost.Q.value = 1.0;
-            presenceBoost.gain.value = 4 + (normalizedIntensity * 6);
+            presenceBoost.gain.value = 4 + normalizedIntensity * 6;
 
             gainNode.gain.value = 0.8; // Reduce slightly to avoid clipping
 
@@ -170,15 +170,15 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             const distortion = audioContext.createWaveShaper();
 
             lowpass.type = 'lowpass';
-            lowpass.frequency.value = 3000 - (normalizedIntensity * 1000);
+            lowpass.frequency.value = 3000 - normalizedIntensity * 1000;
 
             highpass.type = 'highpass';
-            highpass.frequency.value = 300 + (normalizedIntensity * 200);
+            highpass.frequency.value = 300 + normalizedIntensity * 200;
 
             // Slight distortion for radio crackle
             const curve = new Float32Array(256);
             for (let i = 0; i < 256; i++) {
-                const x = (i / 128) - 1;
+                const x = i / 128 - 1;
                 curve[i] = Math.sign(x) * Math.pow(Math.abs(x), 0.8);
             }
             distortion.curve = curve;
@@ -211,8 +211,8 @@ export function createVoiceEffect(effectType, intensity, audioContext, sourceStr
             }
             convolver.buffer = impulse;
 
-            wetGain.gain.value = 0.3 + (normalizedIntensity * 0.5);
-            dryGain.gain.value = 1 - (normalizedIntensity * 0.2);
+            wetGain.gain.value = 0.3 + normalizedIntensity * 0.5;
+            dryGain.gain.value = 1 - normalizedIntensity * 0.2;
 
             source.connect(dryGain);
             source.connect(convolver);

@@ -1,3 +1,4 @@
+import React from 'react';
 // frontend/src/utils/accessibilityHelpers.js
 
 /**
@@ -85,7 +86,7 @@ class AccessibilityManager {
         const skip = document.createElement('a');
         skip.href = '#main-content';
         skip.className = 'skip-link';
-        skip.textContent = 'Skip to main content';
+        skip.textContent = 'İçeriğe Atla';
         skip.style.cssText = `
       position: absolute;
       left: -10000px;
@@ -138,21 +139,37 @@ class AccessibilityManager {
             el.classList.remove('focus-visible');
         };
 
-        document.addEventListener('keydown', () => {
-            hadKeyboardEvent = true;
-        }, true);
+        document.addEventListener(
+            'keydown',
+            () => {
+                hadKeyboardEvent = true;
+            },
+            true
+        );
 
-        document.addEventListener('mousedown', () => {
-            hadKeyboardEvent = false;
-        }, true);
+        document.addEventListener(
+            'mousedown',
+            () => {
+                hadKeyboardEvent = false;
+            },
+            true
+        );
 
-        document.addEventListener('focus', (e) => {
-            addFocusVisibleClass(e.target);
-        }, true);
+        document.addEventListener(
+            'focus',
+            (e) => {
+                addFocusVisibleClass(e.target);
+            },
+            true
+        );
 
-        document.addEventListener('blur', (e) => {
-            removeFocusVisibleClass(e.target);
-        }, true);
+        document.addEventListener(
+            'blur',
+            (e) => {
+                removeFocusVisibleClass(e.target);
+            },
+            true
+        );
     }
 
     /**
@@ -205,7 +222,7 @@ class AccessibilityManager {
                 if (index > -1) {
                     this.focusTrapStack.splice(index, 1);
                 }
-            }
+            },
         };
 
         this.focusTrapStack.push(trap);
@@ -268,7 +285,7 @@ class AccessibilityManager {
     getContrastRatio(color1, color2) {
         const getLuminance = (color) => {
             const rgb = this.hexToRgb(color);
-            const [r, g, b] = [rgb.r, rgb.g, rgb.b].map(v => {
+            const [r, g, b] = [rgb.r, rgb.g, rgb.b].map((v) => {
                 v /= 255;
                 return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
             });
@@ -290,8 +307,8 @@ class AccessibilityManager {
         const ratio = this.getContrastRatio(color1, color2);
 
         const requirements = {
-            'AA': { normal: 4.5, large: 3 },
-            'AAA': { normal: 7, large: 4.5 }
+            AA: { normal: 4.5, large: 3 },
+            AAA: { normal: 7, large: 4.5 },
         };
 
         const required = requirements[level][size];
@@ -300,7 +317,7 @@ class AccessibilityManager {
             passes: ratio >= required,
             required,
             level,
-            size
+            size,
         };
     }
 
@@ -309,11 +326,13 @@ class AccessibilityManager {
      */
     hexToRgb(hex) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
+        return result
+            ? {
+                  r: parseInt(result[1], 16),
+                  g: parseInt(result[2], 16),
+                  b: parseInt(result[3], 16),
+              }
+            : null;
     }
 
     /**
@@ -373,41 +392,39 @@ export const ariaProps = {
         role: 'button',
         'aria-label': label,
         'aria-expanded': expanded,
-        tabIndex: 0
+        tabIndex: 0,
     }),
 
     dialog: (labelId, describedById) => ({
         role: 'dialog',
         'aria-modal': true,
         'aria-labelledby': labelId,
-        'aria-describedby': describedById
+        'aria-describedby': describedById,
     }),
 
     menu: (label) => ({
         role: 'menu',
-        'aria-label': label
+        'aria-label': label,
     }),
 
     menuItem: () => ({
         role: 'menuitem',
-        tabIndex: -1
+        tabIndex: -1,
     }),
 
     tab: (selected, controls) => ({
         role: 'tab',
         'aria-selected': selected,
         'aria-controls': controls,
-        tabIndex: selected ? 0 : -1
+        tabIndex: selected ? 0 : -1,
     }),
 
     tabPanel: (labelledBy, hidden) => ({
         role: 'tabpanel',
         'aria-labelledby': labelledBy,
         'aria-hidden': hidden,
-        tabIndex: 0
-    })
+        tabIndex: 0,
+    }),
 };
 
 export default AccessibilityManager;
-
-

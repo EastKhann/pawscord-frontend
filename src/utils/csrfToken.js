@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/csrfToken.js
 
 /**
@@ -18,21 +19,21 @@ class CSRFTokenManager {
     generateToken() {
         const array = new Uint8Array(32);
         window.crypto.getRandomValues(array);
-        this.token = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        this.token = Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
 
-        // localStorage'a kaydet
+        // localStorage'a save
         localStorage.setItem(this.tokenKey, this.token);
 
         return this.token;
     }
 
     /**
-     * Mevcut token'ı getir veya yeni oluştur
+     * Mevcut token'ı getir or yeni oluştur
      * @returns {string} CSRF token
      */
     getToken() {
         if (!this.token) {
-            // localStorage'dan yükle
+            // localStorage'dan upload
             this.token = localStorage.getItem(this.tokenKey);
 
             // Yoksa yeni oluştur
@@ -53,7 +54,7 @@ class CSRFTokenManager {
         const isValid = token === currentToken;
 
         if (!isValid) {
-            console.error('❌ [CSRF] Token geçersiz!');
+            logger.error('❌ [CSRF] Token geçersiz!');
         }
 
         return isValid;
@@ -69,9 +70,9 @@ class CSRFTokenManager {
     }
 
     /**
-     * Fetch request'e CSRF header ekle
+     * Fetch request'e CSRF header add
      * @param {Object} options - Fetch options
-     * @returns {Object} CSRF header eklenmiş options
+     * @returns {Object} CSRF header addnmiş options
      */
     addTokenToRequest(options = {}) {
         const token = this.getToken();
@@ -80,8 +81,8 @@ class CSRFTokenManager {
             headers: {
                 ...options.headers,
                 'X-CSRF-Token': token,
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+                'X-Requested-With': 'XMLHttpRequest',
+            },
         };
     }
 
@@ -97,7 +98,7 @@ class CSRFTokenManager {
 // Global instance
 export const csrfManager = new CSRFTokenManager();
 
-// Kolay kullanım için wrapper fonksiyon
+// Easy usage wrapper function
 export const fetchWithCSRF = async (url, options = {}) => {
     const optionsWithToken = csrfManager.addTokenToRequest(options);
 
@@ -106,21 +107,19 @@ export const fetchWithCSRF = async (url, options = {}) => {
 
         // 403 Forbidden durumunda token'ı yenile
         if (response.status === 403) {
-            console.warn('⚠️ [CSRF] Token geçersiz, yenileniyor...');
+            logger.warn('⚠️ [CSRF] Token geçersiz, yenileniyor...');
             csrfManager.refreshToken();
 
-            // Tekrar dene
+            // Try again
             const retryOptions = csrfManager.addTokenToRequest(options);
             return await fetch(url, retryOptions);
         }
 
         return response;
     } catch (error) {
-        console.error('❌ [CSRF] Fetch hatası:', error);
+        logger.error('❌ [CSRF] Fetch hatası:', error);
         throw error;
     }
 };
 
 export default CSRFTokenManager;
-
-

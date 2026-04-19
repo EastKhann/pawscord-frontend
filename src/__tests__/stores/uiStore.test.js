@@ -146,7 +146,7 @@ describe('useUIStore – Comprehensive', () => {
             useUIStore.getState().openModal('analytics');
             useUIStore.getState().closeAllModals();
             const modals = useUIStore.getState().modals;
-            Object.values(modals).forEach(v => expect(v).toBe(false));
+            Object.values(modals).forEach((v) => expect(v).toBe(false));
         });
 
         it('should clear all modal data', () => {
@@ -261,7 +261,7 @@ describe('useUIStore – Comprehensive', () => {
         });
 
         it('setLoading accepts function updater', () => {
-            useUIStore.getState().setLoading(prev => !prev);
+            useUIStore.getState().setLoading((prev) => !prev);
             expect(useUIStore.getState().isLoading).toBe(true);
         });
 
@@ -320,7 +320,12 @@ describe('useUIStore – Comprehensive', () => {
     describe('Context Menu', () => {
         it('setContextMenu should set menu data', () => {
             useUIStore.getState().setContextMenu({ x: 100, y: 200, type: 'user', data: {} });
-            expect(useUIStore.getState().contextMenu).toEqual({ x: 100, y: 200, type: 'user', data: {} });
+            expect(useUIStore.getState().contextMenu).toEqual({
+                x: 100,
+                y: 200,
+                type: 'user',
+                data: {},
+            });
         });
 
         it('clearContextMenu should reset to null', () => {
@@ -341,7 +346,7 @@ describe('useUIStore – Comprehensive', () => {
 
         it('setSearchQuery with function updater', () => {
             useUIStore.getState().setSearchQuery('start');
-            useUIStore.getState().setSearchQuery(prev => prev + ' more');
+            useUIStore.getState().setSearchQuery((prev) => prev + ' more');
             expect(useUIStore.getState().searchQuery).toBe('start more');
         });
     });
@@ -355,7 +360,7 @@ describe('useUIStore – Comprehensive', () => {
             expect(useUIStore.getState().downloadProgress).toBe(50);
         });
 
-        it('setIsDownloading should toggle downloading state', () => {
+        it('setIsDownloading should toggle downloadg state', () => {
             useUIStore.getState().setIsDownloading(true);
             expect(useUIStore.getState().isDownloading).toBe(true);
         });

@@ -1,3 +1,5 @@
+import React from 'react';
+import { getToken } from './tokenStorage';
 // frontend/src/utils/apiClient.js
 import { API_BASE_URL } from './apiEndpoints';
 
@@ -19,12 +21,12 @@ class APIClient {
         this.interceptors = {
             request: [],
             response: [],
-            error: []
+            error: [],
         };
 
         this.cacheConfig = {
             maxAge: options.cacheMaxAge || 5 * 60 * 1000, // 5 minutes
-            maxSize: options.cacheMaxSize || 100
+            maxSize: options.cacheMaxSize || 100,
         };
     }
 
@@ -94,7 +96,7 @@ class APIClient {
             method,
             headers: { ...this.headers, ...headers },
             body,
-            ...fetchOptions
+            ...fetchOptions,
         };
 
         for (const interceptor of this.interceptors.request) {
@@ -154,7 +156,7 @@ class APIClient {
                 headers: config.headers,
                 body: config.body ? JSON.stringify(config.body) : undefined,
                 signal: controller.signal,
-                ...config
+                ...config,
             });
 
             clearTimeout(timeoutId);
@@ -192,7 +194,7 @@ class APIClient {
             if (import.meta.env.MODE === 'development') {
             }
 
-            await new Promise(resolve => setTimeout(resolve, delay));
+            await new Promise((resolve) => setTimeout(resolve, delay));
             return this.requestWithRetry(config, timeout, attempt + 1);
         }
     }
@@ -206,7 +208,7 @@ class APIClient {
         if (!params) return fullURL;
 
         const urlObj = new URL(fullURL);
-        Object.keys(params).forEach(key => {
+        Object.keys(params).forEach((key) => {
             if (params[key] !== undefined && params[key] !== null) {
                 urlObj.searchParams.set(key, params[key]);
             }
@@ -243,7 +245,7 @@ class APIClient {
 
         this.cache.set(key, {
             data,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
     }
 
@@ -303,13 +305,13 @@ class APIClient {
      * Batch requests
      */
     async batch(requests, options = {}) {
-        const { parallel = 3 } = options;
+        const { pparallel = 3 } = options;
         const results = [];
 
-        for (let i = 0; i < requests.length; i += parallel) {
-            const batch = requests.slice(i, i + parallel);
-            const promises = batch.map(req =>
-                this.request(req.url, req.options).catch(err => ({ error: err }))
+        for (let i = 0; i < requests.length; i += pparallel) {
+            const batch = requests.slice(i, i + pparallel);
+            const promises = batch.map((req) =>
+                this.request(req.url, req.options).catch((err) => ({ error: err }))
             );
 
             const batchResults = await Promise.all(promises);
@@ -326,13 +328,13 @@ export const apiClient = new APIClient({
     timeout: 30000,
     retryAttempts: 3,
     headers: {
-        'Content-Type': 'application/json'
-    }
+        'Content-Type': 'application/json',
+    },
 });
 
 // Add auth interceptor
 apiClient.addRequestInterceptor(async (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = getToken();
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -395,24 +397,25 @@ export const useMutation = (url, options = {}) => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
-    const mutate = React.useCallback(async (body) => {
-        setLoading(true);
-        setError(null);
+    const mutate = React.useCallback(
+        async (body) => {
+            setLoading(true);
+            setError(null);
 
-        try {
-            const result = await apiClient.post(url, body, options);
-            return result;
-        } catch (err) {
-            setError(err);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    }, [url, options]);
+            try {
+                const result = await apiClient.post(url, body, options);
+                return result;
+            } catch (err) {
+                setError(err);
+                throw err;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [url, options]
+    );
 
     return { mutate, loading, error };
 };
 
 export default APIClient;
-
-

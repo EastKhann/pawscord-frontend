@@ -560,7 +560,7 @@
     cursor: pointer;
 }
 
-.effect-toggle input[type="checkbox"] {
+.effect-toggle input[type='checkbox'] {
     width: 20px;
     height: 20px;
 }
@@ -575,7 +575,7 @@
     color: var(--text-mist);
 }
 
-.effect-slider input[type="range"] {
+.effect-slider input[type='range'] {
     width: 100%;
     height: 6px;
     background: rgba(255, 255, 255, 0.1);
@@ -584,7 +584,7 @@
     -webkit-appearance: none;
 }
 
-.effect-slider input[type="range"]::-webkit-slider-thumb {
+.effect-slider input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 18px;
     height: 18px;

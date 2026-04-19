@@ -1,6 +1,11 @@
 import {
-    FaCommentSlash, FaHistory, FaAt, FaLink,
-    FaExclamationTriangle, FaBan, FaShieldAlt
+    FaCommentSlash,
+    FaHistory,
+    FaAt,
+    FaLink,
+    FaExclamationTriangle,
+    FaBan,
+    FaShieldAlt,
 } from 'react-icons/fa';
 
 export const PATTERN_WEIGHTS = {
@@ -9,26 +14,55 @@ export const PATTERN_WEIGHTS = {
     mentionSpam: 0.2,
     linkSpam: 0.15,
     capsLock: 0.05,
-    zalgoText: 0.05
+    zalgoText: 0.05,
 };
 
 export const SENSITIVITY_PRESETS = {
-    low: { messagesPerMinute: 15, duplicateThreshold: 5, mentionLimit: 10, linkLimit: 5, capsPercentage: 80 },
-    medium: { messagesPerMinute: 10, duplicateThreshold: 3, mentionLimit: 5, linkLimit: 3, capsPercentage: 70 },
-    high: { messagesPerMinute: 7, duplicateThreshold: 2, mentionLimit: 3, linkLimit: 2, capsPercentage: 60 },
-    aggressive: { messagesPerMinute: 5, duplicateThreshold: 2, mentionLimit: 2, linkLimit: 1, capsPercentage: 50 }
+    low: {
+        messagesThuMinute: 15,
+        duplicateThreshold: 5,
+        mentionLimit: 10,
+        linkLimit: 5,
+        capsPercentage: 80,
+    },
+    medium: {
+        messagesThuMinute: 10,
+        duplicateThreshold: 3,
+        mentionLimit: 5,
+        linkLimit: 3,
+        capsPercentage: 70,
+    },
+    high: {
+        messagesThuMinute: 7,
+        duplicateThreshold: 2,
+        mentionLimit: 3,
+        linkLimit: 2,
+        capsPercentage: 60,
+    },
+    aggressive: {
+        messagesThuMinute: 5,
+        duplicateThreshold: 2,
+        mentionLimit: 2,
+        linkLimit: 1,
+        capsPercentage: 50,
+    },
 };
 
 export const PATTERN_LABELS = {
-    rapidMessages: 'Hızlı Mesaj',
-    duplicateContent: 'Tekrarlanan İçerik',
-    mentionSpam: 'Etiket Spam',
-    linkSpam: 'Link Spam',
-    capsLock: 'BÜYÜK HARF',
-    zalgoText: 'Zalgo Metin'
+    rapidMessages: { key: 'spamDetection.rapidMessages', fallback: 'Rapid Messages' },
+    duplicateContent: { key: 'spamDetection.duplicateContent', fallback: 'Duplicate Content' },
+    mentionSpam: { key: 'spamDetection.mentionSpam', fallback: 'Mention Spam' },
+    linkSpam: { key: 'spamDetection.linkSpam', fallback: 'Link Spam' },
+    capsLock: { key: 'spamDetection.capsLock', fallback: 'CAPS LOCK' },
+    zalgoText: { key: 'spamDetection.zalgoText', fallback: 'Zalgo Text' },
 };
 
-export const ACTION_LABELS = { warn: 'Uyar', mute: 'Sustur', kick: 'At', ban: 'Yasakla' };
+export const ACTION_LABELS = {
+    warn: { key: 'spamDetection.actionWarn', fallback: 'Warn' },
+    mute: { key: 'spamDetection.actionMute', fallback: 'Mute' },
+    kick: { key: 'spamDetection.actionKick', fallback: 'Kick' },
+    ban: { key: 'spamDetection.actionBan', fallback: 'Ban' },
+};
 
 export const getPatternIcon = (type) => {
     const icons = {
@@ -37,7 +71,7 @@ export const getPatternIcon = (type) => {
         mentionSpam: <FaAt />,
         linkSpam: <FaLink />,
         capsLock: <FaExclamationTriangle />,
-        zalgoText: <FaBan />
+        zalgoText: <FaBan />,
     };
     return icons[type] || <FaShieldAlt />;
 };

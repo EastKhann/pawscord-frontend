@@ -1,0 +1,312 @@
+.slash-commands-panel {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 20px;
+    color: var(--text-primary);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.commands-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--bg-input);
+}
+
+.commands-header h2 {
+    color: var(--color-white);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.command-executor {
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.executor-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.terminal-icon {
+    color: var(--color-success);
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.command-input {
+    flex: 1;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
+    padding: 15px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+.command-input:focus {
+    outline: none;
+    border-color: var(--color-success);
+}
+
+.execute-btn {
+    background: var(--color-success);
+    color: var(--color-white);
+    border: none;
+    padding: 15px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.execute-btn:hover:not(:disabled) {
+    background: #3ca374;
+}
+
+.execute-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.command-result {
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid;
+}
+
+.command-result.success {
+    background: rgba(67, 181, 129, 0.1);
+    border-left-color: var(--color-success);
+}
+
+.command-result.error {
+    background: rgba(240, 71, 71, 0.1);
+    border-left-color: var(--color-danger);
+}
+
+.result-header {
+    color: var(--color-white);
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.result-output {
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.command-params {
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.command-params h3 {
+    color: var(--color-white);
+    font-size: 16px;
+    margin: 0 0 15px 0;
+}
+
+.param-input {
+    margin-bottom: 15px;
+}
+
+.param-input label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.required {
+    color: var(--color-danger);
+    font-weight: 700;
+}
+
+.param-field {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 2px solid var(--bg-primary);
+    color: var(--text-primary);
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.param-field:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.commands-list {
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.commands-list h3 {
+    color: var(--color-white);
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.loading {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px;
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.command-card {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.command-card:hover {
+    background: var(--bg-elevated);
+    transform: translateX(5px);
+}
+
+.command-card.selected {
+    background: var(--bg-elevated);
+    box-shadow: 0 0 0 2px var(--color-success);
+}
+
+.command-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.command-name {
+    color: var(--color-success);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+}
+
+.command-category {
+    color: var(--color-white);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.command-description {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.command-usage {
+    background: var(--bg-input);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.command-usage code {
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.command-history {
+    background: var(--bg-input);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.command-history h3 {
+    color: var(--color-white);
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty-history {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 20px;
+}
+
+.empty-icon {
+    font-size: 64px;
+    color: var(--bg-neutral-dark);
+    margin-bottom: 15px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 3px solid;
+}
+
+.history-item.success {
+    background: rgba(67, 181, 129, 0.1);
+    border-left-color: var(--color-success);
+}
+
+.history-item.error {
+    background: rgba(240, 71, 71, 0.1);
+    border-left-color: var(--color-danger);
+}
+
+.history-command {
+    color: var(--color-white);
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-time {
+    color: var(--text-muted);
+    font-size: 12px;
+}

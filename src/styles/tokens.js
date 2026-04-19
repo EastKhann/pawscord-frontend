@@ -1,10 +1,11 @@
+const _s = (o) => o;
 /**
  * JS-accessible design tokens — mirrors CSS custom properties in designTokens.css
  * Use these in inline styles instead of hardcoded hex values.
  *
  * Usage:
  *   import { colors, bg, text, spacing } from '../styles/tokens';
- *   style={{ color: colors.primary, background: bg.primary }}
+ *   style={_s({ color: colors.primary, background: bg.primary })}>
  */
 
 export const colors = {

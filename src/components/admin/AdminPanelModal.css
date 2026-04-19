@@ -1,0 +1,151 @@
+/* ====================================================
+   ADMIN PANEL MODAL — MOBILE RESPONSIVE
+   Uses !important to override React inline styles
+   ==================================================== */
+
+/* ── 768 px: tablet / telefon (landscape + portrait) ─ */
+@media (max-width: 768px) {
+    /* Full-screen modal */
+    .admin-panel-modal {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100dvh !important;
+        height: 100vh !important;
+        /* fallback */
+        border-radius: 0 !important;
+        border: none !important;
+    }
+
+    /* Compact header */
+    .admin-panel-header {
+        padding: 10px 14px !important;
+    }
+
+    .admin-panel-title {
+        font-size: 14px !important;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Hide v2.0 badge & online count on small screens */
+    .admin-panel-badge,
+    .admin-panel-online-info {
+        display: none !important;
+    }
+
+    /* Body: stack sidebar above content */
+    .admin-panel-body {
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Sidebar → horizontal scrollable pill nav */
+    .admin-panel-sidebar {
+        width: 100% !important;
+        min-width: unset;
+        max-height: 48px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden !important;
+        padding: 6px 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #16203a;
+        display: flex;
+        gap: 3px;
+        flex-shrink: 0;
+        scrollbar-width: none;
+    }
+
+    .admin-panel-sidebar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Sidebar buttons: compact horizontal pills */
+    .admin-panel-sidebar-btn {
+        white-space: nowrap;
+        width: auto !important;
+        min-width: unset;
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+        flex-shrink: 0;
+        margin-bottom: 0 !important;
+        border-radius: 6px !important;
+        height: 32px;
+        display: inline-flex !important;
+        align-items: center;
+    }
+
+    /* Content area: full width, less padding */
+    .admin-panel-content {
+        padding: 10px !important;
+        overflow-x: hidden;
+    }
+
+    /* ── Tables: make horizontally scrollable ── */
+    .admin-panel-content table {
+        display: block;
+        overflow-x: auto;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* ── Grid overrides: collapse fixed multi-column grids ── */
+    /* These selectors match inline style values React writes to the DOM */
+
+    /* 6-col and 5-col → 2-col */
+    .admin-panel-content div[style*='repeat(6,'],
+    .admin-panel-content div[style*='repeat(5,'] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* 4-col → 2-col */
+    .admin-panel-content div[style*='repeat(4,'] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* 3-col → 2-col */
+    .admin-panel-content div[style*='repeat(3,'] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* Asymmetric 2-col (1fr 2fr) and 2fr side-by-side → 1-col */
+    .admin-panel-content div[style*='1fr 2fr'],
+    .admin-panel-content div[style*='2fr 1fr'] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ── Visitor logs 2-col summary row ── */
+    .admin-panel-content .visitor-two-col,
+    .admin-panel-content [style*='display: flex'][style*='gap: 16px'] {
+        flex-direction: column;
+    }
+
+    /* ── Misc: input rows that need to wrap ── */
+    .admin-panel-content [style*='display: flex'][style*='flexWrap: wrap'],
+    .admin-panel-content [style*='display: flex'][style*='flex-wrap: wrap'] {
+        flex-wrap: wrap;
+    }
+}
+
+/* ── 480 px: small phones ─────────────────────────── */
+@media (max-width: 480px) {
+    /* Single column for everything */
+    .admin-panel-content div[style*='repeat(2,'],
+    .admin-panel-content div[style*='repeat(3,'],
+    .admin-panel-content div[style*='repeat(4,'],
+    .admin-panel-content div[style*='repeat(5,'],
+    .admin-panel-content div[style*='repeat(6,'],
+    .admin-panel-content div[style*='1fr 1fr'] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-panel-header {
+        padding: 8px 10px !important;
+    }
+
+    .admin-panel-content {
+        padding: 8px !important;
+    }
+}

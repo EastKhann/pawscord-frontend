@@ -31,7 +31,7 @@ describe('useUIStore — Advanced', () => {
 
         it('setLoading should accept function updater', () => {
             useUIStore.getState().setLoading(true);
-            useUIStore.getState().setLoading(prev => !prev);
+            useUIStore.getState().setLoading((prev) => !prev);
             expect(useUIStore.getState().isLoading).toBe(false);
         });
     });
@@ -138,7 +138,7 @@ describe('useUIStore — Advanced', () => {
 
         it('setSearchQuery should accept function updater', () => {
             useUIStore.getState().setSearchQuery('hello');
-            useUIStore.getState().setSearchQuery(prev => prev + ' world');
+            useUIStore.getState().setSearchQuery((prev) => prev + ' world');
             expect(useUIStore.getState().searchQuery).toBe('hello world');
         });
 
@@ -156,7 +156,7 @@ describe('useUIStore — Advanced', () => {
             expect(useUIStore.getState().downloadProgress).toBe(50);
         });
 
-        it('should track downloading state', () => {
+        it('should track downloadg state', () => {
             useUIStore.getState().setIsDownloading(true);
             expect(useUIStore.getState().isDownloading).toBe(true);
         });
@@ -214,7 +214,7 @@ describe('useUIStore — Advanced', () => {
         it('setIsConnected with function updater should toggle', () => {
             useUIStore.getState().setIsConnected(true);
             expect(useUIStore.getState().isConnected).toBe(true);
-            useUIStore.getState().setIsConnected(prev => !prev);
+            useUIStore.getState().setIsConnected((prev) => !prev);
             expect(useUIStore.getState().isConnected).toBe(false);
         });
     });

@@ -1,3 +1,4 @@
+import React from 'react';
 // frontend/src/utils/networkQualityDetector.js
 
 /**
@@ -7,7 +8,7 @@
 
 class NetworkQualityDetector {
     constructor(options = {}) {
-        this.onQualityChange = options.onQualityChange || (() => { });
+        this.onQualityChange = options.onQualityChange || (() => {});
         this.checkInterval = options.checkInterval || 30000; // 30 seconds
 
         this.quality = 'unknown';
@@ -18,7 +19,7 @@ class NetworkQualityDetector {
             rtt: 0,
             downlink: 0,
             effectiveType: 'unknown',
-            saveData: false
+            saveData: false,
         };
 
         this.init();
@@ -29,9 +30,8 @@ class NetworkQualityDetector {
      */
     init() {
         // Network Information API
-        this.connection = navigator.connection ||
-            navigator.mozConnection ||
-            navigator.webkitConnection;
+        this.connection =
+            navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
         if (this.connection) {
             this.updateFromConnection();
@@ -69,7 +69,7 @@ class NetworkQualityDetector {
             rtt: this.connection.rtt || 0,
             downlink: this.connection.downlink || 0,
             effectiveType: this.connection.effectiveType || 'unknown',
-            saveData: this.connection.saveData || false
+            saveData: this.connection.saveData || false,
         };
 
         this.detectQuality();
@@ -223,7 +223,7 @@ class NetworkQualityDetector {
                 imageQuality: 'none',
                 videoQuality: 'none',
                 prefetch: false,
-                lazyLoad: true
+                lazyLoad: true,
             },
             low: {
                 enableImages: true,
@@ -233,7 +233,7 @@ class NetworkQualityDetector {
                 imageQuality: 'low',
                 videoQuality: '360p',
                 prefetch: false,
-                lazyLoad: true
+                lazyLoad: true,
             },
             medium: {
                 enableImages: true,
@@ -243,7 +243,7 @@ class NetworkQualityDetector {
                 imageQuality: 'medium',
                 videoQuality: '720p',
                 prefetch: true,
-                lazyLoad: true
+                lazyLoad: true,
             },
             high: {
                 enableImages: true,
@@ -253,7 +253,7 @@ class NetworkQualityDetector {
                 imageQuality: 'high',
                 videoQuality: '1080p',
                 prefetch: true,
-                lazyLoad: false
+                lazyLoad: false,
             },
             unknown: {
                 enableImages: true,
@@ -263,8 +263,8 @@ class NetworkQualityDetector {
                 imageQuality: 'medium',
                 videoQuality: '720p',
                 prefetch: false,
-                lazyLoad: true
-            }
+                lazyLoad: true,
+            },
         };
 
         return configs[this.quality] || configs.unknown;
@@ -288,7 +288,7 @@ export const networkQuality = new NetworkQualityDetector({
     onQualityChange: (quality, metrics) => {
         if (import.meta.env.MODE === 'development') {
         }
-    }
+    },
 });
 
 /**
@@ -304,7 +304,7 @@ export const useNetworkQuality = () => {
             onQualityChange: (newQuality, newMetrics) => {
                 setQuality(newQuality);
                 setMetrics(newMetrics);
-            }
+            },
         });
 
         const handleOnline = () => setIsOnline(true);
@@ -329,7 +329,7 @@ export const useNetworkQuality = () => {
         isHighQuality: quality === 'high',
         isLowQuality: quality === 'low' || quality === 'offline',
         shouldReduceData: networkQuality.shouldReduceData(),
-        config
+        config,
     };
 };
 
@@ -340,7 +340,7 @@ export const getAdaptiveImageUrl = (baseUrl, quality) => {
     const qualities = {
         low: '_low',
         medium: '_medium',
-        high: ''
+        high: '',
     };
 
     const suffix = qualities[quality] || qualities.medium;
@@ -354,12 +354,10 @@ export const getAdaptiveVideoQuality = (quality) => {
     const qualities = {
         low: '360p',
         medium: '720p',
-        high: '1080p'
+        high: '1080p',
     };
 
     return qualities[quality] || '720p';
 };
 
 export default NetworkQualityDetector;
-
-

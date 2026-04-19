@@ -129,7 +129,7 @@ describe('useModalA11y', () => {
         expect(stopPropagation).toHaveBeenCalled();
     });
 
-    // ── 9. Does not set up listeners when isOpen=false ──
+    // ── 9. Does not set up listners when isOpen=false ──
     it('should not call onClose on Escape when isOpen is false', () => {
         const onClose = vi.fn();
         renderHook(() => useModalA11y({ onClose, isOpen: false }));

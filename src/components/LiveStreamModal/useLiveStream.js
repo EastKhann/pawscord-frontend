@@ -1,14 +1,20 @@
+﻿// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../utils/toast';
+import PropTypes from 'prop-types';
+import logger from '../../utils/logger';
 
 const rtcConfig = {
     iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
         { urls: 'stun:stun1.l.google.com:19302' },
-    ]
+    ],
 };
 
 const useLiveStream = ({ roomSlug, ws, onClose }) => {
+    const { t } = useTranslation();
     const [isStreaming, setIsStreaming] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [streamType, setStreamType] = useState('camera');
@@ -24,16 +30,30 @@ const useLiveStream = ({ roomSlug, ws, onClose }) => {
         if (!streamRef.current) return;
         const pc = new RTCPeerConnection(rtcConfig);
         peerConnectionsRef.current[viewerId] = pc;
-        streamRef.current.getTracks().forEach(track => { pc.addTrack(track, streamRef.current); });
+        streamRef.current.getTracks().forEach((track) => {
+            pc.addTrack(track, streamRef.current);
+        });
         pc.onicecandidate = (event) => {
             if (event.candidate && ws.current?.readyState === WebSocket.OPEN) {
-                ws.current.send(JSON.stringify({ type: 'ice_candidate', candidate: event.candidate, viewer_id: viewerId }));
+                ws.current.send(
+                    JSON.stringify({
+                        type: 'ice_candidate',
+                        candidate: event.candidate,
+                        viewer_id: viewerId,
+                    })
+                );
             }
         };
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
         if (ws.current?.readyState === WebSocket.OPEN) {
-            ws.current.send(JSON.stringify({ type: 'stream_offer', sdp: pc.localDescription, viewer_id: viewerId }));
+            ws.current.send(
+                JSON.stringify({
+                    type: 'stream_offer',
+                    sdp: pc.localDescription,
+                    viewer_id: viewerId,
+                })
+            );
         }
     };
 
@@ -44,16 +64,28 @@ const useLiveStream = ({ roomSlug, ws, onClose }) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'stream_viewer_count') setViewers(data.count);
                 else if (data.type === 'stream_chat') {
-                    setChatMessages(prev => [...prev, { id: Date.now(), user: data.username, message: data.message, timestamp: new Date().toLocaleTimeString() }]);
+                    setChatMessages((prev) => [
+                        ...prev,
+                        {
+                            id: Date.now(),
+                            user: data.username,
+                            message: data.message,
+                            timestamp: new Date().toLocaleTimeString(),
+                        },
+                    ]);
                 } else if (data.type === 'stream_viewer_join') createPeerConnection(data.viewerId);
-            } catch (e) { console.error('Stream WS error:', e); }
+            } catch (e) {
+                logger.error('Stream WS error:', e);
+            }
         };
         ws.current.addEventListener('message', handleMessage);
         return () => ws.current?.removeEventListener('message', handleMessage);
     }, [ws]);
 
     useEffect(() => {
-        const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
         window.addEventListener('keydown', handleEsc);
         return () => window.removeEventListener('keydown', handleEsc);
     }, [onClose]);
@@ -62,22 +94,48 @@ const useLiveStream = ({ roomSlug, ws, onClose }) => {
         try {
             let stream;
             if (streamType === 'camera') {
-                stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } }, audio: true });
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        frameRate: { ideal: 30 },
+                    },
+                    audio: true,
+                });
             } else {
-                stream = await navigator.mediaDevices.getDisplayMedia({ video: { width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 30 } }, audio: true });
+                stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: {
+                        width: { ideal: 1920 },
+                        height: { ideal: 1080 },
+                        frameRate: { ideal: 30 },
+                    },
+                    audio: true,
+                });
             }
             streamRef.current = stream;
             if (videoRef.current) videoRef.current.srcObject = stream;
             setIsStreaming(true);
             if (ws.current?.readyState === WebSocket.OPEN) {
-                ws.current.send(JSON.stringify({ type: 'stream_start', room_slug: roomSlug, stream_type: streamType }));
+                ws.current.send(
+                    JSON.stringify({
+                        type: 'stream_start',
+                        room_slug: roomSlug,
+                        stream_type: streamType,
+                    })
+                );
             }
-        } catch (error) { console.error('Failed to start stream:', error); toast.error('❌ Failed to start stream. Please check permissions.'); }
+        } catch (error) {
+            logger.error('Failed to start stream:', error);
+            toast.error(t('liveStream.startFailed'));
+        }
     };
 
     const stopStream = () => {
-        if (streamRef.current) { streamRef.current.getTracks().forEach(track => track.stop()); streamRef.current = null; }
-        Object.values(peerConnectionsRef.current).forEach(pc => pc.close());
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach((track) => track.stop());
+            streamRef.current = null;
+        }
+        Object.values(peerConnectionsRef.current).forEach((pc) => pc.close());
         peerConnectionsRef.current = {};
         if (videoRef.current) videoRef.current.srcObject = null;
         setIsStreaming(false);
@@ -87,23 +145,46 @@ const useLiveStream = ({ roomSlug, ws, onClose }) => {
     };
 
     const toggleMute = () => {
-        if (streamRef.current) { streamRef.current.getAudioTracks().forEach(track => { track.enabled = isMuted; }); setIsMuted(!isMuted); }
+        if (streamRef.current) {
+            streamRef.current.getAudioTracks().forEach((track) => {
+                track.enabled = isMuted;
+            });
+            setIsMuted(!isMuted);
+        }
     };
 
     const sendChatMessage = (e) => {
         e.preventDefault();
         if (!chatInput.trim()) return;
         if (ws.current?.readyState === WebSocket.OPEN) {
-            ws.current.send(JSON.stringify({ type: 'stream_chat', room_slug: roomSlug, message: chatInput }));
+            ws.current.send(
+                JSON.stringify({ type: 'stream_chat', room_slug: roomSlug, message: chatInput })
+            );
         }
         setChatInput('');
     };
 
     return {
-        isStreaming, isMuted, streamType, setStreamType, viewers,
-        chatMessages, chatInput, setChatInput, videoRef,
-        startStream, stopStream, toggleMute, sendChatMessage
+        isStreaming,
+        isMuted,
+        streamType,
+        setStreamType,
+        viewers,
+        chatMessages,
+        chatInput,
+        setChatInput,
+        videoRef,
+        startStream,
+        stopStream,
+        toggleMute,
+        sendChatMessage,
     };
 };
 
 export default useLiveStream;
+
+useLiveStream.propTypes = {
+    roomSlug: PropTypes.string,
+    ws: PropTypes.array,
+    onClose: PropTypes.func.isRequired,
+};

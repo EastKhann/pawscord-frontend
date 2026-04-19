@@ -117,7 +117,7 @@ describe('useFocusTrap', () => {
         expect(true).toBe(true);
     });
 
-    it('cleans up listener on unmount', () => {
+    it('cleans up listner on unmount', () => {
         const removeSpy = vi.spyOn(document, 'removeEventListener');
         const { unmount } = render(<TrapContainer />);
         unmount();
@@ -129,7 +129,11 @@ describe('useFocusTrap', () => {
         function Empty() {
             const ref = useRef(null);
             useFocusTrap(ref);
-            return <div ref={ref} data-testid="empty"><span>No focusable</span></div>;
+            return (
+                <div ref={ref} data-testid="empty">
+                    <span>No focusable</span>
+                </div>
+            );
         }
         render(<Empty />);
         fireEvent.keyDown(document, { key: 'Tab' });
@@ -143,7 +147,9 @@ describe('useFocusTrap', () => {
             return (
                 <div ref={ref}>
                     <button data-testid="enabled">OK</button>
-                    <button disabled data-testid="disabled">Nope</button>
+                    <button disabled data-testid="disabled">
+                        Nope
+                    </button>
                 </div>
             );
         }

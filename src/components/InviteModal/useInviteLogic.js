@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../utils/toast';
 import { PRODUCTION_URL } from '../../utils/constants';
+import logger from '../../utils/logger';
 
 const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
+    const { t } = useTranslation();
     const [friends, setFriends] = useState([]);
     const [loadingFriends, setLoadingFriends] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -15,27 +18,32 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
 
     useEffect(() => {
         fetchFriends();
-        getOrCreatePermanentLink();
+        getOrCreateThumanentLink();
         setTimeout(() => searchRef.current?.focus(), 100);
     }, []);
 
-    const getOrCreatePermanentLink = async () => {
-        if (!server?.id) { setLoadingLink(false); return; }
+    const getOrCreateThumanentLink = async () => {
+        if (!server?.id) {
+            setLoadingLink(false);
+            return;
+        }
         setLoadingLink(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: server.id, max_uses: 0, expires_in_hours: 0 })
+                body: JSON.stringify({ server_id: server.id, max_uses: 0, expires_in_hours: 0 }),
             });
             if (res.ok) {
                 const data = await res.json();
-                setInviteLink(data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`);
+                setInviteLink(
+                    data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`
+                );
             } else {
-                console.error('[InviteModal] Create failed:', await res.json().catch(() => ({})));
+                logger.error('[InviteModal] Create failed:', await res.json().catch(() => ({})));
             }
         } catch (e) {
-            console.error('[InviteModal] Create error:', e);
+            logger.error('[InviteModal] Create error:', e);
         } finally {
             setLoadingLink(false);
         }
@@ -48,17 +56,19 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
             const res = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: server.id, max_uses: 0, expires_in_hours: 0 })
+                body: JSON.stringify({ server_id: server.id, max_uses: 0, expires_in_hours: 0 }),
             });
             if (res.ok) {
                 const data = await res.json();
-                setInviteLink(data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`);
-                toast.success('🔗 Yeni davet linki oluşturuldu!');
+                setInviteLink(
+                    data.url || data.invite_link || `${PRODUCTION_URL}/#/invite/${data.code}`
+                );
+                toast.success(t('invite.created'));
             } else {
-                toast.error('Link oluşturulamadı');
+                toast.error(t('invite.createFailed'));
             }
         } catch (e) {
-            toast.error('Link oluşturulurken hata: ' + e.message);
+            toast.error(t('invite.createError') + ': ' + e.message);
         } finally {
             setIsRegenerating(false);
         }
@@ -70,57 +80,61 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
             const res = await fetchWithAuth(`${apiBaseUrl}/friends/list/`);
             if (res.ok) {
                 const data = await res.json();
-                setFriends(Array.isArray(data) ? data : (data.friends || []));
+                setFriends(Array.isArray(data) ? data : data.friends || []);
             }
         } catch (e) {
-            console.error("Arkadaş listesi hatası:", e);
+            logger.error('Friend list error:', e);
         } finally {
             setLoadingFriends(false);
         }
     };
 
     const sendInviteToFriend = async (friendUsername) => {
-        setInvitedUsers(prev => new Set(prev).add(friendUsername));
+        setInvitedUsers((prev) => new Set(prev).add(friendUsername));
         try {
             let link = inviteLink;
             if (!link) {
                 const inviteRes = await fetchWithAuth(`${apiBaseUrl}/invites/create/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ server_id: server.id, max_uses: 1, expires_in_hours: 24 })
+                    body: JSON.stringify({
+                        server_id: server.id,
+                        max_uses: 1,
+                        expires_in_hours: 24,
+                    }),
                 });
-                if (!inviteRes.ok) throw new Error('Davet oluşturulamadı');
+                if (!inviteRes.ok) throw new Error('Could not create invite');
                 const inviteData = await inviteRes.json();
                 link = inviteData.url || inviteData.invite_link;
             }
             const convRes = await fetchWithAuth(`${apiBaseUrl}/conversations/find_or_create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ target_username: friendUsername })
+                body: JSON.stringify({ target_username: friendUsername }),
             });
-            if (!convRes.ok) throw new Error('DM oluşturulamadı');
+            if (!convRes.ok) throw new Error('DM could not be created');
             const convData = await convRes.json();
             const msgRes = await fetchWithAuth(`${apiBaseUrl}/messages/send_dm/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     conversation_id: convData.conversation_id,
-                    content: `Hey! Seni **${server?.name || 'sunucu'}** sunucusuna davet ediyorum! 🎉\n${link}`
-                })
+                    content: `Hey! You're invited to **${server?.name || 'sunucu'}** **! 🎉\n${link}`,
+                }),
             });
             if (msgRes.ok) {
-                toast.success(`✅ ${friendUsername} kullanıcısına davet gönderildi!`);
+                toast.success(t('invite.sent', { user: friendUsername }));
             } else {
                 navigator.clipboard.writeText(link);
-                toast.success(`Link kopyalandı! ${friendUsername} ile paylaşabilirsiniz.`);
+                toast.success(t('invite.linkCopied', { user: friendUsername }));
             }
         } catch (e) {
-            setInvitedUsers(prev => {
+            setInvitedUsers((prev) => {
                 const next = new Set(prev);
                 next.delete(friendUsername);
                 return next;
             });
-            toast.error("Davet gönderilemedi: " + e.message);
+            toast.error('Davet gönderilemedi: ' + e.message);
         }
     };
 
@@ -138,7 +152,7 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
             : friendship.receiver_avatar;
     };
 
-    const filteredFriends = friends.filter(f => {
+    const filteredFriends = friends.filter((f) => {
         const name = getFriendName(f);
         return name?.toLowerCase().includes(searchQuery.toLowerCase());
     });
@@ -146,16 +160,28 @@ const useInviteLogic = ({ server, fetchWithAuth, apiBaseUrl, currentUser }) => {
     const copyToClipboard = () => {
         navigator.clipboard.writeText(inviteLink);
         setCopied(true);
-        toast.success('📋 Davet linki kopyalandı!');
+        toast.success(t('invite.copied'));
         setTimeout(() => setCopied(false), 2000);
     };
 
     return {
-        friends, loadingFriends, searchQuery, setSearchQuery,
-        invitedUsers, inviteLink, copied, loadingLink, isRegenerating,
-        searchRef, filteredFriends,
-        getOrCreatePermanentLink, regenerateLink, sendInviteToFriend,
-        getFriendName, getFriendAvatar, copyToClipboard,
+        friends,
+        loadingFriends,
+        searchQuery,
+        setSearchQuery,
+        invitedUsers,
+        inviteLink,
+        copied,
+        loadingLink,
+        isRegenerating,
+        searchRef,
+        filteredFriends,
+        getOrCreateThumanentLink,
+        regenerateLink,
+        sendInviteToFriend,
+        getFriendName,
+        getFriendAvatar,
+        copyToClipboard,
     };
 };
 

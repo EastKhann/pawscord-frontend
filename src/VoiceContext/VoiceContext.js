@@ -1,0 +1,745 @@
+import {
+    createContext,
+    useContext,
+    useRef,
+    useState,
+    useEffect,
+    useCallback,
+    useMemo,
+} from 'react';
+import { useAuth } from '../AuthContext';
+import { useTranslation } from 'react-i18next';
+import toast from '../utils/toast';
+import { spatialAudio } from '../features/SpatialAudioEngine';
+import { createVoiceEffect } from './voiceEffects';
+import { useVoiceSettings } from './useVoiceSettings';
+import { useRecording } from './useRecording';
+import { useStatsMonitoring } from './useStatsMonitoring';
+import { useAudioVisualizer } from './useAudioVisualizer';
+import { useMediaControls } from './useMediaControls';
+import { useWebRTC } from './useWebRTC';
+import { useSignalHandler } from './useSignalHandler';
+import { useIceServers } from './useIceServers';
+import { useVAD } from './useVAD';
+import { usePTT } from './usePTT';
+import { useNoiseControl } from './useNoiseControl';
+import { useVoiceConnection } from './useVoiceConnection';
+
+import PropTypes from 'prop-types';
+import logger from '../utils/logger';
+
+const VoiceContext = createContext(null);
+
+export const VoiceProvider = ({ children }) => {
+    const { user, token } = useAuth();
+    const { t } = useTranslation();
+    const username = user?.username;
+
+    // State'ler
+    const [isInVoice, setIsInVoice] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(false);
+    const [currentRoom, setCurrentRoom] = useState(null);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isDeafened, setIsDeafened] = useState(false);
+    const [isVideoEnabled, setIsVideoEnabled] = useState(false);
+    const [isScreenSharing, setIsScreenSharing] = useState(false);
+    const [isTalking, setIsTalking] = useState(false);
+
+    // 🎵 Voice Effects State
+    const [activeVoiceEffect, setActiveVoiceEffect] = useState(null);
+    const [voiceEffectIntensity, setVoiceEffectIntensity] = useState(50);
+
+    // Medya Akışları
+    const [localAudioStream, setLocalAudioStream] = useState(null);
+    const [localCameraStream, setLocalCameraStream] = useState(null);
+    const [localScreenStream, setLocalScreenStream] = useState(null);
+    const [remoteStreams, setRemoteStreams] = useState({});
+    const [connectedUsers, setConnectedUsers] = useState([]); // 🆕 Bağlı kullanıcılar
+    const [lastReaction, setLastReaction] = useState(null);
+    const [cinemaState, setCinemaState] = useState({
+        isActive: false,
+        url: 'https://www.youtube.com/watch?v=jfKfPfyJRdk',
+        playing: false,
+        time: 0,
+        lastSyncAction: null,
+        timestamp: 0,
+    });
+    const [gameState, setGameState] = useState({
+        gameType: 'rps',
+        moves: {},
+        result: null,
+        players: [],
+        currentTurn: null,
+    });
+
+    // Voice Panel UI State (used by App.js)
+    const [useNewVoicePanel] = useState(true);
+    const [showVoiceIsland, setShowVoiceIsland] = useState(false);
+    const [isVoicePanelMinimized, setIsVoicePanelMinimized] = useState(false);
+    const [focusedStream, setFocusedStream] = useState(null);
+    const [islandState, setIslandState] = useState('collapsed');
+
+    // Voice Settings (localStorage-backed state)
+    const {
+        noiseGateThreshold,
+        isNoiseGateEnabled,
+        isVisualizerEnabled,
+        remoteVolumes,
+        setRemoteVolumes,
+        mutedUsers,
+        setMutedUsers,
+        isSpatialAudioEnabled,
+        setIsSpatialAudioEnabled,
+        vadSensitivity,
+        isNoiseSuppressionEnabled,
+        setIsNoiseSuppressionEnabled,
+        noiseSuppressionLevel,
+        screenShareQuality,
+        screenShareFPS,
+        includeSystemAudio,
+        isPTTMode,
+        setIsPTTMode,
+        pttKey,
+        isPTTActive,
+        setIsPTTActive,
+        setRemoteVolume,
+        updateVadSensitivity,
+        updateNoiseSuppressionLevel,
+        updateScreenQuality,
+        updateScreenFPS,
+        toggleSystemAudio,
+        toggleNoiseGate,
+        updateNoiseGateThreshold,
+        toggleVisualizer,
+        updatePTTKey,
+    } = useVoiceSettings();
+
+    // 🔧 ICE/TURN Servers Hook (lazy — fetches on voice join, not on mount)
+    const { iceServers, refreshIceServers } = useIceServers({ token });
+    const [isReconnecting, setIsReconnecting] = useState(false);
+
+    // Ref'ler
+    const voiceWsRef = useRef(null);
+    const peerConnectionsRef = useRef({});
+    const audioContextRef = useRef(null);
+    const globalAudioContextRef = useRef(null); // 🔥 PERFORMANS: Global AudioContext (RAM optimization)
+    const localStreamRef = useRef(null);
+    const localCameraStreamRef = useRef(null); // 🔥 Camera stream ref
+    const localScreenStreamRef = useRef(null); // 🔥 Screen stream ref
+    const joinVoiceRoomRef = useRef(null); // 🔥 Ref for joinVoiceRoom (used in handleSignalMessage before definition)
+    const leaveVoiceRoomRef = useRef(null); // 🔥 Ref for leaveVoiceRoom (used in useSignalHandler)
+
+    // 🎵 Voice Effect Refs
+    const voiceEffectNodesRef = useRef(null);
+    const processedStreamRef = useRef(null);
+
+    // 🎙️ Recording Hook
+    const { isRecording, recordingDuration, startRecording, stopRecording, downloadRecording } =
+        useRecording({
+            isInVoice,
+            localAudioStream,
+            remoteStreams,
+            currentRoom,
+            voiceWsRef,
+            globalAudioContextRef,
+        });
+
+    // 📊 Stats Monitoring Hook
+    const {
+        connectionStats,
+        startStatsMonitoring: _rawStartStats,
+        stopStatsMonitoring,
+    } = useStatsMonitoring();
+    // 🔥 FIX: Wrap startStatsMonitoring to automatically pass peerConnectionsRef
+    const startStatsMonitoring = useCallback(() => {
+        _rawStartStats(peerConnectionsRef);
+    }, [_rawStartStats, peerConnectionsRef]);
+
+    // 📊 Audio Visualizer Hook
+    const { audioVisualizerData, startVisualizer, stopVisualizer } = useAudioVisualizer({
+        isVisualizerEnabled,
+        localAudioStream,
+        remoteStreams,
+        isInVoice,
+        globalAudioContextRef,
+    });
+
+    useEffect(() => {
+        localStreamRef.current = localAudioStream;
+    }, [localAudioStream]);
+
+    // 🔥 Sync camera stream to ref
+    useEffect(() => {
+        localCameraStreamRef.current = localCameraStream;
+    }, [localCameraStream]);
+
+    // 🔥 Sync screen stream to ref
+    useEffect(() => {
+        localScreenStreamRef.current = localScreenStream;
+    }, [localScreenStream]);
+
+    // 🔥 Voice Activity Detection Hook
+    useVAD({
+        localAudioStream,
+        isInVoice,
+        isMuted,
+        vadSensitivity,
+        setIsTalking,
+        globalAudioContextRef,
+    });
+
+    const initializeAudio = useCallback(() => {
+        if (!audioContextRef.current) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContextRef.current = new AudioContext();
+        }
+        if (audioContextRef.current.state === 'suspended') {
+            audioContextRef.current.resume();
+        }
+    }, []);
+
+    // 🔥 YENİ: Spatial Audio Toggle
+    const toggleSpatialAudio = useCallback(async () => {
+        const newState = !isSpatialAudioEnabled;
+
+        if (newState) {
+            // Spatial audio'yu open
+            try {
+                await spatialAudio.initialize();
+
+                // Mevcut kullanıcıları spatial audio'ya add
+                Object.keys(remoteStreams).forEach((streamKey, index) => {
+                    const stream = remoteStreams[streamKey];
+                    const username = streamKey.replace('_camera', '').replace('_screen', '');
+
+                    // Sadece audio stream'leri add (kamera/ekran değil)
+                    if (!streamKey.includes('_camera') && !streamKey.includes('_screen')) {
+                        // Dairesel dizilim with pozisyon ver
+                        const angle = (index / Object.keys(remoteStreams).length) * 2 * Math.PI;
+                        const position = {
+                            x: Math.cos(angle) * 3,
+                            y: 0,
+                            z: Math.sin(angle) * 3,
+                        };
+
+                        spatialAudio.addUser(username, stream, position);
+                    }
+                });
+            } catch (err) {
+                logger.error('Failed to enable spatial audio:', err);
+                toast.warning(t('voice.spatialAudioFailed'));
+                return;
+            }
+        } else {
+            // Spatial audio'yu close
+            spatialAudio.destroy();
+        }
+
+        setIsSpatialAudioEnabled(newState);
+        localStorage.setItem('pawscord_spatial_audio', newState.toString());
+    }, [isSpatialAudioEnabled, remoteStreams]);
+
+    // 🔥 Noise Control Hook
+    const { toggleNoiseSuppression } = useNoiseControl({
+        isNoiseSuppressionEnabled,
+        setIsNoiseSuppressionEnabled,
+        noiseSuppressionLevel,
+        isInVoice,
+        localAudioStream,
+        setLocalAudioStream,
+        localStreamRef,
+        peerConnectionsRef,
+        globalAudioContextRef,
+    });
+
+    // 🔥 Push-to-Talk Hook
+    const { togglePTTMode } = usePTT({
+        isPTTMode,
+        setIsPTTMode,
+        isInVoice,
+        pttKey,
+        isPTTActive,
+        setIsPTTActive,
+        localStreamRef,
+        setIsMuted,
+    });
+
+    // 🔥 YENİ: Spatial audio state değişince remote stream'leri daycelle
+    useEffect(() => {
+        if (!isSpatialAudioEnabled) return;
+
+        // Yeni stream addnince spatial audio'ya da add
+        Object.keys(remoteStreams).forEach((streamKey, index) => {
+            const stream = remoteStreams[streamKey];
+            const username = streamKey.replace('_camera', '').replace('_screen', '');
+
+            // Sadece audio stream'leri
+            if (!streamKey.includes('_camera') && !streamKey.includes('_screen')) {
+                // Eğer zaten addnmemişse add
+                if (!spatialAudio.spatialNodes[username]) {
+                    const angle = (index / Object.keys(remoteStreams).length) * 2 * Math.PI;
+                    const position = {
+                        x: Math.cos(angle) * 3,
+                        y: 0,
+                        z: Math.sin(angle) * 3,
+                    };
+
+                    spatialAudio.addUser(username, stream, position);
+                }
+            }
+        });
+    }, [remoteStreams, isSpatialAudioEnabled]);
+
+    // 🔥 WebRTC Hook - peer connection, signaling, bandwidth management
+    const {
+        sendSignal,
+        adjustBandwidth,
+        handleRemoteStream,
+        createPeerConnection,
+        iceCandidateBufferRef,
+        addLocalStreamsToPeer,
+        trackMetadataRef,
+    } = useWebRTC({
+        username,
+        voiceWsRef,
+        peerConnectionsRef,
+        localStreamRef,
+        localCameraStreamRef,
+        localScreenStreamRef,
+        setRemoteStreams,
+        setIsReconnecting,
+        initializeAudio,
+    });
+
+    // 🔥 Signal Handler Hook - handles all WebSocket signal messages
+    const { handleSignalMessage } = useSignalHandler({
+        username,
+        isMuted,
+        isVideoEnabled,
+        isScreenSharing,
+        isTalking,
+        createPeerConnection,
+        sendSignal,
+        iceCandidateBufferRef,
+        addLocalStreamsToPeer,
+        trackMetadataRef,
+        peerConnectionsRef,
+        localStreamRef,
+        localCameraStreamRef,
+        localScreenStreamRef,
+        joinVoiceRoomRef,
+        setRemoteStreams,
+        setConnectedUsers,
+        setLastReaction,
+        setGameState,
+        setCinemaState,
+        setIsReconnecting,
+        leaveVoiceRoomRef,
+    });
+
+    // 🔥 Voice Connection Hook (joinVoiceRoom + leaveVoiceRoom)
+    const { joinVoiceRoom, leaveVoiceRoom } = useVoiceConnection({
+        username,
+        token,
+        isInVoice,
+        setIsInVoice,
+        currentRoom,
+        setCurrentRoom,
+        isMuted,
+        setIsMuted,
+        isVideoEnabled,
+        isScreenSharing,
+        setIsDeafened,
+        setIsConnecting,
+        setLocalAudioStream,
+        localCameraStream,
+        setLocalCameraStream,
+        setIsVideoEnabled,
+        localScreenStream,
+        setLocalScreenStream,
+        setIsScreenSharing,
+        localStreamRef,
+        localCameraStreamRef,
+        localScreenStreamRef,
+        voiceWsRef,
+        peerConnectionsRef,
+        audioContextRef,
+        globalAudioContextRef,
+        iceCandidateBufferRef,
+        joinVoiceRoomRef,
+        leaveVoiceRoomRef,
+        isNoiseSuppressionEnabled,
+        isPTTMode,
+        iceServers,
+        refreshIceServers,
+        initializeAudio,
+        handleSignalMessage,
+        setRemoteStreams,
+        setConnectedUsers,
+        setIsReconnecting,
+        stopRecording,
+    });
+
+    // --- TOGGLE FUNCTIONS (extracted to useMediaControls hook) ---
+    const { toggleMute, toggleDeafened, toggleVideo, toggleCamera, toggleScreenShare } =
+        useMediaControls({
+            sendSignal,
+            voiceWsRef,
+            peerConnectionsRef,
+            localStreamRef,
+            localCameraStreamRef,
+            localScreenStreamRef,
+            setIsMuted,
+            setIsDeafened,
+            setIsVideoEnabled,
+            setIsScreenSharing,
+            setLocalCameraStream,
+            setLocalScreenStream,
+            screenShareQuality,
+            screenShareFPS,
+            includeSystemAudio,
+        });
+
+    // 🎵 VOICE EFFECTS IMPLEMENTATION
+    const applyVoiceEffect = useCallback(
+        async (effectType, intensity = 50) => {
+            if (!localAudioStream || !isInVoice) {
+                logger.warn('[VoiceEffect] No stream or not in voice');
+                return;
+            }
+
+            try {
+                // Clear previous effect
+                if (voiceEffectNodesRef.current) {
+                    voiceEffectNodesRef.current.forEach((node) => {
+                        try {
+                            node.disconnect();
+                        } catch (_) {
+                            /* AudioNode already disconnected */
+                        }
+                    });
+                    voiceEffectNodesRef.current = null;
+                }
+
+                // If effectType is null, remove effect — restore original track to peers
+                if (!effectType) {
+                    setActiveVoiceEffect(null);
+                    // Restore original audio track on all peer connections
+                    if (localStreamRef.current) {
+                        const originalTrack = localStreamRef.current.getAudioTracks()[0];
+                        if (originalTrack && peerConnectionsRef.current) {
+                            for (const pc of Object.values(peerConnectionsRef.current)) {
+                                const audioSender = pc
+                                    .getSenders()
+                                    .find((s) => s.track?.kind === 'audio');
+                                if (audioSender) {
+                                    try {
+                                        await audioSender.replaceTrack(originalTrack);
+                                    } catch (e) {
+                                        logger.warn(
+                                            '[VoiceEffect] replaceTrack restore failed:',
+                                            e
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    processedStreamRef.current = null;
+                    return;
+                }
+
+                const audioContext = globalAudioContextRef.current || new AudioContext();
+                if (!globalAudioContextRef.current) globalAudioContextRef.current = audioContext;
+
+                const { nodes, outputStream } = createVoiceEffect(
+                    effectType,
+                    intensity,
+                    audioContext,
+                    localAudioStream
+                );
+
+                voiceEffectNodesRef.current = nodes;
+                processedStreamRef.current = outputStream;
+                setActiveVoiceEffect(effectType);
+                setVoiceEffectIntensity(intensity);
+
+                // 🔥 FIX: Replace audio track on all peer connections so remote peers hear the effect
+                const processedTrack = outputStream.getAudioTracks()[0];
+                if (processedTrack && peerConnectionsRef.current) {
+                    for (const [peerName, pc] of Object.entries(peerConnectionsRef.current)) {
+                        const audioSender = pc.getSenders().find((s) => s.track?.kind === 'audio');
+                        if (audioSender) {
+                            try {
+                                await audioSender.replaceTrack(processedTrack);
+                            } catch (e) {
+                                logger.warn(
+                                    `[VoiceEffect] replaceTrack failed for ${peerName}:`,
+                                    e
+                                );
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                logger.error('[VoiceEffect] Error:', error);
+                toast.error(t('voice.soundEffectFailed'));
+            }
+        },
+        [localAudioStream, isInVoice, peerConnectionsRef, localStreamRef]
+    );
+
+    // 💬 SEND REACTION
+    const sendReaction = useCallback((emoji) => {
+        if (!voiceWsRef.current || voiceWsRef.current.readyState !== WebSocket.OPEN) {
+            logger.warn('[Reaction] WebSocket not connected');
+            return;
+        }
+
+        voiceWsRef.current.send(
+            JSON.stringify({
+                type: 'voice_reaction',
+                emoji: emoji,
+            })
+        );
+    }, []);
+
+    // 🎮 SEND GAME SIGNAL
+    const sendGameSignal = useCallback((gameType, action, move = null, target = null) => {
+        if (!voiceWsRef.current || voiceWsRef.current.readyState !== WebSocket.OPEN) {
+            logger.warn('[Game] WebSocket not connected');
+            return;
+        }
+
+        voiceWsRef.current.send(
+            JSON.stringify({
+                type: 'game_signal',
+                game_type: gameType,
+                action: action,
+                move: move,
+                target: target,
+            })
+        );
+    }, []);
+
+    // 🎬 SEND CINEMA SYNC
+    const sendCinemaSync = useCallback((action, time = 0, url = null) => {
+        if (!voiceWsRef.current || voiceWsRef.current.readyState !== WebSocket.OPEN) {
+            logger.warn('[Cinema] WebSocket not connected');
+            return;
+        }
+
+        voiceWsRef.current.send(
+            JSON.stringify({
+                type: 'cinema_sync',
+                action: action,
+                time: time,
+                url: url,
+            })
+        );
+    }, []);
+
+    // Cleanup on unmount or leave
+    useEffect(() => {
+        return () => {
+            stopRecording();
+            stopStatsMonitoring();
+        };
+    }, [stopRecording, stopStatsMonitoring]);
+
+    const voiceValue = useMemo(
+        () => ({
+            isInVoice,
+            isConnecting,
+            currentRoom,
+            isMuted,
+            isDeafened,
+            isVideoEnabled,
+            isScreenSharing,
+            isTalking,
+            isSpatialAudioEnabled,
+            vadSensitivity,
+            isNoiseSuppressionEnabled,
+            screenShareQuality,
+            screenShareFPS,
+            isRecording,
+            recordingDuration,
+            isPTTMode,
+            isPTTActive,
+            pttKey,
+            includeSystemAudio,
+            localStream: localAudioStream,
+            localAudioStream,
+            localCameraStream,
+            localScreenStream,
+            remoteStreams,
+            connectedUsers,
+            remoteVolumes,
+            mutedUsers,
+            joinVoiceRoom,
+            leaveVoiceRoom,
+            joinChannel: joinVoiceRoom,
+            leaveChannel: leaveVoiceRoom,
+            setRemoteVolume,
+            setIsMuted,
+            setIsDeafened,
+            setIsVideoEnabled,
+            setIsScreenSharing,
+            toggleMute,
+            toggleDeafened,
+            toggleVideo,
+            toggleCamera,
+            toggleScreenShare,
+            toggleSpatialAudio,
+            updateVadSensitivity,
+            toggleNoiseSuppression,
+            updateScreenQuality,
+            updateScreenFPS,
+            toggleSystemAudio,
+            togglePTTMode,
+            updatePTTKey,
+            startRecording,
+            stopRecording,
+            downloadRecording,
+            sendSignal,
+            isPttActive: isPTTActive,
+            sendReaction,
+            lastReaction,
+            applyVoiceEffect,
+            activeVoiceEffect,
+            activeEffect: activeVoiceEffect,
+            voiceEffectIntensity,
+            setVoiceEffectIntensity,
+            cinemaState,
+            setCinemaState,
+            sendCinemaSync,
+            gameState,
+            setGameState,
+            sendGameSignal,
+            connectionStats,
+            startStatsMonitoring,
+            stopStatsMonitoring,
+            noiseSuppressionLevel,
+            updateNoiseSuppressionLevel,
+            iceServers,
+            isReconnecting,
+            adjustBandwidth,
+            noiseGateThreshold,
+            isNoiseGateEnabled,
+            toggleNoiseGate,
+            updateNoiseGateThreshold,
+            audioVisualizerData,
+            isVisualizerEnabled,
+            toggleVisualizer,
+            startVisualizer,
+            stopVisualizer,
+            useNewVoicePanel,
+            showVoiceIsland,
+            setShowVoiceIsland,
+            isVoicePanelMinimized,
+            setIsVoicePanelMinimized,
+            focusedStream,
+            setFocusedStream,
+            islandState,
+            setIslandState,
+        }),
+        [
+            isInVoice,
+            isConnecting,
+            currentRoom,
+            isMuted,
+            isDeafened,
+            isVideoEnabled,
+            isScreenSharing,
+            isTalking,
+            isSpatialAudioEnabled,
+            vadSensitivity,
+            isNoiseSuppressionEnabled,
+            screenShareQuality,
+            screenShareFPS,
+            isRecording,
+            recordingDuration,
+            isPTTMode,
+            isPTTActive,
+            pttKey,
+            includeSystemAudio,
+            localAudioStream,
+            localCameraStream,
+            localScreenStream,
+            remoteStreams,
+            connectedUsers,
+            remoteVolumes,
+            mutedUsers,
+            joinVoiceRoom,
+            leaveVoiceRoom,
+            setRemoteVolume,
+            setIsMuted,
+            setIsDeafened,
+            setIsVideoEnabled,
+            setIsScreenSharing,
+            toggleMute,
+            toggleDeafened,
+            toggleVideo,
+            toggleCamera,
+            toggleScreenShare,
+            toggleSpatialAudio,
+            updateVadSensitivity,
+            toggleNoiseSuppression,
+            updateScreenQuality,
+            updateScreenFPS,
+            toggleSystemAudio,
+            togglePTTMode,
+            updatePTTKey,
+            startRecording,
+            stopRecording,
+            downloadRecording,
+            sendSignal,
+            sendReaction,
+            lastReaction,
+            applyVoiceEffect,
+            activeVoiceEffect,
+            voiceEffectIntensity,
+            setVoiceEffectIntensity,
+            cinemaState,
+            setCinemaState,
+            sendCinemaSync,
+            gameState,
+            setGameState,
+            sendGameSignal,
+            connectionStats,
+            startStatsMonitoring,
+            stopStatsMonitoring,
+            noiseSuppressionLevel,
+            updateNoiseSuppressionLevel,
+            iceServers,
+            isReconnecting,
+            adjustBandwidth,
+            noiseGateThreshold,
+            isNoiseGateEnabled,
+            toggleNoiseGate,
+            updateNoiseGateThreshold,
+            audioVisualizerData,
+            isVisualizerEnabled,
+            toggleVisualizer,
+            startVisualizer,
+            stopVisualizer,
+            useNewVoicePanel,
+            showVoiceIsland,
+            setShowVoiceIsland,
+            isVoicePanelMinimized,
+            setIsVoicePanelMinimized,
+            focusedStream,
+            setFocusedStream,
+            islandState,
+            setIslandState,
+        ]
+    );
+
+    return <VoiceContext.Provider value={voiceValue}>{children}</VoiceContext.Provider>;
+};
+
+export const useVoice = () => useContext(VoiceContext);
+
+VoiceContext.propTypes = {
+    children: PropTypes.array,
+};

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import logger from '../../utils/logger';
 
 const useMicTest = () => {
     const [micLevel, setMicLevel] = useState(0);
@@ -12,7 +13,7 @@ const useMicTest = () => {
         if (!isTesting) {
             if (animationRef.current) cancelAnimationFrame(animationRef.current);
             if (testStreamRef.current) {
-                testStreamRef.current.getTracks().forEach(track => track.stop());
+                testStreamRef.current.getTracks().forEach((track) => track.stop());
                 testStreamRef.current = null;
             }
             if (audioContextRef.current) {
@@ -25,9 +26,13 @@ const useMicTest = () => {
 
         (async () => {
             try {
-                // 🔥 Mic test: gürültü engelleme KAPALI — gerçek seviye
+                // 🔥 Mic test: noise suppression OFF — real level
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+                    audio: {
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false,
+                    },
                 });
                 testStreamRef.current = stream;
 
@@ -64,15 +69,15 @@ const useMicTest = () => {
                     }
                     const rms = Math.sqrt(sumSquares / dataArray.length);
                     const hybrid = rms * 0.7 + peak * 0.3;
-                    // Power curve: normal konuşma ~%40-70
+                    // Power curve: normal speech ~40-70%
                     const scaled = Math.min(100, Math.pow(hybrid, 0.35) * 100);
-                    setMicLevel(prev => prev * 0.2 + scaled * 0.8);
+                    setMicLevel((prev) => prev * 0.2 + scaled * 0.8);
                     animationRef.current = requestAnimationFrame(updateLevel);
                 };
 
                 updateLevel();
             } catch (err) {
-                console.error('Mic test error:', err);
+                logger.error('Mic test error:', err);
                 setIsTesting(false);
             }
         })();
@@ -80,7 +85,7 @@ const useMicTest = () => {
         return () => {
             if (animationRef.current) cancelAnimationFrame(animationRef.current);
             if (testStreamRef.current) {
-                testStreamRef.current.getTracks().forEach(track => track.stop());
+                testStreamRef.current.getTracks().forEach((track) => track.stop());
             }
             if (audioContextRef.current) {
                 audioContextRef.current.close();

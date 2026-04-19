@@ -1,4 +1,5 @@
 // frontend/src/utils/imageOptimizer.js
+import PropTypes from 'prop-types';
 
 /**
  * 🖼️ Image Optimization Manager
@@ -174,6 +175,24 @@ class ImageOptimizer {
     async generatePlaceholder(src, options = {}) {
         const { width = 20, height = 20, blur = 10 } = options;
 
+        // Skip canvas-based placeholder for cross-origin CDN images to avoid CORS errors
+        // (R2/Cloudflare CDN assets don't serve CORS headers for canvas operations)
+        try {
+            const url = new URL(src, window.location.href);
+            if (url.host !== window.location.host) {
+                // Return a simple gray placeholder data URI for cross-origin images
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#2b2d31';
+                ctx.fillRect(0, 0, width, height);
+                return canvas.toDataURL('image/jpeg', this.placeholderQuality);
+            }
+        } catch {
+            // If URL parsing fails, fall through to normal path
+        }
+
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.crossOrigin = 'anonymous';
@@ -195,7 +214,16 @@ class ImageOptimizer {
                 resolve(canvas.toDataURL('image/jpeg', this.placeholderQuality));
             };
 
-            img.onerror = reject;
+            img.onerror = () => {
+                // On error, resolve with a simple gray placeholder instead of rejecting
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#2b2d31';
+                ctx.fillRect(0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', this.placeholderQuality));
+            };
             img.src = src;
         });
     }
@@ -261,11 +289,11 @@ class ImageOptimizer {
      * Batch preload
      */
     async preloadBatch(sources, options = {}) {
-        const { parallel = 3 } = options;
+        const { pparallel = 3 } = options;
         const results = [];
 
-        for (let i = 0; i < sources.length; i += parallel) {
-            const batch = sources.slice(i, i + parallel);
+        for (let i = 0; i < sources.length; i += pparallel) {
+            const batch = sources.slice(i, i + pparallel);
             const promises = batch.map(src =>
                 this.preload(src).catch(err => ({ error: err, src }))
             );
@@ -423,12 +451,18 @@ export const ProgressiveImage = ({ src, placeholder, alt, className, ...props })
         <img
             src={currentSrc}
             alt={alt}
-            className={`progressive-image ${loading ? 'loading' : 'loaded'} ${className || ''}`}
+            className={`progressive-image ${loading ? 'loading' : 'loaded'} ${className || ''}`}>
             {...props}
         />
-    );
+            );
 };
 
-export default ImageOptimizer;
+            ImageOptimizer.propTypes = {
+                src: PropTypes.string,
+            placeholder: PropTypes.string,
+            alt: PropTypes.string,
+            className: PropTypes.string,
+};
+            export default ImageOptimizer;
 
 

@@ -5,10 +5,9 @@ const config: CapacitorConfig = {
   appName: 'Pawscord',
   webDir: 'build',
   server: {
-    androidScheme: 'https', // Production: https olmalı (Play Store build)
-    cleartext: true,
+    androidScheme: 'https',
+    cleartext: false,  // ✅ Production: HTTPS only, no cleartext
     allowNavigation: [
-      '192.168.68.53', // Senin IP adresini de izin verilenlere ekleyelim
       'pawscord.com',
       'accounts.google.com',
       'googleusercontent.com'
@@ -16,9 +15,9 @@ const config: CapacitorConfig = {
   },
   // 🔥 Service Worker'ı devre dışı bırak - LazyLoad sorunu için
   android: {
-    allowMixedContent: true,
+    allowMixedContent: false,  // ✅ Production: false - HTTPS only
     captureInput: true,
-    webContentsDebuggingEnabled: false  // ⚠️ Production: false olmalı!
+    webContentsDebuggingEnabled: false
   },
   plugins: {
     GoogleAuth: {

@@ -113,8 +113,8 @@ describe('useKeyboardShortcuts', () => {
         }).not.toThrow();
     });
 
-    // ── 10. Cleans up event listener on unmount ──
-    it('should remove keydown listener on unmount', () => {
+    // ── 10. Cleans up event listner on unmount ──
+    it('should remove keydown listner on unmount', () => {
         const onEscape = vi.fn();
         const { unmount } = renderHook(() => useKeyboardShortcuts({ onEscape }));
 
@@ -141,12 +141,22 @@ describe('SHORTCUTS', () => {
 
     it('should have all expected shortcut entries', () => {
         const expectedKeys = [
-            'QUICK_SWITCHER', 'SEARCH', 'COMMAND_LIST', 'MUTE', 'DEAFEN',
-            'NAVIGATE_UP', 'NAVIGATE_DOWN', 'SEND_MESSAGE', 'CLOSE',
-            'TOGGLE_SIDEBAR', 'TOGGLE_USER_INFO', 'TOGGLE_EMOJI', 'TOGGLE_THEME',
-            'EDIT_LAST'
+            'QUICK_SWITCHER',
+            'SEARCH',
+            'COMMAND_LIST',
+            'MUTE',
+            'DEAFEN',
+            'NAVIGATE_UP',
+            'NAVIGATE_DOWN',
+            'SEND_MESSAGE',
+            'CLOSE',
+            'TOGGLE_SIDEBAR',
+            'TOGGLE_USER_INFO',
+            'TOGGLE_EMOJI',
+            'TOGGLE_THEME',
+            'EDIT_LAST',
         ];
-        expectedKeys.forEach(key => {
+        expectedKeys.forEach((key) => {
             expect(SHORTCUTS[key]).toBeDefined();
             expect(SHORTCUTS[key]).toHaveProperty('key');
             expect(SHORTCUTS[key]).toHaveProperty('description');

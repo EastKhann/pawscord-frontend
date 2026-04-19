@@ -337,15 +337,15 @@
 }
 
 .rank-1 {
-    color: var(--color-warning-gold) !important;
+    color: var(--color-warning-gold);
 }
 
 .rank-2 {
-    color: #c0c0c0 !important;
+    color: #c0c0c0;
 }
 
 .rank-3 {
-    color: #cd7f32 !important;
+    color: #cd7f32;
 }
 
 .emoji-large {
@@ -490,16 +490,6 @@
     animation: spin 1s linear infinite;
     font-size: 2rem;
     color: var(--color-primary);
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 /* Mobile Responsive */

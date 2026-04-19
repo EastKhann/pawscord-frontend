@@ -1,6 +1,8 @@
-// frontend/src/utils/urlHandlers.js
+﻿// frontend/src/utils/urlHandlers.js
 // 🔗 Deep Link & URL Handlers for APK
 import toast from './toast';
+import i18n from '../i18n';
+import logger from '../utils/logger';
 
 /**
  * Handle deep links in APK
@@ -15,7 +17,6 @@ export const initializeDeepLinkHandler = (navigate) => {
     window.Capacitor.Plugins.App.addListener('appUrlOpen', (data) => {
         handleDeepLink(data.url, navigate);
     });
-
 };
 
 /**
@@ -23,7 +24,6 @@ export const initializeDeepLinkHandler = (navigate) => {
  */
 export const handleDeepLink = (url, navigate) => {
     try {
-
         // Example: pawscord://chat/123
         const urlObj = new URL(url);
         const path = urlObj.pathname;
@@ -44,9 +44,8 @@ export const handleDeepLink = (url, navigate) => {
         } else {
             navigate(path || '/');
         }
-
     } catch (error) {
-        console.error('❌ Deep link error:', error);
+        logger.error('❌ Deep link error:', error);
     }
 };
 
@@ -60,7 +59,7 @@ export const shareContent = async (title, text, url) => {
             await navigator.share({
                 title,
                 text,
-                url
+                url,
             });
             return true;
         }
@@ -68,13 +67,13 @@ export const shareContent = async (title, text, url) => {
         // Fallback: Copy to clipboard
         if (navigator.clipboard) {
             await navigator.clipboard.writeText(url || text);
-            toast.success('✅ Link copied to clipboard!');
+            toast.success(i18n.t('urlHandlers.linkCopied'));
             return true;
         }
 
         return false;
     } catch (error) {
-        console.error('Share error:', error);
+        logger.error('Share error:', error);
         return false;
     }
 };
@@ -93,7 +92,7 @@ export const openExternalUrl = async (url) => {
         }
         return true;
     } catch (error) {
-        console.error('Open URL error:', error);
+        logger.error('Open URL error:', error);
         return false;
     }
 };
@@ -119,7 +118,7 @@ export const copyToClipboard = async (text) => {
         document.body.removeChild(textArea);
         return true;
     } catch (error) {
-        console.error('Copy error:', error);
+        logger.error('Copy error:', error);
         return false;
     }
 };
@@ -131,7 +130,8 @@ export const getAppUrl = (path = '') => {
     // Dynamic base URL detection
     const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isLocalhost =
+        window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     let baseUrl;
     if (isElectron || isPawscordDomain) {
@@ -156,9 +156,11 @@ export const getDeepLinkUrl = (path = '') => {
  * Check if running as installed PWA
  */
 export const isInstalledPWA = () => {
-    return window.matchMedia('(display-mode: standalone)').matches ||
+    return (
+        window.matchMedia('(display-mode: standalone)').matches ||
         window.navigator.standalone === true ||
-        document.referrer.includes('android-app://');
+        document.referrer.includes('android-app://')
+    );
 };
 
 /**
@@ -175,7 +177,7 @@ export const promptPWAInstall = () => {
     }
 };
 
-// PWA install prompt managed by pwaHelper.js — no duplicate listener needed
+// PWA install prompt managed by pwaHelper.js — no duplicate listner needed
 
 export default {
     initializeDeepLinkHandler,
@@ -186,7 +188,5 @@ export default {
     getAppUrl,
     getDeepLinkUrl,
     isInstalledPWA,
-    promptPWAInstall
+    promptPWAInstall,
 };
-
-

@@ -3,6 +3,7 @@
 // SWR-like caching with stale-while-revalidate pattern
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import logger from '../utils/logger';
 
 // Global cache storage
 const globalCache = new Map();
@@ -28,7 +29,7 @@ const DEFAULT_CONFIG = {
 
 /**
  * 🚀 useAPICache - Smart caching hook for API calls
- * 
+ *
  * Features:
  * - Automatic caching with stale-while-revalidate
  * - Request deduplication
@@ -36,7 +37,7 @@ const DEFAULT_CONFIG = {
  * - Error retry with exponential backoff
  * - Optimistic updates
  * - Manual cache invalidation
- * 
+ *
  * @param {string} key - Unique cache key
  * @param {Function} fetcher - Async function to fetch data
  * @param {Object} options - Configuration options
@@ -67,7 +68,7 @@ export function useAPICache(key, fetcher, options = {}) {
         const subs = subscribers.get(key);
         const callback = (newState) => {
             if (mountedRef.current) {
-                setState(prev => ({ ...prev, ...newState }));
+                setState((prev) => ({ ...prev, ...newState }));
             }
         };
         subs.add(callback);
@@ -81,79 +82,87 @@ export function useAPICache(key, fetcher, options = {}) {
     }, [key]);
 
     // Broadcast state updates to all subscribers
-    const broadcast = useCallback((newState) => {
-        const subs = subscribers.get(key);
-        if (subs) {
-            subs.forEach(cb => cb(newState));
-        }
-    }, [key]);
+    const broadcast = useCallback(
+        (newState) => {
+            const subs = subscribers.get(key);
+            if (subs) {
+                subs.forEach((cb) => cb(newState));
+            }
+        },
+        [key]
+    );
 
     // Core fetch function with retry logic
-    const fetchData = useCallback(async (isRevalidation = false) => {
-        // Check if request is already pending (deduplication)
-        const pending = pendingRequests.get(key);
-        if (pending && Date.now() - pending.timestamp < config.dedupingInterval) {
-            return pending.promise;
-        }
-
-        // Check if cache is still fresh
-        const cached = globalCache.get(key);
-        if (cached && !isRevalidation) {
-            const isFresh = Date.now() - cached.timestamp < config.staleTime;
-            if (isFresh) {
-                broadcast({ data: cached.data, loading: false, error: null });
-                return cached.data;
+    const fetchData = useCallback(
+        async (isRevalidation = false) => {
+            // Check if request is already pending (deduplication)
+            const pending = pendingRequests.get(key);
+            if (pending && Date.now() - pending.timestamp < config.dedupingInterval) {
+                return pending.promise;
             }
-            // Stale - return cached but revalidate in background
-            if (cached.data) {
-                broadcast({ data: cached.data, loading: false, isValidating: true });
-            }
-        }
 
-        if (!isRevalidation) {
-            broadcast({ loading: true });
-        }
-        broadcast({ isValidating: true });
-
-        let lastError;
-        for (let attempt = 0; attempt < config.retryCount; attempt++) {
-            try {
-                const fetchPromise = fetcherRef.current();
-                pendingRequests.set(key, { promise: fetchPromise, timestamp: Date.now() });
-
-                const data = await fetchPromise;
-
-                // Update cache
-                globalCache.set(key, {
-                    data,
-                    timestamp: Date.now(),
-                    expiry: Date.now() + config.cacheTime,
-                });
-
-                pendingRequests.delete(key);
-                broadcast({ data, loading: false, error: null, isValidating: false });
-
-                // Schedule cache cleanup
-                setTimeout(() => {
-                    const cached = globalCache.get(key);
-                    if (cached && Date.now() > cached.expiry) {
-                        globalCache.delete(key);
-                    }
-                }, config.cacheTime);
-
-                return data;
-            } catch (err) {
-                lastError = err;
-                if (attempt < config.retryCount - 1) {
-                    await new Promise(r => setTimeout(r, config.retryDelay * Math.pow(2, attempt)));
+            // Check if cache is still fresh
+            const cached = globalCache.get(key);
+            if (cached && !isRevalidation) {
+                const isFresh = Date.now() - cached.timestamp < config.staleTime;
+                if (isFresh) {
+                    broadcast({ data: cached.data, loading: false, error: null });
+                    return cached.data;
+                }
+                // Stale - return cached but revalidate in background
+                if (cached.data) {
+                    broadcast({ data: cached.data, loading: false, isValidating: true });
                 }
             }
-        }
 
-        pendingRequests.delete(key);
-        broadcast({ error: lastError, loading: false, isValidating: false });
-        throw lastError;
-    }, [key, config, broadcast]);
+            if (!isRevalidation) {
+                broadcast({ loading: true });
+            }
+            broadcast({ isValidating: true });
+
+            let lastError;
+            for (let attempt = 0; attempt < config.retryCount; attempt++) {
+                try {
+                    const fetchPromise = fetcherRef.current();
+                    pendingRequests.set(key, { promise: fetchPromise, timestamp: Date.now() });
+
+                    const data = await fetchPromise;
+
+                    // Update cache
+                    globalCache.set(key, {
+                        data,
+                        timestamp: Date.now(),
+                        expiry: Date.now() + config.cacheTime,
+                    });
+
+                    pendingRequests.delete(key);
+                    broadcast({ data, loading: false, error: null, isValidating: false });
+
+                    // Schedule cache cleanup
+                    setTimeout(() => {
+                        const cached = globalCache.get(key);
+                        if (cached && Date.now() > cached.expiry) {
+                            globalCache.delete(key);
+                        }
+                    }, config.cacheTime);
+
+                    return data;
+                } catch (err) {
+                    lastError = err;
+                    if (attempt < config.retryCount - 1) {
+                        await new Promise((r) =>
+                            setTimeout(r, config.retryDelay * Math.pow(2, attempt))
+                        );
+                    }
+                }
+            }
+
+            pendingRequests.delete(key);
+            broadcast({ error: lastError, loading: false, isValidating: false });
+            throw lastError;
+        },
+        [key, config, broadcast]
+    );
 
     // Initial fetch
     useEffect(() => {
@@ -194,25 +203,28 @@ export function useAPICache(key, fetcher, options = {}) {
     }, [config.revalidateOnReconnect, fetchData]);
 
     // Manual mutate function (optimistic updates)
-    const mutate = useCallback((newData, shouldRevalidate = true) => {
-        if (typeof newData === 'function') {
-            const cached = globalCache.get(key);
-            newData = newData(cached?.data);
-        }
+    const mutate = useCallback(
+        (newData, shouldRevalidate = true) => {
+            if (typeof newData === 'function') {
+                const cached = globalCache.get(key);
+                newData = newData(cached?.data);
+            }
 
-        globalCache.set(key, {
-            data: newData,
-            timestamp: Date.now(),
-            expiry: Date.now() + config.cacheTime,
-        });
+            globalCache.set(key, {
+                data: newData,
+                timestamp: Date.now(),
+                expiry: Date.now() + config.cacheTime,
+            });
 
-        broadcast({ data: newData });
+            broadcast({ data: newData });
 
-        if (shouldRevalidate) {
-            // Revalidate in background
-            fetchData(true).catch(() => { });
-        }
-    }, [key, config.cacheTime, broadcast, fetchData]);
+            if (shouldRevalidate) {
+                // Revalidate in background
+                fetchData(true).catch(() => {});
+            }
+        },
+        [key, config.cacheTime, broadcast, fetchData]
+    );
 
     // Manual refresh function
     const refresh = useCallback(() => fetchData(true), [fetchData]);
@@ -271,7 +283,7 @@ export const cacheUtils = {
             });
             return data;
         } catch (err) {
-            console.error('Prefetch error:', err);
+            logger.error('Prefetch error:', err);
             return null;
         }
     },
@@ -286,11 +298,7 @@ export function useInfiniteAPICache(key, fetcher, options = {}) {
     const [loadingMore, setLoadingMore] = useState(false);
     const pageRef = useRef(1);
 
-    const { data, error, loading, refresh } = useAPICache(
-        key,
-        () => fetcher(1),
-        options
-    );
+    const { data, error, loading, refresh } = useAPICache(key, () => fetcher(1), options);
 
     useEffect(() => {
         if (data) {
@@ -310,11 +318,11 @@ export function useInfiniteAPICache(key, fetcher, options = {}) {
             if (!newData || (Array.isArray(newData) && newData.length === 0)) {
                 setHasMore(false);
             } else {
-                setPages(prev => [...prev, newData]);
+                setPages((prev) => [...prev, newData]);
                 pageRef.current = nextPage;
             }
         } catch (err) {
-            console.error('Load more error:', err);
+            logger.error('Load more error:', err);
         } finally {
             setLoadingMore(false);
         }
@@ -348,39 +356,42 @@ export function useMutation(mutationFn, options = {}) {
         loading: false,
     });
 
-    const mutate = useCallback(async (variables) => {
-        setState({ data: null, error: null, loading: true });
+    const mutate = useCallback(
+        async (variables) => {
+            setState({ data: null, error: null, loading: true });
 
-        // Optimistic update
-        if (options.onMutate) {
-            options.onMutate(variables);
-        }
-
-        try {
-            const data = await mutationFn(variables);
-            setState({ data, error: null, loading: false });
-
-            // Invalidate related queries
-            if (options.invalidateKeys) {
-                options.invalidateKeys.forEach(key => cacheUtils.invalidate(key));
+            // Optimistic update
+            if (options.onMutate) {
+                options.onMutate(variables);
             }
 
-            if (options.onSuccess) {
-                options.onSuccess(data, variables);
+            try {
+                const data = await mutationFn(variables);
+                setState({ data, error: null, loading: false });
+
+                // Invalidate related queries
+                if (options.invalidateKeys) {
+                    options.invalidateKeys.forEach((key) => cacheUtils.invalidate(key));
+                }
+
+                if (options.onSuccess) {
+                    options.onSuccess(data, variables);
+                }
+
+                return data;
+            } catch (err) {
+                setState({ data: null, error: err, loading: false });
+
+                // Rollback on error
+                if (options.onError) {
+                    options.onError(err, variables);
+                }
+
+                throw err;
             }
-
-            return data;
-        } catch (err) {
-            setState({ data: null, error: err, loading: false });
-
-            // Rollback on error
-            if (options.onError) {
-                options.onError(err, variables);
-            }
-
-            throw err;
-        }
-    }, [mutationFn, options]);
+        },
+        [mutationFn, options]
+    );
 
     return {
         ...state,

@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/translation.js
 /**
  * 🌐 LIVE TRANSLATION UTILITIES
@@ -12,22 +13,21 @@ const translationCache = new Map();
  */
 export async function translateText(text, targetLang, apiBaseUrl, fetchWithAuth) {
     // Check cache first
-    const cacheKey = `${text.substring(0, 100)}_${targetLang}`;  // First 100 chars for key
+    const cacheKey = `${text.substring(0, 100)}_${targetLang}`; // First 100 chars for key
 
     if (translationCache.has(cacheKey)) {
         return translationCache.get(cacheKey);
     }
 
     try {
-
         const response = await fetchWithAuth(`${apiBaseUrl}/translation/translate/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 text: text,
                 target_lang: targetLang,
-                source_lang: 'auto'
-            })
+                source_lang: 'auto',
+            }),
         });
 
         if (!response.ok) {
@@ -39,11 +39,9 @@ export async function translateText(text, targetLang, apiBaseUrl, fetchWithAuth)
         // Cache the result
         translationCache.set(cacheKey, data);
 
-
         return data;
-
     } catch (error) {
-        console.error('❌ [Translation] Error:', error);
+        logger.error('❌ [Translation] Error:', error);
 
         // Return original text on error
         return {
@@ -51,7 +49,7 @@ export async function translateText(text, targetLang, apiBaseUrl, fetchWithAuth)
             original: text,
             source_lang: 'unknown',
             target_lang: targetLang,
-            error: true
+            error: true,
         };
     }
 }
@@ -65,17 +63,16 @@ export async function translateBatch(messages, targetLang, apiBaseUrl, fetchWith
     }
 
     try {
-
         const response = await fetchWithAuth(`${apiBaseUrl}/translation/translate-batch/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                messages: messages.map(msg => ({
+                messages: messages.map((msg) => ({
                     id: msg.id,
-                    text: msg.text || msg.content
+                    text: msg.text || msg.content,
                 })),
-                target_lang: targetLang
-            })
+                target_lang: targetLang,
+            }),
         });
 
         if (!response.ok) {
@@ -91,18 +88,16 @@ export async function translateBatch(messages, targetLang, apiBaseUrl, fetchWith
             translationCache.set(cacheKey, result);
         });
 
-
         return data.results;
-
     } catch (error) {
-        console.error('❌ [Translation] Batch error:', error);
+        logger.error('❌ [Translation] Batch error:', error);
 
         // Return original texts on error
-        return messages.map(msg => ({
+        return messages.map((msg) => ({
             id: msg.id,
             translated: msg.text || msg.content,
             original: msg.text || msg.content,
-            error: true
+            error: true,
         }));
     }
 }
@@ -120,26 +115,24 @@ export async function getSupportedLanguages(apiBaseUrl) {
 
         const data = await response.json();
 
-
         return data.languages;
-
     } catch (error) {
-        console.error('❌ [Translation] Failed to load languages:', error);
+        logger.error('❌ [Translation] Failed to load languages:', error);
 
         // Return minimal fallback
         return {
-            'en': 'English',
-            'tr': 'Türkçe',
-            'es': 'Español',
-            'fr': 'Français',
-            'de': 'Deutsch',
-            'it': 'Italiano',
-            'pt': 'Português',
-            'ru': 'Русский',
+            en: 'English',
+            tr: 'Turkish',
+            es: 'Español',
+            fr: 'Français',
+            de: 'Deutsch',
+            it: 'Italiano',
+            pt: 'Português',
+            ru: 'Русский',
             'zh-cn': '中文',
-            'ja': '日本語',
-            'ko': '한국어',
-            'ar': 'العربية'
+            ja: '日本語',
+            ko: '한국어',
+            ar: 'العربية',
         };
     }
 }
@@ -157,7 +150,7 @@ export function detectLanguageClient(text) {
     // Russian/Cyrillic
     if (/[а-яА-ЯёЁ]/.test(text)) return 'ru';
 
-    // Arabic
+    // Searchbic
     if (/[؀-ۿ]/.test(text)) return 'ar';
 
     // Hebrew
@@ -195,7 +188,3 @@ export function clearTranslationCache() {
 export function getCacheSize() {
     return translationCache.size;
 }
-
-
-
-

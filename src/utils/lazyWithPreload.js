@@ -14,7 +14,7 @@ export function lazyWithPreload(factory) {
 
     const LazyComponent = lazy(() => {
         if (!factoryPromise) {
-            factoryPromise = factory().then(module => {
+            factoryPromise = factory().then((module) => {
                 LoadedComponent = module;
                 return module;
             });
@@ -25,7 +25,7 @@ export function lazyWithPreload(factory) {
     // Add preload method to component
     LazyComponent.preload = () => {
         if (!factoryPromise) {
-            factoryPromise = factory().then(module => {
+            factoryPromise = factory().then((module) => {
                 LoadedComponent = module;
                 return module;
             });
@@ -45,9 +45,7 @@ export function lazyWithPreload(factory) {
  */
 export function preloadComponents(components) {
     return Promise.all(
-        components.map(component =>
-            component.preload ? component.preload() : Promise.resolve()
-        )
+        components.map((component) => (component.preload ? component.preload() : Promise.resolve()))
     );
 }
 

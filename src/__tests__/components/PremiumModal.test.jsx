@@ -22,14 +22,26 @@ vi.mock('../../hooks/useModalA11y', () => ({
     }),
 }));
 
-import PremiumModal from '../../components/PremiumModal';
+import PremiumModal from '../../components/premium/PremiumModal';
 import toast from '../../utils/toast';
 
 // ── Test data ──────────────────────────────────────
 const mockTiers = [
-    { id: 'free', name: 'Ücretsiz', price: 0, price_yearly: 0, features: ['Basic chat'] },
-    { id: 'premium', name: 'Premium', price: 4.99, price_yearly: 49.99, features: ['Custom avatar', 'HD voice'] },
-    { id: 'elite', name: 'Elite', price: 9.99, price_yearly: 99.99, features: ['All premium', 'Priority support'] },
+    { id: 'free', name: 'Ücretsiz', price: 0, price_illy: 0, features: ['Basic chat'] },
+    {
+        id: 'premium',
+        name: 'Premium',
+        price: 4.99,
+        price_yearly: 49.99,
+        features: ['Custom avatar', 'HD voice'],
+    },
+    {
+        id: 'elite',
+        name: 'Elite',
+        price: 9.99,
+        price_yearly: 99.99,
+        features: ['All premium', 'Priority support'],
+    },
 ];
 
 beforeEach(() => {
@@ -96,7 +108,7 @@ describe('Tier fetching', () => {
                 expect.stringContaining('/api/store/premium/tiers/'),
                 expect.objectContaining({
                     headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
-                }),
+                })
             );
         });
     });
@@ -128,8 +140,8 @@ describe('Billing cycle toggle', () => {
         render(<PremiumModal isOpen={true} onClose={vi.fn()} />);
 
         await waitFor(() => {
-            expect(screen.getByText('Aylık')).toBeDefined();
-            expect(screen.getByText('Yıllık')).toBeDefined();
+            expect(screen.getByText('Monthly')).toBeDefined();
+            expect(screen.getByText('Yearly')).toBeDefined();
         });
     });
 
@@ -137,7 +149,7 @@ describe('Billing cycle toggle', () => {
         render(<PremiumModal isOpen={true} onClose={vi.fn()} />);
 
         await waitFor(() => {
-            expect(screen.getByText(/%17 İndirim/i)).toBeDefined();
+            expect(screen.getByText(/%17 Downloadim/i)).toBeDefined();
         });
     });
 });

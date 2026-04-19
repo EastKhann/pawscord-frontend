@@ -1,3 +1,4 @@
+import { getToken } from '../utils/tokenStorage';
 /**
  * useChatConnection — WebSocket connections + fetchWithAuth
  * 10/10 Edition: Heartbeat ping/pong, visibility handler, infinite reconnect, connection state
@@ -7,10 +8,11 @@ import { useChatStore } from '../stores/useChatStore';
 import { soundManager } from '../utils/notificationSounds';
 import { loadSavedTheme } from '../utils/ThemeManager';
 import { offlineQueue } from '../utils/offlineMessageQueue';
+import logger from '../utils/logger';
 
-const HEARTBEAT_INTERVAL = 25000;  // 25s ping interval
-const HEARTBEAT_TIMEOUT = 10000;   // 10s to receive pong before treating as dead
-const MAX_CHAT_RECONNECT = 20;     // Allow more reconnect attempts before giving up
+const HEARTBEAT_INTERVAL = 25000; // 25s ping interval
+const HEARTBEAT_TIMEOUT = 10000; // 10s to receive pong before treating as dead
+const MAX_CHAT_RECONNECT = 20; // Allow more reconnect attempts before giving up
 
 /** Add jitter to backoff delay to prevent thundering herd */
 function jitteredDelay(baseDelay, attempt, maxDelay = 30000) {
@@ -20,17 +22,40 @@ function jitteredDelay(baseDelay, attempt, maxDelay = 30000) {
 }
 
 export default function useChatConnection({
-    activeChat, username, token, isAuthenticated, isInitialDataLoaded,
-    fetchWithAuth, scrollToBottom, isNearBottom, setMessages,
-    setIsConnected, historyCacheRef, setHasMoreMessages,
-    fetchMessageHistory, prefetchMessages, setShowScrollToBottom,
-    API_BASE_URL, API_HOST, WS_PROTOCOL,
-    forwardToGlobalContext, setGlobalWsConnected,
-    setOnlineUsers, setVoiceUsersState, setAllUsers, setCurrentUserProfile,
-    activeChatRef, tokenRef, usernameRef,
-    setCategories, ROOM_LIST_URL,
-    statusWsRef, statusWsReconnectRef,
-    logout, refreshAccessToken,
+    activeChat,
+    activeRoomType,
+    username,
+    token,
+    isAuthenticated,
+    isInitialDataLoaded,
+    fetchWithAuth,
+    scrollToBottom,
+    isNearBottom,
+    setMessages,
+    setIsConnected,
+    historyCacheRef,
+    setHasMoreMessages,
+    fetchMessageHistory,
+    prefetchMessages,
+    setShowScrollToBottom,
+    API_BASE_URL,
+    API_HOST,
+    WS_PROTOCOL,
+    forwardToGlobalContext,
+    setGlobalWsConnected,
+    setOnlineUsers,
+    setVoiceUsersState,
+    setAllUsers,
+    setCurrentUserProfile,
+    activeChatRef,
+    tokenRef,
+    usernameRef,
+    setCategories,
+    ROOM_LIST_URL,
+    statusWsRef,
+    statusWsReconnectRef,
+    logout,
+    refreshAccessToken,
     setCurrentTheme,
     notifyMessage = null,
 }) {
@@ -50,13 +75,19 @@ export default function useChatConnection({
             if (ws.current && ws.current.readyState === WebSocket.OPEN) {
                 try {
                     ws.current.send(JSON.stringify({ type: 'ping' }));
-                } catch { /* socket may have just closed */ }
+                } catch {
+                    /* socket may have just closed */
+                }
 
                 // If no pong within timeout, force reconnect
                 heartbeatTimeout.current = setTimeout(() => {
                     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-                        console.warn('[ChatWS] Heartbeat timeout — forcing reconnect');
-                        try { ws.current.close(4999, 'heartbeat_timeout'); } catch { /* ignore */ }
+                        logger.warn('[ChatWS] Heartbeat timeout — forcing reconnect');
+                        try {
+                            ws.current.close(4999, 'heartbeat_timeout');
+                        } catch {
+                            /* ignore */
+                        }
                     }
                 }, HEARTBEAT_TIMEOUT);
             }
@@ -64,26 +95,49 @@ export default function useChatConnection({
     }, []);
 
     const stopHeartbeat = useCallback(() => {
-        if (heartbeatTimer.current) { clearInterval(heartbeatTimer.current); heartbeatTimer.current = null; }
-        if (heartbeatTimeout.current) { clearTimeout(heartbeatTimeout.current); heartbeatTimeout.current = null; }
+        if (heartbeatTimer.current) {
+            clearInterval(heartbeatTimer.current);
+            heartbeatTimer.current = null;
+        }
+        if (heartbeatTimeout.current) {
+            clearTimeout(heartbeatTimeout.current);
+            heartbeatTimeout.current = null;
+        }
     }, []);
 
     // --- CHAT WEBSOCKET ---
     const connectWebSocket = useCallback(() => {
-        if (!activeChat.id || activeChat.type === 'welcome' || activeChat.type === 'friends' || !username || !token) return;
+        if (
+            !activeChat.id ||
+            activeChat.type === 'welcome' ||
+            activeChat.type === 'friends' ||
+            activeChat.type === 'kanban' ||
+            !username ||
+            !token
+        )
+            return;
+        // Kanban channels use REST only — no WebSocket needed
+        if (activeRoomType === 'kanban') return;
 
-        const expectedPath = activeChat.type === 'room'
-            ? `/ws/chat/${activeChat.id}/`
-            : `/ws/dm/${activeChat.id}/`;
+        const expectedPath =
+            activeChat.type === 'room' ? `/ws/chat/${activeChat.id}/` : `/ws/dm/${activeChat.id}/`;
         // 🔧 FIX: Guard against duplicate sockets — also check CONNECTING state
         // Prevents reconnect storm when React re-renders trigger effect cleanup + re-creation
-        if (ws.current && (ws.current.readyState === WebSocket.OPEN || ws.current.readyState === WebSocket.CONNECTING)) {
+        if (
+            ws.current &&
+            (ws.current.readyState === WebSocket.OPEN ||
+                ws.current.readyState === WebSocket.CONNECTING)
+        ) {
             if (ws.current.url && ws.current.url.includes(expectedPath)) return;
         }
 
         // Close any existing socket
         if (ws.current) {
-            try { ws.current.close(1000, 'change_room'); } catch (e) { /* ignore */ }
+            try {
+                ws.current.close(1000, 'change_room');
+            } catch (e) {
+                /* ignore */
+            }
             ws.current = null;
         }
         stopHeartbeat();
@@ -93,8 +147,10 @@ export default function useChatConnection({
         // to avoid token leaking in server access logs, referrer headers, and browser history.
         // Backend TokenAuthMiddleware also checks subprotocol for token (fallback: query param).
         const params = `?username=${encodeURIComponent(username)}`;
-        if (activeChat.type === 'room') wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/chat/${activeChat.id}/${params}`;
-        else if (activeChat.type === 'dm') wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/dm/${activeChat.id}/${params}`;
+        if (activeChat.type === 'room')
+            wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/chat/${activeChat.id}/${params}`;
+        else if (activeChat.type === 'dm')
+            wsUrl = `${WS_PROTOCOL}://${API_HOST}/ws/dm/${activeChat.id}/${params}`;
 
         if (!wsUrl) return;
 
@@ -130,11 +186,19 @@ export default function useChatConnection({
                 return;
             }
 
-            if (data.type === 'chat' || data.type === 'dm' || data.type === 'chat_message' || data.type === 'chat_message_handler' || data.type === 'dm_message') {
+            if (
+                data.type === 'chat' ||
+                data.type === 'dm' ||
+                data.type === 'chat_message' ||
+                data.type === 'chat_message_handler' ||
+                data.type === 'dm_message'
+            ) {
                 const getCacheKeyFromMessage = (msgData) => {
                     if (msgData.room) return `room-${msgData.room}`;
                     if (msgData.conversation) return `dm-${msgData.conversation}`;
-                    return activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
+                    return activeChat.type === 'room'
+                        ? `room-${activeChat.id}`
+                        : `dm-${activeChat.id}`;
                 };
 
                 // ── GUARD: ignore messages that don't belong to the current active chat ──
@@ -156,7 +220,7 @@ export default function useChatConnection({
                     const cacheKey = getCacheKeyFromMessage(data);
                     if (data.id && historyCacheRef.current[cacheKey]) {
                         const cached = historyCacheRef.current[cacheKey];
-                        if (cached.messages && !cached.messages.some(m => m.id === data.id)) {
+                        if (cached.messages && !cached.messages.some((m) => m.id === data.id)) {
                             cached.messages = [...cached.messages, data];
                             cached._ts = Date.now();
                         }
@@ -164,22 +228,28 @@ export default function useChatConnection({
                     return; // ← do NOT add to current visible messages
                 }
 
-                setMessages(prev => {
+                setMessages((prev) => {
                     if (data.temp_id) {
-                        const tempIndex = prev.findIndex(msg => msg.temp_id === data.temp_id);
+                        const tempIndex = prev.findIndex((msg) => msg.temp_id === data.temp_id);
                         if (tempIndex !== -1) {
                             const newMessages = [...prev];
                             newMessages[tempIndex] = data;
                             const cacheKey = getCacheKeyFromMessage(data);
-                            if (historyCacheRef.current[cacheKey]) { historyCacheRef.current[cacheKey].messages = newMessages; historyCacheRef.current[cacheKey]._ts = Date.now(); }
+                            if (historyCacheRef.current[cacheKey]) {
+                                historyCacheRef.current[cacheKey].messages = newMessages;
+                                historyCacheRef.current[cacheKey]._ts = Date.now();
+                            }
                             return newMessages;
                         }
                     }
-                    if (data.id && prev.some(msg => msg.id === data.id)) return prev;
+                    if (data.id && prev.some((msg) => msg.id === data.id)) return prev;
 
                     const updatedMessages = [...prev, data];
                     const cacheKey = getCacheKeyFromMessage(data);
-                    if (historyCacheRef.current[cacheKey]) { historyCacheRef.current[cacheKey].messages = updatedMessages; historyCacheRef.current[cacheKey]._ts = Date.now(); }
+                    if (historyCacheRef.current[cacheKey]) {
+                        historyCacheRef.current[cacheKey].messages = updatedMessages;
+                        historyCacheRef.current[cacheKey]._ts = Date.now();
+                    }
                     return updatedMessages;
                 });
 
@@ -187,12 +257,19 @@ export default function useChatConnection({
 
                 if (data.username !== username) {
                     try {
-                        const isMention = data.content?.includes(`@${username}`) || data.mentions?.includes(username);
-                        const isDM = data.type === 'dm_message' || data.type === 'dm' || data.message_type === 'dm';
+                        const isMention =
+                            data.content?.includes(`@${username}`) ||
+                            data.mentions?.includes(username);
+                        const isDM =
+                            data.type === 'dm_message' ||
+                            data.type === 'dm' ||
+                            data.message_type === 'dm';
                         if (isMention) soundManager.play('mention');
                         else if (isDM) soundManager.play('dm');
                         else soundManager.play('message');
-                    } catch (e) { /* sound not critical */ }
+                    } catch (e) {
+                        /* sound not critical */
+                    }
                 }
 
                 if (isNearBottom()) scrollToBottom('smooth');
@@ -208,60 +285,74 @@ export default function useChatConnection({
                 // 🔧 Real-time message deletion — remove from state immediately
                 const deletedId = data.message_id;
                 if (deletedId) {
-                    setMessages(prev => prev.filter(msg => msg.id !== deletedId && String(msg.id) !== String(deletedId)));
+                    setMessages((prev) =>
+                        prev.filter(
+                            (msg) => msg.id !== deletedId && String(msg.id) !== String(deletedId)
+                        )
+                    );
                 }
             } else if (data.type === 'message_updated') {
                 // 🔧 Real-time message edit — update content in-place
                 const editedId = data.message_id;
                 if (editedId) {
-                    setMessages(prev => prev.map(msg => {
-                        if (msg.id === editedId || String(msg.id) === String(editedId)) {
-                            return { ...msg, content: data.content, is_edited: true };
-                        }
-                        return msg;
-                    }));
+                    setMessages((prev) =>
+                        prev.map((msg) => {
+                            if (msg.id === editedId || String(msg.id) === String(editedId)) {
+                                return { ...msg, content: data.content, is_edited: true };
+                            }
+                            return msg;
+                        })
+                    );
                 }
             } else if (data.type === 'messages_read') {
                 const ids = Array.isArray(data.message_ids) ? data.message_ids.map(String) : [];
                 const reader = data.reader_username;
                 if (ids.length > 0 && reader) {
-                    setMessages(prev => prev.map(msg => {
-                        if (!ids.includes(String(msg.id))) return msg;
-                        const readBy = Array.isArray(msg.read_by) ? msg.read_by : [];
-                        if (readBy.includes(reader)) return msg;
-                        return { ...msg, read_by: [...readBy, reader] };
-                    }));
+                    setMessages((prev) =>
+                        prev.map((msg) => {
+                            if (!ids.includes(String(msg.id))) return msg;
+                            const readBy = Array.isArray(msg.read_by) ? msg.read_by : [];
+                            if (readBy.includes(reader)) return msg;
+                            return { ...msg, read_by: [...readBy, reader] };
+                        })
+                    );
                 }
             } else if (data.type === 'read_receipt') {
                 const messageId = data.message_id;
                 const reader = data.username;
                 if (messageId && reader) {
-                    setMessages(prev => prev.map(msg => {
-                        if (String(msg.id) !== String(messageId)) return msg;
-                        const readBy = Array.isArray(msg.read_by) ? msg.read_by : [];
-                        if (readBy.includes(reader)) return msg;
-                        return { ...msg, read_by: [...readBy, reader] };
-                    }));
+                    setMessages((prev) =>
+                        prev.map((msg) => {
+                            if (String(msg.id) !== String(messageId)) return msg;
+                            const readBy = Array.isArray(msg.read_by) ? msg.read_by : [];
+                            if (readBy.includes(reader)) return msg;
+                            return { ...msg, read_by: [...readBy, reader] };
+                        })
+                    );
                 }
             }
 
             if (data.message && data.message.startsWith('[ANNOUNCE] ')) {
                 const announcement = data.message.replace('[ANNOUNCE] ', '');
                 // Use event to notify App about sticky message
-                window.dispatchEvent(new CustomEvent('stickyMessage', {
-                    detail: { message: announcement, type: 'info', author: data.username }
-                }));
+                window.dispatchEvent(
+                    new CustomEvent('stickyMessage', {
+                        detail: { message: announcement, type: 'info', author: data.username },
+                    })
+                );
             }
         };
 
-        newWs.onerror = (error) => console.error('[WebSocket] Connection error:', error);
+        newWs.onerror = (error) => logger.error('[WebSocket] Connection error:', error);
         newWs.onclose = (event) => {
             setIsConnected(false);
             stopHeartbeat();
             // Reconnect unless intentionally closed (room switch / unmount)
             if (!intentionalChatClose.current && event.code !== 1000 && event.code !== 1001) {
                 if (chatReconnectAttempts.current >= MAX_CHAT_RECONNECT) {
-                    console.warn('[ChatWS] Max reconnect attempts reached — will retry on visibility change');
+                    logger.warn(
+                        '[ChatWS] Max reconnect attempts reached — will retry on visibility change'
+                    );
                     return;
                 }
                 chatReconnectAttempts.current++;
@@ -269,27 +360,51 @@ export default function useChatConnection({
                 chatReconnectRef.current = setTimeout(async () => {
                     if (intentionalChatClose.current) return;
                     // 🔧 FIX: Refresh token before reconnecting (prevents stale JWT failures)
-                    try { await refreshAccessToken(); } catch (e) { /* non-fatal */ }
+                    try {
+                        await refreshAccessToken();
+                    } catch (e) {
+                        /* non-fatal */
+                    }
                     connectWebSocket();
                 }, delay);
             }
         };
-    }, [activeChat.id, activeChat.type, username, token, startHeartbeat, stopHeartbeat]);
+    }, [
+        activeChat.id,
+        activeChat.type,
+        activeRoomType,
+        username,
+        token,
+        startHeartbeat,
+        stopHeartbeat,
+    ]);
 
     // --- VISIBILITY CHANGE: Reconnect dead sockets when tab becomes visible ---
     useEffect(() => {
         const handleVisibility = async () => {
             if (document.visibilityState === 'visible') {
                 // 🔧 FIX: Refresh token when tab becomes visible — covers long-idle scenarios
-                try { await refreshAccessToken(); } catch (e) { /* non-fatal */ }
+                try {
+                    await refreshAccessToken();
+                } catch (e) {
+                    /* non-fatal */
+                }
 
                 // Chat WS: reconnect if dead
-                if (ws.current && ws.current.readyState !== WebSocket.OPEN && ws.current.readyState !== WebSocket.CONNECTING) {
+                if (
+                    ws.current &&
+                    ws.current.readyState !== WebSocket.OPEN &&
+                    ws.current.readyState !== WebSocket.CONNECTING
+                ) {
                     chatReconnectAttempts.current = 0; // Reset attempts on visibility
                     connectWebSocket();
                 }
                 // Status WS: force reconnect if dead (don't rely solely on backoff timer)
-                if (statusWsRef.current && statusWsRef.current.readyState !== WebSocket.OPEN && statusWsRef.current.readyState !== WebSocket.CONNECTING) {
+                if (
+                    statusWsRef.current &&
+                    statusWsRef.current.readyState !== WebSocket.OPEN &&
+                    statusWsRef.current.readyState !== WebSocket.CONNECTING
+                ) {
                     clearTimeout(statusWsReconnectRef.current);
                     statusIntentionalCloseRef.current = false;
                     // createSocket is in a different effect scope — just close & let onclose retry
@@ -300,9 +415,13 @@ export default function useChatConnection({
 
         // --- ONLINE/OFFLINE: Smart reconnect on network recovery ---
         const handleOnline = async () => {
-            console.info('[Network] Back online — reconnecting WebSockets');
+            logger.info('[Network] Back online — reconnecting WebSockets');
             // Refresh token first — may have expired while offline
-            try { await refreshAccessToken(); } catch (e) { /* non-fatal */ }
+            try {
+                await refreshAccessToken();
+            } catch (e) {
+                /* non-fatal */
+            }
             chatReconnectAttempts.current = 0;
             if (!ws.current || ws.current.readyState !== WebSocket.OPEN) {
                 connectWebSocket();
@@ -310,7 +429,7 @@ export default function useChatConnection({
         };
 
         const handleOffline = () => {
-            console.warn('[Network] Went offline — pausing reconnection');
+            logger.warn('[Network] Went offline — pausing reconnection');
             // Clear any pending reconnect timers while offline
             clearTimeout(chatReconnectRef.current);
             stopHeartbeat();
@@ -335,8 +454,14 @@ export default function useChatConnection({
     const statusHeartbeatTimeout = useRef(null);
 
     const stopStatusHeartbeat = useCallback(() => {
-        if (statusHeartbeatTimer.current) { clearInterval(statusHeartbeatTimer.current); statusHeartbeatTimer.current = null; }
-        if (statusHeartbeatTimeout.current) { clearTimeout(statusHeartbeatTimeout.current); statusHeartbeatTimeout.current = null; }
+        if (statusHeartbeatTimer.current) {
+            clearInterval(statusHeartbeatTimer.current);
+            statusHeartbeatTimer.current = null;
+        }
+        if (statusHeartbeatTimeout.current) {
+            clearTimeout(statusHeartbeatTimeout.current);
+            statusHeartbeatTimeout.current = null;
+        }
     }, []);
 
     useEffect(() => {
@@ -354,19 +479,25 @@ export default function useChatConnection({
 
         const createSocket = () => {
             // 🔧 FIX: Guard — don't create duplicate status sockets (prevents reconnect storm)
-            if (statusWsRef.current &&
+            if (
+                statusWsRef.current &&
                 (statusWsRef.current.readyState === WebSocket.OPEN ||
-                    statusWsRef.current.readyState === WebSocket.CONNECTING)) {
+                    statusWsRef.current.readyState === WebSocket.CONNECTING)
+            ) {
                 return null;
             }
 
-            const tok = tokenRef.current || localStorage.getItem('access_token') || currentToken;
+            const tok = tokenRef.current || getToken() || currentToken;
             const currentUser = usernameRef.current || username;
             // 🔧 SECURITY: Token via subprotocol instead of URL
             const url = `${WS_PROTOCOL}://${API_HOST}/ws/status/?username=${encodeURIComponent(currentUser)}`;
 
             let socket;
-            try { socket = new WebSocket(url, [`token-${tok}`]); } catch (err) { return null; }
+            try {
+                socket = new WebSocket(url, [`token-${tok}`]);
+            } catch (err) {
+                return null;
+            }
 
             socket.onopen = () => {
                 setGlobalWsConnected(true);
@@ -379,19 +510,26 @@ export default function useChatConnection({
                         statusWsRef.current.send(JSON.stringify({ type: 'ping' }));
                         statusHeartbeatTimeout.current = setTimeout(() => {
                             // No pong received — connection is dead, force close to trigger reconnect
-                            if (statusWsRef.current && statusWsRef.current.readyState === WebSocket.OPEN) {
+                            if (
+                                statusWsRef.current &&
+                                statusWsRef.current.readyState === WebSocket.OPEN
+                            ) {
                                 statusWsRef.current.close(4000, 'Heartbeat timeout');
                             }
                         }, HEARTBEAT_TIMEOUT);
                     }
                 }, HEARTBEAT_INTERVAL);
             };
-            socket.onerror = (error) => console.error('[StatusWS] WebSocket error:', error);
+            socket.onerror = (error) => logger.error('[StatusWS] WebSocket error:', error);
 
             socket.onclose = (event) => {
                 setGlobalWsConnected(false);
                 stopStatusHeartbeat();
-                if (!statusIntentionalCloseRef.current && event.code !== 1000 && event.code !== 1001) {
+                if (
+                    !statusIntentionalCloseRef.current &&
+                    event.code !== 1000 &&
+                    event.code !== 1001
+                ) {
                     // Infinite reconnect with exponential backoff (cap at 60s)
                     reconnectAttempts++;
                     const delay = jitteredDelay(5000, reconnectAttempts, 60000);
@@ -404,7 +542,7 @@ export default function useChatConnection({
                         try {
                             await refreshAccessToken();
                         } catch (e) {
-                            console.warn('[StatusWS] Token refresh failed before reconnect:', e);
+                            logger.warn('[StatusWS] Token refresh failed before reconnect:', e);
                         }
 
                         const newSocket = createSocket();
@@ -430,7 +568,7 @@ export default function useChatConnection({
 
                     if (data.type === 'online_user_list_update') {
                         const onlineUsernames = Array.isArray(data.users)
-                            ? data.users.map(u => typeof u === 'string' ? u : u.username || u)
+                            ? data.users.map((u) => (typeof u === 'string' ? u : u.username || u))
                             : [];
                         setOnlineUsers(onlineUsernames);
                     }
@@ -440,21 +578,26 @@ export default function useChatConnection({
                         const activity = data.activity
                             ? { ...data.activity, _received_at: Date.now() }
                             : null;
-                        setAllUsers(prevUsers => {
-                            const found = prevUsers.some(u => u.username === data.username);
+                        setAllUsers((prevUsers) => {
+                            const found = prevUsers.some((u) => u.username === data.username);
                             if (found) {
-                                return prevUsers.map(u =>
-                                    u.username === data.username ? { ...u, current_activity: activity } : u
+                                return prevUsers.map((u) =>
+                                    u.username === data.username
+                                        ? { ...u, current_activity: activity }
+                                        : u
                                 );
                             }
                             // User not in allUsers yet (non-friend server member) — add them
-                            return [...prevUsers, { username: data.username, current_activity: activity }];
+                            return [
+                                ...prevUsers,
+                                { username: data.username, current_activity: activity },
+                            ];
                         });
                     }
                     if (data.type === 'user_profile_update' && data.user_data) {
                         const updatedUser = data.user_data;
                         if (updatedUser.username === username) {
-                            setCurrentUserProfile(prevProfile => ({
+                            setCurrentUserProfile((prevProfile) => ({
                                 ...prevProfile,
                                 avatar: updatedUser.avatar,
                                 status_message: updatedUser.status_message,
@@ -463,17 +606,22 @@ export default function useChatConnection({
                                 xp: updatedUser.xp,
                                 level: updatedUser.level,
                                 status: updatedUser.status,
-                                role: updatedUser.role
+                                role: updatedUser.role,
                             }));
                         }
-                        setAllUsers(prevUsers => prevUsers.map(u =>
-                            u.username === updatedUser.username ? { ...u, ...updatedUser } : u
-                        ));
+                        setAllUsers((prevUsers) =>
+                            prevUsers.map((u) =>
+                                u.username === updatedUser.username ? { ...u, ...updatedUser } : u
+                            )
+                        );
                     }
                     if (data.type === 'global_message_notification' && data.username !== username) {
-                        const key = data.room_slug ? `room-${data.room_slug}` : `dm-${data.conversation_id}`;
+                        const key = data.room_slug
+                            ? `room-${data.room_slug}`
+                            : `dm-${data.conversation_id}`;
                         const chat = activeChatRef.current;
-                        const currentKey = chat.type === 'room' ? `room-${chat.id}` : `dm-${chat.id}`;
+                        const currentKey =
+                            chat.type === 'room' ? `room-${chat.id}` : `dm-${chat.id}`;
                         if (key !== currentKey) {
                             incrementUnread(key);
                             // 🔔 Desktop push notification
@@ -492,11 +640,14 @@ export default function useChatConnection({
                         if (data.categories && Array.isArray(data.categories)) {
                             setCategories(data.categories);
                         } else {
-                            fetchWithAuth(ROOM_LIST_URL).then(r => r.json()).then(rooms => setCategories(rooms)).catch(console.error);
+                            fetchWithAuth(ROOM_LIST_URL)
+                                .then((r) => r.json())
+                                .then((rooms) => setCategories(rooms))
+                                .catch(console.error);
                         }
                     }
                 } catch (parseError) {
-                    console.error('[StatusWS] Failed to parse message:', parseError);
+                    logger.error('[StatusWS] Failed to parse message:', parseError);
                 }
             };
 
@@ -520,14 +671,25 @@ export default function useChatConnection({
             statusIntentionalCloseRef.current = true;
             clearTimeout(statusWsReconnectRef.current);
             stopStatusHeartbeat();
-            try { statusWsRef.current.close(1000, 'Logout'); } catch (e) { /* ignore */ }
+            try {
+                statusWsRef.current.close(1000, 'Logout');
+            } catch (e) {
+                /* ignore */
+            }
             statusWsRef.current = null;
         }
     }, [isAuthenticated, stopStatusHeartbeat]);
 
     // --- 🔌 CONNECT ON ACTIVE CHAT CHANGE ---
     useEffect(() => {
-        if (!isInitialDataLoaded || !activeChat.id || activeChat.type === 'friends' || activeChat.type === 'welcome' || activeChat.type === 'server') return;
+        if (
+            !isInitialDataLoaded ||
+            !activeChat.id ||
+            activeChat.type === 'friends' ||
+            activeChat.type === 'welcome' ||
+            activeChat.type === 'server'
+        )
+            return;
 
         let isCancelled = false;
         const key = activeChat.type === 'room' ? `room-${activeChat.id}` : `dm-${activeChat.id}`;
@@ -546,11 +708,11 @@ export default function useChatConnection({
         // 🚀 Start WS connection IMMEDIATELY (don't wait for cache check)
         connectWebSocket();
 
-        // 🚀 Fetch history: skip if cache is fresh, otherwise background refresh
+        // 🚀 Fetch history: skip if cache is fresh, otherwisee background refresh
         // 🔧 FIX: Removed requestAnimationFrame — it's for paint scheduling, not network requests.
         // Using queueMicrotask for immediate async execution without paint-wait delay.
         if (cached?.messages?.length > 0) {
-            const cacheAge = cached._ts ? (Date.now() - cached._ts) : Infinity;
+            const cacheAge = cached._ts ? Date.now() - cached._ts : Infinity;
             if (cacheAge > 15000) {
                 queueMicrotask(() => {
                     if (!isCancelled) fetchMessageHistory(true, true);
@@ -571,20 +733,24 @@ export default function useChatConnection({
             // React re-renders (StrictMode, parent state changes) can re-fire this effect
             // for the SAME channel, causing unnecessary disconnect → reconnect storms.
             const currentUrl = ws.current?.url || '';
-            const expectedPath = activeChat.type === 'room'
-                ? `/ws/chat/${activeChat.id}/`
-                : `/ws/dm/${activeChat.id}/`;
+            const expectedPath =
+                activeChat.type === 'room'
+                    ? `/ws/chat/${activeChat.id}/`
+                    : `/ws/dm/${activeChat.id}/`;
             const isSameChannel = currentUrl.includes(expectedPath);
 
             if (ws.current && !isSameChannel) {
                 intentionalChatClose.current = true;
-                try { ws.current.close(1000, 'chat_switch'); } catch (e) { /* ignore */ }
+                try {
+                    ws.current.close(1000, 'chat_switch');
+                } catch (e) {
+                    /* ignore */
+                }
                 ws.current = null;
             }
         };
-    }, [activeChat.id, activeChat.type, isInitialDataLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
-    // NOTE: connectWebSocket excluded from deps — it changes when activeChat changes,
-    // which would cause double-fire. activeChat.id/type already cover reconnection needs.
+    }, [activeChat.id, activeChat.type, isInitialDataLoaded]); // INTENTIONAL: connectWebSocket excluded — it changes when activeChat changes, causing double-fire
+    // activeChat.id/type already cover reconnection needs.
 
     return { ws, connectWebSocket };
 }

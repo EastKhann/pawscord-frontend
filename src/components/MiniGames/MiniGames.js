@@ -1,8 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import './MiniGames.css';
 
+import { useTranslation } from 'react-i18next';
 // ==================== TIC TAC TOE ====================
 export const TicTacToe = ({ opponent, onGameEnd, isMyTurn, mySymbol = 'X' }) => {
+    const { t } = useTranslation();
     const [board, setBoard] = useState(Array(9).fill(null));
     const [currentPlayer, setCurrentPlayer] = useState('X');
     const [winner, setWinner] = useState(null);
@@ -53,7 +56,7 @@ export const TicTacToe = ({ opponent, onGameEnd, isMyTurn, mySymbol = 'X' }) => 
     };
 
     return (
-        <div className="tictactoe-game">
+        <div aria-label="tic tac toe" className="tictactoe-game">
             <div className="game-header">
                 <h3>🎮 XOX Oyunu</h3>
                 {opponent && <span className="opponent">vs {opponent}</span>}
@@ -65,18 +68,17 @@ export const TicTacToe = ({ opponent, onGameEnd, isMyTurn, mySymbol = 'X' }) => 
                 ) : winner ? (
                     <span>🎉 {winner} Kazandı!</span>
                 ) : (
-                    <span>Sıra: {currentPlayer} {currentPlayer === mySymbol ? '(Sen)' : `(${opponent || 'Rakip'})`}</span>
+                    <span>Rank: {currentPlayer} {currentPlayer === mySymbol ? '(Sen)' : `(${opponent || 'Rakip'})`}</span>
                 )}
             </div>
 
             <div className="tictactoe-board">
                 {board.map((cell, index) => (
                     <button
-                        key={index}
+                        key={`item-${index}`}
                         className={`tictactoe-cell ${cell} ${winningLine?.includes(index) ? 'winning' : ''}`}
                         onClick={() => handleClick(index)}
-                        disabled={!!winner || !!cell}
-                    >
+                        disabled={!!winner || !!cell}>
                         {cell}
                     </button>
                 ))}
@@ -97,6 +99,7 @@ const HANGMAN_WORDS = [
 ];
 
 export const Hangman = ({ onGameEnd, customWord }) => {
+    const { t } = useTranslation();
     const [word, setWord] = useState('');
     const [guessedLetters, setGuessedLetters] = useState(new Set());
     const [wrongGuesses, setWrongGuesses] = useState(0);
@@ -174,7 +177,7 @@ export const Hangman = ({ onGameEnd, customWord }) => {
 
             {(isWon || isLost) && (
                 <div className="game-result">
-                    {isWon ? '🎉 Kazandın!' : '😢 Kaybettin!'}
+                    {isWon ? t('ui.kazandin') : '😢 Kmaybettin!'}
                 </div>
             )}
 
@@ -184,8 +187,7 @@ export const Hangman = ({ onGameEnd, customWord }) => {
                         key={letter}
                         className={`key ${guessedLetters.has(letter) ? (word.includes(letter) ? 'correct' : 'wrong') : ''}`}
                         onClick={() => handleGuess(letter)}
-                        disabled={guessedLetters.has(letter) || isWon || isLost}
-                    >
+                        disabled={guessedLetters.has(letter) || isWon || isLost}>
                         {letter.toUpperCase()}
                     </button>
                 ))}
@@ -206,13 +208,13 @@ const TRIVIA_QUESTIONS = [
         correct: 2
     },
     {
-        question: "React'ın ilk sürümü hangi yıl çıktı?",
+        question: "React'ın ilk sürümü hangi year ktı?",
         options: ["2011", "2013", "2015", "2017"],
         correct: 1
     },
     {
-        question: "HTTP protokolünde 404 kodu ne anlama gelir?",
-        options: ["Sunucu Hatası", "Bulunamadı", "Yetki Yok", "Yönlendirme"],
+        question: t('ui.http_protokolunde_404_kodu_ne_anlama_gel'),
+        options: [ t('ui.server_errorsi'), "Not found", "Yetki Yok", "Redirect"],
         correct: 1
     },
     {
@@ -222,27 +224,28 @@ const TRIVIA_QUESTIONS = [
     },
     {
         question: "Git'te 'HEAD' ne anlama gelir?",
-        options: ["İlk commit", "Son commit", "Mevcut branch referansı", "Uzak repo"],
+        options: [ t('ui.ilk_commit'), "Son commit", "Current branch reference", "Uzak repo"],
         correct: 2
     },
     {
         question: "CSS'te 'display: flex' ne yapar?",
-        options: ["Elementi gizler", "Flexbox layout açar", "Elementi sabitler", "Animasyon ekler"],
+        options: ["Hides element", "Flexbox layout example", "Fixes element", "Animation examples"],
         correct: 1
     },
     {
-        question: "Discord hangi yıl kuruldu?",
+        question: "Discord hangi year kuruldu?",
         options: ["2013", "2015", "2017", "2019"],
         correct: 1
     },
     {
-        question: "Node.js hangi JavaScript motoru üzerine kurulu?",
+        question: "What JavaScript engine is Node.js built on?",
         options: ["SpiderMonkey", "V8", "Chakra", "JavaScriptCore"],
         correct: 1
     }
 ];
 
 export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
+    const { t } = useTranslation();
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [score, setScore] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -267,7 +270,7 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
         }
 
         setTimeout(() => {
-            if (currentQuestion < shuffledQuestions.length - 1) {
+            if (currentQuestion <shuffledQuestions.length - 1) {
                 setCurrentQuestion(currentQuestion + 1);
                 setSelectedAnswer(null);
                 setShowResult(false);
@@ -288,7 +291,7 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
         setGameOver(false);
     };
 
-    if (shuffledQuestions.length === 0) return <div>Yükleniyor...</div>;
+    if (shuffledQuestions.length === 0) return <div>{t("common.loading")}</div>;
 
     const question = shuffledQuestions[currentQuestion];
 
@@ -296,17 +299,17 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
         return (
             <div className="trivia-game">
                 <div className="trivia-result">
-                    <h3>{score >= 3 ? '🎉 Tebrikler!' : '😢 Olmadı!'}</h3>
+                    <h3>{score >= 3 ? '🎉 Tebrikler!' : t('ui.olmadi')</h3>
                     <div className="final-score">
                         <span className="score-value">{score}</span>
                         <span className="score-total">/ {shuffledQuestions.length}</span>
                     </div>
                     <p>
-                        {score === 5 ? 'Mükemmel! Hepsini bildin!' :
-                            score >= 3 ? 'İyi iş!' : 'Bir daha dene!'}
+                        {score === 5 ? 'Excellent! Hepsini bildin!' :
+                            score >= 3 ? t('ui.iyi_is') : 'Bir daha dene!'}
                     </p>
                     <button className="game-reset-btn" onClick={resetGame}>
-                        🔄 Tekrar Oyna
+                        🔄 Play Again
                     </button>
                 </div>
             </div>
@@ -333,15 +336,14 @@ export const Trivia = ({ onGameEnd, questions = TRIVIA_QUESTIONS }) => {
             <div className="trivia-options">
                 {question.options.map((option, index) => (
                     <button
-                        key={index}
+                        key={`item-${index}`}
                         className={`trivia-option ${showResult ? (
                                 index === question.correct ? 'correct' :
                                     index === selectedAnswer ? 'wrong' : ''
                             ) : ''
                             } ${selectedAnswer === index ? 'selected' : ''}`}
                         onClick={() => handleAnswer(index)}
-                        disabled={showResult}
-                    >
+                        disabled={showResult}>
                         {option}
                     </button>
                 ))}
@@ -397,8 +399,7 @@ const MiniGames = ({ onClose }) => {
                     <button
                         key={game.id}
                         className="game-card"
-                        onClick={() => setSelectedGame(game.id)}
-                    >
+                        onClick={() => setSelectedGame(game.id)}>
                         <span className="game-icon">{game.icon}</span>
                         <span className="game-name">{game.name}</span>
                         <span className="game-desc">{game.description}</span>
@@ -407,6 +408,32 @@ const MiniGames = ({ onClose }) => {
             </div>
         </div>
     );
+};
+
+MiniGames.propTypes = {
+    opponent: PropTypes.object,
+    onGameEnd: PropTypes.func,
+    isMyTurn: PropTypes.bool,
+    mySymbol: PropTypes.string,
+};
+
+TicTacToe.propTypes = {
+    opponent: PropTypes.object,
+    onGameEnd: PropTypes.func,
+    isMyTurn: PropTypes.bool,
+    mySymbol: PropTypes.object,
+};
+
+
+Hangman.propTypes = {
+    onGameEnd: PropTypes.func,
+    customWord: PropTypes.object,
+};
+
+
+Trivia.propTypes = {
+    onGameEnd: PropTypes.func,
+    questions: PropTypes.array,
 };
 
 export default MiniGames;

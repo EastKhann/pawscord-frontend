@@ -76,8 +76,8 @@ describe('useClickOutside', () => {
         expect(callback).not.toHaveBeenCalled();
     });
 
-    // ── 5. Cleans up event listener on unmount ──
-    it('should remove event listener on unmount', () => {
+    // ── 5. Cleans up event listner on unmount ──
+    it('should remove event listner on unmount', () => {
         const removeSpy = vi.spyOn(document, 'removeEventListener');
         const callback = vi.fn();
         const { unmount } = renderHook(() => useClickOutside(callback));
@@ -92,10 +92,9 @@ describe('useClickOutside', () => {
     it('should use the latest callback after rerender', () => {
         const callback1 = vi.fn();
         const callback2 = vi.fn();
-        const { result, rerender } = renderHook(
-            ({ cb }) => useClickOutside(cb),
-            { initialProps: { cb: callback1 } }
-        );
+        const { result, rerender } = renderHook(({ cb }) => useClickOutside(cb), {
+            initialProps: { cb: callback1 },
+        });
 
         const inside = document.createElement('div');
         document.body.appendChild(inside);
@@ -165,7 +164,7 @@ describe('useClickOutside', () => {
     });
 
     // ── 9. Registers mousedown (not click) ──
-    it('should listen specifically for mousedown events', () => {
+    it('should listn specifically for mousedown events', () => {
         const addSpy = vi.spyOn(document, 'addEventListener');
         const callback = vi.fn();
         renderHook(() => useClickOutside(callback));

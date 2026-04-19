@@ -1,8 +1,11 @@
+import React from 'react';
+import logger from '../utils/logger';
 // ⚡ API REQUEST OPTIMIZATION
 // Enhanced fetch with caching, deduplication, and retry logic
 
 class APICache {
-    constructor(maxAge = 60000) { // Default 1 minute
+    constructor(maxAge = 60000) {
+        // Default 1 minute
         this.cache = new Map();
         this.maxAge = maxAge;
     }
@@ -129,10 +132,12 @@ class OptimizedAPI {
         } catch (error) {
             // Retry logic
             if (attempt < this.options.retryAttempts && !error.name === 'AbortError') {
-                console.warn(`⚠️ Request failed, retrying (${attempt}/${this.options.retryAttempts})...`);
+                logger.warn(
+                    `⚠️ Request failed, retrying (${attempt}/${this.options.retryAttempts})...`
+                );
 
                 // Exponential backoff
-                await new Promise(resolve =>
+                await new Promise((resolve) =>
                     setTimeout(resolve, this.options.retryDelay * Math.pow(2, attempt - 1))
                 );
 

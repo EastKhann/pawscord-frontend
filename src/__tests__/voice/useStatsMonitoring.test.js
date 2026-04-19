@@ -26,13 +26,23 @@ describe('useStatsMonitoring', () => {
     it('should start monitoring with peer connections', async () => {
         const mockStats = new Map([
             ['stat1', { type: 'candidate-pair', state: 'succeeded', currentRoundTripTime: 0.05 }],
-            ['stat2', { type: 'inbound-rtp', kind: 'audio', packetsReceived: 100, packetsLost: 0, jitter: 0.01, bytesReceived: 5000 }]
+            [
+                'stat2',
+                {
+                    type: 'inbound-rtp',
+                    kind: 'audio',
+                    packetsReceived: 100,
+                    packetsLost: 0,
+                    jitter: 0.01,
+                    bytesReceived: 5000,
+                },
+            ],
         ]);
 
         const mockPC = {
             getStats: vi.fn().mockResolvedValue(mockStats),
             connectionState: 'connected',
-            iceConnectionState: 'connected'
+            iceConnectionState: 'connected',
         };
 
         const peerConnectionsRef = { current: { testUser: mockPC } };

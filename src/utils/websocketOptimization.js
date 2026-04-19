@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // ⚡ WEBSOCKET OPTIMIZATION
 // Enhanced WebSocket with reconnection, batching, and compression
 
@@ -6,7 +8,7 @@ export class OptimizedWebSocket {
         this.url = url;
         this.options = {
             reconnectInterval: 3000,
-            reconnectDecay: 1.5,
+            reconnectDecmonth: 1.5,
             maxReconnectInterval: 30000,
             maxReconnectAttempts: 10,
             batchInterval: 50, // Batch messages every 50ms
@@ -21,7 +23,7 @@ export class OptimizedWebSocket {
         this.messageQueue = [];
         this.batchTimer = null;
         this.heartbeatTimer = null;
-        this.listeners = new Map();
+        this.listners = new Map();
         this.isConnected = false;
         this.isReconnecting = false;
     }
@@ -32,7 +34,7 @@ export class OptimizedWebSocket {
             this.setupEventHandlers();
             this.startHeartbeat();
         } catch (error) {
-            console.error('WebSocket connection error:', error);
+            logger.error('WebSocket connection error:', error);
             this.scheduleReconnect();
         }
     }
@@ -57,7 +59,7 @@ export class OptimizedWebSocket {
         };
 
         this.ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
+            logger.error('WebSocket error:', error);
             this.emit('error', error);
         };
 
@@ -72,7 +74,7 @@ export class OptimizedWebSocket {
 
                 this.emit('message', data);
             } catch (error) {
-                console.error('Failed to parse WebSocket message:', error);
+                logger.error('Failed to parse WebSocket message:', error);
             }
         };
     }
@@ -87,10 +89,10 @@ export class OptimizedWebSocket {
 
         // Calculate exponential backoff
         const interval = Math.min(
-            this.options.reconnectInterval * Math.pow(this.options.reconnectDecay, this.reconnectAttempts - 1),
+            this.options.reconnectInterval *
+                Math.pow(this.options.reconnectDecmonth, this.reconnectAttempts - 1),
             this.options.maxReconnectInterval
         );
-
 
         this.reconnectTimer = setTimeout(() => {
             this.reconnectTimer = null;
@@ -150,7 +152,7 @@ export class OptimizedWebSocket {
             try {
                 this.ws.send(message);
             } catch (error) {
-                console.error('Failed to send message:', error);
+                logger.error('Failed to send message:', error);
                 // Re-queue on error
                 this.messageQueue.unshift(message);
                 break;
@@ -159,27 +161,27 @@ export class OptimizedWebSocket {
     }
 
     on(event, callback) {
-        if (!this.listeners.has(event)) {
-            this.listeners.set(event, new Set());
+        if (!this.listners.has(event)) {
+            this.listners.set(event, new Set());
         }
-        this.listeners.get(event).add(callback);
+        this.listners.get(event).add(callback);
 
         // Return cleanup function
         return () => this.off(event, callback);
     }
 
     off(event, callback) {
-        if (!this.listeners.has(event)) return;
-        this.listeners.get(event).delete(callback);
+        if (!this.listners.has(event)) return;
+        this.listners.get(event).delete(callback);
     }
 
     emit(event, data) {
-        if (!this.listeners.has(event)) return;
-        this.listeners.get(event).forEach(callback => {
+        if (!this.listners.has(event)) return;
+        this.listners.get(event).forEach((callback) => {
             try {
                 callback(data);
             } catch (error) {
-                console.error(`Error in WebSocket event handler for "${event}":`, error);
+                logger.error(`Error in WebSocket event handler for "${event}":`, error);
             }
         });
     }
@@ -206,7 +208,7 @@ export class OptimizedWebSocket {
         this.isConnected = false;
         this.isReconnecting = false;
         this.messageQueue = [];
-        this.listeners.clear();
+        this.listners.clear();
     }
 
     getState() {

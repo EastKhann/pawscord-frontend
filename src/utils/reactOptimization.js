@@ -1,6 +1,11 @@
+/* eslint-disable no-duplicate-imports */
+import React from 'react';
 // ⚡ REACT OPTIMIZATION HOOKS
 // Custom hooks for automatic performance optimization
 
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useCallback, useMemo, useRef, useEffect, memo } from 'react';
 
 /**
@@ -49,12 +54,15 @@ export function useThrottledValue(value, limit = 500) {
     const lastRan = useRef(Date.now());
 
     useEffect(() => {
-        const handler = setTimeout(() => {
-            if (Date.now() - lastRan.current >= limit) {
-                setThrottledValue(value);
-                lastRan.current = Date.now();
-            }
-        }, limit - (Date.now() - lastRan.current));
+        const handler = setTimeout(
+            () => {
+                if (Date.now() - lastRan.current >= limit) {
+                    setThrottledValue(value);
+                    lastRan.current = Date.now();
+                }
+            },
+            limit - (Date.now() - lastRan.current)
+        );
 
         return () => clearTimeout(handler);
     }, [value, limit]);
@@ -140,8 +148,7 @@ export function useDeepMemo(value) {
 function deepEqual(obj1, obj2) {
     if (obj1 === obj2) return true;
 
-    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' ||
-        obj1 === null || obj2 === null) {
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
         return false;
     }
 
@@ -201,9 +208,9 @@ export function useBatchedState(initialState = {}) {
         }
 
         timeoutRef.current = setTimeout(() => {
-            setState(prevState => {
+            setState((prevState) => {
                 const newState = { ...prevState };
-                updateQueue.current.forEach(update => {
+                updateQueue.current.forEach((update) => {
                     Object.assign(newState, update);
                 });
                 updateQueue.current = [];
@@ -227,10 +234,7 @@ export function useOptimizedHandler(handler, deps = []) {
         savedHandler.current = handler;
     }, [handler]);
 
-    return useCallback(
-        (...args) => savedHandler.current(...args),
-        deps
-    );
+    return useCallback((...args) => savedHandler.current(...args), deps);
 }
 
 export default {

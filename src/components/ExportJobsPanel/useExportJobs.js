@@ -1,15 +1,20 @@
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useState, useEffect } from 'react';
 import { FaClock, FaCheckCircle, FaSpinner, FaExclamationCircle } from 'react-icons/fa';
 import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
+import logger from '../../utils/logger';
 
 export const EXPORT_TYPES = [
-    { id: 'messages', name: 'Messages', description: 'Export all your messages' },
-    { id: 'server', name: 'Server Data', description: 'Export server content' },
-    { id: 'dm', name: 'Direct Messages', description: 'Export DM history' },
-    { id: 'media', name: 'Media Files', description: 'Export uploaded media' },
-    { id: 'profile', name: 'Profile Data', description: 'Export your profile info' },
-    { id: 'analytics', name: 'Analytics', description: 'Export analytics data' }
+    { id: 'messages', nameKey: 'exportJobs.messages', descKey: 'exportJobs.messagesDesc' },
+    { id: 'server', nameKey: 'exportJobs.serverData', descKey: 'exportJobs.serverDataDesc' },
+    { id: 'dm', nameKey: 'exportJobs.directMessages', descKey: 'exportJobs.directMessagesDesc' },
+    { id: 'media', nameKey: 'exportJobs.mediaFiles', descKey: 'exportJobs.mediaFilesDesc' },
+    { id: 'profile', nameKey: 'exportJobs.profileData', descKey: 'exportJobs.profileDataDesc' },
+    { id: 'analytics', nameKey: 'exportJobs.analytics', descKey: 'exportJobs.analyticsDesc' },
 ];
 
 export const formatFileSize = (bytes) => {
@@ -20,16 +25,17 @@ export const formatFileSize = (bytes) => {
 };
 
 const STATUS_ICONS = {
-    completed: <FaCheckCircle style={{ color: '#23a559' }} />,
-    processing: <FaSpinner style={{ color: '#f0b232' }} className="fa-spin" />,
-    failed: <FaExclamationCircle style={{ color: '#f23f42' }} />
+    completed: <FaCheckCircle className="icon-success" />,
+    processing: <FaSpinner className="fa-spin icon-warning" />,
+    failed: <FaExclamationCircle className="icon-danger" />,
 };
 const STATUS_COLORS = { completed: '#23a559', processing: '#f0b232', failed: '#f23f42' };
 
-export const getStatusIcon = (status) => STATUS_ICONS[status] || <FaClock style={{ color: '#949ba4' }} />;
+export const getStatusIcon = (status) => STATUS_ICONS[status] || <FaClock className="icon-muted" />;
 export const getStatusColor = (status) => STATUS_COLORS[status] || '#949ba4';
 
 export default function useExportJobs(fetchWithAuth, apiBaseUrl) {
+    const { t } = useTranslation();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [exportType, setExportType] = useState('messages');
@@ -41,8 +47,11 @@ export default function useExportJobs(fetchWithAuth, apiBaseUrl) {
             if (!res.ok) return;
             const data = await res.json();
             setJobs(data.jobs || []);
-        } catch (err) { console.error('Failed to load export jobs:', err); }
-        finally { setLoading(false); }
+        } catch (err) {
+            logger.error('Failed to load export jobs:', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -55,13 +64,19 @@ export default function useExportJobs(fetchWithAuth, apiBaseUrl) {
         setCreating(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/exports/create/`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ export_type: exportType })
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ export_type: exportType }),
             });
             const data = await res.json();
-            data.success ? (toast.success('Export job created! Processing...'), loadExportJobs()) : toast.error(data.error || 'Failed to create export');
-        } catch { toast.error('Failed to create export'); }
-        finally { setCreating(false); }
+            data.success
+                ? (toast.success(t('exportJobs.created')), loadExportJobs())
+                : toast.error(data.error || t('exportJobs.createFailed'));
+        } catch {
+            toast.error(t('exportJobs.createFailed'));
+        } finally {
+            setCreating(false);
+        }
     };
 
     const downloadExport = async (jobId) => {
@@ -70,20 +85,41 @@ export default function useExportJobs(fetchWithAuth, apiBaseUrl) {
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = `export_${jobId}.zip`;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            a.href = url;
+            a.download = `export_${jobId}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-            toast.success('Download started!');
-        } catch { toast.error('Download failed'); }
+            toast.success(t('exportJobs.downloadStarted'));
+        } catch {
+            toast.error(t('exportJobs.downloadFailed'));
+        }
     };
 
     const deleteJob = async (jobId) => {
-        if (!await confirmDialog('Delete this export job?')) return;
+        if (!(await confirmDialog(t('exportJobs.deleteConfirm')))) return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/exports/${jobId}/delete/`, { method: 'DELETE' });
-            toast.success('Export job deleted'); loadExportJobs();
-        } catch { toast.error('Failed to delete job'); }
+            toast.success(t('exportJobs.deleted'));
+            loadExportJobs();
+        } catch {
+            toast.error(t('exportJobs.deleteFailed'));
+        }
     };
 
-    return { jobs, loading, exportType, setExportType, creating, createExport, downloadExport, deleteJob };
+    return {
+        jobs,
+        loading,
+        exportType,
+        setExportType,
+        creating,
+        createExport,
+        downloadExport,
+        deleteJob,
+    };
 }
+
+useExportJobs.propTypes = {
+    bytes: PropTypes.array,
+};

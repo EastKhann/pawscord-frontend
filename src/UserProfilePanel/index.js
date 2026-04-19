@@ -1,3 +1,4 @@
+export { default } from './UserProfilePanel';
 // Barrel export for UserProfilePanel
 export { default as ProfileHeader } from './ProfileHeader';
 export { default as ProfileSidebar } from './ProfileSidebar';

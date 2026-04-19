@@ -1,31 +1,49 @@
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import SettingSection from '../components/SettingSection';
-import S from '../styles';
+import importedS from '../styles';
 
-const SHORTCUTS = [
-    { keys: 'Ctrl + K', desc: 'Hızlı Geçiş' },
-    { keys: 'Ctrl + Shift + M', desc: 'Mikrofon Aç/Kapa' },
-    { keys: 'Ctrl + Shift + D', desc: 'Kulaklık Aç/Kapa' },
-    { keys: 'Ctrl + Enter', desc: 'Mesaj Gönder' },
-    { keys: 'Shift + Enter', desc: 'Yeni Satır' },
-    { keys: '↑ (boş input)', desc: 'Son Mesajı Düzenle' },
-    { keys: 'Escape', desc: 'Düzenleme/Yanıt İptal' },
-    { keys: 'Ctrl + T', desc: 'Şablonlar' },
-    { keys: 'Ctrl + B', desc: 'Kalın Metin' },
-    { keys: 'Ctrl + I', desc: 'İtalik Metin' },
-    { keys: 'Ctrl + U', desc: 'Altı Çizili' },
-];
+const S = {
+    ...importedS,
+    flex: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '10px 0',
+        borderBottom: '1px solid rgba(255,255,255,0.04)',
+    },
+};
 
-const KeybindsTab = () => (
-    <div>
-        <SettingSection title="Klavye Kısayolları">
-            {SHORTCUTS.map((s, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <span style={{ color: '#dbdee1', fontSize: 14 }}>{s.desc}</span>
-                    <kbd style={S.kbd}>{s.keys}</kbd>
-                </div>
-            ))}
-        </SettingSection>
-    </div>
-);
+const KeybindsTab = () => {
+    const { t } = useTranslation();
+    const SHORTCUTS = [
+        { keys: 'Ctrl + K', descKey: 'quickSwitch' },
+        { keys: 'Ctrl + Shift + M', descKey: 'muteToggle' },
+        { keys: 'Ctrl + Shift + D', descKey: 'deafenToggle' },
+        { keys: 'Ctrl + Enter', descKey: 'sendMessage' },
+        { keys: 'Shift + Enter', descKey: 'newLine' },
+        { keys: '↑', descKey: 'editLastMessage' },
+        { keys: 'Escape', descKey: 'cancelEdit' },
+        { keys: 'Ctrl + T', descKey: 'templates' },
+        { keys: 'Ctrl + B', descKey: 'bold' },
+        { keys: 'Ctrl + I', descKey: 'italic' },
+        { keys: 'Ctrl + U', descKey: 'underline' },
+    ];
+    return (
+        <div aria-label="keybinds tab">
+            <SettingSection title={t('settings.tabs.keybinds.keyboardShortcuts')}>
+                {SHORTCUTS.map((s) => (
+                    <div key={s.keys} style={S.flex}>
+                        <span className="text-dbd-14n">
+                            {t('settings.tabs.keybinds.' + s.descKey)}
+                        </span>
+                        <kbd style={S.kbd}>{s.keys}</kbd>
+                    </div>
+                ))}
+            </SettingSection>
+        </div>
+    );
+};
 
+KeybindsTab.propTypes = {};
 export default KeybindsTab;

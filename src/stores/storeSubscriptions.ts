@@ -23,7 +23,7 @@ import { useServerStore } from './useServerStore';
 function subscribeToSlice<TStore, TSlice>(
     store: { subscribe: (listener: (state: TStore) => void) => () => void; getState: () => TStore },
     selector: (state: TStore) => TSlice,
-    callback: (slice: TSlice) => void,
+    callback: (slice: TSlice) => void
 ): () => void {
     let prev = selector(store.getState());
     return store.subscribe((state) => {

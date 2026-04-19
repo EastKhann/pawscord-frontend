@@ -1,15 +1,20 @@
+import React from 'react';
+import logger from '../utils/logger';
+import { getToken } from './tokenStorage';
 // frontend/src/utils/offlineMode.js
 
 /**
  * 📵 Offline Mode Manager
  * İnternet bağlantısı kesildiğinde uygulamanın çalışmaya devam etmesini sağlar
- * IndexedDB ile mesajları cache'ler, bağlantı gelince senkronize eder
+ * IndexedDB with mesajları cache'ler, bağlantı gelince senkronize eder
  */
 
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
 class OfflineModeManager {
     constructor() {
         this.isOnline = navigator.onLine;
-        this.listeners = new Set();
+        this.listners = new Set();
         this.pendingActions = []; // Offline iken yapılan işlemler
         this.db = null;
 
@@ -20,13 +25,12 @@ class OfflineModeManager {
      * Offline mode'u başlat
      */
     async init() {
-        // Online/offline event listener'ları
+        // Online/offline event listner'ları
         window.addEventListener('online', () => this.handleOnline());
         window.addEventListener('offline', () => this.handleOffline());
 
         // IndexedDB'yi başlat
         await this.initDatabase();
-
     }
 
     /**
@@ -37,7 +41,7 @@ class OfflineModeManager {
             const request = indexedDB.open('PawscordOfflineDB', 1);
 
             request.onerror = () => {
-                console.error('❌ [OfflineMode] IndexedDB açılamadı');
+                logger.error('❌ [OfflineMode] IndexedDB could not be opened');
                 reject(request.error);
             };
 
@@ -51,7 +55,10 @@ class OfflineModeManager {
 
                 // Mesajlar tablosu
                 if (!db.objectStoreNames.contains('messages')) {
-                    const messageStore = db.createObjectStore('messages', { keyPath: 'id', autoIncrement: true });
+                    const messageStore = db.createObjectStore('messages', {
+                        keyPath: 'id',
+                        autoIncrement: true,
+                    });
                     messageStore.createIndex('timestamp', 'timestamp', { unique: false });
                     messageStore.createIndex('room', 'room', { unique: false });
                     messageStore.createIndex('synced', 'synced', { unique: false });
@@ -59,10 +66,12 @@ class OfflineModeManager {
 
                 // Pending actions tablosu
                 if (!db.objectStoreNames.contains('pendingActions')) {
-                    const actionStore = db.createObjectStore('pendingActions', { keyPath: 'id', autoIncrement: true });
+                    const actionStore = db.createObjectStore('pendingActions', {
+                        keyPath: 'id',
+                        autoIncrement: true,
+                    });
                     actionStore.createIndex('timestamp', 'timestamp', { unique: false });
                 }
-
             };
         });
     }
@@ -82,35 +91,35 @@ class OfflineModeManager {
      * Offline olduğunda tetiklenir
      */
     handleOffline() {
-        console.warn('🔴 [OfflineMode] İnternet bağlantısı kesildi');
+        logger.warn('🔴 [OfflineMode] Internet connection lost');
         this.isOnline = false;
         this.notify('offline');
     }
 
     /**
-     * Listener ekle
+     * Listener add
      * @param {Function} callback - Callback fonksiyonu
      */
     onStatusChange(callback) {
-        this.listeners.add(callback);
-        return () => this.listeners.delete(callback);
+        this.listners.add(callback);
+        return () => this.listners.delete(callback);
     }
 
     /**
-     * Listener'ları bilgilendir
+     * Listener'ları bilgwithndir
      */
     notify(status) {
-        this.listeners.forEach(callback => {
+        this.listners.forEach((callback) => {
             try {
                 callback({ status, isOnline: this.isOnline });
             } catch (error) {
-                console.error('❌ [OfflineMode] Listener hatası:', error);
+                logger.error('❌ [OfflineMode] Listener error:', error);
             }
         });
     }
 
     /**
-     * Mesajı cache'e kaydet (offline iken)
+     * Mesajı cache'e save (offline iken)
      * @param {Object} message - Mesaj objesi
      */
     async cacheMessage(message) {
@@ -123,7 +132,7 @@ class OfflineModeManager {
             const messageData = {
                 ...message,
                 timestamp: Date.now(),
-                synced: false
+                synced: false,
             };
 
             const request = store.add(messageData);
@@ -133,7 +142,7 @@ class OfflineModeManager {
             };
 
             request.onerror = () => {
-                console.error('❌ [OfflineMode] Mesaj kaydetme hatası:', request.error);
+                logger.error('❌ [OfflineMode] Message save error:', request.error);
                 reject(request.error);
             };
         });
@@ -158,14 +167,14 @@ class OfflineModeManager {
             };
 
             request.onerror = () => {
-                console.error('❌ [OfflineMode] Mesaj okuma hatası:', request.error);
+                logger.error('❌ [OfflineMode] Message read error:', request.error);
                 reject(request.error);
             };
         });
     }
 
     /**
-     * Pending action ekle (offline iken yapılan işlem)
+     * Pending action add (offline iken yapılan işlem)
      * @param {Object} action - İşlem objesi
      */
     async addPendingAction(action) {
@@ -177,7 +186,7 @@ class OfflineModeManager {
 
             const actionData = {
                 ...action,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             };
 
             const request = store.add(actionData);
@@ -188,7 +197,7 @@ class OfflineModeManager {
             };
 
             request.onerror = () => {
-                console.error('❌ [OfflineMode] Action ekleme hatası:', request.error);
+                logger.error('❌ [OfflineMode] Action add error:', request.error);
                 reject(request.error);
             };
         });
@@ -199,7 +208,6 @@ class OfflineModeManager {
      */
     async syncPendingActions() {
         if (!this.db || this.pendingActions.length === 0) return;
-
 
         const transaction = this.db.transaction(['pendingActions'], 'readwrite');
         const store = transaction.objectStore('pendingActions');
@@ -218,14 +226,13 @@ class OfflineModeManager {
                     } else if (action.type === 'uploadFile') {
                         await this.executeUploadFile(action.data);
                     }
-                    // Diğer action tipleri...
+                    // Other action tipleri...
 
-                    // Başarılı olduysa sil
+                    // Successful olduysa delete
                     store.delete(action.id);
-
                 } catch (error) {
-                    console.error('❌ [OfflineMode] Senkronizasyon hatası:', error);
-                    // Hata durumunda action'ı koru, sonra tekrar dene
+                    logger.error('❌ [OfflineMode] Synchronization error:', error);
+                    // Error durumunda action'ı koru, sonra tekrar dene
                 }
             }
 
@@ -237,28 +244,28 @@ class OfflineModeManager {
      * Mesaj gönderme işlemini çalıştır
      */
     async executeSendMessage(data) {
-
-        const token = localStorage.getItem('access_token');
+        const token = getToken();
         if (!token) {
             throw new Error('No auth token available');
         }
 
         const apiUrl = this.getApiUrl();
-        const endpoint = data.type === 'dm'
-            ? `${apiUrl}/messages/dm/send/`
-            : `${apiUrl}/messages/room/send/`;
+        const endpoint =
+            data.type === 'dm' ? `${apiUrl}/messages/dm/send/` : `${apiUrl}/messages/room/send/`;
 
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 content: data.content,
-                ...(data.type === 'dm' ? { conversation_id: data.conversationId } : { room_slug: data.roomSlug }),
-                temp_id: data.tempId
-            })
+                ...(data.type === 'dm'
+                    ? { conversation_id: data.conversationId }
+                    : { room_slug: data.roomSlug }),
+                temp_id: data.tempId,
+            }),
         });
 
         if (!response.ok) {
@@ -270,11 +277,10 @@ class OfflineModeManager {
     }
 
     /**
-     * Dosya yükleme işlemini çalıştır
+     * File load işlemini çalıştır
      */
     async executeUploadFile(data) {
-
-        const token = localStorage.getItem('access_token');
+        const token = getToken();
         if (!token) {
             throw new Error('No auth token available');
         }
@@ -295,9 +301,9 @@ class OfflineModeManager {
         const response = await fetch(`${apiUrl}/messages/upload_file/`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
-            body: formData
+            body: formData,
         });
 
         if (!response.ok) {
@@ -314,7 +320,8 @@ class OfflineModeManager {
     getApiUrl() {
         const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
         const isPawscordDomain = window.location.hostname.includes('pawscord.com');
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isLocalhost =
+            window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
         // Use environment variable if available, fallback to auto-detection
         const envApiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -338,17 +345,16 @@ class OfflineModeManager {
         const transaction = this.db.transaction(['messages', 'pendingActions'], 'readwrite');
         transaction.objectStore('messages').clear();
         transaction.objectStore('pendingActions').clear();
-
     }
 
     /**
-     * Durum bilgisi
+     * Status bilgisi
      */
     getStatus() {
         return {
             isOnline: this.isOnline,
             pendingActionsCount: this.pendingActions.length,
-            hasDatabase: !!this.db
+            hasDatabase: !!this.db,
         };
     }
 }
@@ -360,14 +366,14 @@ export const offlineManager = new OfflineModeManager();
 export const useOfflineMode = () => {
     const [status, setStatus] = React.useState({
         isOnline: offlineManager.isOnline,
-        pendingActionsCount: offlineManager.pendingActions.length
+        pendingActionsCount: offlineManager.pendingActions.length,
     });
 
     React.useEffect(() => {
         const unsubscribe = offlineManager.onStatusChange((newStatus) => {
             setStatus({
                 isOnline: newStatus.isOnline,
-                pendingActionsCount: offlineManager.pendingActions.length
+                pendingActionsCount: offlineManager.pendingActions.length,
             });
         });
 
@@ -378,5 +384,3 @@ export const useOfflineMode = () => {
 };
 
 export default OfflineModeManager;
-
-

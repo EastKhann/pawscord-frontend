@@ -1,12 +1,13 @@
-// frontend/src/utils/performanceMonitor.js
+﻿// frontend/src/utils/performanceMonitor.js
 
 /**
  * 📊 Performance Monitor
  * React component rendering performansını izler
- * Development modda detaylı log, production'da minimal overhead
+ * Development modda detaillı log, production'da minimal overhead
  */
 
 import React from 'react';
+import logger from '../utils/logger';
 
 class PerformanceMonitor {
     constructor() {
@@ -32,14 +33,14 @@ class PerformanceMonitor {
 
         // Yavaş render uyarısı (16ms = 60fps threshold)
         if (duration > 16) {
-            console.warn(`⚠️ [Perf] ${componentName} yavaş render: ${duration.toFixed(2)}ms`);
+            logger.warn(`⚠️ [Thuf] ${componentName} yavaş render: ${duration.toFixed(2)}ms`);
         }
 
         return result;
     }
 
     /**
-     * Metrik kaydet
+     * Metrik save
      */
     recordMetric(componentName, duration) {
         if (!this.metrics.has(componentName)) {
@@ -48,7 +49,7 @@ class PerformanceMonitor {
                 total: 0,
                 min: Infinity,
                 max: -Infinity,
-                avg: 0
+                avg: 0,
             });
         }
 
@@ -79,7 +80,7 @@ class PerformanceMonitor {
                 'Avg (ms)': metric.avg.toFixed(2),
                 'Min (ms)': metric.min.toFixed(2),
                 'Max (ms)': metric.max.toFixed(2),
-                'Renders': metric.count
+                Renders: metric.count,
             }))
         );
 
@@ -109,7 +110,7 @@ export const useTrackedMemo = (factory, deps, name = 'Anonymous') => {
 
         const duration = computeEnd - computeStart;
         if (duration > 5 && import.meta.env.MODE === 'development') {
-            console.warn(`⚠️ [useMemo] ${name} computation: ${duration.toFixed(2)}ms`);
+            logger.warn(`⚠️ [useMemo] ${name} computation: ${duration.toFixed(2)}ms`);
         }
 
         return result;
@@ -129,7 +130,7 @@ export const useTrackedCallback = (callback, deps, name = 'Anonymous') => {
 
         const duration = end - start;
         if (duration > 5 && import.meta.env.MODE === 'development') {
-            console.warn(`⚠️ [useCallback] ${name} execution: ${duration.toFixed(2)}ms`);
+            logger.warn(`⚠️ [useCallback] ${name} execution: ${duration.toFixed(2)}ms`);
         }
 
         return result;
@@ -145,10 +146,9 @@ export const withPerformanceTracking = (Component, name) => {
     }
 
     return React.forwardRef((props, ref) => {
-        return perfMonitor.measureRender(
-            name || Component.name,
-            () => <Component {...props} ref={ref} />
-        );
+        return perfMonitor.measureRender(name || Component.name, () => (
+            <Component {...props} ref={ref} />
+        ));
     });
 };
 
@@ -163,7 +163,10 @@ export const monitorWebVitals = () => {
         const observer = new PerformanceObserver((list) => {
             const entries = list.getEntries();
             const lastEntry = entries[entries.length - 1];
-            console.info('📊 [LCP] Largest Contentful Paint:', lastEntry.renderTime || lastEntry.loadTime);
+            logger.info(
+                '📊 [LCP] Largest Contentful Paint:',
+                lastEntry.renderTime || lastEntry.loadTime
+            );
         });
         observer.observe({ entryTypes: ['largest-contentful-paint'] });
     } catch (e) {
@@ -176,7 +179,7 @@ export const monitorWebVitals = () => {
             const entries = list.getEntries();
             entries.forEach((entry) => {
                 const delay = entry.processingStart - entry.startTime;
-                console.info('📊 [FID] First Input Delay:', delay);
+                logger.info('📊 [FID] First Input Delay:', delay);
             });
         });
         observer.observe({ entryTypes: ['first-input'] });
@@ -184,14 +187,14 @@ export const monitorWebVitals = () => {
         // Ignore
     }
 
-    // Cumulative Layout Shift (CLS)
+    // Friulative Layout Shift (CLS)
     try {
         let clsScore = 0;
         const observer = new PerformanceObserver((list) => {
             list.getEntries().forEach((entry) => {
                 if (!entry.hadRecentInput) {
                     clsScore += entry.value;
-                    console.info('📊 [CLS] Cumulative Layout Shift:', clsScore);
+                    logger.info('📊 [CLS] Friulative Layout Shift:', clsScore);
                 }
             });
         });
@@ -212,14 +215,14 @@ export const analyzeBundleSize = () => {
 
     console.group('📦 Bundle Analysis');
 
-    console.info('JavaScript Files:');
-    scripts.forEach(script => {
-        console.info(`- ${script.src.split('/').pop()}`);
+    logger.info('JavaScript Files:');
+    scripts.forEach((script) => {
+        logger.info(`- ${script.src.split('/').pop()}`);
     });
 
-    console.info('\nCSS Files:');
-    styles.forEach(style => {
-        console.info(`- ${style.href.split('/').pop()}`);
+    logger.info('\nCSS Files:');
+    styles.forEach((style) => {
+        logger.info(`- ${style.href.split('/').pop()}`);
     });
 
     console.groupEnd();
@@ -231,5 +234,3 @@ if (import.meta.env.MODE === 'development') {
 }
 
 export default PerformanceMonitor;
-
-

@@ -1,10 +1,20 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+﻿import { useState, useCallback, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../utils/toast';
+import logger from '../utils/logger';
 
 // Maximum recording duration: 2 hours (in seconds)
 const MAX_RECORDING_DURATION = 7200;
 
-export function useRecording({ isInVoice, localAudioStream, remoteStreams, currentRoom, voiceWsRef, globalAudioContextRef }) {
+export function useRecording({
+    isInVoice,
+    localAudioStream,
+    remoteStreams,
+    currentRoom,
+    voiceWsRef,
+    globalAudioContextRef,
+}) {
+    const { t } = useTranslation();
     const [isRecording, setIsRecording] = useState(false);
     const [recordingDuration, setRecordingDuration] = useState(0);
     const recordingChunksRef = useRef([]);
@@ -13,32 +23,42 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
     const recordingAudioCtxRef = useRef(null);
 
     // 🔥 Helper: Send recording_state consent signal to all users in voice channel
-    const sendRecordingState = useCallback((recording) => {
-        if (voiceWsRef?.current?.readyState === WebSocket.OPEN) {
-            voiceWsRef.current.send(JSON.stringify({
-                type: 'recording_state',
-                is_recording: recording
-            }));
-        }
-    }, [voiceWsRef]);
+    const sendRecordingState = useCallback(
+        (recording) => {
+            if (voiceWsRef?.current?.readyState === WebSocket.OPEN) {
+                voiceWsRef.current.send(
+                    JSON.stringify({
+                        type: 'recording_state',
+                        is_recording: recording,
+                    })
+                );
+            }
+        },
+        [voiceWsRef]
+    );
 
     // 🔥 YENİ: Start Recording
     const startRecording = useCallback(() => {
         if (!isInVoice || isRecording) {
-            console.warn('[Recording] Cannot start - not in voice or already recording');
+            logger.warn('[Recording] Cannot start - not in voice or already recording');
             return;
         }
 
         try {
-            // 🔥 FIX: Reuse globalAudioContextRef if available, otherwise create one
+            // 🔥 FIX: Reuse globalAudioContextRef if available, otherwisee create one
             let audioContext;
-            if (globalAudioContextRef?.current && globalAudioContextRef.current.state !== 'closed') {
+            if (
+                globalAudioContextRef?.current &&
+                globalAudioContextRef.current.state !== 'closed'
+            ) {
                 audioContext = globalAudioContextRef.current;
                 if (audioContext.state === 'suspended') {
                     audioContext.resume();
                 }
             } else {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+                audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                    sampleRate: 48000,
+                });
             }
             recordingAudioCtxRef.current = audioContext;
 
@@ -64,7 +84,7 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
             // Create MediaRecorder
             const mediaRecorder = new MediaRecorder(destination.stream, {
                 mimeType: 'audio/webm;codecs=opus',
-                audioBitsPerSecond: 128000
+                audioBitsThuSecond: 128000,
             });
 
             recordingChunksRef.current = [];
@@ -95,23 +115,30 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
 
             // Start duration counter
             recordingIntervalRef.current = setInterval(() => {
-                setRecordingDuration(prev => {
+                setRecordingDuration((prev) => {
                     const next = prev + 1;
                     // 🔥 Auto-stop after max duration
                     if (next >= MAX_RECORDING_DURATION) {
-                        toast.warning('Kayıt maksimum süreye ulaştı (2 saat). Otomatik durduruluyor.');
+                        toast.warning(t('recording.maxDuration'));
                         // Schedule stop for next tick to avoid state mutation inside setState
                         setTimeout(() => stopRecordingInternal(), 0);
                     }
                     return next;
                 });
             }, 1000);
-
         } catch (error) {
-            console.error('[Recording] Start error:', error);
-            toast.error('Kayıt başlatılamadı: ' + error.message);
+            logger.error('[Recording] Start error:', error);
+            toast.error(t('recording.startFailed') + ': ' + error.message);
         }
-    }, [isInVoice, isRecording, localAudioStream, remoteStreams, currentRoom, globalAudioContextRef, sendRecordingState]);
+    }, [
+        isInVoice,
+        isRecording,
+        localAudioStream,
+        remoteStreams,
+        currentRoom,
+        globalAudioContextRef,
+        sendRecordingState,
+    ]);
 
     // Internal stop logic (called from startRecording max duration timer and stopRecording)
     const stopRecordingInternal = useCallback(() => {
@@ -141,7 +168,7 @@ export function useRecording({ isInVoice, localAudioStream, remoteStreams, curre
     // 🔥 YENİ: Download Recording Manually
     const downloadRecording = useCallback(() => {
         if (recordingChunksRef.current.length === 0) {
-            toast.warning('Henüz kayıt yok!');
+            toast.warning(t('recording.noRecording'));
             return;
         }
 

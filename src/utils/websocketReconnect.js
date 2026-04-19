@@ -1,11 +1,15 @@
+import logger from '../utils/logger';
 // frontend/src/utils/websocketReconnect.js
 
 /**
  * 🔌 WebSocket Reconnection Manager
  * Bağlantı koptuğunda otomatik yeniden bağlanma
- * Exponential backoff stratejisi ile akıllı yeniden deneme
+ * Exponential backoff stratejisi with akıllı yeniden deneme
  */
 
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 class WebSocketReconnectManager {
     constructor(options = {}) {
         this.options = {
@@ -13,35 +17,35 @@ class WebSocketReconnectManager {
             initialDelay: options.initialDelay || 1000, // 1 saniye
             maxDelay: options.maxDelay || 30000, // 30 saniye
             backoffMultiplier: options.backoffMultiplier || 1.5,
-            debug: options.debug || false
+            debug: options.debug || false,
         };
 
         this.reconnectAttempts = 0;
         this.reconnectTimer = null;
         this.isReconnecting = false;
-        this.listeners = new Set();
+        this.listners = new Set();
     }
 
     /**
-     * Reconnect event listener ekle
+     * Reconnect event listner add
      * @param {Function} callback - Callback fonksiyonu
      */
     onReconnect(callback) {
-        this.listeners.add(callback);
-        return () => this.listeners.delete(callback);
+        this.listners.add(callback);
+        return () => this.listners.delete(callback);
     }
 
     /**
-     * Dinleyicileri bilgilendir
+     * Dinleyicforward bilgwithndir
      * @param {string} event - Event tipi
      * @param {any} data - Event verisi
      */
     notify(event, data) {
-        this.listeners.forEach(callback => {
+        this.listners.forEach((callback) => {
             try {
                 callback({ event, data });
             } catch (error) {
-                console.error('❌ [WSReconnect] Listener hatası:', error);
+                logger.error('❌ [WSReconnect] Listener error:', error);
             }
         });
     }
@@ -52,7 +56,8 @@ class WebSocketReconnectManager {
      */
     calculateDelay() {
         const delay = Math.min(
-            this.options.initialDelay * Math.pow(this.options.backoffMultiplier, this.reconnectAttempts),
+            this.options.initialDelay *
+                Math.pow(this.options.backoffMultiplier, this.reconnectAttempts),
             this.options.maxDelay
         );
         return delay;
@@ -60,16 +65,16 @@ class WebSocketReconnectManager {
 
     /**
      * WebSocket yeniden bağlanma işlemini başlat
-     * @param {Function} connectCallback - Bağlanma fonksiyonu
+     * @param {Function} connectCallback - Connectma fonksiyonu
      */
     startReconnect(connectCallback) {
         if (this.isReconnecting) {
-            this.log('⚠️ Zaten yeniden bağlanma işlemi devam ediyor');
+            this.log('⚠️ Reconnection process is already in progress');
             return;
         }
 
         if (this.reconnectAttempts >= this.options.maxReconnectAttempts) {
-            this.log('❌ Maksimum yeniden bağlanma denemesi aşıldı');
+            this.log('❌ Maximum reconnection attempts exceeded');
             this.notify('max_attempts_reached', { attempts: this.reconnectAttempts });
             return;
         }
@@ -78,30 +83,32 @@ class WebSocketReconnectManager {
         this.reconnectAttempts++;
 
         const delay = this.calculateDelay();
-        this.log(`🔄 Yeniden bağlanma ${this.reconnectAttempts}/${this.options.maxReconnectAttempts} (${delay}ms sonra)`);
+        this.log(
+            `🔄 Yeniden bağlanma ${this.reconnectAttempts}/${this.options.maxReconnectAttempts} (${delay}ms sonra)`
+        );
 
         this.notify('reconnecting', {
             attempt: this.reconnectAttempts,
             delay,
-            maxAttempts: this.options.maxReconnectAttempts
+            maxAttempts: this.options.maxReconnectAttempts,
         });
 
         this.reconnectTimer = setTimeout(() => {
-            this.log('🔌 Yeniden bağlanma denemesi başlatılıyor...');
+            this.log('🔌 Starting reconnection attempt...');
             this.isReconnecting = false;
 
             try {
                 connectCallback();
             } catch (error) {
-                this.log('❌ Yeniden bağlanma hatası:', error);
+                this.log('❌ Reconnection error:', error);
                 this.notify('reconnect_failed', { error });
-                this.startReconnect(connectCallback); // Tekrar dene
+                this.startReconnect(connectCallback); // Try again
             }
         }, delay);
     }
 
     /**
-     * Yeniden bağlanma işlemini iptal et
+     * Yeniden bağlanma işlemini cancel et
      */
     cancelReconnect() {
         if (this.reconnectTimer) {
@@ -109,17 +116,17 @@ class WebSocketReconnectManager {
             this.reconnectTimer = null;
         }
         this.isReconnecting = false;
-        this.log('🛑 Yeniden bağlanma iptal edildi');
+        this.log('🛑 Reconnection cancelled');
         this.notify('reconnect_cancelled', {});
     }
 
     /**
-     * Başarılı bağlantıdan sonra sıfırla
+     * Successful bağlantıdan sonra sıfırla
      */
     reset() {
         this.reconnectAttempts = 0;
         this.cancelReconnect();
-        this.log('✅ Reconnect manager sıfırlandı');
+        this.log('✅ Reconnect manager reset');
         this.notify('connected', {});
     }
 
@@ -132,20 +139,20 @@ class WebSocketReconnectManager {
     }
 
     /**
-     * Durum bilgisi
+     * Status bilgisi
      */
     getStatus() {
         return {
             isReconnecting: this.isReconnecting,
             reconnectAttempts: this.reconnectAttempts,
             maxAttempts: this.options.maxReconnectAttempts,
-            nextDelay: this.calculateDelay()
+            nextDelay: this.calculateDelay(),
         };
     }
 }
 
 /**
- * WebSocket wrapper ile kullanım
+ * WebSocket wrapper with kullanım
  */
 export class ReconnectingWebSocket {
     constructor(url, options = {}) {
@@ -154,7 +161,7 @@ export class ReconnectingWebSocket {
         this.ws = null;
         this.reconnectManager = new WebSocketReconnectManager({
             debug: options.debug || false,
-            maxReconnectAttempts: options.maxReconnectAttempts || 10
+            maxReconnectAttempts: options.maxReconnectAttempts || 10,
         });
 
         this.messageQueue = []; // Bağlantı koptuğunda mesajları kuyruğa al
@@ -181,45 +188,44 @@ export class ReconnectingWebSocket {
             };
 
             this.ws.onclose = (event) => {
-                console.warn('⚠️ [ReconnectWS] Bağlantı kapandı:', event.code, event.reason);
+                logger.warn('⚠️ [ReconnectWS] Connection closed:', event.code, event.reason);
                 this.triggerEvent('close', event);
 
-                // Otomatik yeniden bağlan (normal kapanma değilse)
+                // Auto yeniden bağlan (normal kapanma değilse)
                 if (event.code !== 1000) {
                     this.reconnectManager.startReconnect(() => this.connect());
                 }
             };
 
             this.ws.onerror = (error) => {
-                console.error('❌ [ReconnectWS] Hata:', error);
+                logger.error('❌ [ReconnectWS] Error:', error);
                 this.triggerEvent('error', error);
             };
 
             this.ws.onmessage = (event) => {
                 this.triggerEvent('message', event);
             };
-
         } catch (error) {
-            console.error('❌ [ReconnectWS] Bağlantı hatası:', error);
+            logger.error('❌ [ReconnectWS] Connection error:', error);
             this.reconnectManager.startReconnect(() => this.connect());
         }
     }
 
     /**
      * Mesaj gönder
-     * @param {any} data - Gönderilecek veri
+     * @param {any} data - Sendilecek veri
      */
     send(data) {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(typeof data === 'string' ? data : JSON.stringify(data));
         } else {
-            console.warn('⚠️ [ReconnectWS] Bağlantı yok, mesaj kuyruğa alındı');
+            logger.warn('⚠️ [ReconnectWS] Connection unavailable, message queued');
             this.messageQueue.push(data);
         }
     }
 
     /**
-     * Event handler ekle
+     * Event handler add
      * @param {string} event - Event tipi (open, close, error, message)
      * @param {Function} callback - Callback fonksiyonu
      */
@@ -244,12 +250,12 @@ export class ReconnectingWebSocket {
      */
     triggerEvent(event, data) {
         if (this.eventHandlers.has(event)) {
-            this.eventHandlers.get(event).forEach(callback => callback(data));
+            this.eventHandlers.get(event).forEach((callback) => callback(data));
         }
     }
 
     /**
-     * Bağlantıyı kapat
+     * Bağlantıyı close
      */
     close(code = 1000, reason = 'Normal closure') {
         this.reconnectManager.cancelReconnect();
@@ -267,5 +273,3 @@ export class ReconnectingWebSocket {
 }
 
 export default WebSocketReconnectManager;
-
-

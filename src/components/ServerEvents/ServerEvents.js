@@ -4,13 +4,17 @@
  */
 
 import { FaCalendarAlt, FaPlus } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 import './ServerEvents.css';
 import { useServerEvents } from './hooks/useServerEvents';
 import { EventCard } from './EventCard';
 import { CalendarView } from './CalendarView';
 import { CreateEventModal } from './CreateEventModal';
+import { useTranslation } from 'react-i18next';
 
 const ServerEvents = ({ serverId }) => {
+    const { t } = useTranslation();
+
     const {
         events, calendarEvents, isLoading, view, setView,
         showCreateModal, setShowCreateModal, setSelectedEvent,
@@ -18,16 +22,16 @@ const ServerEvents = ({ serverId }) => {
     } = useServerEvents(serverId);
 
     if (isLoading) {
-        return <div className="events-loading">Etkinlikler yükleniyor...</div>;
+        return <div className="events-loading">{t('events_yükleniyor')}</div>;
     }
 
     return (
-        <div className="server-events">
+        <div aria-label="server events" className="server-events">
             {/* Header */}
             <div className="se-header">
                 <div className="se-title">
                     <FaCalendarAlt />
-                    <h2>Etkinlikler</h2>
+                    <h2>{t('events')}</h2>
                 </div>
 
                 <div className="se-actions">
@@ -35,22 +39,19 @@ const ServerEvents = ({ serverId }) => {
                         <button
                             className={view === 'list' ? 'active' : ''}
                             onClick={() => setView('list')}
-                        >
                             Liste
                         </button>
                         <button
                             className={view === 'calendar' ? 'active' : ''}
                             onClick={() => setView('calendar')}
-                        >
                             Takvim
                         </button>
                     </div>
 
                     <button
                         className="se-create-btn"
-                        onClick={() => setShowCreateModal(true)}
-                    >
-                        <FaPlus /> Etkinlik Oluştur
+                        onClick={() => setShowCreateModal(true)}>
+                        <FaPlus /> Event Create
                     </button>
                 </div>
             </div>
@@ -70,9 +71,9 @@ const ServerEvents = ({ serverId }) => {
                     ) : (
                         <div className="se-empty">
                             <FaCalendarAlt />
-                            <p>Henüz etkinlik yok</p>
+                            <p>{t('not_yet_etkinlik_yok')}</p>
                             <button onClick={() => setShowCreateModal(true)}>
-                                {'İ'}lk etkinliği oluştur
+                                İlk etkinliği oluştur
                             </button>
                         </div>
                     )}
@@ -96,4 +97,7 @@ const ServerEvents = ({ serverId }) => {
     );
 };
 
+ServerEvents.propTypes = {
+    serverId: PropTypes.string,
+};
 export default ServerEvents;

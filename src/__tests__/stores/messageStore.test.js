@@ -13,7 +13,7 @@ const mockMessages = [
         created_at: '2024-01-15T10:00:00Z',
         reactions: [],
         attachments: [],
-        edited: false
+        edited: false,
     },
     {
         id: 2,
@@ -23,7 +23,7 @@ const mockMessages = [
         created_at: '2024-01-15T10:05:00Z',
         reactions: [{ emoji: '👍', count: 3, users: [1, 2, 3] }],
         attachments: [],
-        edited: false
+        edited: false,
     },
     {
         id: 3,
@@ -34,8 +34,8 @@ const mockMessages = [
         reactions: [],
         attachments: [{ id: 1, filename: 'image.png', url: 'http://cdn.example.com/image.png' }],
         edited: true,
-        edited_at: '2024-01-15T10:12:00Z'
-    }
+        edited_at: '2024-01-15T10:12:00Z',
+    },
 ];
 
 const mockMessageStore = {
@@ -56,12 +56,12 @@ const mockMessageStore = {
     clearMessages: vi.fn(),
     pinMessage: vi.fn(),
     unpinMessage: vi.fn(),
-    searchMessages: vi.fn()
+    searchMessages: vi.fn(),
 };
 
 vi.mock('../../stores/messageStore', () => ({
     default: () => mockMessageStore,
-    useMessageStore: () => mockMessageStore
+    useMessageStore: () => mockMessageStore,
 }));
 
 describe('Message Store', () => {
@@ -106,14 +106,14 @@ describe('Message Store', () => {
                 {
                     id: 0,
                     content: 'Older message',
-                    created_at: '2024-01-15T09:00:00Z'
-                }
+                    created_at: '2024-01-15T09:00:00Z',
+                },
             ];
 
             mockMessageStore.fetchMessages.mockImplementationOnce((channelId, before) => {
                 mockMessageStore.messages[channelId] = [
                     ...olderMessages,
-                    ...mockMessageStore.messages[channelId]
+                    ...mockMessageStore.messages[channelId],
                 ];
             });
 
@@ -138,7 +138,7 @@ describe('Message Store', () => {
         it('should send a text message', async () => {
             const newMessage = {
                 content: 'New message',
-                channel_id: 1
+                channel_id: 1,
             };
 
             const sentMessage = {
@@ -147,7 +147,7 @@ describe('Message Store', () => {
                 author: { id: 1, username: 'user1' },
                 created_at: new Date().toISOString(),
                 reactions: [],
-                attachments: []
+                attachments: [],
             };
 
             mockMessageStore.sendMessage.mockImplementationOnce((channelId, content) => {
@@ -164,9 +164,7 @@ describe('Message Store', () => {
         });
 
         it('should send message with attachments', async () => {
-            const attachments = [
-                { file: new File(['test'], 'test.txt'), name: 'test.txt' }
-            ];
+            const attachments = [{ file: new File(['test'], 'test.txt'), name: 'test.txt' }];
 
             mockMessageStore.sendMessage.mockImplementationOnce((channelId, content, files) => {
                 return { id: 5, content, attachments: files };
@@ -174,7 +172,11 @@ describe('Message Store', () => {
 
             await mockMessageStore.sendMessage(1, 'Message with file', attachments);
 
-            expect(mockMessageStore.sendMessage).toHaveBeenCalledWith(1, 'Message with file', attachments);
+            expect(mockMessageStore.sendMessage).toHaveBeenCalledWith(
+                1,
+                'Message with file',
+                attachments
+            );
         });
     });
 
@@ -183,7 +185,7 @@ describe('Message Store', () => {
             mockMessageStore.messages[1] = [...mockMessages];
 
             mockMessageStore.editMessage.mockImplementationOnce((messageId, newContent) => {
-                const message = mockMessageStore.messages[1].find(m => m.id === messageId);
+                const message = mockMessageStore.messages[1].find((m) => m.id === messageId);
                 if (message) {
                     message.content = newContent;
                     message.edited = true;
@@ -204,14 +206,16 @@ describe('Message Store', () => {
             mockMessageStore.messages[1] = [...mockMessages];
 
             mockMessageStore.deleteMessage.mockImplementationOnce((messageId) => {
-                mockMessageStore.messages[1] = mockMessageStore.messages[1].filter(m => m.id !== messageId);
+                mockMessageStore.messages[1] = mockMessageStore.messages[1].filter(
+                    (m) => m.id !== messageId
+                );
             });
 
             await mockMessageStore.deleteMessage(1);
 
             expect(mockMessageStore.deleteMessage).toHaveBeenCalledWith(1);
             expect(mockMessageStore.messages[1]).toHaveLength(2);
-            expect(mockMessageStore.messages[1].find(m => m.id === 1)).toBeUndefined();
+            expect(mockMessageStore.messages[1].find((m) => m.id === 1)).toBeUndefined();
         });
     });
 
@@ -220,9 +224,9 @@ describe('Message Store', () => {
             mockMessageStore.messages[1] = [...mockMessages];
 
             mockMessageStore.addReaction.mockImplementationOnce((messageId, emoji) => {
-                const message = mockMessageStore.messages[1].find(m => m.id === messageId);
+                const message = mockMessageStore.messages[1].find((m) => m.id === messageId);
                 if (message) {
-                    const existingReaction = message.reactions.find(r => r.emoji === emoji);
+                    const existingReaction = message.reactions.find((r) => r.emoji === emoji);
                     if (existingReaction) {
                         existingReaction.count++;
                     } else {
@@ -240,9 +244,9 @@ describe('Message Store', () => {
             mockMessageStore.messages[1] = [...mockMessages];
 
             mockMessageStore.removeReaction.mockImplementationOnce((messageId, emoji) => {
-                const message = mockMessageStore.messages[1].find(m => m.id === messageId);
+                const message = mockMessageStore.messages[1].find((m) => m.id === messageId);
                 if (message) {
-                    const reactionIndex = message.reactions.findIndex(r => r.emoji === emoji);
+                    const reactionIndex = message.reactions.findIndex((r) => r.emoji === emoji);
                     if (reactionIndex !== -1) {
                         if (message.reactions[reactionIndex].count > 1) {
                             message.reactions[reactionIndex].count--;
@@ -268,7 +272,7 @@ describe('Message Store', () => {
                 content: 'Real-time message',
                 author: { id: 3, username: 'user3' },
                 channel_id: 1,
-                created_at: new Date().toISOString()
+                created_at: new Date().toISOString(),
             };
 
             mockMessageStore.addMessage.mockImplementationOnce((channelId, message) => {
@@ -291,8 +295,9 @@ describe('Message Store', () => {
                 if (isTyping) {
                     mockMessageStore.typingUsers[channelId].push(userId);
                 } else {
-                    mockMessageStore.typingUsers[channelId] =
-                        mockMessageStore.typingUsers[channelId].filter(id => id !== userId);
+                    mockMessageStore.typingUsers[channelId] = mockMessageStore.typingUsers[
+                        channelId
+                    ].filter((id) => id !== userId);
                 }
             });
 

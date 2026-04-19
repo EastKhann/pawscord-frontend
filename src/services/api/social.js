@@ -13,7 +13,7 @@ export const birthdayApi = {
     setBirthday: async (data) => {
         return await apiFetch(`${API_BASE}/api/birthday/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getBirthdaysToday: async () => {
@@ -21,7 +21,7 @@ export const birthdayApi = {
     },
     getServerBirthdays: async (serverId) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/birthdays/`);
-    }
+    },
 };
 
 // ==========================================
@@ -31,7 +31,7 @@ export const giftApi = {
     sendGift: async (data) => {
         return await apiFetch(`${API_BASE}/api/gifts/send/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getMyGifts: async () => {
@@ -39,9 +39,9 @@ export const giftApi = {
     },
     openGift: async (giftId) => {
         return await apiFetch(`${API_BASE}/api/gifts/${giftId}/open/`, {
-            method: 'POST'
+            method: 'POST',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -49,11 +49,13 @@ export const giftApi = {
 // ==========================================
 export const leaderboardApi = {
     getServerLeaderboard: async (serverId, type = 'xp', limit = 10) => {
-        return await apiFetch(`${API_BASE}/api/servers/${serverId}/leaderboard/?type=${type}&limit=${limit}`);
+        return await apiFetch(
+            `${API_BASE}/api/servers/${serverId}/leaderboard/?type=${type}&limit=${limit}`
+        );
     },
     getGlobalLeaderboard: async (type = 'xp', limit = 10) => {
         return await apiFetch(`${API_BASE}/api/leaderboard/global/?type=${type}&limit=${limit}`);
-    }
+    },
 };
 
 // ==========================================
@@ -66,12 +68,12 @@ export const moodApi = {
     setMood: async (data) => {
         return await apiFetch(`${API_BASE}/api/mood/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getUserStatus: async (userId) => {
         return await apiFetch(`${API_BASE}/api/users/${userId}/status/`);
-    }
+    },
 };
 
 // ==========================================
@@ -84,9 +86,9 @@ export const profileThemeApi = {
     setTheme: async (data) => {
         return await apiFetch(`${API_BASE}/api/profile/theme/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -99,9 +101,9 @@ export const achievementShowcaseApi = {
     updateShowcase: async (data) => {
         return await apiFetch(`${API_BASE}/api/achievements/showcase/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -114,7 +116,11 @@ export const relationshipApi = {
     create: async (targetUserId, type = 'friend', nickname = null) => {
         return await apiFetch(`${API_BASE}/api/relationships/`, {
             method: 'POST',
-            body: JSON.stringify({ target_user_id: targetUserId, relationship_type: type, nickname })
+            body: JSON.stringify({
+                target_user_id: targetUserId,
+                relationship_type: type,
+                nickname,
+            }),
         });
     },
     getDetail: async (relationshipId) => {
@@ -122,9 +128,9 @@ export const relationshipApi = {
     },
     delete: async (relationshipId) => {
         return await apiFetch(`${API_BASE}/api/relationships/${relationshipId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -137,24 +143,24 @@ export const storyApi = {
     create: async (storyData) => {
         return await apiFetch(`${API_BASE}/api/stories/`, {
             method: 'POST',
-            body: JSON.stringify(storyData)
+            body: JSON.stringify(storyData),
         });
     },
     view: async (storyId) => {
         return await apiFetch(`${API_BASE}/api/stories/${storyId}/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'view' })
+            body: JSON.stringify({ action: 'view' }),
         });
     },
     react: async (storyId, emoji) => {
         return await apiFetch(`${API_BASE}/api/stories/${storyId}/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'react', emoji })
+            body: JSON.stringify({ action: 'react', emoji }),
         });
     },
     delete: async (storyId) => {
         return await apiFetch(`${API_BASE}/api/stories/${storyId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
     },
     getHighlights: async () => {
@@ -163,9 +169,9 @@ export const storyApi = {
     createHighlight: async (title, storyIds) => {
         return await apiFetch(`${API_BASE}/api/stories/highlights/`, {
             method: 'POST',
-            body: JSON.stringify({ title, story_ids: storyIds })
+            body: JSON.stringify({ title, story_ids: storyIds }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -173,7 +179,9 @@ export const storyApi = {
 // ==========================================
 export const interestApi = {
     getTags: async (category = null) => {
-        const url = category ? `${API_BASE}/api/interests/tags/?category=${category}` : `${API_BASE}/api/interests/tags/`;
+        const url = category
+            ? `${API_BASE}/api/interests/tags/?category=${category}`
+            : `${API_BASE}/api/interests/tags/`;
         return await apiFetch(url);
     },
     getUserInterests: async () => {
@@ -182,16 +190,16 @@ export const interestApi = {
     addInterest: async (tagId, skillLevel = 'intermediate') => {
         return await apiFetch(`${API_BASE}/api/interests/`, {
             method: 'POST',
-            body: JSON.stringify({ tag_id: tagId, skill_level: skillLevel })
+            body: JSON.stringify({ tag_id: tagId, skill_level: skillLevel }),
         });
     },
     removeInterest: async (interestId) => {
         return await apiFetch(`${API_BASE}/api/interests/`, {
             method: 'DELETE',
-            body: JSON.stringify({ interest_id: interestId })
+            body: JSON.stringify({ interest_id: interestId }),
         });
     },
     getMatches: async () => {
         return await apiFetch(`${API_BASE}/api/interests/matches/`);
-    }
+    },
 };

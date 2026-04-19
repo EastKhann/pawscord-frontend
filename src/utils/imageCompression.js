@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/imageCompression.js
 
 /**
@@ -18,7 +19,7 @@ export async function compressImage(file, options = {}) {
         maxHeight = 1080,
         quality = 0.85,
         convertToWebP = true,
-        maintainAspectRatio = true
+        maintainAspectRatio = true,
     } = options;
 
     return new Promise((resolve, reject) => {
@@ -60,14 +61,17 @@ export async function compressImage(file, options = {}) {
                     // Convert to blob
                     const mimeType = convertToWebP ? 'image/webp' : file.type;
 
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            resolve(blob);
-                        } else {
-                            reject(new Error('Failed to compress image'));
-                        }
-                    }, mimeType, quality);
-
+                    canvas.toBlob(
+                        (blob) => {
+                            if (blob) {
+                                resolve(blob);
+                            } else {
+                                reject(new Error('Failed to compress image'));
+                            }
+                        },
+                        mimeType,
+                        quality
+                    );
                 } catch (error) {
                     reject(error);
                 }
@@ -93,7 +97,7 @@ export async function compressAvatar(file) {
         maxHeight: 512,
         quality: 0.9,
         convertToWebP: true,
-        maintainAspectRatio: false // Force square
+        maintainAspectRatio: false, // Force square
     });
 }
 
@@ -108,7 +112,7 @@ export async function compressBanner(file) {
         maxHeight: 480,
         quality: 0.85,
         convertToWebP: true,
-        maintainAspectRatio: true
+        maintainAspectRatio: true,
     });
 }
 
@@ -123,7 +127,7 @@ export async function compressChatImage(file) {
         maxHeight: 1080,
         quality: 0.85,
         convertToWebP: true,
-        maintainAspectRatio: true
+        maintainAspectRatio: true,
     });
 }
 
@@ -134,7 +138,7 @@ export async function compressChatImage(file) {
  * @returns {Promise<Blob[]>} Array of compressed blobs
  */
 export async function compressMultipleImages(files, options = {}) {
-    const promises = files.map(file => compressImage(file, options));
+    const promises = files.map((file) => compressImage(file, options));
     return Promise.all(promises);
 }
 
@@ -144,7 +148,8 @@ export async function compressMultipleImages(files, options = {}) {
  */
 export function supportsWebP() {
     return new Promise((resolve) => {
-        const webP = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+        const webP =
+            'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
         const img = new Image();
         img.onload = () => resolve(img.width === 2);
         img.onerror = () => resolve(false);
@@ -164,7 +169,7 @@ export async function createThumbnail(file, size = 150) {
         maxHeight: size,
         quality: 0.8,
         convertToWebP: true,
-        maintainAspectRatio: true
+        maintainAspectRatio: true,
     });
 }
 
@@ -216,7 +221,7 @@ export class ProgressiveImageLoader {
 
             return { thumbnail, fullImage };
         } catch (error) {
-            console.error('❌ [ProgressiveLoader] Failed:', error);
+            logger.error('❌ [ProgressiveLoader] Failed:', error);
             throw error;
         }
     }
@@ -234,7 +239,7 @@ export async function convertImageFormat(file, format = 'webp', quality = 0.85) 
         webp: 'image/webp',
         jpeg: 'image/jpeg',
         jpg: 'image/jpeg',
-        png: 'image/png'
+        png: 'image/png',
     };
 
     return new Promise((resolve, reject) => {
@@ -253,10 +258,14 @@ export async function convertImageFormat(file, format = 'webp', quality = 0.85) 
 
                 const mimeType = mimeTypes[format] || 'image/webp';
 
-                canvas.toBlob((blob) => {
-                    if (blob) resolve(blob);
-                    else reject(new Error('Conversion failed'));
-                }, mimeType, quality);
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob) resolve(blob);
+                        else reject(new Error('Conversion failed'));
+                    },
+                    mimeType,
+                    quality
+                );
             };
 
             img.onerror = reject;
@@ -299,7 +308,5 @@ export default {
     createThumbnail,
     ProgressiveImageLoader,
     convertImageFormat,
-    getImageDimensions
+    getImageDimensions,
 };
-
-

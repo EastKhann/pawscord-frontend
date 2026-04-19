@@ -1,11 +1,10 @@
 // frontend/src/hooks/useNotifications.js
 import { useEffect, useCallback, useState } from 'react';
 import notificationManager from '../utils/notifications';
+import logger from '../utils/logger';
 
 const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
-    const [notificationsEnabled, setNotificationsEnabled] = useState(
-        notificationManager.enabled
-    );
+    const [notificationsEnabled, setNotificationsEnabled] = useState(notificationManager.enabled);
 
     // Request permission on mount
     useEffect(() => {
@@ -45,29 +44,12 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
                     const isDM = room && room.startsWith('dm-');
 
                     if (isMention) {
-                        notificationManager.showMention(
-                            username,
-                            content,
-                            avatar,
-                            room,
-                            id
-                        );
+                        notificationManager.showMention(username, content, avatar, room, id);
                     } else if (isDM) {
-                        notificationManager.showDM(
-                            username,
-                            content,
-                            avatar,
-                            id
-                        );
+                        notificationManager.showDM(username, content, avatar, id);
                     } else if (room === currentRoom) {
                         // Only notify for current room messages (optional)
-                        notificationManager.showMessage(
-                            username,
-                            content,
-                            avatar,
-                            room,
-                            id
-                        );
+                        notificationManager.showMessage(username, content, avatar, room, id);
                     }
                 }
 
@@ -77,7 +59,7 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
                     notificationManager.showVoiceCall(username, avatar, room);
                 }
             } catch (error) {
-                console.error('Notification error:', error);
+                logger.error('Notification error:', error);
             }
         };
 
@@ -98,7 +80,7 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
     const testNotification = useCallback(() => {
         notificationManager.show('PAWSCORD', {
             body: 'Desktop notifications enabled! 🔔',
-            icon: '/logo192.png'
+            icon: '/logo192.png',
         });
     }, []);
 
@@ -106,11 +88,8 @@ const useNotifications = (ws, currentUser, currentRoom, isWindowFocused) => {
         notificationsEnabled,
         enableNotifications,
         testNotification,
-        isSupported: notificationManager.isSupported()
+        isSupported: notificationManager.isSupported(),
     };
 };
 
 export default useNotifications;
-
-
-

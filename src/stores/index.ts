@@ -22,3 +22,26 @@ export {
     onConnectionChange,
     resetAllStores,
 } from './storeSubscriptions';
+
+// ---------- Cross-store coordination actions ----------
+
+/**
+ * Switch to a room within the current server.
+ * Updates active chat and closes mobile sidebar in one call.
+ */
+export const switchRoom = (roomId: string) => {
+    useChatStore.getState().setActiveChat('room', roomId);
+    useUIStore.getState().setMobileSidebarOpen(false);
+};
+
+/**
+ * Select a server and navigate to a specific room inside it.
+ * Orchestrates server selection, chat activation, and mobile sidebar.
+ */
+export const selectServerAndRoom = (server: any, roomId?: string) => {
+    useServerStore.getState().selectServer(server);
+    if (roomId) {
+        useChatStore.getState().setActiveChat('room', roomId);
+    }
+    useUIStore.getState().setMobileSidebarOpen(false);
+};

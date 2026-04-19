@@ -141,7 +141,10 @@ describe('number formatting (Intl)', () => {
     });
 
     it('formats currency', () => {
-        const formatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(9.99);
+        const formatted = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        }).format(9.99);
         expect(formatted).toContain('9.99');
     });
 

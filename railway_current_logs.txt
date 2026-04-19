@@ -1,0 +1,200 @@
+﻿2026-04-12 06:04:40,532 DEBUG    HTTP b'GET' request for ['100.64.0.13', 28500]
+2026-04-12 06:04:40,534 DEBUG    HTTP b'GET' request for ['100.64.0.19', 59530]
+2026-04-12 06:04:40,791 DEBUG    Starting new HTTPS connection (1): api.spotify.com:443
+2026-04-12 06:04:40,793 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:40.679591+00:00", "ip": "100.64.0.19", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 114.21, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:04:41.019156192Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=258ms request_id=3a803c58-96c2-4638-a93a-668940437ff1 user=YANHESAP content_length=29 asctime="2026-04-12 06:04:40,794" levelname="INFO" name="chat.request_tracking" request_id="3a803c58-96c2-4638-a93a-668940437ff1" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:40,794 DEBUG    HTTP 200 response started for ['100.64.0.19', 59530]
+2026-04-12 06:04:40,795 DEBUG    HTTP close for ['100.64.0.19', 59530]
+2026-04-12 06:04:40,795 INFO     "100.64.0.19" - - [12/Apr/2026:06:04:40 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:04:40,795 DEBUG    HTTP response complete for ['100.64.0.19', 59530]
+100.64.0.19:59530 - - [12/Apr/2026:06:04:40] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:04:40,840 DEBUG    WebSocket incoming frame on ['100.64.0.4', 36668]
+2026-04-12 06:04:40,841 DEBUG    Sent WebSocket packet to client for ['100.64.0.4', 36668]
+2026-04-12 06:04:40,899 DEBUG    HTTP b'GET' request for ['100.64.0.5', 12878]
+2026-04-12 06:04:40,919 DEBUG    Starting new HTTPS connection (1): media.pawscord.com:443
+2026-04-12 06:04:40,945 DEBUG    HTTP b'GET' request for ['100.64.0.9', 20644]
+2026-04-12 06:04:40,947 DEBUG    HTTP b'GET' request for ['100.64.0.4', 24862]
+2026-04-12 06:04:40,947 DEBUG    https://api.spotify.com:443 "GET /v1/me/player/currently-playing HTTP/1.1" 204 0
+2026-04-12 06:04:40,950 DEBUG    Starting new HTTPS connection (1): api.steampowered.com:443
+2026-04-12 06:04:41,005 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:40.960331+00:00", "ip": "100.64.0.4", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 45.0, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:04:41.020363140Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=54ms request_id=96f85952-137e-47b6-8e4a-24b3207533fa user=PawPaw content_length=29 asctime="2026-04-12 06:04:41,005" levelname="INFO" name="chat.request_tracking" request_id="96f85952-137e-47b6-8e4a-24b3207533fa" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,006 DEBUG    HTTP 200 response started for ['100.64.0.4', 24862]
+2026-04-12 06:04:41,006 DEBUG    HTTP close for ['100.64.0.4', 24862]
+2026-04-12 06:04:41,006 INFO     "100.64.0.4" - - [12/Apr/2026:06:04:40 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,006 DEBUG    HTTP response complete for ['100.64.0.4', 24862]
+100.64.0.4:24862 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:04:41,018 DEBUG    Starting new HTTPS connection (1): api.spotify.com:443
+2026-04-12 06:04:41,063 DEBUG    https://api.steampowered.com:443 "GET /ISteamUser/GetPlayerSummaries/v0002/?key=A520FB52A859D9C9703F3E5285E75FFB&steamids=76561198868230390 HTTP/1.1" 200 305
+2026-04-12 06:04:41,071 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:40.684629+00:00", "ip": "100.64.0.13", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 386.94, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:04:41.077478726Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=537ms request_id=972cec1c-5e21-49e9-bce5-ba917e3bf807 user=YANHESAP content_length=29 asctime="2026-04-12 06:04:41,072" levelname="INFO" name="chat.request_tracking" request_id="972cec1c-5e21-49e9-bce5-ba917e3bf807" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12T06:04:41.077485765Z [ERRO] [SLOW_REQUEST] GET /api/users/rich_presence/PawPaw/ 200 537ms user=YANHESAP asctime="2026-04-12 06:04:41,072" levelname="WARNING" name="chat.performance" request_id="972cec1c-5e21-49e9-bce5-ba917e3bf807" pathname="/app/chat/middleware/performance.py" lineno=52
+2026-04-12 06:04:41,074 DEBUG    HTTP 200 response started for ['100.64.0.13', 28500]
+2026-04-12 06:04:41,075 DEBUG    HTTP close for ['100.64.0.13', 28500]
+2026-04-12 06:04:41,076 INFO     "100.64.0.13" - - [12/Apr/2026:06:04:40 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,076 DEBUG    HTTP response complete for ['100.64.0.13', 28500]
+100.64.0.13:28500 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:04:41,156 DEBUG    https://media.pawscord.com:443 "GET /crypto/signal_export_ORACLE.json HTTP/1.1" 200 None
+2026-04-12T06:04:41.163213517Z [ERRO] [CryptoAPI] R2 fallback fetched: https://media.pawscord.com/crypto/signal_export_ORACLE.json asctime="2026-04-12 06:04:41,157" levelname="INFO" name="chat.crypto_views" request_id="85ab6c3a-8e17-4254-85a1-531f6ca2ac5f" pathname="/app/chat/crypto_views.py" lineno=93
+2026-04-12 06:04:41,165 DEBUG    https://api.spotify.com:443 "GET /v1/me/player/currently-playing HTTP/1.1" 204 0
+2026-04-12T06:04:41.168984052Z [ERRO] request: method=GET path=/api/crypto/signals/ status=200 duration=265ms request_id=85ab6c3a-8e17-4254-85a1-531f6ca2ac5f user= content_length=188150 asctime="2026-04-12 06:04:41,167" levelname="INFO" name="chat.request_tracking" request_id="85ab6c3a-8e17-4254-85a1-531f6ca2ac5f" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,168 DEBUG    HTTP 200 response started for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,169 DEBUG    Starting new HTTPS connection (1): api.steampowered.com:443
+100.64.0.5:12878 - - [12/Apr/2026:06:04:41] "GET /api/crypto/signals/?t=1775973879503&file=signal_export_ORACLE" 200 188150
+2026-04-12 06:04:41,169 DEBUG    HTTP response chunk for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,170 DEBUG    HTTP response chunk for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,170 DEBUG    HTTP close for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,170 INFO     "100.64.0.5" - - [12/Apr/2026:06:04:40 +0000] "GET /api/crypto/signals/?t=1775973879503&file=signal_export_ORACLE HTTP/1.1" 200 188150 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,170 DEBUG    HTTP response complete for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,252 DEBUG    HTTP b'GET' request for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,287 DEBUG    https://api.steampowered.com:443 "GET /ISteamUser/GetPlayerSummaries/v0002/?key=A520FB52A859D9C9703F3E5285E75FFB&steamids=76561198868230390 HTTP/1.1" 200 305
+2026-04-12 06:04:41,297 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:40.959411+00:00", "ip": "100.64.0.9", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 337.97, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:04:41.299829918Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=347ms request_id=2c5b687a-c582-44b8-8972-5f7491758997 user=PawPaw content_length=29 asctime="2026-04-12 06:04:41,298" levelname="INFO" name="chat.request_tracking" request_id="2c5b687a-c582-44b8-8972-5f7491758997" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,298 DEBUG    HTTP 200 response started for ['100.64.0.9', 20644]
+2026-04-12 06:04:41,298 DEBUG    HTTP close for ['100.64.0.9', 20644]
+2026-04-12 06:04:41,299 INFO     "100.64.0.9" - - [12/Apr/2026:06:04:40 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,299 DEBUG    HTTP response complete for ['100.64.0.9', 20644]
+100.64.0.9:20644 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:04:41,307 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:41.266348+00:00", "ip": "100.64.0.8", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 40.58, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:04:41.314046648Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=52ms request_id=f3d37a10-95b0-44dd-80a3-2265f099f0ea user=PawPaw content_length=29 asctime="2026-04-12 06:04:41,307" levelname="INFO" name="chat.request_tracking" request_id="f3d37a10-95b0-44dd-80a3-2265f099f0ea" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,307 DEBUG    HTTP 200 response started for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,307 DEBUG    HTTP close for ['100.64.0.8', 22068]
+100.64.0.8:22068 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:04:41,307 INFO     "100.64.0.8" - - [12/Apr/2026:06:04:40 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,307 DEBUG    HTTP response complete for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,327 DEBUG    HTTP b'GET' request for ['100.64.0.11', 42432]
+2026-04-12 06:04:41,386 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:41.337499+00:00", "ip": "100.64.0.11", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 48.92, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:04:41.392060641Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=58ms request_id=c33c6ed9-148b-4742-bc5b-0a4a46e055f8 user=YANHESAP content_length=29 asctime="2026-04-12 06:04:41,386" levelname="INFO" name="chat.request_tracking" request_id="c33c6ed9-148b-4742-bc5b-0a4a46e055f8" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,387 DEBUG    HTTP 200 response started for ['100.64.0.11', 42432]
+2026-04-12 06:04:41,387 DEBUG    HTTP close for ['100.64.0.11', 42432]
+100.64.0.11:42432 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:04:41,387 INFO     "100.64.0.11" - - [12/Apr/2026:06:04:41 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,387 DEBUG    HTTP response complete for ['100.64.0.11', 42432]
+2026-04-12 06:04:41,467 DEBUG    HTTP b'GET' request for ['100.64.0.9', 20644]
+2026-04-12 06:04:41,478 DEBUG    HTTP b'GET' request for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,581 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:41.534816+00:00", "ip": "100.64.0.8", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 46.57, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:04:42.018220105Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=102ms request_id=521c0466-9405-48fe-948d-460b2413154f user=PawPaw content_length=29 asctime="2026-04-12 06:04:41,582" levelname="INFO" name="chat.request_tracking" request_id="521c0466-9405-48fe-948d-460b2413154f" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,581 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:41.535625+00:00", "ip": "100.64.0.9", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 46.13, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:04:42.018230625Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=113ms request_id=c55857b8-2b26-4282-8d74-94d5d8e321dd user=PawPaw content_length=29 asctime="2026-04-12 06:04:41,582" levelname="INFO" name="chat.request_tracking" request_id="c55857b8-2b26-4282-8d74-94d5d8e321dd" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,583 DEBUG    HTTP 200 response started for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,583 DEBUG    HTTP close for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,584 DEBUG    HTTP close for ['100.64.0.9', 20644]
+2026-04-12 06:04:41,583 INFO     "100.64.0.8" - - [12/Apr/2026:06:04:41 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+100.64.0.9:20644 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:04:41,583 DEBUG    HTTP response complete for ['100.64.0.8', 22068]
+2026-04-12 06:04:41,584 INFO     "100.64.0.9" - - [12/Apr/2026:06:04:41 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+100.64.0.8:22068 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:04:41,584 DEBUG    HTTP response complete for ['100.64.0.9', 20644]
+2026-04-12 06:04:41,584 DEBUG    HTTP 200 response started for ['100.64.0.9', 20644]
+2026-04-12 06:04:41,644 DEBUG    HTTP b'GET' request for ['100.64.0.9', 20652]
+2026-04-12 06:04:41,758 DEBUG    HTTP b'GET' request for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,793 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:41.660584+00:00", "ip": "100.64.0.9", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 133.24, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:04:42.025131079Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=148ms request_id=fb1acc42-ce3f-47a2-bcaf-9c86826dfe01 user=YANHESAP content_length=29 asctime="2026-04-12 06:04:41,794" levelname="INFO" name="chat.request_tracking" request_id="fb1acc42-ce3f-47a2-bcaf-9c86826dfe01" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,794 DEBUG    HTTP 200 response started for ['100.64.0.9', 20652]
+2026-04-12 06:04:41,794 DEBUG    HTTP close for ['100.64.0.9', 20652]
+2026-04-12 06:04:41,794 INFO     "100.64.0.9" - - [12/Apr/2026:06:04:41 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,794 DEBUG    HTTP response complete for ['100.64.0.9', 20652]
+100.64.0.9:20652 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:04:41,809 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:41.769401+00:00", "ip": "100.64.0.5", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 39.96, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+100.64.0.5:12878 - - [12/Apr/2026:06:04:41] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12T06:04:42.025159618Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=50ms request_id=bc208908-a533-424d-a3c2-181efaba04c3 user=PawPaw content_length=29 asctime="2026-04-12 06:04:41,809" levelname="INFO" name="chat.request_tracking" request_id="bc208908-a533-424d-a3c2-181efaba04c3" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:41,809 DEBUG    HTTP 200 response started for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,810 DEBUG    HTTP close for ['100.64.0.5', 12878]
+2026-04-12 06:04:41,810 INFO     "100.64.0.5" - - [12/Apr/2026:06:04:41 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:04:41,810 DEBUG    HTTP response complete for ['100.64.0.5', 12878]
+2026-04-12 06:04:47,668 DEBUG    HTTP b'GET' request for ['100.64.0.9', 61058]
+2026-04-12 06:04:47,841 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:04:47.736558+00:00", "ip": "100.64.0.9", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 104.84, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:04:48.159076373Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=172ms request_id=92e1ada8-e287-402d-9d2c-fc2f7f64fcb4 user=YANHESAP content_length=29 asctime="2026-04-12 06:04:47,841" levelname="INFO" name="chat.request_tracking" request_id="92e1ada8-e287-402d-9d2c-fc2f7f64fcb4" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:04:47,842 DEBUG    HTTP 200 response started for ['100.64.0.9', 61058]
+2026-04-12 06:04:47,842 DEBUG    HTTP close for ['100.64.0.9', 61058]
+2026-04-12 06:04:47,842 INFO     "100.64.0.9" - - [12/Apr/2026:06:04:47 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:04:47,842 DEBUG    HTTP response complete for ['100.64.0.9', 61058]
+100.64.0.9:61058 - - [12/Apr/2026:06:04:47] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:04:53,596 DEBUG    WebSocket incoming frame on ['100.64.0.23', 32214]
+2026-04-12 06:04:53,597 DEBUG    Sent WebSocket packet to client for ['100.64.0.23', 32214]
+2026-04-12 06:04:57,584 DEBUG    WebSocket incoming frame on ['100.64.0.4', 36668]
+2026-04-12 06:04:57,584 DEBUG    Sent WebSocket packet to client for ['100.64.0.4', 36668]
+2026-04-12 06:05:02,970 INFO     "100.64.0.9" - - [12/Apr/2026:06:05:02 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:05:02,770 DEBUG    HTTP b'GET' request for ['100.64.0.9', 52076]
+2026-04-12 06:05:02,969 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:02.850310+00:00", "ip": "100.64.0.9", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 118.93, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12 06:05:02,970 DEBUG    HTTP response complete for ['100.64.0.9', 52076]
+2026-04-12T06:05:03.278156416Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=196ms request_id=4a0c0c55-ecbb-44a1-bcf5-d17cc91e73df user=YANHESAP content_length=29 asctime="2026-04-12 06:05:02,969" levelname="INFO" name="chat.request_tracking" request_id="4a0c0c55-ecbb-44a1-bcf5-d17cc91e73df" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+100.64.0.9:52076 - - [12/Apr/2026:06:05:02] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:05:02,970 DEBUG    HTTP 200 response started for ['100.64.0.9', 52076]
+2026-04-12 06:05:02,970 DEBUG    HTTP close for ['100.64.0.9', 52076]
+2026-04-12 06:05:17,754 DEBUG    HTTP b'GET' request for ['100.64.0.6', 15808]
+2026-04-12 06:05:17,920 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:17.821348+00:00", "ip": "100.64.0.6", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 98.59, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:05:23.295127157Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=164ms request_id=0e77f61c-87fb-48c3-9278-ff11fe69eff5 user=YANHESAP content_length=29 asctime="2026-04-12 06:05:17,920" levelname="INFO" name="chat.request_tracking" request_id="0e77f61c-87fb-48c3-9278-ff11fe69eff5" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:17,920 DEBUG    HTTP 200 response started for ['100.64.0.6', 15808]
+2026-04-12 06:05:17,921 DEBUG    HTTP close for ['100.64.0.6', 15808]
+2026-04-12 06:05:17,921 INFO     "100.64.0.6" - - [12/Apr/2026:06:05:17 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:05:17,921 DEBUG    HTTP response complete for ['100.64.0.6', 15808]
+100.64.0.6:15808 - - [12/Apr/2026:06:05:17] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:05:18,588 DEBUG    WebSocket incoming frame on ['100.64.0.23', 32214]
+2026-04-12 06:05:18,589 DEBUG    Sent WebSocket packet to client for ['100.64.0.23', 32214]
+2026-04-12 06:05:22,583 DEBUG    WebSocket incoming frame on ['100.64.0.4', 36668]
+2026-04-12 06:05:22,584 DEBUG    Sent WebSocket packet to client for ['100.64.0.4', 36668]
+2026-04-12 06:05:29,863 DEBUG    HTTP b'GET' request for ['100.64.0.7', 35340]
+2026-04-12 06:05:29,972 DEBUG    HTTP b'GET' request for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,037 DEBUG    Starting new HTTPS connection (1): api.spotify.com:443
+2026-04-12 06:05:30,039 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:29.982015+00:00", "ip": "100.64.0.18", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 57.44, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:05:30.358932983Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=66ms request_id=f38ecace-18d3-4cca-a447-b5882edb114d user=PawPaw content_length=29 asctime="2026-04-12 06:05:30,039" levelname="INFO" name="chat.request_tracking" request_id="f38ecace-18d3-4cca-a447-b5882edb114d" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:30,040 DEBUG    HTTP 200 response started for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,040 DEBUG    HTTP close for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,040 INFO     "100.64.0.18" - - [12/Apr/2026:06:05:29 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:05:30,040 DEBUG    HTTP response complete for ['100.64.0.18', 37282]
+100.64.0.18:37282 - - [12/Apr/2026:06:05:30] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:05:30,187 DEBUG    https://api.spotify.com:443 "GET /v1/me/player/currently-playing HTTP/1.1" 204 0
+2026-04-12 06:05:30,188 DEBUG    Starting new HTTPS connection (1): api.steampowered.com:443
+2026-04-12 06:05:30,205 DEBUG    HTTP b'GET' request for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,266 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:30.223711+00:00", "ip": "100.64.0.18", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 42.52, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:05:30.362343131Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=55ms request_id=102d5c96-3edc-4a00-8141-b731469534d8 user=PawPaw content_length=29 asctime="2026-04-12 06:05:30,266" levelname="INFO" name="chat.request_tracking" request_id="102d5c96-3edc-4a00-8141-b731469534d8" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:30,267 DEBUG    HTTP 200 response started for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,267 DEBUG    HTTP close for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,267 INFO     "100.64.0.18" - - [12/Apr/2026:06:05:29 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+100.64.0.18:37282 - - [12/Apr/2026:06:05:30] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:05:30,268 DEBUG    HTTP response complete for ['100.64.0.18', 37282]
+2026-04-12 06:05:30,310 DEBUG    https://api.steampowered.com:443 "GET /ISteamUser/GetPlayerSummaries/v0002/?key=A520FB52A859D9C9703F3E5285E75FFB&steamids=76561198868230390 HTTP/1.1" 200 305
+2026-04-12 06:05:30,326 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:29.932760+00:00", "ip": "100.64.0.7", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 393.82, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:05:30.365972085Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=463ms request_id=01422bd3-fad5-43cf-a035-fd91d7f762e8 user=YANHESAP content_length=29 asctime="2026-04-12 06:05:30,327" levelname="INFO" name="chat.request_tracking" request_id="01422bd3-fad5-43cf-a035-fd91d7f762e8" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:30,328 DEBUG    HTTP 200 response started for ['100.64.0.7', 35340]
+2026-04-12 06:05:30,328 DEBUG    HTTP close for ['100.64.0.7', 35340]
+2026-04-12 06:05:30,328 INFO     "100.64.0.7" - - [12/Apr/2026:06:05:29 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:05:30,328 DEBUG    HTTP response complete for ['100.64.0.7', 35340]
+100.64.0.7:35340 - - [12/Apr/2026:06:05:30] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:05:32,588 DEBUG    HTTP b'GET' request for ['100.64.0.18', 37282]
+2026-04-12 06:05:32,750 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:32.654967+00:00", "ip": "100.64.0.18", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/YANHESAP/", "status_code": 200, "duration_ms": 95.42, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"}
+2026-04-12T06:05:32.753795306Z [ERRO] request: method=GET path=/api/users/rich_presence/YANHESAP/ status=200 duration=160ms request_id=ff24cbb2-2fe4-4a63-a6a7-b96ce15b6ae3 user=YANHESAP content_length=29 asctime="2026-04-12 06:05:32,750" levelname="INFO" name="chat.request_tracking" request_id="ff24cbb2-2fe4-4a63-a6a7-b96ce15b6ae3" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:32,751 DEBUG    HTTP 200 response started for ['100.64.0.18', 37282]
+2026-04-12 06:05:32,751 DEBUG    HTTP close for ['100.64.0.18', 37282]
+2026-04-12 06:05:32,751 INFO     "100.64.0.18" - - [12/Apr/2026:06:05:32 +0000] "GET /api/users/rich_presence/YANHESAP/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+2026-04-12 06:05:32,751 DEBUG    HTTP response complete for ['100.64.0.18', 37282]
+100.64.0.18:37282 - - [12/Apr/2026:06:05:32] "GET /api/users/rich_presence/YANHESAP/" 200 29
+2026-04-12 06:05:40,689 DEBUG    HTTP b'GET' request for ['100.64.0.5', 46048]
+2026-04-12 06:05:40,694 DEBUG    HTTP b'GET' request for ['100.64.0.12', 33872]
+2026-04-12 06:05:40,773 DEBUG    Starting new HTTPS connection (1): media.pawscord.com:443
+2026-04-12 06:05:40,866 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:40.756787+00:00", "ip": "100.64.0.5", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 109.17, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:05:41.340844089Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=175ms request_id=ded95fe4-b9da-48a5-8283-ae315b092115 user=PawPaw content_length=29 asctime="2026-04-12 06:05:40,866" levelname="INFO" name="chat.request_tracking" request_id="ded95fe4-b9da-48a5-8283-ae315b092115" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:40,866 DEBUG    HTTP 200 response started for ['100.64.0.5', 46048]
+2026-04-12 06:05:40,867 DEBUG    HTTP close for ['100.64.0.5', 46048]
+2026-04-12 06:05:40,867 INFO     "100.64.0.5" - - [12/Apr/2026:06:05:40 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:05:40,867 DEBUG    HTTP response complete for ['100.64.0.5', 46048]
+100.64.0.5:46048 - - [12/Apr/2026:06:05:40] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:05:40,975 DEBUG    https://media.pawscord.com:443 "GET /crypto/signal_export_ORACLE.json HTTP/1.1" 200 None
+2026-04-12T06:05:41.340903138Z [ERRO] [CryptoAPI] R2 fallback fetched: https://media.pawscord.com/crypto/signal_export_ORACLE.json asctime="2026-04-12 06:05:40,976" levelname="INFO" name="chat.crypto_views" request_id="3e870be4-e3bd-42ff-8446-4b0757a57faf" pathname="/app/chat/crypto_views.py" lineno=93
+2026-04-12T06:05:41.345052312Z [ERRO] request: method=GET path=/api/crypto/signals/ status=200 duration=291ms request_id=3e870be4-e3bd-42ff-8446-4b0757a57faf user= content_length=188150 asctime="2026-04-12 06:05:40,987" levelname="INFO" name="chat.request_tracking" request_id="3e870be4-e3bd-42ff-8446-4b0757a57faf" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:40,987 DEBUG    HTTP 200 response started for ['100.64.0.12', 33872]
+2026-04-12 06:05:40,988 DEBUG    HTTP response chunk for ['100.64.0.12', 33872]
+2026-04-12 06:05:40,988 DEBUG    HTTP response chunk for ['100.64.0.12', 33872]
+2026-04-12 06:05:40,988 DEBUG    HTTP close for ['100.64.0.12', 33872]
+2026-04-12 06:05:40,988 INFO     "100.64.0.12" - - [12/Apr/2026:06:05:40 +0000] "GET /api/crypto/signals/?t=1775973939390&file=signal_export_ORACLE HTTP/1.1" 200 188150 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:05:40,988 DEBUG    HTTP response complete for ['100.64.0.12', 33872]
+100.64.0.12:33872 - - [12/Apr/2026:06:05:40] "GET /api/crypto/signals/?t=1775973939390&file=signal_export_ORACLE" 200 188150
+2026-04-12 06:05:41,113 DEBUG    HTTP b'GET' request for ['100.64.0.22', 30608]
+2026-04-12 06:05:41,164 DEBUG    ├░┼╕┼╕┬ó AUDIT: {"timestamp": "2026-04-12T06:05:41.123311+00:00", "ip": "100.64.0.22", "user_id": null, "username": null, "method": "GET", "path": "/api/users/rich_presence/PawPaw/", "status_code": 200, "duration_ms": 40.77, "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"}
+2026-04-12T06:05:41.347417069Z [ERRO] request: method=GET path=/api/users/rich_presence/PawPaw/ status=200 duration=49ms request_id=07f5e94d-7536-4ab8-8f27-30a13af97e4b user=PawPaw content_length=29 asctime="2026-04-12 06:05:41,164" levelname="INFO" name="chat.request_tracking" request_id="07f5e94d-7536-4ab8-8f27-30a13af97e4b" pathname="/app/chat/middleware/request_tracking.py" lineno=43
+2026-04-12 06:05:41,165 DEBUG    HTTP 200 response started for ['100.64.0.22', 30608]
+2026-04-12 06:05:41,165 DEBUG    HTTP close for ['100.64.0.22', 30608]
+2026-04-12 06:05:41,165 INFO     "100.64.0.22" - - [12/Apr/2026:06:05:40 +0000] "GET /api/users/rich_presence/PawPaw/ HTTP/1.1" 200 29 "https://www.pawscord.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+2026-04-12 06:05:41,165 DEBUG    HTTP response complete for ['100.64.0.22', 30608]
+100.64.0.22:30608 - - [12/Apr/2026:06:05:41] "GET /api/users/rich_presence/PawPaw/" 200 29
+2026-04-12 06:05:43,599 DEBUG    Sent WebSocket packet to client for ['100.64.0.23', 32214]

@@ -14,7 +14,7 @@ describe('useVoiceStore', () => {
             isCameraOn: false,
             isScreenSharing: false,
             voiceUsers: {},
-            speakingUsers: new Set(),
+            speakingUsers: [],
             inputDevice: 'default',
             outputDevice: 'default',
             inputVolume: 100,

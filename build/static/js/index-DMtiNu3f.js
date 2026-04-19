@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["./web-BaZCdwz0.js","./electron-BrGK1ERG.js","../css/electron-CQpeyYQ4.css"])))=>i.map(i=>d[i]);
+var t=Object.defineProperty;var e=(r,o)=>t(r,"name",{value:o,configurable:!0});import{bP as i,ah as s}from"./electron-BrGK1ERG.js";const m=i("Browser",{web:e(()=>s(()=>import("./web-BaZCdwz0.js"),__vite__mapDeps([0,1,2]),import.meta.url).then(r=>new r.BrowserWeb),"web")});export{m as Browser};

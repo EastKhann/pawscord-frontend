@@ -1,7 +1,9 @@
+import { getToken } from './tokenStorage';
 // 🚀 API CACHING SYSTEM: Advanced Caching with SWR-like Pattern
 // Optimized for PAWSCORD - Reduces API calls by 70%
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import logger from '../utils/logger';
 
 // Cache storage
 const cache = new Map();
@@ -18,7 +20,7 @@ const DEDUPE_TIME = 2000; // 2 seconds - dedupe identical requests
 const generateCacheKey = (endpoint, params = {}) => {
     const sortedParams = Object.keys(params)
         .sort()
-        .map(key => `${key}=${params[key]}`)
+        .map((key) => `${key}=${params[key]}`)
         .join('&');
     return `${endpoint}?${sortedParams}`;
 };
@@ -26,7 +28,7 @@ const generateCacheKey = (endpoint, params = {}) => {
 // Notify subscribers of cache updates
 const notifySubscribers = (key, data, error = null) => {
     const subs = subscribers.get(key) || [];
-    subs.forEach(callback => callback(data, error));
+    subs.forEach((callback) => callback(data, error));
 };
 
 // ⚡ OPTIMIZED FETCH WITH CACHING
@@ -37,7 +39,7 @@ export const cachedFetch = async (endpoint, options = {}) => {
         forceRefresh = false,
         method = 'GET',
         body = null,
-        headers = {}
+        headers = {},
     } = options;
 
     const cacheKey = generateCacheKey(endpoint, params);
@@ -78,7 +80,7 @@ export const cachedFetch = async (endpoint, options = {}) => {
 
     // Make the actual request
     const fetchPromise = fetchWithRetry(endpoint, { method, body, headers, params })
-        .then(data => {
+        .then((data) => {
             // Update cache
             cache.set(cacheKey, data);
             cacheTimestamps.set(cacheKey, Date.now());
@@ -86,12 +88,12 @@ export const cachedFetch = async (endpoint, options = {}) => {
             notifySubscribers(cacheKey, data);
             return { data, fromCache: false, stale: false };
         })
-        .catch(error => {
+        .catch((error) => {
             pendingRequests.delete(cacheKey);
 
             // Return stale data on error if available
             if (cachedData) {
-                console.warn(`[Cache] Returning stale data due to error: ${error.message}`);
+                logger.warn(`[Cache] Returning stale data due to error: ${error.message}`);
                 return { data: cachedData, fromCache: true, stale: true, error };
             }
             throw error;
@@ -109,14 +111,14 @@ const revalidateInBackground = async (cacheKey, endpoint, params, headers) => {
         cacheTimestamps.set(cacheKey, Date.now());
         notifySubscribers(cacheKey, data);
     } catch (error) {
-        console.warn(`[Cache] Background revalidation failed: ${error.message}`);
+        logger.warn(`[Cache] Background revalidation failed: ${error.message}`);
     }
 };
 
 // Fetch with retry and timeout
 const fetchWithRetry = async (endpoint, options = {}, retries = 3) => {
     const { method = 'GET', body, headers = {}, params = {} } = options;
-    const token = localStorage.getItem('access_token');
+    const token = getToken();
 
     let url = endpoint;
     if (Object.keys(params).length > 0) {
@@ -128,10 +130,10 @@ const fetchWithRetry = async (endpoint, options = {}, retries = 3) => {
         method,
         headers: {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` }),
-            ...headers
+            ...(token && { Authorization: `Bearer ${token}` }),
+            ...headers,
         },
-        ...(body && { body: JSON.stringify(body) })
+        ...(body && { body: JSON.stringify(body) }),
     };
 
     for (let i = 0; i < retries; i++) {
@@ -141,7 +143,7 @@ const fetchWithRetry = async (endpoint, options = {}, retries = 3) => {
 
             const response = await fetch(url, {
                 ...fetchOptions,
-                signal: controller.signal
+                signal: controller.signal,
             });
 
             clearTimeout(timeoutId);
@@ -153,7 +155,7 @@ const fetchWithRetry = async (endpoint, options = {}, retries = 3) => {
             return response.json();
         } catch (error) {
             if (i === retries - 1) throw error;
-            await new Promise(r => setTimeout(r, 1000 * (i + 1))); // Exponential backoff
+            await new Promise((r) => setTimeout(r, 1000 * (i + 1))); // Exponential backoff
         }
     }
 };
@@ -166,7 +168,7 @@ export const useCachedAPI = (endpoint, options = {}) => {
         cacheTime = DEFAULT_CACHE_TIME,
         onSuccess,
         onError,
-        initialData
+        initialData,
     } = options;
 
     const [data, setData] = useState(initialData || null);
@@ -194,38 +196,44 @@ export const useCachedAPI = (endpoint, options = {}) => {
         return () => {
             mountedRef.current = false;
             const currentSubs = subscribers.get(cacheKey) || [];
-            subscribers.set(cacheKey, currentSubs.filter(cb => cb !== handleUpdate));
+            subscribers.set(
+                cacheKey,
+                currentSubs.filter((cb) => cb !== handleUpdate)
+            );
         };
     }, [cacheKey]);
 
     // Fetch data
-    const fetchData = useCallback(async (forceRefresh = false) => {
-        if (!enabled || !endpoint) return;
+    const fetchData = useCallback(
+        async (forceRefresh = false) => {
+            if (!enabled || !endpoint) return;
 
-        try {
-            setIsValidating(true);
-            const result = await cachedFetch(endpoint, {
-                params,
-                cacheTime,
-                forceRefresh
-            });
+            try {
+                setIsValidating(true);
+                const result = await cachedFetch(endpoint, {
+                    params,
+                    cacheTime,
+                    forceRefresh,
+                });
 
-            if (mountedRef.current) {
-                setData(result.data);
-                setError(null);
-                setIsLoading(false);
-                setIsValidating(false);
-                onSuccess?.(result.data);
+                if (mountedRef.current) {
+                    setData(result.data);
+                    setError(null);
+                    setIsLoading(false);
+                    setIsValidating(false);
+                    onSuccess?.(result.data);
+                }
+            } catch (err) {
+                if (mountedRef.current) {
+                    setError(err);
+                    setIsLoading(false);
+                    setIsValidating(false);
+                    onError?.(err);
+                }
             }
-        } catch (err) {
-            if (mountedRef.current) {
-                setError(err);
-                setIsLoading(false);
-                setIsValidating(false);
-                onError?.(err);
-            }
-        }
-    }, [endpoint, JSON.stringify(params), enabled, cacheTime, onSuccess, onError]);
+        },
+        [endpoint, JSON.stringify(params), enabled, cacheTime, onSuccess, onError]
+    );
 
     // Initial fetch
     useEffect(() => {
@@ -236,16 +244,19 @@ export const useCachedAPI = (endpoint, options = {}) => {
     const refresh = useCallback(() => fetchData(true), [fetchData]);
 
     // Mutate local data optimistically
-    const mutate = useCallback((newData, shouldRevalidate = true) => {
-        cache.set(cacheKey, newData);
-        cacheTimestamps.set(cacheKey, Date.now());
-        setData(newData);
-        notifySubscribers(cacheKey, newData);
+    const mutate = useCallback(
+        (newData, shouldRevalidate = true) => {
+            cache.set(cacheKey, newData);
+            cacheTimestamps.set(cacheKey, Date.now());
+            setData(newData);
+            notifySubscribers(cacheKey, newData);
 
-        if (shouldRevalidate) {
-            fetchData(true);
-        }
-    }, [cacheKey, fetchData]);
+            if (shouldRevalidate) {
+                fetchData(true);
+            }
+        },
+        [cacheKey, fetchData]
+    );
 
     return {
         data,
@@ -253,7 +264,7 @@ export const useCachedAPI = (endpoint, options = {}) => {
         isLoading,
         isValidating,
         refresh,
-        mutate
+        mutate,
     };
 };
 
@@ -273,7 +284,7 @@ export const optimisticUpdate = async (cacheKey, optimisticData, asyncFn) => {
         notifySubscribers(cacheKey, result);
         return result;
     } catch (error) {
-        // Rollback on error
+        // Rolelback on error
         cache.set(cacheKey, previousData);
         notifySubscribers(cacheKey, previousData);
         throw error;
@@ -309,13 +320,13 @@ export const cacheManager = {
     getStats: () => ({
         size: cache.size,
         keys: Array.from(cache.keys()),
-        totalSize: JSON.stringify(Array.from(cache.values())).length
+        totalSize: JSON.stringify(Array.from(cache.values())).length,
     }),
 
     // Prefetch data
     prefetch: (endpoint, params = {}) => {
         cachedFetch(endpoint, { params });
-    }
+    },
 };
 
 // ⚡ BATCH REQUEST HELPER
@@ -328,7 +339,7 @@ export const batchRequests = async (requests) => {
         endpoint: requests[index].endpoint,
         success: result.status === 'fulfilled',
         data: result.status === 'fulfilled' ? result.value.data : null,
-        error: result.status === 'rejected' ? result.reason : null
+        error: result.status === 'rejected' ? result.reason : null,
     }));
 };
 
@@ -337,5 +348,5 @@ export default {
     useCachedAPI,
     optimisticUpdate,
     cacheManager,
-    batchRequests
+    batchRequests,
 };

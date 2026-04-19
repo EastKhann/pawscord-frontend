@@ -1,0 +1,163 @@
+/* ChannelSettingsModal shared CSS module */
+
+/* ─── flex helpers ─── */
+.flexAlignGap8 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.flexAlignGap10 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flexGap8 {
+    display: flex;
+    gap: 8px;
+}
+
+.flexGap10 {
+    display: flex;
+    gap: 10px;
+}
+
+.flexEndGap10 {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.flexCol {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── text helpers ─── */
+.labelMuted {
+    color: #b5bac1;
+    font-size: 0.9em;
+}
+
+.labelSmall {
+    color: #b5bac1;
+    font-size: 0.9em;
+}
+
+.hintMuted {
+    font-size: 0.875em;
+    color: #949ba4;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.hintSmall {
+    font-size: 0.85em;
+    color: '#949ba4';
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.textXs {
+    font-size: 0.85em;
+    color: #949ba4;
+    margin-top: 5px;
+}
+
+.textSuccess {
+    font-size: 0.85em;
+    color: #23a559;
+    margin-top: 5px;
+}
+
+.sectionTitle {
+    color: '#b5bac1';
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+.headingWhite {
+    margin: 0;
+    color: '#fff';
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* ─── spacing ─── */
+.mb15 {
+    margin-bottom: 15px;
+}
+
+/* ─── avatar / icon ─── */
+.avatar24 {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.colorDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* ─── permission list ─── */
+.permissionMeta {
+    font-size: 0.85em;
+    color: #949ba4;
+    margin-top: 5px;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 40px;
+    color: #949ba4;
+}
+
+.emptyIcon {
+    opacity: 0.3;
+    margin-bottom: 10px;
+}
+
+/* ─── search dropdown ─── */
+.searchDropdown {
+    background: #0d0e10;
+    border-radius: 6px;
+    margin-top: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #4e5058;
+}
+
+.searchItem {
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #0e1222;
+    transition: background-color 0.2s;
+}
+
+.searchItem:hover {
+    background-color: #111214;
+}
+
+.searchItemSelected {
+    background-color: #5865f2;
+}
+
+.searchItemText {
+    color: #fff;
+    font-size: 0.95em;
+}
+
+/* ─── voice label ─── */
+.voiceLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

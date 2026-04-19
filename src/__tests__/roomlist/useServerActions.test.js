@@ -199,9 +199,7 @@ describe('useServerActions', () => {
 
     it('should call onMoveServer when handleMoveServer is invoked', () => {
         const onMoveServer = vi.fn();
-        const { result } = renderHook(() =>
-            useServerActions(createDefaultProps({ onMoveServer }))
-        );
+        const { result } = renderHook(() => useServerActions(createDefaultProps({ onMoveServer })));
 
         act(() => {
             result.current.handleMoveServer(5, 'up');

@@ -3,6 +3,7 @@
 // Advanced WebSocket manager with auto-reconnect, heartbeat, and message queuing
 
 import { WS_PROTOCOL, API_HOST } from '../utils/constants';
+import logger from '../utils/logger';
 
 /**
  * WebSocket Connection States
@@ -12,10 +13,10 @@ export const WS_STATES = {
     CONNECTED: 'CONNECTED',
     DISCONNECTED: 'DISCONNECTED',
     RECONNECTING: 'RECONNECTING',
-    ERROR: 'ERROR'
+    ERROR: 'ERROR',
 } as const;
 
-export type WSState = typeof WS_STATES[keyof typeof WS_STATES];
+export type WSState = (typeof WS_STATES)[keyof typeof WS_STATES];
 
 /**
  * Message Types
@@ -29,7 +30,7 @@ export const MESSAGE_TYPES = {
     REACTION: 'reaction',
     SYSTEM: 'system',
     PING: 'ping',
-    PONG: 'pong'
+    PONG: 'pong',
 } as const;
 
 /**
@@ -57,14 +58,14 @@ class WebSocketService {
             maxReconnectDelay: 30000,
             heartbeatInterval: 30000,
             messageTimeout: 10000,
-            queueMaxSize: 100
+            queueMaxSize: 100,
         };
 
         this.stats = {
             messagesSent: 0,
             messagesReceived: 0,
             reconnects: 0,
-            errors: 0
+            errors: 0,
         };
 
         // Setup visibility change handler
@@ -75,7 +76,7 @@ class WebSocketService {
      * Handle page visibility changes
      */
     setupVisibilityHandler() {
-        document.addEventListener('visibilitychange', () => {
+        this._visibilityHandler = () => {
             if (document.visibilityState === 'visible') {
                 // Reconnect all sockets when page becomes visible
                 this.connections.forEach((conn, channel) => {
@@ -84,7 +85,25 @@ class WebSocketService {
                     }
                 });
             }
+        };
+        document.addEventListener('visibilitychange', this._visibilityHandler);
+    }
+
+    /**
+     * Cleanup: remove event listeners to prevent memory leaks
+     */
+    destroy() {
+        if (this._visibilityHandler) {
+            document.removeEventListener('visibilitychange', this._visibilityHandler);
+            this._visibilityHandler = null;
+        }
+        // Close all connections
+        this.connections.forEach((conn, channel) => {
+            this.disconnect(channel);
         });
+        this.handlers.clear();
+        this.globalHandlers = [];
+        this.messageQueue.clear();
     }
 
     /**
@@ -115,7 +134,7 @@ class WebSocketService {
                 reconnectAttempts: 0,
                 lastActivity: Date.now(),
                 heartbeatTimer: null,
-                options
+                options,
             };
 
             this.connections.set(channel, connection);
@@ -145,7 +164,7 @@ class WebSocketService {
             };
 
             ws.onerror = (error) => {
-                console.error(`🔌 [WS] Error: ${channel}`, error);
+                logger.error(`🔌 [WS] Error: ${channel}`, error);
                 connection.state = WS_STATES.ERROR;
                 this.stats.errors++;
                 this.emit('error', { channel, error });
@@ -188,28 +207,27 @@ class WebSocketService {
 
             // Call channel-specific handlers
             const channelHandlers = this.handlers.get(channel) || [];
-            channelHandlers.forEach(handler => {
+            channelHandlers.forEach((handler) => {
                 try {
                     handler(data, channel);
                 } catch (e) {
-                    console.error('Handler error:', e);
+                    logger.error('Handler error:', e);
                 }
             });
 
             // Call global handlers
-            this.globalHandlers.forEach(handler => {
+            this.globalHandlers.forEach((handler) => {
                 try {
                     handler(data, channel);
                 } catch (e) {
-                    console.error('Global handler error:', e);
+                    logger.error('Global handler error:', e);
                 }
             });
 
             // Emit event
             this.emit('message', { channel, data });
-
         } catch (error) {
-            console.error('Failed to parse WebSocket message:', error);
+            logger.error('Failed to parse WebSocket message:', error);
         }
     }
 
@@ -222,7 +240,7 @@ class WebSocketService {
             type,
             ...payload,
             timestamp: Date.now(),
-            id: this.generateMessageId()
+            id: this.generateMessageId(),
         };
 
         if (!connection || connection.state !== WS_STATES.CONNECTED) {
@@ -238,7 +256,7 @@ class WebSocketService {
             this.stats.messagesSent++;
             return true;
         } catch (error) {
-            console.error('Failed to send message:', error);
+            logger.error('Failed to send message:', error);
             if (options.queue !== false) {
                 this.queueMessage(channel, message);
             }
@@ -326,10 +344,10 @@ class WebSocketService {
         this.stats.reconnects++;
 
         const delay = Math.min(
-            this.config.reconnectDelay * Math.pow(this.config.reconnectMultiplier, connection.reconnectAttempts - 1),
+            this.config.reconnectDelay *
+                Math.pow(this.config.reconnectMultiplier, connection.reconnectAttempts - 1),
             this.config.maxReconnectDelay
         );
-
 
         setTimeout(() => {
             this.reconnect(channel);
@@ -347,7 +365,9 @@ class WebSocketService {
         if (connection.ws) {
             try {
                 connection.ws.close();
-            } catch (e) { console.debug('[WebSocket] Close during reconnect:', e.message); }
+            } catch (e) {
+                logger.debug('[WebSocket] Close during reconnect:', e.message);
+            }
         }
 
         // Reconnect with same options
@@ -447,7 +467,7 @@ class WebSocketService {
             result[channel] = {
                 state: conn.state,
                 lastActivity: conn.lastActivity,
-                reconnectAttempts: conn.reconnectAttempts
+                reconnectAttempts: conn.reconnectAttempts,
             };
         });
         return result;
@@ -469,7 +489,7 @@ class WebSocketService {
      */
     connectToRoom(roomId) {
         return this.connect(`chat/${roomId}`, {
-            params: { room_id: roomId }
+            params: { room_id: roomId },
         });
     }
 
@@ -478,7 +498,7 @@ class WebSocketService {
      */
     connectToVoice(roomId) {
         return this.connect(`voice/${roomId}`, {
-            params: { room_id: roomId }
+            params: { room_id: roomId },
         });
     }
 
@@ -488,7 +508,7 @@ class WebSocketService {
     connectToStatus(username) {
         return this.connect('status', {
             username,
-            params: { username }
+            params: { username },
         });
     }
 
@@ -505,7 +525,7 @@ class WebSocketService {
     sendChatMessage(roomId, content, options = {}) {
         return this.send(`chat/${roomId}`, MESSAGE_TYPES.CHAT, {
             content,
-            ...options
+            ...options,
         });
     }
 
@@ -514,7 +534,7 @@ class WebSocketService {
      */
     sendTyping(roomId, isTyping = true) {
         return this.send(`chat/${roomId}`, MESSAGE_TYPES.TYPING, {
-            typing: isTyping
+            typing: isTyping,
         });
     }
 
@@ -524,7 +544,7 @@ class WebSocketService {
     sendPresence(status, activity = null) {
         return this.send('status', MESSAGE_TYPES.PRESENCE, {
             status,
-            activity
+            activity,
         });
     }
 
@@ -534,7 +554,7 @@ class WebSocketService {
     sendReaction(roomId, messageId, emoji) {
         return this.send(`chat/${roomId}`, MESSAGE_TYPES.REACTION, {
             message_id: messageId,
-            emoji
+            emoji,
         });
     }
 }

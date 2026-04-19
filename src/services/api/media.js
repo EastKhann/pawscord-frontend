@@ -9,9 +9,9 @@ import { API_BASE, apiFetch } from './shared';
 export const voiceTranscriptionApi = {
     transcribe: async (messageId) => {
         return await apiFetch(`${API_BASE}/api/messages/${messageId}/transcribe/`, {
-            method: 'POST'
+            method: 'POST',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -24,21 +24,21 @@ export const voiceRecordingApi = {
     startRecording: async (channelId) => {
         return await apiFetch(`${API_BASE}/api/voice-channels/${channelId}/recordings/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'start' })
+            body: JSON.stringify({ action: 'start' }),
         });
     },
     stopRecording: async (channelId, recordingId) => {
         return await apiFetch(`${API_BASE}/api/voice-channels/${channelId}/recordings/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'stop', recording_id: recordingId })
+            body: JSON.stringify({ action: 'stop', recording_id: recordingId }),
         });
     },
     giveConsent: async (recordingId, consent = true) => {
         return await apiFetch(`${API_BASE}/api/recordings/${recordingId}/consent/`, {
             method: 'POST',
-            body: JSON.stringify({ consent })
+            body: JSON.stringify({ consent }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -51,14 +51,14 @@ export const annotationApi = {
     addAnnotation: async (sessionId, annotationData) => {
         return await apiFetch(`${API_BASE}/api/screen-share/${sessionId}/annotations/`, {
             method: 'POST',
-            body: JSON.stringify(annotationData)
+            body: JSON.stringify(annotationData),
         });
     },
     clearAnnotations: async (sessionId) => {
         return await apiFetch(`${API_BASE}/api/screen-share/${sessionId}/annotations/clear/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -70,9 +70,9 @@ export const callTranscriptApi = {
     },
     requestTranscription: async (recordingId) => {
         return await apiFetch(`${API_BASE}/api/recordings/${recordingId}/transcribe/`, {
-            method: 'POST'
+            method: 'POST',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -85,25 +85,25 @@ export const voiceQueueApi = {
     toggleQueue: async (channelId) => {
         return await apiFetch(`${API_BASE}/api/voice-channels/${channelId}/queue/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'toggle' })
+            body: JSON.stringify({ action: 'toggle' }),
         });
     },
     raiseHand: async (channelId) => {
         return await apiFetch(`${API_BASE}/api/voice-channels/${channelId}/queue/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'raise_hand' })
+            body: JSON.stringify({ action: 'raise_hand' }),
         });
     },
     lowerHand: async (channelId) => {
         return await apiFetch(`${API_BASE}/api/voice-channels/${channelId}/queue/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'lower_hand' })
+            body: JSON.stringify({ action: 'lower_hand' }),
         });
     },
     nextSpeaker: async (channelId) => {
         return await apiFetch(`${API_BASE}/api/voice-channels/${channelId}/queue/`, {
             method: 'POST',
-            body: JSON.stringify({ action: 'next_speaker' })
+            body: JSON.stringify({ action: 'next_speaker' }),
         });
-    }
+    },
 };

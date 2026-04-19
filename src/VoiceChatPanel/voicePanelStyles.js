@@ -41,7 +41,7 @@ export function injectVoicePanelStyles() {
                 z-index: 9999 !important;
             }
 
-            /* 🔥 YENİ: Badge Animasyonları */
+            /* 🔥 NEW: Badge Animations */
             @keyframes badgePulse {
                 0%, 100% {
                     transform: scale(1);
@@ -64,7 +64,7 @@ export function injectVoicePanelStyles() {
                 }
             }
 
-            /* 🔥 YENİ: Talking Indicator Wave Animations */
+            /* 🔥 NEW: Talking Indicator Wave Animations */
             @keyframes wave1 {
                 0%, 100% { height: 12px; }
                 50% { height: 20px; }
@@ -78,7 +78,7 @@ export function injectVoicePanelStyles() {
                 50% { height: 20px; }
             }
 
-            /* 🔥 YENİ: Avatar Talking Pulse Animation */
+            /* 🔥 NEW: Avatar Talking Pulse Animation */
             @keyframes talkingPulse {
                 0%, 100% {
                     box-shadow: 0 0 0 0 rgba(67, 181, 129, 0.7);
@@ -105,6 +105,19 @@ export function injectVoicePanelStyles() {
             @keyframes screenShareGlow {
                 0%, 100% { border-color: rgba(88, 101, 242, 0.5); }
                 50% { border-color: rgba(88, 101, 242, 0.9); }
+            }
+
+            /* Speaking ring gradient rotation */
+            @keyframes speakingRing {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            /* Context menu appear */
+            @keyframes contextMenuIn {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
             }
 
             /* Smooth grid transitions */

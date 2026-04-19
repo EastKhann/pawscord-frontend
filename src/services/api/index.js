@@ -8,19 +8,17 @@ export {
     accessibilityApi,
     dyslexiaApi,
     gestureApi,
-    rtlApi
+    rtlApi,
 } from './accessibility';
 
-export {
-    adminPanelApi
-} from './admin';
+export { adminPanelApi } from './admin';
 
 export {
     botBuilderApi,
     chatSummaryApi,
     aiImageApi,
     recommendationApi,
-    languageLearningApi
+    languageLearningApi,
 } from './ai';
 
 export {
@@ -28,7 +26,7 @@ export {
     userAnalyticsApi,
     serverGrowthApi,
     dataExportApi,
-    performanceApi
+    performanceApi,
 } from './analytics';
 
 export {
@@ -46,7 +44,7 @@ export {
     translationApi,
     smartPinApi,
     messageSchedulingApi,
-    mentionSuggestionApi
+    mentionSuggestionApi,
 } from './chat';
 
 export {
@@ -54,7 +52,7 @@ export {
     voiceRecordingApi,
     annotationApi,
     callTranscriptApi,
-    voiceQueueApi
+    voiceQueueApi,
 } from './media';
 
 export {
@@ -62,7 +60,7 @@ export {
     emergencyBroadcastApi,
     customThemesApi,
     notificationScheduleApi,
-    miniGamesApi
+    miniGamesApi,
 } from './misc';
 
 export {
@@ -70,7 +68,7 @@ export {
     toxicityApi,
     imageModerationApi,
     spamDetectionApi,
-    moderationAssistantApi
+    moderationAssistantApi,
 } from './moderation';
 
 export {
@@ -78,7 +76,7 @@ export {
     auditRetentionApi,
     e2eeKeysApi,
     hardwareKeyApi,
-    altAccountApi
+    altAccountApi,
 } from './security';
 
 export {
@@ -90,20 +88,88 @@ export {
     achievementShowcaseApi,
     relationshipApi,
     storyApi,
-    interestApi
+    interestApi,
 } from './social';
 
 // Import all for default export
-import { viewPreferencesApi, accessibilityApi, dyslexiaApi, gestureApi, rtlApi } from './accessibility';
+import {
+    viewPreferencesApi,
+    accessibilityApi,
+    dyslexiaApi,
+    gestureApi,
+    rtlApi,
+} from './accessibility';
 import { adminPanelApi } from './admin';
-import { botBuilderApi, chatSummaryApi, aiImageApi, recommendationApi, languageLearningApi } from './ai';
-import { socialAnalyticsApi, userAnalyticsApi, serverGrowthApi, dataExportApi, performanceApi } from './analytics';
-import { feedbackApi, timeCapsuleApi, qrCodeApi, threadingApi, messageTemplatesApi, advancedSearchApi, autoDeleteApi, linkPreviewApi, ttsApi, messageBundlesApi, ephemeralApi, translationApi, smartPinApi, messageSchedulingApi, mentionSuggestionApi } from './chat';
-import { voiceTranscriptionApi, voiceRecordingApi, annotationApi, callTranscriptApi, voiceQueueApi } from './media';
-import { gameEventsApi, emergencyBroadcastApi, customThemesApi, notificationScheduleApi, miniGamesApi } from './misc';
-import { appealApi, toxicityApi, imageModerationApi, spamDetectionApi, moderationAssistantApi } from './moderation';
-import { securityApi, auditRetentionApi, e2eeKeysApi, hardwareKeyApi, altAccountApi } from './security';
-import { birthdayApi, giftApi, leaderboardApi, moodApi, profileThemeApi, achievementShowcaseApi, relationshipApi, storyApi, interestApi } from './social';
+import {
+    botBuilderApi,
+    chatSummaryApi,
+    aiImageApi,
+    recommendationApi,
+    languageLearningApi,
+} from './ai';
+import {
+    socialAnalyticsApi,
+    userAnalyticsApi,
+    serverGrowthApi,
+    dataExportApi,
+    performanceApi,
+} from './analytics';
+import {
+    feedbackApi,
+    timeCapsuleApi,
+    qrCodeApi,
+    threadingApi,
+    messageTemplatesApi,
+    advancedSearchApi,
+    autoDeleteApi,
+    linkPreviewApi,
+    ttsApi,
+    messageBundlesApi,
+    ephemeralApi,
+    translationApi,
+    smartPinApi,
+    messageSchedulingApi,
+    mentionSuggestionApi,
+} from './chat';
+import {
+    voiceTranscriptionApi,
+    voiceRecordingApi,
+    annotationApi,
+    callTranscriptApi,
+    voiceQueueApi,
+} from './media';
+import {
+    gameEventsApi,
+    emergencyBroadcastApi,
+    customThemesApi,
+    notificationScheduleApi,
+    miniGamesApi,
+} from './misc';
+import {
+    appealApi,
+    toxicityApi,
+    imageModerationApi,
+    spamDetectionApi,
+    moderationAssistantApi,
+} from './moderation';
+import {
+    securityApi,
+    auditRetentionApi,
+    e2eeKeysApi,
+    hardwareKeyApi,
+    altAccountApi,
+} from './security';
+import {
+    birthdayApi,
+    giftApi,
+    leaderboardApi,
+    moodApi,
+    profileThemeApi,
+    achievementShowcaseApi,
+    relationshipApi,
+    storyApi,
+    interestApi,
+} from './social';
 
 export default {
     viewPreferences: viewPreferencesApi,

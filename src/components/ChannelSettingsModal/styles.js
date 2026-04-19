@@ -14,7 +14,7 @@ const styles = {
         alignItems: 'center',
         zIndex: 9999,
         padding: '20px',
-        overflow: 'auto'
+        overflow: 'auto',
     },
     modal: {
         background: '#17191c',
@@ -28,7 +28,7 @@ const styles = {
         minHeight: '600px',
         boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
         position: 'relative',
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     header: {
         padding: '24px 28px',
@@ -37,7 +37,7 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         color: 'white',
-        flexShrink: 0
+        flexShrink: 0,
     },
     closeBtn: {
         background: 'none',
@@ -46,13 +46,13 @@ const styles = {
         cursor: 'pointer',
         fontSize: '1.4em',
         transition: 'color 0.2s',
-        padding: '8px'
+        padding: '8px',
     },
     tabs: {
         display: 'flex',
         borderBottom: '1px solid #0b0e1b',
         background: '#111214',
-        flexShrink: 0
+        flexShrink: 0,
     },
     tab: {
         flex: 1,
@@ -67,7 +67,7 @@ const styles = {
         gap: '10px',
         fontSize: '1em',
         transition: 'all 0.2s',
-        borderBottom: '2px solid transparent'
+        borderBottom: '2px solid transparent',
     },
     tabActive: {
         flex: 1,
@@ -82,17 +82,17 @@ const styles = {
         gap: '10px',
         fontSize: '1em',
         fontWeight: 'bold',
-        borderBottom: '2px solid #5865f2'
+        borderBottom: '2px solid #5865f2',
     },
     body: {
         padding: '28px 32px',
         overflowY: 'auto',
-        flex: 1
+        flex: 1,
     },
     section: {
         marginBottom: '24px',
         color: '#dbdee1',
-        fontSize: '1em'
+        fontSize: '1em',
     },
     input: {
         width: '100%',
@@ -104,7 +104,7 @@ const styles = {
         marginTop: '8px',
         boxSizing: 'border-box',
         fontSize: '0.95em',
-        transition: 'border-color 0.2s'
+        transition: 'border-color 0.2s',
     },
     rolesList: {
         maxHeight: '250px',
@@ -112,7 +112,7 @@ const styles = {
         background: '#111214',
         padding: '12px',
         borderRadius: '6px',
-        marginTop: '12px'
+        marginTop: '12px',
     },
     roleItem: {
         display: 'flex',
@@ -124,14 +124,14 @@ const styles = {
         alignItems: 'center',
         fontSize: '0.95em',
         borderRadius: '4px',
-        transition: 'background-color 0.2s'
+        transition: 'background-color 0.2s',
     },
     footer: {
         display: 'flex',
         justifyContent: 'space-between',
         marginTop: '28px',
         paddingTop: '20px',
-        borderTop: '1px solid #0b0e1b'
+        borderTop: '1px solid #0b0e1b',
     },
     saveBtn: {
         background: '#23a559',
@@ -145,7 +145,7 @@ const styles = {
         gap: 8,
         fontWeight: 'bold',
         fontSize: '0.95em',
-        transition: 'background-color 0.2s'
+        transition: 'background-color 0.2s',
     },
     deleteBtn: {
         background: 'transparent',
@@ -158,7 +158,7 @@ const styles = {
         alignItems: 'center',
         gap: 8,
         fontSize: '0.95em',
-        transition: 'all 0.2s'
+        transition: 'all 0.2s',
     },
     permissionsHeader: {
         display: 'flex',
@@ -166,9 +166,9 @@ const styles = {
         alignItems: 'center',
         marginBottom: '20px',
         paddingBottom: '10px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
-    addPermBtn: {
+    addThumBtn: {
         background: '#5865f2',
         color: 'white',
         border: 'none',
@@ -179,10 +179,10 @@ const styles = {
         alignItems: 'center',
         gap: '5px',
         fontSize: '0.9em',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     permSection: {
-        marginBottom: '20px'
+        marginBottom: '20px',
     },
     permissionItem: {
         background: '#111214',
@@ -192,7 +192,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
-        position: 'relative'
+        position: 'relative',
     },
     removeBtn: {
         position: 'absolute',
@@ -204,14 +204,14 @@ const styles = {
         padding: '5px 10px',
         borderRadius: '4px',
         cursor: 'pointer',
-        fontSize: '0.8em'
+        fontSize: '0.8em',
     },
-    addPermModal: {
+    addThumModal: {
         background: '#111214',
         padding: '20px',
         borderRadius: '8px',
         marginTop: '20px',
-        border: '2px solid #5865f2'
+        border: '2px solid #5865f2',
     },
     cancelBtn: {
         background: 'transparent',
@@ -221,7 +221,7 @@ const styles = {
         borderRadius: '6px',
         cursor: 'pointer',
         fontSize: '0.95em',
-        transition: 'all 0.2s'
+        transition: 'all 0.2s',
     },
     confirmBtn: {
         background: '#5865f2',
@@ -232,7 +232,7 @@ const styles = {
         cursor: 'pointer',
         fontSize: '0.95em',
         fontWeight: 'bold',
-        transition: 'background-color 0.2s'
+        transition: 'background-color 0.2s',
     },
     label: {
         color: '#b5bac1',
@@ -241,7 +241,7 @@ const styles = {
         textTransform: 'uppercase',
         marginBottom: '8px',
         display: 'block',
-        letterSpacing: '0.5px'
+        letterSpacing: '0.5px',
     },
     checkboxLabel: {
         display: 'flex',
@@ -249,13 +249,13 @@ const styles = {
         gap: 12,
         cursor: 'pointer',
         fontSize: '0.95em',
-        padding: '8px 0'
+        padding: '8px 0',
     },
     // 🔗 ENTEGRASYONLAR TAB STİLLERİ
     integrationHeader: {
         marginBottom: '24px',
         paddingBottom: '16px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     integrationCard: {
         background: '#111214',
@@ -266,12 +266,12 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'center',
         border: '1px solid #182135',
-        transition: 'border-color 0.2s'
+        transition: 'border-color 0.2s',
     },
     integrationCardHeader: {
         display: 'flex',
         alignItems: 'center',
-        gap: '16px'
+        gap: '16px',
     },
     integrationIcon: {
         width: '48px',
@@ -280,18 +280,18 @@ const styles = {
         background: 'rgba(88, 101, 242, 0.2)',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     integrationTitle: {
         color: '#fff',
         fontSize: '1em',
         fontWeight: 'bold',
-        margin: 0
+        margin: 0,
     },
     integrationDesc: {
         color: '#949ba4',
         fontSize: '0.85em',
-        margin: '4px 0 0 0'
+        margin: '4px 0 0 0',
     },
     integrationBtn: {
         background: '#5865f2',
@@ -305,7 +305,7 @@ const styles = {
         gap: '8px',
         fontSize: '0.9em',
         fontWeight: 'bold',
-        transition: 'background-color 0.2s'
+        transition: 'background-color 0.2s',
     },
     // ⚙️ GELİŞMİŞ TAB STİLLERİ
     advancedSection: {
@@ -313,7 +313,7 @@ const styles = {
         borderRadius: '12px',
         padding: '20px',
         marginBottom: '16px',
-        border: '1px solid #182135'
+        border: '1px solid #182135',
     },
     advancedSectionTitle: {
         color: '#fff',
@@ -322,30 +322,30 @@ const styles = {
         margin: '0 0 16px 0',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '10px',
     },
     advancedOption: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '12px 0',
-        borderTop: '1px solid #182135'
+        borderTop: '1px solid #182135',
     },
     advancedOptionTitle: {
         color: '#dbdee1',
         fontSize: '0.95em',
         fontWeight: '500',
-        margin: 0
+        margin: 0,
     },
     advancedOptionDesc: {
         color: '#949ba4',
         fontSize: '0.8em',
-        margin: '4px 0 0 0'
+        margin: '4px 0 0 0',
     },
     statsGrid: {
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px'
+        gap: '12px',
     },
     statBox: {
         background: '#0d0e10',
@@ -354,23 +354,23 @@ const styles = {
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
-        gap: '4px'
+        gap: '4px',
     },
     statValue: {
         color: '#5865f2',
         fontSize: '1.5em',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     statLabel: {
         color: '#949ba4',
-        fontSize: '0.8em'
+        fontSize: '0.8em',
     },
     dangerZone: {
         background: 'rgba(237, 66, 69, 0.1)',
         borderRadius: '12px',
         padding: '20px',
         marginTop: '24px',
-        border: '1px solid rgba(237, 66, 69, 0.3)'
+        border: '1px solid rgba(237, 66, 69, 0.3)',
     },
     dangerZoneTitle: {
         color: '#f23f42',
@@ -379,7 +379,7 @@ const styles = {
         margin: '0 0 16px 0',
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '10px',
     },
     dangerBtnSmall: {
         background: '#f23f42',
@@ -389,7 +389,7 @@ const styles = {
         borderRadius: '6px',
         cursor: 'pointer',
         fontSize: '0.85em',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     dangerBtnLarge: {
         background: '#f23f42',
@@ -403,8 +403,19 @@ const styles = {
         gap: '8px',
         fontSize: '0.9em',
         fontWeight: 'bold',
-        transition: 'background-color 0.2s'
-    }
+        transition: 'background-color 0.2s',
+    },
+    labelFlex: {
+        color: '#b5bac1',
+        fontSize: '0.875em',
+        fontWeight: '600',
+        textTransform: 'uppercase',
+        marginBottom: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        letterSpacing: '0.5px',
+    },
 };
 
 export default styles;

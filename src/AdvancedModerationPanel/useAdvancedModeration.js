@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import confirmDialog from '../../utils/confirmDialog';
+import { getToken } from '../utils/tokenStorage';
+import confirmDialog from '../utils/confirmDialog';
+import logger from '../utils/logger';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 
 const useAdvancedModeration = (serverId) => {
     const [selectedUser, setSelectedUser] = useState(null);
@@ -9,134 +12,229 @@ const useAdvancedModeration = (serverId) => {
     const [massActionCriteria, setMassActionCriteria] = useState('');
     const [warnings, setWarnings] = useState([]);
     const [raidProtection, setRaidProtection] = useState(false);
-    const [raidSettings, setRaidSettings] = useState({ threshold: 10, timeWindow: 60, action: 'kick' });
+    const [raidSettings, setRaidSettings] = useState({
+        threshold: 10,
+        timeWindow: 60,
+        action: 'kick',
+    });
     const [moderationLogs, setModerationLogs] = useState([]);
     const [automodRules, setAutomodRules] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const authHeader = () => ({ 'Authorization': `Bearer ${localStorage.getItem('access_token')}` });
+    const authHeader = () => ({ Authorization: `Bearer ${getToken()}` });
 
     const fetchWarnings = async () => {
         try {
-            const res = await fetch(`/api/moderation/warnings/${serverId}/`, { headers: authHeader() });
-            if (res.ok) { const data = await res.json(); setWarnings(data.warnings || []); }
-        } catch (err) { console.error('Failed to fetch warnings:', err); }
+            const res = await fetch(`${API_BASE_URL}/moderation/warnings/${serverId}/`, {
+                headers: authHeader(),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setWarnings(data.warnings || []);
+            }
+        } catch (err) {
+            logger.error('Failed to fetch warnings:', err);
+        }
     };
 
     const fetchRaidSettings = async () => {
         try {
-            const res = await fetch(`/api/moderation/raid-protection/${serverId}/`, { headers: authHeader() });
+            const res = await fetch(`${API_BASE_URL}/moderation/raid-protection/${serverId}/`, {
+                headers: authHeader(),
+            });
             if (res.ok) {
                 const data = await res.json();
                 setRaidProtection(data.enabled || false);
                 if (data.settings) setRaidSettings(data.settings);
             }
-        } catch (err) { console.error('Failed to fetch raid settings:', err); }
+        } catch (err) {
+            logger.error('Failed to fetch raid settings:', err);
+        }
     };
 
     const fetchModerationLogs = async () => {
         try {
-            const res = await fetch(`/api/moderation/logs/${serverId}/`, { headers: authHeader() });
-            if (res.ok) { const data = await res.json(); setModerationLogs(data.logs || []); }
-        } catch (err) { console.error('Failed to fetch logs:', err); }
+            const res = await fetch(`${API_BASE_URL}/moderation/logs/${serverId}/`, {
+                headers: authHeader(),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setModerationLogs(data.logs || []);
+            }
+        } catch (err) {
+            logger.error('Failed to fetch logs:', err);
+        }
     };
 
     const fetchAutomodRules = async () => {
         try {
-            const res = await fetch(`/api/moderation/automod/${serverId}/`, { headers: authHeader() });
-            if (res.ok) { const data = await res.json(); setAutomodRules(data.rules || []); }
-        } catch (err) { console.error('Failed to fetch automod rules:', err); }
+            const res = await fetch(`${API_BASE_URL}/moderation/automod/${serverId}/`, {
+                headers: authHeader(),
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setAutomodRules(data.rules || []);
+            }
+        } catch (err) {
+            logger.error('Failed to fetch automod rules:', err);
+        }
     };
 
     useEffect(() => {
         setIsLoading(true);
-        Promise.all([fetchWarnings(), fetchRaidSettings(), fetchModerationLogs(), fetchAutomodRules()])
-            .catch(err => console.error('Failed to fetch moderation data:', err))
+        Promise.all([
+            fetchWarnings(),
+            fetchRaidSettings(),
+            fetchModerationLogs(),
+            fetchAutomodRules(),
+        ])
+            .catch((err) => logger.error('Failed to fetch moderation data:', err))
             .finally(() => setIsLoading(false));
     }, [serverId]);
 
     const showToast = (message, type) => {};
 
     const timeoutUser = async () => {
-        if (!selectedUser) { showToast('Please select a user', 'error'); return; }
+        if (!selectedUser) {
+            showToast('Lütfen bir kullanıcı seçin', 'error');
+            return;
+        }
         try {
-            const res = await fetch('/api/moderation/timeout/', {
+            const res = await fetch(`${API_BASE_URL}/moderation/timeout/`, {
                 method: 'POST',
                 headers: { ...authHeader(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: serverId, user_id: selectedUser.id, duration: timeoutDuration, reason: timeoutReason })
+                body: JSON.stringify({
+                    server_id: serverId,
+                    user_id: selectedUser.id,
+                    duration: timeoutDuration,
+                    reason: timeoutReason,
+                }),
             });
             if (res.ok) {
-                showToast(`${selectedUser.username} timed out for ${timeoutDuration} minutes`, 'success');
-                setSelectedUser(null); setTimeoutDuration(60); setTimeoutReason('');
+                showToast(
+                    `${selectedUser.username} kullanıcısına ${timeoutDuration} dakika zaman aşımı uygulandı`,
+                    'success'
+                );
+                setSelectedUser(null);
+                setTimeoutDuration(60);
+                setTimeoutReason('');
                 fetchModerationLogs();
             } else throw new Error('Timeout failed');
-        } catch (err) { console.error('Failed to timeout user:', err); showToast('Failed to timeout user', 'error'); }
+        } catch (err) {
+            logger.error('Failed to timeout user:', err);
+            showToast('Kullanıcıya zaman aşımı uygulanamadı', 'error');
+        }
     };
 
     const executeMassAction = async () => {
-        if (!massActionType || !massActionCriteria) { showToast('Please select action type and criteria', 'error'); return; }
-        if (!await confirmDialog(`Execute mass ${massActionType}? This cannot be undone.`)) return;
+        if (!massActionType || !massActionCriteria) {
+            showToast('Lütfen eylem tipi ve kriter seçin', 'error');
+            return;
+        }
+        if (!(await confirmDialog(`Execute mass ${massActionType}? This cannot be undone.`)))
+            return;
         try {
-            const res = await fetch('/api/moderation/mass-action/', {
+            const res = await fetch(`${API_BASE_URL}/moderation/mass-action/`, {
                 method: 'POST',
                 headers: { ...authHeader(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: serverId, action: massActionType, criteria: massActionCriteria })
+                body: JSON.stringify({
+                    server_id: serverId,
+                    action: massActionType,
+                    criteria: massActionCriteria,
+                }),
             });
             if (res.ok) {
                 const data = await res.json();
-                showToast(`Mass action completed: ${data.affected_count} users affected`, 'success');
-                setMassActionType(''); setMassActionCriteria('');
+                showToast(
+                    `Toplu eylem tamamlandı: ${data.affected_count} kullanıcı etkilendi`,
+                    'success'
+                );
+                setMassActionType('');
+                setMassActionCriteria('');
                 fetchModerationLogs();
             } else throw new Error('Mass action failed');
-        } catch (err) { console.error('Failed to execute mass action:', err); showToast('Failed to execute mass action', 'error'); }
+        } catch (err) {
+            logger.error('Failed to execute mass action:', err);
+            showToast('Toplu eylem gerçekleştirilemedi', 'error');
+        }
     };
 
     const toggleRaidProtection = async () => {
         try {
-            const res = await fetch('/api/moderation/raid-protection/', {
+            const res = await fetch(`${API_BASE_URL}/moderation/raid-protection/`, {
                 method: 'POST',
                 headers: { ...authHeader(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: serverId, enabled: !raidProtection, settings: raidSettings })
+                body: JSON.stringify({
+                    server_id: serverId,
+                    enabled: !raidProtection,
+                    settings: raidSettings,
+                }),
             });
             if (res.ok) {
                 setRaidProtection(!raidProtection);
-                showToast(`Raid protection ${!raidProtection ? 'enabled' : 'disabled'}`, 'success');
+                showToast(
+                    `Baskın koruması ${!raidProtection ? 'etkinleştirildi' : 'devre dışı bırakıldı'}`,
+                    'success'
+                );
             } else throw new Error('Failed to toggle raid protection');
-        } catch (err) { console.error('Failed to toggle raid protection:', err); showToast('Failed to update raid protection', 'error'); }
+        } catch (err) {
+            logger.error('Failed to toggle raid protection:', err);
+            showToast('Baskın koruması güncellenemedi', 'error');
+        }
     };
 
     const updateRaidSettings = async () => {
         try {
-            const res = await fetch('/api/moderation/raid-protection/', {
+            const res = await fetch(`${API_BASE_URL}/moderation/raid-protection/`, {
                 method: 'POST',
                 headers: { ...authHeader(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: serverId, enabled: raidProtection, settings: raidSettings })
+                body: JSON.stringify({
+                    server_id: serverId,
+                    enabled: raidProtection,
+                    settings: raidSettings,
+                }),
             });
-            if (res.ok) showToast('Raid settings updated', 'success');
-        } catch (err) { console.error('Failed to update raid settings:', err); showToast('Failed to update settings', 'error'); }
+            if (res.ok) showToast('Baskın ayarları güncellendi', 'success');
+        } catch (err) {
+            logger.error('Failed to update raid settings:', err);
+            showToast('Ayarlar güncellenemedi', 'error');
+        }
     };
 
     const issueWarning = async (userId, reason) => {
         try {
-            const res = await fetch('/api/moderation/warning/', {
+            const res = await fetch(`${API_BASE_URL}/moderation/warning/`, {
                 method: 'POST',
                 headers: { ...authHeader(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: serverId, user_id: userId, reason })
+                body: JSON.stringify({ server_id: serverId, user_id: userId, reason }),
             });
-            if (res.ok) { showToast('Warning issued', 'success'); fetchWarnings(); fetchModerationLogs(); }
-        } catch (err) { console.error('Failed to issue warning:', err); showToast('Failed to issue warning', 'error'); }
+            if (res.ok) {
+                showToast('Uyarı verildi', 'success');
+                fetchWarnings();
+                fetchModerationLogs();
+            }
+        } catch (err) {
+            logger.error('Failed to issue warning:', err);
+            showToast('Uyarı verilemedi', 'error');
+        }
     };
 
     const clearWarnings = async (userId) => {
-        if (!await confirmDialog('Clear all warnings for this user?')) return;
+        if (!(await confirmDialog('Clear all warnings for this user?'))) return;
         try {
-            const res = await fetch(`/api/moderation/warning/${userId}/clear/`, {
+            const res = await fetch(`${API_BASE_URL}/moderation/warning/${userId}/clear/`, {
                 method: 'POST',
                 headers: { ...authHeader(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ server_id: serverId })
+                body: JSON.stringify({ server_id: serverId }),
             });
-            if (res.ok) { showToast('Warnings cleared', 'success'); fetchWarnings(); }
-        } catch (err) { console.error('Failed to clear warnings:', err); showToast('Failed to clear warnings', 'error'); }
+            if (res.ok) {
+                showToast('Uyarılar temizlendi', 'success');
+                fetchWarnings();
+            }
+        } catch (err) {
+            logger.error('Failed to clear warnings:', err);
+            showToast('Uyarılar temizlenemedi', 'error');
+        }
     };
 
     const formatDuration = (minutes) => {
@@ -147,20 +245,42 @@ const useAdvancedModeration = (serverId) => {
     };
 
     return {
-        selectedUser, setSelectedUser, timeoutDuration, setTimeoutDuration,
-        timeoutReason, setTimeoutReason, massActionType, setMassActionType,
-        massActionCriteria, setMassActionCriteria, warnings, raidProtection,
-        raidSettings, setRaidSettings, moderationLogs, automodRules, isLoading,
-        timeoutUser, executeMassAction, toggleRaidProtection, updateRaidSettings,
-        issueWarning, clearWarnings, formatDuration
+        selectedUser,
+        setSelectedUser,
+        timeoutDuration,
+        setTimeoutDuration,
+        timeoutReason,
+        setTimeoutReason,
+        massActionType,
+        setMassActionType,
+        massActionCriteria,
+        setMassActionCriteria,
+        warnings,
+        raidProtection,
+        raidSettings,
+        setRaidSettings,
+        moderationLogs,
+        automodRules,
+        isLoading,
+        timeoutUser,
+        executeMassAction,
+        toggleRaidProtection,
+        updateRaidSettings,
+        issueWarning,
+        clearWarnings,
+        formatDuration,
     };
 };
 
 export const getLogIcon = (action) => {
     const icons = {
-        'timeout': 'clock', 'kick': 'door-open', 'ban': 'ban',
-        'warn': 'exclamation-triangle', 'unban': 'check',
-        'role_add': 'plus', 'role_remove': 'minus'
+        timeout: 'clock',
+        kick: 'door-open',
+        ban: 'ban',
+        warn: 'exclamation-triangle',
+        unban: 'check',
+        role_add: 'plus',
+        role_remove: 'minus',
     };
     return icons[action] || 'info-circle';
 };

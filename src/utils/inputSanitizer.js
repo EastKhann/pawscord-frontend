@@ -1,3 +1,4 @@
+/* eslint-disable no-control-regex */
 // frontend/src/utils/inputSanitizer.js
 // 🧹 Client-side input sanitization — defence-in-depth layer
 
@@ -20,17 +21,22 @@ export const sanitizeInput = (input) => {
 
 /**
  * Validate and sanitize a URL.
- * Only allows http: and https: protocols; returns empty string for anything else.
+ * Only allows http: and https: protocols; blocks javascript:, data:, vbscript: etc.
+ * Returns empty string for anything unsafe.
  *
  * @param {string} url - URL to validate
  * @returns {string} The original URL if safe, or ''
  */
 export const sanitizeUrl = (url) => {
     if (typeof url !== 'string' || !url.trim()) return '';
+    // Strip leading whitespace/control characters that could bypass protocol checks
+    const cleaned = url.replace(/^[\s\u0000-\u001f]+/, '');
     try {
-        const parsed = new URL(url);
+        const parsed = new URL(cleaned);
         if (!['http:', 'https:'].includes(parsed.protocol)) return '';
-        return url;
+        // Block URLs with embedded credentials (user:pass@host)
+        if (parsed.username || parsed.password) return '';
+        return cleaned;
     } catch {
         return '';
     }

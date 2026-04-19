@@ -1,9 +1,16 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import logger from '../utils/logger';
 
-export function useAudioVisualizer({ isVisualizerEnabled, localAudioStream, remoteStreams, isInVoice, globalAudioContextRef }) {
+export function useAudioVisualizer({
+    isVisualizerEnabled,
+    localAudioStream,
+    remoteStreams,
+    isInVoice,
+    globalAudioContextRef,
+}) {
     const [audioVisualizerData, setAudioVisualizerData] = useState({
         local: new Uint8Array(128),
-        remote: {}
+        remote: {},
     });
     const visualizerIntervalRef = useRef(null);
     const visualizerAnalyserRef = useRef(null);
@@ -15,7 +22,9 @@ export function useAudioVisualizer({ isVisualizerEnabled, localAudioStream, remo
 
         try {
             if (!globalAudioContextRef.current) {
-                globalAudioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+                globalAudioContextRef.current = new (
+                    window.AudioContext || window.webkitAudioContext
+                )();
             }
             const audioContext = globalAudioContextRef.current;
 
@@ -33,7 +42,10 @@ export function useAudioVisualizer({ isVisualizerEnabled, localAudioStream, remo
                     remoteAnalyser.fftSize = 256;
                     const remoteSource = audioContext.createMediaStreamSource(stream);
                     remoteSource.connect(remoteAnalyser);
-                    visualizerAnalyserRef.current.remote[key] = { analyser: remoteAnalyser, source: remoteSource };
+                    visualizerAnalyserRef.current.remote[key] = {
+                        analyser: remoteAnalyser,
+                        source: remoteSource,
+                    };
                 }
             });
 
@@ -43,17 +55,18 @@ export function useAudioVisualizer({ isVisualizerEnabled, localAudioStream, remo
                 visualizerAnalyserRef.current.local.getByteFrequencyData(localData);
 
                 const remoteData = {};
-                Object.entries(visualizerAnalyserRef.current.remote).forEach(([key, { analyser }]) => {
-                    const data = new Uint8Array(128);
-                    analyser.getByteFrequencyData(data);
-                    remoteData[key] = data;
-                });
+                Object.entries(visualizerAnalyserRef.current.remote).forEach(
+                    ([key, { analyser }]) => {
+                        const data = new Uint8Array(128);
+                        analyser.getByteFrequencyData(data);
+                        remoteData[key] = data;
+                    }
+                );
 
                 setAudioVisualizerData({ local: localData, remote: remoteData });
             }, 33); // ~30fps for performance
-
         } catch (err) {
-            console.error('[Visualizer] Failed to start:', err);
+            logger.error('[Visualizer] Failed to start:', err);
         }
     }, [isVisualizerEnabled, localAudioStream, remoteStreams, globalAudioContextRef]);
 
@@ -69,7 +82,9 @@ export function useAudioVisualizer({ isVisualizerEnabled, localAudioStream, remo
                 Object.values(visualizerAnalyserRef.current.remote).forEach(({ source }) => {
                     source?.disconnect();
                 });
-            } catch (_) { /* AudioNode cleanup - safe to ignore */ }
+            } catch (_) {
+                /* AudioNode cleanup - safe to ignore */
+            }
             visualizerAnalyserRef.current = null;
         }
         setAudioVisualizerData({ local: new Uint8Array(128), remote: {} });

@@ -114,9 +114,7 @@ describe('useDMActions', () => {
         const fetchWithAuth = vi.fn(() =>
             Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
         );
-        const { result } = renderHook(() =>
-            useDMActions(createDefaultProps({ fetchWithAuth }))
-        );
+        const { result } = renderHook(() => useDMActions(createDefaultProps({ fetchWithAuth })));
 
         await act(async () => {
             await result.current.handleClearDM(123);
@@ -132,9 +130,7 @@ describe('useDMActions', () => {
         const fetchWithAuth = vi.fn(() =>
             Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
         );
-        const { result } = renderHook(() =>
-            useDMActions(createDefaultProps({ fetchWithAuth }))
-        );
+        const { result } = renderHook(() => useDMActions(createDefaultProps({ fetchWithAuth })));
 
         await act(async () => {
             await result.current.handleAddFriend('newFriend');
@@ -154,9 +150,7 @@ describe('useDMActions', () => {
         const fetchWithAuth = vi.fn(() =>
             Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
         );
-        const { result } = renderHook(() =>
-            useDMActions(createDefaultProps({ fetchWithAuth }))
-        );
+        const { result } = renderHook(() => useDMActions(createDefaultProps({ fetchWithAuth })));
 
         await act(async () => {
             await result.current.handleBlockUser('baduser');

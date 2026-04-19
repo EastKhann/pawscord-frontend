@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/requestBatcher.js
 
 /**
@@ -12,7 +13,7 @@ class RequestBatcher {
             batchSize: options.batchSize || 10,
             batchDelay: options.batchDelay || 50, // ms
             maxWaitTime: options.maxWaitTime || 200, // ms
-            ...options
+            ...options,
         };
 
         this.queues = new Map(); // endpoint -> requests[]
@@ -20,7 +21,7 @@ class RequestBatcher {
     }
 
     /**
-     * API isteğini batch'e ekle
+     * API isteğini batch'e add
      * @param {string} endpoint - API endpoint
      * @param {Object} data - Request data
      * @param {Object} options - Request options
@@ -28,7 +29,7 @@ class RequestBatcher {
      */
     async add(endpoint, data, options = {}) {
         return new Promise((resolve, reject) => {
-            // Queue'ya ekle
+            // Queue'ya add
             if (!this.queues.has(endpoint)) {
                 this.queues.set(endpoint, []);
             }
@@ -77,16 +78,15 @@ class RequestBatcher {
         const requests = [...queue];
         this.queues.set(endpoint, []);
 
-
         try {
             // Batch request gönder
-            const batchData = requests.map(r => r.data);
+            const batchData = requests.map((r) => r.data);
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ batch: batchData })
+                body: JSON.stringify({ batch: batchData }),
             });
 
             if (!response.ok) {
@@ -104,16 +104,15 @@ class RequestBatcher {
                     req.resolve(result);
                 }
             });
-
         } catch (error) {
-            console.error(`❌ [Batcher] Error:`, error);
-            // Tüm istekleri reject et
-            requests.forEach(req => req.reject(error));
+            logger.error(`❌ [Batcher] Error:`, error);
+            // Tüm istaddri reject et
+            requests.forEach((req) => req.reject(error));
         }
     }
 
     /**
-     * Belirli endpoint için flush et
+     * Belirli endpoint for flush et
      * @param {string} endpoint - API endpoint
      */
     flushEndpoint(endpoint) {
@@ -130,7 +129,7 @@ class RequestBatcher {
     }
 
     /**
-     * Temizle
+     * Clear
      */
     clear() {
         // Tüm timer'ları temizle
@@ -146,35 +145,31 @@ class RequestBatcher {
 export const requestBatcher = new RequestBatcher({
     batchSize: 10,
     batchDelay: 50,
-    maxWaitTime: 200
+    maxWaitTime: 200,
 });
 
 /**
  * Helper: Mesaj gönderme batch
  */
 export const batchSendMessages = (messages) => {
-    return Promise.all(
-        messages.map(msg =>
-            requestBatcher.add('/api/messages/', msg)
-        )
-    );
+    return Promise.all(messages.map((msg) => requestBatcher.add('/api/messages/', msg)));
 };
 
 /**
  * Helper: Mesaj okuma batch
  */
 export const batchMarkAsRead = (messageIds) => {
-    return requestBatcher.add('/api/messages/mark-read/', {
-        message_ids: messageIds
+    return requestBatcher.add('/api/messages/mark_read/', {
+        message_ids: messageIds,
     });
 };
 
 /**
- * Helper: Kullanıcı bilgisi batch fetch
+ * Helper: User bilgisi batch fetch
  */
 export const batchFetchUsers = (userIds) => {
     return requestBatcher.add('/api/users/batch/', {
-        user_ids: userIds
+        user_ids: userIds,
     });
 };
 
@@ -219,7 +214,7 @@ export const throttledApiCall = (() => {
         const lastCall = lastCalls.get(key) || 0;
 
         if (now - lastCall < delay) {
-            console.warn(`⚠️ [Throttle] ${key} too many calls, waiting...`);
+            logger.warn(`⚠️ [Throttle] ${key} too many calls, waiting...`);
             return null;
         }
 
@@ -240,7 +235,7 @@ export class RequestQueue {
     }
 
     /**
-     * Queue'ya istek ekle
+     * Queue'ya istek add
      */
     enqueue(request, priority = 0) {
         this.queue.push({ request, priority, retries: 0 });
@@ -262,19 +257,19 @@ export class RequestQueue {
             try {
                 await item.request();
             } catch (error) {
-                console.error(`❌ [Queue] Request failed:`, error);
+                logger.error(`❌ [Queue] Request failed:`, error);
 
                 // Retry
                 if (item.retries < this.maxRetries) {
                     item.retries++;
 
-                    await new Promise(resolve =>
+                    await new Promise((resolve) =>
                         setTimeout(resolve, this.retryDelay * item.retries)
                     );
 
-                    this.queue.unshift(item); // Başa ekle
+                    this.queue.unshift(item); // Başa add
                 } else {
-                    console.error(`❌ [Queue] Max retries reached, giving up`);
+                    logger.error(`❌ [Queue] Max retries reached, giving up`);
                 }
             }
         }
@@ -295,11 +290,9 @@ export class RequestQueue {
     getStatus() {
         return {
             pending: this.queue.length,
-            processing: this.processing
+            processing: this.processing,
         };
     }
 }
 
 export default RequestBatcher;
-
-

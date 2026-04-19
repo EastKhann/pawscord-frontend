@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/workerManager.js
 
 /**
@@ -24,7 +26,7 @@ class WorkerManager {
                 this.workers.set(workerPath, {
                     worker,
                     busy: false,
-                    tasks: new Map()
+                    tasks: new Map(),
                 });
 
                 worker.addEventListener('message', (event) => {
@@ -32,13 +34,13 @@ class WorkerManager {
                 });
 
                 worker.addEventListener('error', (error) => {
-                    console.error(`❌ [Worker] Error in ${workerPath}:`, error);
+                    logger.error(`❌ [Worker] Error in ${workerPath}:`, error);
                 });
 
                 if (import.meta.env.MODE === 'development') {
                 }
             } catch (error) {
-                console.error(`❌ [Worker] Failed to create worker:`, error);
+                logger.error(`❌ [Worker] Failed to create worker:`, error);
                 return null;
             }
         }
@@ -91,7 +93,7 @@ class WorkerManager {
                 timeout,
                 resolve,
                 reject,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             };
 
             // Add to queue
@@ -103,7 +105,7 @@ class WorkerManager {
 
             // Timeout
             setTimeout(() => {
-                const index = this.taskQueue.findIndex(t => t.id === id);
+                const index = this.taskQueue.findIndex((t) => t.id === id);
                 if (index !== -1) {
                     this.taskQueue.splice(index, 1);
                     reject(new Error('Worker task timeout'));
@@ -140,7 +142,7 @@ class WorkerManager {
         workerData.worker.postMessage({
             id: task.id,
             type: task.taskType,
-            payload: task.payload
+            payload: task.payload,
         });
 
         if (import.meta.env.MODE === 'development') {
@@ -188,8 +190,8 @@ class WorkerManager {
             workers: Array.from(this.workers.entries()).map(([path, data]) => ({
                 path,
                 busy: data.busy,
-                activeTasks: data.tasks.size
-            }))
+                activeTasks: data.tasks.size,
+            })),
         };
     }
 }
@@ -213,25 +215,26 @@ export const useWebWorker = (workerPath) => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
-    const runTask = React.useCallback(async (taskType, payload, options) => {
-        setLoading(true);
-        setError(null);
+    const runTask = React.useCallback(
+        async (taskType, payload, options) => {
+            setLoading(true);
+            setError(null);
 
-        try {
-            const data = await workerManager.runTask(workerPath, taskType, payload, options);
-            setResult(data);
-            return data;
-        } catch (err) {
-            setError(err);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    }, [workerPath]);
+            try {
+                const data = await workerManager.runTask(workerPath, taskType, payload, options);
+                setResult(data);
+                return data;
+            } catch (err) {
+                setError(err);
+                throw err;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [workerPath]
+    );
 
     return { result, loading, error, runTask };
 };
 
 export default WorkerManager;
-
-

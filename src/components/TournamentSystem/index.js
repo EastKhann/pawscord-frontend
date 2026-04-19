@@ -1,3 +1,4 @@
+export { default } from '../social/TournamentSystem';
 // Barrel export for TournamentSystem
 export { default as CreateTournamentModal } from './CreateTournamentModal';
 export { default as TournamentCard } from './TournamentCard';

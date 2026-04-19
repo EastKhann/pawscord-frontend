@@ -2,7 +2,18 @@
 // 🛡️ ENHANCED ERROR BOUNDARY with Recovery & Reporting
 
 import { Component, createContext, useContext } from 'react';
-import { FaExclamationTriangle, FaRedo, FaHome, FaBug, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import {
+    FaExclamationTriangle,
+    FaRedo,
+    FaHome,
+    FaBug,
+    FaChevronDown,
+    FaChevronUp,
+} from 'react-icons/fa';
+
+import PropTypes from 'prop-types';
+import { useTranslation, withTranslation } from 'react-i18next';
+import logger from '../../utils/logger';
 
 // Error Context for child components
 const ErrorContext = createContext(null);
@@ -11,7 +22,7 @@ export const useError = () => useContext(ErrorContext);
 
 /**
  * 🛡️ EnhancedErrorBoundary
- * 
+ *
  * Features:
  * - Automatic error recovery attempts
  * - Error reporting to backend
@@ -43,8 +54,8 @@ class EnhancedErrorBoundary extends Component {
 
         // Log to console in development
         if (import.meta.env.MODE === 'development') {
-            console.error('🔴 ErrorBoundary caught:', error);
-            console.error('📍 Component Stack:', errorInfo?.componentStack);
+            logger.error('🔴 ErrorBoundary caught:', error);
+            logger.error('📍 Component Stack:', errorInfo?.componentStack);
         }
 
         // Auto-report to backend (production only)
@@ -58,7 +69,10 @@ class EnhancedErrorBoundary extends Component {
         }
 
         // Attempt auto-recovery if configured
-        if (this.props.autoRecovery && this.state.recoveryAttempts < (this.props.maxRecoveryAttempts || 3)) {
+        if (
+            this.props.autoRecovery &&
+            this.state.recoveryAttempts < (this.props.maxRecoveryAttempts || 3)
+        ) {
             setTimeout(() => {
                 this.handleRecovery();
             }, this.props.recoveryDelay || 2000);
@@ -101,14 +115,14 @@ class EnhancedErrorBoundary extends Component {
 
             this.setState({ reportSent: true });
         } catch (reportError) {
-            console.error('Failed to report error:', reportError);
+            logger.error('Failed to report error:', reportError);
         } finally {
             this.setState({ isReporting: false });
         }
     };
 
     handleRecovery = () => {
-        this.setState(prev => ({
+        this.setState((prev) => ({
             hasError: false,
             error: null,
             errorInfo: null,
@@ -134,11 +148,19 @@ class EnhancedErrorBoundary extends Component {
     };
 
     toggleDetails = () => {
-        this.setState(prev => ({ showDetails: !prev.showDetails }));
+        this.setState((prev) => ({ showDetails: !prev.showDetails }));
     };
 
     render() {
-        const { hasError, error, errorInfo, showDetails, recoveryAttempts, isReporting, reportSent } = this.state;
+        const {
+            hasError,
+            error,
+            errorInfo,
+            showDetails,
+            recoveryAttempts,
+            isReporting,
+            reportSent,
+        } = this.state;
         const {
             children,
             fallback,
@@ -167,19 +189,29 @@ class EnhancedErrorBoundary extends Component {
             }
 
             // Default error UI based on level
+            const t = this.props.t || ((k) => k);
             return (
-                <div style={styles[level]?.container || styles.page.container}>
+                <div
+                    style={styles[level]?.container || styles.page.container}
+                    role="alert"
+                    aria-live="assertive"
+                >
                     <div style={styles.content}>
                         <div style={styles.iconWrapper}>
-                            <FaExclamationTriangle size={level === 'component' ? 24 : 48} color="#f23f42" />
+                            <FaExclamationTriangle
+                                size={level === 'component' ? 24 : 48}
+                                color="#f23f42"
+                            />
                         </div>
 
                         <h2 style={styles.title}>
-                            {level === 'component' ? 'Bir hata oluştu' : 'Üzgünüz, bir şeyler yanlış gitti'}
+                            {level === 'component'
+                                ? 'Bir hata oluştu'
+                                : t('ui.uzgunuz_bir_seyler_yanlis_gitti')}
                         </h2>
 
                         <p style={styles.message}>
-                            {error?.message || 'Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.'}
+                            {error?.message || t('ui.beklenmeyen_bir_hata_olustu_please_tekra')}
                         </p>
 
                         {recoveryAttempts > 0 && (
@@ -192,20 +224,20 @@ class EnhancedErrorBoundary extends Component {
                             <button
                                 onClick={this.handleReset}
                                 style={styles.primaryButton}
-                                aria-label="Tekrar dene"
+                                aria-label="Try again"
                             >
                                 <FaRedo size={14} />
-                                <span>Tekrar Dene</span>
+                                <span>{t('tekrar_dene')}</span>
                             </button>
 
                             {showHomeButton && level === 'page' && (
                                 <button
-                                    onClick={() => window.location.href = '/'}
+                                    onClick={() => (window.location.href = '/')}
                                     style={styles.secondaryButton}
-                                    aria-label="Ana sayfaya git"
+                                    aria-label="Ana pageya git"
                                 >
                                     <FaHome size={14} />
-                                    <span>Ana Sayfa</span>
+                                    <span>{t('ana_sayfa')}</span>
                                 </button>
                             )}
 
@@ -214,15 +246,17 @@ class EnhancedErrorBoundary extends Component {
                                     onClick={() => this.reportError(error, errorInfo)}
                                     style={styles.ghostButton}
                                     disabled={isReporting}
-                                    aria-label="Hatayı bildir"
+                                    aria-label={t('ui.erroryi_bildir')}
                                 >
                                     <FaBug size={14} />
-                                    <span>{isReporting ? 'Bildiriliyor...' : 'Hatayı Bildir'}</span>
+                                    <span>
+                                        {isReporting ? 'Raporlanıyor...' : t('ui.erroryi_report')}
+                                    </span>
                                 </button>
                             )}
 
                             {reportSent && (
-                                <span style={styles.reportedBadge}>✓ Hata bildirildi</span>
+                                <span style={styles.reportedBadge}>{t('✓_error_bildirildi')}</span>
                             )}
                         </div>
 
@@ -234,19 +268,21 @@ class EnhancedErrorBoundary extends Component {
                                     aria-expanded={showDetails}
                                 >
                                     {showDetails ? <FaChevronUp /> : <FaChevronDown />}
-                                    <span>Teknik Detaylar</span>
+                                    <span>{t('teknik_detaylar')}</span>
                                 </button>
 
                                 {showDetails && (
                                     <div style={styles.details}>
                                         <div style={styles.detailSection}>
-                                            <strong>Error:</strong>
+                                            <strong>{t('error')}</strong>
                                             <pre style={styles.stackTrace}>{error?.stack}</pre>
                                         </div>
                                         {errorInfo?.componentStack && (
                                             <div style={styles.detailSection}>
-                                                <strong>Component Stack:</strong>
-                                                <pre style={styles.stackTrace}>{errorInfo.componentStack}</pre>
+                                                <strong>{t('component_stack')}</strong>
+                                                <pre style={styles.stackTrace}>
+                                                    {errorInfo.componentStack}
+                                                </pre>
                                             </div>
                                         )}
                                     </div>
@@ -423,13 +459,16 @@ const styles = {
 
 // HOC for wrapping components
 export const withErrorBoundary = (Component, errorBoundaryProps = {}) => {
-    const WrappedComponent = (props) => (
-        <EnhancedErrorBoundary {...errorBoundaryProps}>
-            <Component {...props} />
-        </EnhancedErrorBoundary>
-    );
+    const WrappedComponent = (props) => {
+        const { t } = useTranslation();
+        return (
+            <EnhancedErrorBoundary {...errorBoundaryProps}>
+                <Component {...props} />
+            </EnhancedErrorBoundary>
+        );
+    };
     WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name || 'Component'})`;
     return WrappedComponent;
 };
 
-export default EnhancedErrorBoundary;
+export default withTranslation()(EnhancedErrorBoundary);

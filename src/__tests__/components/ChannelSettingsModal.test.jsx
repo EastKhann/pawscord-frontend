@@ -73,7 +73,7 @@ describe('GeneralTab', () => {
 
     it('renders private toggle', () => {
         render(<GeneralTab {...defaultProps} />);
-        expect(screen.getByText(/Herkese Açık/i)).toBeDefined();
+        expect(screen.getByText(/Public/i)).toBeDefined();
     });
 
     it('shows private label when isPrivate is true', () => {
@@ -86,7 +86,7 @@ describe('GeneralTab', () => {
         expect(screen.getByText('Admin')).toBeDefined();
     });
 
-    it('calls toggleRole when role clicked', () => {
+    it('calls toggleRolee when role clicked', () => {
         render(<GeneralTab {...defaultProps} isPrivate={true} />);
         fireEvent.click(screen.getByText('Admin'));
         expect(defaultProps.toggleRole).toHaveBeenCalledWith(1);
@@ -104,17 +104,17 @@ describe('GeneralTab', () => {
 
     it('renders read-only toggle', () => {
         render(<GeneralTab {...defaultProps} />);
-        expect(screen.getByText(/Duyuru Kanalı/i)).toBeDefined();
+        expect(screen.getByText(/Announcement Channel/i)).toBeDefined();
     });
 
     it('does NOT render voice settings when not voice channel', () => {
         render(<GeneralTab {...defaultProps} isVoiceChannel={false} />);
-        expect(screen.queryByText(/Kullanıcı Limiti/i)).toBeNull();
+        expect(screen.queryByText(/User Limiti/i)).toBeNull();
     });
 
     it('renders voice settings when isVoiceChannel', () => {
         render(<GeneralTab {...defaultProps} isVoiceChannel={true} />);
-        expect(screen.getByText(/Kullanıcı Limiti/i)).toBeDefined();
+        expect(screen.getByText(/User Limiti/i)).toBeDefined();
         expect(screen.getByText(/Ses Kalitesi/i)).toBeDefined();
     });
 
@@ -140,10 +140,25 @@ describe('PermissionsTab', () => {
     const defaultPerms = {
         permissions: {
             role_permissions: [
-                { id: 1, role_name: 'Moderator', role_color: '#00ff00', can_view: true, can_send_messages: true, can_connect: false, can_speak: false },
+                {
+                    id: 1,
+                    role_name: 'Moderator',
+                    role_color: '#00ff00',
+                    can_view: true,
+                    can_send_messages: true,
+                    can_connect: false,
+                    can_speak: false,
+                },
             ],
             user_permissions: [
-                { id: 2, username: 'testUser', avatar: null, can_view: true, can_send_messages: false, can_connect: true },
+                {
+                    id: 2,
+                    username: 'testUser',
+                    avatar: null,
+                    can_view: true,
+                    can_send_messages: false,
+                    can_connect: true,
+                },
             ],
             available_roles: [{ id: 3, name: 'Member' }],
         },
@@ -198,6 +213,6 @@ describe('PermissionsTab', () => {
             permissions: { role_permissions: [], user_permissions: [], available_roles: [] },
         };
         render(<PermissionsTab {...emptyPerms} />);
-        expect(screen.getByText(/Henüz özel izin tanımlanmamış/i)).toBeDefined();
+        expect(screen.getByText(/Not yet özel izin tanımlanmamış/i)).toBeDefined();
     });
 });

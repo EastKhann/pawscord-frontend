@@ -1,88 +1,80 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable no-useless-escape */
 // frontend/src/utils/pwaHelper.js
 // 🚀 PWA HELPER UTILITIES
 // Service Worker registration, updates, offline support
 import toast from './toast';
+import i18n from '../i18n';
+import logger from '../utils/logger';
 
 /**
  * 🎯 Service Worker Registration
- * SW'yi register et ve update'leri yönet
+ * Web build'de eski SW/cache kalıntılarını temizle
  * ⚠️ Electron'da file:// protokolü Service Worker desteklemez
  */
 export const registerServiceWorker = async () => {
     // Electron'da Service Worker devre dışı (file:// protokolü desteklenmiyor)
-    const isElectron = typeof window !== 'undefined' && (
-        window.process?.versions?.electron ||
-        window.navigator?.userAgent?.toLowerCase().includes('electron') ||
-        window.location?.protocol === 'file:'
-    );
+    const isElectron =
+        typeof window !== 'undefined' &&
+        (window.process?.versions?.electron ||
+            window.navigator?.userAgent?.toLowerCase().includes('electron') ||
+            window.location?.protocol === 'file:');
 
     if (isElectron) {
-        console.info('⚠️ [PWA] Service Worker disabled in Electron (file:// protocol)');
+        logger.info('⚠️ [PWA] Service Worker disabled in Electron (file:// protocol)');
         return null;
     }
 
     if ('serviceWorker' in navigator) {
         try {
-            // 🔥 Eski service-worker.js'yi unregister et (workbox sw.js kullanılıyor)
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            for (const reg of registrations) {
-                if (reg.active && reg.active.scriptURL.includes('service-worker.js')) {
-                    console.info('🗑️ Eski service-worker.js unregister ediliyor...');
-                    await reg.unregister();
-                    // Eski cache'leri temizle
-                    const cacheNames = await caches.keys();
-                    for (const name of cacheNames) {
-                        if (name.includes('pawscord-v')) {
-                            console.info('🗑️ Eski cache siliniyor:', name);
-                            await caches.delete(name);
-                        }
+            // Web'de PWA geçici olarak devre dışı: eski SW ve cache kalıntılarını temizle.
+            try {
+                const cacheNames = await caches.keys();
+                for (const name of cacheNames) {
+                    if (
+                        name.includes('static-assets-v2') ||
+                        name.includes('static-assets-v3') ||
+                        name.includes('workbox') ||
+                        name.includes('pawscord-v')
+                    ) {
+                        logger.info('🗑️ Service worker cache siliniyor:', name);
+                        await caches.delete(name);
                     }
                 }
+            } catch (cacheError) {
+                logger.warn('⚠️ Static asset cache cleanup failed:', cacheError);
             }
 
-            // ✅ Workbox sw.js zaten registerSW.js tarafından register ediliyor
-            // Burada sadece update kontrolü yapıyoruz
-            const registration = await navigator.serviceWorker.getRegistration('/');
-            if (registration) {
-                console.info('✅ Service Worker active:', registration.scope);
-
-                // Update checker
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    console.info('🔄 New Service Worker installing...');
-
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // Yeni versiyon hazır — otomatik aktive et
-                            newWorker.postMessage({ type: 'SKIP_WAITING' });
-                            console.info('🔄 Yeni SW aktive ediliyor, sayfa yenilenecek...');
-                            window.location.reload();
-                        }
-                    });
-                });
-
-                // Periyodik update kontrolü (her 30 dakikada)
-                setInterval(() => {
-                    registration.update();
-                }, 30 * 60 * 1000);
+            // Aktif/eski fark etmeksizin tüm service worker kayıtlarını kaldır.
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (const reg of registrations) {
+                const scriptURL =
+                    reg.active?.scriptURL ||
+                    reg.waiting?.scriptURL ||
+                    reg.installing?.scriptURL ||
+                    reg.scope;
+                logger.info('🗑️ Service Worker unregister ediliyor:', scriptURL);
+                await reg.unregister();
             }
 
-            return registration;
+            return null;
         } catch (error) {
-            console.error('❌ Service Worker error:', error);
+            logger.error('❌ Service Worker error:', error);
             return null;
         }
     }
+
+    return null;
 };
 
 /**
  * 🔔 Update Notification
  * Yeni versiyon hazır olduğunda kullanıcıya bildir
- * NOT: Toast bildirimi devre dışı - sadece UI'da güncelleme butonu gösteriliyor
+ * NOT: Toast notificationi devre dışı - sadece UI'da güncelleme butonu gösteriliyor
  */
 const showUpdateNotification = () => {
-    // Toast bildirim gösterme - sadece updateAvailable state kullan
-    console.info('ℹ️ Yeni versiyon mevcut - UI güncelleme butonu aktif');
+    // Toast notification gösterme - sadece updateAvailable state kullan
+    logger.info('ℹ️ Yeni versiyon mevcut - UI güncelleme butonu aktif');
 };
 
 /**
@@ -102,19 +94,19 @@ export const setupInstallPrompt = () => {
             installButton.style.display = 'block';
         }
 
-        console.info('📱 PWA install prompt ready');
+        logger.info('📱 PWA install prompt ready');
     });
 
-    // Install başarılı olduğunda
+    // Install successful olduğunda
     window.addEventListener('appinstalled', () => {
-        console.info('✅ PWA installed successfully');
+        logger.info('✅ PWA installed successfully');
         deferredPrompt = null;
 
         // Analytics event
         if (window.gtag) {
             window.gtag('event', 'pwa_installed', {
                 event_category: 'PWA',
-                event_label: 'App Installed'
+                event_label: 'App Installed',
             });
         }
     });
@@ -122,18 +114,18 @@ export const setupInstallPrompt = () => {
 
 /**
  * 🎯 Trigger Install Prompt
- * Kullanıcı butona tıkladığında prompt göster
+ * User butona tıkladığında prompt göster
  */
 export const triggerInstallPrompt = async () => {
     if (!deferredPrompt) {
-        toast.error('❌ PWA zaten yüklü veya tarayıcınız desteklemiyor.');
+        toast.error(i18n.t('pwa.alreadyInstalled'));
         return false;
     }
 
     deferredPrompt.prompt();
 
     const { outcome } = await deferredPrompt.userChoice;
-    console.info(`User response to install prompt: ${outcome}`);
+    logger.info(`User response to install prompt: ${outcome}`);
 
     deferredPrompt = null;
     return outcome === 'accepted';
@@ -145,19 +137,19 @@ export const triggerInstallPrompt = async () => {
  */
 export const setupNetworkMonitor = (onOnline, onOffline) => {
     const handleOnline = () => {
-        console.info('✅ Network: Online');
+        logger.info('✅ Network: Online');
         if (onOnline) onOnline();
 
         // Banner göster
-        showNetworkBanner('🟢 Çevrimiçi', 'success');
+        showNetworkBanner('🟢 Online', 'success');
     };
 
     const handleOffline = () => {
-        console.info('❌ Network: Offline');
+        logger.info('❌ Network: Offline');
         if (onOffline) onOffline();
 
         // Banner göster
-        showNetworkBanner('🔴 Çevrimdışı - Bağlantı koptu', 'error');
+        showNetworkBanner('🔴 Offline - Bağlantı koptu', 'error');
     };
 
     window.addEventListener('online', handleOnline);
@@ -177,7 +169,7 @@ export const setupNetworkMonitor = (onOnline, onOffline) => {
 
 /**
  * 📊 Network Banner
- * Network durumu için banner göster
+ * Network durumu for banner göster
  */
 const showNetworkBanner = (message, type = 'info') => {
     const existingBanner = document.getElementById('network-banner');
@@ -220,8 +212,8 @@ const showNetworkBanner = (message, type = 'info') => {
 export const clearAllCaches = async () => {
     if ('caches' in window) {
         const cacheNames = await caches.keys();
-        await Promise.all(cacheNames.map(name => caches.delete(name)));
-        console.info('🗑️ All caches cleared');
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
+        logger.info('🗑️ All caches cleared');
         return true;
     }
     return false;
@@ -253,7 +245,7 @@ export const getCacheStats = async () => {
         stats.push({
             name,
             items: keys.length,
-            size: totalSize
+            size: totalSize,
         });
     }
 
@@ -262,11 +254,11 @@ export const getCacheStats = async () => {
 
 /**
  * 🔔 Push Notification Permission
- * Push bildirim izni iste
+ * Push notification izni iste
  */
 export const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {
-        console.warn('Bu tarayıcı bildirimleri desteklemiyor');
+        logger.warn('Bu tarayıcı notificationleri desteklemiyor');
         return false;
     }
 
@@ -284,19 +276,19 @@ export const requestNotificationPermission = async () => {
 
 /**
  * 📱 Push Subscription
- * Push bildirimi için subscribe ol
+ * Push notificationi for subscribe ol
  */
 export const subscribeToPush = async (registration, vapidPublicKey) => {
     try {
         const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+            applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
         });
 
-        console.info('✅ Push subscription successful');
+        logger.info('✅ Push subscription successful');
         return subscription;
     } catch (error) {
-        console.error('❌ Push subscription failed:', error);
+        logger.error('❌ Push subscription failed:', error);
         return null;
     }
 };
@@ -305,10 +297,8 @@ export const subscribeToPush = async (registration, vapidPublicKey) => {
  * 🔧 VAPID Key Converter
  */
 function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-        .replace(/\-/g, '+')
-        .replace(/_/g, '/');
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
 
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
@@ -325,8 +315,10 @@ function urlBase64ToUint8Array(base64String) {
  */
 export const isPWAInstalled = () => {
     // Standalone modda çalışıyor mu?
-    return window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true; // iOS Safari
+    return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        window.navigator.standalone === true
+    ); // iOS Safari
 };
 
 /**
@@ -335,11 +327,15 @@ export const isPWAInstalled = () => {
 export const getDeviceType = () => {
     const ua = navigator.userAgent;
 
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+    if (/(tablet|ipad|playbook|deletek)|(android(?!.*mobi))/i.test(ua)) {
         return 'tablet';
     }
 
-    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+    if (
+        /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Deletek-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+            ua
+        )
+    ) {
         return 'mobile';
     }
 
@@ -379,7 +375,5 @@ export default {
     requestNotificationPermission,
     subscribeToPush,
     isPWAInstalled,
-    getDeviceType
+    getDeviceType,
 };
-
-

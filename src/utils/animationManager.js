@@ -1,3 +1,4 @@
+import React from 'react';
 // frontend/src/utils/animationManager.js
 
 /**
@@ -14,24 +15,26 @@ class AnimationManager {
         this.defaultEasing = options.defaultEasing || 'ease-out';
 
         this.easings = {
-            linear: t => t,
-            easeIn: t => t * t,
-            easeOut: t => t * (2 - t),
-            easeInOut: t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-            easeInCubic: t => t * t * t,
-            easeOutCubic: t => (--t) * t * t + 1,
-            easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
-            easeInQuart: t => t * t * t * t,
-            easeOutQuart: t => 1 - (--t) * t * t * t,
-            easeInOutQuart: t => t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
-            easeInQuint: t => t * t * t * t * t,
-            easeOutQuint: t => 1 + (--t) * t * t * t * t,
-            easeInOutQuint: t => t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
-            elastic: t => {
+            linear: (t) => t,
+            easeIn: (t) => t * t,
+            easeOut: (t) => t * (2 - t),
+            easeInOut: (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+            easeInCubic: (t) => t * t * t,
+            easeOutCubic: (t) => --t * t * t + 1,
+            easeInOutCubic: (t) =>
+                t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+            easeInQuart: (t) => t * t * t * t,
+            easeOutQuart: (t) => 1 - --t * t * t * t,
+            easeInOutQuart: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t),
+            easeInQuint: (t) => t * t * t * t * t,
+            easeOutQuint: (t) => 1 + --t * t * t * t * t,
+            easeInOutQuint: (t) =>
+                t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t,
+            elastic: (t) => {
                 const p = 0.3;
-                return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+                return Math.pow(2, -10 * t) * Math.sin(((t - p / 4) * (2 * Math.PI)) / p) + 1;
             },
-            bounce: t => {
+            bounce: (t) => {
                 if (t < 1 / 2.75) {
                     return 7.5625 * t * t;
                 } else if (t < 2 / 2.75) {
@@ -41,7 +44,7 @@ class AnimationManager {
                 } else {
                     return 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
                 }
-            }
+            },
         };
 
         this.init();
@@ -52,13 +55,12 @@ class AnimationManager {
      */
     init() {
         // Listen for reduced motion preference changes
-        window.matchMedia('(prefers-reduced-motion: reduce)')
-            .addEventListener('change', (e) => {
-                this.prefersReducedMotion = e.matches;
-                if (e.matches) {
-                    this.cancelAll();
-                }
-            });
+        window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+            this.prefersReducedMotion = e.matches;
+            if (e.matches) {
+                this.cancelAll();
+            }
+        });
     }
 
     /**
@@ -89,12 +91,16 @@ class AnimationManager {
         const deltaH = first.height / last.height;
 
         // Play: Animate from inverted to normal
-        return this.animate(element, {
-            transform: [
-                `translate(${deltaX}px, ${deltaY}px) scale(${deltaW}, ${deltaH})`,
-                'translate(0, 0) scale(1, 1)'
-            ]
-        }, { duration, easing: 'easeOutCubic' });
+        return this.animate(
+            element,
+            {
+                transform: [
+                    `translate(${deltaX}px, ${deltaY}px) scale(${deltaW}, ${deltaH})`,
+                    'translate(0, 0) scale(1, 1)',
+                ],
+            },
+            { duration, easing: 'easeOutCubic' }
+        );
     }
 
     /**
@@ -103,7 +109,7 @@ class AnimationManager {
     animate(element, properties, options = {}) {
         if (this.prefersReducedMotion && !options.force) {
             // Skip animation, apply final state
-            Object.keys(properties).forEach(prop => {
+            Object.keys(properties).forEach((prop) => {
                 const value = Array.isArray(properties[prop])
                     ? properties[prop][properties[prop].length - 1]
                     : properties[prop];
@@ -117,7 +123,7 @@ class AnimationManager {
             easing = this.defaultEasing,
             delay = 0,
             onProgress,
-            onComplete
+            onComplete,
         } = options;
 
         const id = `${Date.now()}-${Math.random()}`;
@@ -132,14 +138,15 @@ class AnimationManager {
 
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const easedProgress = typeof easing === 'function'
-                    ? easing(progress)
-                    : this.easings[easing]
-                        ? this.easings[easing](progress)
-                        : progress;
+                const easedProgress =
+                    typeof easing === 'function'
+                        ? easing(progress)
+                        : this.easings[easing]
+                          ? this.easings[easing](progress)
+                          : progress;
 
                 // Apply properties
-                Object.keys(properties).forEach(prop => {
+                Object.keys(properties).forEach((prop) => {
                     const value = properties[prop];
 
                     if (Array.isArray(value)) {
@@ -180,7 +187,7 @@ class AnimationManager {
 
         return {
             value: parseFloat(match[1]),
-            unit: match[2] || ''
+            unit: match[2] || '',
         };
     }
 
@@ -190,7 +197,7 @@ class AnimationManager {
     interpolate(from, to, progress) {
         return {
             value: from.value + (to.value - from.value) * progress,
-            unit: to.unit || from.unit
+            unit: to.unit || from.unit,
         };
     }
 
@@ -206,18 +213,26 @@ class AnimationManager {
      */
     fadeIn(element, options = {}) {
         element.style.opacity = '0';
-        return this.animate(element, {
-            opacity: ['0', '1']
-        }, options);
+        return this.animate(
+            element,
+            {
+                opacity: ['0', '1'],
+            },
+            options
+        );
     }
 
     /**
      * Fade out
      */
     fadeOut(element, options = {}) {
-        return this.animate(element, {
-            opacity: ['1', '0']
-        }, options);
+        return this.animate(
+            element,
+            {
+                opacity: ['1', '0'],
+            },
+            options
+        );
     }
 
     /**
@@ -228,14 +243,18 @@ class AnimationManager {
             up: ['translateY(20px)', 'translateY(0)'],
             down: ['translateY(-20px)', 'translateY(0)'],
             left: ['translateX(20px)', 'translateX(0)'],
-            right: ['translateX(-20px)', 'translateX(0)']
+            right: ['translateX(-20px)', 'translateX(0)'],
         };
 
         element.style.opacity = '0';
-        return this.animate(element, {
-            opacity: ['0', '1'],
-            transform: transforms[direction]
-        }, options);
+        return this.animate(
+            element,
+            {
+                opacity: ['0', '1'],
+                transform: transforms[direction],
+            },
+            options
+        );
     }
 
     /**
@@ -243,25 +262,33 @@ class AnimationManager {
      */
     scaleIn(element, options = {}) {
         element.style.opacity = '0';
-        return this.animate(element, {
-            opacity: ['0', '1'],
-            transform: ['scale(0.8)', 'scale(1)']
-        }, options);
+        return this.animate(
+            element,
+            {
+                opacity: ['0', '1'],
+                transform: ['scale(0.8)', 'scale(1)'],
+            },
+            options
+        );
     }
 
     /**
      * Bounce
      */
     bounce(element, options = {}) {
-        return this.animate(element, {
-            transform: [
-                'translateY(0)',
-                'translateY(-20px)',
-                'translateY(0)',
-                'translateY(-10px)',
-                'translateY(0)'
-            ]
-        }, { ...options, easing: 'bounce' });
+        return this.animate(
+            element,
+            {
+                transform: [
+                    'translateY(0)',
+                    'translateY(-20px)',
+                    'translateY(0)',
+                    'translateY(-10px)',
+                    'translateY(0)',
+                ],
+            },
+            { ...options, easing: 'bounce' }
+        );
     }
 
     /**
@@ -269,25 +296,33 @@ class AnimationManager {
      */
     shake(element, options = {}) {
         const { intensity = 10 } = options;
-        return this.animate(element, {
-            transform: [
-                'translateX(0)',
-                `translateX(-${intensity}px)`,
-                `translateX(${intensity}px)`,
-                `translateX(-${intensity}px)`,
-                `translateX(${intensity}px)`,
-                'translateX(0)'
-            ]
-        }, { ...options, duration: 400 });
+        return this.animate(
+            element,
+            {
+                transform: [
+                    'translateX(0)',
+                    `translateX(-${intensity}px)`,
+                    `translateX(${intensity}px)`,
+                    `translateX(-${intensity}px)`,
+                    `translateX(${intensity}px)`,
+                    'translateX(0)',
+                ],
+            },
+            { ...options, duration: 400 }
+        );
     }
 
     /**
      * Pulse
      */
     pulse(element, options = {}) {
-        return this.animate(element, {
-            transform: ['scale(1)', 'scale(1.05)', 'scale(1)']
-        }, { ...options, duration: 600 });
+        return this.animate(
+            element,
+            {
+                transform: ['scale(1)', 'scale(1.05)', 'scale(1)'],
+            },
+            { ...options, duration: 600 }
+        );
     }
 
     /**
@@ -300,7 +335,7 @@ class AnimationManager {
             Array.from(elements).map((element, index) => {
                 return animationFn(element, {
                     ...options,
-                    delay: index * staggerDelay
+                    delay: index * staggerDelay,
                 });
             })
         );
@@ -330,7 +365,7 @@ class AnimationManager {
      * Cancel all animations
      */
     cancelAll() {
-        this.animations.forEach(animation => animation.cancel());
+        this.animations.forEach((animation) => animation.cancel());
         this.animations.clear();
     }
 
@@ -353,18 +388,21 @@ class AnimationManager {
     animateOnScroll(element, animationFn, options = {}) {
         const { offset = 100, once = true } = options;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animationFn(entry.target, options);
-                    if (once) {
-                        observer.unobserve(entry.target);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        animationFn(entry.target, options);
+                        if (once) {
+                            observer.unobserve(entry.target);
+                        }
                     }
-                }
-            });
-        }, {
-            rootMargin: `${offset}px`
-        });
+                });
+            },
+            {
+                rootMargin: `${offset}px`,
+            }
+        );
 
         observer.observe(element);
 
@@ -441,5 +479,3 @@ export const disableGPU = (element) => {
 };
 
 export default AnimationManager;
-
-

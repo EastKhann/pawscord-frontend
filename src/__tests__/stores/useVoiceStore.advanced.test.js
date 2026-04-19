@@ -14,7 +14,7 @@ describe('useVoiceStore — Advanced', () => {
             isCameraOn: false,
             isScreenSharing: false,
             voiceUsers: {},
-            speakingUsers: new Set(),
+            speakingUsers: [],
             inputDevice: 'default',
             outputDevice: 'default',
             inputVolume: 100,
@@ -107,13 +107,13 @@ describe('useVoiceStore — Advanced', () => {
     describe('setSpeaking', () => {
         it('should add user to speaking set', () => {
             useVoiceStore.getState().setSpeaking('user-1', true);
-            expect(useVoiceStore.getState().speakingUsers.has('user-1')).toBe(true);
+            expect(useVoiceStore.getState().speakingUsers.includes('user-1')).toBe(true);
         });
 
         it('should remove user from speaking set', () => {
             useVoiceStore.getState().setSpeaking('user-1', true);
             useVoiceStore.getState().setSpeaking('user-1', false);
-            expect(useVoiceStore.getState().speakingUsers.has('user-1')).toBe(false);
+            expect(useVoiceStore.getState().speakingUsers.includes('user-1')).toBe(false);
         });
 
         it('should track multiple speaking users', () => {
@@ -127,7 +127,7 @@ describe('useVoiceStore — Advanced', () => {
         it('should not duplicate user in speaking set', () => {
             useVoiceStore.getState().setSpeaking('user-1', true);
             useVoiceStore.getState().setSpeaking('user-1', true);
-            expect(useVoiceStore.getState().speakingUsers.size).toBe(1);
+            expect(useVoiceStore.getState().speakingUsers.length).toBe(1);
         });
     });
 
@@ -142,7 +142,7 @@ describe('useVoiceStore — Advanced', () => {
 
             const state = useVoiceStore.getState();
             expect(state.voiceUsers).toEqual({});
-            expect(state.speakingUsers.size).toBe(0);
+            expect(state.speakingUsers.length).toBe(0);
             expect(state.isInVoiceChat).toBe(false);
         });
 
@@ -216,7 +216,7 @@ describe('useVoiceStore — Advanced', () => {
 
             // Speaking
             store.setSpeaking('u1', true);
-            expect(useVoiceStore.getState().speakingUsers.has('u1')).toBe(true);
+            expect(useVoiceStore.getState().speakingUsers.includes('u1')).toBe(true);
 
             // Leave
             store.leaveVoiceRoom();

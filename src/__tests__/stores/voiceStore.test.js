@@ -13,7 +13,7 @@ const resetStore = () => {
         isCameraOn: false,
         isScreenSharing: false,
         voiceUsers: {},
-        speakingUsers: new Set(),
+        speakingUsers: [],
         inputDevice: 'default',
         outputDevice: 'default',
         inputVolume: 100,
@@ -85,7 +85,7 @@ describe('useVoiceStore – Comprehensive', () => {
 
         it('should have empty voiceUsers and speakingUsers', () => {
             expect(useVoiceStore.getState().voiceUsers).toEqual({});
-            expect(useVoiceStore.getState().speakingUsers).toEqual(new Set());
+            expect(useVoiceStore.getState().speakingUsers).toEqual([]);
         });
     });
 
@@ -120,7 +120,7 @@ describe('useVoiceStore – Comprehensive', () => {
             expect(s.currentVoiceRoom).toBeNull();
             expect(s.currentServerId).toBeNull();
             expect(s.voiceUsers).toEqual({});
-            expect(s.speakingUsers.size).toBe(0);
+            expect(s.speakingUsers.length).toBe(0);
         });
 
         it('should not reset audio settings on leave', () => {
@@ -196,7 +196,10 @@ describe('useVoiceStore – Comprehensive', () => {
     describe('Voice User Management', () => {
         it('addVoiceUser should add user to map', () => {
             useVoiceStore.getState().addVoiceUser('u1', { name: 'Alice', muted: false });
-            expect(useVoiceStore.getState().voiceUsers['u1']).toEqual({ name: 'Alice', muted: false });
+            expect(useVoiceStore.getState().voiceUsers['u1']).toEqual({
+                name: 'Alice',
+                muted: false,
+            });
         });
 
         it('addVoiceUser should overwrite existing entry', () => {
@@ -232,26 +235,26 @@ describe('useVoiceStore – Comprehensive', () => {
     describe('Speaking Users', () => {
         it('setSpeaking(true) should add user to set', () => {
             useVoiceStore.getState().setSpeaking('u1', true);
-            expect(useVoiceStore.getState().speakingUsers.has('u1')).toBe(true);
+            expect(useVoiceStore.getState().speakingUsers.includes('u1')).toBe(true);
         });
 
         it('setSpeaking(false) should remove user from set', () => {
             useVoiceStore.getState().setSpeaking('u1', true);
             useVoiceStore.getState().setSpeaking('u1', false);
-            expect(useVoiceStore.getState().speakingUsers.has('u1')).toBe(false);
+            expect(useVoiceStore.getState().speakingUsers.includes('u1')).toBe(false);
         });
 
         it('multiple users can speak simultaneously', () => {
             useVoiceStore.getState().setSpeaking('u1', true);
             useVoiceStore.getState().setSpeaking('u2', true);
             useVoiceStore.getState().setSpeaking('u3', true);
-            expect(useVoiceStore.getState().speakingUsers.size).toBe(3);
+            expect(useVoiceStore.getState().speakingUsers.length).toBe(3);
         });
 
         it('setSpeaking(true) on already-speaking user is idempotent', () => {
             useVoiceStore.getState().setSpeaking('u1', true);
             useVoiceStore.getState().setSpeaking('u1', true);
-            expect(useVoiceStore.getState().speakingUsers.size).toBe(1);
+            expect(useVoiceStore.getState().speakingUsers.length).toBe(1);
         });
     });
 

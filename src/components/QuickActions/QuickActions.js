@@ -1,12 +1,15 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 // frontend/src/components/QuickActions/QuickActions.js
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import './QuickActions.css';
 
+import { useTranslation } from 'react-i18next';
 /**
  * 🚀 Quick Actions - Spotlight-style command palette
  * Keyboard shortcut: Ctrl+K / Cmd+K
- * 
+ *
  * Features:
  * - Quick navigation to servers/channels
  * - Message actions (star, bookmark, translate)
@@ -23,8 +26,9 @@ const QuickActions = ({
     currentRoom,
     user,
     onNavigate,
-    onAction
+    onAction,
 }) => {
+    const { t } = useTranslation();
     const [query, setQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [results, setResults] = useState([]);
@@ -34,39 +38,165 @@ const QuickActions = ({
     // Action definitions
     const actions = [
         // Navigation
-        { id: 'home', icon: '🏠', label: 'Go to Home', category: 'navigation', keywords: ['home', 'ana sayfa'] },
-        { id: 'discover', icon: '🔍', label: 'Discover Servers', category: 'navigation', keywords: ['discover', 'keşfet', 'explore'] },
-        { id: 'friends', icon: '👥', label: 'Friends List', category: 'navigation', keywords: ['friends', 'arkadaşlar', 'dm'] },
-        { id: 'settings', icon: '⚙️', label: 'User Settings', category: 'navigation', keywords: ['settings', 'ayarlar', 'preferences'] },
+        {
+            id: 'home',
+            icon: '🏠',
+            label: t('nav.home', 'Ana Sayfa'),
+            category: 'navigation',
+            keywords: ['home', 'ana sayfa'],
+        },
+        {
+            id: 'discover',
+            icon: '🔍',
+            label: t('server.findServer', 'Sunucu Keşfet'),
+            category: 'navigation',
+            keywords: ['discover', t('ui.kesfet'), 'explore'],
+        },
+        {
+            id: 'friends',
+            icon: '👥',
+            label: t('home.friends_title', 'Arkadaşlar'),
+            category: 'navigation',
+            keywords: ['friends', t('ui.arkadaslar'), 'dm'],
+        },
+        {
+            id: 'settings',
+            icon: '⚙️',
+            label: t('common.settings', 'Ayarlar'),
+            category: 'navigation',
+            keywords: ['settings', 'ayarlar', 'preferences'],
+        },
 
         // AI Commands
-        { id: 'ai-ask', icon: '🤖', label: 'Ask AI Assistant', category: 'ai', keywords: ['ask', 'sor', 'ai', 'chatgpt'] },
-        { id: 'ai-summarize', icon: '📝', label: 'Summarize Channel', category: 'ai', keywords: ['summarize', 'özet', 'tldr'] },
-        { id: 'ai-translate', icon: '🌐', label: 'Translate Message', category: 'ai', keywords: ['translate', 'çevir', 'translation'] },
+        {
+            id: 'ai-ask',
+            icon: '🤖',
+            label: t('quickActions.askAI'),
+            category: 'ai',
+            keywords: ['ask', 'sor', 'ai', 'chatgpt'],
+        },
+        {
+            id: 'ai-summarize',
+            icon: '📝',
+            label: t('quickActions.summarizeChannel'),
+            category: 'ai',
+            keywords: ['summarize', t('ui.ozet'), 'tldr'],
+        },
+        {
+            id: 'ai-translate',
+            icon: '🌐',
+            label: t('quickActions.translateMessage'),
+            category: 'ai',
+            keywords: ['translate', t('ui.cevir'), 'translation'],
+        },
 
         // Channel Actions
-        { id: 'create-channel', icon: '➕', label: 'Create Channel', category: 'channel', keywords: ['create', 'oluştur', 'kanal', 'channel'] },
-        { id: 'invite', icon: '📨', label: 'Create Invite Link', category: 'channel', keywords: ['invite', 'davet', 'link'] },
-        { id: 'pin-message', icon: '📌', label: 'Pin a Message', category: 'channel', keywords: ['pin', 'sabitle', 'message'] },
+        {
+            id: 'create-channel',
+            icon: '➕',
+            label: t('quickActions.createChannel'),
+            category: 'channel',
+            keywords: ['create', t('ui.olustur'), 'kanal', 'channel'],
+        },
+        {
+            id: 'invite',
+            icon: '📨',
+            label: t('quickActions.createInvite'),
+            category: 'channel',
+            keywords: ['invite', 'davet', 'link'],
+        },
+        {
+            id: 'pin-message',
+            icon: '📌',
+            label: t('quickActions.pinMessage'),
+            category: 'channel',
+            keywords: ['pin', 'sabitle', 'message'],
+        },
 
         // Server Actions
-        { id: 'server-settings', icon: '🔧', label: 'Server Settings', category: 'server', keywords: ['server', 'sunucu', 'settings'] },
-        { id: 'server-members', icon: '👤', label: 'Member List', category: 'server', keywords: ['members', 'üyeler', 'users'] },
-        { id: 'server-roles', icon: '🎭', label: 'Manage Roles', category: 'server', keywords: ['roles', 'roller', 'permissions'] },
+        {
+            id: 'server-settings',
+            icon: '🔧',
+            label: t('quickActions.serverSettings'),
+            category: 'server',
+            keywords: ['server', 'sunucu', 'settings'],
+        },
+        {
+            id: 'server-members',
+            icon: '👤',
+            label: t('quickActions.memberList'),
+            category: 'server',
+            keywords: ['members', 'üyeler', 'users'],
+        },
+        {
+            id: 'server-roles',
+            icon: '🎭',
+            label: t('quickActions.manageRoles'),
+            category: 'server',
+            keywords: ['roles', 'roller', 'permissions'],
+        },
 
         // User Actions
-        { id: 'profile', icon: '👤', label: 'Edit Profile', category: 'user', keywords: ['profile', 'profil', 'avatar'] },
-        { id: 'status', icon: '🟢', label: 'Set Status', category: 'user', keywords: ['status', 'durum', 'online', 'afk'] },
-        { id: 'theme', icon: '🎨', label: 'Change Theme', category: 'user', keywords: ['theme', 'tema', 'dark', 'light'] },
+        {
+            id: 'profile',
+            icon: '👤',
+            label: t('quickActions.editProfile'),
+            category: 'user',
+            keywords: ['profile', 'profil', 'avatar'],
+        },
+        {
+            id: 'status',
+            icon: '🟢',
+            label: t('quickActions.setStatus'),
+            category: 'user',
+            keywords: ['status', 'durum', 'online', 'afk'],
+        },
+        {
+            id: 'theme',
+            icon: '🎨',
+            label: t('quickActions.changeTheme'),
+            category: 'user',
+            keywords: ['theme', 'tema', 'dark', 'light'],
+        },
 
         // Moderation
-        { id: 'mod-logs', icon: '📋', label: 'Moderation Logs', category: 'moderation', keywords: ['mod', 'logs', 'kayıtlar'] },
-        { id: 'automod', icon: '🛡️', label: 'AutoMod Settings', category: 'moderation', keywords: ['automod', 'filter', 'spam'] },
+        {
+            id: 'mod-logs',
+            icon: '📋',
+            label: t('quickActions.modLogs'),
+            category: 'moderation',
+            keywords: ['mod', 'logs', t('ui.kayitlar_2')],
+        },
+        {
+            id: 'automod',
+            icon: '🛡️',
+            label: t('quickActions.autoMod'),
+            category: 'moderation',
+            keywords: ['automod', 'filter', 'spam'],
+        },
 
         // Fun
-        { id: 'giveaway', icon: '🎁', label: 'Create Giveaway', category: 'fun', keywords: ['giveaway', 'çekiliş', 'prize'] },
-        { id: 'poll', icon: '📊', label: 'Create Poll', category: 'fun', keywords: ['poll', 'anket', 'vote'] },
-        { id: 'event', icon: '📅', label: 'Create Event', category: 'fun', keywords: ['event', 'etkinlik', 'schedule'] },
+        {
+            id: 'giveaway',
+            icon: '🎁',
+            label: t('quickActions.createGiveaway'),
+            category: 'fun',
+            keywords: ['giveaway', t('ui.cekilis'), 'prize'],
+        },
+        {
+            id: 'poll',
+            icon: '📊',
+            label: t('quickActions.createPoll'),
+            category: 'fun',
+            keywords: ['poll', 'anket', 'vote'],
+        },
+        {
+            id: 'event',
+            icon: '📅',
+            label: t('quickActions.createEvent'),
+            category: 'fun',
+            keywords: ['event', 'etkinlik', 'schedule'],
+        },
     ];
 
     // Search and filter results
@@ -76,13 +206,13 @@ const QuickActions = ({
         let filtered = [...actions];
 
         // Add servers to results
-        const serverResults = servers.map(server => ({
+        const serverResults = servers.map((server) => ({
             id: `server-${server.id}`,
             icon: server.icon || '🏠',
             label: server.name,
             category: 'servers',
             keywords: [server.name.toLowerCase()],
-            data: server
+            data: server,
         }));
 
         filtered = [...filtered, ...serverResults];
@@ -90,16 +220,16 @@ const QuickActions = ({
         // Filter by query
         if (query) {
             const lowerQuery = query.toLowerCase();
-            filtered = filtered.filter(action => {
+            filtered = filtered.filter((action) => {
                 const matchLabel = action.label.toLowerCase().includes(lowerQuery);
-                const matchKeywords = action.keywords?.some(k => k.includes(lowerQuery));
+                const matchKeywords = action.keywords?.some((k) => k.includes(lowerQuery));
                 return matchLabel || matchKeywords;
             });
         }
 
         // Filter by category
         if (category !== 'all') {
-            filtered = filtered.filter(action => action.category === category);
+            filtered = filtered.filter((action) => action.category === category);
         }
 
         setResults(filtered.slice(0, 10));
@@ -114,32 +244,35 @@ const QuickActions = ({
     }, [isOpen]);
 
     // Keyboard navigation
-    const handleKeyDown = useCallback((e) => {
-        if (!isOpen) return;
+    const handleKeyDown = useCallback(
+        (e) => {
+            if (!isOpen) return;
 
-        switch (e.key) {
-            case 'ArrowDown':
-                e.preventDefault();
-                setSelectedIndex(i => Math.min(i + 1, results.length - 1));
-                break;
-            case 'ArrowUp':
-                e.preventDefault();
-                setSelectedIndex(i => Math.max(i - 1, 0));
-                break;
-            case 'Enter':
-                e.preventDefault();
-                if (results[selectedIndex]) {
-                    handleSelect(results[selectedIndex]);
-                }
-                break;
-            case 'Escape':
-                e.preventDefault();
-                onClose();
-                break;
-            default:
-                break;
-        }
-    }, [isOpen, results, selectedIndex, onClose]);
+            switch (e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    setSelectedIndex((i) => Math.min(i + 1, results.length - 1));
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    setSelectedIndex((i) => Math.max(i - 1, 0));
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    if (results[selectedIndex]) {
+                        handleSelect(results[selectedIndex]);
+                    }
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    onClose();
+                    break;
+                default:
+                    break;
+            }
+        },
+        [isOpen, results, selectedIndex, onClose]
+    );
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -159,28 +292,41 @@ const QuickActions = ({
 
     // Category tabs
     const categories = [
-        { id: 'all', label: 'All', icon: '🔍' },
-        { id: 'navigation', label: 'Navigate', icon: '🧭' },
-        { id: 'servers', label: 'Servers', icon: '🏠' },
-        { id: 'ai', label: 'AI', icon: '🤖' },
-        { id: 'channel', label: 'Channel', icon: '💬' },
-        { id: 'moderation', label: 'Moderation', icon: '🛡️' },
+        { id: 'all', label: t('quickActions.all'), icon: '🔍' },
+        { id: 'navigation', label: t('quickActions.navigation'), icon: '🧭' },
+        { id: 'servers', label: t('nav.servers'), icon: '🏠' },
+        { id: 'ai', label: t('quickActions.ai'), icon: '🤖' },
+        { id: 'channel', label: t('quickActions.channel'), icon: '💬' },
+        { id: 'moderation', label: t('quickActions.moderation'), icon: '🛡️' },
     ];
 
     if (!isOpen) return null;
 
     return (
-        <div className="quick-actions-overlay" onClick={onClose}>
-            <div className="quick-actions-modal" onClick={e => e.stopPropagation()}>
+        <div
+            className="quick-actions-overlay"
+            role="button"
+            tabIndex={0}
+            onClick={onClose}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+        >
+            <div
+                className="quick-actions-modal"
+                role="button"
+                tabIndex={0}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            >
                 {/* Search Input */}
                 <div className="quick-actions-search">
                     <span className="search-icon">🔍</span>
+                    {/* eslint-disable-next-line jsx-a11y/no-autofocus */}
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder="Type a command or search..."
+                        placeholder={t('quickActions.searchPlaceholder')}
                         value={query}
-                        onChange={e => setQuery(e.target.value)}
+                        onChange={(e) => setQuery(e.target.value)}
                         autoFocus
                     />
                     <span className="shortcut-hint">ESC</span>
@@ -188,7 +334,7 @@ const QuickActions = ({
 
                 {/* Category Tabs */}
                 <div className="quick-actions-categories">
-                    {categories.map(cat => (
+                    {categories.map((cat) => (
                         <button
                             key={cat.id}
                             className={`category-tab ${category === cat.id ? 'active' : ''}`}
@@ -206,8 +352,13 @@ const QuickActions = ({
                             <div
                                 key={action.id}
                                 className={`result-item ${index === selectedIndex ? 'selected' : ''}`}
+                                role="button"
+                                tabIndex={0}
                                 onClick={() => handleSelect(action)}
                                 onMouseEnter={() => setSelectedIndex(index)}
+                                onKeyDown={(e) =>
+                                    (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                                }
                             >
                                 <span className="result-icon">{action.icon}</span>
                                 <span className="result-label">{action.label}</span>
@@ -217,20 +368,30 @@ const QuickActions = ({
                     ) : (
                         <div className="no-results">
                             <span>😕</span>
-                            <p>No results found</p>
+                            <p>{t('panels.noResults')}</p>
                         </div>
                     )}
                 </div>
 
                 {/* Footer */}
                 <div className="quick-actions-footer">
-                    <span>↑↓ Navigate</span>
-                    <span>↵ Select</span>
-                    <span>ESC Close</span>
+                    <span>↑↓ {t('quickActions.navigate')}</span>
+                    <span>↵ {t('quickActions.select')}</span>
+                    <span>ESC {t('quickActions.close')}</span>
                 </div>
             </div>
         </div>
     );
 };
 
+QuickActions.propTypes = {
+    isOpen: PropTypes.bool,
+    onClose: PropTypes.func,
+    servers: PropTypes.array,
+    currentServer: PropTypes.object,
+    currentRoom: PropTypes.object,
+    user: PropTypes.object,
+    onNavigate: PropTypes.func,
+    onAction: PropTypes.func,
+};
 export default QuickActions;

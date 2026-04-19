@@ -2,16 +2,16 @@ import { useCallback, useEffect, useRef } from 'react';
 
 /**
  * Push-to-Talk hook — 10/10 kalite.
- * 
- * İyileştirmeler:
- * - Aktivasyon/deaktivasyon ses efektleri (beep)
+ *
+ * İyleştirmeler:
+ * - Aktivasyon/deaktivasyon audio efektleri (beep)
  * - Mobile touch desteği (touchstart/touchend)
- * - Fade-in/fade-out: PTT açılırken/kapanırken ses yumuşak geçiş
+ * - Fade-in/fade-out: PTT açılırken/kapanırken audio yumuşak geçiş
  * - contentEditable desteği (input/textarea dışı editörler)
- * - Tuş basılıyken sayfa değiştirme koruması (blur event)
+ * - Tuş basılıyken page değiştirme koruması (blur event)
  */
 
-// 🔥 PTT aktivasyon/deaktivasyon ses efektleri — WebAudio ile hafif beep
+// 🔥 PTT aktivasyon/deaktivasyon audio efektleri — WebAudio with hafif beep
 function playPTTBeep(activate = true) {
     try {
         const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -23,25 +23,37 @@ function playPTTBeep(activate = true) {
         // Aktivasyon: yükselen ton, deaktivasyon: alçalan ton
         osc.frequency.value = activate ? 440 : 330;
         osc.type = 'sine';
-        gain.gain.value = 0.08; // Çok hafif ses
+        gain.gain.value = 0.08; // Çok hafif audio
         osc.start();
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
         osc.stop(ctx.currentTime + 0.08);
         // Cleanup
-        setTimeout(() => { try { ctx.close(); } catch (e) { } }, 200);
+        setTimeout(() => {
+            try {
+                ctx.close();
+            } catch (e) {}
+        }, 200);
     } catch (e) {
         // Ses çalamazsa sessizce devam et
     }
 }
 
 export function usePTT({
-    isPTTMode, setIsPTTMode, isInVoice, pttKey,
-    isPTTActive, setIsPTTActive, localStreamRef, setIsMuted
+    isPTTMode,
+    setIsPTTMode,
+    isInVoice,
+    pttKey,
+    isPTTActive,
+    setIsPTTActive,
+    localStreamRef,
+    setIsMuted,
 }) {
     const isPTTActiveRef = useRef(false);
 
     // Keep ref in sync for blur handler
-    useEffect(() => { isPTTActiveRef.current = isPTTActive; }, [isPTTActive]);
+    useEffect(() => {
+        isPTTActiveRef.current = isPTTActive;
+    }, [isPTTActive]);
 
     // 🔥 PTT Mode Toggle
     const togglePTTMode = useCallback(() => {
@@ -52,15 +64,15 @@ export function usePTT({
         if (newMode) {
             // PTT mode'da mikrofon başlangıçta kapalı
             if (localStreamRef.current) {
-                localStreamRef.current.getAudioTracks().forEach(track => {
+                localStreamRef.current.getAudioTracks().forEach((track) => {
                     track.enabled = false;
                 });
             }
             setIsMuted(true);
         } else {
-            // Normal mode'a dönünce mikrofonu aç
+            // Normal mode'a dönünce mikrofonu open
             if (localStreamRef.current) {
-                localStreamRef.current.getAudioTracks().forEach(track => {
+                localStreamRef.current.getAudioTracks().forEach((track) => {
                     track.enabled = true;
                 });
             }
@@ -69,27 +81,27 @@ export function usePTT({
         }
     }, [isPTTMode]);
 
-    // 🔥 Helper: Mikrofonu aç (fade-in destekli)
+    // 🔥 Helper: Mikrofonu open (fade-in destekli)
     const activateMic = useCallback(() => {
         if (isPTTActiveRef.current) return; // Zaten aktif
         setIsPTTActive(true);
         isPTTActiveRef.current = true;
         playPTTBeep(true);
         if (localStreamRef.current) {
-            localStreamRef.current.getAudioTracks().forEach(track => {
+            localStreamRef.current.getAudioTracks().forEach((track) => {
                 track.enabled = true;
             });
         }
     }, [setIsPTTActive, localStreamRef]);
 
-    // 🔥 Helper: Mikrofonu kapat
+    // 🔥 Helper: Mikrofonu close
     const deactivateMic = useCallback(() => {
         if (!isPTTActiveRef.current) return; // Zaten kapalı
         setIsPTTActive(false);
         isPTTActiveRef.current = false;
         playPTTBeep(false);
         if (localStreamRef.current) {
-            localStreamRef.current.getAudioTracks().forEach(track => {
+            localStreamRef.current.getAudioTracks().forEach((track) => {
                 track.enabled = false;
             });
         }
@@ -130,7 +142,7 @@ export function usePTT({
             }
         };
 
-        // 🔥 Mobile touch desteği — PTT butonuna dokunma için
+        // 🔥 Mobile touch desteği — PTT butonuna dokunma for
         // (Bu event'ler VoiceChatPanel'deki PTT butonuyla kullanılır)
         const handleTouchStart = (e) => {
             if (e.target.closest?.('[data-ptt-button]')) {
@@ -160,7 +172,7 @@ export function usePTT({
             document.removeEventListener('touchstart', handleTouchStart);
             document.removeEventListener('touchend', handleTouchEnd);
             document.removeEventListener('touchcancel', handleTouchEnd);
-            // Cleanup: PTT aktifken component unmount olursa mikrofonu kapat
+            // Cleanup: PTT aktifken component unmount olursa mikrofonu close
             if (isPTTActiveRef.current) {
                 deactivateMic();
             }

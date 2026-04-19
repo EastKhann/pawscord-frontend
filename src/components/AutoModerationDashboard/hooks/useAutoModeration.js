@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import confirmDialog from '../../../utils/confirmDialog';
+import logger from '../../../utils/logger';
 
 export const useAutoModeration = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const [rules, setRules] = useState([]);
@@ -8,14 +9,14 @@ export const useAutoModeration = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         total_violations: 0,
         auto_deleted: 0,
         warnings_issued: 0,
-        users_banned: 0
+        users_banned: 0,
     });
     const [showCreateRule, setShowCreateRule] = useState(false);
     const [newRule, setNewRule] = useState({
         rule_type: 'toxic',
         action: 'warn',
         threshold: 0.8,
-        keywords: []
+        keywords: [],
     });
     const [loading, setLoading] = useState(true);
 
@@ -37,14 +38,14 @@ export const useAutoModeration = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 if (logsData.length > 0) {
                     setStats({
                         total_violations: logsData.length,
-                        auto_deleted: logsData.filter(l => l.action === 'delete').length,
-                        warnings_issued: logsData.filter(l => l.action === 'warn').length,
-                        users_banned: logsData.filter(l => l.action === 'ban').length
+                        auto_deleted: logsData.filter((l) => l.action === 'delete').length,
+                        warnings_issued: logsData.filter((l) => l.action === 'warn').length,
+                        users_banned: logsData.filter((l) => l.action === 'ban').length,
                     });
                 }
             }
         } catch (error) {
-            console.error('Failed to load moderation data:', error);
+            logger.error('Failed to load moderation data:', error);
         }
         setLoading(false);
     };
@@ -53,7 +54,7 @@ export const useAutoModeration = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/moderation/rules/${serverId}/create/`, {
                 method: 'POST',
-                body: JSON.stringify(newRule)
+                body: JSON.stringify(newRule),
             });
 
             if (res.ok) {
@@ -63,38 +64,46 @@ export const useAutoModeration = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 setNewRule({ rule_type: 'toxic', action: 'warn', threshold: 0.8, keywords: [] });
             }
         } catch (error) {
-            console.error('Failed to create rule:', error);
+            logger.error('Failed to create rule:', error);
         }
     };
 
     const toggleRule = async (ruleId) => {
         try {
             await fetchWithAuth(`${apiBaseUrl}/moderation/rules/${ruleId}/toggle/`, {
-                method: 'POST'
+                method: 'POST',
             });
-            setRules(rules.map(r => r.id === ruleId ? { ...r, is_enabled: !r.is_enabled } : r));
+            setRules(rules.map((r) => (r.id === ruleId ? { ...r, is_enabled: !r.is_enabled } : r)));
         } catch (error) {
-            console.error('Failed to toggle rule:', error);
+            logger.error('Failed to toggle rule:', error);
         }
     };
 
     const deleteRule = async (ruleId) => {
-        if (!await confirmDialog('Bu kuralı silmek istediğine emin misin?')) return;
+        if (!(await confirmDialog('Bu kuralı silmek istediğinizden emin misiniz?'))) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/moderation/rules/${ruleId}/`, {
-                method: 'DELETE'
+                method: 'DELETE',
             });
-            setRules(rules.filter(r => r.id !== ruleId));
+            setRules(rules.filter((r) => r.id !== ruleId));
         } catch (error) {
-            console.error('Failed to delete rule:', error);
+            logger.error('Failed to delete rule:', error);
         }
     };
 
     return {
-        rules, logs, stats, loading,
-        showCreateRule, setShowCreateRule,
-        newRule, setNewRule,
-        loadData, createRule, toggleRule, deleteRule
+        rules,
+        logs,
+        stats,
+        loading,
+        showCreateRule,
+        setShowCreateRule,
+        newRule,
+        setNewRule,
+        loadData,
+        createRule,
+        toggleRule,
+        deleteRule,
     };
 };

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // frontend/src/__tests__/components/MessageInput.advanced.test.jsx
 // Advanced MessageInput tests — emoji, file attach, slash commands, mentions
 
@@ -102,7 +104,12 @@ const MockAdvancedInput = ({
             {showEmoji && (
                 <div data-testid="emoji-picker">
                     {['😀', '❤️', '👍', '🎉', '🔥'].map((e) => (
-                        <button key={e} data-testid={`emoji-${e}`} type="button" onClick={() => insertEmoji(e)}>
+                        <button
+                            key={e}
+                            data-testid={`emoji-${e}`}
+                            type="button"
+                            onClick={() => insertEmoji(e)}
+                        >
                             {e}
                         </button>
                     ))}

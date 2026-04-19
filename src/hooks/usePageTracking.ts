@@ -23,12 +23,14 @@ const usePageTracking = (): void => {
                 const sessionId = getOrCreateSessionId();
                 const token = localStorage.getItem('access_token');
 
+                if (!token) {
+                    return;
+                }
+
                 const headers: Record<string, string> = {
                     'Content-Type': 'application/json',
                 };
-                if (token) {
-                    headers['Authorization'] = `Bearer ${token}`;
-                }
+                headers['Authorization'] = `Bearer ${token}`;
 
                 await fetch(`${API_BASE_URL}/analytics/track/`, {
                     method: 'POST',
@@ -37,12 +39,11 @@ const usePageTracking = (): void => {
                         path: location.pathname,
                         session_id: sessionId,
                         referrer: document.referrer,
-                        timestamp: new Date().toISOString()
-                    })
+                        timestamp: new Date().toISOString(),
+                    }),
                 });
-
             } catch (error) {
-                // Silently fail — analytics should never break the app
+                // Deleteently fail — analytics should never break the app
             }
         };
 
@@ -51,6 +52,3 @@ const usePageTracking = (): void => {
 };
 
 export default usePageTracking;
-
-
-

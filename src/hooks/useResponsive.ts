@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
  * Responsive breakpoints
  */
 const BREAKPOINTS = {
-    mobile: 768,      // 0-768px = Mobile
-    tablet: 1024,     // 769-1024px = Tablet
-    desktop: 1920,    // 1025-1920px = Desktop
-    ultrawide: 2560   // 1921+ = Ultrawide
+    mobile: 768, // 0-768px = Mobile
+    tablet: 1024, // 769-1024px = Tablet
+    desktop: 1920, // 1025-1920px = Desktop
+    ultrawide: 2560, // 1921+ = Ultrawide
 };
 
 /**
@@ -30,7 +30,7 @@ const BREAKPOINTS = {
 export const useResponsive = () => {
     const [dimensions, setDimensions] = useState({
         width: typeof window !== 'undefined' ? window.innerWidth : 1920,
-        height: typeof window !== 'undefined' ? window.innerHeight : 1080
+        height: typeof window !== 'undefined' ? window.innerHeight : 1080,
     });
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export const useResponsive = () => {
             timeoutId = setTimeout(() => {
                 setDimensions({
                     width: window.innerWidth,
-                    height: window.innerHeight
+                    height: window.innerHeight,
                 });
             }, 150); // 150ms debounce
         };
@@ -87,14 +87,13 @@ export const useResponsive = () => {
         isLargeScreen: width > BREAKPOINTS.tablet,
 
         // Touch device detection
-        isTouchDevice: typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0),
+        isTouchDevice:
+            typeof window !== 'undefined' &&
+            ('ontouchstart' in window || navigator.maxTouchPoints > 0),
 
         // Breakpoints (for custom comparisons)
-        breakpoints: BREAKPOINTS
+        breakpoints: BREAKPOINTS,
     };
 };
 
 export default useResponsive;
-
-
-

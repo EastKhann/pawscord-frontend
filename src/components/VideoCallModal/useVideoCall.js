@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import logger from '../../utils/logger';
 
 export const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -24,30 +25,54 @@ export default function useVideoCall(isOpen, localStream, remoteStream) {
         (async () => {
             try {
                 const deviceList = await navigator.mediaDevices.enumerateDevices();
-                const cameras = deviceList.filter(d => d.kind === 'videoinput');
-                const microphones = deviceList.filter(d => d.kind === 'audioinput');
+                const cameras = deviceList.filter((d) => d.kind === 'videoinput');
+                const microphones = deviceList.filter((d) => d.kind === 'sesinput');
                 setDevices({ cameras, microphones });
                 if (cameras.length > 0 && !selectedCamera) setSelectedCamera(cameras[0].deviceId);
-                if (microphones.length > 0 && !selectedMicrophone) setSelectedMicrophone(microphones[0].deviceId);
-            } catch (err) { console.error('Failed to enumerate devices:', err); }
+                if (microphones.length > 0 && !selectedMicrophone)
+                    setSelectedMicrophone(microphones[0].deviceId);
+            } catch (err) {
+                logger.error('Failed to enumerate devices:', err);
+            }
         })();
     }, [isOpen]);
 
     // Attach streams to video elements
-    useEffect(() => { if (localVideoRef.current && localStream) localVideoRef.current.srcObject = localStream; }, [localStream]);
-    useEffect(() => { if (remoteVideoRef.current && remoteStream) remoteVideoRef.current.srcObject = remoteStream; }, [remoteStream]);
+    useEffect(() => {
+        if (localVideoRef.current && localStream) localVideoRef.current.srcObject = localStream;
+    }, [localStream]);
+    useEffect(() => {
+        if (remoteVideoRef.current && remoteStream) remoteVideoRef.current.srcObject = remoteStream;
+    }, [remoteStream]);
 
     const toggleFullscreen = async () => {
         if (!document.fullscreenElement) {
-            try { await containerRef.current?.requestFullscreen(); setIsFullscreen(true); }
-            catch (err) { console.error('Fullscreen failed:', err); }
-        } else { await document.exitFullscreen(); setIsFullscreen(false); }
+            try {
+                await containerRef.current?.requestFullscreen();
+                setIsFullscreen(true);
+            } catch (err) {
+                logger.error('Fullscreen failed:', err);
+            }
+        } else {
+            await document.exitFullscreen();
+            setIsFullscreen(false);
+        }
     };
 
     return {
-        isFullscreen, showSettings, setShowSettings,
-        selectedCamera, setSelectedCamera, selectedMicrophone, setSelectedMicrophone,
-        devices, videoQuality, setVideoQuality,
-        localVideoRef, remoteVideoRef, containerRef, toggleFullscreen
+        isFullscreen,
+        showSettings,
+        setShowSettings,
+        selectedCamera,
+        setSelectedCamera,
+        selectedMicrophone,
+        setSelectedMicrophone,
+        devices,
+        videoQuality,
+        setVideoQuality,
+        localVideoRef,
+        remoteVideoRef,
+        containerRef,
+        toggleFullscreen,
     };
 }

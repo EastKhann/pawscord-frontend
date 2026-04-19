@@ -96,13 +96,11 @@ const MessageFlowApp = ({ initialMessages = [] }) => {
                                 <button
                                     data-testid={`edit-save-${msg.id}`}
                                     onClick={() => handleEdit(msg.id)}
-                                >
                                     Save
                                 </button>
                                 <button
                                     data-testid={`edit-cancel-${msg.id}`}
                                     onClick={() => setEditingId(null)}
-                                >
                                     Cancel
                                 </button>
                             </div>
@@ -123,19 +121,16 @@ const MessageFlowApp = ({ initialMessages = [] }) => {
                                 <button
                                     data-testid={`delete-btn-${msg.id}`}
                                     onClick={() => handleDelete(msg.id)}
-                                >
                                     Delete
                                 </button>
                                 <button
                                     data-testid={`reply-btn-${msg.id}`}
                                     onClick={() => handleReply(msg)}
-                                >
                                     Reply
                                 </button>
                                 <button
                                     data-testid={`react-btn-${msg.id}`}
                                     onClick={() => handleReact(msg.id, '👍')}
-                                >
                                     React
                                 </button>
                                 {msg.reactions.map((r, idx) => (
@@ -152,12 +147,11 @@ const MessageFlowApp = ({ initialMessages = [] }) => {
             {/* Reply preview */}
             {replyingTo && (
                 <div data-testid="reply-bar">
-                    Replying to {replyingTo.author.username}:{' '}
+                    Replying to {replyingTo.author.username}: 
                     {replyingTo.content}
                     <button
                         data-testid="cancel-reply"
-                        onClick={() => setReplyingTo(null)}
-                    >
+                        onClick={() => setReplyingTo(null)}>
                         ✕
                     </button>
                 </div>

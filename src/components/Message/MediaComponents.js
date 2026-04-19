@@ -1,30 +1,62 @@
 import { memo, lazy, Suspense, useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaDownload } from 'react-icons/fa';
 import styles from './messageMediaStyles';
 
-const VoiceMessagePlayer = lazy(() => import('../VoiceMessagePlayer'));
+import PropTypes from 'prop-types';
+
+const S = {
+    mar: { marginLeft: '6px' },
+    txt: { color: '#aaa' },
+};
+
+const flexStyle = (style) => ({
+    minHeight: '200px',
+    ...style,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000',
+});
+const sizeStyle = (minHeight) => ({ minHeight });
+
+const VoiceMessagePlayer = lazy(() => import('../chat/VoiceMessagePlayer'));
 
 export const LazyVideo = memo(({ src, style }) => {
+    const { t } = useTranslation();
     const videoRef = useRef(null);
     const [shouldLoad, setShouldLoad] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) { setShouldLoad(true); observer.disconnect(); }
-        }, { threshold: 0.2 });
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setShouldLoad(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.2 }
+        );
         if (videoRef.current) observer.observe(videoRef.current);
-        return () => { if (videoRef.current) observer.unobserve(videoRef.current); };
+        return () => {
+            if (videoRef.current) observer.unobserve(videoRef.current);
+        };
     }, []);
 
     return (
-        <div ref={videoRef} style={{ minHeight: '200px', ...style, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#000' }}>
+        <div ref={videoRef} style={flexStyle(style)}>
             {shouldLoad ? (
                 <video controls preload="metadata" src={src} style={style}>
-                    Taray{'ı'}c{'ı'}n{'ı'}z video oynatmay{'ı'} desteklemiyor.
-                    <a href={src} download>{'İ'}ndir</a>
+                    <track kind="captions" />
+                    Your browser does not support video playback.
+                    <a href={src} download>
+                        {t('download')}
+                    </a>
                 </video>
             ) : (
-                <span style={{ color: '#aaa' }}>Video Y{'ü'}kleniyor...</span>
+                <span style={S.txt}>{t('loading_video')}</span>
             )}
         </div>
     );
@@ -36,18 +68,29 @@ export const LazyMount = memo(({ children, minHeight = 60 }) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) { setShow(true); observer.disconnect(); }
-        }, { threshold: 0.1 });
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setShow(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.1 }
+        );
         if (ref.current) observer.observe(ref.current);
         return () => observer.disconnect();
     }, []);
 
-    return <div ref={ref} style={{ minHeight }}>{show ? children : null}</div>;
+    return (
+        <div ref={ref} style={sizeStyle(minHeight)}>
+            {show ? children : null}
+        </div>
+    );
 });
 LazyMount.displayName = 'LazyMount';
 
 export const FileAttachment = memo(({ fileUrl, fileName, fileSize }) => {
+    const { t } = useTranslation();
     const ext = (fileName || '').split('.').pop().toLowerCase();
     const fileExt = ext.toUpperCase();
     const fileSizeText = fileSize ? `(${(fileSize / 1024 / 1024).toFixed(2)} MB)` : '';
@@ -66,37 +109,60 @@ export const FileAttachment = memo(({ fileUrl, fileName, fileSize }) => {
         <div style={styles.fileAttachment} className="file-attachment-hover">
             <div style={styles.fileIcon}>{getFileIcon()}</div>
             <div style={styles.fileInfo}>
-                <div style={styles.fileName}>{fileName || 'Dosya'}</div>
-                <div style={styles.fileDetails}>{fileExt} {fileSizeText}</div>
+                <div style={styles.fileName}>{fileName || 'File'}</div>
+                <div style={styles.fileDetails}>
+                    {fileExt} {fileSizeText}
+                </div>
             </div>
-            <a href={fileUrl} download={fileName} style={styles.downloadButton} className="download-button-hover" onClick={e => e.stopPropagation()}>
+            <a
+                href={fileUrl}
+                download={fileName}
+                style={styles.downloadButton}
+                className="download-button-hover"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <FaDownload size={18} />
-                <span style={{ marginLeft: '6px' }}>{'İ'}ndir</span>
+                <span style={S.mar}>{t('download')}</span>
             </a>
         </div>
     );
 });
 FileAttachment.displayName = 'FileAttachment';
 
-export const VoiceMessage = memo(({ fileUrl, fileName, duration, transcription, isTranscribing, onTranscribe }) => (
-    <Suspense fallback={<div style={styles.loadingMedia}>{'🎵'} Ses y{'ü'}kleniyor...</div>}>
-        <div>
-            <VoiceMessagePlayer
-                audioUrl={fileUrl}
-                duration={duration || 0}
-                onDownload={() => { const a = document.createElement('a'); a.href = fileUrl; a.download = fileName || `voice-${Date.now()}.webm`; a.click(); }}
-            />
-            {transcription && (
-                <div style={styles.voiceTranscription}>
-                    <div style={styles.transcriptionIcon}>{'💬'}</div>
-                    <div style={styles.transcriptionText}>{transcription}</div>
-                </div>
-            )}
-            {!transcription && !isTranscribing && (
-                <button onClick={onTranscribe} style={styles.transcribeButton}>{'📝'} Metne {'Ç'}evir</button>
-            )}
-            {isTranscribing && <div style={styles.transcribingLoader}>{'⏳'} {'Ç'}evriliyor...</div>}
-        </div>
-    </Suspense>
-));
+export const VoiceMessage = memo(
+    ({ fileUrl, fileName, duration, transcription, isTranscribing, onTranscribe }) => (
+        <Suspense fallback={<div style={styles.loadingMedia}>🎵 Loading audio...</div>}>
+            <div>
+                <VoiceMessagePlayer
+                    audioUrl={fileUrl}
+                    duration={duration || 0}
+                    onDownload={() => {
+                        const a = document.createElement('a');
+                        a.href = fileUrl;
+                        a.download = fileName || `voice-${Date.now()}.webm`;
+                        a.click();
+                    }}
+                />
+                {transcription && (
+                    <div style={styles.voiceTranscription}>
+                        <div style={styles.transcriptionIcon}>💬</div>
+                        <div style={styles.transcriptionText}>{transcription}</div>
+                    </div>
+                )}
+                {!transcription && !isTranscribing && (
+                    <button
+                        aria-label="on Transcribe"
+                        onClick={onTranscribe}
+                        style={styles.transcribeButton}
+                    >
+                        📝 Convert to text
+                    </button>
+                )}
+                {isTranscribing && <div style={styles.transcribingLoader}>⏳ Converting...</div>}
+            </div>
+        </Suspense>
+    )
+);
 VoiceMessage.displayName = 'VoiceMessage';
+
+VoiceMessagePlayer.propTypes = {};

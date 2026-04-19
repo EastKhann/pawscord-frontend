@@ -1,30 +1,40 @@
 // frontend/src/components/MessageInput/PendingFilesPreview.js
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FaFileAlt, FaTimes } from 'react-icons/fa';
 import styles from './styles';
+import { useTranslation } from 'react-i18next';
 
 const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile }) => {
+    const { t } = useTranslation();
+
     if (pendingFiles.length === 0) return null;
 
     return (
-        <div style={styles.pendingFilesContainer}>
+        <div aria-label="pending files preview" style={styles.pendingFilesContainer}>
             <div style={styles.pendingFilesHeader}>
                 <span>📎 {pendingFiles.length} dosya bekliyor</span>
                 <button
                     onClick={() => setPendingFiles([])}
                     style={styles.clearAllButton}
-                    title="Tümünü temizle"
+                    title={t('allnü_temizle')}
                 >
-                    Tümünü Kaldır
+                    Hepsini Kaldır
                 </button>
             </div>
             <div style={styles.pendingFilesList}>
                 {pendingFiles.map((file) => (
                     <div key={file.id} style={styles.pendingFileItem}>
                         {file.previewUrl && file.type.startsWith('image/') ? (
-                            <img src={file.previewUrl} alt={file.name} style={styles.filePreviewImage} />
+                            <img
+                                src={file.previewUrl}
+                                alt={file.name}
+                                style={styles.filePreviewImage}
+                            />
                         ) : file.previewUrl && file.type.startsWith('video/') ? (
-                            <video src={file.previewUrl} style={styles.filePreviewVideo} muted />
+                            <video src={file.previewUrl} style={styles.filePreviewVideo} muted>
+                                <track kind="captions" />
+                            </video>
                         ) : (
                             <div style={styles.filePreviewIcon}>
                                 <FaFileAlt size={24} />
@@ -32,14 +42,16 @@ const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile 
                         )}
                         <div style={styles.fileInfo}>
                             <span style={styles.fileName}>
-                                {file.name.length > 20 ? file.name.substring(0, 17) + '...' : file.name}
+                                {file.name.length > 20
+                                    ? file.name.substring(0, 17) + '...'
+                                    : file.name}
                             </span>
                             <span style={styles.fileSize}>{(file.size / 1024).toFixed(1)} KB</span>
                         </div>
                         <button
                             onClick={() => removePendingFile(file.id)}
                             style={styles.removeFileButton}
-                            title="Dosyayı kaldır"
+                            title={t('remove_file')}
                         >
                             <FaTimes />
                         </button>
@@ -50,4 +62,9 @@ const PendingFilesPreview = ({ pendingFiles, setPendingFiles, removePendingFile 
     );
 };
 
+PendingFilesPreview.propTypes = {
+    pendingFiles: PropTypes.array,
+    setPendingFiles: PropTypes.func,
+    removePendingFile: PropTypes.func,
+};
 export default React.memo(PendingFilesPreview);

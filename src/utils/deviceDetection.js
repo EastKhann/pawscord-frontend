@@ -1,5 +1,5 @@
-// frontend/src/utils/deviceDetection.js
-
+/* eslint-disable no-irregular-whitespace */
+import React from 'react'; // frontend/src/utils/deviceDetection.js
 /**
  * 📱 Device Detection Utility
  * Browser, OS, device type detection
@@ -16,11 +16,13 @@ class DeviceDetector {
      * Device type detection
      */
     isMobile() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(this.userAgent);
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            this.userAgent
+        );
     }
 
     isTablet() {
-        return /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(this.userAgent);
+        return /(tablet|ipad|playbook|deletek)|(android(?!.*mobi))/i.test(this.userAgent);
     }
 
     isDesktop() {
@@ -56,7 +58,10 @@ class DeviceDetector {
      * Browser version
      */
     getBrowserVersion() {
-        const match = this.userAgent.match(/(chrome|safari|firefox|opera|edge|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+        const match =
+            this.userAgent.match(
+                /(chrome|safari|firefox|opera|edge|msie|trident(?=\/))\/?\s*(\d+)/i
+            ) || [];
         return match[2] || 'Unknown';
     }
 
@@ -78,7 +83,7 @@ class DeviceDetector {
             availHeight: window.screen.availHeight,
             colorDepth: window.screen.colorDepth,
             pixelRatio: window.devicePixelRatio || 1,
-            orientation: window.screen.orientation?.type || 'unknown'
+            orientation: window.screen.orientation?.type || 'unknown',
         };
     }
 
@@ -88,7 +93,7 @@ class DeviceDetector {
     getViewportSize() {
         return {
             width: window.innerWidth,
-            height: window.innerHeight
+            height: window.innerHeight,
         };
     }
 
@@ -96,7 +101,8 @@ class DeviceDetector {
      * Connection info
      */
     getConnectionInfo() {
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        const connection =
+            navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
         if (!connection) {
             return { supported: false };
@@ -107,7 +113,7 @@ class DeviceDetector {
             effectiveType: connection.effectiveType,
             downlink: connection.downlink,
             rtt: connection.rtt,
-            saveData: connection.saveData
+            saveData: connection.saveData,
         };
     }
 
@@ -126,7 +132,7 @@ class DeviceDetector {
                 charging: battery.charging,
                 level: battery.level,
                 chargingTime: battery.chargingTime,
-                dischargingTime: battery.dischargingTime
+                dischargingTime: battery.dischargingTime,
             };
         } catch (error) {
             return { supported: false, error: error.message };
@@ -146,7 +152,8 @@ class DeviceDetector {
             jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
             totalJSHeapSize: performance.memory.totalJSHeapSize,
             usedJSHeapSize: performance.memory.usedJSHeapSize,
-            usedPercentage: (performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100
+            usedPercentage:
+                (performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100,
         };
     }
 
@@ -162,7 +169,7 @@ class DeviceDetector {
      */
     getDeviceInfo() {
         return {
-            type: this.isMobile() ? 'mobile' : (this.isTablet() ? 'tablet' : 'desktop'),
+            type: this.isMobile() ? 'mobile' : this.isTablet() ? 'tablet' : 'desktop',
             os: this.getOS(),
             browser: this.getBrowser(),
             browserVersion: this.getBrowserVersion(),
@@ -172,7 +179,7 @@ class DeviceDetector {
             connection: this.getConnectionInfo(),
             memory: this.getMemoryInfo(),
             cpuCores: this.getCPUCores(),
-            userAgent: this.userAgent
+            userAgent: this.userAgent,
         };
     }
 
@@ -184,8 +191,9 @@ class DeviceDetector {
         const cores = this.getCPUCores();
         const connection = this.getConnectionInfo();
 
-        // Düşük bellek
-        if (memory.supported && memory.jsHeapSizeLimit < 1000000000) { // < 1GB
+        // Low bellek
+        if (memory.supported && memory.jsHeapSizeLimit < 1000000000) {
+            // < 1GB
             return true;
         }
 
@@ -195,7 +203,10 @@ class DeviceDetector {
         }
 
         // Yavaş bağlantı
-        if (connection.supported && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')) {
+        if (
+            connection.supported &&
+            (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g')
+        ) {
             return true;
         }
 
@@ -261,8 +272,8 @@ export const useDeviceDetection = () => {
         setDeviceInfo(info);
 
         // Battery info async
-        deviceDetector.getBatteryInfo().then(battery => {
-            setDeviceInfo(prev => ({ ...prev, battery }));
+        deviceDetector.getBatteryInfo().then((battery) => {
+            setDeviceInfo((prev) => ({ ...prev, battery }));
         });
     }, []);
 
@@ -270,5 +281,3 @@ export const useDeviceDetection = () => {
 };
 
 export default DeviceDetector;
-
-

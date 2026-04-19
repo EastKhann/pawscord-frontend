@@ -1,4 +1,6 @@
 // frontend/src/utils/routerManager.js
+import PropTypes from 'prop-types';
+import logger from '../utils/logger';
 
 /**
  * 🗺️ Router Manager
@@ -14,7 +16,7 @@ class RouterManager {
         this.scrollBehavior = options.scrollBehavior || 'smooth';
         this.transitionDuration = options.transitionDuration || 300;
 
-        this.listeners = new Map();
+        this.listners = new Map();
         this.prefetchedRoutes = new Set();
         this.moduleCache = new Map();
 
@@ -84,7 +86,7 @@ class RouterManager {
         const route = this.matchRoute(path);
 
         if (!route) {
-            console.warn(`Route not found: ${path}`);
+            logger.warn(`Route not found: ${path}`);
             this.emit('notFound', { path });
             return;
         }
@@ -210,7 +212,7 @@ class RouterManager {
             this.moduleCache.set(path, component);
             return component;
         } catch (error) {
-            console.error(`Failed to load component for ${path}:`, error);
+            logger.error(`Failed to load component for ${path}:`, error);
             this.emit('loadError', { path, error });
             throw error;
         }
@@ -236,7 +238,7 @@ class RouterManager {
             if (import.meta.env.MODE === 'development') {
             }
         } catch (error) {
-            console.error(`Failed to prefetch ${path}:`, error);
+            logger.error(`Failed to prefetch ${path}:`, error);
         }
     }
 
@@ -340,16 +342,16 @@ class RouterManager {
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listeners.has(event)) {
-            this.listeners.set(event, []);
+        if (!this.listners.has(event)) {
+            this.listners.set(event, []);
         }
-        this.listeners.get(event).push(callback);
+        this.listners.get(event).push(callback);
     }
 
     off(event, callback) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        const callbacks = this.listeners.get(event);
+        const callbacks = this.listners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -358,10 +360,10 @@ class RouterManager {
     }
 
     async emit(event, data) {
-        if (!this.listeners.has(event)) return true;
+        if (!this.listners.has(event)) return true;
 
         const results = [];
-        for (const callback of this.listeners.get(event)) {
+        for (const callback of this.listners.get(event)) {
             const result = await callback(data);
             results.push(result);
         }
@@ -458,7 +460,7 @@ export const Link = ({ to, prefetch = true, children, className, ...props }) => 
             data-route={to}
             data-prefetch={prefetch}
             className={className}
-            onMouseEnter={handleMouseEnter}
+            onMouseEnter={handleMouseEnter}>
             {...props}
         >
             {children}
@@ -466,6 +468,12 @@ export const Link = ({ to, prefetch = true, children, className, ...props }) => 
     );
 };
 
+RouterManager.propTypes = {
+    to: PropTypes.string,
+    prefetch: PropTypes.bool,
+    children: PropTypes.array,
+    className: PropTypes.string,
+};
 export default RouterManager;
 
 

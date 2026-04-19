@@ -5,8 +5,9 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { getApiBase } from '../utils/apiClient';
+import { getApiBase } from '../utils/apiEndpoints';
 import { isElectron } from '../utils/constants';
+import logger from '../utils/logger';
 
 const useGamePresence = () => {
     const [currentGame, setCurrentGame] = useState(null);
@@ -23,13 +24,13 @@ const useGamePresence = () => {
                     await fetch(`${getApiBase()}/activity/game/clear/`, {
                         method: 'POST',
                         headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
+                            Authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
                     });
                     lastReportedGame.current = null;
                 } catch (err) {
-                    console.error('Failed to clear game activity:', err);
+                    logger.error('Failed to clear game activity:', err);
                 }
             }
             return;
@@ -45,18 +46,18 @@ const useGamePresence = () => {
             await fetch(`${getApiBase()}/activity/game/`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     game_name: game.name,
                     game_id: game.id,
-                    platform: 'desktop'
-                })
+                    platform: 'desktop',
+                }),
             });
             lastReportedGame.current = game;
         } catch (err) {
-            console.error('Failed to report game activity:', err);
+            logger.error('Failed to report game activity:', err);
         }
     }, []);
 
@@ -109,17 +110,23 @@ const useGamePresence = () => {
         try {
             return await window.electron.getRunningProcesses();
         } catch (err) {
-            console.error('Failed to get running processes:', err);
+            logger.error('Failed to get running processes:', err);
             return [];
         }
     }, []);
 
     // Set custom game activity
-    const setCustomGame = useCallback(async (gameName, gameId = null) => {
-        const game = { name: gameName, id: gameId || gameName.toLowerCase().replace(/\s+/g, '-') };
-        setCurrentGame(game);
-        await reportGameActivity(game);
-    }, [reportGameActivity]);
+    const setCustomGame = useCallback(
+        async (gameName, gameId = null) => {
+            const game = {
+                name: gameName,
+                id: gameId || gameName.toLowerCase().replace(/\s+/g, '-'),
+            };
+            setCurrentGame(game);
+            await reportGameActivity(game);
+        },
+        [reportGameActivity]
+    );
 
     // Clear game activity
     const clearGame = useCallback(async () => {
@@ -134,7 +141,7 @@ const useGamePresence = () => {
         detectGames,
         getRunningProcesses,
         setCustomGame,
-        clearGame
+        clearGame,
     };
 };
 

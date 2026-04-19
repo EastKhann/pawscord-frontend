@@ -141,7 +141,7 @@ describe('useVoiceSettings', () => {
         it('should accept valid levels', () => {
             const { result } = renderHook(() => useVoiceSettings());
 
-            ['low', 'medium', 'high', 'aggressive'].forEach(level => {
+            ['low', 'medium', 'high', 'aggressive'].forEach((level) => {
                 act(() => result.current.updateNoiseSuppressionLevel(level));
                 expect(result.current.noiseSuppressionLevel).toBe(level);
             });

@@ -1,0 +1,37 @@
+// components/shared/index.js — barrel exports
+
+export { default as AdvancedSearch } from './AdvancedSearch';
+export { default as AdvancedSearchPanel } from './AdvancedSearchPanel';
+export { default as AppModals } from './AppModals';
+export { default as ConfirmModal } from './ConfirmModal';
+export { default as ConnectionStatusBanner } from './ConnectionStatusBanner';
+export { default as CreateGroupModal } from './CreateGroupModal';
+export { default as DownloadModal } from './DownloadModal';
+export { default as ErrorBoundary } from './ErrorBoundary';
+export { default as FeatureErrorBoundary } from './FeatureErrorBoundary';
+export { default as FileManagerPanel } from './FileManagerPanel';
+export { default as ImageGalleryGroup } from './ImageGalleryGroup';
+export { default as ImageLightbox } from './ImageLightbox';
+export { default as KeyboardShortcutsModal } from './KeyboardShortcutsModal';
+export { default as LandingPage } from './LandingPage';
+export { default as LazyImage } from './LazyImage';
+export { default as LoadingSkeleton } from './LoadingSkeleton';
+export { default as LoadingSpinner } from './LoadingSpinner';
+export { default as LogoutModal } from './LogoutModal';
+export { default as MaintenanceBanner } from './MaintenanceBanner';
+export { default as MobileNav } from './MobileNav';
+export { default as PageTransitionWrapper } from './PageTransitionWrapper';
+export { default as PageWrapper } from './PageWrapper';
+export { default as PermissionsPanel } from './PermissionsPanel';
+export { default as ProtectedRoute } from './ProtectedRoute';
+export { default as QuickActionsMenu } from './QuickActionsMenu';
+export { default as QuickSwitcher } from './QuickSwitcher';
+export { default as ReminderModal } from './ReminderModal';
+export { default as ReminderPanel } from './ReminderPanel';
+export { default as RouteErrorBoundary } from './RouteErrorBoundary';
+export { default as SlowModePanel } from './SlowModePanel';
+export { default as StickyMessageBanner } from './StickyMessageBanner';
+export { default as SuspenseWithBoundary } from './SuspenseWithBoundary';
+export { default as SwipeActions } from './SwipeActions';
+export { default as ToastDemo } from './ToastDemo';
+export { default as TopicHistoryPanel } from './TopicHistoryPanel';

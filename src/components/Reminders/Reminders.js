@@ -1,6 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import './Reminders.css';
 import toast from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 // Parse time string like "30m", "2h", "1d", "15:30"
 const parseTimeString = (timeStr) => {
@@ -41,17 +44,17 @@ const parseTimeString = (timeStr) => {
 
 // Format remaining time
 const formatTimeRemaining = (ms) => {
-    if (ms < 0) return 'Geçti';
+    if (ms < 0) return i18n.t('ui.gecti');
 
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (days > 0) return `${days}g ${hours % 24}s`;
-    if (hours > 0) return `${hours}s ${minutes % 60}dk`;
-    if (minutes > 0) return `${minutes}dk ${seconds % 60}sn`;
-    return `${seconds}sn`;
+    if (days > 0) return `${days}d ${hours % 24}h`;
+    if (hours > 0) return `${hours}h ${minutes % 60}m`;
+    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+    return `${seconds}s`;
 };
 
 // Reminder Manager Hook
@@ -85,7 +88,7 @@ export const useReminders = (userId) => {
                         updated = true;
                         // Trigger notification
                         if ('Notification' in window && Notification.permission === 'granted') {
-                            new Notification('⏰ Hatırlatma', {
+                            new Notification(t('ui.hatirlatma'), {
                                 body: r.message,
                                 icon: '/favicon.ico'
                             });
@@ -131,6 +134,8 @@ export const useReminders = (userId) => {
 
 // Main Reminders Component
 const Reminders = ({ userId, onReminderDue }) => {
+    const { t } = useTranslation();
+
     const { reminders, addReminder, removeReminder, clearAll } = useReminders(userId);
     const [timeInput, setTimeInput] = useState('');
     const [messageInput, setMessageInput] = useState('');
@@ -151,18 +156,18 @@ const Reminders = ({ userId, onReminderDue }) => {
 
     const handleAddReminder = () => {
         if (!timeInput || !messageInput.trim()) {
-            toast.info('Zaman ve mesaj girin!');
+            toast.info(t('reminders.timeAndMessage'));
             return;
         }
 
         const time = parseTimeString(timeInput);
         if (!time) {
-            toast.error('Geçersiz zaman formatı! Örnek: 30m, 2h, 15:30');
+            toast.error(t('ui.gecersiz_zaman_formati_ornek_30m_2h_1530'));
             return;
         }
 
         if (time <= Date.now()) {
-            toast.info('Geçmiş bir zaman seçemezsiniz!');
+            toast.info(t('reminders.noPastTime'));
             return;
         }
 
@@ -182,9 +187,9 @@ const Reminders = ({ userId, onReminderDue }) => {
         { label: '5dk', value: '5m' },
         { label: '15dk', value: '15m' },
         { label: '30dk', value: '30m' },
-        { label: '1 saat', value: '1h' },
-        { label: '2 saat', value: '2h' },
-        { label: 'Yarın', value: '1d' }
+        { label: '1 hour', value: '1h' },
+        { label: '2 hour', value: '2h' },
+        { label: t('ui.yarin'), value: '1d' }
     ];
 
     const activeReminders = reminders.filter(r => !r.notified);
@@ -193,7 +198,7 @@ const Reminders = ({ userId, onReminderDue }) => {
     return (
         <div className="reminders-container">
             <div className="reminders-header">
-                <h3>⏰ Hatırlatmalar</h3>
+                <h3>{t('⏰_hatırlatmalar')}</h3>
                 <span className="reminder-count">{activeReminders.length} aktif</span>
             </div>
 
@@ -202,7 +207,7 @@ const Reminders = ({ userId, onReminderDue }) => {
                     <input
                         type="text"
                         className="time-input"
-                        placeholder="30m, 2h, 15:30..."
+                        placeholder={t('30m_2h_15_30')}
                         value={timeInput}
                         onChange={(e) => setTimeInput(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -210,7 +215,7 @@ const Reminders = ({ userId, onReminderDue }) => {
                     <input
                         type="text"
                         className="message-input"
-                        placeholder="Ne hatırlatılsın?"
+                        placeholder={t('ne_hatırlatılsın')}
                         value={messageInput}
                         onChange={(e) => setMessageInput(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -225,8 +230,7 @@ const Reminders = ({ userId, onReminderDue }) => {
                         <button
                             key={qt.value}
                             className="quick-time-btn"
-                            onClick={() => setTimeInput(qt.value)}
-                        >
+                            onClick={() => setTimeInput(qt.value)}>
                             {qt.label}
                         </button>
                     ))}
@@ -236,10 +240,10 @@ const Reminders = ({ userId, onReminderDue }) => {
             {activeReminders.length > 0 && (
                 <div className="reminders-list">
                     <div className="list-header">
-                        <span>Aktif Hatırlatmalar</span>
+                        <span>{t('active_hatırlatmalar')}</span>
                         {activeReminders.length > 1 && (
                             <button className="clear-all-btn" onClick={clearAll}>
-                                Hepsini Sil
+                                Hepsini Delete
                             </button>
                         )}
                     </div>
@@ -260,7 +264,7 @@ const Reminders = ({ userId, onReminderDue }) => {
             {pastReminders.length > 0 && (
                 <div className="reminders-list past">
                     <div className="list-header">
-                        <span>Geçmiş</span>
+                        <span>{t('geçmiş')}</span>
                     </div>
                     {pastReminders.slice(0, 5).map(reminder => (
                         <ReminderItem
@@ -277,7 +281,7 @@ const Reminders = ({ userId, onReminderDue }) => {
             {reminders.length === 0 && (
                 <div className="no-reminders">
                     <span className="empty-icon">⏰</span>
-                    <p>Henüz hatırlatma yok</p>
+                    <p>{t('not_yet_hatırlatma_yok')}</p>
                     <span className="help-text">
                         /remind 30m toplantı veya yukarıdan ekle
                     </span>
@@ -289,6 +293,7 @@ const Reminders = ({ userId, onReminderDue }) => {
 
 // Individual Reminder Item
 const ReminderItem = ({ reminder, now, onRemove, isPast = false }) => {
+    const { t } = useTranslation();
     const remaining = reminder.time - now;
     const isUrgent = remaining > 0 && remaining < 300000; // < 5 min
 
@@ -316,23 +321,23 @@ const ReminderItem = ({ reminder, now, onRemove, isPast = false }) => {
             <button
                 className="remove-btn"
                 onClick={() => onRemove(reminder.id)}
-                title="Sil"
-            >
+                title={t('delete')}
                 ✕
-            </button>
-        </div>
+        </button>
+        </div >
     );
 };
 
 // Reminder Toast for notifications in-app
 export const ReminderToast = ({ reminder, onDismiss }) => {
+    const { t } = useTranslation();
     if (!reminder) return null;
 
     return (
         <div className="reminder-toast">
             <div className="toast-icon">⏰</div>
             <div className="toast-content">
-                <span className="toast-title">Hatırlatma!</span>
+                <span className="toast-title">{t('hatırlatma')}</span>
                 <span className="toast-message">{reminder.message}</span>
             </div>
             <button className="toast-dismiss" onClick={onDismiss}>
@@ -356,6 +361,24 @@ export const parseRemindCommand = (command) => {
     if (!time) return null;
 
     return { time, message };
+};
+
+Reminders.propTypes = {
+    userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    onReminderDue: PropTypes.func,
+};
+
+ReminderItem.propTypes = {
+    reminder: PropTypes.object,
+    now: PropTypes.object,
+    onRemove: PropTypes.func,
+    isPast: PropTypes.bool,
+};
+
+
+ReminderToast.propTypes = {
+    reminder: PropTypes.object,
+    onDismiss: PropTypes.func,
 };
 
 export default Reminders;

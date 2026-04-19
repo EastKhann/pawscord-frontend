@@ -6,7 +6,7 @@ import React from 'react';
 
 /**
  * ♿ Accessibility Utilities
- * 
+ *
  * Features:
  * - Keyboard navigation helpers
  * - ARIA attribute generators
@@ -109,9 +109,9 @@ export const Keys = {
  */
 export const handleListKeyDown = (event, currentIndex, itemCount, options = {}) => {
     const {
-        onSelect = () => { },
-        onFocusChange = () => { },
-        onEscape = () => { },
+        onSelect = () => {},
+        onFocusChange = () => {},
+        onEscape = () => {},
         wrap = true,
         horizontal = false,
     } = options;
@@ -171,7 +171,7 @@ export const handleListKeyDown = (event, currentIndex, itemCount, options = {}) 
  * @param {Object} options - Configuration options
  */
 export const createRovingTabIndex = (elements, options = {}) => {
-    const { wrap = true, horizontal = false, onFocus = () => { } } = options;
+    const { wrap = true, horizontal = false, onFocus = () => {} } = options;
     let currentIndex = 0;
 
     // Initialize tabindex
@@ -232,7 +232,7 @@ export const createRovingTabIndex = (elements, options = {}) => {
         }
     };
 
-    // Attach event listeners
+    // Attach event listners
     elements.forEach((el) => {
         el.addEventListener('keydown', handleKeyDown);
     });
@@ -274,8 +274,9 @@ export const createFocusTrap = (container, options = {}) => {
     let previouslyFocused = document.activeElement;
 
     const getFocusableElements = () => {
-        return Array.from(container.querySelectorAll(focusableSelector))
-            .filter(el => el.offsetParent !== null); // Only visible elements
+        return Array.from(container.querySelectorAll(focusableSelector)).filter(
+            (el) => el.offsetParent !== null
+        ); // Only visible elements
     };
 
     const handleKeyDown = (event) => {
@@ -377,15 +378,7 @@ export const createSkipLink = (targetId) => {
  * @param {Object} options - Configuration options
  */
 export const getButtonAriaProps = (options = {}) => {
-    const {
-        label,
-        description,
-        expanded,
-        pressed,
-        disabled,
-        hasPopup,
-        controls,
-    } = options;
+    const { label, description, expanded, pressed, disabled, hasPopup, controls } = options;
 
     const props = {};
 
@@ -510,7 +503,7 @@ export const prefersHighContrast = () => {
  * @param {number} b - Blue (0-255)
  */
 export const getLuminance = (r, g, b) => {
-    const [rs, gs, bs] = [r, g, b].map(c => {
+    const [rs, gs, bs] = [r, g, b].map((c) => {
         c = c / 255;
         return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
     });
@@ -525,11 +518,13 @@ export const getLuminance = (r, g, b) => {
 export const getContrastRatio = (color1, color2) => {
     const hexToRgb = (hex) => {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16),
-        } : null;
+        return result
+            ? {
+                  r: parseInt(result[1], 16),
+                  g: parseInt(result[2], 16),
+                  b: parseInt(result[3], 16),
+              }
+            : null;
     };
 
     const rgb1 = hexToRgb(color1);
@@ -553,7 +548,12 @@ export const getContrastRatio = (color1, color2) => {
  * @param {'AA'|'AAA'} level - WCAG conformance level
  * @param {'normal'|'large'} textSize - Text size category
  */
-export const meetsContrastRequirements = (foreground, background, level = 'AA', textSize = 'normal') => {
+export const meetsContrastRequirements = (
+    foreground,
+    background,
+    level = 'AA',
+    textSize = 'normal'
+) => {
     const ratio = getContrastRatio(foreground, background);
     if (ratio === null) return null;
 

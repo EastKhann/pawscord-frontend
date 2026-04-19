@@ -2,10 +2,18 @@
 // 📜 EDIT HISTORY - Shows message edit history dropdown
 
 import { useState, useEffect, useRef, memo } from 'react';
+import PropTypes from 'prop-types';
+import logger from '../../utils/logger';
+
+const S = {
+  size: {maxHeight: '200px', overflowY: 'auto'},
+  rel: {position: 'relative', display: 'inline-block', marginLeft: '5px'},
+};
 
 export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAuth }) => {
     const [history, setHistory] = useState([]);
     const [showHistory, setShowHistory] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const historyRef = useRef(null);
 
     useEffect(() => {
@@ -16,7 +24,7 @@ export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAu
                 const response = await fetchWithAuth(`${messageEditHistoryUrl}${messageId}/edit_history/`);
                 if (response.ok) setHistory(await response.json());
             } catch (e) {
-                console.error(e);
+                logger.error(e);
             }
         };
 
@@ -33,20 +41,19 @@ export const EditHistory = memo(({ messageId, messageEditHistoryUrl, fetchWithAu
     }, [showHistory, messageId, messageEditHistoryUrl, fetchWithAuth]);
 
     return (
-        <div style={{ position: 'relative', display: 'inline-block', marginLeft: '5px' }} ref={historyRef}>
+        <div aria-label="handle click outside" style={S.rel}>ref={historyRef}>
             <span
                 onClick={(e) => { e.stopPropagation(); setShowHistory(!showHistory); }}
-                style={styles.editedLabel}
-            >
-                (düzenlendi)
+                style={styles.editedLabel}>
+                (editndi)
             </span>
 
             {showHistory && (
                 <div style={styles.historyDropdown}>
-                    <h4 style={styles.historyHeader}>Geçmiş ({history.length})</h4>
-                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                    <h4 style={styles.historyHeader}>History ({history.length})</h4>
+                    <div style={S.size}>
                         {history.map((h, i) => (
-                            <div key={i} style={styles.historyItem}>
+                            <div key={`item-${i}`} style={styles.historyItem}>
                                 <small>{new Date(h.edited_at).toLocaleString()}</small>
                                 <div><del>{h.old_content}</del></div>
                             </div>
@@ -94,4 +101,9 @@ const styles = {
 };
 
 EditHistory.displayName = 'EditHistory';
+EditHistory.propTypes = {
+    messageId: PropTypes.string,
+    messageEditHistoryUrl: PropTypes.string,
+    fetchWithAuth: PropTypes.func,
+};
 export default EditHistory;

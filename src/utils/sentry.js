@@ -1,7 +1,7 @@
 // frontend/src/utils/sentry.js
 // 🐛 Sentry Error Tracking Integration (v8+)
 
-import * as Sentry from "@sentry/react";
+import * as Sentry from '@sentry/react';
 
 // Initialize Sentry
 export const initSentry = () => {
@@ -73,7 +73,6 @@ export const initSentry = () => {
                 return event;
             },
         });
-
     } else {
     }
 };
@@ -125,7 +124,7 @@ export const trackAction = (action, data = {}) => {
 
 // Performance tracking
 export const startTransaction = (name, op = 'custom') => {
-    return Sentry.startSpan({ name, op }, () => { });
+    return Sentry.startSpan({ name, op }, () => {});
 };
 
 export default {
@@ -138,5 +137,3 @@ export default {
     trackAction,
     startTransaction,
 };
-
-

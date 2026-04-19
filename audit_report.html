@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pawscord Visual Audit — 2026-04-12</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #1a1a2e; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    h1 { padding: 20px; background: #16213e; font-size: 1.4rem; }
+    .summary { display: flex; gap: 16px; padding: 16px 20px; background: #0f3460; flex-wrap: wrap; }
+    .stat { background: #1a1a2e; padding: 10px 18px; border-radius: 8px; text-align: center; }
+    .stat .val { font-size: 1.8rem; font-weight: bold; }
+    .stat .key { font-size: 0.75rem; opacity: 0.7; margin-top: 2px; }
+    .val.ok { color: #23a559; }
+    .val.warn { color: #f0b132; }
+    .val.err { color: #e74c3c; }
+    .filter-bar { padding: 12px 20px; background: #16213e; display: flex; gap: 10px; align-items: center; }
+    .filter-bar button { padding: 6px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+    .btn-all { background: #5865f2; color: white; }
+    .btn-err { background: #e74c3c; color: white; }
+    .btn-ok  { background: #23a559; color: white; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; padding: 20px; }
+    .card { background: #16213e; border-radius: 10px; overflow: hidden; border: 2px solid transparent; transition: border-color 0.2s; }
+    .card:hover { border-color: #5865f2; }
+    .card.has-error { border-color: #e74c3c66; }
+    .card img { width: 100%; height: 200px; object-fit: cover; object-position: top; display: block; cursor: pointer; }
+    .card img:hover { object-position: center; }
+    .label { padding: 8px 12px; font-size: 0.85rem; font-weight: 500; background: #0f3460; }
+    .errors { padding: 6px 12px 10px; }
+    .err { font-size: 0.72rem; padding: 3px 6px; margin-top: 3px; border-radius: 4px; word-break: break-all; }
+    .err.console { background: #e74c3c22; color: #ff8080; }
+    .err.api { background: #f0b13222; color: #ffd080; }
+    .all-errors { padding: 20px; }
+    .all-errors h2 { margin-bottom: 12px; color: #e74c3c; }
+    .all-errors ul { list-style: none; }
+    .all-errors li { font-size: 0.8rem; padding: 4px 0; border-bottom: 1px solid #ffffff18; word-break: break-all; }
+    footer { padding: 20px; text-align: center; opacity: 0.5; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+<h1>🎨 Pawscord Visual Audit — Sun, 12 Apr 2026 21:03:02 GMT</h1>
+<div class="summary">
+    <div class="stat"><div class="val ok">16</div><div class="key">Screenshots</div></div>
+    <div class="stat"><div class="val ok">0</div><div class="key">Screens with Errors</div></div>
+    <div class="stat"><div class="val ok">0</div><div class="key">Console Errors</div></div>
+    <div class="stat"><div class="val ok">0</div><div class="key">API Errors</div></div>
+    <div class="stat"><div class="val">186.2s</div><div class="key">Duration</div></div>
+</div>
+<div class="filter-bar">
+    <button class="btn-all" onclick="filterCards('all')">All Screens (16)</button>
+    <button class="btn-err" onclick="filterCards('err')">⚠️ With Errors (0)</button>
+    <button class="btn-ok"  onclick="filterCards('ok')">✅ Clean (16)</button>
+</div>
+<div class="grid" id="grid">
+
+        <div class="card ">
+            <a href="screenshots/001_00_login_page.png" target="_blank">
+                <img src="screenshots/001_00_login_page.png" alt="00_login_page" loading="lazy" />
+            </a>
+            <div class="label">1. 00_login_page</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/002_01_after_login.png" target="_blank">
+                <img src="screenshots/002_01_after_login.png" alt="01_after_login" loading="lazy" />
+            </a>
+            <div class="label">2. 01_after_login</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/003_02_home.png" target="_blank">
+                <img src="screenshots/003_02_home.png" alt="02_home" loading="lazy" />
+            </a>
+            <div class="label">3. 02_home</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/004_03_discover_servers.png" target="_blank">
+                <img src="screenshots/004_03_discover_servers.png" alt="03_discover_servers" loading="lazy" />
+            </a>
+            <div class="label">4. 03_discover_servers</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/005_03b_discover_scroll.png" target="_blank">
+                <img src="screenshots/005_03b_discover_scroll.png" alt="03b_discover_scroll" loading="lazy" />
+            </a>
+            <div class="label">5. 03b_discover_scroll</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/006_04_premium_store.png" target="_blank">
+                <img src="screenshots/006_04_premium_store.png" alt="04_premium_store" loading="lazy" />
+            </a>
+            <div class="label">6. 04_premium_store</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/007_05_add_server_menu.png" target="_blank">
+                <img src="screenshots/007_05_add_server_menu.png" alt="05_add_server_menu" loading="lazy" />
+            </a>
+            <div class="label">7. 05_add_server_menu</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/008_admin_panel_open.png" target="_blank">
+                <img src="screenshots/008_admin_panel_open.png" alt="admin_panel_open" loading="lazy" />
+            </a>
+            <div class="label">8. admin_panel_open</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/009_dm_chat_first.png" target="_blank">
+                <img src="screenshots/009_dm_chat_first.png" alt="dm_chat_first" loading="lazy" />
+            </a>
+            <div class="label">9. dm_chat_first</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/010_dm_members_sidebar.png" target="_blank">
+                <img src="screenshots/010_dm_members_sidebar.png" alt="dm_members_sidebar" loading="lazy" />
+            </a>
+            <div class="label">10. dm_members_sidebar</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/011_custom_status_modal.png" target="_blank">
+                <img src="screenshots/011_custom_status_modal.png" alt="custom_status_modal" loading="lazy" />
+            </a>
+            <div class="label">11. custom_status_modal</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/012_keyboard_shortcuts_modal.png" target="_blank">
+                <img src="screenshots/012_keyboard_shortcuts_modal.png" alt="keyboard_shortcuts_modal" loading="lazy" />
+            </a>
+            <div class="label">12. keyboard_shortcuts_modal</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/013_support_developer.png" target="_blank">
+                <img src="screenshots/013_support_developer.png" alt="support_developer" loading="lazy" />
+            </a>
+            <div class="label">13. support_developer</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/014_coin_store.png" target="_blank">
+                <img src="screenshots/014_coin_store.png" alt="coin_store" loading="lazy" />
+            </a>
+            <div class="label">14. coin_store</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/015_crypto_modal.png" target="_blank">
+                <img src="screenshots/015_crypto_modal.png" alt="crypto_modal" loading="lazy" />
+            </a>
+            <div class="label">15. crypto_modal</div>
+            
+        </div>
+        <div class="card ">
+            <a href="screenshots/016_ZZ_final_home.png" target="_blank">
+                <img src="screenshots/016_ZZ_final_home.png" alt="ZZ_final_home" loading="lazy" />
+            </a>
+            <div class="label">16. ZZ_final_home</div>
+            
+        </div>
+</div>
+
+
+<footer>Generated by visual_audit.js · 2026-04-12T21:03:02.456Z</footer>
+<script>
+function filterCards(mode) {
+    document.querySelectorAll('.card').forEach(c => {
+        if (mode === 'all') c.style.display = '';
+        else if (mode === 'err') c.style.display = c.classList.contains('has-error') ? '' : 'none';
+        else if (mode === 'ok')  c.style.display = c.classList.contains('has-error') ? 'none' : '';
+    });
+}
+// Click image to open full-size in modal
+document.querySelectorAll('.card img').forEach(img => {
+    img.onclick = e => { e.preventDefault(); window.open(img.parentElement.href, '_blank'); };
+});
+</script>
+</body>
+</html>

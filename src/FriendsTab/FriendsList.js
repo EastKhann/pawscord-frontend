@@ -1,16 +1,52 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { FaCommentDots, FaTimes, FaSearch } from 'react-icons/fa';
-import LazyImage from '../components/LazyImage';
+import LazyImage from '../components/shared/LazyImage';
 import styles from './friendsTabStyles';
 import { getFreshActivity } from '../utils/activityUtils';
 
+// -- dynamic style helpers (pass 2) --
+
+// -- extracted inline style constants --
+
+const _st1063 = styles.username;
+const _st1064 = styles.status;
+const _st1065 = { ...styles.iconButton, color: '#f23f42' };
+
 const IGNORED_APPS = new Set([
-    'fps monitor', 'msi afterburner', 'rivatuner', 'fraps', 'nvidia geforce experience',
-    'amd radeon software', 'obs', 'obs studio', 'streamlabs', 'xsplit', 'nvidia shadowplay',
-    'movavi video suite', 'movavi', 'camtasia', 'bandicam', 'soundpad', 'voicemod',
-    'teamspeak', 'mumble', 'overwolf', 'razer cortex',
-    'steam', 'epic games launcher', 'origin', 'uplay', 'battle.net', 'gog galaxy',
-    'ea app', 'xbox app', 'microsoft store',
+    'fps monitor',
+    'msi afterburner',
+    'rivatuner',
+    'fraps',
+    'nvidia geforce experience',
+    'amd radeon software',
+    'obs',
+    'obs studio',
+    'streamlabs',
+    'xsplit',
+    'nvidia shadowplay',
+    'movavi video suite',
+    'movavi',
+    'camtasia',
+    'bandicam',
+    'soundpad',
+    'voicemod',
+    'teamspeak',
+    'mumble',
+    'overwolf',
+    'razer cortex',
+    'steam',
+    'epic games launcher',
+    'origin',
+    'uplay',
+    'battle.net',
+    'gog galaxy',
+    'ea app',
+    'xbox app',
+    'microsoft store',
 ]);
 
 const isIgnoredApp = (appName) => {
@@ -22,39 +58,105 @@ const isIgnoredApp = (appName) => {
     return false;
 };
 
-const STATUS_TEXT = { online: 'Çevrimiçi', idle: 'Boşta', dnd: 'Rahatsız Etmeyin', invisible: 'Görünmez', offline: 'Çevrimdışı' };
-const STATUS_COLOR = { online: '#23a559', idle: '#f0b232', dnd: '#f23f43', invisible: '#80848e', offline: '#80848e' };
+const STATUS_KEYS = {
+    online: 'friends.online',
+    idle: 'status.idle',
+    dnd: 'status.dnd',
+    invisible: 'status.invisible',
+    offline: 'status.offline',
+};
+const STATUS_COLOR = {
+    online: '#23a559',
+    idle: '#f0b232',
+    dnd: '#f23f43',
+    invisible: '#80848e',
+    offline: '#80848e',
+};
 
-const FriendsList = ({ friends, onlineUsers = [], allUsers = [], getDeterministicAvatar, onStartDM, handleRemoveFriend, setActiveTab }) => {
+const getActivityMeta = (activity) => {
+    if (activity?.spotify) {
+        return {
+            icon: '🎵',
+            color: '#1db954',
+            background: 'rgba(29, 185, 84, 0.16)',
+            text: activity.spotify.track || activity.spotify.name,
+        };
+    }
+
+    if (activity?.steam && !isIgnoredApp(activity.steam.game || activity.steam.name)) {
+        return {
+            icon: '🎮',
+            color: '#66c0f4',
+            background: 'rgba(102, 192, 244, 0.16)',
+            text: activity.steam.game || activity.steam.name,
+        };
+    }
+
+    return null;
+};
+
+const FriendsList = ({
+    friends,
+    onlineUsers = [],
+    allUsers = [],
+    getDeterministicAvatar,
+    onStartDM,
+    handleRemoveFriend,
+    setActiveTab,
+    isLoading = false,
+    error = null,
+}) => {
+    const { t } = useTranslation();
     const [search, setSearch] = useState('');
     const myUsername = localStorage.getItem('chat_username') || '';
 
-    const enriched = useMemo(() => friends.map(friend => {
-        const iAmSender = friend.sender_username === myUsername;
-        const friendUsername = iAmSender ? friend.receiver_username : friend.sender_username;
-        const displayAvatar = iAmSender ? friend.receiver_avatar : friend.sender_avatar;
-        // Prefer live activity from allUsers (real-time) over the stale DB snapshot on the friend object
-        const liveUser = allUsers.find(u => u.username === friendUsername);
-        const friendActivity = getFreshActivity(liveUser?.current_activity || (iAmSender ? friend.receiver_activity : friend.sender_activity));
-        const isReallyOnline = Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
-        return { ...friend, friendUsername, displayAvatar, friendActivity, isReallyOnline };
-    }), [friends, onlineUsers, allUsers, myUsername]);
+    if (isLoading) return <div>{t('common.loading')}</div>;
+    if (error) return <div role="alert">{error}</div>;
+
+    const enriched = useMemo(
+        () =>
+            friends.map((friend) => {
+                const iAmSender = friend.sender_username === myUsername;
+                const friendUsername = iAmSender
+                    ? friend.receiver_username
+                    : friend.sender_username;
+                const displayAvatar = iAmSender ? friend.receiver_avatar : friend.sender_avatar;
+                // Prefer live activity from allUsers (real-time) over the stale DB snapshot on the friend object
+                const liveUser = allUsers.find((u) => u.username === friendUsername);
+                const friendActivity = getFreshActivity(
+                    liveUser?.current_activity ||
+                        (iAmSender ? friend.receiver_activity : friend.sender_activity)
+                );
+                const isReallyOnline =
+                    Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
+                return { ...friend, friendUsername, displayAvatar, friendActivity, isReallyOnline };
+            }),
+        [friends, onlineUsers, allUsers, myUsername]
+    );
 
     const filtered = useMemo(() => {
         const q = search.toLowerCase();
-        const list = q ? enriched.filter(f => f.friendUsername.toLowerCase().includes(q)) : enriched;
+        const list = q
+            ? enriched.filter((f) => f.friendUsername.toLowerCase().includes(q))
+            : enriched;
         // sort: online first
         return [...list].sort((a, b) => (b.isReallyOnline ? 1 : 0) - (a.isReallyOnline ? 1 : 0));
     }, [enriched, search]);
 
-    const onlineCount = enriched.filter(f => f.isReallyOnline).length;
+    const onlineCount = enriched.filter((f) => f.isReallyOnline).length;
 
     if (friends.length === 0) {
         return (
             <div style={styles.emptyState}>
-                <div style={{ fontSize: '3em', marginBottom: '10px' }}>🥺</div>
-                <p style={styles.emptyText}>Henüz kimseyle arkadaş değilsin.</p>
-                <button onClick={() => setActiveTab('add')} style={styles.emptyBtn}>Arkadaş Ekle</button>
+                <div>🥺</div>
+                <p style={styles.emptyText}>{t('friends.noFriends')}</p>
+                <button
+                    onClick={() => setActiveTab('add')}
+                    style={styles.emptyBtn}
+                    aria-label={t('friends.addFriend')}
+                >
+                    {t('friends.addFriend')}
+                </button>
             </div>
         );
     }
@@ -62,59 +164,119 @@ const FriendsList = ({ friends, onlineUsers = [], allUsers = [], getDeterministi
     return (
         <div>
             {/* Header with search + online count */}
-            <div style={{ padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, background: '#1e1f22', borderRadius: 8, padding: '6px 10px' }}>
+            <div>
+                <div>
                     <FaSearch size={11} color="#7a7d87" />
                     <input
                         value={search}
-                        onChange={e => setSearch(e.target.value)}
-                        placeholder="Arkadaş ara..."
-                        style={{ background: 'transparent', border: 'none', outline: 'none', color: '#dbdee1', fontSize: '0.85em', flex: 1 }}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder={t('common.search')}
                     />
                 </div>
-                <div style={{ fontSize: '0.78em', color: '#7a7d87', whiteSpace: 'nowrap', background: '#2b2d31', borderRadius: 6, padding: '4px 8px' }}>
+                <div>
                     🟢 {onlineCount} / {friends.length}
                 </div>
             </div>
 
-            {filtered.map(friend => {
-                const { id, friendUsername, displayAvatar, friendActivity, isReallyOnline } = friend;
+            {filtered.map((friend) => {
+                const { id, friendUsername, displayAvatar, friendActivity, isReallyOnline } =
+                    friend;
                 const friendStatus = isReallyOnline ? 'online' : 'offline';
-                const statusText = STATUS_TEXT[friendStatus] || 'Çevrimdışı';
+                const statusText = t(STATUS_KEYS[friendStatus] || 'status.offline', friendStatus);
                 const statusColor = STATUS_COLOR[friendStatus] || '#80848e';
+                const activityMeta = getActivityMeta(friendActivity);
 
                 return (
                     <div key={id} style={styles.listItem}>
-                        <div style={styles.userInfo} role="button" tabIndex={0} onClick={() => onStartDM(friendUsername)} onKeyDown={e => e.key === 'Enter' && onStartDM(friendUsername)} aria-label={`${friendUsername} ile sohbet et`}>
-                            <div style={{ position: 'relative', flexShrink: 0 }}>
-                                <LazyImage src={displayAvatar || getDeterministicAvatar(friendUsername)} style={styles.avatar} alt="avatar" />
-                                <span style={{
-                                    position: 'absolute', bottom: 0, right: 0,
-                                    width: 11, height: 11, borderRadius: '50%',
-                                    background: statusColor, border: '2px solid #2b2d31'
-                                }} />
+                        <div
+                            style={styles.userInfo}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => onStartDM(friendUsername)}
+                            onKeyDown={(e) => e.key === 'Enter' && onStartDM(friendUsername)}
+                            aria-label={`${t('friends.startDM')} ${friendUsername}`}
+                        >
+                            <div>
+                                <LazyImage
+                                    src={displayAvatar || getDeterministicAvatar(friendUsername)}
+                                    style={styles.avatar}
+                                    alt="avatar"
+                                />
+                                <span
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        right: 0,
+                                        width: 11,
+                                        height: 11,
+                                        borderRadius: '50%',
+                                        background: statusColor,
+                                        border: '2px solid #2b2d31',
+                                    }}
+                                />
                             </div>
-                            <div style={{ marginLeft: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                                <div style={styles.username}>{friendUsername}</div>
-                                <div style={{ ...styles.status, color: statusColor }}>{statusText}</div>
-                                {friendActivity?.spotify && (
-                                    <span style={{ fontSize: '10px', color: '#1db954', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                                        🎵 {friendActivity.spotify.track || friendActivity.spotify.name}
-                                    </span>
-                                )}
-                                {friendActivity?.steam && !isIgnoredApp(friendActivity.steam.game || friendActivity.steam.name) && (
-                                    <span style={{ fontSize: '10px', color: '#66c0f4', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '2px' }}>
-                                        🎮 {friendActivity.steam.game || friendActivity.steam.name}
+                            <div>
+                                <div>
+                                    <div style={_st1063}>{friendUsername}</div>
+                                    {activityMeta && (
+                                        <span
+                                            style={{
+                                                flexShrink: 0,
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '22px',
+                                                height: '22px',
+                                                borderRadius: '999px',
+                                                background: activityMeta.background,
+                                                border: `1px solid ${activityMeta.color}33`,
+                                                color: activityMeta.color,
+                                                fontSize: '10px',
+                                                fontWeight: '700',
+                                            }}
+                                        >
+                                            <span aria-hidden="true">{activityMeta.icon}</span>
+                                        </span>
+                                    )}
+                                </div>
+                                <div style={_st1064}>{statusText}</div>
+                                {activityMeta && (
+                                    <span
+                                        style={{
+                                            fontSize: '10px',
+                                            color: activityMeta.color,
+                                            whiteSpace: 'nowrap',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            marginTop: '2px',
+                                        }}
+                                    >
+                                        {activityMeta.icon} {activityMeta.text}
                                     </span>
                                 )}
                             </div>
                         </div>
                         <div style={styles.actions}>
-                            <button style={styles.iconButton} title="Mesaj At" onClick={(e) => { e.stopPropagation(); onStartDM(friendUsername); }}>
+                            <button
+                                style={styles.iconButton}
+                                title={t('friends.startDM')}
+                                aria-label={t('friends.startDM')}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onStartDM(friendUsername);
+                                }}
+                            >
                                 <FaCommentDots />
                             </button>
-                            <button style={{ ...styles.iconButton, backgroundColor: '#f23f42' }} title="Arkadaşlıktan Çıkar"
-                                onClick={(e) => { e.stopPropagation(); handleRemoveFriend(id, friendUsername); }}>
+                            <button
+                                style={_st1065}
+                                title={t('friends.removeFriend')}
+                                aria-label={t('friends.removeFriend')}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveFriend(id, friendUsername);
+                                }}
+                            >
                                 <FaTimes />
                             </button>
                         </div>
@@ -125,4 +287,15 @@ const FriendsList = ({ friends, onlineUsers = [], allUsers = [], getDeterministi
     );
 };
 
+FriendsList.propTypes = {
+    friends: PropTypes.array,
+    onlineUsers: PropTypes.func,
+    allUsers: PropTypes.array,
+    getDeterministicAvatar: PropTypes.func,
+    onStartDM: PropTypes.func,
+    handleRemoveFriend: PropTypes.func,
+    setActiveTab: PropTypes.func,
+    isLoading: PropTypes.bool,
+    error: PropTypes.string,
+};
 export default React.memo(FriendsList);

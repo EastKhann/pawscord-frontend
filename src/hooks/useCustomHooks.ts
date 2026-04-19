@@ -2,20 +2,17 @@
 
 /**
  * 🎣 Custom React Hooks Collection
- * Performance ve UX için optimize edilmiş hooklar
+ * Thuformance ve UX için optimize edilmiş hooklar
  */
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import logger from '../utils/logger';
 
 /**
  * 1. useIntersectionObserver - Viewport tracking
  */
 export const useIntersectionObserver = (options = {}) => {
-    const {
-        threshold = 0.1,
-        rootMargin = '0px',
-        root = null
-    } = options;
+    const { threshold = 0.1, rootMargin = '0px', root = null } = options;
 
     const [isIntersecting, setIsIntersecting] = useState(false);
     const [entry, setEntry] = useState(null);
@@ -60,7 +57,8 @@ export const useNetworkStatus = () => {
 
         // Network Information API (if available)
         if ('connection' in navigator) {
-            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const connection =
+                navigator.connection || navigator.mozConnection || navigator.webkitConnection;
 
             const updateConnectionInfo = () => {
                 setEffectiveType(connection.effectiveType);
@@ -111,12 +109,15 @@ export const useThrottle = (value, delay = 300) => {
     const lastRan = useRef(Date.now());
 
     useEffect(() => {
-        const handler = setTimeout(() => {
-            if (Date.now() - lastRan.current >= delay) {
-                setThrottledValue(value);
-                lastRan.current = Date.now();
-            }
-        }, delay - (Date.now() - lastRan.current));
+        const handler = setTimeout(
+            () => {
+                if (Date.now() - lastRan.current >= delay) {
+                    setThrottledValue(value);
+                    lastRan.current = Date.now();
+                }
+            },
+            delay - (Date.now() - lastRan.current)
+        );
 
         return () => clearTimeout(handler);
     }, [value, delay]);
@@ -133,27 +134,30 @@ export const useLocalStorage = (key, initialValue) => {
             const item = window.localStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
-            console.error(`Error loading localStorage key "${key}":`, error);
+            logger.error(`Error loading localStorage key "${key}":`, error);
             return initialValue;
         }
     });
 
-    const setValue = useCallback((value) => {
-        try {
-            const valueToStore = value instanceof Function ? value(storedValue) : value;
-            setStoredValue(valueToStore);
-            window.localStorage.setItem(key, JSON.stringify(valueToStore));
-        } catch (error) {
-            console.error(`Error setting localStorage key "${key}":`, error);
-        }
-    }, [key, storedValue]);
+    const setValue = useCallback(
+        (value) => {
+            try {
+                const valueToStore = value instanceof Function ? value(storedValue) : value;
+                setStoredValue(valueToStore);
+                window.localStorage.setItem(key, JSON.stringify(valueToStore));
+            } catch (error) {
+                logger.error(`Error setting localStorage key "${key}":`, error);
+            }
+        },
+        [key, storedValue]
+    );
 
     const removeValue = useCallback(() => {
         try {
             window.localStorage.removeItem(key);
             setStoredValue(initialValue);
         } catch (error) {
-            console.error(`Error removing localStorage key "${key}":`, error);
+            logger.error(`Error removing localStorage key "${key}":`, error);
         }
     }, [key, initialValue]);
 
@@ -166,14 +170,14 @@ export const useLocalStorage = (key, initialValue) => {
 export const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
     });
 
     useEffect(() => {
         const handleResize = () => {
             setWindowSize({
                 width: window.innerWidth,
-                height: window.innerHeight
+                height: window.innerHeight,
             });
         };
 
@@ -347,7 +351,7 @@ export const useClipboard = () => {
             setTimeout(() => setCopiedText(null), 2000);
             return true;
         } catch (error) {
-            console.error('Failed to copy:', error);
+            logger.error('Failed to copy:', error);
             return false;
         }
     }, []);
@@ -362,7 +366,7 @@ export const useToggle = (initialValue = false) => {
     const [value, setValue] = useState(initialValue);
 
     const toggle = useCallback(() => {
-        setValue(v => !v);
+        setValue((v) => !v);
     }, []);
 
     return [value, toggle, setValue];
@@ -375,21 +379,24 @@ export const useAsyncState = (asyncFunction) => {
     const [state, setState] = useState({
         loading: false,
         data: null,
-        error: null
+        error: null,
     });
 
-    const execute = useCallback(async (...args) => {
-        setState({ loading: true, data: null, error: null });
+    const execute = useCallback(
+        async (...args) => {
+            setState({ loading: true, data: null, error: null });
 
-        try {
-            const data = await asyncFunction(...args);
-            setState({ loading: false, data, error: null });
-            return data;
-        } catch (error) {
-            setState({ loading: false, data: null, error });
-            throw error;
-        }
-    }, [asyncFunction]);
+            try {
+                const data = await asyncFunction(...args);
+                setState({ loading: false, data, error: null });
+                return data;
+            } catch (error) {
+                setState({ loading: false, data: null, error });
+                throw error;
+            }
+        },
+        [asyncFunction]
+    );
 
     return { ...state, execute };
 };
@@ -445,7 +452,5 @@ export default {
     useToggle,
     useAsyncState,
     useUpdateEffect,
-    useMountedState
+    useMountedState,
 };
-
-

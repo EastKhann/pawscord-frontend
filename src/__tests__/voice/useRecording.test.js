@@ -11,7 +11,9 @@ class MockMediaRecorder {
         this.ondataavailable = null;
         this.onstop = null;
     }
-    start(timeslice) { this.state = 'recording'; }
+    start(timeslice) {
+        this.state = 'recording';
+    }
     stop() {
         this.state = 'inactive';
         if (this.onstop) this.onstop();
@@ -24,7 +26,7 @@ describe('useRecording', () => {
         isInVoice: true,
         localAudioStream: null,
         remoteStreams: {},
-        currentRoom: 'test-room'
+        currentRoom: 'test-room',
     };
 
     beforeEach(() => {

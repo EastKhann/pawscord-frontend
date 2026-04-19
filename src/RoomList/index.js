@@ -1,3 +1,4 @@
+export { default } from './RoomList';
 // Barrel export for RoomList
 export { default as ActionMenuModal } from './ActionMenuModal';
 export { default as AddServerModal } from './AddServerModal';

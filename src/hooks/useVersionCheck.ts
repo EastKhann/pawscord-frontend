@@ -1,6 +1,7 @@
 // frontend/src/hooks/useVersionCheck.js
 // Extracted from App.js - checks for app updates via CDN
 import { useState, useEffect } from 'react';
+import logger from '../utils/logger';
 
 /**
  * Checks for application updates by comparing semantic versions
@@ -25,13 +26,14 @@ export default function useVersionCheck({ isElectron, isNative }) {
 
                 return false;
             } catch (error) {
-                console.error('Version comparison error:', error);
+                logger.error('Version comparison error:', error);
                 return false;
             }
         };
 
         const checkForUpdates = async () => {
-            const isDebugMode = window.location.hostname === 'localhost' && window.location.port === '3000';
+            const isDebugMode =
+                window.location.hostname === 'localhost' && window.location.port === '3000';
 
             if (!isElectron && !isNative && !isDebugMode) {
                 return;
@@ -44,14 +46,14 @@ export default function useVersionCheck({ isElectron, isNative }) {
                     try {
                         currentVersion = await window.electron.getAppVersion();
                     } catch (e) {
-                        console.warn('Electron version unavailable:', e);
+                        logger.warn('Electron version unavailable:', e);
                     }
                 }
 
                 const res = await fetch('https://media.pawscord.com/builds/version.json');
 
                 if (!res.ok) {
-                    console.warn('version.json fetch failed:', res.status);
+                    logger.warn('version.json fetch failed:', res.status);
                     return;
                 }
 
@@ -68,14 +70,14 @@ export default function useVersionCheck({ isElectron, isNative }) {
                         ipcRenderer.send('update-available', {
                             currentVersion,
                             latestVersion,
-                            downloadUrl: data.download_url_windows
+                            downloadUrl: data.download_url_windows,
                         });
                     }
                 } else {
                     setUpdateAvailable(false);
                 }
             } catch (error) {
-                console.error('Version check error:', error);
+                logger.error('Version check error:', error);
             }
         };
 

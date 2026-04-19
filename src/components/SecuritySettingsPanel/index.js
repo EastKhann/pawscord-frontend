@@ -1,3 +1,4 @@
+export { default } from '../security/SecuritySettingsPanel';
 // Barrel export for SecuritySettingsPanel
 export { default as IPWhitelistTab } from './IPWhitelistTab';
 export { default as PasskeyTab } from './PasskeyTab';

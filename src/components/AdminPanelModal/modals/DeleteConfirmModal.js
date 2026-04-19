@@ -1,34 +1,70 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import styles from '../styles';
 import useModalA11y from '../../../hooks/useModalA11y';
+import { useTranslation } from 'react-i18next';
+import css from '../tabs/AdminTabs.module.css';
+
+// -- dynamic style helpers (pass 2) --
+
+const S = {
+    txt: { color: '#e74c3c', fontSize: '12px' },
+    flex: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.85)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 20,
+    },
+};
+
+const _st1183 = {
+    backgroundColor: '#f23f42',
+    color: '#fff',
+    padding: '10px 16px',
+    borderRadius: '6px',
+    border: 'none',
+    fontWeight: '600',
+    cursor: 'pointer',
+    fontSize: '14px',
+};
 
 const DeleteConfirmModal = ({ deleteConfirm, handleServerDelete, setDeleteConfirm }) => {
+    const { t } = useTranslation();
+
     const onClose = useCallback(() => setDeleteConfirm(null), [setDeleteConfirm]);
-    const { modalRef, overlayProps, dialogProps } = useModalA11y({ onClose, label: 'Delete Confirmation' });
+    const { modalRef, overlayProps, dialogProps } = useModalA11y({
+        onClose,
+        label: 'Delete Confirmation',
+    });
     return (
-        <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.85)', display: 'flex',
-            justifyContent: 'center', alignItems: 'center', zIndex: 20
-        }} {...overlayProps}>
-            <div style={{
-                backgroundColor: '#1a1a1e', borderRadius: '12px',
-                padding: '24px', width: '400px', border: '1px solid #e74c3c40'
-            }} {...dialogProps}>
-                <h3 style={{ color: '#e74c3c', marginTop: 0 }}>⚠️ Silme Onayı</h3>
-                <p style={{ color: '#9ca3af' }}>
-                    <strong style={{ color: '#fff' }}>"{deleteConfirm.name}"</strong> silmek istediğinizden emin misiniz?
-                    <br /><span style={{ color: '#e74c3c', fontSize: '12px' }}>Bu işlem geri alınamaz!</span>
+        <div aria-label="delete confirm modal" style={S.flex} {...overlayProps}>
+            <div className={css.modalCard420} {...dialogProps}>
+                <h3 className={css.dangerH3}>{t('delete_confirmation')}</h3>
+                <p className={css.mutedText}>
+                    <strong className="text-white">"{deleteConfirm.name}"</strong> are you sure you
+                    want to delete?
+                    <br />
+                    <span style={S.txt}>{t('bu_işlem_geri alınamaz')}</span>
                 </p>
-                <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-                    <button style={{ ...styles.actionBtn('#e74c3c'), padding: '10px 20px' }}
+                <div className="flex-gap-8-mt16">
+                    <button
+                        style={_st1183}
                         onClick={() => {
-                            if (deleteConfirm.type === 'server') handleServerDelete(deleteConfirm.id, deleteConfirm.name);
-                        }}>
-                        🗑️ Sil
+                            if (deleteConfirm.type === 'server')
+                                handleServerDelete(deleteConfirm.id, deleteConfirm.name);
+                        }}
+                    >
+                        🗑️ Delete
                     </button>
-                    <button style={{ ...styles.actionBtn('#6b7280'), padding: '10px 20px' }} onClick={() => setDeleteConfirm(null)}>
-                        İptal
+                    <button style={styles.actionBtnGrayLg} onClick={() => setDeleteConfirm(null)}>
+                        Cancel
                     </button>
                 </div>
             </div>
@@ -36,4 +72,9 @@ const DeleteConfirmModal = ({ deleteConfirm, handleServerDelete, setDeleteConfir
     );
 };
 
+DeleteConfirmModal.propTypes = {
+    deleteConfirm: PropTypes.object,
+    handleServerDelete: PropTypes.func,
+    setDeleteConfirm: PropTypes.func,
+};
 export default DeleteConfirmModal;

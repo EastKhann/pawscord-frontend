@@ -1,14 +1,25 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { toast } from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
+import confirmDialog from '../../utils/confirmDialog';
 
 export const eventTypes = [
-    'message.created', 'message.updated', 'message.deleted',
-    'member.joined', 'member.left', 'member.updated',
-    'channel.created', 'channel.updated', 'channel.deleted',
-    'role.created', 'role.updated', 'role.deleted'
+    'message.created',
+    'message.updated',
+    'message.deleted',
+    'member.joined',
+    'member.left',
+    'member.updated',
+    'channel.created',
+    'channel.updated',
+    'channel.deleted',
+    'role.created',
+    'role.updated',
+    'role.deleted',
 ];
 
 const useRoomWebhooks = (fetchWithAuth, apiBaseUrl, roomSlug) => {
+    const { t } = useTranslation();
     const [webhooks, setWebhooks] = useState([]);
     const [deliveries, setDeliveries] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -27,7 +38,7 @@ const useRoomWebhooks = (fetchWithAuth, apiBaseUrl, roomSlug) => {
             const data = await response.json();
             setWebhooks(data.webhooks || []);
         } catch (error) {
-            toast.error('Failed to load webhooks');
+            toast.error(t('roomWebhooks.loadFailed'));
         } finally {
             setLoading(false);
         }
@@ -40,13 +51,13 @@ const useRoomWebhooks = (fetchWithAuth, apiBaseUrl, roomSlug) => {
             setDeliveries(data.deliveries || []);
             setSelectedWebhook(webhookId);
         } catch (error) {
-            toast.error('Failed to load delivery logs');
+            toast.error(t('roomWebhook.deliveryLoadFailed'));
         }
     };
 
     const createWebhook = async () => {
         if (!newWebhook.name || !newWebhook.url) {
-            toast.error('Name and URL are required');
+            toast.error(t('roomWebhook.nameUrlRequired'));
             return;
         }
 
@@ -56,31 +67,31 @@ const useRoomWebhooks = (fetchWithAuth, apiBaseUrl, roomSlug) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...newWebhook,
-                    room_slug: roomSlug
-                })
+                    room_slug: roomSlug,
+                }),
             });
 
-            toast.success('Webhook created successfully');
+            toast.success(t('roomWebhook.created'));
             setShowCreateForm(false);
             setNewWebhook({ name: '', url: '', events: [] });
             fetchWebhooks();
         } catch (error) {
-            toast.error('Failed to create webhook');
+            toast.error(t('roomWebhook.createFailed'));
         }
     };
 
     const deleteWebhook = async (webhookId) => {
-        if (!confirm('Are you sure you want to delete this webhook?')) return;
+        if (!(await confirmDialog(t('webhooks.deleteConfirm')))) return;
 
         try {
             await fetchWithAuth(`${apiBaseUrl}/webhooks/${webhookId}/delete/`, {
-                method: 'DELETE'
+                method: 'DELETE',
             });
 
-            toast.success('Webhook deleted successfully');
+            toast.success(t('roomWebhook.deleted'));
             fetchWebhooks();
         } catch (error) {
-            toast.error('Failed to delete webhook');
+            toast.error(t('roomWebhook.deleteFailed'));
         }
     };
 
@@ -89,24 +100,24 @@ const useRoomWebhooks = (fetchWithAuth, apiBaseUrl, roomSlug) => {
             await fetchWithAuth(`${apiBaseUrl}/webhook/deliveries/retry/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ delivery_id: deliveryId })
+                body: JSON.stringify({ delivery_id: deliveryId }),
             });
 
-            toast.success('Delivery retried successfully');
+            toast.success(t('roomWebhook.retried'));
             if (selectedWebhook) {
                 fetchDeliveries(selectedWebhook);
             }
         } catch (error) {
-            toast.error('Failed to retry delivery');
+            toast.error(t('roomWebhook.retryFailed'));
         }
     };
 
     const toggleEvent = (event) => {
-        setNewWebhook(prev => ({
+        setNewWebhook((prev) => ({
             ...prev,
             events: prev.events.includes(event)
-                ? prev.events.filter(e => e !== event)
-                : [...prev.events, event]
+                ? prev.events.filter((e) => e !== event)
+                : [...prev.events, event],
         }));
     };
 
@@ -114,14 +125,16 @@ const useRoomWebhooks = (fetchWithAuth, apiBaseUrl, roomSlug) => {
         webhooks,
         deliveries,
         loading,
-        showCreateForm, setShowCreateForm,
+        showCreateForm,
+        setShowCreateForm,
         selectedWebhook,
-        newWebhook, setNewWebhook,
+        newWebhook,
+        setNewWebhook,
         fetchDeliveries,
         createWebhook,
         deleteWebhook,
         retryDelivery,
-        toggleEvent
+        toggleEvent,
     };
 };
 

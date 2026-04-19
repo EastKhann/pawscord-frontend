@@ -1,4 +1,7 @@
+import React from 'react';
 // frontend/src/utils/featureFlags.js
+import PropTypes from 'prop-types';
+import logger from '../utils/logger';
 
 /**
  * 🚩 Feature Flags Manager
@@ -11,7 +14,7 @@ class FeatureFlagsManager {
         this.userId = options.userId || this.generateUserId();
         this.environment = options.environment || import.meta.env.MODE || 'development';
         this.storageKey = options.storageKey || 'feature-flags';
-        this.remoteEndpoint = options.remoteEndpoint || '/api/feature-flags';
+        this.remoteEndpoint = options.remoteEndpoint || '/api/feature-flags/';
         this.refreshInterval = options.refreshInterval || 5 * 60 * 1000; // 5 minutes
 
         this.listeners = new Map();
@@ -63,7 +66,7 @@ class FeatureFlagsManager {
             rolloutPercentage = 100,
             environments = ['development', 'production'],
             userIds = [],
-            variations = null
+            variations = null,
         } = options;
 
         this.flags.set(key, {
@@ -74,7 +77,7 @@ class FeatureFlagsManager {
             environments,
             userIds,
             variations,
-            enabled: this.calculateEnabled(key, options)
+            enabled: this.calculateEnabled(key, options),
         });
 
         if (import.meta.env.MODE === 'development') {
@@ -121,7 +124,7 @@ class FeatureFlagsManager {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
+            hash = (hash << 5) - hash + char;
             hash = hash & hash;
         }
         return Math.abs(hash);
@@ -166,7 +169,7 @@ class FeatureFlagsManager {
      */
     override(key, value) {
         if (!this.flags.has(key)) {
-            console.warn(`Flag not found: ${key}`);
+            logger.warn(`Flag not found: ${key}`);
             return;
         }
 
@@ -203,7 +206,7 @@ class FeatureFlagsManager {
             const response = await fetch(`${this.remoteEndpoint}?userId=${this.userId}`);
             const remoteFlags = await response.json();
 
-            Object.keys(remoteFlags).forEach(key => {
+            Object.keys(remoteFlags).forEach((key) => {
                 if (this.flags.has(key)) {
                     const flag = this.flags.get(key);
                     flag.enabled = remoteFlags[key];
@@ -218,7 +221,7 @@ class FeatureFlagsManager {
             if (import.meta.env.MODE === 'development') {
             }
         } catch (error) {
-            console.error('Failed to fetch feature flags:', error);
+            logger.error('Failed to fetch feature flags:', error);
         }
     }
 
@@ -234,7 +237,7 @@ class FeatureFlagsManager {
 
             localStorage.setItem(this.storageKey, JSON.stringify(flagsObj));
         } catch (error) {
-            console.error('Failed to save flags to cache:', error);
+            logger.error('Failed to save flags to cache:', error);
         }
     }
 
@@ -248,14 +251,14 @@ class FeatureFlagsManager {
             if (cached) {
                 const flagsObj = JSON.parse(cached);
 
-                Object.keys(flagsObj).forEach(key => {
+                Object.keys(flagsObj).forEach((key) => {
                     if (!this.flags.has(key)) {
                         this.register(key, { defaultValue: flagsObj[key] });
                     }
                 });
             }
         } catch (error) {
-            console.error('Failed to load flags from cache:', error);
+            logger.error('Failed to load flags from cache:', error);
         }
     }
 
@@ -313,7 +316,7 @@ class FeatureFlagsManager {
     emit(event, data) {
         if (!this.listeners.has(event)) return;
 
-        this.listeners.get(event).forEach(callback => {
+        this.listeners.get(event).forEach((callback) => {
             callback(data);
         });
     }
@@ -326,19 +329,19 @@ export const featureFlags = new FeatureFlagsManager();
 featureFlags.register('new-ui', {
     description: 'Enable new UI design',
     rolloutPercentage: 50,
-    defaultValue: false
+    defaultValue: false,
 });
 
 featureFlags.register('dark-mode', {
     description: 'Enable dark mode',
     rolloutPercentage: 100,
-    defaultValue: true
+    defaultValue: true,
 });
 
 featureFlags.register('ai-chat', {
     description: 'Enable AI chatbot',
     rolloutPercentage: 25,
-    defaultValue: false
+    defaultValue: false,
 });
 
 /**
@@ -379,6 +382,9 @@ export const FeatureGate = ({ flag, fallback = null, children }) => {
     return children;
 };
 
+FeatureFlagsManager.propTypes = {
+    flag: PropTypes.object,
+    fallback: PropTypes.object,
+    children: PropTypes.array,
+};
 export default FeatureFlagsManager;
-
-

@@ -43,7 +43,7 @@ describe('useServerStore — Advanced', () => {
             });
             useServerStore.getState().removeChannel(2);
             expect(useServerStore.getState().channels).toHaveLength(2);
-            expect(useServerStore.getState().channels.find(c => c.id === 2)).toBeUndefined();
+            expect(useServerStore.getState().channels.find((c) => c.id === 2)).toBeUndefined();
         });
 
         it('updateChannel should merge updates for matching channel', () => {
@@ -111,9 +111,7 @@ describe('useServerStore — Advanced', () => {
 
         it('updateMember should merge updates by user.id', () => {
             useServerStore.setState({
-                members: [
-                    { id: 1, user: { id: 10, username: 'alice' }, nickname: null },
-                ],
+                members: [{ id: 1, user: { id: 10, username: 'alice' }, nickname: null }],
             });
             useServerStore.getState().updateMember(10, { nickname: 'Ali' });
             expect(useServerStore.getState().members[0].nickname).toBe('Ali');
@@ -176,13 +174,13 @@ describe('useServerStore — Advanced', () => {
         it('getTextChannels should return text channels and channels without type', () => {
             const textChannels = useServerStore.getState().getTextChannels();
             expect(textChannels.length).toBeGreaterThanOrEqual(2);
-            expect(textChannels.every(c => c.type === 'text' || !c.type)).toBe(true);
+            expect(textChannels.every((c) => c.type === 'text' || !c.type)).toBe(true);
         });
 
         it('getVoiceChannels should return voice channels only', () => {
             const voiceChannels = useServerStore.getState().getVoiceChannels();
             expect(voiceChannels).toHaveLength(2);
-            expect(voiceChannels.every(c => c.type === 'voice')).toBe(true);
+            expect(voiceChannels.every((c) => c.type === 'voice')).toBe(true);
         });
 
         it('getCategoryChannels should return category channels only', () => {
@@ -261,7 +259,10 @@ describe('useServerStore — Advanced', () => {
     describe('updateServer — edge cases', () => {
         it('should not update selectedServer if it does not match', () => {
             useServerStore.setState({
-                servers: [{ id: 1, name: 'S1' }, { id: 2, name: 'S2' }],
+                servers: [
+                    { id: 1, name: 'S1' },
+                    { id: 2, name: 'S2' },
+                ],
                 selectedServer: { id: 2, name: 'S2' },
             });
             useServerStore.getState().updateServer(1, { name: 'Updated S1' });

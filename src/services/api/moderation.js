@@ -13,7 +13,7 @@ export const appealApi = {
     createAppeal: async (data) => {
         return await apiFetch(`${API_BASE}/api/appeals/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getAppealDetails: async (appealId) => {
@@ -22,9 +22,9 @@ export const appealApi = {
     reviewAppeal: async (appealId, data) => {
         return await apiFetch(`${API_BASE}/api/appeals/${appealId}/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -34,7 +34,7 @@ export const toxicityApi = {
     checkContent: async (content, context = {}) => {
         return await apiFetch(`${API_BASE}/api/moderation/toxicity/check/`, {
             method: 'POST',
-            body: JSON.stringify({ content, context })
+            body: JSON.stringify({ content, context }),
         });
     },
     getSettings: async (serverId) => {
@@ -43,15 +43,15 @@ export const toxicityApi = {
     updateSettings: async (serverId, settings) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/toxicity/settings/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
     },
     reportFalsePositive: async (checkId, reason) => {
         return await apiFetch(`${API_BASE}/api/toxicity/${checkId}/false-positive/`, {
             method: 'POST',
-            body: JSON.stringify({ reason })
+            body: JSON.stringify({ reason }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -61,7 +61,7 @@ export const imageModerationApi = {
     scanImage: async (imageUrl) => {
         return await apiFetch(`${API_BASE}/api/moderation/image/scan/`, {
             method: 'POST',
-            body: JSON.stringify({ image_url: imageUrl })
+            body: JSON.stringify({ image_url: imageUrl }),
         });
     },
     getSettings: async (serverId) => {
@@ -70,18 +70,20 @@ export const imageModerationApi = {
     updateSettings: async (serverId, settings) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/image-moderation/settings/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
     },
     getQueue: async (serverId, status = 'pending') => {
-        return await apiFetch(`${API_BASE}/api/servers/${serverId}/image-moderation/queue/?status=${status}`);
+        return await apiFetch(
+            `${API_BASE}/api/servers/${serverId}/image-moderation/queue/?status=${status}`
+        );
     },
     reviewImage: async (serverId, itemId, action) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/image-moderation/queue/`, {
             method: 'POST',
-            body: JSON.stringify({ item_id: itemId, action })
+            body: JSON.stringify({ item_id: itemId, action }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -91,7 +93,7 @@ export const spamDetectionApi = {
     checkContent: async (data) => {
         return await apiFetch(`${API_BASE}/api/moderation/spam/check/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getSettings: async (serverId) => {
@@ -100,9 +102,9 @@ export const spamDetectionApi = {
     updateSettings: async (serverId, settings) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/spam/settings/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -110,24 +112,29 @@ export const spamDetectionApi = {
 // ==========================================
 export const moderationAssistantApi = {
     getSuggestions: async (serverId, status = 'pending') => {
-        return await apiFetch(`${API_BASE}/api/servers/${serverId}/moderation/suggestions/?status=${status}`);
+        return await apiFetch(
+            `${API_BASE}/api/servers/${serverId}/moderation/suggestions/?status=${status}`
+        );
     },
     reviewSuggestion: async (suggestionId, action, note = '') => {
         return await apiFetch(`${API_BASE}/api/moderation/suggestions/${suggestionId}/review/`, {
             method: 'POST',
-            body: JSON.stringify({ action, note })
+            body: JSON.stringify({ action, note }),
         });
     },
     getSettings: async (serverId) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/moderation/assistant/settings/`);
     },
     updateSettings: async (serverId, settings) => {
-        return await apiFetch(`${API_BASE}/api/servers/${serverId}/moderation/assistant/settings/`, {
-            method: 'PATCH',
-            body: JSON.stringify(settings)
-        });
+        return await apiFetch(
+            `${API_BASE}/api/servers/${serverId}/moderation/assistant/settings/`,
+            {
+                method: 'PATCH',
+                body: JSON.stringify(settings),
+            }
+        );
     },
     getEfficiency: async (serverId) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/moderation/efficiency/`);
-    }
+    },
 };

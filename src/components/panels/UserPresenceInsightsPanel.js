@@ -1,17 +1,37 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable react/no-unescaped-entities */
 // frontend/src/components/panels/UserPresenceInsightsPanel.js
 // 👤 User Presence Insights - Activity patterns and engagement analytics
 
 import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import {
-    FaTimes, FaUserClock, FaChartLine, FaMoon, FaSun,
-    FaCalendarAlt, FaClock, FaUsers, FaCommentAlt,
-    FaMicrophone, FaGamepad, FaMusic, FaFire, FaSync,
-    FaTrophy, FaGlobe, FaStar
+    FaTimes,
+    FaUserClock,
+    FaChartLine,
+    FaMoon,
+    FaSun,
+    FaCalendarAlt,
+    FaClock,
+    FaUsers,
+    FaCommentAlt,
+    FaMicrophone,
+    FaGamepad,
+    FaMusic,
+    FaFire,
+    FaSync,
+    FaTrophy,
+    FaGlobe,
+    FaStar,
 } from 'react-icons/fa';
 import { getApiBase } from '../../utils/apiEndpoints';
 import './UserPresenceInsightsPanel.css';
+import { useTranslation } from 'react-i18next';
+import logger from '../../utils/logger';
 
 const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth }) => {
+    const { t } = useTranslation();
+
     const [insights, setInsights] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
@@ -19,7 +39,9 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
     const loadInsights = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${getApiBase()}/users/${userId}/presence-insights/`);
+            const response = await fetchWithAuth(
+                `${getApiBase()}/users/${userId}/presence-insights/`
+            );
             if (response.ok) {
                 const data = await response.json();
                 setInsights(data);
@@ -30,19 +52,21 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                         username: username || 'User',
                         status: 'online',
                         joined: '2024-03-15',
-                        timezone: 'UTC+3'
+                        timezone: 'UTC+3',
                     },
                     activity_summary: {
                         total_online_hours: 847,
                         messages_sent: 12453,
                         voice_hours: 234,
                         servers_active: 8,
-                        reactions_given: 3421
+                        reactions_given: 3421,
                     },
-                    active_hours: Array(24).fill(0).map((_, i) => ({
-                        hour: i,
-                        activity: Math.random() * 100
-                    })),
+                    active_hours: Array(24)
+                        .fill(0)
+                        .map((_, i) => ({
+                            hour: i,
+                            activity: Math.random() * 100,
+                        })),
                     weekly_pattern: [
                         { day: 'Mon', activity: 65 },
                         { day: 'Tue', activity: 72 },
@@ -50,27 +74,27 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                         { day: 'Thu', activity: 75 },
                         { day: 'Fri', activity: 90 },
                         { day: 'Sat', activity: 100 },
-                        { day: 'Sun', activity: 85 }
+                        { day: 'Sun', activity: 85 },
                     ],
                     status_distribution: {
                         online: 45,
                         idle: 25,
                         dnd: 15,
-                        offline: 15
+                        offline: 15,
                     },
                     top_activities: [
                         { name: 'Gaming', hours: 156, icon: 'gaming' },
                         { name: 'Music', hours: 89, icon: 'music' },
                         { name: 'Voice Chat', hours: 234, icon: 'voice' },
-                        { name: 'Streaming', hours: 45, icon: 'stream' }
+                        { name: 'Streaming', hours: 45, icon: 'stream' },
                     ],
                     engagement_score: 87,
                     peak_time: { start: 20, end: 23 },
-                    preferred_timezone: 'Evening (8PM - 11PM)'
+                    preferred_timezone: 'Evening (8PM - 11PM)',
                 });
             }
         } catch (error) {
-            console.error('Error loading insights:', error);
+            logger.error('Error loading insights:', error);
             setInsights(null);
         }
         setLoading(false);
@@ -88,35 +112,59 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'online': return '#10b981';
-            case 'idle': return '#f59e0b';
-            case 'dnd': return '#f23f42';
-            default: return '#6b7280';
+            case 'online':
+                return '#10b981';
+            case 'idle':
+                return '#f59e0b';
+            case 'dnd':
+                return '#f23f42';
+            default:
+                return '#6b7280';
         }
     };
 
     const getActivityIcon = (icon) => {
         switch (icon) {
-            case 'gaming': return <FaGamepad />;
-            case 'music': return <FaMusic />;
-            case 'voice': return <FaMicrophone />;
-            case 'stream': return <FaChartLine />;
-            default: return <FaStar />;
+            case 'gaming':
+                return <FaGamepad />;
+            case 'music':
+                return <FaMusic />;
+            case 'voice':
+                return <FaMicrophone />;
+            case 'stream':
+                return <FaChartLine />;
+            default:
+                return <FaStar />;
         }
     };
 
     const getMaxHourlyActivity = () => {
         if (!insights?.active_hours) return 1;
-        return Math.max(...insights.active_hours.map(h => h.activity), 1);
+        return Math.max(...insights.active_hours.map((h) => h.activity), 1);
     };
 
     if (loading) {
         return (
-            <div className="presence-insights-overlay" onClick={onClose}>
-                <div className="presence-insights-panel" onClick={e => e.stopPropagation()}>
+            <div
+                aria-label="user presence insights panel"
+                className="presence-insights-overlay"
+                role="button"
+                tabIndex={0}
+                onClick={onClose}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            >
+                <div
+                    className="presence-insights-panel"
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) =>
+                        (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                    }
+                >
                     <div className="loading-state">
                         <FaSync className="spin" />
-                        <span>Analyzing activity patterns...</span>
+                        <span>{t('analyzing_activity_patterns')}</span>
                     </div>
                 </div>
             </div>
@@ -124,8 +172,20 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
     }
 
     return (
-        <div className="presence-insights-overlay" onClick={onClose}>
-            <div className="presence-insights-panel" onClick={e => e.stopPropagation()}>
+        <div
+            className="presence-insights-overlay"
+            role="button"
+            tabIndex={0}
+            onClick={onClose}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+        >
+            <div
+                className="presence-insights-panel"
+                role="button"
+                tabIndex={0}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            >
                 {/* Header */}
                 <div className="panel-header">
                     <div className="user-header">
@@ -139,8 +199,12 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                         <div className="user-info">
                             <h2>{insights?.user?.username || 'User'}</h2>
                             <div className="user-meta">
-                                <span><FaCalendarAlt /> Joined {insights?.user?.joined || 'N/A'}</span>
-                                <span><FaGlobe /> {insights?.user?.timezone || 'Unknown'}</span>
+                                <span>
+                                    <FaCalendarAlt /> Joined {insights?.user?.joined || 'N/A'}
+                                </span>
+                                <span>
+                                    <FaGlobe /> {insights?.user?.timezone || 'Unknown'}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -148,37 +212,49 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                         <div className="score-circle">
                             <span className="score-value">{insights?.engagement_score || 0}</span>
                         </div>
-                        <span className="score-label">Engagement</span>
+                        <span className="score-label">{t('engagement')}</span>
                     </div>
-                    <button className="close-btn" onClick={onClose}><FaTimes /></button>
+                    <button className="close-btn" onClick={onClose}>
+                        <FaTimes />
+                    </button>
                 </div>
 
                 {/* Stats Bar */}
                 <div className="stats-bar">
                     <div className="stat">
                         <FaClock />
-                        <span className="stat-value">{formatNumber(insights?.activity_summary?.total_online_hours)}h</span>
-                        <span className="stat-label">Online</span>
+                        <span className="stat-value">
+                            {formatNumber(insights?.activity_summary?.total_online_hours)}h
+                        </span>
+                        <span className="stat-label">{t('online')}</span>
                     </div>
                     <div className="stat">
                         <FaCommentAlt />
-                        <span className="stat-value">{formatNumber(insights?.activity_summary?.messages_sent)}</span>
-                        <span className="stat-label">Messages</span>
+                        <span className="stat-value">
+                            {formatNumber(insights?.activity_summary?.messages_sent)}
+                        </span>
+                        <span className="stat-label">{t('messages')}</span>
                     </div>
                     <div className="stat">
                         <FaMicrophone />
-                        <span className="stat-value">{formatNumber(insights?.activity_summary?.voice_hours)}h</span>
-                        <span className="stat-label">Voice</span>
+                        <span className="stat-value">
+                            {formatNumber(insights?.activity_summary?.voice_hours)}h
+                        </span>
+                        <span className="stat-label">{t('voice')}</span>
                     </div>
                     <div className="stat">
                         <FaUsers />
-                        <span className="stat-value">{insights?.activity_summary?.servers_active || 0}</span>
-                        <span className="stat-label">Servers</span>
+                        <span className="stat-value">
+                            {insights?.activity_summary?.servers_active || 0}
+                        </span>
+                        <span className="stat-label">{t('servers')}</span>
                     </div>
                     <div className="stat">
                         <FaFire />
-                        <span className="stat-value">{formatNumber(insights?.activity_summary?.reactions_given)}</span>
-                        <span className="stat-label">Reactions</span>
+                        <span className="stat-value">
+                            {formatNumber(insights?.activity_summary?.reactions_given)}
+                        </span>
+                        <span className="stat-label">{t('reactions')}</span>
                     </div>
                 </div>
 
@@ -213,47 +289,55 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                                 <div className="peak-card">
                                     <FaSun className="peak-icon day" />
                                     <div className="peak-content">
-                                        <span className="peak-label">Peak Activity Time</span>
-                                        <span className="peak-value">{insights?.preferred_timezone}</span>
+                                        <span className="peak-label">
+                                            {t('peak_activity_time')}
+                                        </span>
+                                        <span className="peak-value">
+                                            {insights?.preferred_timezone}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Status Distribution */}
                             <div className="section">
-                                <h3>Status Distribution</h3>
+                                <h3>{t('status_distribution')}</h3>
                                 <div className="status-bars">
-                                    {Object.entries(insights?.status_distribution || {}).map(([status, percentage]) => (
-                                        <div key={status} className="status-bar-item">
-                                            <div className="status-bar-header">
-                                                <span
-                                                    className="status-name"
-                                                    style={{ color: getStatusColor(status) }}
-                                                >
-                                                    {status.toUpperCase()}
-                                                </span>
-                                                <span className="status-percent">{percentage}%</span>
+                                    {Object.entries(insights?.status_distribution || {}).map(
+                                        ([status, percentage]) => (
+                                            <div key={status} className="status-bar-item">
+                                                <div className="status-bar-header">
+                                                    <span
+                                                        className="status-name"
+                                                        style={{ color: getStatusColor(status) }}
+                                                    >
+                                                        {status.toUpperCase()}
+                                                    </span>
+                                                    <span className="status-percent">
+                                                        {percentage}%
+                                                    </span>
+                                                </div>
+                                                <div className="status-bar-track">
+                                                    <div
+                                                        className="status-bar-fill"
+                                                        style={{
+                                                            width: `${percentage}%`,
+                                                            backgroundColor: getStatusColor(status),
+                                                        }}
+                                                    />
+                                                </div>
                                             </div>
-                                            <div className="status-bar-track">
-                                                <div
-                                                    className="status-bar-fill"
-                                                    style={{
-                                                        width: `${percentage}%`,
-                                                        backgroundColor: getStatusColor(status)
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
+                                        )
+                                    )}
                                 </div>
                             </div>
 
                             {/* Weekly Pattern */}
                             <div className="section">
-                                <h3>Weekly Activity Pattern</h3>
+                                <h3>{t('weekly_activity_pattern')}</h3>
                                 <div className="weekly-chart">
                                     {(insights?.weekly_pattern || []).map((day, index) => (
-                                        <div key={index} className="day-bar">
+                                        <div key={`item-${index}`} className="day-bar">
                                             <div
                                                 className="bar"
                                                 style={{ height: `${day.activity}%` }}
@@ -269,14 +353,17 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                     {activeTab === 'schedule' && (
                         <div className="schedule-tab">
                             <div className="section">
-                                <h3><FaMoon /> <FaSun /> 24-Hour Activity Pattern</h3>
+                                <h3>
+                                    <FaMoon /> <FaSun />
+                                    {t('24-hour_activity_pattern')}
+                                </h3>
                                 <div className="hourly-chart">
                                     {(insights?.active_hours || []).map((hour, index) => (
-                                        <div key={index} className="hour-column">
+                                        <div key={`item-${index}`} className="hour-column">
                                             <div
                                                 className={`hour-bar ${index >= (insights?.peak_time?.start || 0) && index <= (insights?.peak_time?.end || 23) ? 'peak' : ''}`}
                                                 style={{
-                                                    height: `${Math.max((hour.activity / getMaxHourlyActivity()) * 100, 5)}%`
+                                                    height: `${Math.max((hour.activity / getMaxHourlyActivity()) * 100, 5)}%`,
                                                 }}
                                                 title={`${hour.hour}:00 - Activity: ${Math.round(hour.activity)}%`}
                                             />
@@ -285,14 +372,23 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                                     ))}
                                 </div>
                                 <div className="chart-legend">
-                                    <span><span className="legend-dot peak"></span> Peak hours</span>
-                                    <span><span className="legend-dot"></span> Regular activity</span>
+                                    <span>
+                                        <span className="legend-dot peak"></span>
+                                        {t('peak_hours')}
+                                    </span>
+                                    <span>
+                                        <span className="legend-dot"></span>
+                                        {t('regular_activity')}
+                                    </span>
                                 </div>
                             </div>
 
                             <div className="timezone-note">
                                 <FaGlobe />
-                                <span>Times shown in user's local timezone ({insights?.user?.timezone})</span>
+                                <span>
+                                    Times shown in user's local timezone ({insights?.user?.timezone}
+                                    )
+                                </span>
                             </div>
                         </div>
                     )}
@@ -300,30 +396,43 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
                     {activeTab === 'activities' && (
                         <div className="activities-tab">
                             <div className="section">
-                                <h3><FaTrophy /> Top Activities</h3>
+                                <h3>
+                                    <FaTrophy />
+                                    {t('top_activities')}
+                                </h3>
                                 <div className="activities-list">
                                     {(insights?.top_activities || []).map((activity, index) => (
-                                        <div key={index} className={`activity-item rank-${index + 1}`}>
+                                        <div
+                                            key={`item-${index}`}
+                                            className={`activity-item rank-${index + 1}`}
+                                        >
                                             <span className="activity-rank">{index + 1}</span>
                                             <div className="activity-icon">
                                                 {getActivityIcon(activity.icon)}
                                             </div>
                                             <div className="activity-info">
-                                                <span className="activity-name">{activity.name}</span>
-                                                <span className="activity-hours">{activity.hours} hours total</span>
+                                                <span className="activity-name">
+                                                    {activity.name}
+                                                </span>
+                                                <span className="activity-hours">
+                                                    {activity.hours} hours total
+                                                </span>
                                             </div>
                                             <div className="activity-bar">
                                                 <div
                                                     className="bar-fill"
                                                     style={{
-                                                        width: `${(activity.hours / (insights?.top_activities?.[0]?.hours || 1)) * 100}%`
+                                                        width: `${(activity.hours / (insights?.top_activities?.[0]?.hours || 1)) * 100}%`,
                                                     }}
                                                 />
                                             </div>
                                         </div>
                                     ))}
-                                    {(!insights?.top_activities || insights.top_activities.length === 0) && (
-                                        <div className="empty-state">No activity data available</div>
+                                    {(!insights?.top_activities ||
+                                        insights.top_activities.length === 0) && (
+                                        <div className="empty-state">
+                                            {t('no_activity_data_available')}
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -335,4 +444,10 @@ const UserPresenceInsightsPanel = ({ userId, username, onClose, fetchWithAuth })
     );
 };
 
+UserPresenceInsightsPanel.propTypes = {
+    userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    username: PropTypes.string,
+    onClose: PropTypes.func,
+    fetchWithAuth: PropTypes.func,
+};
 export default UserPresenceInsightsPanel;

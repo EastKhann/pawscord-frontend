@@ -1,3 +1,4 @@
+/* eslint-disable no-duplicate-imports */
 /**
  * @file performanceOptimization.js — Legacy re-export
  * All implementations now live in ./performanceHooks.js
@@ -56,5 +57,3 @@ export default {
     useMemoizedStyles,
     useDeepCompare,
 };
-
-

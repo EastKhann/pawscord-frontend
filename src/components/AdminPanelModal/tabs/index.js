@@ -12,3 +12,4 @@ export { default as QuickActionsTab } from './QuickActionsTab';
 export { default as WhitelistTab } from './WhitelistTab';
 export { default as CryptoSignalsTab } from './CryptoSignalsTab';
 export { default as VisitorLogsTab } from './VisitorLogsTab';
+export { default as FeatureWhitelistTab } from './FeatureWhitelistTab';

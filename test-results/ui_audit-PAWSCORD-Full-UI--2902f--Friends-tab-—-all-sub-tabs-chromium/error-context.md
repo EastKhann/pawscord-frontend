@@ -1,0 +1,103 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - link "İçeriğe Atla" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - link "Skip to main content" [ref=e4] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic "page transition wrapper" [ref=e5]:
+      - generic [ref=e7]:
+        - navigation "Channel list" [ref=e8]:
+          - generic [ref=e10]:
+            - navigation "Server listsi" [ref=e11]:
+              - button "Home" [ref=e14] [cursor=pointer]:
+                - img "Pawscord" [ref=e15]
+              - list "Serverlar"
+              - button "Discover Servers" [ref=e17] [cursor=pointer]:
+                - img [ref=e18]
+              - button "Premium Store" [ref=e20] [cursor=pointer]: 🛒
+              - button "Server add" [ref=e21] [cursor=pointer]:
+                - img [ref=e22]
+            - generic [ref=e24]:
+              - generic [ref=e25]:
+                - generic [ref=e26]: Home
+                - button "Join Server" [ref=e28] [cursor=pointer]:
+                  - img [ref=e29]
+                  - text: Join Server
+                - generic [ref=e31]:
+                  - button "PawPaw AI channel" [ref=e32] [cursor=pointer]:
+                    - generic [ref=e33]:
+                      - img [ref=e34]
+                      - generic [ref=e36]: PawPaw AI
+                  - button "Signal Bot channel" [ref=e37] [cursor=pointer]:
+                    - generic [ref=e38]:
+                      - img [ref=e39]
+                      - generic [ref=e41]: Sinyal Bot
+                - generic [ref=e42]:
+                  - generic [ref=e43]:
+                    - generic [ref=e44]: DOĞRUDAN MESAJLAR
+                    - button "Arkadaş ekle" [ref=e45] [cursor=pointer]:
+                      - img [ref=e46]
+                      - text: Ekle
+                  - generic [ref=e48]:
+                    - text: Henüz doğrudan mesaj yok.
+                    - text: Başlamak için Arkadaş Ekle butonuna tıkla!
+              - generic [ref=e49]:
+                - generic [ref=e50]:
+                  - button "💰 Payment Panel" [ref=e51] [cursor=pointer]: 💰
+                  - button "🛒 Store" [ref=e52] [cursor=pointer]: 🛒
+                  - button "🎁 Daily Rewards" [ref=e53] [cursor=pointer]: 🎁
+                  - button "📊 API Usage" [ref=e54] [cursor=pointer]: 📊
+                  - button "📥 Export Jobs" [ref=e55] [cursor=pointer]: 📥
+                  - button "📢 Scheduled Announcements" [ref=e56] [cursor=pointer]: 📢
+                  - button "🎮 Mini Games" [ref=e57] [cursor=pointer]: 🎮
+                  - button "📂 Projects" [ref=e58] [cursor=pointer]: 📂
+                  - button "🎨 Avatar Studio" [ref=e59] [cursor=pointer]: 🎨
+                - button "Support the developer" [ref=e60] [cursor=pointer]:
+                  - img [ref=e61]
+                  - generic [ref=e64]: Support Developer
+                  - generic [ref=e65]: ☕
+                - 'button "testuser testuser #1234 Settings" [ref=e67] [cursor=pointer]':
+                  - img "testuser" [ref=e69]
+                  - generic [ref=e71]:
+                    - generic [ref=e73]: testuser
+                    - generic [ref=e74]: "#1234"
+                  - button "Settings" [ref=e75]:
+                    - img [ref=e76]
+        - main "Chat area" [ref=e78]:
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - img [ref=e84]
+                  - text: Arkadaşlar
+                - generic [ref=e86]:
+                  - button "Tümü (0)" [ref=e87] [cursor=pointer]
+                  - button "Bekleyenler" [ref=e88] [cursor=pointer]
+                  - button "Arkadaş Ekle" [ref=e89] [cursor=pointer]
+              - button "Close" [ref=e90] [cursor=pointer]:
+                - img [ref=e91]
+            - generic [ref=e94]:
+              - heading "ARKADAŞ EKLE" [level=3] [ref=e95]
+              - paragraph [ref=e96]: Arkadaş isteği göndermek için kullanıcı adını girin.
+              - generic [ref=e97]:
+                - textbox "Kullanıcı adı veya arkadaş kodu" [active] [ref=e98]:
+                  - /placeholder: "Kullanıcı Adı veya Arkadaş Kodu (Örn: 8392014)"
+                - button "Gönder" [ref=e99] [cursor=pointer]:
+                  - img [ref=e100]
+                  - text: Gönder
+          - generic [ref=e103]:
+            - generic [ref=e104]:
+              - generic [ref=e105]: Friends
+              - generic [ref=e106]: 0 / 0
+            - list "Friend list" [ref=e107]:
+              - generic [ref=e108]:
+                - img [ref=e109]
+                - paragraph [ref=e111]: Friends list empty. Add friends!
+            - generic [ref=e113]:
+              - generic [ref=e114]: 🐾
+              - generic [ref=e115]: PAWSCORD
+              - generic [ref=e116]: v1.1.229
+```

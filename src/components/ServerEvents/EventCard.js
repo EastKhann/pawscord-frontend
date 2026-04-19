@@ -1,7 +1,15 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { FaClock, FaMapMarkerAlt, FaUsers, FaCheck, FaStar } from 'react-icons/fa';
 import { EVENT_ICONS, EVENT_COLORS } from './eventConstants';
 
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
+    const { t } = useTranslation();
+
     const eventDate = new Date(event.start_time);
     const isOngoing = event.is_ongoing;
     const isPast = !event.is_upcoming && !isOngoing;
@@ -16,19 +24,26 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         if (date.toDateString() === today.toDateString()) {
-            return 'Bugün';
+            return 'Today';
         } else if (date.toDateString() === tomorrow.toDateString()) {
-            return 'Yarın';
+            return t('ui.yarin_2');
         }
-        return date.toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short' });
+        return date.toLocaleDateString('tr-TR', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+        });
     };
 
     if (compact) {
         return (
             <div
                 className={`event-card-compact ${isPast ? 'past' : ''}`}
+                role="button"
+                tabIndex={0}
                 onClick={() => onView?.(event)}
                 style={{ borderLeftColor: EVENT_COLORS[event.event_type] }}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
                 <span className="ecc-icon">{EVENT_ICONS[event.event_type]}</span>
                 <span className="ecc-name">{event.name}</span>
@@ -38,11 +53,14 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
     }
 
     return (
-        <div className={`event-card ${isPast ? 'past' : ''} ${isOngoing ? 'ongoing' : ''}`}>
+        <div
+            aria-label="event card"
+            className={`event-card ${isPast ? 'past' : ''} ${isOngoing ? 'ongoing' : ''}`}
+        >
             {event.cover_image_url && (
                 <div className="ec-cover">
                     <img src={event.cover_image_url} alt={event.name} />
-                    {isOngoing && <span className="ec-live-badge">CANLI</span>}
+                    {isOngoing && <span className="ec-live-badge">{t('canli')}</span>}
                 </div>
             )}
 
@@ -58,11 +76,12 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                     <span className="ec-date">{formatDate(eventDate)}</span>
                 </div>
 
-                <h3 className="ec-name" onClick={() => onView?.(event)}>{event.name}</h3>
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+                <h3 className="ec-name" onClick={() => onView?.(event)}>
+                    {event.name}
+                </h3>
 
-                {event.description && (
-                    <p className="ec-description">{event.description}</p>
-                )}
+                {event.description && <p className="ec-description">{event.description}</p>}
 
                 <div className="ec-meta">
                     <span className="ec-time">
@@ -76,8 +95,7 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                             <FaMapMarkerAlt />
                             {event.external_location.length > 30
                                 ? event.external_location.substring(0, 30) + '...'
-                                : event.external_location
-                            }
+                                : event.external_location}
                         </span>
                     )}
                 </div>
@@ -86,8 +104,9 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                     <div className="ec-attendees">
                         <FaUsers />
                         <span>
-                            {event.going_count} kat{'ı'}l{'ı'}yor
-                            {event.interested_count > 0 && ` • ${event.interested_count} ilgileniyor`}
+                            {event.going_count} katılıyor
+                            {event.interested_count > 0 &&
+                                ` • ${event.interested_count} ilgwithniyor`}
                         </span>
                     </div>
 
@@ -97,13 +116,13 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
                                 className={`rsvp-btn ${event.user_status === 'interested' ? 'active' : ''}`}
                                 onClick={() => onRSVP?.(event.id, 'interested')}
                             >
-                                <FaStar /> {'İ'}lgileniyorum
+                                <FaStar /> {'İlgileniyor'}
                             </button>
                             <button
                                 className={`rsvp-btn primary ${event.user_status === 'going' ? 'active' : ''}`}
                                 onClick={() => onRSVP?.(event.id, 'going')}
                             >
-                                <FaCheck /> Kat{'ı'}lacağ{'ı'}m
+                                <FaCheck /> {'Katıl'}
                             </button>
                         </div>
                     )}
@@ -111,4 +130,11 @@ export const EventCard = ({ event, onRSVP, onView, compact = false }) => {
             </div>
         </div>
     );
+};
+
+EventCard.propTypes = {
+    event: PropTypes.object,
+    onRSVP: PropTypes.func,
+    onView: PropTypes.func,
+    compact: PropTypes.object,
 };

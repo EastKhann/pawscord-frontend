@@ -55,8 +55,7 @@ const MockDMItem = ({
             tabIndex={0}
             aria-selected={isActive}
             onClick={() => onSelect(conversation)}
-            className={isActive ? 'active' : ''}
-        >
+            className={isActive ? 'active' : ''}>
             <img
                 data-testid={`dm-avatar-${conversation.username}`}
                 src={conversation.avatar || getDeterministicAvatar(conversation.username)}
@@ -109,7 +108,7 @@ const MockRoomList = ({
             <div data-testid="room-search">
                 <input
                     data-testid="room-search-input"
-                    placeholder="Ara veya yeni sohbet başlat"
+                    placeholder="Ara or yeni sohbet başlat"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -119,14 +118,14 @@ const MockRoomList = ({
                 <>
                     {/* Friend shortcuts */}
                     <div data-testid="friend-shortcuts">
-                        <button data-testid="friends-button">Arkadaşlar ({friendsList.length})</button>
+                        <button data-testid="friends-button">Friendlar ({friendsList.length})</button>
                     </div>
 
                     {/* DM Conversations */}
                     <div data-testid="dm-list" role="list" aria-label="Direkt Mesajlar">
                         <h4 data-testid="dm-header">DİREKT MESAJLAR</h4>
                         {filteredConversations.length === 0 && (
-                            <div data-testid="no-conversations">Henüz mesaj yok</div>
+                            <div data-testid="no-conversations">Not yet message yok</div>
                         )}
                         {filteredConversations.map(conv => (
                             <MockDMItem
@@ -153,7 +152,7 @@ const MockRoomList = ({
                         />
                     ))}
                     {filteredRooms.length === 0 && (
-                        <div data-testid="no-rooms">Kanal bulunamadı</div>
+                        <div data-testid="no-rooms">Channel not found</div>
                     )}
                 </div>
             )}
@@ -297,7 +296,7 @@ describe('RoomList Component', () => {
                 <MockRoomList
                     mode="server"
                     rooms={mockRooms}
-                    unreadCounts={{ 'room-random': 7 }}
+                    unreadCounts={{ 'room-random': 7 }}>
                     {...handlers}
                 />
             );
@@ -333,11 +332,11 @@ describe('RoomList Component', () => {
                 <MockRoomList
                     mode="home"
                     conversations={mockConversations}
-                    friendsList={[{ username: 'alice' }, { username: 'charlie' }]}
+                    friendsList={[{ username: 'alice' }, { username: 'charlie' }]}>
                     {...handlers}
                 />
             );
-            expect(screen.getByTestId('friends-button')).toHaveTextContent('Arkadaşlar (2)');
+            expect(screen.getByTestId('friends-button')).toHaveTextContent('Friendlar (2)');
         });
     });
 });

@@ -7,6 +7,7 @@
  * @param {string} message - Text to announce
  * @param {'polite'|'assertive'} priority - Urgency level
  */
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
 export function announceToScreenReader(message, priority = 'polite') {
     let container = document.getElementById('a11y-live-region');
     if (!container) {
@@ -46,9 +47,10 @@ export function announceToScreenReader(message, priority = 'polite') {
  */
 export function trapFocus(containerRef) {
     const el = containerRef?.current ?? containerRef;
-    if (!el) return () => { };
+    if (!el) return () => {};
 
-    const FOCUSABLE = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const FOCUSABLE =
+        'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
     const previouslyFocused = document.activeElement;
 
     const handleKeyDown = (e) => {

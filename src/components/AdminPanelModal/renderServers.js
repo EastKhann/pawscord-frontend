@@ -1,52 +1,83 @@
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-undef */
 import React from 'react';
 import { FaEye, FaTrash } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import css from './tabs/AdminTabs.module.css';
+import PropTypes from 'prop-types';
+import styles from './styles';
 
 // Extracted from AdminPanelModal.js
-    const renderServers = () => (
-        <div>
-            <h2 style={{ color: '#fff', marginBottom: '16px', fontSize: '18px' }}>🏠 Sunucu Yönetimi</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
-                {servers.map(server => (
-                    <div key={server.id} style={{ ...styles.statCard, position: 'relative' }}>
+const renderServers = () => {
+    const { t } = useTranslation();
+    return (
+        <div aria-label="render servers">
+            <h2 className="white-18-mb16">{t('🏠_server_yönetimi')}</h2>
+            <div className="grid-auto-280-14">
+                {servers.map((server) => (
+                    <div key={server.id} style={styles.statCardRel}>
                         {server.is_verified && (
-                            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-                                <span style={styles.badge('#23a559')}>✓ Onaylı</span>
+                            <div className="pos-abs-tr10">
+                                <span style={styles.badge('#23a559')}>{t('✓_approved')}</span>
                             </div>
                         )}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-                            <div style={{
-                                width: '48px', height: '48px', borderRadius: '12px',
-                                background: `linear-gradient(135deg, hsl(${server.id * 50}, 60%, 45%), hsl(${server.id * 50 + 40}, 60%, 35%))`,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                color: '#fff', fontWeight: '700', fontSize: '18px'
-                            }}>
+                        <div className="flex-align-12-mb14">
+                            <div
+                                style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    borderRadius: '12px',
+                                    background: `linear-gradient(135deg, hsl(${server.id * 50}, 60%, 45%), hsl(${server.id * 50 + 40}, 60%, 35%))`,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: '#fff',
+                                    fontWeight: '700',
+                                    fontSize: '18px',
+                                }}
+                            >
                                 {server.name?.charAt(0)}
                             </div>
                             <div>
-                                <div style={{ fontWeight: '600', color: '#fff', fontSize: '14px' }}>{server.name}</div>
-                                <div style={{ fontSize: '11px', color: '#6b7280' }}>Sahip: {server.owner}</div>
+                                <div className="white-bold-14">{server.name}</div>
+                                <div className="text-gray6b-11">
+                                    {t('admin.servers.owner', 'Sahip')}: {server.owner}
+                                </div>
                             </div>
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '14px' }}>
+                        <div className="grid-3col-8-mb14">
                             <div style={styles.miniCard}>
-                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#5865f2' }}>{server.members}</div>
-                                <div style={{ fontSize: '9px', color: '#6b7280' }}>Üye</div>
+                                <div className="white-bold-16p">{server.members}</div>
+                                <div className="text-gray6b-9">{t('member')}</div>
                             </div>
                             <div style={styles.miniCard}>
-                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#23a559' }}>{server.channels}</div>
-                                <div style={{ fontSize: '9px', color: '#6b7280' }}>Kanal</div>
+                                <div className="white-bold-16g">{server.channels}</div>
+                                <div className="text-gray6b-9">{t('channel')}</div>
                             </div>
                             <div style={styles.miniCard}>
-                                <div style={{ fontSize: '16px', fontWeight: '700', color: '#5865f2' }}>{server.voice_channels}</div>
-                                <div style={{ fontSize: '9px', color: '#6b7280' }}>Ses</div>
+                                <div className="white-bold-16p">{server.voice_channels}</div>
+                                <div className="text-gray6b-9">{t('ses')}</div>
                             </div>
                         </div>
-                        <div style={{ display: 'flex', gap: '6px' }}>
-                            <button style={{ ...styles.actionBtn('#5865f2'), flex: 1, padding: '8px' }} onClick={() => handleServerDetails(server)}>
-                                <FaEye /> Görüntüle
+                        <div className="flex-gap-6">
+                            <button
+                                style={styles.actionBtnBlueBlock}
+                                onClick={() => handleServerDetails(server)}
+                            >
+                                <FaEye /> {t('admin.servers.view', 'Görüntüle')}
                             </button>
-                            <button style={{ ...styles.actionBtn('#e74c3c'), flex: 1, padding: '8px' }} onClick={() => setDeleteConfirm({ type: 'server', id: server.id, name: server.name })}>
-                                <FaTrash /> Sil
+                            <button
+                                style={styles.actionBtnRedBlock}
+                                onClick={() =>
+                                    setDeleteConfirm({
+                                        type: 'server',
+                                        id: server.id,
+                                        name: server.name,
+                                    })
+                                }
+                            >
+                                <FaTrash /> {t('admin.servers.delete', 'Sil')}
                             </button>
                         </div>
                     </div>
@@ -54,3 +85,6 @@ import { FaEye, FaTrash } from 'react-icons/fa';
             </div>
         </div>
     );
+};
+
+renderServers.propTypes = {};

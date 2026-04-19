@@ -1,3 +1,17 @@
-# https://www.robotstxt.org/robotstxt.html
+# PAWSCORD robots.txt
+# Allow search engines to index the landing page
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /swagger/
+Disallow: /static/
+Disallow: /media/
+Disallow: /ws/
+
+# Sitemap
+Sitemap: https://www.pawscord.com/sitemap.xml
+
+# Sitemap (uncomment when available)
+# Sitemap: https://www.pawscord.com/sitemap.xml
+# Last updated: 2026-04-12 (force rebuild)

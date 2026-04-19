@@ -1,3 +1,4 @@
+export { default } from '../admin/AdminAnalyticsPanel';
 // Barrel export for AdminAnalyticsPanel
 export { default as OverviewTab } from './OverviewTab';
 export { default as PremiumTab } from './PremiumTab';

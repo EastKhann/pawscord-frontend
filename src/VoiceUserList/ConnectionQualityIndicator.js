@@ -1,9 +1,10 @@
-// frontend/src/VoiceUserList/ConnectionQualityIndicator.js
+﻿// frontend/src/VoiceUserList/ConnectionQualityIndicator.js
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * 🔥 Bağlantı Kalitesi Göstergesi — sinyal çubukları (1-4 bar)
- * 
+ *
  * Props:
  *   - quality: 'excellent' | 'good' | 'fair' | 'poor' | undefined
  *   - rtt: RTT (ms)
@@ -12,10 +13,10 @@ import React from 'react';
  *   - size: piksel boyutu (varsayılan 16)
  */
 const qualityConfig = {
-    excellent: { bars: 4, color: '#23a559', label: 'Mükemmel' },
-    good: { bars: 3, color: '#7BC96F', label: 'İyi' },
+    excellent: { bars: 4, color: '#23a559', label: 'Excellent' },
+    good: { bars: 3, color: '#7BC96F', label: 'Good' },
     fair: { bars: 2, color: '#f0b232', label: 'Orta' },
-    poor: { bars: 1, color: '#f23f42', label: 'Zayıf' },
+    poor: { bars: 1, color: '#f23f42', label: 'Weak' },
 };
 
 const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore, size = 16 }) => {
@@ -32,10 +33,13 @@ const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore
         rtt != null ? `RTT: ${Math.round(rtt)}ms` : null,
         packetLossRate != null ? `Kayıp: ${packetLossRate.toFixed(1)}%` : null,
         qualityScore != null ? `Skor: ${qualityScore}/100` : null,
-    ].filter(Boolean).join(' | ');
+    ]
+        .filter(Boolean)
+        .join(' | ');
 
     return (
         <div
+            aria-label="connection quality indicator"
             title={tooltip}
             style={{
                 display: 'inline-flex',
@@ -46,7 +50,7 @@ const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore
                 cursor: 'default',
             }}
         >
-            {[1, 2, 3, 4].map(barIndex => {
+            {[1, 2, 3, 4].map((barIndex) => {
                 const isActive = barIndex <= config.bars;
                 const barHeight = (barIndex / 4) * size;
                 return (
@@ -67,4 +71,11 @@ const ConnectionQualityIndicator = ({ quality, rtt, packetLossRate, qualityScore
     );
 };
 
+ConnectionQualityIndicator.propTypes = {
+    quality: PropTypes.object,
+    rtt: PropTypes.object,
+    packetLossRate: PropTypes.object,
+    qualityScore: PropTypes.object,
+    size: PropTypes.number,
+};
 export default React.memo(ConnectionQualityIndicator);

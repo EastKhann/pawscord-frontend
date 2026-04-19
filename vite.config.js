@@ -51,8 +51,26 @@ export default defineConfig({
       template: 'treemap', // treemap, sunburst, network
     }),
 
+    // 🔥 FIX: Cloudflare Pages routes CORS-mode requests to index.html instead of static assets.
+    // Vite adds crossorigin to <link rel="stylesheet"> and <script type="module">, which causes
+    // browsers to use Sec-Fetch-Mode: cors. Cloudflare Pages incorrectly serves index.html for these.
+    // Removing crossorigin makes the browser use same-origin/no-cors mode instead of cors,
+    // so Cloudflare serves the actual files. Safe: all assets are same-origin anyway.
+    {
+      name: 'remove-cloudflare-breaking-crossorigin',
+      apply: 'build',
+      transformIndexHtml(html) {
+        // Remove crossorigin from CSS links (same-origin → no CORS needed)
+        html = html.replace(/<link rel="stylesheet" crossorigin /g, '<link rel="stylesheet" ');
+        // Remove crossorigin from module script entry (same-origin → dynamic imports use same-origin mode)
+        html = html.replace(/<script type="module" crossorigin /g, '<script type="module" ');
+        return html;
+      }
+    },
+
     // ⚡ PWA Support - SADECE web build için (Electron'da devre dışı)
     ...(process.env.VITE_ELECTRON !== 'true' ? [VitePWA({
+      injectRegister: false,
       // 🔥 autoUpdate: Yeni deploy anında aktif olsun (chunk hatalarını önler)
       registerType: 'autoUpdate',
       workbox: {
@@ -63,7 +81,7 @@ export default defineConfig({
         // JS/CSS zaten hariç (hash'li, runtime'da yüklensin)
         globPatterns: ['**/*.{ico,png,svg,webp}'],
         // Büyük dosyaları precache'den hariç tut
-        globIgnores: ['**/bot/*.png', '**/static/js/*.js', '**/static/css/*.css', '**/*.html'],
+        globIgnores: ['**/bot/*.png', '**/static/js/*.js', '**/static/css/*.css', '**/assets/js/*.js', '**/assets/css/*.css', '**/*.html'],
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
         // Eski cache'leri otomatik temizle
         cleanupOutdatedCaches: true,
@@ -71,19 +89,9 @@ export default defineConfig({
         navigateFallback: null,
         navigationPreload: false,
         runtimeCaching: [
-          // 🔥 JS/CSS: NetworkFirst - her zaman güncel dosyaları yükle, offline ise cache'den
-          {
-            urlPattern: /\/static\/(?:js|css)\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'static-assets-v2',
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
-              },
-              networkTimeoutSeconds: 5
-            }
-          },
+          // 🔥 Hash'li JS/CSS dosyaları SW runtime cache'lenmiyor.
+          // Stale HTML ile eski chunk hash'leri karışırsa browser/CDN doğrudan
+          // doğru 200/404 cevabını almalı; SW yanlışlıkla index.html cache'lememeli.
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
@@ -199,11 +207,15 @@ export default defineConfig({
     // VITE_OUT_DIR=dist for Cloudflare Pages, default 'build' for local/Electron
     outDir: process.env.VITE_OUT_DIR || 'build',
 
+    // Cloudflare Pages is incorrectly serving some JS modulepreload requests as HTML.
+    // Disable JS module preloads so dynamic imports fetch chunks directly.
+    modulePreload: false,
+
     // Sourcemap (production'da false)
     sourcemap: false,
 
     // Chunk size warnings
-    chunkSizeWarningLimit: 1500,
+    chunkSizeWarningLimit: 500,  // ⚡ Catch large chunks early
 
     // Rollup optimizations
     rollupOptions: {
@@ -246,23 +258,29 @@ export default defineConfig({
               return 'icons-vendor';
             }
 
+            // Cloudflare Pages is intermittently serving some script-destination
+            // chunk requests as HTML. Keep high-traffic shared/vendor modules on
+            // the already-working main chunk instead of separate JS files.
             // UI libraries - Toastify, color picker
+            // NOTE: renamed from 'main' to 'app-vendor' to bust CDN cache for old wrong-cached main-BNr3Bg49.js
             if (id.includes('react-toastify') || id.includes('react-color')) {
-              return 'ui-vendor';
+              return 'app-vendor';
             }
 
-            // Chart libraries - all chart libs in chart-vendor (imports react-core, no circular dep)
-            if (id.includes('recharts') || id.includes('victory-vendor') ||
-              id.includes('@reduxjs/toolkit') || id.includes('react-redux') ||
+            // Redux/state libs that may be used app-wide
+            // NOTE: renamed from 'main' to 'app-vendor' to bust CDN cache
+            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux') ||
               id.includes('reselect') || id.includes('immer') ||
               id.includes('use-sync-external-store')) {
-              return 'chart-vendor'; // Recharts + its Redux/toolkit deps
+              return 'app-vendor';
             }
-            if (id.includes('chart.js') && !id.includes('react-chartjs')) {
-              return 'chart-vendor'; // Pure chart.js
+            // Pure chart libs (only used by analytics/dashboard pages) - lazy
+            if (id.includes('recharts') || id.includes('victory-vendor')) {
+              return 'chart-vendor';
             }
-            if (id.includes('react-chartjs-2')) {
-              return 'chart-vendor'; // Chart.js React wrapper
+            // chart.js + react wrapper (~150KB)
+            if (id.includes('chart.js') || id.includes('react-chartjs')) {
+              return 'chart-vendor';
             }
 
             // Media libraries
@@ -275,12 +293,12 @@ export default defineConfig({
               return 'editor-vendor';
             }
             if (id.includes('react-dnd') || id.includes('dnd-core') || id.includes('@dnd-kit')) {
-              return 'ui-vendor'; // DnD libraries
+              return 'dnd-vendor';
             }
 
             // Crypto & Security
             if (id.includes('crypto-js') || id.includes('spark-md5') || id.includes('jwt-decode')) {
-              return 'crypto-vendor';
+              return 'main';
             }
 
             // Virtual scrolling
@@ -291,6 +309,62 @@ export default defineConfig({
             // State management
             if (id.includes('zustand')) {
               return 'state-vendor';
+            }
+
+            // HTTP client — keep separate to avoid being absorbed into feature chunks
+            if (id.includes('axios')) {
+              return 'main';
+            }
+
+            // 📊 Sentry SDK (~1.8 MB!) — error monitoring, can load deferred
+            // Putting in own chunk so it doesn't bloat the entry bundle
+            if (id.includes('@sentry')) {
+              return 'sentry-vendor';
+            }
+
+            // 🔥 Firebase SDK (FCM, messaging) — only needed for push notifications
+            if (id.includes('firebase') || id.includes('@firebase')) {
+              return 'firebase-vendor';
+            }
+
+            // 🌐 i18next runtime (translations are loaded on demand anyway)
+            if (id.includes('i18next') || id.includes('react-i18next')) {
+              return 'i18n-vendor';
+            }
+          }
+
+          // ⚡ App-level chunk splitting for large feature modules
+          if (id.includes('/src/')) {
+            // Shared utilities — must be checked BEFORE feature chunks
+            // to prevent Rollup from absorbing them into feature chunks (causing circular deps)
+            if (id.includes('/utils/toast') || id.includes('/utils/constants') ||
+              id.includes('/utils/apiEndpoints') || id.includes('/utils/confirmDialog') ||
+              id.includes('/utils/authFetch') || id.includes('/utils/logger') ||
+              id.includes('/utils/ThemeManager') ||
+              id.includes('/hooks/useModalA11y') ||
+              id.includes('AuthContext')) {
+              return 'main';
+            }
+
+            // Voice feature (WebRTC, audio processing) — large, not always needed
+            if (id.includes('/components/Voice') || id.includes('/hooks/useVoice') ||
+              id.includes('/stores/useVoiceStore')) {
+              return 'feature-voice';
+            }
+            // Admin & analytics — staff-only features
+            if (id.includes('/components/Admin') || id.includes('/components/Analytics') ||
+              id.includes('AnalyticsPanel') || id.includes('AnalyticsDashboard')) {
+              return 'feature-admin';
+            }
+            // Premium & store — monetization features
+            if (id.includes('Premium') || id.includes('StoreModal') || id.includes('CoinStore') ||
+              id.includes('SubscriptionManager')) {
+              return 'feature-premium';
+            }
+            // Moderation tools — moderator-only features
+            if (id.includes('Moderation') || id.includes('RaidProtection') ||
+              id.includes('SpamDetection') || id.includes('AutoMod')) {
+              return 'feature-moderation';
             }
           }
         },
@@ -303,12 +377,12 @@ export default defineConfig({
           } else if (/woff|woff2|ttf|otf/i.test(extType)) {
             extType = 'fonts';
           } else if (/css/i.test(extType)) {
-            return 'static/css/[name]-[hash][extname]';
+            return 'assets/css/[name]-[hash][extname]';
           }
-          return `static/${extType}/[name]-[hash][extname]`;
+          return `assets/${extType}/[name]-[hash][extname]`;
         },
-        chunkFileNames: 'static/js/[name]-[hash].js',
-        entryFileNames: 'static/js/[name]-[hash].js',
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
       },
     },
 
@@ -345,7 +419,9 @@ export default defineConfig({
               'html', 'body', /^react-/, /^toast/, /^Toastify/,
               /^recharts/, /^chart/, /modal/, /dropdown/,
               /^btn-/, /^text-/, /^bg-/, /active/, /disabled/,
-              /loading/, /spinner/, /skeleton/
+              /loading/, /spinner/, /skeleton/,
+              // CSS Modules: hashed class names (_className_hash_line) not found by PurgeCSS extractor
+              /^_/
             ],
             deep: [/^rc-/, /^ant-/],  // Keep nested classes
             greedy: [/toast/, /modal/, /popup/]  // Keep anything containing these
@@ -390,5 +466,6 @@ export default defineConfig({
   // Define global constants - 🔥 VERSION ARTIK DİNAMİK!
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(APP_VERSION),
+    'import.meta.env.VITE_BUILD_ID': JSON.stringify(Date.now().toString()),
   },
 })

@@ -21,7 +21,7 @@ export const styles = {
         textAlign: 'center',
         position: 'relative',
         boxSizing: 'border-box',
-        marginTop: '10px'
+        marginTop: '10px',
     },
     pageTitle: {
         marginTop: '10px',
@@ -44,7 +44,7 @@ export const styles = {
         alignItems: 'center',
         marginBottom: '15px',
         flexWrap: 'wrap',
-        gap: '10px'
+        gap: '10px',
     },
     controls: {
         display: 'flex',
@@ -108,7 +108,7 @@ export const styles = {
         transform: 'translateY(-50%)',
         color: 'var(--text-primary, #dbdee1)',
         fontSize: '0.9em',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     wordArea: {
         marginTop: '20px',
@@ -159,5 +159,5 @@ export const styles = {
     },
     errorText: {
         color: 'var(--text-danger, #f23f42)',
-    }
+    },
 };

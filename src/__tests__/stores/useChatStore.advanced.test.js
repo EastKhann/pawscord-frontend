@@ -1,7 +1,14 @@
 // frontend/src/__tests__/stores/useChatStore.advanced.test.js
 // Advanced Chat Store Tests — batch ops, selectors, connection, encryption, edge cases
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { useChatStore, useMessages, useActiveChat, useUnreadCounts, useTypingUsers, useConnectionState } from '../../stores/useChatStore';
+import {
+    useChatStore,
+    useMessages,
+    useActiveChat,
+    useUnreadCounts,
+    useTypingUsers,
+    useConnectionState,
+} from '../../stores/useChatStore';
 
 describe('useChatStore — Advanced', () => {
     beforeEach(() => {
@@ -55,17 +62,22 @@ describe('useChatStore — Advanced', () => {
         });
 
         it('should filter out invalid messages in batch', () => {
-            useChatStore.getState().addMessagesBatch([
-                { id: 1, content: 'Valid' },
-                null,
-                { content: 'No ID' },
-                { id: 3, content: 'Also valid' },
-            ]);
+            useChatStore
+                .getState()
+                .addMessagesBatch([
+                    { id: 1, content: 'Valid' },
+                    null,
+                    { content: 'No ID' },
+                    { id: 3, content: 'Also valid' },
+                ]);
             expect(useChatStore.getState().messages).toHaveLength(2);
         });
 
         it('should not mutate state when all messages are duplicates', () => {
-            const initial = [{ id: 1, content: 'A' }, { id: 2, content: 'B' }];
+            const initial = [
+                { id: 1, content: 'A' },
+                { id: 2, content: 'B' },
+            ];
             useChatStore.setState({ messages: initial });
             useChatStore.getState().addMessagesBatch([{ id: 1 }, { id: 2 }]);
             expect(useChatStore.getState().messages).toHaveLength(2);
@@ -111,7 +123,7 @@ describe('useChatStore — Advanced', () => {
             useChatStore.getState().removeMessage(2);
             const msgs = useChatStore.getState().messages;
             expect(msgs).toHaveLength(2);
-            expect(msgs.find(m => m.id === 2)).toBeUndefined();
+            expect(msgs.find((m) => m.id === 2)).toBeUndefined();
         });
 
         it('should not change state for non-existent id', () => {
@@ -173,13 +185,9 @@ describe('useChatStore — Advanced', () => {
         });
 
         it('should accept function updater', () => {
-            useChatStore.setState({ selectedMessages: new Set([1]) });
-            useChatStore.getState().setSelectedMessages(prev => {
-                const next = new Set(prev);
-                next.add(2);
-                return next;
-            });
-            expect(useChatStore.getState().selectedMessages.has(2)).toBe(true);
+            useChatStore.setState({ selectedMessages: [1] });
+            useChatStore.getState().setSelectedMessages((prev) => [...prev, 2]);
+            expect(useChatStore.getState().selectedMessages.includes(2)).toBe(true);
         });
     });
 
@@ -194,8 +202,8 @@ describe('useChatStore — Advanced', () => {
             });
             useChatStore.getState().updateUserStatus(1, 'idle');
             const users = useChatStore.getState().onlineUsers;
-            expect(users.find(u => u.id === 1).status).toBe('idle');
-            expect(users.find(u => u.id === 2).status).toBe('online');
+            expect(users.find((u) => u.id === 1).status).toBe('idle');
+            expect(users.find((u) => u.id === 2).status).toBe('online');
         });
 
         it('should handle user_id field', () => {
@@ -285,7 +293,7 @@ describe('useChatStore — Advanced', () => {
                     { id: 2, content: 'remove', pinned: false },
                 ],
             });
-            useChatStore.getState().setMessages(prev => prev.filter(m => m.pinned));
+            useChatStore.getState().setMessages((prev) => prev.filter((m) => m.pinned));
             expect(useChatStore.getState().messages).toHaveLength(1);
             expect(useChatStore.getState().messages[0].id).toBe(1);
         });

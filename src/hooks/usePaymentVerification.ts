@@ -1,7 +1,9 @@
 // frontend/src/hooks/usePaymentVerification.js
 // Extracted from App.js - handles Stripe/Coinbase payment callback verification
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import logger from '../utils/logger';
 
 /**
  * On mount, checks URL params for payment success/cancel callbacks.
@@ -9,6 +11,7 @@ import { toast } from 'react-toastify';
  * Cleans up URL params after processing.
  */
 export default function usePaymentVerification() {
+    const { t } = useTranslation();
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const success = params.get('success');
@@ -26,32 +29,36 @@ export default function usePaymentVerification() {
                         const response = await fetch(`${apiBase}/payments/verify/`, {
                             method: 'POST',
                             headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
+                                Authorization: `Bearer ${token}`,
+                                'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
                                 session_id: sessionId,
-                                coin_amount: parseInt(coins)
-                            })
+                                coin_amount: parseInt(coins),
+                            }),
                         });
 
                         const data = await response.json();
 
                         if (data.success) {
                             if (data.already_processed) {
-                                toast.info(`Odeme zaten islendi! Bakiye: ${data.balance} coin`);
+                                toast.info(
+                                    t('payment.alreadyProcessed', { balance: data.balance })
+                                );
                             } else {
-                                toast.success(`${coins} coin hesabina eklendi! Yeni bakiye: ${data.balance} coin`);
+                                toast.success(
+                                    t('payment.coinsAdded', { coins, balance: data.balance })
+                                );
                             }
                         } else {
-                            toast.error(data.error || 'Odeme dogrulama hatasi');
+                            toast.error(data.error || t('payment.verifyError'));
                         }
                     } else {
-                        toast.success(`Odeme basarili! ${coins} coin hesabina eklendi.`);
+                        toast.success(t('payment.successful', { coins }));
                     }
                 } catch (error) {
-                    console.error('Payment verification error:', error);
-                    toast.success(`${coins} coin satin alma tamamlandi!`);
+                    logger.error('Payment verification error:', error);
+                    toast.success(t('payment.confirmed', { coins }));
                 }
             };
 
@@ -60,7 +67,7 @@ export default function usePaymentVerification() {
         }
 
         if (canceled === 'true') {
-            toast.info('Odeme iptal edildi.');
+            toast.info(t('payment.cancelled'));
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }, []);

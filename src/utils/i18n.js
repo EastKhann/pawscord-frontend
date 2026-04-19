@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/i18n.js
 
 /**
@@ -14,7 +16,7 @@ class I18nManager {
 
         this.translations = new Map();
         this.loadedLocales = new Set();
-        this.listeners = new Map();
+        this.listners = new Map();
 
         this.init();
     }
@@ -66,7 +68,7 @@ class I18nManager {
             this.register(locale, translations);
             return translations;
         } catch (error) {
-            console.error(`Failed to load translations for ${locale}:`, error);
+            logger.error(`Failed to load translations for ${locale}:`, error);
             return null;
         }
     }
@@ -97,7 +99,7 @@ class I18nManager {
         // Emit event
         this.emit('localeChange', {
             previous: previousLocale,
-            current: locale
+            current: locale,
         });
 
         if (import.meta.env.MODE === 'development') {
@@ -112,7 +114,7 @@ class I18nManager {
 
         if (!translation) {
             if (import.meta.env.MODE === 'development') {
-                console.warn(`Translation missing: ${key} (${locale})`);
+                logger.warn(`Translation missing: ${key} (${locale})`);
             }
             return key;
         }
@@ -181,7 +183,7 @@ class I18nManager {
         return new Intl.NumberFormat(this.currentLocale, {
             style: 'currency',
             currency,
-            ...options
+            ...options,
         }).format(amount);
     }
 
@@ -210,7 +212,7 @@ class I18nManager {
             { unit: 'day', seconds: 86400 },
             { unit: 'hour', seconds: 3600 },
             { unit: 'minute', seconds: 60 },
-            { unit: 'second', seconds: 1 }
+            { unit: 'second', seconds: 1 },
         ];
 
         for (const { unit, seconds } of units) {
@@ -261,7 +263,7 @@ class I18nManager {
         try {
             localStorage.setItem(this.storageKey, locale);
         } catch (error) {
-            console.error('Failed to save locale:', error);
+            logger.error('Failed to save locale:', error);
         }
     }
 
@@ -272,7 +274,7 @@ class I18nManager {
         try {
             return localStorage.getItem(this.storageKey);
         } catch (error) {
-            console.error('Failed to load locale:', error);
+            logger.error('Failed to load locale:', error);
             return null;
         }
     }
@@ -281,16 +283,16 @@ class I18nManager {
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listeners.has(event)) {
-            this.listeners.set(event, []);
+        if (!this.listners.has(event)) {
+            this.listners.set(event, []);
         }
-        this.listeners.get(event).push(callback);
+        this.listners.get(event).push(callback);
     }
 
     off(event, callback) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        const callbacks = this.listeners.get(event);
+        const callbacks = this.listners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -299,9 +301,9 @@ class I18nManager {
     }
 
     emit(event, data) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        this.listeners.get(event).forEach(callback => {
+        this.listners.get(event).forEach((callback) => {
             callback(data);
         });
     }
@@ -319,28 +321,28 @@ i18n.register('en', {
         save: 'Save',
         cancel: 'Cancel',
         delete: 'Delete',
-        edit: 'Edit'
+        edit: 'Edit',
     },
     messages: {
         one: '{{count}} message',
-        other: '{{count}} messages'
-    }
+        other: '{{count}} messages',
+    },
 });
 
 i18n.register('tr', {
     common: {
-        welcome: 'Hoş geldiniz',
-        loading: 'Yükleniyor...',
-        error: 'Bir hata oluştu',
-        save: 'Kaydet',
-        cancel: 'İptal',
+        welcome: 'Welcomeiz',
+        loading: 'Loading...',
+        error: 'An error occurred',
+        save: 'Save',
+        cancel: 'Cancel',
         delete: 'Sil',
-        edit: 'Düzenle'
+        edit: 'Edit',
     },
     messages: {
-        one: '{{count}} mesaj',
-        other: '{{count}} mesaj'
-    }
+        one: '{{count}} message',
+        other: '{{count}} message',
+    },
 });
 
 /**
@@ -361,9 +363,12 @@ export const useTranslation = () => {
         };
     }, []);
 
-    const t = React.useCallback((key, params) => {
-        return i18n.t(key, params);
-    }, [locale]);
+    const t = React.useCallback(
+        (key, params) => {
+            return i18n.t(key, params);
+        },
+        [locale]
+    );
 
     const setLocale = React.useCallback((newLocale, options) => {
         return i18n.setLocale(newLocale, options);
@@ -376,10 +381,8 @@ export const useTranslation = () => {
         formatNumber: i18n.formatNumber.bind(i18n),
         formatCurrency: i18n.formatCurrency.bind(i18n),
         formatDate: i18n.formatDate.bind(i18n),
-        formatRelativeTime: i18n.formatRelativeTime.bind(i18n)
+        formatRelativeTime: i18n.formatRelativeTime.bind(i18n),
     };
 };
 
 export default I18nManager;
-
-

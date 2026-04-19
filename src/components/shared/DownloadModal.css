@@ -1,0 +1,151 @@
+﻿/* DownloadModal.css — Entrance Animations */
+
+@keyframes dlModalEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(32px);
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes dlCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes dlFeaturesIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dlBtnPulse {
+    0%,
+    100% {
+        box-shadow: 0 4px 14px rgba(0, 168, 252, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 28px rgba(0, 168, 252, 0.65);
+    }
+}
+
+@keyframes dlBtnPulseGreen {
+    0%,
+    100% {
+        box-shadow: 0 4px 14px rgba(61, 220, 132, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 28px rgba(61, 220, 132, 0.62);
+    }
+}
+
+@keyframes dlCheckmark {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Modal container */
+.dl-modal {
+    animation: dlModalEnter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Platform cards */
+.dl-card-windows {
+    animation: dlCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.dl-card-android {
+    animation: dlCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+}
+
+.dl-card-ios {
+    animation: dlCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+}
+
+/* Feature row */
+.dl-features {
+    animation: dlFeaturesIn 0.5s ease 0.42s both;
+}
+
+/* Download button pulse */
+.dl-btn-windows {
+    animation: dlBtnPulse 3s ease-in-out 1s infinite;
+}
+
+.dl-btn-android {
+    animation: dlBtnPulseGreen 3s ease-in-out 1.3s infinite;
+}
+
+/* Win/Android icon wrapper glow on hover */
+.dl-icon-windows:hover {
+    filter: drop-shadow(0 0 12px rgba(0, 168, 252, 0.7));
+}
+
+.dl-icon-android:hover {
+    filter: drop-shadow(0 0 12px rgba(61, 220, 132, 0.65));
+}
+
+/* Download started checkmark */
+.dl-started {
+    animation: dlCheckmark 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    display: inline-block;
+}
+
+/* Web App card */
+.dl-card-web {
+    animation: dlCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+}
+
+@keyframes dlBtnPulseWeb {
+    0%,
+    100% {
+        box-shadow: 0 4px 14px rgba(88, 101, 242, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 28px rgba(88, 101, 242, 0.62);
+    }
+}
+
+.dl-btn-web {
+    animation: dlBtnPulseWeb 3s ease-in-out 1.6s infinite;
+}
+
+/* Accessibility: reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .dl-modal,
+    .dl-card-windows,
+    .dl-card-android,
+    .dl-card-ios,
+    .dl-card-web,
+    .dl-features,
+    .dl-btn-windows,
+    .dl-btn-android,
+    .dl-btn-web {
+        animation: none !important;
+    }
+}

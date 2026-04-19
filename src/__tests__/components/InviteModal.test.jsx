@@ -32,13 +32,27 @@ beforeEach(() => {
     // Default mocks: invite create OK, friends list OK
     mockFetchWithAuth.mockImplementation((url) => {
         if (url.includes('invites/create')) {
-            return Promise.resolve(jsonOk({ code: 'abc123', url: 'https://pawscord.com/#/invite/abc123' }));
+            return Promise.resolve(
+                jsonOk({ code: 'abc123', url: 'https://pawscord.com/#/invite/abc123' })
+            );
         }
         if (url.includes('friends/list')) {
-            return Promise.resolve(jsonOk([
-                { sender_username: 'testuser', receiver_username: 'friend1', sender_avatar: null, receiver_avatar: null },
-                { sender_username: 'friend2', receiver_username: 'testuser', sender_avatar: null, receiver_avatar: null },
-            ]));
+            return Promise.resolve(
+                jsonOk([
+                    {
+                        sender_username: 'testuser',
+                        receiver_username: 'friend1',
+                        sender_avatar: null,
+                        receiver_avatar: null,
+                    },
+                    {
+                        sender_username: 'friend2',
+                        receiver_username: 'testuser',
+                        sender_avatar: null,
+                        receiver_avatar: null,
+                    },
+                ])
+            );
         }
         return Promise.resolve(jsonOk({}));
     });
@@ -112,7 +126,9 @@ describe('useInviteLogic', () => {
     it('regenerateLink updates the invite link', async () => {
         mockFetchWithAuth.mockImplementation((url) => {
             if (url.includes('invites/create')) {
-                return Promise.resolve(jsonOk({ code: 'new123', url: 'https://pawscord.com/#/invite/new123' }));
+                return Promise.resolve(
+                    jsonOk({ code: 'new123', url: 'https://pawscord.com/#/invite/new123' })
+                );
             }
             if (url.includes('friends/list')) {
                 return Promise.resolve(jsonOk([]));
@@ -155,9 +171,7 @@ describe('useInviteLogic', () => {
     });
 
     it('handles missing server gracefully', async () => {
-        const { result } = renderHook(() =>
-            useInviteLogic({ ...defaultProps, server: null })
-        );
+        const { result } = renderHook(() => useInviteLogic({ ...defaultProps, server: null }));
 
         await waitFor(() => {
             expect(result.current.loadingLink).toBe(false);

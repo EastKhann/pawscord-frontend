@@ -1,8 +1,9 @@
+import logger from '../utils/logger';
 // frontend/src/utils/pushNotifications.js
 
 /**
  * 🔔 Push Notifications Manager
- * APK için FCM entegrasyonu
+ * APK for FCM entegrasyonu
  */
 
 class PushNotificationManager {
@@ -54,7 +55,7 @@ class PushNotificationManager {
 
                 // Listen for registration errors
                 await PushNotifications.addListener('registrationError', (error) => {
-                    console.error('🔔 [Push] Registration error:', error);
+                    logger.error('🔔 [Push] Registration error:', error);
                 });
 
                 // Listen for push notifications
@@ -66,10 +67,9 @@ class PushNotificationManager {
                 await PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
                     this.handleNotificationAction(action);
                 });
-
             }
         } catch (error) {
-            console.error('❌ [Push] Capacitor init failed:', error);
+            logger.error('❌ [Push] Capacitor init failed:', error);
         }
     }
 
@@ -78,7 +78,7 @@ class PushNotificationManager {
      */
     async initWeb() {
         if (!this.isSupported) {
-            console.warn('⚠️ [Push] Web push not supported');
+            logger.warn('⚠️ [Push] Web push not supported');
             return;
         }
 
@@ -101,14 +101,14 @@ class PushNotificationManager {
                 body: JSON.stringify({
                     registration_id: token,
                     type: 'android', // or 'ios', 'web'
-                    active: true
-                })
+                    active: true,
+                }),
             });
 
             if (response.ok) {
             }
         } catch (error) {
-            console.error('❌ [Push] Device registration failed:', error);
+            logger.error('❌ [Push] Device registration failed:', error);
         }
     }
 
@@ -130,7 +130,7 @@ class PushNotificationManager {
                 icon: '/logo192.png',
                 badge: '/badge.png',
                 tag: data?.messageId || 'default',
-                data
+                data,
             });
         }
     }
@@ -145,7 +145,7 @@ class PushNotificationManager {
             callback({
                 type: 'action',
                 actionId,
-                notification
+                notification,
             });
         });
 
@@ -172,10 +172,10 @@ class PushNotificationManager {
     async sendTestNotification() {
         try {
             await this.fetchWithAuth(`${this.apiBaseUrl}/push/test/`, {
-                method: 'POST'
+                method: 'POST',
             });
         } catch (error) {
-            console.error('❌ [Push] Test failed:', error);
+            logger.error('❌ [Push] Test failed:', error);
         }
     }
 
@@ -186,10 +186,10 @@ class PushNotificationManager {
         if (this.deviceToken) {
             try {
                 await this.fetchWithAuth(`${this.apiBaseUrl}/devices/${this.deviceToken}/`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
                 });
             } catch (error) {
-                console.error('❌ [Push] Unregister failed:', error);
+                logger.error('❌ [Push] Unregister failed:', error);
             }
         }
     }
@@ -198,5 +198,3 @@ class PushNotificationManager {
 export const pushNotificationManager = new PushNotificationManager();
 
 export default pushNotificationManager;
-
-

@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/webSocketManager.js
 
 /**
@@ -23,7 +25,7 @@ class WebSocketManager {
 
         // State
         this.messageQueue = [];
-        this.listeners = new Map();
+        this.listners = new Map();
         this.heartbeatTimer = null;
         this.heartbeatTimeoutTimer = null;
         this.reconnectTimer = null;
@@ -38,8 +40,11 @@ class WebSocketManager {
      * Connect to WebSocket
      */
     connect() {
-        if (this.ws && (this.ws.readyState === WebSocket.CONNECTING || this.ws.readyState === WebSocket.OPEN)) {
-            console.warn('WebSocket already connecting or connected');
+        if (
+            this.ws &&
+            (this.ws.readyState === WebSocket.CONNECTING || this.ws.readyState === WebSocket.OPEN)
+        ) {
+            logger.warn('WebSocket already connecting or connected');
             return;
         }
 
@@ -50,7 +55,7 @@ class WebSocketManager {
             if (import.meta.env.MODE === 'development') {
             }
         } catch (error) {
-            console.error('WebSocket connection error:', error);
+            logger.error('WebSocket connection error:', error);
             this.scheduleReconnect();
         }
     }
@@ -95,13 +100,13 @@ class WebSocketManager {
                 if (import.meta.env.MODE === 'development') {
                 }
             } catch (error) {
-                console.error('Failed to parse WebSocket message:', error);
+                logger.error('Failed to parse WebSocket message:', error);
                 this.emit('error', error);
             }
         };
 
         this.ws.onerror = (error) => {
-            console.error('❌ [WebSocket] Error:', error);
+            logger.error('❌ [WebSocket] Error:', error);
             this.emit('error', error);
         };
 
@@ -133,7 +138,7 @@ class WebSocketManager {
 
                 return true;
             } catch (error) {
-                console.error('Failed to send WebSocket message:', error);
+                logger.error('Failed to send WebSocket message:', error);
                 this.queueMessage(message);
                 return false;
             }
@@ -163,13 +168,12 @@ class WebSocketManager {
     flushMessageQueue() {
         if (this.messageQueue.length === 0) return;
 
-
         while (this.messageQueue.length > 0) {
             const message = this.messageQueue.shift();
             try {
                 this.ws.send(message);
             } catch (error) {
-                console.error('Failed to flush message:', error);
+                logger.error('Failed to flush message:', error);
                 // Re-queue if failed
                 this.messageQueue.unshift(message);
                 break;
@@ -189,7 +193,7 @@ class WebSocketManager {
 
                 // Set timeout for pong response
                 this.heartbeatTimeoutTimer = setTimeout(() => {
-                    console.warn('⚠️ [WebSocket] Heartbeat timeout - reconnecting');
+                    logger.warn('⚠️ [WebSocket] Heartbeat timeout - reconnecting');
                     this.reconnect();
                 }, this.heartbeatTimeout);
             }
@@ -226,7 +230,7 @@ class WebSocketManager {
      */
     scheduleReconnect() {
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-            console.error('❌ [WebSocket] Max reconnect attempts reached');
+            logger.error('❌ [WebSocket] Max reconnect attempts reached');
             this.emit('maxReconnectAttempts');
             return;
         }
@@ -240,14 +244,13 @@ class WebSocketManager {
             this.maxReconnectDelay
         );
 
-
         this.reconnectTimer = setTimeout(() => {
             this.connect();
         }, delay);
 
         this.emit('reconnecting', {
             attempt: this.reconnectAttempts,
-            delay
+            delay,
         });
     }
 
@@ -280,7 +283,7 @@ class WebSocketManager {
             try {
                 this.ws.close(code, reason);
             } catch (error) {
-                console.error('Error closing WebSocket:', error);
+                logger.error('Error closing WebSocket:', error);
             }
             this.ws = null;
         }
@@ -293,18 +296,18 @@ class WebSocketManager {
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listeners.has(event)) {
-            this.listeners.set(event, []);
+        if (!this.listners.has(event)) {
+            this.listners.set(event, []);
         }
-        this.listeners.get(event).push(callback);
+        this.listners.get(event).push(callback);
 
         return () => this.off(event, callback);
     }
 
     off(event, callback) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        const callbacks = this.listeners.get(event);
+        const callbacks = this.listners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -313,13 +316,13 @@ class WebSocketManager {
     }
 
     emit(event, data) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        this.listeners.get(event).forEach(callback => {
+        this.listners.get(event).forEach((callback) => {
             try {
                 callback(data);
             } catch (error) {
-                console.error(`Error in ${event} listener:`, error);
+                logger.error(`Error in ${event} listner:`, error);
             }
         });
     }
@@ -334,7 +337,7 @@ class WebSocketManager {
             [WebSocket.CONNECTING]: 'connecting',
             [WebSocket.OPEN]: 'connected',
             [WebSocket.CLOSING]: 'closing',
-            [WebSocket.CLOSED]: 'disconnected'
+            [WebSocket.CLOSED]: 'disconnected',
         };
 
         return states[this.ws.readyState] || 'unknown';
@@ -366,9 +369,12 @@ export const useWebSocket = (url, options = {}) => {
         };
     }, [ws]);
 
-    const send = React.useCallback((data) => {
-        return ws.send(data);
-    }, [ws]);
+    const send = React.useCallback(
+        (data) => {
+            return ws.send(data);
+        },
+        [ws]
+    );
 
     const reconnect = React.useCallback(() => {
         ws.reconnect();
@@ -379,7 +385,7 @@ export const useWebSocket = (url, options = {}) => {
         lastMessage,
         send,
         reconnect,
-        ws
+        ws,
     };
 };
 
@@ -398,7 +404,7 @@ export const useWebSocketEvent = (url, eventHandlers = {}, options = {}) => {
         ws.on('close', handleClose);
 
         // Register event handlers
-        Object.keys(eventHandlers).forEach(event => {
+        Object.keys(eventHandlers).forEach((event) => {
             ws.on(event, eventHandlers[event]);
         });
 
@@ -406,7 +412,7 @@ export const useWebSocketEvent = (url, eventHandlers = {}, options = {}) => {
             ws.off('open', handleOpen);
             ws.off('close', handleClose);
 
-            Object.keys(eventHandlers).forEach(event => {
+            Object.keys(eventHandlers).forEach((event) => {
                 ws.off(event, eventHandlers[event]);
             });
 
@@ -414,13 +420,14 @@ export const useWebSocketEvent = (url, eventHandlers = {}, options = {}) => {
         };
     }, [ws, eventHandlers]);
 
-    const send = React.useCallback((data) => {
-        return ws.send(data);
-    }, [ws]);
+    const send = React.useCallback(
+        (data) => {
+            return ws.send(data);
+        },
+        [ws]
+    );
 
     return { isConnected, send, ws };
 };
 
 export default WebSocketManager;
-
-

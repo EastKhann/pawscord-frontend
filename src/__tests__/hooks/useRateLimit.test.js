@@ -6,7 +6,7 @@ import { useRateLimit } from '../../hooks/useRateLimit';
 describe('useRateLimit', () => {
     beforeEach(() => {
         vi.useFakeTimers();
-        vi.spyOn(console, 'warn').mockImplementation(() => { });
+        vi.spyOn(console, 'warn').mockImplementation(() => {});
     });
 
     afterEach(() => {

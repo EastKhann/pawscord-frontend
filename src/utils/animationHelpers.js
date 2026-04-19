@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/animationHelpers.js
 
 /**
@@ -8,6 +9,9 @@
 /**
  * Smooth scroll to element
  */
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 export const smoothScrollTo = (element, duration = 300, offset = 0) => {
     const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
     const startPosition = window.pageYOffset;
@@ -20,9 +24,10 @@ export const smoothScrollTo = (element, duration = 300, offset = 0) => {
         const progress = Math.min(timeElapsed / duration, 1);
 
         // Easing function (easeInOutCubic)
-        const easing = progress < 0.5
-            ? 4 * progress * progress * progress
-            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        const easing =
+            progress < 0.5
+                ? 4 * progress * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
         window.scrollTo(0, startPosition + distance * easing);
 
@@ -114,7 +119,7 @@ export class AnimationTimeline {
         this.animations.push({
             ...animation,
             startTime: animation.delay || 0,
-            duration: animation.duration || 1000
+            duration: animation.duration || 1000,
         });
         return this;
     }
@@ -134,7 +139,7 @@ export class AnimationTimeline {
     reset() {
         this.currentTime = 0;
         this.startTime = null;
-        this.animations.forEach(anim => anim.onReset?.());
+        this.animations.forEach((anim) => anim.onReset?.());
         return this;
     }
 
@@ -144,7 +149,7 @@ export class AnimationTimeline {
         const now = performance.now();
         this.currentTime = now - this.startTime;
 
-        this.animations.forEach(anim => {
+        this.animations.forEach((anim) => {
             const animTime = this.currentTime - anim.startTime;
 
             if (animTime < 0) return; // Not started yet
@@ -167,40 +172,39 @@ export class AnimationTimeline {
  * Easing functions
  */
 export const Easing = {
-    linear: t => t,
-    easeInQuad: t => t * t,
-    easeOutQuad: t => t * (2 - t),
-    easeInOutQuad: t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
-    easeInCubic: t => t * t * t,
-    easeOutCubic: t => (--t) * t * t + 1,
-    easeInOutCubic: t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
-    easeInQuart: t => t * t * t * t,
-    easeOutQuart: t => 1 - (--t) * t * t * t,
-    easeInOutQuart: t => t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
-    easeInElastic: t => {
+    linear: (t) => t,
+    easeInQuad: (t) => t * t,
+    easeOutQuad: (t) => t * (2 - t),
+    easeInOutQuad: (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
+    easeInCubic: (t) => t * t * t,
+    easeOutCubic: (t) => --t * t * t + 1,
+    easeInOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1),
+    easeInQuart: (t) => t * t * t * t,
+    easeOutQuart: (t) => 1 - --t * t * t * t,
+    easeInOutQuart: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t),
+    easeInElastic: (t) => {
         const c4 = (2 * Math.PI) / 3;
-        return t === 0 ? 0 : t === 1 ? 1 : -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * c4);
+        return t === 0
+            ? 0
+            : t === 1
+              ? 1
+              : -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * c4);
     },
-    easeOutBounce: t => {
+    easeOutBounce: (t) => {
         const n1 = 7.5625;
         const d1 = 2.75;
         if (t < 1 / d1) return n1 * t * t;
         if (t < 2 / d1) return n1 * (t -= 1.5 / d1) * t + 0.75;
         if (t < 2.5 / d1) return n1 * (t -= 2.25 / d1) * t + 0.9375;
         return n1 * (t -= 2.625 / d1) * t + 0.984375;
-    }
+    },
 };
 
 /**
  * Spring animation
  */
 export const spring = (target, config = {}) => {
-    const {
-        stiffness = 100,
-        damping = 10,
-        mass = 1,
-        velocity = 0
-    } = config;
+    const { stiffness = 100, damping = 10, mass = 1, velocity = 0 } = config;
 
     let current = 0;
     let currentVelocity = velocity;
@@ -326,7 +330,7 @@ export const monitorAnimationPerformance = (callback) => {
             lastTime = now;
 
             if (fps < 30) {
-                console.warn(`⚠️ [Animation] Low FPS detected: ${fps}`);
+                logger.warn(`⚠️ [Animation] Low FPS detected: ${fps}`);
             }
 
             callback?.(fps);
@@ -350,7 +354,5 @@ export default {
     fadeIn,
     fadeOut,
     slideDown,
-    monitorAnimationPerformance
+    monitorAnimationPerformance,
 };
-
-

@@ -167,7 +167,7 @@ describe('message handling', () => {
 
         expect(handler).toHaveBeenCalledWith(
             expect.objectContaining({ type: 'chat_message', content: 'hello' }),
-            'chat/1',
+            'chat/1'
         );
     });
 

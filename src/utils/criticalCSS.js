@@ -1,10 +1,10 @@
 // frontend/src/utils/criticalCSS.js
 // 🎨 CRITICAL CSS EXTRACTION & INLINE
-// Above-the-fold CSS'i inline eder, geri kalanı lazy load
+// Above-the-fold CSS'i inline eder, back kalanı lazy load
 
 /**
  * 🎯 Critical CSS (Above-the-fold)
- * İlk ekranda gösterilen elementler için CSS
+ * İlk ekranda gösterilen elementler for CSS
  */
 export const CRITICAL_CSS = `
 /* 🎨 PAWSCORD Critical CSS - Above the Fold */
@@ -216,7 +216,7 @@ export const lazyLoadCSS = (href) => {
 
 /**
  * 🎨 Load All Non-Critical CSS
- * requestIdleCallback ile non-critical CSS yükle
+ * requestIdleCallback with non-critical CSS upload
  */
 export const loadNonCriticalCSS = () => {
     // ⚠️ DISABLED: These CSS files don't exist, all CSS is bundled by webpack
@@ -230,7 +230,7 @@ export const loadNonCriticalCSS = () => {
     */
 
     const loadCSS = () => {
-        nonCriticalCSS.forEach(href => {
+        nonCriticalCSS.forEach((href) => {
             lazyLoadCSS(href);
         });
     };
@@ -244,22 +244,22 @@ export const loadNonCriticalCSS = () => {
 
 /**
  * 📊 Font Loading Optimization
- * Font'ları optimize şekilde yükle
+ * Font'ları optimize şekilde upload
  * ⚠️ Electron'da file:// protokolü preload desteklemiyor
  */
 export const optimizeFontLoading = () => {
     // Electron kontrolü - file:// protokolünde font preload çalışmaz
-    const isElectron = typeof window !== 'undefined' && (
-        window.process?.versions?.electron ||
-        window.navigator?.userAgent?.includes('Electron') ||
-        window.location?.protocol === 'file:'
-    );
+    const isElectron =
+        typeof window !== 'undefined' &&
+        (window.process?.versions?.electron ||
+            window.navigator?.userAgent?.includes('Electron') ||
+            window.location?.protocol === 'file:');
 
     if (isElectron) {
         return;
     }
 
-    // Font preload kaldırıldı - artık kullanılmıyor (system font stack)
+    // Font preload removed - artık kullanılmıyor (system font stack)
 };
 
 /**
@@ -269,17 +269,17 @@ export const optimizeFontLoading = () => {
  */
 export const preloadKeyResources = () => {
     // Electron kontrolü - file:// protokolünde preload çalışmaz
-    const isElectron = typeof window !== 'undefined' && (
-        window.process?.versions?.electron ||
-        window.navigator?.userAgent?.includes('Electron') ||
-        window.location?.protocol === 'file:'
-    );
+    const isElectron =
+        typeof window !== 'undefined' &&
+        (window.process?.versions?.electron ||
+            window.navigator?.userAgent?.includes('Electron') ||
+            window.location?.protocol === 'file:');
 
     if (isElectron) {
         return;
     }
 
-    // ⚠️ Preload kaldırıldı - logo R2 CDN'den yükleniyor, local dosya yok
+    // ⚠️ Preload removed - logo R2 CDN'den yükleniyor, local file yok
     // Bu sayede "preloaded but not used" uyarısı çıkmaz
 };
 
@@ -331,7 +331,5 @@ export default {
     optimizeFontLoading,
     preloadKeyResources,
     removeCriticalCSS,
-    initializeCSSOptimization
+    initializeCSSOptimization,
 };
-
-

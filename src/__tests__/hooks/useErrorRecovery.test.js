@@ -17,9 +17,7 @@ describe('useErrorRecovery', () => {
     // ── 1. Initial state ──
     it('should have correct initial state', () => {
         const fetchFn = vi.fn().mockResolvedValue('data');
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: false })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: false }));
 
         expect(result.current.data).toBeNull();
         expect(result.current.error).toBeNull();
@@ -30,9 +28,7 @@ describe('useErrorRecovery', () => {
     // ── 2. Successful fetch ──
     it('should return data on successful fetch', async () => {
         const fetchFn = vi.fn().mockResolvedValue({ messages: [] });
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: true })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: true }));
 
         await waitFor(() => {
             expect(result.current.data).toEqual({ messages: [] });
@@ -63,9 +59,7 @@ describe('useErrorRecovery', () => {
     // ── 4. Has retry function ──
     it('should expose retry function', () => {
         const fetchFn = vi.fn().mockResolvedValue('ok');
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: false })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: false }));
 
         expect(typeof result.current.retry).toBe('function');
     });
@@ -73,9 +67,7 @@ describe('useErrorRecovery', () => {
     // ── 5. Has reset function ──
     it('should expose reset function', () => {
         const fetchFn = vi.fn().mockResolvedValue('ok');
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: false })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: false }));
 
         expect(typeof result.current.reset).toBe('function');
     });
@@ -83,9 +75,7 @@ describe('useErrorRecovery', () => {
     // ── 6. Has retry and reset as functions ──
     it('retry and reset should be callable functions', () => {
         const fetchFn = vi.fn().mockResolvedValue('ok');
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: false })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: false }));
 
         expect(typeof result.current.retry).toBe('function');
         expect(typeof result.current.reset).toBe('function');
@@ -96,9 +86,7 @@ describe('useErrorRecovery', () => {
     // ── 7. immediate: false does not auto-fetch ──
     it('should not auto-fetch when immediate is false', () => {
         const fetchFn = vi.fn().mockResolvedValue('data');
-        renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: false })
-        );
+        renderHook(() => useErrorRecovery(fetchFn, { immediate: false }));
 
         expect(fetchFn).not.toHaveBeenCalled();
     });
@@ -110,9 +98,7 @@ describe('useErrorRecovery', () => {
             return Promise.resolve('ok');
         });
 
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: true })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: true }));
 
         await waitFor(() => {
             expect(result.current.data).toBe('ok');
@@ -127,9 +113,7 @@ describe('useErrorRecovery', () => {
             return new Promise((resolve) => setTimeout(() => resolve('data'), 5000));
         });
 
-        const { unmount } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: true })
-        );
+        const { unmount } = renderHook(() => useErrorRecovery(fetchFn, { immediate: true }));
 
         // Unmount while fetch is in progress
         unmount();
@@ -143,9 +127,7 @@ describe('useErrorRecovery', () => {
     // ── 10. Reset clears state ──
     it('should clear state on reset', async () => {
         const fetchFn = vi.fn().mockResolvedValue('data');
-        const { result } = renderHook(() =>
-            useErrorRecovery(fetchFn, { immediate: true })
-        );
+        const { result } = renderHook(() => useErrorRecovery(fetchFn, { immediate: true }));
 
         await waitFor(() => {
             expect(result.current.data).toBe('data');

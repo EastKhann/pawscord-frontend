@@ -1,3 +1,4 @@
+export { default } from './VoiceChatPanel';
 // Barrel export for VoiceChatPanel
 export { default as ActionButton } from './ActionButton';
 export { default as ControlBar } from './ControlBar';
@@ -8,7 +9,7 @@ export { default as MiniButton } from './MiniButton';
 export { default as MinimizedView } from './MinimizedView';
 export { default as ProfileCardGrid } from './ProfileCardGrid';
 export { default as SettingsModal } from './SettingsModal';
-export { default as StatusBadges } from './StatusBadges';
+export * from './StatusBadges';
 export { default as UserVideoCard } from './UserVideoCard';
 export { default as VideoFeed } from './VideoFeed';
 export { default as VoiceControlBtn } from './VoiceControlBtn';

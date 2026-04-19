@@ -1,3 +1,4 @@
+export { default } from '../profile/LevelingSystemPanel';
 // Barrel export for LevelingSystemPanel
 export { default as LeaderboardSection } from './LeaderboardSection';
 export { default as LevelRolesSection } from './LevelRolesSection';

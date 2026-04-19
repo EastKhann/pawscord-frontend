@@ -1,12 +1,47 @@
 /* frontend/src/styles/mobile.css */
-/* ðŸ“± MOBILE-FIRST RESPONSIVE STYLES */
+/* 📱 MOBILE-FIRST RESPONSIVE STYLES */
+
+/* ========================================
+   TABLET BREAKPOINT (769px - 1024px)
+   iPad landscape, small laptops
+   ======================================== */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Adjust sidebar widths for tablet */
+    .server-list {
+        width: 60px;
+    }
+
+    .channel-sidebar {
+        width: 200px;
+    }
+
+    .member-sidebar {
+        width: 200px;
+    }
+
+    /* Reduce padding for tablet */
+    .chat-area {
+        padding: 12px;
+    }
+
+    /* Stack modals better on tablet */
+    .modal-content {
+        max-width: 90vw;
+        max-height: 85vh;
+    }
+
+    /* Admin panel adjustments */
+    .admin-panel-modal .admin-content {
+        padding: 16px;
+    }
+}
 
 /* ========================================
    GLOBAL MOBILE OPTIMIZATIONS
    ======================================== */
 
 @media (max-width: 768px) {
-
     /* ðŸ”¥ Prevent text selection on mobile (better UX) */
     * {
         -webkit-tap-highlight-color: transparent;
@@ -65,7 +100,7 @@
         width: 100% !important;
         height: auto !important;
         flex-direction: row !important;
-        z-index: 1000 !important;
+        z-index: var(--z-modal, 1000) !important;
         border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-right: none !important;
     }
@@ -87,55 +122,12 @@
         max-width: 320px !important;
         height: calc(100vh - 60px) !important;
         transition: right 0.3s ease !important;
-        z-index: 999 !important;
+        z-index: var(--z-dropdown, 999) !important;
         box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3) !important;
     }
 
     .user-list.open {
         right: 0 !important;
-    }
-}
-
-/* ========================================
-   VOICE CHAT MOBILE
-   ======================================== */
-
-@media (max-width: 768px) {
-
-    /* Voice panel: Minimized by default on mobile */
-    .voice-chat-panel {
-        position: fixed !important;
-        bottom: 56px !important;
-        /* above bottom nav */
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
-        max-height: 50vh !important;
-        border-radius: 16px 16px 0 0 !important;
-    }
-
-    .voice-chat-panel.minimized {
-        height: 60px !important;
-        max-height: 60px !important;
-    }
-
-    .voice-chat-panel.fullscreen {
-        top: 0 !important;
-        bottom: 0 !important;
-        max-height: 100vh !important;
-        border-radius: 0 !important;
-    }
-
-    /* Video grid: 1 column on mobile */
-    .video-grid {
-        grid-template-columns: 1fr !important;
-        gap: 8px !important;
-    }
-
-    /* Video cards: Larger on mobile */
-    .video-card {
-        min-height: 200px !important;
-        aspect-ratio: 16/9 !important;
     }
 }
 
@@ -216,7 +208,6 @@
    ======================================== */
 
 @media (max-width: 768px) {
-
     /* All modals: Full screen on mobile */
     .modal-overlay {
         align-items: flex-end !important;
@@ -262,7 +253,6 @@
    ======================================== */
 
 @media (min-width: 769px) and (max-width: 1024px) {
-
     /* Sidebar: Collapsible */
     .sidebar {
         width: 240px !important;
@@ -311,7 +301,6 @@
    ======================================== */
 
 @media (max-width: 896px) and (orientation: landscape) {
-
     /* Remove bottom nav in landscape */
     .sidebar {
         display: none !important;
@@ -347,10 +336,9 @@
    ======================================== */
 
 @media (max-width: 768px) {
-
     /* Modals full-width on mobile */
     .jsm-modal,
-    [class*="Modal"]>div[style*="borderRadius"] {
+    [class*='Modal'] > div[style*='borderRadius'] {
         width: 100vw !important;
         max-width: 100vw !important;
         max-height: 100vh !important;
@@ -372,7 +360,6 @@
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-
     /* Modals slightly wider on tablet */
     .jsm-modal {
         width: 90vw !important;

@@ -1,3 +1,4 @@
+export { default } from '../moderation/SpamDetectionPanel';
 // Barrel export for SpamDetectionPanel
 export { default as LogsTab } from './LogsTab';
 export { default as OverviewTab } from './OverviewTab';

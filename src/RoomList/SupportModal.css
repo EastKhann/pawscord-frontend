@@ -1,0 +1,68 @@
+﻿/* SupportModal.css — Entrance Animations */
+
+@keyframes supportModalEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.88) translateY(44px);
+        filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes heartBeat {
+    0%,
+    70%,
+    100% {
+        transform: scale(1);
+    }
+    15% {
+        transform: scale(1.25) rotate(-8deg);
+    }
+    30% {
+        transform: scale(0.95) rotate(4deg);
+    }
+    45% {
+        transform: scale(1.15) rotate(-3deg);
+    }
+}
+
+@keyframes supportCardIn {
+    from {
+        opacity: 0;
+        transform: translateX(-16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.support-modal {
+    animation: supportModalEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.support-heart {
+    animation: heartBeat 2.4s ease-in-out 0.8s infinite;
+    display: inline-block;
+}
+
+.support-coffee-card {
+    animation: supportCardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+.support-crypto-section {
+    animation: supportCardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .support-modal,
+    .support-heart,
+    .support-coffee-card,
+    .support-crypto-section {
+        animation: none !important;
+    }
+}

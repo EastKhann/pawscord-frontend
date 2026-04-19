@@ -26,7 +26,9 @@ const DANGEROUS_PATTERNS = [
     { pattern: /localhost:\d+/g, name: 'Localhost with port', severity: 'HIGH' },
     { pattern: /sk_test_[A-Za-z0-9]+/g, name: 'Stripe Test Secret Key', severity: 'CRITICAL' },
     { pattern: /sk_live_[A-Za-z0-9]+/g, name: 'Stripe Live Secret Key', severity: 'CRITICAL' },
-    { pattern: /password\s*[:=]\s*["'][^"']+["']/gi, name: 'Hardcoded Password', severity: 'CRITICAL' },
+    // Only flag password values that look like real secrets: no spaces, at least 8 non-whitespace chars
+    // This avoids flagging UI strings like password:"Password", password:"Confirm Password"
+    { pattern: /password\s*[:=]\s*["'][^\s"']{8,}["']/gi, name: 'Hardcoded Password', severity: 'CRITICAL' },
     { pattern: /api[_-]?key\s*[:=]\s*["'][A-Za-z0-9]{20,}["']/gi, name: 'API Key', severity: 'HIGH' },
 ];
 
@@ -39,6 +41,11 @@ const ALLOWED_PATTERNS = [
     /firebaseapp\.com/g,       // Firebase
     /sentry\.io/g,             // Sentry monitoring
     /cloudfront\.net/g,        // CDN
+    // i18n translation strings for 'password' field labels in any language.
+    // Pure-text values (letters, spaces, punctuation from any script) are UI labels, not real credentials.
+    // Real hardcoded passwords would have digits or ASCII special chars (abc123, s3cr3t!, etc.)
+    /password\s*:\s*["'][^"'0-9!@#$%^&*+_=\[\]{};\\|<>/"]*[\u0080-\uFFFF][^"'0-9!@#$%^&*+_=\[\]{};\\|<>/"]*["']/i,
+    /password\s*:\s*["'][A-Za-z\u00C0-\u024F\s\u00B7.,!?':()\-]+["']/i,
 ];
 
 // Colors for terminal output

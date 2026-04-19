@@ -1,20 +1,34 @@
-﻿// frontend/src/utils/codeSplitting.js
+﻿// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// frontend/src/utils/codeSplitting.js
 // 📦 CODE SPLITTING & LAZY LOADING UTILITY
 
 import { lazy, Suspense } from 'react';
 
+import { useTranslation } from 'react-i18next';
+import logger from '../utils/logger';
+
+// -- extracted inline style constants --
+const _st1 = { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' };
+const _st2 = {
+    width: '40px',
+    height: '40px',
+    border: '4px solid rgba(88,101,242,0.3)',
+    borderTop: '4px solid #5865f2',
+    borderRadius: '50%',
+};
+
 /**
  * 🎯 Lazy Load Component Wrapper
- * Component'leri lazy load eder, loading fallback ile
- * 
+ * Component'leri lazy load eder, loading fallback with
+ *
  * @param {Function} importFunc - Dynamic import fonksiyonu
  * @param {ReactNode} fallback - Loading sırasında gösterilecek component
  * @returns {ReactComponent} - Lazy loaded component
- * 
+ *
  * @example
  * const HeavyComponent = lazyLoad(
  *   () => import('./components/HeavyComponent'),
- *   <div>Yükleniyor...</div>
+ *   <div>{t("common.loading")}</div>
  * );
  */
 export const lazyLoad = (importFunc, fallback = <LoadingSpinner />) => {
@@ -30,10 +44,10 @@ export const lazyLoad = (importFunc, fallback = <LoadingSpinner />) => {
 /**
  * ⚡ Preload Component
  * Component'i kullanmadan önce preload eder
- * 
+ *
  * @param {Function} importFunc - Dynamic import fonksiyonu
  * @returns {Function} - Preload fonksiyonu
- * 
+ *
  * @example
  * const preloadSettings = preloadComponent(() => import('./Settings'));
  * // Hover'da preload:
@@ -51,11 +65,11 @@ export const preloadComponent = (importFunc) => {
 
 /**
  * 🔄 Route-based Code Splitting Helper
- * Route'lara göre component'leri lazy load eder
- * 
+ * Route'lsearch göre component'leri lazy load eder
+ *
  * @param {Object} routes - Route map
  * @returns {Object} - Lazy loaded routes
- * 
+ *
  * @example
  * const routes = createLazyRoutes({
  *   '/home': () => import('./pages/Home'),
@@ -65,7 +79,7 @@ export const preloadComponent = (importFunc) => {
 export const createLazyRoutes = (routeMap) => {
     const lazyRoutes = {};
 
-    Object.keys(routeMap).forEach(path => {
+    Object.keys(routeMap).forEach((path) => {
         lazyRoutes[path] = lazy(routeMap[path]);
     });
 
@@ -75,7 +89,7 @@ export const createLazyRoutes = (routeMap) => {
 /**
  * 📊 Chunk Size Analyzer
  * Import edilen module'ün boyutunu estimate eder
- * 
+ *
  * @param {Function} importFunc - Dynamic import fonksiyonu
  * @returns {Promise<number>} - Estimated size in KB
  */
@@ -94,21 +108,8 @@ export const estimateChunkSize = async (importFunc) => {
  * 🎨 Default Loading Spinner Component
  */
 const LoadingSpinner = () => (
-    <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '200px',
-        color: '#b5bac1'
-    }}>
-        <div style={{
-            border: '3px solid #182135',
-            borderTop: '3px solid #5865f2',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            animation: 'spin 1s linear infinite'
-        }} />
+    <div aria-label="code splitting" style={_st1}>
+        <div style={_st2} />
         <style>{`
             @keyframes spin {
                 0% { transform: rotate(0deg); }
@@ -126,49 +127,49 @@ const LoadingSpinner = () => (
 // 📧 Email/Messaging Related Components (Low Priority)
 export const lazyEmailComponents = {
     EmailClient: lazyLoad(() => import('../components/EmailClient')),
-    EmailComposer: lazyLoad(() => import('../components/EmailComposer'))
+    EmailComposer: lazyLoad(() => import('../components/EmailComposer')),
 };
 
 // 🎮 Gaming Features (Medium Priority)
 export const lazyGameComponents = {
-    TicTacToe: lazyLoad(() => import('../components/TicTacToe')),
-    GameMessage: lazyLoad(() => import('../components/GameMessage'))
+    TicTacToe: lazyLoad(() => import('../components/games/TicTacToe')),
+    GameMessage: lazyLoad(() => import('../components/chat/GameMessage')),
 };
 
 // 📊 Analytics & Charts (Low Priority)
 export const lazyAnalyticsComponents = {
     AnalyticsPage: lazyLoad(() => import('../AnalyticsPage')),
-    ChartViewer: lazyLoad(() => import('../components/ChartViewer'))
+    ChartViewer: lazyLoad(() => import('../components/ChartViewer')),
 };
 
 // 🎨 Media Viewers (On-Demand)
 export const lazyMediaComponents = {
     ImageGallery: lazyLoad(() => import('../components/ImageGallery')),
     VideoPlayer: lazyLoad(() => import('../components/VideoPlayer')),
-    GifPicker: lazyLoad(() => import('../components/GifPicker'))
+    GifPicker: lazyLoad(() => import('../GifPicker')),
 };
 
 // ⚙️ Settings & Admin (Low Priority)
 export const lazySettingsComponents = {
     SettingsPanel: lazyLoad(() => import('../SettingsPanel')),
-    AdminAnalytics: lazyLoad(() => import('../AdminAnalytics'))
+    AdminAnalytics: lazyLoad(() => import('../AdminAnalytics')),
 };
 
 // 🔐 Security Features (Medium Priority)
 export const lazySecurityComponents = {
-    TwoFactorSetup: lazyLoad(() => import('../components/TwoFactorSetup')),
-    SecurityAuditLog: lazyLoad(() => import('../components/SecurityAuditLog'))
+    TwoFactorSetup: lazyLoad(() => import('../components/security/TwoFactorSetup')),
+    SecurityAuditLog: lazyLoad(() => import('../components/SecurityAuditLog')),
 };
 
 /**
  * 🎯 Smart Loading Strategy
- * Kullanıcı davranışına göre component preload eder
- * 
- * @param {string} userBehavior - Kullanıcı davranış tipi
+ * User davranışına göre component preload eder
+ *
+ * @param {string} userBehavior - User davranış tipi
  * @returns {Promise} - Preload promise
- * 
+ *
  * @example
- * // Kullanıcı chat'e girdiğinde media viewer'ı preload et
+ * // User chat'e girdiğinde media viewer'ı preload et
  * useEffect(() => {
  *   smartPreload('chat-focused');
  * }, [isChatFocused]);
@@ -176,38 +177,38 @@ export const lazySecurityComponents = {
 export const smartPreload = async (userBehavior) => {
     const preloadStrategies = {
         'chat-focused': [
-            () => import('../components/GifPicker'),
-            () => import('../components/EmojiPicker')
+            () => import('../GifPicker'),
+            () => import('../components/chat/EmojiPicker'),
         ],
         'profile-viewing': [
             () => import('../components/ImageGallery'),
-            () => import('../ProfileEditModal')
+            () => import('../ProfileEditModal'),
         ],
         'settings-opened': [
             () => import('../SettingsPanel'),
-            () => import('../components/TwoFactorSetup')
+            () => import('../components/security/TwoFactorSetup'),
         ],
         'admin-panel': [
             () => import('../AdminAnalytics'),
-            () => import('../components/SecurityAuditLog')
-        ]
+            () => import('../components/SecurityAuditLog'),
+        ],
     };
 
     const preloads = preloadStrategies[userBehavior];
     if (preloads) {
-        // Parallel preload
-        await Promise.all(preloads.map(loader => loader()));
+        // Pparallel preload
+        await Promise.all(preloads.map((loader) => loader()));
     }
 };
 
 /**
  * 📦 Webpack Magic Comments Helper
- * Webpack chunk naming için yardımcı fonksiyon
- * 
+ * Webpack chunk naming for yardımcı fonksiyon
+ *
  * @param {string} chunkName - Chunk adı
  * @param {Function} importFunc - Import fonksiyonu
  * @returns {Function} - Named chunk loader
- * 
+ *
  * @example
  * const Settings = lazy(namedChunk('settings', () => import('./Settings')));
  */
@@ -221,45 +222,29 @@ export const namedChunk = (chunkName, importFunc) => {
  * 🎯 Bundle Size Recommendations
  */
 export const BUNDLE_RECOMMENDATIONS = {
-    // Core bundle (her zaman yüklensin) - Max 200KB gzipped
-    CORE: [
-        'MessageInput',
-        'Message',
-        'RoomList',
-        'ChatRoom',
-        'WebSocketContext'
-    ],
+    // Core bundle (her zaman uploadnsin) - Max 200KB gzipped
+    CORE: ['MessageInput', 'Message', 'RoomList', 'ChatRoom', 'WebSocketContext'],
 
     // Secondary (route-based) - Max 100KB gzipped each
-    SECONDARY: [
-        'SettingsPanel',
-        'ProfilePage',
-        'AdminPanel'
-    ],
+    SECONDARY: ['SettingsPanel', 'ProfilePage', 'AdminPanel'],
 
     // On-Demand (user interaction) - Optimize for smallest chunks
-    ON_DEMAND: [
-        'GifPicker',
-        'ImageGallery',
-        'TicTacToe',
-        'EmailClient',
-        'Analytics'
-    ]
+    ON_DEMAND: ['GifPicker', 'ImageGallery', 'TicTacToe', 'EmailClient', 'Analytics'],
 };
 
 /**
  * 📊 Performance Budget Checker
  * Bundle size limitlerini kontrol eder
- * 
+ *
  * @param {string} chunkName - Chunk adı
  * @param {number} sizeKB - Chunk boyutu (KB)
- * @returns {boolean} - Budget içinde mi?
+ * @returns {boolean} - Budget forde mi?
  */
 export const checkPerformanceBudget = (chunkName, sizeKB) => {
     const budgets = {
         core: 200,
         secondary: 100,
-        onDemand: 50
+        onDemand: 50,
     };
 
     let category = 'onDemand';
@@ -273,12 +258,12 @@ export const checkPerformanceBudget = (chunkName, sizeKB) => {
     const isWithinBudget = sizeKB <= budget;
 
     if (!isWithinBudget) {
-        console.warn(
+        logger.warn(
             `⚠️ Performance Budget Exceeded!\n` +
-            `  Chunk: ${chunkName}\n` +
-            `  Size: ${sizeKB}KB\n` +
-            `  Budget: ${budget}KB\n` +
-            `  Overage: ${(sizeKB - budget).toFixed(2)}KB`
+                `  Chunk: ${chunkName}\n` +
+                `  Size: ${sizeKB}KB\n` +
+                `  Budget: ${budget}KB\n` +
+                `  Overage: ${(sizeKB - budget).toFixed(2)}KB`
         );
     }
 
@@ -288,7 +273,7 @@ export const checkPerformanceBudget = (chunkName, sizeKB) => {
 /**
  * 🚀 Critical CSS Inliner
  * Above-the-fold CSS'i inline eder
- * 
+ *
  * @param {string} css - Critical CSS
  */
 export const inlineCriticalCSS = (css) => {
@@ -299,8 +284,8 @@ export const inlineCriticalCSS = (css) => {
 
 /**
  * 📦 Resource Hints Helper
- * DNS-prefetch, preconnect, prefetch için helper
- * 
+ * DNS-prefetch, preconnect, prefetch for helper
+ *
  * @param {string} url - Resource URL
  * @param {string} type - Hint tipi (prefetch, preconnect, dns-prefetch)
  */
@@ -328,7 +313,5 @@ export default {
     lazyAnalyticsComponents,
     lazyMediaComponents,
     lazySettingsComponents,
-    lazySecurityComponents
+    lazySecurityComponents,
 };
-
-

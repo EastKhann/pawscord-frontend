@@ -1,3 +1,4 @@
+import React from 'react';
 // frontend/src/utils/keyboardShortcuts.js
 
 /**
@@ -5,6 +6,9 @@
  * Global keyboard shortcut sistemi
  */
 
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 class KeyboardShortcutManager {
     constructor() {
         this.shortcuts = new Map();
@@ -31,10 +35,10 @@ class KeyboardShortcutManager {
     handleKeyDown(event) {
         if (!this.isEnabled) return;
 
-        // Input, textarea, contenteditable içinde değilse
+        // Input, textarea, contenteditable forde değilse
         if (this.isInputElement(event.target)) return;
 
-        // Key'i kaydet
+        // Key'i save
         this.pressedKeys.add(event.key.toLowerCase());
 
         // Shortcut'ı kontrol et
@@ -61,8 +65,9 @@ class KeyboardShortcutManager {
      * Input element kontrolü
      */
     isInputElement(element) {
-        return ['INPUT', 'TEXTAREA'].includes(element.tagName) ||
-            element.contentEditable === 'true';
+        return (
+            ['INPUT', 'TEXTAREA'].includes(element.tagName) || element.contentEditable === 'true'
+        );
     }
 
     /**
@@ -84,7 +89,7 @@ class KeyboardShortcutManager {
     }
 
     /**
-     * Shortcut ekle
+     * Shortcut add
      */
     register(shortcut, callback, description = '') {
         const normalized = this.normalizeShortcut(shortcut);
@@ -92,7 +97,7 @@ class KeyboardShortcutManager {
         this.shortcuts.set(normalized, {
             callback,
             description,
-            shortcut: normalized
+            shortcut: normalized,
         });
 
         if (import.meta.env.MODE === 'development') {
@@ -105,11 +110,12 @@ class KeyboardShortcutManager {
      * Shortcut'ı normalize et
      */
     normalizeShortcut(shortcut) {
-        return shortcut.toLowerCase()
+        return shortcut
+            .toLowerCase()
             .replace('cmd', 'ctrl')
             .replace('command', 'ctrl')
             .split('+')
-            .map(s => s.trim())
+            .map((s) => s.trim())
             .sort()
             .join('+');
     }
@@ -148,45 +154,51 @@ class KeyboardShortcutManager {
     }
 
     /**
-     * Tüm shortcut'ları listele
+     * Tüm shortcut'ları listle
      */
     list() {
         const shortcuts = [];
         this.shortcuts.forEach((value, key) => {
             shortcuts.push({
                 shortcut: key,
-                description: value.description
+                description: value.description,
             });
         });
         return shortcuts;
     }
 
     /**
-     * Help modal için formatlanmış liste
+     * Help modal for formatlanmış list
      */
     getFormattedList() {
         const groups = {
             navigation: [],
             editing: [],
             actions: [],
-            other: []
+            other: [],
         };
 
         this.shortcuts.forEach((value, key) => {
             const formatted = {
                 keys: this.formatShortcutForDisplay(key),
-                description: value.description
+                description: value.description,
             };
 
-            // Kategorize et
-            if (value.description.toLowerCase().includes('navigate') ||
-                value.description.toLowerCase().includes('go to')) {
+            // Categoryze et
+            if (
+                value.description.toLowerCase().includes('navigate') ||
+                value.description.toLowerCase().includes('go to')
+            ) {
                 groups.navigation.push(formatted);
-            } else if (value.description.toLowerCase().includes('edit') ||
-                value.description.toLowerCase().includes('delete')) {
+            } else if (
+                value.description.toLowerCase().includes('edit') ||
+                value.description.toLowerCase().includes('delete')
+            ) {
                 groups.editing.push(formatted);
-            } else if (value.description.toLowerCase().includes('send') ||
-                value.description.toLowerCase().includes('save')) {
+            } else if (
+                value.description.toLowerCase().includes('send') ||
+                value.description.toLowerCase().includes('save')
+            ) {
                 groups.actions.push(formatted);
             } else {
                 groups.other.push(formatted);
@@ -204,7 +216,7 @@ class KeyboardShortcutManager {
 
         return shortcut
             .split('+')
-            .map(key => {
+            .map((key) => {
                 if (key === 'ctrl') return isMac ? '⌘' : 'Ctrl';
                 if (key === 'alt') return isMac ? '⌥' : 'Alt';
                 if (key === 'shift') return isMac ? '⇧' : 'Shift';
@@ -218,7 +230,7 @@ class KeyboardShortcutManager {
 export const keyboardManager = new KeyboardShortcutManager();
 
 /**
- * Önceden tanımlanmış shortcut'ları kaydet
+ * Önceden tanımlanmış shortcut'ları save
  */
 export const registerDefaultShortcuts = (handlers = {}) => {
     // Navigation
@@ -278,7 +290,6 @@ export const registerDefaultShortcuts = (handlers = {}) => {
     if (handlers.toggleDeafen) {
         keyboardManager.register('ctrl+shift+d', handlers.toggleDeafen, 'Toggle deafen');
     }
-
 };
 
 /**
@@ -312,7 +323,7 @@ export const useKeyboardShortcuts = (shortcuts) => {
         });
 
         return () => {
-            unregisterFns.forEach(fn => fn());
+            unregisterFns.forEach((fn) => fn());
         };
     }, [shortcuts]);
 };
@@ -333,10 +344,10 @@ export class CommandPalette {
             keywords: command.keywords || [],
             action: command.action,
             shortcut: command.shortcut,
-            icon: command.icon
+            icon: command.icon,
         });
 
-        // Shortcut varsa kaydet
+        // Shortcut varsa save
         if (command.shortcut) {
             keyboardManager.register(command.shortcut, command.action, command.label);
         }
@@ -354,10 +365,10 @@ export class CommandPalette {
         const lowerQuery = query.toLowerCase();
         const results = [];
 
-        this.commands.forEach(command => {
+        this.commands.forEach((command) => {
             const labelMatch = command.label.toLowerCase().includes(lowerQuery);
             const descMatch = command.description?.toLowerCase().includes(lowerQuery);
-            const keywordMatch = command.keywords.some(k => k.toLowerCase().includes(lowerQuery));
+            const keywordMatch = command.keywords.some((k) => k.toLowerCase().includes(lowerQuery));
 
             if (labelMatch || descMatch || keywordMatch) {
                 results.push(command);
@@ -375,5 +386,3 @@ export class CommandPalette {
 export const commandPalette = new CommandPalette();
 
 export default KeyboardShortcutManager;
-
-

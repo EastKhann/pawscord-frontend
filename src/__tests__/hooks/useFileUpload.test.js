@@ -107,7 +107,8 @@ describe('useFileUpload', () => {
                 // Complete
                 .mockResolvedValueOnce({
                     ok: true,
-                    json: () => Promise.resolve({ id: 50, content: 'uploaded', temp_id: 'temp-123' }),
+                    json: () =>
+                        Promise.resolve({ id: 50, content: 'uploaded', temp_id: 'temp-123' }),
                     text: () => Promise.resolve('ok'),
                 });
 
@@ -171,17 +172,27 @@ describe('useFileUpload', () => {
         it('handleChatDragLeave decrements counter and clears isDragging when zero', () => {
             const { result } = renderHook(() => useFileUpload(defaultProps));
             // Enter once, leave once
-            act(() => { result.current.handleChatDragEnter({ preventDefault: vi.fn() }); });
-            act(() => { result.current.handleChatDragLeave({ preventDefault: vi.fn() }); });
+            act(() => {
+                result.current.handleChatDragEnter({ preventDefault: vi.fn() });
+            });
+            act(() => {
+                result.current.handleChatDragLeave({ preventDefault: vi.fn() });
+            });
             expect(result.current.isDragging).toBe(false);
         });
 
         it('handleChatDragLeave still dragging with nested elements', () => {
             const { result } = renderHook(() => useFileUpload(defaultProps));
             // Enter twice (parent + child), leave once (child)
-            act(() => { result.current.handleChatDragEnter({ preventDefault: vi.fn() }); });
-            act(() => { result.current.handleChatDragEnter({ preventDefault: vi.fn() }); });
-            act(() => { result.current.handleChatDragLeave({ preventDefault: vi.fn() }); });
+            act(() => {
+                result.current.handleChatDragEnter({ preventDefault: vi.fn() });
+            });
+            act(() => {
+                result.current.handleChatDragEnter({ preventDefault: vi.fn() });
+            });
+            act(() => {
+                result.current.handleChatDragLeave({ preventDefault: vi.fn() });
+            });
             expect(result.current.isDragging).toBe(true);
         });
 
@@ -194,8 +205,12 @@ describe('useFileUpload', () => {
                 dataTransfer: { files: [mockFile] },
             };
 
-            act(() => { result.current.handleChatDragEnter({ preventDefault: vi.fn() }); });
-            act(() => { result.current.handleChatDrop(mockEvent); });
+            act(() => {
+                result.current.handleChatDragEnter({ preventDefault: vi.fn() });
+            });
+            act(() => {
+                result.current.handleChatDrop(mockEvent);
+            });
 
             expect(result.current.isDragging).toBe(false);
             expect(result.current.pendingFilesFromDrop).toHaveLength(1);
@@ -265,7 +280,7 @@ describe('useFileUpload', () => {
                 await result.current.startVoiceRecording();
             });
 
-            expect(toast.warning).toHaveBeenCalledWith('Mikrofon erişimi reddedildi!');
+            expect(toast.warning).toHaveBeenCalledWith('Mikrofon erişimi rejected!');
         });
 
         it('should show warning toast when mic not found', async () => {
@@ -277,7 +292,7 @@ describe('useFileUpload', () => {
                 await result.current.startVoiceRecording();
             });
 
-            expect(toast.warning).toHaveBeenCalledWith('Mikrofon bulunamadı!');
+            expect(toast.warning).toHaveBeenCalledWith('Mikrofon not found!');
         });
     });
 

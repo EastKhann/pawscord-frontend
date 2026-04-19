@@ -1,7 +1,11 @@
 // ⚡ LAZY PANEL LOADER: Optimized Panel Loading System
 // Reduces initial bundle size by lazy loading all panels
 
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { Suspense, lazy, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import logger from '../utils/logger';
 
 // Loading fallback component
 const PanelLoadingFallback = ({ name }) => (
@@ -36,9 +40,9 @@ const PanelLoadingFallback = ({ name }) => (
 const PanelErrorFallback = ({ error, resetError }) => (
     <div className="panel-error-fallback">
         <span className="error-icon">⚠️</span>
-        <h3>Failed to load panel</h3>
+        <h3>Panel yüklenemedi</h3>
         <p>{error?.message || 'Unknown error'}</p>
-        <button onClick={resetError}>Try Again</button>
+        <button onClick={resetError}>Tekrar Dene</button>
         <style>{`
             .panel-error-fallback {
                 display: flex;
@@ -67,24 +71,28 @@ const PanelErrorFallback = ({ error, resetError }) => (
 // ⚡ PANEL REGISTRY: All panels are lazy loaded
 const panelRegistry = {
     // ====== MODERATION PANELS ======
-    AutoModerationDashboard: lazy(() => import('../components/AutoModerationDashboard')),
-    AutoModerationPanel: lazy(() => import('../components/AutoModerationPanel')),
-    RaidProtectionPanel: lazy(() => import('../components/RaidProtectionPanel')),
-    ReportSystemPanel: lazy(() => import('../components/ReportSystemPanel')),
-    AuditLogPanel: lazy(() => import('../components/AuditLogPanel')),
-    UserWarningsPanel: lazy(() => import('../components/UserWarningsPanel')),
+    AutoModerationDashboard: lazy(() => import('../components/moderation/AutoModerationDashboard')),
+    AutoModerationPanel: lazy(() => import('../components/moderation/AutoModerationPanel')),
+    RaidProtectionPanel: lazy(() => import('../components/moderation/RaidProtectionPanel')),
+    ReportSystemPanel: lazy(() => import('../components/admin/ReportSystemPanel')),
+    AuditLogPanel: lazy(() => import('../components/admin/AuditLogPanel')),
+    UserWarningsPanel: lazy(() => import('../components/moderation/UserWarningsPanel')),
 
     // ====== SETTINGS PANELS ======
-    ServerSettingsModal: lazy(() => import('../components/ServerSettingsModal')),
-    PollSettingsPanel: lazy(() => import('../components/panels/PollSettingsPanel')),
+    ServerSettingsModal: lazy(() => import('../components/server/ServerSettingsModal')),
+    PollSettingsPanel: lazy(() => import('../components/chat/PollSettingsPanel')),
 
     // ====== FEATURE PANELS ======
-    BookmarkPanel: lazy(() => import('../components/BookmarkPanel')),
+    BookmarkPanel: lazy(() => import('../components/chat/BookmarkPanel')),
     ReactionAggregatePanel: lazy(() => import('../components/panels/ReactionAggregatePanel')),
-    MessageSummaryPanel: lazy(() => import('../components/panels/MessageSummaryPanel')),
-    InviteAuditPanel: lazy(() => import('../components/panels/InviteAuditPanel')),
-    VirtualTransactionHistoryPanel: lazy(() => import('../components/panels/VirtualTransactionHistoryPanel')),
-    StageChannelManagementPanel: lazy(() => import('../components/panels/StageChannelManagementPanel')),
+    MessageSummaryPanel: lazy(() => import('../components/chat/MessageSummaryPanel')),
+    InviteAuditPanel: lazy(() => import('../components/admin/InviteAuditPanel')),
+    VirtualTransactionHistoryPanel: lazy(
+        () => import('../components/premium/VirtualTransactionHistoryPanel')
+    ),
+    StageChannelManagementPanel: lazy(
+        () => import('../components/server/StageChannelManagementPanel')
+    ),
 
     // ====== 🚀 NEW FEATURES - 26 Ocak 2026 ======
     NewFeaturesPanel: lazy(() => import('../components/panels/NewFeaturesPanel')),
@@ -93,57 +101,57 @@ const panelRegistry = {
     ExtraFeaturesPanel: lazy(() => import('../components/panels/ExtraFeaturesPanel')),
 
     // ====== ADMIN PANELS ======
-    AdminAnalyticsPanel: lazy(() => import('../components/AdminAnalyticsPanel')),
-    AdminPanelModal: lazy(() => import('../components/AdminPanelModal')),
+    AdminAnalyticsPanel: lazy(() => import('../components/admin/AdminAnalyticsPanel')),
+    AdminPanelModal: lazy(() => import('../components/admin/AdminPanelModal')),
 
     // ====== MEDIA PANELS ======
-    WhiteboardModal: lazy(() => import('../components/WhiteboardModal')),
-    SoundboardModal: lazy(() => import('../components/SoundboardModal')),
-    DJModal: lazy(() => import('../components/DJModal')),
+    WhiteboardModal: lazy(() => import('../components/media/WhiteboardModal')),
+    SoundboardModal: lazy(() => import('../components/media/SoundboardModal')),
+    DJModal: lazy(() => import('../components/media/DJModal')),
     CinemaModal: lazy(() => import('../CinemaModal')),
 
     // ====== STORE PANELS ======
-    CryptoStoreModal: lazy(() => import('../components/CryptoStoreModal')),
-    PremiumStoreModal: lazy(() => import('../components/PremiumStoreModal')),
-    ThemeStoreModal: lazy(() => import('../components/ThemeStoreModal')),
+    CryptoStoreModal: lazy(() => import('../components/premium/CryptoStoreModal')),
+    PremiumStoreModal: lazy(() => import('../components/premium/PremiumStoreModal')),
+    ThemeStoreModal: lazy(() => import('../components/premium/ThemeStoreModal')),
 
     // ====== INTEGRATION PANELS ======
-    WebhooksPanel: lazy(() => import('../components/WebhooksPanel')),
-    KanbanBoard: lazy(() => import('../components/KanbanBoard')),
+    WebhooksPanel: lazy(() => import('../components/server/WebhooksPanel')),
+    KanbanBoard: lazy(() => import('../components/moderation/KanbanBoard')),
 
     // ====== 🎮 GAMING & ENTERTAINMENT ======
-    TournamentSystem: lazy(() => import('../components/TournamentSystem')),
-    GiveawayPanel: lazy(() => import('../components/GiveawayPanel')),
-    ClipsSystem: lazy(() => import('../components/ClipsSystem')),
+    TournamentSystem: lazy(() => import('../components/social/TournamentSystem')),
+    GiveawayPanel: lazy(() => import('../components/social/GiveawayPanel')),
+    ClipsSystem: lazy(() => import('../components/media/ClipsSystem')),
 
     // ====== 🔐 SECURITY PANELS ======
-    E2EEPanel: lazy(() => import('../components/E2EEPanel')),
-    WebAuthnPanel: lazy(() => import('../components/WebAuthnPanel')),
-    TwoFactorPanel: lazy(() => import('../components/TwoFactorPanel')),
+    E2EEPanel: lazy(() => import('../components/security/E2EEPanel')),
+    WebAuthnPanel: lazy(() => import('../components/security/WebAuthnPanel')),
+    TwoFactorPanel: lazy(() => import('../components/security/TwoFactorPanel')),
 
     // ====== 🎙️ VOICE & STREAMING ======
-    StageChannelPanel: lazy(() => import('../components/StageChannelPanel')),
-    LiveStreamPanel: lazy(() => import('../components/LiveStreamPanel')),
-    VoiceRecordingPanel: lazy(() => import('../components/VoiceRecordingPanel')),
+    StageChannelPanel: lazy(() => import('../components/server/StageChannelPanel')),
+    LiveStreamPanel: lazy(() => import('../components/media/LiveStreamPanel')),
+    VoiceRecordingPanel: lazy(() => import('../components/media/VoiceRecordingPanel')),
 
     // ====== 💬 FORUM & COMMUNITY ======
-    ForumPanel: lazy(() => import('../components/ForumPanel')),
-    TicketSystemPanel: lazy(() => import('../components/TicketSystemPanel')),
-    SuggestionsPanel: lazy(() => import('../components/SuggestionsPanel')),
+    ForumPanel: lazy(() => import('../components/social/ForumPanel')),
+    TicketSystemPanel: lazy(() => import('../components/social/TicketSystemPanel')),
+    SuggestionsPanel: lazy(() => import('../components/social/SuggestionsPanel')),
 
     // ====== 🎨 ECONOMY ======
-    EconomySystemPanel: lazy(() => import('../components/EconomySystemPanel')),
-    InventoryPanel: lazy(() => import('../components/InventoryPanel')),
+    EconomySystemPanel: lazy(() => import('../components/premium/EconomySystemPanel')),
+    InventoryPanel: lazy(() => import('../components/premium/InventoryPanel')),
 
     // ====== 📊 ANALYTICS ======
-    ServerAnalyticsDashboard: lazy(() => import('../components/ServerAnalyticsDashboard')),
-    GrowthDashboard: lazy(() => import('../components/GrowthDashboard')),
-    MemberActivityDashboard: lazy(() => import('../components/MemberActivityDashboard')),
+    ServerAnalyticsDashboard: lazy(() => import('../components/server/ServerAnalyticsDashboard')),
+    GrowthDashboard: lazy(() => import('../components/analytics/GrowthDashboard')),
+    MemberActivityDashboard: lazy(() => import('../components/profile/MemberActivityDashboard')),
 
     // ====== 🤖 BOT & AUTOMATION ======
-    BotDeveloperPanel: lazy(() => import('../components/BotDeveloperPanel')),
-    AutoRespondersPanel: lazy(() => import('../components/AutoRespondersPanel')),
-    CustomCommandsPanel: lazy(() => import('../components/CustomCommandsPanel')),
+    BotDeveloperPanel: lazy(() => import('../components/bot/BotDeveloperPanel')),
+    AutoRespondersPanel: lazy(() => import('../components/bot/AutoRespondersPanel')),
+    CustomCommandsPanel: lazy(() => import('../components/profile/CustomCommandsPanel')),
 };
 
 // ⚡ LAZY PANEL WRAPPER
@@ -153,7 +161,7 @@ export const LazyPanel = ({ name, fallback, ...props }) => {
     const Panel = panelRegistry[name];
 
     if (!Panel) {
-        console.error(`[LazyPanel] Unknown panel: ${name}`);
+        logger.error(`[LazyPanel] Unknown panel: ${name}`);
         return <PanelErrorFallback error={{ message: `Unknown panel: ${name}` }} />;
     }
 
@@ -174,25 +182,28 @@ export const usePanelManager = () => {
     const [panelProps, setPanelProps] = useState({});
 
     const openPanel = useCallback((name, props = {}) => {
-        setOpenPanels(prev => new Set([...prev, name]));
-        setPanelProps(prev => ({ ...prev, [name]: props }));
+        setOpenPanels((prev) => new Set([...prev, name]));
+        setPanelProps((prev) => ({ ...prev, [name]: props }));
     }, []);
 
     const closePanel = useCallback((name) => {
-        setOpenPanels(prev => {
+        setOpenPanels((prev) => {
             const next = new Set(prev);
             next.delete(name);
             return next;
         });
     }, []);
 
-    const togglePanel = useCallback((name, props = {}) => {
-        if (openPanels.has(name)) {
-            closePanel(name);
-        } else {
-            openPanel(name, props);
-        }
-    }, [openPanels, openPanel, closePanel]);
+    const togglePanel = useCallback(
+        (name, props = {}) => {
+            if (openPanels.has(name)) {
+                closePanel(name);
+            } else {
+                openPanel(name, props);
+            }
+        },
+        [openPanels, openPanel, closePanel]
+    );
 
     const isPanelOpen = useCallback((name) => openPanels.has(name), [openPanels]);
 
@@ -204,7 +215,7 @@ export const usePanelManager = () => {
         closePanel,
         togglePanel,
         isPanelOpen,
-        getPanelProps
+        getPanelProps,
     };
 };
 
@@ -219,11 +230,7 @@ export const preloadPanel = (name) => {
 
 // ⚡ PRELOAD COMMON PANELS: Load frequently used panels
 export const preloadCommonPanels = () => {
-    const commonPanels = [
-        'BookmarkPanel',
-        'AdminPanelModal',
-        'ServerSettingsModal'
-    ];
+    const commonPanels = ['BookmarkPanel', 'AdminPanelModal', 'ServerSettingsModal'];
 
     // Preload after initial render
     setTimeout(() => {
@@ -239,5 +246,10 @@ export default {
     usePanelManager,
     preloadPanel,
     preloadCommonPanels,
-    PanelNames
+    PanelNames,
+};
+
+LazyPanel.propTypes = {
+    name: PropTypes.string,
+    fallback: PropTypes.node,
 };

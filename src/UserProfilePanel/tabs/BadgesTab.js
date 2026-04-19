@@ -1,98 +1,146 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import profileStyles from '../styles';
+const _s = (o) => o;
 
-const BadgesTab = ({ achievements, badges, calculateXPProgress, storeBalance, userStats }) => {
-  const styles = profileStyles;
+// -- dynamic style helpers (pass 2) --
+const _st1108 = { ...profileStyles.progressBar, height: '6px' };
 
-  return (
-    <>
-      <div style={styles.card}>
-        <h3 style={styles.sectionTitle}>🏆 Rozetler & XP</h3>
+// -- extracted inline style constants --
+const _st1 = { marginBottom: '32px' };
+const _st2 = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '8px',
+};
+const _st3 = { color: '#fff', fontSize: '16px', fontWeight: '600' };
+const _st4 = { color: '#b5bac1', fontSize: '14px' };
+const _st5 = { marginBottom: '24px' };
+const _st6 = { color: '#fff', marginBottom: '12px' };
+const _st7 = { color: '#fff', marginBottom: '16px' };
+const _st8 = { color: '#b5bac1' };
+const _st9 = { display: 'flex', flexWrap: 'wrap', gap: '8px' };
+const _st10 = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '16px',
+    marginTop: '16px',
+};
+const _st11 = { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' };
+const _st12 = { fontSize: '32px' };
+const _st13 = { flex: 1 };
+const _st14 = { marginLeft: '8px', color: '#23a559' };
+const _st15 = { color: '#b5bac1', margin: '4px 0 0 0', fontSize: '12px' };
+const _st16 = { color: '#b5bac1', fontSize: '11px', marginTop: '4px' };
 
-        <div style={{ marginBottom: '32px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ color: '#fff', fontSize: '16px', fontWeight: '600' }}>
-              Seviye {userStats.level}
-            </span>
-            <span style={{ color: '#b5bac1', fontSize: '14px' }}>
-              {userStats.xp} / {userStats.next_level_xp} XP
-            </span>
-          </div>
-          <div style={styles.progressBar}>
-            <div style={styles.progressFill(calculateXPProgress())} />
-          </div>
-        </div>
+const BadgesTab = ({
+    achievements: rawAch,
+    badges: rawBadges,
+    calculateXPProgress,
+    storeBalance,
+    userStats,
+}) => {
+    const badges = rawBadges || [];
+    const achievements = rawAch || [];
+    const styles = profileStyles;
+    const [error, setError] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
 
-        <div style={{ marginBottom: '24px' }}>
-          <h4 style={{ color: '#fff', marginBottom: '12px' }}>💰 Coin: {userStats.coins}</h4>
-          <h4 style={{ color: '#fff', marginBottom: '12px' }}>🏪 Mağaza Bakiyesi: ${storeBalance.toFixed(2)}</h4>
-        </div>
+    return (
+        <>
+            <div aria-label="badges tab" style={styles.card}>
+                <h3 style={styles.sectionTitle}>🏆 Rozetler & XP</h3>
 
-        <h4 style={{ color: '#fff', marginBottom: '16px' }}>🎖️ Kazanılan Rozetler</h4>
-
-        {badges.length === 0 && (
-          <p style={{ color: '#b5bac1' }}>Henüz rozet kazanılmadı. Daha fazla aktivite gösterin!</p>
-        )}
-
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-          {badges.map((badge, idx) => (
-            <div key={idx} style={styles.badge} title={badge.description}>
-              {badge.icon} {badge.name}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div style={styles.card}>
-        <h3 style={styles.sectionTitle}>🎯 Başarılar (Achievements)</h3>
-
-        {achievements.length === 0 && (
-          <p style={{ color: '#b5bac1' }}>Henüz başarı kazanılmadı.</p>
-        )}
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', marginTop: '16px' }}>
-          {achievements.map((achievement, idx) => (
-            <div
-              key={idx}
-              style={{
-                padding: '16px',
-                background: achievement.completed
-                  ? 'linear-gradient(135deg, rgba(67, 181, 129, 0.2) 0%, rgba(67, 181, 129, 0.05) 100%)'
-                  : 'rgba(255, 255, 255, 0.03)',
-                borderRadius: '12px',
-                border: achievement.completed
-                  ? '1px solid rgba(67, 181, 129, 0.3)'
-                  : '1px solid rgba(255, 255, 255, 0.05)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                <div style={{ fontSize: '32px' }}>{achievement.icon || '🏆'}</div>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ color: '#fff', margin: 0, fontSize: '14px' }}>
-                    {achievement.name}
-                    {achievement.completed && <span style={{ marginLeft: '8px', color: '#23a559' }}>✅</span>}
-                  </h4>
-                  <p style={{ color: '#b5bac1', margin: '4px 0 0 0', fontSize: '12px' }}>
-                    {achievement.description}
-                  </p>
+                <div style={_st1}>
+                    <div style={_st2}>
+                        <span style={_st3}>Level {userStats.level}</span>
+                        <span style={_st4}>
+                            {userStats.xp} / {userStats.next_level_xp} XP
+                        </span>
+                    </div>
+                    <div style={styles.progressBar}>
+                        <div style={styles.progressFill(calculateXPProgress())} />
+                    </div>
                 </div>
-              </div>
-              {achievement.progress !== undefined && (
-                <div>
-                  <div style={{ ...styles.progressBar, height: '6px' }}>
-                    <div style={styles.progressFill((achievement.progress / achievement.target) * 100)} />
-                  </div>
-                  <p style={{ color: '#b5bac1', fontSize: '11px', marginTop: '4px' }}>
-                    {achievement.progress} / {achievement.target}
-                  </p>
+
+                <div style={_st5}>
+                    <h4 style={_st6}>💰 Coin: {userStats.coins}</h4>
+                    <h4 style={_st6}>🏪 Store Balance: ${storeBalance.toFixed(2)}</h4>
                 </div>
-              )}
+
+                <h4 style={_st7}>🎖️ Earned Badges</h4>
+
+                {badges.length === 0 && (
+                    <p style={_st8}>Henüz rozet kazanılmadı. Daha fazla aktivite göster!</p>
+                )}
+
+                <div style={_st9}>
+                    {badges.map((badge, idx) => (
+                        <div key={`item-${idx}`} style={styles.badge} title={badge.description}>
+                            {badge.icon} {badge.name}
+                        </div>
+                    ))}
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
+
+            <div style={styles.card}>
+                <h3 style={styles.sectionTitle}>🎯 Achievements</h3>
+
+                {achievements.length === 0 && <p style={_st8}>Henüz başarım kazanılmadı.</p>}
+
+                <div style={_st10}>
+                    {achievements.map((achievement, idx) => (
+                        <div
+                            key={`item-${idx}`}
+                            style={_s({
+                                padding: '16px',
+                                background: achievement.completed
+                                    ? 'linear-gradient(135deg, rgba(67, 181, 129, 0.2) 0%, rgba(67, 181, 129, 0.05) 100%)'
+                                    : 'rgba(255, 255, 255, 0.03)',
+                                borderRadius: '12px',
+                                border: achievement.completed
+                                    ? '1px solid rgba(67, 181, 129, 0.3)'
+                                    : '1px solid rgba(255, 255, 255, 0.05)',
+                            })}
+                        >
+                            <div style={_st11}>
+                                <div style={_st12}>{achievement.icon || '🏆'}</div>
+                                <div style={_st13}>
+                                    <h4 style={styles.settingRowTitle}>
+                                        {achievement.name}
+                                        {achievement.completed && <span style={_st14}>✅</span>}
+                                    </h4>
+                                    <p style={_st15}>{achievement.description}</p>
+                                </div>
+                            </div>
+                            {achievement.progress !== undefined && (
+                                <div>
+                                    <div style={_st1108}>
+                                        <div
+                                            style={styles.progressFill(
+                                                (achievement.progress / achievement.target) * 100
+                                            )}
+                                        />
+                                    </div>
+                                    <p style={_st16}>
+                                        {achievement.progress} / {achievement.target}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </>
+    );
 };
 
+BadgesTab.propTypes = {
+    achievements: PropTypes.array,
+    badges: PropTypes.array,
+    calculateXPProgress: PropTypes.array,
+    storeBalance: PropTypes.object,
+    userStats: PropTypes.array,
+};
 export default BadgesTab;

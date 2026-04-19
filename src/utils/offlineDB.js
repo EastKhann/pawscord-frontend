@@ -9,6 +9,7 @@
  * Uses the `idb` library (Promise-based IndexedDB wrapper).
  */
 import { openDB } from 'idb';
+import logger from '../utils/logger';
 
 const DB_NAME = 'pawscord-offline';
 const DB_VERSION = 1;
@@ -71,7 +72,7 @@ export async function cacheMessages(roomId, messages) {
         }
         await tx.done;
     } catch (err) {
-        console.warn('[offlineDB] cacheMessages error:', err);
+        logger.warn('[offlineDB] cacheMessages error:', err);
     }
 }
 
@@ -91,7 +92,7 @@ export async function getCachedMessages(roomId, limit = 50) {
         all.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         return all.slice(0, limit);
     } catch (err) {
-        console.warn('[offlineDB] getCachedMessages error:', err);
+        logger.warn('[offlineDB] getCachedMessages error:', err);
         return [];
     }
 }
@@ -117,7 +118,7 @@ export async function evictOldMessages(roomId, keep = 200) {
         }
         await tx.done;
     } catch (err) {
-        console.warn('[offlineDB] evictOldMessages error:', err);
+        logger.warn('[offlineDB] evictOldMessages error:', err);
     }
 }
 
@@ -136,7 +137,7 @@ export async function enqueuePendingMessage(msg) {
             createdAt: new Date().toISOString(),
         });
     } catch (err) {
-        console.warn('[offlineDB] enqueuePendingMessage error:', err);
+        logger.warn('[offlineDB] enqueuePendingMessage error:', err);
     }
 }
 
@@ -149,14 +150,15 @@ export async function getPendingMessages(roomId) {
     try {
         const db = await getDB();
         if (roomId) {
-            const index = db.transaction('pendingMessages', 'readonly')
+            const index = db
+                .transaction('pendingMessages', 'readonly')
                 .objectStore('pendingMessages')
                 .index('by-room');
             return await index.getAll(String(roomId));
         }
         return await db.getAll('pendingMessages');
     } catch (err) {
-        console.warn('[offlineDB] getPendingMessages error:', err);
+        logger.warn('[offlineDB] getPendingMessages error:', err);
         return [];
     }
 }
@@ -170,7 +172,7 @@ export async function removePendingMessage(tempId) {
         const db = await getDB();
         await db.delete('pendingMessages', tempId);
     } catch (err) {
-        console.warn('[offlineDB] removePendingMessage error:', err);
+        logger.warn('[offlineDB] removePendingMessage error:', err);
     }
 }
 
@@ -189,7 +191,7 @@ export async function cacheServers(servers) {
         }
         await tx.done;
     } catch (err) {
-        console.warn('[offlineDB] cacheServers error:', err);
+        logger.warn('[offlineDB] cacheServers error:', err);
     }
 }
 
@@ -199,7 +201,7 @@ export async function getCachedServers() {
         const db = await getDB();
         return await db.getAll('servers');
     } catch (err) {
-        console.warn('[offlineDB] getCachedServers error:', err);
+        logger.warn('[offlineDB] getCachedServers error:', err);
         return [];
     }
 }
@@ -218,7 +220,7 @@ export async function cacheChannels(serverId, channels) {
         }
         await tx.done;
     } catch (err) {
-        console.warn('[offlineDB] cacheChannels error:', err);
+        logger.warn('[offlineDB] cacheChannels error:', err);
     }
 }
 
@@ -226,12 +228,13 @@ export async function cacheChannels(serverId, channels) {
 export async function getCachedChannels(serverId) {
     try {
         const db = await getDB();
-        const index = db.transaction('channels', 'readonly')
+        const index = db
+            .transaction('channels', 'readonly')
             .objectStore('channels')
             .index('by-server');
         return await index.getAll(String(serverId));
     } catch (err) {
-        console.warn('[offlineDB] getCachedChannels error:', err);
+        logger.warn('[offlineDB] getCachedChannels error:', err);
         return [];
     }
 }
@@ -243,7 +246,7 @@ export async function cacheUser(user) {
         const db = await getDB();
         await db.put('users', user);
     } catch (err) {
-        console.warn('[offlineDB] cacheUser error:', err);
+        logger.warn('[offlineDB] cacheUser error:', err);
     }
 }
 
@@ -293,6 +296,6 @@ export async function clearOfflineData() {
             await tx.done;
         }
     } catch (err) {
-        console.warn('[offlineDB] clearOfflineData error:', err);
+        logger.warn('[offlineDB] clearOfflineData error:', err);
     }
 }

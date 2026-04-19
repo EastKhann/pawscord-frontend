@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/videoEffects.js
 
 /**
@@ -45,7 +47,7 @@ export const applyBackgroundBlur = async (videoTrack, blurAmount = 10) => {
         // Return canvas stream
         return canvas.captureStream(30); // 30 FPS
     } catch (error) {
-        console.error('Failed to apply background blur:', error);
+        logger.error('Failed to apply background blur:', error);
         return null;
     }
 };
@@ -94,7 +96,7 @@ export const applyVirtualBackground = async (videoTrack, backgroundImage) => {
 
         return canvas.captureStream(30);
     } catch (error) {
-        console.error('Failed to apply virtual background:', error);
+        logger.error('Failed to apply virtual background:', error);
         return null;
     }
 };
@@ -131,7 +133,7 @@ export const applyBrightnessContrast = async (videoTrack, brightness = 1.0, cont
 
         return canvas.captureStream(30);
     } catch (error) {
-        console.error('Failed to apply brightness/contrast:', error);
+        logger.error('Failed to apply brightness/contrast:', error);
         return null;
     }
 };
@@ -144,18 +146,18 @@ export const getVideoConstraints = (quality = '720p') => {
         '480p': {
             width: { ideal: 640 },
             height: { ideal: 480 },
-            frameRate: { ideal: 30, max: 30 }
+            frameRate: { ideal: 30, max: 30 },
         },
         '720p': {
             width: { ideal: 1280 },
             height: { ideal: 720 },
-            frameRate: { ideal: 30, max: 30 }
+            frameRate: { ideal: 30, max: 30 },
         },
         '1080p': {
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 30, max: 30 }
-        }
+            frameRate: { ideal: 30, max: 30 },
+        },
     };
 
     return {
@@ -163,8 +165,8 @@ export const getVideoConstraints = (quality = '720p') => {
         audio: {
             echoCancellation: true,
             noiseSuppression: true,
-            autoGainControl: true
-        }
+            autoGainControl: true,
+        },
     };
 };
 
@@ -176,22 +178,22 @@ export const getScreenShareConstraints = (quality = '1080p') => {
         '720p': {
             width: { ideal: 1280 },
             height: { ideal: 720 },
-            frameRate: { ideal: 15, max: 30 }
+            frameRate: { ideal: 15, max: 30 },
         },
         '1080p': {
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            frameRate: { ideal: 15, max: 30 }
-        }
+            frameRate: { ideal: 15, max: 30 },
+        },
     };
 
     return {
         video: {
             ...constraints[quality],
             cursor: 'always',
-            displaySurface: 'monitor'
+            displaySurface: 'monitor',
         },
-        audio: false
+        audio: false,
     };
 };
 
@@ -204,12 +206,11 @@ export const startScreenShare = async (quality = '1080p') => {
         const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
 
         // Handle user stopping share via browser UI
-        stream.getVideoTracks()[0].onended = () => {
-        };
+        stream.getVideoTracks()[0].onended = () => {};
 
         return stream;
     } catch (error) {
-        console.error('Failed to start screen share:', error);
+        logger.error('Failed to start screen share:', error);
         throw error;
     }
 };
@@ -229,7 +230,7 @@ export const startVideoCall = async (quality = '720p', deviceId = null) => {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         return stream;
     } catch (error) {
-        console.error('Failed to start video call:', error);
+        logger.error('Failed to start video call:', error);
         throw error;
     }
 };
@@ -240,7 +241,7 @@ export const startVideoCall = async (quality = '720p', deviceId = null) => {
 export const switchCamera = async (currentStream, newDeviceId, quality = '720p') => {
     try {
         // Stop current video track
-        currentStream.getVideoTracks().forEach(track => track.stop());
+        currentStream.getVideoTracks().forEach((track) => track.stop());
 
         // Get new stream with different camera
         const constraints = getVideoConstraints(quality);
@@ -255,7 +256,7 @@ export const switchCamera = async (currentStream, newDeviceId, quality = '720p')
 
         return currentStream;
     } catch (error) {
-        console.error('Failed to switch camera:', error);
+        logger.error('Failed to switch camera:', error);
         throw error;
     }
 };
@@ -268,7 +269,7 @@ export const filterPresets = {
     vivid: { brightness: 1.1, contrast: 1.2, saturation: 1.3 },
     warm: { brightness: 1.05, contrast: 1.0, saturation: 1.1 },
     cool: { brightness: 0.95, contrast: 1.0, saturation: 1.1 },
-    grayscale: { brightness: 1.0, contrast: 1.0, saturation: 0.0 }
+    grayscale: { brightness: 1.0, contrast: 1.0, saturation: 0.0 },
 };
 
 /**
@@ -278,23 +279,26 @@ export const useVideoEffects = () => {
     const [activeEffect, setActiveEffect] = React.useState('none');
     const [blurAmount, setBlurAmount] = React.useState(10);
 
-    const applyEffect = React.useCallback(async (videoTrack, effect) => {
-        switch (effect) {
-            case 'blur':
-                return await applyBackgroundBlur(videoTrack, blurAmount);
-            case 'brightness':
-                return await applyBrightnessContrast(videoTrack, 1.2, 1.1);
-            default:
-                return videoTrack;
-        }
-    }, [blurAmount]);
+    const applyEffect = React.useCallback(
+        async (videoTrack, effect) => {
+            switch (effect) {
+                case 'blur':
+                    return await applyBackgroundBlur(videoTrack, blurAmount);
+                case 'brightness':
+                    return await applyBrightnessContrast(videoTrack, 1.2, 1.1);
+                default:
+                    return videoTrack;
+            }
+        },
+        [blurAmount]
+    );
 
     return {
         activeEffect,
         setActiveEffect,
         blurAmount,
         setBlurAmount,
-        applyEffect
+        applyEffect,
     };
 };
 
@@ -308,7 +312,5 @@ export default {
     startVideoCall,
     switchCamera,
     filterPresets,
-    useVideoEffects
+    useVideoEffects,
 };
-
-

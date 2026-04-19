@@ -1,8 +1,11 @@
 ﻿// frontend/src/VoiceChatPanel/UserVideoCard/VideoDisplay.js
 // 📹 Video feed or avatar fallback display with talking animation
 
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { getDeterministicAvatarFallback } from '../avatarUtils';
+
+// -- extracted inline style constants --
 
 /**
  * VideoDisplay Component
@@ -10,17 +13,11 @@ import { getDeterministicAvatarFallback } from '../avatarUtils';
  * talking animation and status when camera is off.
  */
 const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
+    const [error, setError] = useState(null);
     const hasVideo = stream && stream.active && stream.getVideoTracks().length > 0;
 
     return (
-        <div style={{
-            width: '100%',
-            height: '100%',
-            background: '#1a1a1a',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
+        <div aria-label="video display">
             {badge}
             {hasVideo ? (
                 <video
@@ -34,34 +31,30 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
                         objectFit: user.streamType === 'screen' ? 'contain' : 'cover',
                         backgroundColor: user.streamType === 'screen' ? '#000' : '#1a1a1a',
                     }}
-                />
+                >
+                    <track kind="captions" />
+                </video>
             ) : (
                 // 🔥 Camera off — large avatar with talking animation
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '16px',
-                    background: 'linear-gradient(135deg, #17191c 0%, #111214 50%, #0d0e10 100%)',
-                    position: 'relative',
-                }}>
+                <div>
                     {/* Avatar Container with Talking Animation */}
-                    <div style={{
-                        position: 'relative',
-                        padding: '8px',
-                        borderRadius: '50%',
-                        background: user.isTalking
-                            ? 'linear-gradient(135deg, #23a559, #3ca374)'
-                            : 'transparent',
-                        boxShadow: user.isTalking
-                            ? '0 0 20px rgba(67, 181, 129, 0.6), 0 0 40px rgba(67, 181, 129, 0.3)'
-                            : 'none',
-                        transition: 'all 0.3s ease',
-                        animation: user.isTalking ? 'talkingPulse 1s ease-in-out infinite' : 'none',
-                    }}>
+                    <div
+                        style={{
+                            position: 'relative',
+                            padding: '8px',
+                            borderRadius: '50%',
+                            background: user.isTalking
+                                ? 'linear-gradient(135deg, #23a559, #3ca374)'
+                                : 'transparent',
+                            boxShadow: user.isTalking
+                                ? '0 0 20px rgba(67, 181, 129, 0.6), 0 0 40px rgba(67, 181, 129, 0.3)'
+                                : 'none',
+                            transition: 'all 0.3s ease',
+                            animation: user.isTalking
+                                ? 'talkingPulse 1s ease-in-out infinite'
+                                : 'none',
+                        }}
+                    >
                         <img
                             src={getUserAvatar(user.username)}
                             alt={user.username}
@@ -69,45 +62,36 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
                                 e.target.onerror = null;
                                 e.target.src = getDeterministicAvatarFallback(user.username, 256);
                             }}
-                            style={{
-                                width: '140px',
-                                height: '140px',
-                                borderRadius: '50%',
-                                objectFit: 'cover',
-                                border: '5px solid #182135',
-                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-                                display: 'block',
-                            }}
                             loading="lazy"
                         />
                     </div>
                     {/* Username */}
-                    <div style={{
-                        color: '#fff',
-                        fontSize: '18px',
-                        fontWeight: 700,
-                        textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)',
-                        letterSpacing: '0.5px',
-                    }}>
-                        {user.username}
-                    </div>
+                    <div>{user.username}</div>
                     {/* Status */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '6px 14px',
-                        background: user.isMuted ? 'rgba(240, 71, 71, 0.2)' : 'rgba(67, 181, 129, 0.2)',
-                        borderRadius: '16px',
-                        border: user.isMuted ? '1px solid rgba(240, 71, 71, 0.4)' : '1px solid rgba(67, 181, 129, 0.4)',
-                    }}>
-                        <span style={{ fontSize: '16px' }}>{user.isMuted ? '🔇' : '🎤'}</span>
-                        <span style={{
-                            color: user.isMuted ? '#f23f42' : '#23a559',
-                            fontSize: '13px',
-                            fontWeight: 600,
-                        }}>
-                            {user.isMuted ? 'Sessiz' : (user.isTalking ? 'Konuşuyor...' : 'Dinliyor')}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '6px 14px',
+                            background: user.isMuted
+                                ? 'rgba(240, 71, 71, 0.2)'
+                                : 'rgba(67, 181, 129, 0.2)',
+                            borderRadius: '16px',
+                            border: user.isMuted
+                                ? '1px solid rgba(240, 71, 71, 0.4)'
+                                : '1px solid rgba(67, 181, 129, 0.4)',
+                        }}
+                    >
+                        <span>{user.isMuted ? '🔇' : '🎤'}</span>
+                        <span
+                            style={{
+                                color: user.isMuted ? '#f23f42' : '#23a559',
+                                fontSize: '13px',
+                                fontWeight: 600,
+                            }}
+                        >
+                            {user.isMuted ? 'Muted' : user.isTalking ? 'Talking...' : 'Listening'}
                         </span>
                     </div>
                 </div>
@@ -116,4 +100,11 @@ const VideoDisplay = ({ user, stream, videoRef, getUserAvatar, badge }) => {
     );
 };
 
+VideoDisplay.propTypes = {
+    user: PropTypes.object,
+    stream: PropTypes.object,
+    videoRef: PropTypes.object,
+    getUserAvatar: PropTypes.func,
+    badge: PropTypes.object,
+};
 export default VideoDisplay;

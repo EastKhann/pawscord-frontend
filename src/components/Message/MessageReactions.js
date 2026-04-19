@@ -1,37 +1,38 @@
-﻿// frontend/src/components/Message/MessageReactions.js
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+// frontend/src/components/Message/MessageReactions.js
 // ❤️ MESSAGE REACTIONS - Emoji reactions display with hover user popup
 
 import { memo, useCallback, useState, useRef } from 'react';
-import ReactionUsersPopup from '../ReactionUsersPopup';
+import PropTypes from 'prop-types';
+import ReactionUsersPopup from '../chat/ReactionUsersPopup';
 
-export const MessageReactions = memo(({
-    reactions,
-    currentUser,
-    onToggleReaction,
-    messageId
-}) => {
+export const MessageReactions = memo(({ reactions, currentUser, onToggleReaction, messageId }) => {
     const [hoveredEmoji, setHoveredEmoji] = useState(null);
     const [popupAnchor, setPopupAnchor] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     const hoverTimeoutRef = useRef(null);
 
     // Group reactions by emoji
     const groupedReactions = useCallback(() => {
         if (!reactions) return [];
         const groups = {};
-        reactions.forEach(r => {
+        reactions.forEach((r) => {
             if (!groups[r.emoji]) groups[r.emoji] = [];
             groups[r.emoji].push(r.username);
         });
         return Object.entries(groups).map(([emoji, users]) => ({
             emoji,
             users,
-            count: users.length
+            count: users.length,
         }));
     }, [reactions])();
 
     // Check if current user reacted with this emoji
-    const myReaction = useCallback((emoji) =>
-        reactions?.some(r => r.username === currentUser && r.emoji === emoji),
+    const myReaction = useCallback(
+        (emoji) => reactions?.some((r) => r.username === currentUser && r.emoji === emoji),
         [reactions, currentUser]
     );
 
@@ -53,22 +54,29 @@ export const MessageReactions = memo(({
 
     if (groupedReactions.length === 0) return null;
 
-    const hoveredGroup = hoveredEmoji ? groupedReactions.find(g => g.emoji === hoveredEmoji) : null;
+    const hoveredGroup = hoveredEmoji
+        ? groupedReactions.find((g) => g.emoji === hoveredEmoji)
+        : null;
 
     return (
-        <div style={styles.reactionsRow}>
+        <div aria-label="message reactions" style={styles.reactionsRow}>
             {groupedReactions.map(({ emoji, users, count }) => (
                 <span
                     key={emoji}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => onToggleReaction(messageId, emoji)}
+                    onKeyDown={(e) =>
+                        (e.key === 'Enter' || e.key === ' ') && onToggleReaction(messageId, emoji)
+                    }
                     onMouseEnter={(e) => handleReactionHover(emoji, users, e)}
                     onMouseLeave={handleReactionLeave}
                     style={{
                         ...styles.reactionTag,
                         border: myReaction(emoji) ? '1px solid #5865f2' : '1px solid transparent',
-                        backgroundColor: myReaction(emoji) ? 'rgba(88, 101, 242, 0.15)' : '#111214'
+                        backgroundColor: myReaction(emoji) ? 'rgba(88, 101, 242, 0.15)' : '#111214',
                     }}
-                    title={`${emoji} tepkisi ekle/kaldır`}
+                    title={`${emoji} reaction add/remove`}
                 >
                     {emoji} {count}
                 </span>
@@ -79,7 +87,10 @@ export const MessageReactions = memo(({
                     users={hoveredGroup.users}
                     currentUser={currentUser}
                     anchorEl={popupAnchor}
-                    onClose={() => { setHoveredEmoji(null); setPopupAnchor(null); }}
+                    onClose={() => {
+                        setHoveredEmoji(null);
+                        setPopupAnchor(null);
+                    }}
                 />
             )}
         </div>
@@ -91,7 +102,7 @@ const styles = {
         display: 'flex',
         gap: '4px',
         marginTop: '6px',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     reactionTag: {
         backgroundColor: '#111214',
@@ -104,9 +115,15 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         gap: '4px',
-        transition: 'all 0.15s ease'
-    }
+        transition: 'all 0.15s ease',
+    },
 };
 
 MessageReactions.displayName = 'MessageReactions';
+MessageReactions.propTypes = {
+    reactions: PropTypes.array,
+    currentUser: PropTypes.object,
+    onToggleReaction: PropTypes.func,
+    messageId: PropTypes.string,
+};
 export default MessageReactions;

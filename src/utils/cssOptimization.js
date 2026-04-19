@@ -5,10 +5,7 @@
  * PurgeCSS configuration for production
  */
 export const purgeCSSConfig = {
-    content: [
-        './src/**/*.{js,jsx,ts,tsx}',
-        './public/index.html',
-    ],
+    content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
 
     // CSS files to process
     css: ['./src/**/*.css'],
@@ -57,20 +54,10 @@ export const purgeCSSConfig = {
         ],
 
         // Deep selectors (for third-party libraries)
-        deep: [
-            /^react-/,
-            /^Toastify/,
-            /^tippy/,
-            /^emoji/,
-        ],
+        deep: [/^react-/, /^Toastify/, /^tippy/, /^emoji/],
 
         // Greedy (aggressive matching)
-        greedy: [
-            /^btn-/,
-            /^modal-/,
-            /^dropdown-/,
-            /^tooltip-/,
-        ],
+        greedy: [/^btn-/, /^modal-/, /^dropdown-/, /^tooltip-/],
     },
 
     // Default extractor
@@ -87,15 +74,15 @@ export const purgeCSSConfig = {
             extractor: (content) => {
                 // Extract className props
                 const classNameMatches = content.match(/className="([^"]*)"/g) || [];
-                const classes = classNameMatches.map(m =>
-                    m.replace(/className="|"/g, '').split(' ')
-                ).flat();
+                const classes = classNameMatches
+                    .map((m) => m.replace(/className="|"/g, '').split(' '))
+                    .flat();
 
                 // Extract template literals
                 const templateMatches = content.match(/className={`([^`]*)`}/g) || [];
-                const templateClasses = templateMatches.map(m =>
-                    m.replace(/className={`|`}/g, '').split(' ')
-                ).flat();
+                const templateClasses = templateMatches
+                    .map((m) => m.replace(/className={`|`}/g, '').split(' '))
+                    .flat();
 
                 return [...classes, ...templateClasses];
             },
@@ -137,8 +124,15 @@ export const criticalCSSPatterns = [
     '.skeleton',
 
     // Typography
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'p', 'a', 'span',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'p',
+    'a',
+    'span',
 
     // Forms
     'button',
@@ -149,7 +143,7 @@ export const criticalCSSPatterns = [
     // Theme
     '.bg-dark',
     '.bg-darker',
-    '.bg-darkest',
+    '.bg-darcutt',
     '.text-primary',
     '.text-secondary',
 ];
@@ -168,9 +162,7 @@ export function purgeUnusedCSS(css, usedClasses) {
         if (!rule.trim()) continue;
 
         // Check if any used class is in this rule
-        const hasUsedClass = usedClasses.some(className =>
-            rule.includes('.' + className)
-        );
+        const hasUsedClass = usedClasses.some((className) => rule.includes('.' + className));
 
         if (hasUsedClass) {
             purgedRules.push(rule + '}');
@@ -186,20 +178,22 @@ export function purgeUnusedCSS(css, usedClasses) {
  * @returns {string} - Minified CSS
  */
 export function minifyCSS(css) {
-    return css
-        // Remove comments
-        .replace(/\/\*[\s\S]*?\*\//g, '')
-        // Remove whitespace
-        .replace(/\s+/g, ' ')
-        // Remove space around { } : ;
-        .replace(/\s*{\s*/g, '{')
-        .replace(/\s*}\s*/g, '}')
-        .replace(/\s*:\s*/g, ':')
-        .replace(/\s*;\s*/g, ';')
-        // Remove last semicolon in block
-        .replace(/;}/g, '}')
-        // Trim
-        .trim();
+    return (
+        css
+            // Remove comments
+            .replace(/\/\*[\s\S]*?\*\//g, '')
+            // Remove whitespace
+            .replace(/\s+/g, ' ')
+            // Remove space around { } : ;
+            .replace(/\s*{\s*/g, '{')
+            .replace(/\s*}\s*/g, '}')
+            .replace(/\s*:\s*/g, ':')
+            .replace(/\s*;\s*/g, ';')
+            // Remove last semicolon in block
+            .replace(/;}/g, '}')
+            // Trim
+            .trim()
+    );
 }
 
 /**
@@ -215,9 +209,7 @@ export function extractCriticalCSS(css) {
         if (!rule.trim()) continue;
 
         // Check if rule contains critical pattern
-        const isCritical = criticalCSSPatterns.some(pattern =>
-            rule.includes(pattern)
-        );
+        const isCritical = criticalCSSPatterns.some((pattern) => rule.includes(pattern));
 
         if (isCritical) {
             criticalRules.push(rule + '}');
@@ -259,7 +251,7 @@ export function optimizeCSSCustomProperties(css) {
     // Generate optimized :root block
     const rootBlock = `:root{${Array.from(customProps.entries())
         .map(([name, value]) => `--${name}:${value}`)
-        .join(';')}}`;
+        .join(';')}`;
 
     return rootBlock;
 }

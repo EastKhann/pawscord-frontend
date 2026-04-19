@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from '../../utils/toast';
+import confirmDialog from '../../utils/confirmDialog';
 
 export const MATCH_TYPES = [
     { value: 'exact', label: 'Exact Match' },
@@ -9,9 +11,16 @@ export const MATCH_TYPES = [
     { value: 'regex', label: 'Regex' },
 ];
 
-const DEFAULT_RESPONDER = { trigger: '', response: '', match_type: 'contains', case_sensitive: false, enabled: true };
+const DEFAULT_RESPONDER = {
+    trigger: '',
+    response: '',
+    match_type: 'contains',
+    case_sensitive: false,
+    enabled: true,
+};
 
 const useAutoResponders = ({ fetchWithAuth, apiBaseUrl, serverId }) => {
+    const { t } = useTranslation();
     const [responders, setResponders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showCreate, setShowCreate] = useState(false);
@@ -19,33 +28,79 @@ const useAutoResponders = ({ fetchWithAuth, apiBaseUrl, serverId }) => {
 
     const fetchResponders = async () => {
         setLoading(true);
-        try { const res = await fetchWithAuth(`${apiBaseUrl}/autoresponders/list/?server_id=${serverId}`); const d = await res.json(); setResponders(d.responders || []); }
-        catch (e) { toast.error('Failed to load auto-responders'); }
-        finally { setLoading(false); }
+        try {
+            const res = await fetchWithAuth(
+                `${apiBaseUrl}/autoresponders/list/?server_id=${serverId}`
+            );
+            const d = await res.json();
+            setResponders(d.responders || []);
+        } catch (e) {
+            toast.error(t('autoResponder.loadFailed'));
+        } finally {
+            setLoading(false);
+        }
     };
 
-    useEffect(() => { fetchResponders(); }, []);
+    useEffect(() => {
+        fetchResponders();
+    }, []);
 
     const createResponder = async () => {
-        if (!newResponder.trigger.trim() || !newResponder.response.trim()) { toast.error('Please enter trigger and response'); return; }
+        if (!newResponder.trigger.trim() || !newResponder.response.trim()) {
+            toast.error(t('autoResponder.triggerRequired'));
+            return;
+        }
         try {
-            await fetchWithAuth(`${apiBaseUrl}/autoresponders/create/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...newResponder, server_id: serverId }) });
-            toast.success('Auto-responder created'); setNewResponder(DEFAULT_RESPONDER); setShowCreate(false); fetchResponders();
-        } catch (e) { toast.error('Failed to create auto-responder'); }
+            await fetchWithAuth(`${apiBaseUrl}/autoresponders/create/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...newResponder, server_id: serverId }),
+            });
+            toast.success(t('autoResponder.created'));
+            setNewResponder(DEFAULT_RESPONDER);
+            setShowCreate(false);
+            fetchResponders();
+        } catch (e) {
+            toast.error(t('autoResponder.createFailed'));
+        }
     };
 
     const toggleResponder = async (id, enabled) => {
-        try { await fetchWithAuth(`${apiBaseUrl}/autoresponders/${id}/toggle/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ enabled }) }); toast.success(enabled ? 'Enabled' : 'Disabled'); fetchResponders(); }
-        catch (e) { toast.error('Failed to toggle'); }
+        try {
+            await fetchWithAuth(`${apiBaseUrl}/autoresponders/${id}/toggle/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ enabled }),
+            });
+            toast.success(enabled ? t('autoResponder.enabled') : t('autoResponder.disabled'));
+            fetchResponders();
+        } catch (e) {
+            toast.error(t('autoResponder.toggleFailed'));
+        }
     };
 
     const deleteResponder = async (id) => {
-        if (!confirm('Delete this auto-responder?')) return;
-        try { await fetchWithAuth(`${apiBaseUrl}/autoresponders/${id}/delete/`, { method: 'DELETE' }); toast.success('Auto-responder deleted'); fetchResponders(); }
-        catch (e) { toast.error('Failed to delete'); }
+        if (!(await confirmDialog(t('autoResponder.deleteConfirm')))) return;
+        try {
+            await fetchWithAuth(`${apiBaseUrl}/autoresponders/${id}/delete/`, { method: 'DELETE' });
+            toast.success(t('autoResponder.deleted'));
+            fetchResponders();
+        } catch (e) {
+            toast.error(t('autoResponder.deleteFailed'));
+        }
     };
 
-    return { responders, loading, showCreate, setShowCreate, newResponder, setNewResponder, createResponder, toggleResponder, deleteResponder };
+    return {
+        responders,
+        loading,
+        showCreate,
+        setShowCreate,
+        newResponder,
+        setNewResponder,
+        createResponder,
+        toggleResponder,
+        deleteResponder,
+    };
 };
 
 export default useAutoResponders;

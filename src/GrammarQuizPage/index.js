@@ -1,3 +1,4 @@
+export { default } from './GrammarQuizPage';
 // Barrel export for GrammarQuizPage
 export { default as LevelSelect } from './LevelSelect';
 export { default as QuizResult } from './QuizResult';

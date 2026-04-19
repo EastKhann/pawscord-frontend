@@ -1,3 +1,4 @@
+export { default } from './VoiceUserList';
 // Barrel export for VoiceUserList
 export { default as ConnectionQualityIndicator } from './ConnectionQualityIndicator';
 export { default as VoiceUserContextMenu } from './VoiceUserContextMenu';

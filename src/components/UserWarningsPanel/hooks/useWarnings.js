@@ -1,15 +1,20 @@
-// frontend/src/components/UserWarningsPanel/hooks/useWarnings.js
+﻿// frontend/src/components/UserWarningsPanel/hooks/useWarnings.js
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../../utils/toast';
 import confirmDialog from '../../../utils/confirmDialog';
+import logger from '../../../utils/logger';
 
 const useWarnings = (serverId, fetchWithAuth, apiBaseUrl) => {
+    const { t } = useTranslation();
     const [warnings, setWarnings] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({
-        total_warnings: 0, active_warnings: 0,
-        expired_warnings: 0, auto_banned_users: 0
+        total_warnings: 0,
+        active_warnings: 0,
+        expired_warnings: 0,
+        auto_banned_users: 0,
     });
 
     const loadWarnings = useCallback(async () => {
@@ -20,7 +25,9 @@ const useWarnings = (serverId, fetchWithAuth, apiBaseUrl) => {
                 const data = await res.json();
                 setWarnings(data.results || data);
             }
-        } catch (error) { console.error('Failed to load warnings:', error); }
+        } catch (error) {
+            logger.error('Failed to load warnings:', error);
+        }
         setLoading(false);
     }, [serverId, fetchWithAuth, apiBaseUrl]);
 
@@ -28,14 +35,18 @@ const useWarnings = (serverId, fetchWithAuth, apiBaseUrl) => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/members/`);
             if (res.ok) setUsers(await res.json());
-        } catch (error) { console.error('Failed to load users:', error); }
+        } catch (error) {
+            logger.error('Failed to load users:', error);
+        }
     }, [serverId, fetchWithAuth, apiBaseUrl]);
 
     const loadStats = useCallback(async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/stats/${serverId}/`);
             if (res.ok) setStats(await res.json());
-        } catch (error) { console.error('Failed to load stats:', error); }
+        } catch (error) {
+            logger.error('Failed to load stats:', error);
+        }
     }, [serverId, fetchWithAuth, apiBaseUrl]);
 
     useEffect(() => {
@@ -44,60 +55,91 @@ const useWarnings = (serverId, fetchWithAuth, apiBaseUrl) => {
         loadStats();
     }, [loadWarnings, loadUsers, loadStats]);
 
-    const banUser = useCallback(async (userId, reason) => {
-        try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/moderation/ban/`, {
-                method: 'POST',
-                body: JSON.stringify({ server: serverId, user: userId, reason })
-            });
-            if (res.ok) {
-                toast.success('✅ User banned successfully');
-                loadWarnings();
-                loadStats();
-            }
-        } catch (error) { console.error('Failed to ban user:', error); }
-    }, [serverId, fetchWithAuth, apiBaseUrl, loadWarnings, loadStats]);
-
-    const addWarning = useCallback(async (newWarning) => {
-        if (!newWarning.user_id || !newWarning.reason) {
-            toast.error('❌ Please select a user and provide a reason');
-            return false;
-        }
-        try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/create/`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    server: serverId, user: newWarning.user_id,
-                    reason: newWarning.reason, severity: newWarning.severity,
-                    expires_at: new Date(Date.now() + newWarning.expires_in_days * 24 * 60 * 60 * 1000).toISOString(),
-                    is_auto: false
-                })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.total_warnings >= newWarning.auto_ban_on) {
-                    if (await confirmDialog(`User has ${data.total_warnings} warnings. Auto-ban now?`)) {
-                        await banUser(newWarning.user_id, `Auto-ban: ${newWarning.auto_ban_on} warnings reached`);
-                    }
+    const banUser = useCallback(
+        async (userId, reason) => {
+            try {
+                const res = await fetchWithAuth(`${apiBaseUrl}/moderation/ban/`, {
+                    method: 'POST',
+                    body: JSON.stringify({ server: serverId, user: userId, reason }),
+                });
+                if (res.ok) {
+                    toast.success(t('warnings.banned'));
+                    loadWarnings();
+                    loadStats();
                 }
-                loadWarnings();
-                loadStats();
-                return true;
-            } else {
-                toast.error('❌ Failed to add warning');
+            } catch (error) {
+                logger.error('Failed to ban user:', error);
             }
-        } catch (error) { console.error('Failed to add warning:', error); }
-        return false;
-    }, [serverId, fetchWithAuth, apiBaseUrl, banUser, loadWarnings, loadStats]);
+        },
+        [serverId, fetchWithAuth, apiBaseUrl, loadWarnings, loadStats]
+    );
 
-    const removeWarning = useCallback(async (warningId) => {
-        if (!await confirmDialog('Remove this warning?')) return;
-        try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/${warningId}/`, { method: 'DELETE' });
-            if (res.ok) { loadWarnings(); loadStats(); }
-            else toast.error('❌ Failed to remove warning');
-        } catch (error) { console.error('Failed to remove warning:', error); }
-    }, [fetchWithAuth, apiBaseUrl, loadWarnings, loadStats]);
+    const addWarning = useCallback(
+        async (newWarning) => {
+            if (!newWarning.user_id || !newWarning.reason) {
+                toast.error(t('warnings.missingFields'));
+                return false;
+            }
+            try {
+                const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/create/`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        server: serverId,
+                        user: newWarning.user_id,
+                        reason: newWarning.reason,
+                        severity: newWarning.severity,
+                        expires_at: new Date(
+                            Date.now() + newWarning.expires_in_days * 24 * 60 * 60 * 1000
+                        ).toISOString(),
+                        is_auto: false,
+                    }),
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.total_warnings >= newWarning.auto_ban_on) {
+                        if (
+                            await confirmDialog(
+                                `User has ${data.total_warnings} warnings. Auto-ban now?`
+                            )
+                        ) {
+                            await banUser(
+                                newWarning.user_id,
+                                `Auto-ban: ${newWarning.auto_ban_on} warnings reached`
+                            );
+                        }
+                    }
+                    loadWarnings();
+                    loadStats();
+                    return true;
+                } else {
+                    toast.error(t('warnings.addFailed'));
+                }
+            } catch (error) {
+                logger.error('Failed to add warning:', error);
+            }
+            return false;
+        },
+        [serverId, fetchWithAuth, apiBaseUrl, banUser, loadWarnings, loadStats]
+    );
+
+    const removeWarning = useCallback(
+        async (warningId) => {
+            if (!(await confirmDialog('Bu uyardıyı kaldırmak istediğinizden emin misiniz?')))
+                return;
+            try {
+                const res = await fetchWithAuth(`${apiBaseUrl}/moderation/warnings/${warningId}/`, {
+                    method: 'DELETE',
+                });
+                if (res.ok) {
+                    loadWarnings();
+                    loadStats();
+                } else toast.error(t('warnings.removeFailed'));
+            } catch (error) {
+                logger.error('Failed to remove warning:', error);
+            }
+        },
+        [fetchWithAuth, apiBaseUrl, loadWarnings, loadStats]
+    );
 
     return { warnings, users, loading, stats, addWarning, removeWarning, banUser };
 };

@@ -2,65 +2,69 @@
 // 🌐 INTERNATIONALIZATION CONTEXT (Enhanced with i18next)
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import i18n from '../i18n';
+import i18n, { SUPPORTED_LANGUAGES } from '../i18n';
 import api from '../api';
+import logger from '../utils/logger';
 
 const LanguageContext = createContext();
 
-// Default translations (Turkish fallback)
+// Default translations (English fallback)
 const defaultTranslations = {
-    'common.save': 'Kaydet',
-    'common.cancel': 'İptal',
-    'common.loading': 'Yükleniyor...',
-    'common.error': 'Hata',
-    'common.success': 'Başarılı',
+    'common.save': 'Save',
+    'common.cancel': 'Cancel',
+    'common.loading': 'Loading...',
+    'common.error': 'Error',
+    'common.success': 'Success',
 };
 
 export const LanguageProvider = ({ children }) => {
-    const [currentLanguage, setCurrentLanguage] = useState('tr');
+    // Use i18next's detected language (browser-first) as initial
+    const [currentLanguage, setCurrentLanguage] = useState(i18n.language || 'en');
     const [translations, setTranslations] = useState(defaultTranslations);
-    const [languages, setLanguages] = useState([]);
+    const [languages, setLanguages] = useState(
+        SUPPORTED_LANGUAGES.map((l) => ({
+            code: l.code,
+            name: l.name,
+            native_name: l.name,
+            flag: l.flag,
+            direction: l.dir,
+        }))
+    );
     const [loading, setLoading] = useState(true);
     const [direction, setDirection] = useState('ltr');
 
-    // Load available languages
+    // Load available languages (merge API + local)
     useEffect(() => {
         const loadLanguages = async () => {
             try {
                 const response = await api.get('/i18n/languages/');
-                setLanguages(response.data.languages);
-            } catch (error) {
-                console.error('Failed to load languages:', error);
+                if (response.data.languages?.length) {
+                    setLanguages(response.data.languages);
+                }
+            } catch {
+                // API unavailable — use local SUPPORTED_LANGUAGES (already set)
             }
         };
         loadLanguages();
     }, []);
 
-    // Load user's language preference
+    // Load user's language preference (i18next already detected browser lang)
     useEffect(() => {
         const loadUserLanguage = async () => {
             try {
-                const stored = localStorage.getItem('language');
+                const stored = localStorage.getItem('pawscord_language');
                 if (stored) {
                     setCurrentLanguage(stored);
+                    i18n.changeLanguage(stored);
                     await loadTranslations(stored);
                 } else {
-                    // Try to get from API if logged in
-                    try {
-                        const response = await api.get('/i18n/user/');
-                        setCurrentLanguage(response.data.code);
-                        await loadTranslations(response.data.code);
-                    } catch {
-                        // Not logged in, use browser language or default
-                        const browserLang = navigator.language.split('-')[0];
-                        const supported = ['tr', 'en', 'de', 'fr', 'es', 'ru', 'ar', 'ja', 'ko', 'zh'];
-                        const lang = supported.includes(browserLang) ? browserLang : 'tr';
-                        setCurrentLanguage(lang);
-                        await loadTranslations(lang);
-                    }
+                    // i18next already detected browser language
+                    const detectedLang = i18n.language?.split('-')[0] || 'en';
+                    setCurrentLanguage(detectedLang);
+                    await loadTranslations(detectedLang);
                 }
-            } catch (error) {
-                console.error('Failed to load user language:', error);
+            } catch {
+                // Fallback handled by i18next
             }
             setLoading(false);
         };
@@ -78,7 +82,7 @@ export const LanguageProvider = ({ children }) => {
             document.documentElement.dir = response.data.language?.direction || 'ltr';
             document.documentElement.lang = langCode;
         } catch (error) {
-            console.error('Failed to load translations:', error);
+            logger.error('Failed to load translations:', error);
             // Fallback to default
             setTranslations(defaultTranslations);
         }
@@ -101,32 +105,38 @@ export const LanguageProvider = ({ children }) => {
     }, []);
 
     // Translation function with interpolation + i18next fallback
-    const t = useCallback((key, params = {}) => {
-        let text = translations[key];
+    const t = useCallback(
+        (key, params = {}) => {
+            let text = translations[key];
 
-        // Fallback to i18next bundled translations if API translation missing
-        if (!text || text === key) {
-            const i18nKey = key.replace(/^([^.]+)\./, '$1.');
-            const i18nResult = i18n.t(i18nKey, params);
-            if (i18nResult !== i18nKey) {
-                return i18nResult;
+            // Fallback to i18next bundled translations if API translation missing
+            if (!text || text === key) {
+                const i18nKey = key.replace(/^([^.]+)\./, '$1.');
+                const i18nResult = i18n.t(i18nKey, params);
+                if (i18nResult !== i18nKey) {
+                    return i18nResult;
+                }
             }
-        }
 
-        if (!text) return key;
+            if (!text) return key;
 
-        // Handle interpolation {param}
-        Object.entries(params).forEach(([param, value]) => {
-            text = text.replace(new RegExp(`\\{${param}\\}`, 'g'), value);
-        });
+            // Handle interpolation {param}
+            Object.entries(params).forEach(([param, value]) => {
+                text = text.replace(new RegExp(`\\{${param}\\}`, 'g'), value);
+            });
 
-        return text;
-    }, [translations]);
+            return text;
+        },
+        [translations]
+    );
 
     // Get language info
-    const getLanguageInfo = useCallback((code) => {
-        return languages.find(l => l.code === code);
-    }, [languages]);
+    const getLanguageInfo = useCallback(
+        (code) => {
+            return languages.find((l) => l.code === code);
+        },
+        [languages]
+    );
 
     const value = {
         currentLanguage,
@@ -136,14 +146,10 @@ export const LanguageProvider = ({ children }) => {
         direction,
         t,
         changeLanguage,
-        getLanguageInfo
+        getLanguageInfo,
     };
 
-    return (
-        <LanguageContext.Provider value={value}>
-            {children}
-        </LanguageContext.Provider>
-    );
+    return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };
 
 // Hook for using language context

@@ -1,0 +1,86 @@
+{
+  "timestamp": "2026-04-15T12:46:06.003Z",
+  "build": "unknown",
+  "checks": [
+    {
+      "id": 1,
+      "description": "Home header shows \"Ana Sayfa\"",
+      "passed": false,
+      "detail": "Found: \"null\""
+    },
+    {
+      "id": 2,
+      "description": "Friends sub-tabs are in Turkish (not English)",
+      "passed": true,
+      "detail": "Tabs: "
+    },
+    {
+      "id": 3,
+      "description": "Server right sidebar shows \"Sunucu Üyeleri\" (not \"FRIENDS\")",
+      "passed": null,
+      "detail": "Found: \"null\""
+    },
+    {
+      "id": 4,
+      "description": "DM conversation loads without 500 error",
+      "passed": true,
+      "detail": "No new 500 errors"
+    },
+    {
+      "id": 5,
+      "description": "Voice shows \"Ses Bağlandı\" (not \"Voice Connected\")",
+      "passed": false,
+      "detail": "Found: "
+    },
+    {
+      "id": "5b",
+      "description": "No \"/ General\" suffix in voice panel",
+      "passed": true,
+      "detail": "Clean"
+    },
+    {
+      "id": 6,
+      "description": "Voice disconnect button shows \"Bağlantıyı Kes\" (not \"Disconnect\")",
+      "passed": null,
+      "detail": "Found: \"null\""
+    },
+    {
+      "id": 7,
+      "description": "QuickActions labels are in Turkish",
+      "passed": false,
+      "detail": "Modal not found"
+    },
+    {
+      "id": 8,
+      "description": "HomePanel shows \"Ana Sayfa\" title",
+      "passed": true,
+      "detail": "OK"
+    },
+    {
+      "id": "8b",
+      "description": "HomePanel shows \"Sunucu Keşfet\" (if present)",
+      "passed": true,
+      "detail": "Button not shown"
+    },
+    {
+      "id": 9,
+      "description": "Admin panel loads without 500 error",
+      "passed": false,
+      "detail": "500 errors: 500 /api/admin/live-activity/; 500 /api/admin/detailed-stats/"
+    }
+  ],
+  "consoleErrors": [
+    "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsafe-inline' keyword, a hash ('sha256-bSCmXhmahhMoxi",
+    "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsafe-inline' keyword, a hash ('sha256-njfPKV/k1rw/Fn",
+    "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsafe-inline' keyword, a hash ('sha256-Apsi3QstqW8Wkh",
+    "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsafe-inline' keyword, a hash ('sha256-...'), ",
+    "Connecting to 'https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4' violates the following Content Security Policy directive: \"connect-src 'self' https://api.pawscord.com wss://api.pawscord.com https://media.pawscord.com https://fcm.googleapis.com https://firebaseins",
+    "Fetch API cannot load https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4. Refused to connect because it violates the document's Content Security Policy.",
+    "Failed to load resource: the server responded with a status of 500 ()"
+  ],
+  "apiErrors": [
+    "500 /api/admin/live-activity/",
+    "500 /api/admin/detailed-stats/"
+  ],
+  "screenshotCount": 20
+}

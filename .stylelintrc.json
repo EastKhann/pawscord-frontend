@@ -1,0 +1,33 @@
+{
+    "extends": [
+        "stylelint-config-standard"
+    ],
+    "rules": {
+        "declaration-no-important": true,
+        "color-no-invalid-hex": true,
+        "unit-no-unknown": true,
+        "property-no-unknown": true,
+        "selector-pseudo-class-no-unknown": [
+            true,
+            {
+                "ignorePseudoClasses": [
+                    "global",
+                    "local"
+                ]
+            }
+        ],
+        "no-duplicate-selectors": true,
+        "no-empty-source": true,
+        "shorthand-property-no-redundant-values": true,
+        "alpha-value-notation": "number",
+        "color-function-notation": "modern"
+    },
+    "ignoreFiles": [
+        "**/*.js",
+        "**/*.ts",
+        "**/*.tsx",
+        "build/**",
+        "dist/**",
+        "node_modules/**"
+    ]
+}

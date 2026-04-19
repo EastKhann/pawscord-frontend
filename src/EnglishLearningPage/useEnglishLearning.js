@@ -1,14 +1,15 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { getToken } from '../utils/tokenStorage';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalWebSocket } from '../GlobalWebSocketContext';
 import { API_BASE_URL } from '../utils/constants';
+import logger from '../utils/logger';
 
 const TOKEN_REFRESH_URL = `${API_BASE_URL}/auth/token/refresh/`;
 const GET_WORDS_URL = `${API_BASE_URL}/eng-learn/words/`;
 const GET_KNOWN_WORDS_URL = `${API_BASE_URL}/eng-learn/known-words/`;
 const MARK_WORD_AS_KNOWN_URL = `${API_BASE_URL}/eng-learn/mark-known/`;
-
-const getToken = () => localStorage.getItem('access_token');
+const SRS_ADD_URL = `${API_BASE_URL}/srs/add/`;
 
 function useEnglishLearning() {
     const [allData, setAllData] = useState({});
@@ -28,47 +29,58 @@ function useEnglishLearning() {
         navigate('/');
     }, [navigate]);
 
-    const fetchWithAuth = useCallback(async (url, options = {}) => {
-        const originalFetch = async () => {
-            const token = getToken();
-            const headers = options.headers || {};
-            if (token) headers['Authorization'] = `Bearer ${token}`;
-            if (!(options.body instanceof FormData)) headers['Content-Type'] = 'application/json';
-            return fetch(url, { ...options, headers, credentials: 'include' });
-        };
+    const fetchWithAuth = useCallback(
+        async (url, options = {}) => {
+            const originalFetch = async () => {
+                const token = getToken();
+                const headers = options.headers || {};
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+                if (!(options.body instanceof FormData))
+                    headers['Content-Type'] = 'application/json';
+                return fetch(url, { ...options, headers, credentials: 'include' });
+            };
 
-        let response = await originalFetch();
+            let response = await originalFetch();
 
-        if (response.status === 401 && url !== TOKEN_REFRESH_URL) {
-            console.warn("Token süresi doldu, yenileniyor...");
-            try {
-                const refreshResponse = await fetch(TOKEN_REFRESH_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({}),
-                });
-                const data = await refreshResponse.json();
-                if (!refreshResponse.ok) { handleLogout(); throw new Error("Oturum yenilenemedi."); }
-                localStorage.setItem('access_token', data.access);
-                response = await originalFetch();
-            } catch (err) { handleLogout(); throw err; }
-        }
-        return response;
-    }, [handleLogout]);
+            if (response.status === 401 && url !== TOKEN_REFRESH_URL) {
+                logger.warn('Token expired, refreshing...');
+                try {
+                    const refreshResponse = await fetch(TOKEN_REFRESH_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({}),
+                    });
+                    const data = await refreshResponse.json();
+                    if (!refreshResponse.ok) {
+                        handleLogout();
+                        throw new Error('Oturum yenilenemedi.');
+                    }
+                    localStorage.setItem('access_token', data.access);
+                    response = await originalFetch();
+                } catch (err) {
+                    handleLogout();
+                    throw err;
+                }
+            }
+            return response;
+        },
+        [handleLogout]
+    );
 
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
                 const [wordsResponse, knownWordsResponse] = await Promise.all([
                     fetchWithAuth(GET_WORDS_URL),
-                    fetchWithAuth(GET_KNOWN_WORDS_URL)
+                    fetchWithAuth(GET_KNOWN_WORDS_URL),
                 ]);
                 if (!wordsResponse.ok) {
-                    if (wordsResponse.status === 401) throw new Error("Lütfen önce Pawscord'a giriş yapın.");
-                    throw new Error('Kelimeler yüklenemedi. API hatası.');
+                    if (wordsResponse.status === 401)
+                        throw new Error('Please log in to Pawscord first.');
+                    throw new Error('Failed to load words. API error.');
                 }
-                if (!knownWordsResponse.ok) throw new Error('Bilinen kelimeler listesi alınamadı.');
+                if (!knownWordsResponse.ok) throw new Error('Failed to fetch known words list.');
 
                 const wordsData = await wordsResponse.json();
                 const knownWordsData = await knownWordsResponse.json();
@@ -77,8 +89,11 @@ function useEnglishLearning() {
                 setKnownWords(knownWordsData || {});
                 setAvailableLevels(levels);
                 if (levels.length > 0) setCurrentLevel(levels[0]);
-            } catch (err) { setError(err.message); }
-            finally { setIsLoading(false); }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
         };
         fetchInitialData();
     }, [fetchWithAuth]);
@@ -86,20 +101,33 @@ function useEnglishLearning() {
     const availableWordsForLevel = useMemo(() => {
         if (!currentLevel || !allData[currentLevel]) return [];
         const knownWordsInLevel = new Set(knownWords[currentLevel] || []);
-        return allData[currentLevel].filter(word => !knownWordsInLevel.has(word.term));
+        return allData[currentLevel].filter((word) => !knownWordsInLevel.has(word.term));
     }, [allData, currentLevel, knownWords]);
 
     const levelStats = useMemo(() => {
         const total = allData[currentLevel]?.length || 0;
         const known = knownWords[currentLevel]?.length || 0;
-        return { totalWords: total, knownWords: known, progress: Math.round(total > 0 ? (known / total) * 100 : 0) };
+        return {
+            totalWords: total,
+            knownWords: known,
+            progress: Math.round(total > 0 ? (known / total) * 100 : 0),
+        };
     }, [currentLevel, allData, knownWords]);
 
     const totalStats = useMemo(() => {
-        let totalWords = 0, totalKnownWords = 0;
-        Object.values(allData).forEach(arr => { totalWords += arr.length; });
-        Object.values(knownWords).forEach(arr => { totalKnownWords += arr.length; });
-        return { totalWords, totalKnownWords, progress: Math.round(totalWords > 0 ? (totalKnownWords / totalWords) * 100 : 0) };
+        let totalWords = 0,
+            totalKnownWords = 0;
+        Object.values(allData).forEach((arr) => {
+            totalWords += arr.length;
+        });
+        Object.values(knownWords).forEach((arr) => {
+            totalKnownWords += arr.length;
+        });
+        return {
+            totalWords,
+            totalKnownWords,
+            progress: Math.round(totalWords > 0 ? (totalKnownWords / totalWords) * 100 : 0),
+        };
     }, [allData, knownWords]);
 
     const getNewWord = useCallback(() => {
@@ -110,7 +138,9 @@ function useEnglishLearning() {
             if (currentLevel) setLevelComplete(true);
             return;
         }
-        setCurrentWord(availableWordsForLevel[Math.floor(Math.random() * availableWordsForLevel.length)]);
+        setCurrentWord(
+            availableWordsForLevel[Math.floor(Math.random() * availableWordsForLevel.length)]
+        );
     }, [availableWordsForLevel, currentLevel]);
 
     useEffect(() => {
@@ -122,11 +152,23 @@ function useEnglishLearning() {
         try {
             const response = await fetchWithAuth(MARK_WORD_AS_KNOWN_URL, {
                 method: 'POST',
-                body: JSON.stringify({ level: currentLevel, word: currentWord.term })
+                body: JSON.stringify({ level: currentLevel, word: currentWord.term }),
             });
-            if (!response.ok) throw new Error("Kelime kaydedilemedi");
+            if (!response.ok) throw new Error('Kelime kaydedilemedi');
             setKnownWords(await response.json());
-        } catch (err) { console.error("Kelime kaydetme API hatası:", err); }
+            // Also add to SRS queue silently
+            fetchWithAuth(SRS_ADD_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    word: currentWord.term,
+                    translation: currentWord.meanings?.join(' / ') || '',
+                }),
+            }).catch(() => {
+                /* SRS add is optional, don't block */
+            });
+        } catch (err) {
+            logger.error('Word save API error:', err);
+        }
     }, [currentWord, currentLevel, fetchWithAuth]);
 
     const { globalData } = useGlobalWebSocket();
@@ -137,10 +179,21 @@ function useEnglishLearning() {
     }, [globalData]);
 
     return {
-        allData, availableLevels, currentLevel, setCurrentLevel,
-        currentWord, showAnswer, setShowAnswer, isLoading, error,
-        levelComplete, levelStats, totalStats, availableWordsForLevel,
-        getNewWord, handleMarkAsKnown
+        allData,
+        availableLevels,
+        currentLevel,
+        setCurrentLevel,
+        currentWord,
+        showAnswer,
+        setShowAnswer,
+        isLoading,
+        error,
+        levelComplete,
+        levelStats,
+        totalStats,
+        availableWordsForLevel,
+        getNewWord,
+        handleMarkAsKnown,
     };
 }
 

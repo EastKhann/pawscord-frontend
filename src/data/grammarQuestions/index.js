@@ -4,12 +4,12 @@
 export { LEVELS } from './levels';
 
 const levelLoaders = {
-  A1: () => import('./a1Questions').then(m => m.a1Questions),
-  A2: () => import('./a2Questions').then(m => m.a2Questions),
-  B1: () => import('./b1Questions').then(m => m.b1Questions),
-  B2: () => import('./b2Questions').then(m => m.b2Questions),
-  C1: () => import('./c1Questions').then(m => m.c1Questions),
-  C2: () => import('./c2Questions').then(m => m.c2Questions),
+    A1: () => import('./a1Questions').then((m) => m.a1Questions),
+    A2: () => import('./a2Questions').then((m) => m.a2Questions),
+    B1: () => import('./b1Questions').then((m) => m.b1Questions),
+    B2: () => import('./b2Questions').then((m) => m.b2Questions),
+    C1: () => import('./c1Questions').then((m) => m.c1Questions),
+    C2: () => import('./c2Questions').then((m) => m.c2Questions),
 };
 
 // Cache loaded questions
@@ -21,12 +21,12 @@ const cache = {};
  * @returns {Promise<Array>} Array of question objects
  */
 export async function loadQuestionsByLevel(level) {
-  if (cache[level]) return cache[level];
-  const loader = levelLoaders[level];
-  if (!loader) throw new Error(`Unknown level: ${level}`);
-  const questions = await loader();
-  cache[level] = questions;
-  return questions;
+    if (cache[level]) return cache[level];
+    const loader = levelLoaders[level];
+    if (!loader) throw new Error(`Unknown level: ${level}`);
+    const questions = await loader();
+    cache[level] = questions;
+    return questions;
 }
 
 /**
@@ -35,9 +35,9 @@ export async function loadQuestionsByLevel(level) {
  * @returns {Promise<Array>} All questions across all levels
  */
 export async function loadAllQuestions() {
-  const levels = Object.keys(levelLoaders);
-  const results = await Promise.all(levels.map(l => loadQuestionsByLevel(l)));
-  return results.flat();
+    const levels = Object.keys(levelLoaders);
+    const results = await Promise.all(levels.map((l) => loadQuestionsByLevel(l)));
+    return results.flat();
 }
 
 // QUESTIONS_DB removed — all consumers migrated to loadQuestionsByLevel() / loadAllQuestions()

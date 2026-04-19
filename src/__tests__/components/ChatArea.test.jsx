@@ -33,7 +33,7 @@ const MockChatArea = ({
         return (
             <div data-testid="chat-area-empty">
                 <div data-testid="no-chat-selected">
-                    <h2>Sohbet seçilmedi</h2>
+                    <h2>Chat seçilmedi</h2>
                     <p>Sol panelden bir sohbet seçin</p>
                 </div>
             </div>
@@ -49,10 +49,10 @@ const MockChatArea = ({
                     <button data-testid="search-toggle" onClick={() => setSearchQuery('open')} aria-label="Ara">
                         🔍
                     </button>
-                    <button data-testid="members-toggle" aria-label="Üyeler">
+                    <button data-testid="members-toggle" aria-label="Memberler">
                         👥
                     </button>
-                    <button data-testid="notifications-toggle" aria-label="Bildirimler">
+                    <button data-testid="notifications-toggle" aria-label="Notifications">
                         🔔
                     </button>
                 </div>
@@ -73,7 +73,7 @@ const MockChatArea = ({
                         data-testid="search-input"
                         value={localSearchQuery}
                         onChange={(e) => setLocalSearchQuery(e.target.value)}
-                        placeholder="Mesajlarda ara..."
+                        placeholder="Mesajlarda search..."
                     />
                 </div>
             )}
@@ -83,8 +83,7 @@ const MockChatArea = ({
                 data-testid="message-container"
                 ref={messageBoxRef}
                 onScroll={onMessageScroll}
-                style={{ overflowY: 'auto', flex: 1 }}
-            >
+                style={{ overflowY: 'auto', flex: 1 }}>
                 {/* Loading skeleton */}
                 {messageHistoryLoading && (
                     <div data-testid="message-skeleton">
@@ -96,14 +95,14 @@ const MockChatArea = ({
 
                 {/* "Load more" indicator */}
                 {hasMoreMessages && !messageHistoryLoading && (
-                    <div data-testid="load-more-indicator">Daha fazla mesaj yükleniyor...</div>
+                    <div data-testid="load-more-indicator">Daha fazla message yükleniyor...</div>
                 )}
 
                 {/* Messages */}
                 {messages.length === 0 && !messageHistoryLoading ? (
                     <div data-testid="no-messages">
                         <h3>🎉 İlk mesajı sen yaz!</h3>
-                        <p>Bu kanal yeni oluşturuldu.</p>
+                        <p>This channel yeni created.</p>
                     </div>
                 ) : (
                     <div data-testid="message-list" role="log" aria-label="Mesajlar">
@@ -112,12 +111,16 @@ const MockChatArea = ({
                                 key={msg.id}
                                 data-testid={`message-${msg.id}`}
                                 className={isSelectionMode && selectedMessages.includes(msg.id) ? 'selected' : ''}
+                                role="button"
+                                tabIndex={0}
+
                                 onClick={isSelectionMode ? () => {
                                     setSelectedMessages(prev =>
                                         prev.includes(msg.id) ? prev.filter(id => id !== msg.id) : [...prev, msg.id]
                                     );
                                 } : undefined}
-                            >
+                            
+                                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
                                 <span data-testid={`msg-author-${msg.id}`}>{msg.username}</span>
                                 <span data-testid={`msg-content-${msg.id}`}>{msg.content}</span>
                             </div>
@@ -167,7 +170,7 @@ describe('ChatArea Component', () => {
         it('should show "no chat selected" when activeChat is null', () => {
             render(<MockChatArea activeChat={null} {...handlers} />);
             expect(screen.getByTestId('no-chat-selected')).toBeInTheDocument();
-            expect(screen.getByText('Sohbet seçilmedi')).toBeInTheDocument();
+            expect(screen.getByText('Chat seçilmedi')).toBeInTheDocument();
         });
 
         it('should show empty message state when no messages', () => {
@@ -234,7 +237,7 @@ describe('ChatArea Component', () => {
                 <MockChatArea
                     activeChat={mockActiveChat}
                     messages={mockMessages}
-                    activeTypingUsers={['Alice', 'Bob']}
+                    activeTypingUsers={['Alice', 'Bob']}>
                     {...handlers}
                 />
             );

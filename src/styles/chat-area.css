@@ -1,0 +1,377 @@
+/* ================================================================
+ * PAWSCORD — Chat Area Design System
+ * Modern Discord-inspired premium dark theme
+ * ================================================================ */
+
+/* ─── CUSTOM SCROLLBAR ─────────────────────────────────────────── */
+.chat-message-box::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chat-message-box::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-message-box::-webkit-scrollbar-thumb {
+    background: rgba(79, 84, 92, 0.3);
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.chat-message-box::-webkit-scrollbar-thumb:hover {
+    background: rgba(79, 84, 92, 0.55);
+}
+
+/* ─── CHAT AREA ROOT ────────────────────────────────────────────── */
+.chat-area-root {
+    background: #0f1520;
+    background-image:
+        radial-gradient(ellipse at 60% -10%, rgba(88, 101, 242, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 10% 100%, rgba(88, 101, 242, 0.04) 0%, transparent 45%);
+}
+
+/* ─── CHAT HEADER ──────────────────────────────────────────────── */
+.chat-header-elevated {
+    background: rgba(12, 16, 30, 0.78);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1px solid rgba(88, 101, 242, 0.14);
+    box-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.3),
+        0 2px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* ─── MESSAGE ROWS ──────────────────────────────────────────────── */
+/* Base hover */
+.chat-msg {
+    transition: background-color 0.08s ease;
+    /* Prevent flex container from squishing message rows (causes visual overlap) */
+    flex-shrink: 0;
+}
+
+.chat-msg:hover {
+    background-color: rgba(0, 0, 0, 0.14);
+}
+
+/* Selected / mention highlight */
+.chat-msg.msg-selected {
+    background-color: rgba(88, 101, 242, 0.12);
+}
+
+.chat-msg.msg-selected::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #5865f2;
+    border-radius: 0 2px 2px 0;
+    pointer-events: none;
+}
+
+/* Hover timestamp for grouped messages */
+.chat-msg:hover .grouped-ts {
+    opacity: 1;
+}
+
+/* ─── DATE DIVIDER ──────────────────────────────────────────────── */
+.chat-date-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 16px 8px;
+    user-select: none;
+}
+
+.chat-date-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(88, 101, 242, 0.16) 25%,
+        rgba(255, 255, 255, 0.05) 70%,
+        transparent 100%
+    );
+}
+
+.chat-date-divider-line:last-child {
+    background: linear-gradient(
+        to left,
+        transparent 0%,
+        rgba(88, 101, 242, 0.16) 25%,
+        rgba(255, 255, 255, 0.05) 70%,
+        transparent 100%
+    );
+}
+
+.chat-date-divider-label {
+    color: #5d6580;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    background: rgba(88, 101, 242, 0.07);
+    border: 1px solid rgba(88, 101, 242, 0.12);
+}
+
+/* ─── EMPTY STATE ───────────────────────────────────────────────── */
+.chat-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    user-select: none;
+    gap: 4px;
+    animation: chatEmptyFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes chatEmptyFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-empty-icon-ring {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(88, 101, 242, 0.22) 0%, rgba(139, 92, 246, 0.18) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    position: relative;
+    box-shadow:
+        0 0 0 1.5px rgba(88, 101, 242, 0.2),
+        0 0 40px rgba(88, 101, 242, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: emptyIconFloat 3.5s ease-in-out infinite;
+}
+
+/* Outer ring pulse */
+.chat-empty-icon-ring::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(88, 101, 242, 0.22);
+    animation: chatRingPulse 3s ease-out 0.5s infinite;
+    opacity: 0;
+}
+
+/* Inner glow */
+.chat-empty-icon-ring::after {
+    content: '';
+    position: absolute;
+    inset: -22px;
+    border-radius: 50%;
+    border: 1px solid rgba(139, 92, 246, 0.12);
+    animation: chatRingPulse 3s ease-out 1s infinite;
+    opacity: 0;
+}
+
+@keyframes chatRingPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+.chat-empty-title {
+    color: #dde1e7;
+    font-size: 1.25em;
+    font-weight: 700;
+    font-family: 'gg sans', 'Noto Sans', sans-serif;
+    letter-spacing: -0.01em;
+}
+
+.chat-empty-subtitle {
+    color: #4a5073;
+    font-size: 0.88em;
+    font-weight: 400;
+    margin-top: 5px;
+    max-width: 260px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+@keyframes emptyIconFloat {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* ─── DRAG OVERLAY ──────────────────────────────────────────────── */
+.chat-drop-overlay {
+    position: absolute;
+    inset: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(9, 12, 22, 0.92);
+    border: 2px dashed rgba(88, 101, 242, 0.55);
+    border-radius: 14px;
+    pointer-events: none;
+    z-index: 1000;
+    gap: 12px;
+    animation: dropFadeIn 0.15s ease;
+    backdrop-filter: blur(4px);
+}
+
+.chat-drop-icon {
+    font-size: 52px;
+    animation: dropBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chat-drop-title {
+    color: #5865f2;
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+.chat-drop-sub {
+    color: #3e4464;
+    font-size: 0.82em;
+    margin-top: -4px;
+}
+
+@keyframes dropFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes dropBounce {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ─── SCROLL TO BOTTOM FAB ──────────────────────────────────────── */
+.scroll-to-bottom-fab {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.scroll-to-bottom-fab:hover {
+    transform: translateY(-3px) scale(1.08);
+    background-color: #1d2138;
+    border-color: rgba(88, 101, 242, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* ─── UPLOAD PROGRESS ───────────────────────────────────────────── */
+.upload-progress-wrap {
+    position: absolute;
+    top: -50px;
+    left: 12px;
+    right: 12px;
+    background: rgba(11, 14, 24, 0.94);
+    backdrop-filter: blur(14px);
+    border-radius: 10px;
+    padding: 9px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.upload-progress-label {
+    color: #949ba4;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.upload-progress-track {
+    flex: 1;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.upload-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #5865f2, #7b83f5);
+    border-radius: 3px;
+    transition: width 0.28s ease;
+}
+
+/* ─── PULL REFRESH INDICATOR ────────────────────────────────────── */
+.pull-refresh-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    padding: 10px 16px;
+    color: #5d6580;
+    font-size: 0.84em;
+}
+
+.pull-refresh-indicator .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(88, 101, 242, 0.25);
+    border-top-color: #5865f2;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+    flex-shrink: 0;
+}
+
+/* ─── LOAD MORE ROW ─────────────────────────────────────────────── */
+.load-more-row {
+    text-align: center;
+    padding: 6px 0 2px;
+}
+
+/* ─── INPUT CONTAINER ───────────────────────────────────────────── */
+.chat-input-outer {
+    padding: 0 16px 20px;
+}
+
+/* Glow on focus-within (the inner glass input already handles its own style) */
+.chat-input-outer:focus-within .chat-input-glass-ring {
+    box-shadow:
+        0 0 0 1px rgba(88, 101, 242, 0.2),
+        0 4px 20px rgba(0, 0, 0, 0.28);
+}
+
+/* @keyframes spin is defined here for pull-refresh; critical.css may also have it */

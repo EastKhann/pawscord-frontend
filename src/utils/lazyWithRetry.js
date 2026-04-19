@@ -2,7 +2,11 @@
 // 🔄 Lazy load with auto-retry & cache-busting reload on chunk failure
 // Yeni deploy sonrası eski chunk'lar kaybolunca otomatik page reload yapar
 
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import React from 'react';
+import logger from '../utils/logger';
 
 // 🔑 UNIFIED keys — ALL chunk error handlers must use these same keys
 export const CHUNK_RELOAD_KEY = 'pawscord_chunk_reload';
@@ -30,9 +34,9 @@ export function isChunkLoadError(error) {
 }
 
 /**
- * React.lazy() wrapper — chunk yüklenemezse otomatik retry + reload
+ * React.lazy() wrapper — chunk uploadnemezse otomatik retry + reload
  * @param {Function} importFn - () => import('./Component')
- * @param {number} retries - Kaç kez retry denensin (default: 2)
+ * @param {number} retries - Kopen kez retry denensin (default: 2)
  */
 export function lazyWithRetry(importFn, retries = 2) {
     return React.lazy(() => {
@@ -42,8 +46,8 @@ export function lazyWithRetry(importFn, retries = 2) {
                     .then(resolve)
                     .catch((error) => {
                         if (retriesLeft > 0 && isChunkLoadError(error)) {
-                            console.warn(`⚠️ Chunk yükleme hatası, retry... (${retriesLeft} kalan)`);
-                            // Cache-bust ile tekrar dene
+                            logger.warn(`⚠️ Chunk load hatası, retry... (${retriesLeft} kalan)`);
+                            // Cache-bust with tekrar dene
                             setTimeout(() => attempt(retriesLeft - 1), 800);
                         } else if (isChunkLoadError(error)) {
                             // Tüm retry'lar bitti, page reload yap
@@ -60,8 +64,8 @@ export function lazyWithRetry(importFn, retries = 2) {
 }
 
 /**
- * Chunk hatası sonrası güvenli reload — cache-busting ile
- * Sonsuz döngüyü önlemek için counter + cooldown var
+ * Chunk hatası sonrası güvenli reload — cache-busting with
+ * Sonsuz döngüyü önlemek for counter + cooldown var
  */
 export function handleChunkReload() {
     const reloadCount = parseInt(sessionStorage.getItem(CHUNK_RELOAD_COUNT_KEY) || '0', 10);
@@ -70,18 +74,20 @@ export function handleChunkReload() {
 
     // 🛡️ Maksimum reload limiti — sonsuz döngü koruma
     if (reloadCount >= MAX_RELOADS) {
-        console.error('❌ Chunk reload limiti aşıldı. Sonsuz döngü engellendi.');
-        console.error('💡 Lütfen Ctrl+Shift+R ile sayfayı tamamen yenileyin.');
+        logger.error('❌ Chunk reload limit exceeded. Infinite loop blocked.');
+        logger.error('💡 Please refresh the page with Ctrl+Shift+R.');
         return false;
     }
 
-    // 🛡️ Cooldown — 15 saniye içinde tekrar reload yapma
-    if (lastReload && (now - parseInt(lastReload, 10)) < 15000) {
-        console.error('❌ Chunk reload cooldown aktif — sonsuz döngü engellendi');
+    // 🛡️ Cooldown — 15 saniye forde tekrar reload yapma
+    if (lastReload && now - parseInt(lastReload, 10) < 15000) {
+        logger.error('❌ Chunk reload cooldown active — infinite loop blocked');
         return false;
     }
 
-    console.warn(`🔄 Yeni versiyon algılandı, sayfa yenileniyor... (${reloadCount + 1}/${MAX_RELOADS})`);
+    logger.warn(
+        `🔄 Yeni versiyon algılandı, page yenileniyor... (${reloadCount + 1}/${MAX_RELOADS})`
+    );
     sessionStorage.setItem(CHUNK_RELOAD_KEY, now.toString());
     sessionStorage.setItem(CHUNK_RELOAD_COUNT_KEY, (reloadCount + 1).toString());
 

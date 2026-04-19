@@ -164,7 +164,7 @@ describe('isTokenExpired', () => {
 describe('checkRateLimit', () => {
     beforeEach(() => {
         vi.spyOn(Storage.prototype, 'getItem').mockReturnValue('[]');
-        vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { });
+        vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {});
     });
 
     it('allows first attempt', () => {

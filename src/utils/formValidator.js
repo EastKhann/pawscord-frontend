@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/formValidator.js
 
 /**
@@ -151,7 +154,7 @@ class FormValidator {
 
             const validator = this.customValidators.get(validatorName);
             if (!validator) {
-                console.warn(`Unknown validator: ${validatorName}`);
+                logger.warn(`Unknown validator: ${validatorName}`);
                 continue;
             }
 
@@ -163,9 +166,10 @@ class FormValidator {
             }
 
             if (!isValid) {
-                const message = typeof config === 'object' && config.message
-                    ? config.message
-                    : this.getDefaultMessage(validatorName, config);
+                const message =
+                    typeof config === 'object' && config.message
+                        ? config.message
+                        : this.getDefaultMessage(validatorName, config);
 
                 errors.push(message);
             }
@@ -197,7 +201,7 @@ class FormValidator {
             const validator = this.asyncValidators.get(realName);
 
             if (!validator) {
-                console.warn(`Unknown async validator: ${realName}`);
+                logger.warn(`Unknown async validator: ${realName}`);
                 continue;
             }
 
@@ -205,14 +209,15 @@ class FormValidator {
                 const isValid = await validator(value, config, formData);
 
                 if (!isValid) {
-                    const message = typeof config === 'object' && config.message
-                        ? config.message
-                        : `${fieldName} is invalid`;
+                    const message =
+                        typeof config === 'object' && config.message
+                            ? config.message
+                            : `${fieldName} is invalid`;
 
                     errors.push(message);
                 }
             } catch (error) {
-                console.error(`Async validation error for ${fieldName}:`, error);
+                logger.error(`Async validation error for ${fieldName}:`, error);
                 errors.push('Validation failed');
             }
         }
@@ -245,12 +250,12 @@ class FormValidator {
      */
     async validateAsync(formData) {
         const results = await Promise.all(
-            Array.from(this.rules.keys()).map(fieldName =>
+            Array.from(this.rules.keys()).map((fieldName) =>
                 this.validateFieldAsync(fieldName, formData[fieldName], formData)
             )
         );
 
-        return results.every(r => r);
+        return results.every((r) => r);
     }
 
     /**
@@ -329,7 +334,7 @@ class FormValidator {
             alphanumeric: 'Please enter only letters and numbers',
             phone: 'Please enter a valid phone number',
             date: 'Please enter a valid date',
-            match: 'Fields do not match'
+            match: 'Fields do not match',
         };
 
         return messages[validatorName] || 'Invalid value';
@@ -348,39 +353,57 @@ export const useFormValidator = (initialRules = {}) => {
         validator.setAllRules(initialRules);
     }, []);
 
-    const validateField = React.useCallback((fieldName, value, formData) => {
-        const isValid = validator.validateField(fieldName, value, formData);
-        setErrors(validator.getAllErrors());
-        return isValid;
-    }, [validator]);
+    const validateField = React.useCallback(
+        (fieldName, value, formData) => {
+            const isValid = validator.validateField(fieldName, value, formData);
+            setErrors(validator.getAllErrors());
+            return isValid;
+        },
+        [validator]
+    );
 
-    const validateFieldAsync = React.useCallback(async (fieldName, value, formData) => {
-        const isValid = await validator.validateFieldAsync(fieldName, value, formData);
-        setErrors(validator.getAllErrors());
-        return isValid;
-    }, [validator]);
+    const validateFieldAsync = React.useCallback(
+        async (fieldName, value, formData) => {
+            const isValid = await validator.validateFieldAsync(fieldName, value, formData);
+            setErrors(validator.getAllErrors());
+            return isValid;
+        },
+        [validator]
+    );
 
-    const validate = React.useCallback((formData) => {
-        const isValid = validator.validate(formData);
-        setErrors(validator.getAllErrors());
-        return isValid;
-    }, [validator]);
+    const validate = React.useCallback(
+        (formData) => {
+            const isValid = validator.validate(formData);
+            setErrors(validator.getAllErrors());
+            return isValid;
+        },
+        [validator]
+    );
 
-    const validateAsync = React.useCallback(async (formData) => {
-        const isValid = await validator.validateAsync(formData);
-        setErrors(validator.getAllErrors());
-        return isValid;
-    }, [validator]);
+    const validateAsync = React.useCallback(
+        async (formData) => {
+            const isValid = await validator.validateAsync(formData);
+            setErrors(validator.getAllErrors());
+            return isValid;
+        },
+        [validator]
+    );
 
-    const touchField = React.useCallback((fieldName) => {
-        validator.touch(fieldName);
-        setTouched(prev => ({ ...prev, [fieldName]: true }));
-    }, [validator]);
+    const touchField = React.useCallback(
+        (fieldName) => {
+            validator.touch(fieldName);
+            setTouched((prev) => ({ ...prev, [fieldName]: true }));
+        },
+        [validator]
+    );
 
-    const clearErrors = React.useCallback((fieldName) => {
-        validator.clearErrors(fieldName);
-        setErrors(validator.getAllErrors());
-    }, [validator]);
+    const clearErrors = React.useCallback(
+        (fieldName) => {
+            validator.clearErrors(fieldName);
+            setErrors(validator.getAllErrors());
+        },
+        [validator]
+    );
 
     const reset = React.useCallback(() => {
         validator.reset();
@@ -398,7 +421,7 @@ export const useFormValidator = (initialRules = {}) => {
         reset,
         errors,
         touched,
-        hasErrors: Object.keys(errors).length > 0
+        hasErrors: Object.keys(errors).length > 0,
     };
 };
 
@@ -412,13 +435,13 @@ export const ValidationRules = {
         maxLength: { value: 20, message: 'Username must be at most 20 characters' },
         pattern: {
             value: /^[a-zA-Z0-9_]+$/,
-            message: 'Username can only contain letters, numbers and underscores'
-        }
+            message: 'Username can only contain letters, numbers and underscores',
+        },
     },
 
     email: {
         required: true,
-        email: { message: 'Please enter a valid email address' }
+        email: { message: 'Please enter a valid email address' },
     },
 
     password: {
@@ -426,27 +449,25 @@ export const ValidationRules = {
         minLength: { value: 8, message: 'Password must be at least 8 characters' },
         pattern: {
             value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-            message: 'Password must contain uppercase, lowercase and number'
-        }
+            message: 'Password must contain uppercase, lowercase and number',
+        },
     },
 
     passwordConfirm: (passwordFieldName = 'password') => ({
         required: true,
         match: {
             value: passwordFieldName,
-            message: 'Passwords do not match'
-        }
+            message: 'Passwords do not match',
+        },
     }),
 
     url: {
-        url: { message: 'Please enter a valid URL' }
+        url: { message: 'Please enter a valid URL' },
     },
 
     phone: {
-        phone: { message: 'Please enter a valid phone number' }
-    }
+        phone: { message: 'Please enter a valid phone number' },
+    },
 };
 
 export default FormValidator;
-
-

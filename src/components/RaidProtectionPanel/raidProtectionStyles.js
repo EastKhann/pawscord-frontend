@@ -1,13 +1,16 @@
 ﻿export const styles = {
     overlay: {
         position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.85)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10000,
-        backdropFilter: 'blur(5px)'
+        backdropFilter: 'blur(5px)',
     },
     panel: {
         backgroundColor: '#111214',
@@ -18,19 +21,19 @@
         display: 'flex',
         flexDirection: 'column',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     headerLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     headerIcon: { fontSize: '24px' },
     title: { margin: 0, color: '#fff', fontSize: '24px', fontWeight: '600' },
@@ -41,7 +44,7 @@
         borderRadius: '12px',
         fontSize: '12px',
         fontWeight: '700',
-        animation: 'pulse 1.5s infinite'
+        animation: 'pulse 1.5s infinite',
     },
     closeButton: {
         background: 'none',
@@ -50,20 +53,20 @@
         cursor: 'pointer',
         fontSize: '24px',
         padding: '8px',
-        borderRadius: '4px'
+        borderRadius: '4px',
     },
     statsGrid: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
         gap: '16px',
         padding: '20px',
-        borderBottom: '1px solid #0b0e1b'
+        borderBottom: '1px solid #0b0e1b',
     },
     statCard: {
         backgroundColor: '#0d0e10',
         borderRadius: '8px',
         padding: '16px',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     statIcon: { fontSize: '32px', marginBottom: '8px' },
     statValue: { fontSize: '28px', fontWeight: 'bold', color: '#fff', marginBottom: '4px' },
@@ -71,13 +74,13 @@
     section: {
         padding: '20px',
         borderBottom: '1px solid #0b0e1b',
-        overflowY: 'auto'
+        overflowY: 'auto',
     },
     sectionHeader: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '20px'
+        marginBottom: '20px',
     },
     sectionTitle: {
         color: '#fff',
@@ -86,13 +89,13 @@
         margin: 0,
         display: 'flex',
         alignItems: 'center',
-        gap: '8px'
+        gap: '8px',
     },
     masterSwitch: {
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     switchSlider: {
         position: 'relative',
@@ -100,7 +103,7 @@
         height: '24px',
         backgroundColor: '#949ba4',
         borderRadius: '24px',
-        transition: '0.3s'
+        transition: '0.3s',
     },
     switchLabel: { color: '#fff', fontSize: '14px', fontWeight: '600' },
     settings: { display: 'flex', flexDirection: 'column', gap: '20px' },
@@ -110,7 +113,7 @@
         alignItems: 'center',
         padding: '16px',
         backgroundColor: '#0d0e10',
-        borderRadius: '8px'
+        borderRadius: '8px',
     },
     settingInfo: { flex: 1 },
     settingLabel: { color: '#fff', fontSize: '15px', fontWeight: '600', marginBottom: '4px' },
@@ -124,21 +127,24 @@
         color: '#fff',
         fontSize: '14px',
         marginLeft: '20px',
-        minWidth: '150px'
+        minWidth: '150px',
     },
     toggleSwitch: {
         position: 'relative',
         width: '48px',
         height: '24px',
-        marginLeft: '20px'
+        marginLeft: '20px',
     },
     toggleSlider: {
         position: 'absolute',
         cursor: 'pointer',
-        top: 0, left: 0, right: 0, bottom: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundColor: '#949ba4',
         transition: '0.3s',
-        borderRadius: '24px'
+        borderRadius: '24px',
     },
     lockdownBtn: {
         backgroundColor: '#f23f42',
@@ -149,7 +155,7 @@
         cursor: 'pointer',
         fontSize: '14px',
         fontWeight: '600',
-        marginLeft: '20px'
+        marginLeft: '20px',
     },
     lockdownDeactivateBtn: {
         backgroundColor: '#23a559',
@@ -160,7 +166,7 @@
         cursor: 'pointer',
         fontSize: '14px',
         fontWeight: '600',
-        marginLeft: '20px'
+        marginLeft: '20px',
     },
     activityList: { display: 'flex', flexDirection: 'column', gap: '12px' },
     empty: { textAlign: 'center', color: '#b5bac1', padding: '40px', fontSize: '14px' },
@@ -170,7 +176,7 @@
         gap: '12px',
         padding: '12px',
         backgroundColor: '#0d0e10',
-        borderRadius: '6px'
+        borderRadius: '6px',
     },
     activityIcon: { fontSize: '24px' },
     activityContent: { flex: 1 },
@@ -183,16 +189,16 @@
         fontSize: '12px',
         fontWeight: '600',
         backgroundColor: '#5865f2',
-        color: '#fff'
+        color: '#fff',
     },
     infoBox: {
         display: 'flex',
         gap: '16px',
         padding: '20px',
         backgroundColor: 'rgba(88, 101, 242, 0.1)',
-        borderTop: '1px solid #5865f2'
+        borderTop: '1px solid #5865f2',
     },
     infoIcon: { fontSize: '24px', color: '#5865f2', marginTop: '4px' },
     infoContent: { color: '#fff', fontSize: '14px' },
-    infoList: { margin: '8px 0 0 0', paddingLeft: '20px', color: '#b5bac1' }
+    infoList: { margin: '8px 0 0 0', paddingLeft: '20px', color: '#b5bac1' },
 };

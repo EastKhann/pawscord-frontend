@@ -1,112 +1,417 @@
 import React from 'react';
+
+
+import PropTypes from 'prop-types';
+
+
 import {
-    FaTwitter, FaGithub, FaInstagram, FaYoutube, FaTwitch,
+
+
+import { useTranslation } from 'react-i18next';
+
+
+FaTwitter, FaGithub, FaInstagram, FaYoutube, FaTwitch,
+
+
     FaGlobe, FaTimes, FaSave
+
+
 } from 'react-icons/fa';
 
+
+
+
+
 const ProfileEditForm = ({ editData, setEditData, extendedProfile, saveExtendedProfile, setIsEditing }) => {
+
+
+    const { t } = useTranslation();
+
+
+
+
+
     return (
+
+
         <div className="profile-edit-form">
+
+
             <div className="edit-section">
-                <h4>Hakkımda</h4>
+
+
+                <h4>{t('hakkımda')}</h4>
+
+
                 <textarea
+
+
                     value={editData.bio || extendedProfile?.bio || ''}
+
+
                     onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
-                    placeholder="Kendin hakkında bir şeyler yaz..."
+
+
+                    placeholder={t('kendin_hakkında_bir_şeyler_yaz')}
+
+
                     maxLength={500}
+
+
                 />
+
+
             </div>
 
+
+
+
+
             <div className="edit-section">
-                <h4>Zamirler</h4>
+
+
+                <h4>{t('zamirler')}</h4>
+
+
                 <input
+
+
                     type="text"
+
+
                     value={editData.pronouns || extendedProfile?.pronouns || ''}
+
+
                     onChange={(e) => setEditData({ ...editData, pronouns: e.target.value })}
-                    placeholder="ör: he/him, she/her"
+
+
+                    placeholder={t('example_pronouns')}
+
+
+
+
+
+                    aria-label="Pronouns"
+
+
                 />
+
+
             </div>
 
+
+
+
+
             <div className="edit-section">
-                <h4>Konum</h4>
+
+
+                <h4>{t('konum')}</h4>
+
+
                 <input
+
+
                     type="text"
+
+
                     value={editData.location || extendedProfile?.location || ''}
+
+
                     onChange={(e) => setEditData({ ...editData, location: e.target.value })}
-                    placeholder="Şehir, Ülke"
+
+
+                    placeholder={t('şehir_ülke')}
+
+
+
+
+
+                    aria-label="Location"
+
+
                 />
+
+
             </div>
 
+
+
+
+
             <div className="edit-section">
-                <h4>Sosyal Bağlantılar</h4>
+
+
+                <h4>{t('sosyal_baglantilar')}</h4>
+
+
                 <div className="social-inputs">
+
+
                     <div className="social-input">
+
+
                         <FaTwitter />
+
+
                         <input
+
+
                             type="text"
+
+
                             value={editData.twitter_username || extendedProfile?.twitter_username || ''}
+
+
                             onChange={(e) => setEditData({ ...editData, twitter_username: e.target.value })}
-                            placeholder="Twitter kullanıcı adı"
+
+
+                            placeholder={t('twitter_kullanıcı_adı')}
+
+
+
+
+
+                            aria-label="Twitter Username"
+
+
                         />
+
+
                     </div>
+
+
                     <div className="social-input">
+
+
                         <FaGithub />
+
+
                         <input
+
+
                             type="text"
+
+
                             value={editData.github_username || extendedProfile?.github_username || ''}
+
+
                             onChange={(e) => setEditData({ ...editData, github_username: e.target.value })}
-                            placeholder="GitHub kullanıcı adı"
+
+
+                            placeholder={t('github_kullanıcı_adı')}
+
+
+
+
+
+                            aria-label="Github Username"
+
+
                         />
+
+
                     </div>
+
+
                     <div className="social-input">
+
+
                         <FaInstagram />
+
+
                         <input
+
+
                             type="text"
+
+
                             value={editData.instagram_username || extendedProfile?.instagram_username || ''}
+
+
                             onChange={(e) => setEditData({ ...editData, instagram_username: e.target.value })}
-                            placeholder="Instagram kullanıcı adı"
+
+
+                            placeholder={t('instagram_kullanıcı_adı')}
+
+
+
+
+
+                            aria-label="Instagram Username"
+
+
                         />
+
+
                     </div>
+
+
                     <div className="social-input">
+
+
                         <FaYoutube />
+
+
                         <input
+
+
                             type="url"
+
+
                             value={editData.youtube_channel || extendedProfile?.youtube_channel || ''}
+
+
                             onChange={(e) => setEditData({ ...editData, youtube_channel: e.target.value })}
-                            placeholder="YouTube kanal URL"
+
+
+                            placeholder={t('youtube_kanal_url')}
+
+
+
+
+
+                            aria-label="Youtube Channel"
+
+
                         />
+
+
                     </div>
+
+
                     <div className="social-input">
+
+
                         <FaTwitch />
+
+
                         <input
+
+
                             type="text"
+
+
                             value={editData.twitch_username || extendedProfile?.twitch_username || ''}
+
+
                             onChange={(e) => setEditData({ ...editData, twitch_username: e.target.value })}
-                            placeholder="Twitch kullanıcı adı"
+
+
+                            placeholder={t('twitch_kullanıcı_adı')}
+
+
+
+
+
+                            aria-label="Twitch Username"
+
+
                         />
+
+
                     </div>
+
+
                     <div className="social-input">
+
+
                         <FaGlobe />
+
+
                         <input
+
+
                             type="url"
+
+
                             value={editData.website_url || extendedProfile?.website_url || ''}
+
+
                             onChange={(e) => setEditData({ ...editData, website_url: e.target.value })}
-                            placeholder="Web sitesi URL"
+
+
+                            placeholder={t('web_sitesi_url')}
+
+
+
+
+
+                            aria-label="Website Url"
+
+
                         />
+
+
                     </div>
+
+
                 </div>
+
+
             </div>
+
+
+
+
 
             <div className="edit-actions">
+
+
                 <button className="btn-cancel" onClick={() => setIsEditing(false)}>
-                    <FaTimes /> İptal
+
+
+                    <FaTimes /> Cancel
+
+
                 </button>
+
+
                 <button className="btn-save" onClick={saveExtendedProfile}>
+
+
                     <FaSave /> Kaydet
+
+
                 </button>
+
+
             </div>
+
+
         </div>
+
+
     );
+
+
 };
 
+
+
+
+
+ProfileEditForm.propTypes = {
+
+
+    editData: PropTypes.array,
+
+
+    setEditData: PropTypes.func,
+
+
+    extendedProfile: PropTypes.object,
+
+
+    saveExtendedProfile: PropTypes.func,
+
+
+    setIsEditing: PropTypes.func,
+
+
+};
+
+
 export default ProfileEditForm;
+
+

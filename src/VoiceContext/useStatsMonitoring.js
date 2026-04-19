@@ -1,25 +1,26 @@
 import { useState, useCallback, useRef } from 'react';
+import logger from '../utils/logger';
 
 /**
  * WebRTC Stats Monitoring hook — 10/10 kalite.
- * 
- * İyileştirmeler:
+ *
+ * İyleştirmeler:
  * - Bitrate hesaplama (inbound + outbound)
  * - Kalite skoru (0-100): RTT, paket kaybı, jitter'a göre
  * - Kalite seviyesi: excellent / good / fair / poor
  * - Jitter buffer delay tracking
- * - Outbound stats (gönderilen ses kalitesi)
- * - Önceki stats ile karşılaştırma (delta hesaplama)
+ * - Outbound stats (gönderilen audio kalitesi)
+ * - Önceki stats with karşılaştırma (delta hesaplama)
  */
 
 // 🔥 Kalite skoru hesapla (0-100)
 function calculateQualityScore(rtt, packetLossRate, jitter) {
     // RTT: <50ms = mükemmel, >300ms = kötü
-    const rttScore = Math.max(0, 100 - (rtt / 3));
+    const rttScore = Math.max(0, 100 - rtt / 3);
     // Paket kaybı: <%1 = mükemmel, >%5 = kötü
-    const lossScore = Math.max(0, 100 - (packetLossRate * 20));
-    // Jitter: <10ms = mükemmel, >50ms = kötü 
-    const jitterScore = Math.max(0, 100 - ((jitter || 0) * 2000));
+    const lossScore = Math.max(0, 100 - packetLossRate * 20);
+    // Jitter: <10ms = mükemmel, >50ms = kötü
+    const jitterScore = Math.max(0, 100 - (jitter || 0) * 2000);
 
     // Ağırlıklı ortalama: paket kaybı en önemli
     return Math.round(rttScore * 0.3 + lossScore * 0.5 + jitterScore * 0.2);
@@ -35,7 +36,7 @@ function qualityLevel(score) {
 export function useStatsMonitoring() {
     const [connectionStats, setConnectionStats] = useState({});
     const statsIntervalRef = useRef(null);
-    const prevStatsRef = useRef({});  // Önceki istatistikler (delta hesaplama)
+    const prevStatsRef = useRef({}); // Önceki istatistikler (delta hesaplama)
 
     // 📊 WEBRTC STATS MONITORING — gelişmiş
     const startStatsMonitoring = useCallback((peerConnectionsRef) => {
@@ -54,7 +55,7 @@ export function useStatsMonitoring() {
                     let candidatePair = null;
 
                     report.forEach((stat) => {
-                        // 🔥 Inbound audio (gelen ses)
+                        // 🔥 Inbound audio (gelen audio)
                         if (stat.type === 'inbound-rtp' && stat.kind === 'audio') {
                             audioIn = {
                                 packetsReceived: stat.packetsReceived || 0,
@@ -67,7 +68,7 @@ export function useStatsMonitoring() {
                                 totalSamplesReceived: stat.totalSamplesReceived || 0,
                             };
                         }
-                        // 🔥 Outbound audio (gönderilen ses)
+                        // 🔥 Outbound audio (gönderilen audio)
                         if (stat.type === 'outbound-rtp' && stat.kind === 'audio') {
                             audioOut = {
                                 packetsSent: stat.packetsSent || 0,
@@ -83,7 +84,7 @@ export function useStatsMonitoring() {
                                 framesDecoded: stat.framesDecoded,
                                 frameWidth: stat.frameWidth,
                                 frameHeight: stat.frameHeight,
-                                framesPerSecond: stat.framesPerSecond,
+                                framesThuSecond: stat.framesThuSecond,
                             };
                         }
                         // Candidate pair (RTT, connection type)
@@ -91,7 +92,9 @@ export function useStatsMonitoring() {
                             candidatePair = {
                                 rtt: (stat.currentRoundTripTime || 0) * 1000,
                                 availableOutgoingBitrate: stat.availableOutgoingBitrate,
-                                connectionType: stat.localCandidateId?.includes('relay') ? 'TURN' : 'STUN/Direct',
+                                connectionType: stat.localCandidateId?.includes('relmonth')
+                                    ? 'TURN'
+                                    : 'STUN/Direct',
                             };
                         }
                     });
@@ -126,7 +129,7 @@ export function useStatsMonitoring() {
                         );
                     }
 
-                    // 🔥 Concealment ratio (kayıp ses tahmini oranı)
+                    // 🔥 Concealment ratio (kayıp audio tahmini oranı)
                     let concealmentRatio = 0;
                     if (audioIn && audioIn.totalSamplesReceived > 0) {
                         concealmentRatio = audioIn.concealedSamples / audioIn.totalSamplesReceived;
@@ -134,7 +137,11 @@ export function useStatsMonitoring() {
 
                     // 🔥 Kalite skoru
                     const rtt = candidatePair?.rtt || 0;
-                    const qualityScore = calculateQualityScore(rtt, packetLossRate, audioIn?.jitter);
+                    const qualityScore = calculateQualityScore(
+                        rtt,
+                        packetLossRate,
+                        audioIn?.jitter
+                    );
                     const quality = qualityLevel(qualityScore);
 
                     stats[username] = {
@@ -146,13 +153,13 @@ export function useStatsMonitoring() {
                         audioOut,
                         video: videoIn,
                         // 🔥 Yeni metrikler
-                        inboundBitrate,    // bps
-                        outboundBitrate,   // bps
-                        packetLossRate: Math.round(packetLossRate * 100) / 100,  // %
-                        avgJitterBufferDelay,  // ms
+                        inboundBitrate, // bps
+                        outboundBitrate, // bps
+                        packetLossRate: Math.round(packetLossRate * 100) / 100, // %
+                        avgJitterBufferDelay, // ms
                         concealmentRatio: Math.round(concealmentRatio * 10000) / 100, // %
-                        qualityScore,      // 0-100
-                        quality,           // excellent/good/fair/poor
+                        qualityScore, // 0-100
+                        quality, // excellent/good/fair/poor
                         availableBandwidth: candidatePair?.availableOutgoingBitrate,
                     };
 
@@ -163,7 +170,7 @@ export function useStatsMonitoring() {
                         audioOut,
                     };
                 } catch (e) {
-                    console.warn(`[Stats] Failed to get stats for ${username}:`, e);
+                    logger.warn(`[Stats] Failed to get stats for ${username}:`, e);
                 }
             }
 
@@ -176,7 +183,6 @@ export function useStatsMonitoring() {
 
             setConnectionStats(stats);
         }, 2000); // 2 saniyede bir
-
     }, []);
 
     const stopStatsMonitoring = useCallback(() => {

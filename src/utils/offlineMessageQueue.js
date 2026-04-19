@@ -1,39 +1,97 @@
+import logger from '../utils/logger';
+import { openDB } from 'idb';
 // frontend/src/utils/offlineMessageQueue.js
 // 🔄 Offline Message Queue — Queues messages when WebSocket is disconnected
 // and flushes them automatically when connection is restored.
 
 const QUEUE_KEY = 'pawscord_offline_queue';
+const QUEUE_DB_NAME = 'pawscord-offline-queue';
+const QUEUE_STORE_NAME = 'messages';
 const MAX_QUEUE_SIZE = 50;
 const MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes max age for queued messages
 
 class OfflineMessageQueue {
     constructor() {
-        this._queue = this._loadFromStorage();
+        this._queue = [];
         this._flushCallbacks = [];
+        this._dbPromise = this._openDB();
+        this._loadFromStorage();
+    }
+
+    async _openDB() {
+        try {
+            return await openDB(QUEUE_DB_NAME, 1, {
+                upgrade(db) {
+                    if (!db.objectStoreNames.contains(QUEUE_STORE_NAME)) {
+                        db.createObjectStore(QUEUE_STORE_NAME, {
+                            keyPath: 'id',
+                            autoIncrement: true,
+                        });
+                    }
+                },
+            });
+        } catch {
+            return null;
+        }
     }
 
     /**
      * Load queue from sessionStorage (survives page refresh during offline)
      */
-    _loadFromStorage() {
+    async _loadFromStorage() {
+        // Primary path: IndexedDB
         try {
-            const saved = sessionStorage.getItem(QUEUE_KEY);
-            if (!saved) return [];
+            const db = await this._dbPromise;
+            if (db) {
+                const all = await db.getAll(QUEUE_STORE_NAME);
+                const now = Date.now();
+                this._queue = all
+                    .map((row) => row.payload)
+                    .filter((msg) => now - msg._queuedAt < MAX_AGE_MS);
+                if (this._queue.length > 0) {
+                    return;
+                }
+            }
+        } catch {
+            // Fall through to storage fallback
+        }
+
+        // Fallback path: sessionStorage/localStorage compatibility
+        try {
+            const saved = sessionStorage.getItem(QUEUE_KEY) || localStorage.getItem(QUEUE_KEY);
+            if (!saved) return;
             const parsed = JSON.parse(saved);
             // Filter out expired messages
             const now = Date.now();
-            return parsed.filter(msg => (now - msg._queuedAt) < MAX_AGE_MS);
+            this._queue = parsed.filter((msg) => now - msg._queuedAt < MAX_AGE_MS);
         } catch {
-            return [];
+            this._queue = [];
         }
     }
 
     /**
      * Persist queue to sessionStorage
      */
-    _saveToStorage() {
+    async _saveToStorage() {
+        // Primary persistence: IndexedDB
+        try {
+            const db = await this._dbPromise;
+            if (db) {
+                const tx = db.transaction(QUEUE_STORE_NAME, 'readwrite');
+                await tx.store.clear();
+                for (const payload of this._queue) {
+                    await tx.store.add({ payload });
+                }
+                await tx.done;
+            }
+        } catch {
+            // Continue to fallback storage
+        }
+
+        // Compatibility fallback
         try {
             sessionStorage.setItem(QUEUE_KEY, JSON.stringify(this._queue));
+            localStorage.setItem(QUEUE_KEY, JSON.stringify(this._queue));
         } catch {
             // Storage full or unavailable — silent fail
         }
@@ -46,7 +104,7 @@ class OfflineMessageQueue {
      */
     enqueue(message) {
         if (this._queue.length >= MAX_QUEUE_SIZE) {
-            console.warn('[OfflineQueue] Queue full, dropping oldest message');
+            logger.warn('[OfflineQueue] Queue full, dropping oldest message');
             this._queue.shift();
         }
 
@@ -77,7 +135,7 @@ class OfflineMessageQueue {
         this._queue = [];
 
         for (const msg of toSend) {
-            if ((now - msg._queuedAt) > MAX_AGE_MS) {
+            if (now - msg._queuedAt > MAX_AGE_MS) {
                 continue; // Skip expired
             }
 
@@ -95,12 +153,16 @@ class OfflineMessageQueue {
         this._saveToStorage();
 
         if (flushed > 0) {
-            console.info(`[OfflineQueue] Flushed ${flushed} queued message(s)`);
+            logger.info(`[OfflineQueue] Flushed ${flushed} queued message(s)`);
         }
 
         // Notify callbacks
-        this._flushCallbacks.forEach(cb => {
-            try { cb(flushed); } catch { /* ignore */ }
+        this._flushCallbacks.forEach((cb) => {
+            try {
+                cb(flushed);
+            } catch {
+                /* ignore */
+            }
         });
 
         return flushed;

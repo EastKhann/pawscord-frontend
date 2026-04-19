@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import toast from '../../utils/toast';
 import confirmDialog from '../../utils/confirmDialog';
+import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
+    const { t } = useTranslation();
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -23,7 +26,7 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
             const data = await response.json();
             setAnnouncements(data.announcements || []);
         } catch (error) {
-            console.error('Failed to load scheduled announcements:', error);
+            logger.error('Failed to load scheduled announcements:', error);
         } finally {
             setLoading(false);
         }
@@ -46,7 +49,7 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
     const handleScheduleAnnouncement = async (e) => {
         e.preventDefault();
         if (!title || !message || !scheduledDate || !scheduledTime) {
-            toast.error('Please fill in all required fields');
+            toast.error(t('announcement.requiredFields'));
             return;
         }
         const scheduledAt = `${scheduledDate}T${scheduledTime}:00`;
@@ -55,37 +58,41 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    title, message,
+                    title,
+                    message,
                     scheduled_at: scheduledAt,
                     channel_id: channelId || null,
                     recurring,
-                    recurring_type: recurring ? recurringType : null
-                })
+                    recurring_type: recurring ? recurringType : null,
+                }),
             });
             const data = await response.json();
             if (data.success) {
-                toast.success('Announcement scheduled successfully!');
+                toast.success(t('announcement.scheduled'));
                 loadScheduledAnnouncements();
                 resetForm();
                 setShowCreateForm(false);
             } else {
-                toast.error(data.error || 'Failed to schedule announcement');
+                toast.error(data.error || t('announcement.scheduleFailed'));
             }
         } catch (error) {
-            console.error('Schedule error:', error);
-            toast.error('Failed to schedule announcement');
+            logger.error('Schedule error:', error);
+            toast.error(t('announcement.scheduleFailed'));
         }
     };
 
     const deleteAnnouncement = async (announcementId) => {
-        if (!await confirmDialog('Delete this scheduled announcement?')) return;
+        if (!(await confirmDialog('Bu zamanlanmış duyuruyu silmek istediğinizden emin misiniz?')))
+            return;
         try {
-            await fetchWithAuth(`${apiBaseUrl}/announcements/${announcementId}/delete/`, { method: 'DELETE' });
-            toast.success('Announcement deleted');
+            await fetchWithAuth(`${apiBaseUrl}/announcements/${announcementId}/delete/`, {
+                method: 'DELETE',
+            });
+            toast.success(t('announcement.deleted'));
             loadScheduledAnnouncements();
         } catch (error) {
-            console.error('Delete error:', error);
-            toast.error('Failed to delete announcement');
+            logger.error('Delete error:', error);
+            toast.error(t('announcement.deleteFailed'));
         }
     };
 
@@ -99,12 +106,28 @@ const useScheduledAnnouncements = (fetchWithAuth, apiBaseUrl) => {
     };
 
     return {
-        announcements, loading, showCreateForm, setShowCreateForm,
-        title, setTitle, message, setMessage,
-        scheduledDate, setScheduledDate, scheduledTime, setScheduledTime,
-        channelId, setChannelId, recurring, setRecurring,
-        recurringType, setRecurringType,
-        handleScheduleAnnouncement, deleteAnnouncement, resetForm, getStatusColor
+        announcements,
+        loading,
+        showCreateForm,
+        setShowCreateForm,
+        title,
+        setTitle,
+        message,
+        setMessage,
+        scheduledDate,
+        setScheduledDate,
+        scheduledTime,
+        setScheduledTime,
+        channelId,
+        setChannelId,
+        recurring,
+        setRecurring,
+        recurringType,
+        setRecurringType,
+        handleScheduleAnnouncement,
+        deleteAnnouncement,
+        resetForm,
+        getStatusColor,
     };
 };
 

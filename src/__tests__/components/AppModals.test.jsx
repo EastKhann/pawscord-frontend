@@ -5,19 +5,29 @@ import { render } from '@testing-library/react';
 
 // Mock all 5 sub-components
 vi.mock('../../components/AppModals/AppModalsCore', () => ({
-    default: (props) => <div data-testid="app-modals-core" data-props={JSON.stringify(Object.keys(props))} />
+    default: (props) => (
+        <div data-testid="app-modals-core" data-props={JSON.stringify(Object.keys(props))} />
+    ),
 }));
 vi.mock('../../components/AppModals/AppModalsBatch1to8', () => ({
-    default: (props) => <div data-testid="app-modals-batch1to8" data-props={JSON.stringify(Object.keys(props))} />
+    default: (props) => (
+        <div data-testid="app-modals-batch1to8" data-props={JSON.stringify(Object.keys(props))} />
+    ),
 }));
 vi.mock('../../components/AppModals/AppModalsBatch10', () => ({
-    default: (props) => <div data-testid="app-modals-batch10" data-props={JSON.stringify(Object.keys(props))} />
+    default: (props) => (
+        <div data-testid="app-modals-batch10" data-props={JSON.stringify(Object.keys(props))} />
+    ),
 }));
 vi.mock('../../components/AppModals/AppModalsBatch11', () => ({
-    default: (props) => <div data-testid="app-modals-batch11" data-props={JSON.stringify(Object.keys(props))} />
+    default: (props) => (
+        <div data-testid="app-modals-batch11" data-props={JSON.stringify(Object.keys(props))} />
+    ),
 }));
 vi.mock('../../components/AppModals/AppModalsStandard', () => ({
-    default: (props) => <div data-testid="app-modals-standard" data-props={JSON.stringify(Object.keys(props))} />
+    default: (props) => (
+        <div data-testid="app-modals-standard" data-props={JSON.stringify(Object.keys(props))} />
+    ),
 }));
 
 // Mock useUIStore
@@ -34,7 +44,7 @@ vi.mock('../../stores/useUIStore', () => ({
     }),
 }));
 
-import AppModals from '../../components/AppModals';
+import AppModals from '../../components/shared/AppModals';
 
 describe('AppModals Orchestrator', () => {
     const baseProps = {
@@ -91,7 +101,7 @@ describe('AppModals Orchestrator', () => {
 
     it('should render all 5 sub-components', () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
-        
+
         expect(getByTestId('app-modals-core')).toBeTruthy();
         expect(getByTestId('app-modals-batch1to8')).toBeTruthy();
         expect(getByTestId('app-modals-batch10')).toBeTruthy();
@@ -101,14 +111,14 @@ describe('AppModals Orchestrator', () => {
 
     it('should pass all props plus store values to each sub-component', () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
-        
+
         const coreProps = JSON.parse(getByTestId('app-modals-core').getAttribute('data-props'));
-        
+
         // Should include original props
         expect(coreProps).toContain('fetchWithAuth');
         expect(coreProps).toContain('username');
         expect(coreProps).toContain('activeChat');
-        
+
         // Should include store values
         expect(coreProps).toContain('modals');
         expect(coreProps).toContain('openModal');
@@ -118,13 +128,21 @@ describe('AppModals Orchestrator', () => {
 
     it('should pass identical props to all sub-components', () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
-        
+
         const coreProps = JSON.parse(getByTestId('app-modals-core').getAttribute('data-props'));
-        const batch1Props = JSON.parse(getByTestId('app-modals-batch1to8').getAttribute('data-props'));
-        const batch10Props = JSON.parse(getByTestId('app-modals-batch10').getAttribute('data-props'));
-        const batch11Props = JSON.parse(getByTestId('app-modals-batch11').getAttribute('data-props'));
-        const standardProps = JSON.parse(getByTestId('app-modals-standard').getAttribute('data-props'));
-        
+        const batch1Props = JSON.parse(
+            getByTestId('app-modals-batch1to8').getAttribute('data-props')
+        );
+        const batch10Props = JSON.parse(
+            getByTestId('app-modals-batch10').getAttribute('data-props')
+        );
+        const batch11Props = JSON.parse(
+            getByTestId('app-modals-batch11').getAttribute('data-props')
+        );
+        const standardProps = JSON.parse(
+            getByTestId('app-modals-standard').getAttribute('data-props')
+        );
+
         // All should have the same set of prop keys
         expect(coreProps).toEqual(batch1Props);
         expect(batch1Props).toEqual(batch10Props);
@@ -134,7 +152,7 @@ describe('AppModals Orchestrator', () => {
 
     it('should not contain any direct modal rendering', () => {
         const { container } = render(<AppModals {...baseProps} />);
-        
+
         // The orchestrator should only render the 5 sub-components (fragments render children directly)
         const divs = container.querySelectorAll('[data-testid]');
         expect(divs.length).toBe(5);
@@ -142,7 +160,7 @@ describe('AppModals Orchestrator', () => {
 
     it('should pass voice state props', () => {
         const { getByTestId } = render(<AppModals {...baseProps} />);
-        
+
         const coreProps = JSON.parse(getByTestId('app-modals-core').getAttribute('data-props'));
         expect(coreProps).toContain('isMuted');
         expect(coreProps).toContain('isDeafened');

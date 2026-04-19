@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGlobalWebSocket } from '../GlobalWebSocketContext';
 import confirmDialog from '../utils/confirmDialog';
+import logger from '../utils/logger';
 
 const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
     const [activeTab, setActiveTab] = useState('all');
@@ -10,6 +12,7 @@ const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
     const [addUsername, setAddUsername] = useState('');
     const [loading, setLoading] = useState(true);
     const [statusMsg, setStatusMsg] = useState(null);
+    const { t } = useTranslation();
 
     const { globalData } = useGlobalWebSocket();
 
@@ -21,63 +24,118 @@ const useFriendsAPI = ({ fetchWithAuth, apiBaseUrl, onPendingCountChange }) => {
                 setFriends(data.friends || []);
                 setRequests(data.incoming_requests || []);
                 setOutgoing(data.outgoing_requests || []);
-                if (onPendingCountChange) onPendingCountChange((data.incoming_requests || []).length);
+                if (onPendingCountChange)
+                    onPendingCountChange((data.incoming_requests || []).length);
             }
         } catch (error) {
-            console.error("Arkadaş listesi çekilemedi:", error);
-        } finally { setLoading(false); }
+            logger.error('Error fetching friend list:', error);
+        } finally {
+            setLoading(false);
+        }
     }, [apiBaseUrl, fetchWithAuth, onPendingCountChange]);
 
-    useEffect(() => { fetchFriendData(); }, [fetchFriendData]);
+    useEffect(() => {
+        fetchFriendData();
+    }, [fetchFriendData]);
 
     useEffect(() => {
         if (globalData?.type === 'friend_list_update') {
             fetchFriendData();
-            setStatusMsg({ type: 'info', text: '🔔 Arkadaş listeniz güncellendi! "Bekleyenler" sekmesini kontrol edin.' });
+            setStatusMsg({ type: 'info', text: t('friends.listUpdated') });
             setTimeout(() => setStatusMsg(null), 5000);
         }
     }, [globalData, fetchFriendData]);
 
-    const handleSendRequest = useCallback(async (e) => {
-        e.preventDefault();
-        if (!addUsername.trim()) return;
-        try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, {
-                method: 'POST', body: JSON.stringify({ username: addUsername.trim() })
-            });
-            const data = await response.json();
-            if (response.ok) {
-                setStatusMsg({ type: 'success', text: `✅ İstek gönderildi: ${addUsername}` });
-                setAddUsername(''); fetchFriendData();
-            } else { setStatusMsg({ type: 'error', text: `❌ ${data.error || 'Hata.'}` }); }
-        } catch (error) { setStatusMsg({ type: 'error', text: '❌ Sunucu hatası.' }); }
-    }, [addUsername, apiBaseUrl, fetchWithAuth, fetchFriendData]);
-
-    const handleRespond = useCallback(async (requestId, action) => {
-        try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/friends/respond/${requestId}/`, {
-                method: 'POST', body: JSON.stringify({ action })
-            });
-            if (response.ok) {
-                fetchFriendData();
-                setStatusMsg({ type: 'success', text: action === 'accept' ? 'Arkadaşlık kabul edildi!' : 'İstek reddedildi.' });
+    const handleSendRequest = useCallback(
+        async (e) => {
+            e.preventDefault();
+            if (!addUsername.trim()) return;
+            try {
+                const response = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, {
+                    method: 'POST',
+                    body: JSON.stringify({ username: addUsername.trim() }),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setStatusMsg({
+                        type: 'success',
+                        text: t('friends.requestSent', { username: addUsername }),
+                    });
+                    setAddUsername('');
+                    fetchFriendData();
+                } else {
+                    setStatusMsg({ type: 'error', text: `❌ ${data.error || t('common.error')}` });
+                }
+            } catch (error) {
+                setStatusMsg({ type: 'error', text: t('common.serverError') });
             }
-        } catch (error) { console.error("İşlem başarısız:", error); }
-    }, [apiBaseUrl, fetchWithAuth, fetchFriendData]);
+        },
+        [addUsername, apiBaseUrl, fetchWithAuth, fetchFriendData]
+    );
 
-    const handleRemoveFriend = useCallback(async (friendId, friendUsername) => {
-        if (!await confirmDialog(`${friendUsername} ile arkadaşlığı sonlandırmak istediğinize emin misiniz?`)) return;
-        try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/friends/remove/${friendId}/`, { method: 'DELETE' });
-            if (response.ok) { fetchFriendData(); setStatusMsg({ type: 'success', text: '❌ Arkadaşlık sonlandırıldı.' }); }
-            else { setStatusMsg({ type: 'error', text: '❌ Silme başarısız.' }); }
-        } catch (error) { console.error("Arkadaş silme hatası:", error); setStatusMsg({ type: 'error', text: '❌ Sunucu hatası.' }); }
-    }, [apiBaseUrl, fetchWithAuth, fetchFriendData]);
+    const handleRespond = useCallback(
+        async (requestId, action) => {
+            try {
+                const response = await fetchWithAuth(
+                    `${apiBaseUrl}/friends/respond/${requestId}/`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({ action }),
+                    }
+                );
+                if (response.ok) {
+                    fetchFriendData();
+                    setStatusMsg({
+                        type: 'success',
+                        text:
+                            action === 'accept'
+                                ? t('friends.requestAccepted')
+                                : t('friends.requestRejected'),
+                    });
+                }
+            } catch (error) {
+                logger.error('Operation failed:', error);
+            }
+        },
+        [apiBaseUrl, fetchWithAuth, fetchFriendData]
+    );
+
+    const handleRemoveFriend = useCallback(
+        async (friendId, friendUsername) => {
+            if (!(await confirmDialog(t('friends.confirmUnfriend', { username: friendUsername }))))
+                return;
+            try {
+                const response = await fetchWithAuth(`${apiBaseUrl}/friends/remove/${friendId}/`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    fetchFriendData();
+                    setStatusMsg({ type: 'success', text: t('friends.unfriendSuccess') });
+                } else {
+                    setStatusMsg({ type: 'error', text: t('friends.removeFailed') });
+                }
+            } catch (error) {
+                logger.error('Error removing friend:', error);
+                setStatusMsg({ type: 'error', text: t('common.serverError') });
+            }
+        },
+        [apiBaseUrl, fetchWithAuth, fetchFriendData]
+    );
 
     return {
-        activeTab, setActiveTab, friends, requests, outgoing,
-        addUsername, setAddUsername, loading, statusMsg, setStatusMsg,
-        handleSendRequest, handleRespond, handleRemoveFriend
+        activeTab,
+        setActiveTab,
+        friends,
+        requests,
+        outgoing,
+        addUsername,
+        setAddUsername,
+        loading,
+        statusMsg,
+        setStatusMsg,
+        handleSendRequest,
+        handleRespond,
+        handleRemoveFriend,
     };
 };
 

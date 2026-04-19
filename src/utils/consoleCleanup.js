@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/consoleCleanup.js
 
 // 🔥 Console Log Cleanup Utility
@@ -7,7 +8,7 @@ const originalConsole = {
     warn: console.warn,
     error: console.error,
     info: console.info,
-    debug: console.debug
+    debug: console.debug,
 };
 
 let isProduction = import.meta.env.MODE === 'production';
@@ -18,19 +19,19 @@ const LOG_LEVELS = {
     error: 1,
     warn: 2,
     info: 3,
-    debug: 4
+    debug: 4,
 };
 
 const currentLogLevel = LOG_LEVELS[logLevel] || LOG_LEVELS.warn;
 
 // Filter patterns to reduce console noise
 const FILTER_PATTERNS = [
-    /^\[WS\]/,                    // WebSocket logs
-    /^🔗/,                        // Connection logs
-    /^✅/,                        // Success logs
-    /^🎨/,                        // Render logs
-    /^📊/,                        // Analytics logs
-    /^🔍/,                        // Debug logs
+    /^\[WS\]/, // WebSocket logs
+    /^🔗/, // Connection logs
+    /^✅/, // Success logs
+    /^🎨/, // Render logs
+    /^📊/, // Analytics logs
+    /^🔍/, // Debug logs
     /Download the React DevTools/,
     /React will try to recreate/,
 ];
@@ -101,7 +102,7 @@ console.error = (...args) => {
 export const setLogLevel = (level) => {
     if (LOG_LEVELS[level] !== undefined) {
         logLevel = level;
-        console.info(`📝 Log level set to: ${level}`);
+        logger.info(`📝 Log level set to: ${level}`);
     }
 };
 
@@ -130,9 +131,9 @@ export const groupedLog = (group, message, ...args) => {
         logGroupTimer = setTimeout(() => {
             logGroups.forEach((logs, group) => {
                 if (logs.length > 1) {
-                    console.info(`📦 [${group}] ${logs.length} logs:`, logs);
+                    logger.info(`📦 [${group}] ${logs.length} logs:`, logs);
                 } else if (logs.length === 1) {
-                    console.info(`[${group}]`, logs[0].message, ...logs[0].args);
+                    logger.info(`[${group}]`, logs[0].message, ...logs[0].args);
                 }
             });
             logGroups.clear();
@@ -149,7 +150,7 @@ export const rateLimitedLog = (key, message, intervalMs = 1000) => {
     const lastLog = rateLimitedLogs.get(key);
 
     if (!lastLog || now - lastLog > intervalMs) {
-        console.info(message);
+        logger.info(message);
         rateLimitedLogs.set(key, now);
     }
 };
@@ -158,7 +159,8 @@ export const rateLimitedLog = (key, message, intervalMs = 1000) => {
 setInterval(() => {
     const now = Date.now();
     rateLimitedLogs.forEach((timestamp, key) => {
-        if (now - timestamp > 60000) { // Remove entries older than 1 minute
+        if (now - timestamp > 60000) {
+            // Remove entries older than 1 minute
             rateLimitedLogs.delete(key);
         }
     });
@@ -168,8 +170,5 @@ export default {
     setLogLevel,
     restoreConsole,
     groupedLog,
-    rateLimitedLog
+    rateLimitedLog,
 };
-
-
-

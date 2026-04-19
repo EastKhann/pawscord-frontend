@@ -73,7 +73,7 @@ describe('useUIStore', () => {
 
             closeAllModals();
             const modals = useUIStore.getState().modals;
-            Object.values(modals).forEach(val => {
+            Object.values(modals).forEach((val) => {
                 expect(val).toBe(false);
             });
         });

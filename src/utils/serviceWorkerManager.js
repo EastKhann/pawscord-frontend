@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/serviceWorkerManager.js
 
 /**
@@ -12,7 +14,7 @@ class ServiceWorkerManager {
         this.updateInterval = options.updateInterval || 60 * 60 * 1000; // 1 hour
         this.registration = null;
         this.updateCheckInterval = null;
-        this.listeners = new Map();
+        this.listners = new Map();
     }
 
     /**
@@ -20,28 +22,27 @@ class ServiceWorkerManager {
      */
     async register() {
         if (!('serviceWorker' in navigator)) {
-            console.warn('Service Worker not supported');
+            logger.warn('Service Worker not supported');
             return null;
         }
 
         try {
             this.registration = await navigator.serviceWorker.register(this.swPath, {
-                scope: this.scope
+                scope: this.scope,
             });
-
 
             this.setupListeners();
             this.checkForUpdates();
 
             return this.registration;
         } catch (error) {
-            console.error('Service Worker registration failed:', error);
+            logger.error('Service Worker registration failed:', error);
             return null;
         }
     }
 
     /**
-     * Setup event listeners
+     * Setup event listners
      */
     setupListeners() {
         if (!this.registration) return;
@@ -49,7 +50,6 @@ class ServiceWorkerManager {
         // Update found
         this.registration.addEventListener('updatefound', () => {
             const newWorker = this.registration.installing;
-
 
             newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
@@ -93,7 +93,7 @@ class ServiceWorkerManager {
         try {
             await this.registration.update();
         } catch (error) {
-            console.error('Service Worker update failed:', error);
+            logger.error('Service Worker update failed:', error);
         }
     }
 
@@ -105,9 +105,9 @@ class ServiceWorkerManager {
 
         this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
 
-        // 🔥 FIX: Otomatik sayfa yenilemesi KALDIRILDI
-        // Kullanıcı zaten sayfayı kullanıyorsa mesajlar kaybolur!
-        // Yenileme sadece kullanıcı manuel yapınca olsun
+        // 🔥 FIX: Auto page yenilemesi KALDIRILDI
+        // User zaten pageyı kullanıyorsa messagelar kaybolur!
+        // Refreshme sadece kullanıcı manuel yapınca olsun
     }
 
     /**
@@ -130,7 +130,7 @@ class ServiceWorkerManager {
 
             return success;
         } catch (error) {
-            console.error('Service Worker unregister failed:', error);
+            logger.error('Service Worker unregister failed:', error);
             return false;
         }
     }
@@ -140,7 +140,7 @@ class ServiceWorkerManager {
      */
     async postMessage(message) {
         if (!this.registration || !this.registration.active) {
-            console.warn('No active Service Worker');
+            logger.warn('No active Service Worker');
             return;
         }
 
@@ -180,26 +180,23 @@ class ServiceWorkerManager {
 
         const cacheNames = await caches.keys();
 
-        await Promise.all(
-            cacheNames.map(name => caches.delete(name))
-        );
-
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
     }
 
     /**
      * Event emitter
      */
     on(event, callback) {
-        if (!this.listeners.has(event)) {
-            this.listeners.set(event, []);
+        if (!this.listners.has(event)) {
+            this.listners.set(event, []);
         }
-        this.listeners.get(event).push(callback);
+        this.listners.get(event).push(callback);
     }
 
     off(event, callback) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        const callbacks = this.listeners.get(event);
+        const callbacks = this.listners.get(event);
         const index = callbacks.indexOf(callback);
 
         if (index > -1) {
@@ -208,9 +205,9 @@ class ServiceWorkerManager {
     }
 
     emit(event, data) {
-        if (!this.listeners.has(event)) return;
+        if (!this.listners.has(event)) return;
 
-        this.listeners.get(event).forEach(callback => {
+        this.listners.get(event).forEach((callback) => {
             callback(data);
         });
     }
@@ -254,7 +251,7 @@ export const useServiceWorker = (options = {}) => {
 
         // Register on mount
         if (options.autoRegister !== false) {
-            serviceWorkerManager.register().then(reg => {
+            serviceWorkerManager.register().then((reg) => {
                 setRegistration(reg);
                 setState(serviceWorkerManager.getState());
             });
@@ -284,7 +281,7 @@ export const useServiceWorker = (options = {}) => {
         updateAvailable,
         state,
         update,
-        unregister
+        unregister,
     };
 };
 
@@ -318,10 +315,8 @@ export const useServiceWorkerUpdate = () => {
     return {
         showPrompt,
         applyUpdate,
-        dismissUpdate
+        dismissUpdate,
     };
 };
 
 export default ServiceWorkerManager;
-
-

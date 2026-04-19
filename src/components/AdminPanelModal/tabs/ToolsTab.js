@@ -1,35 +1,84 @@
-import React from 'react';
+﻿import React from 'react';
+import { useAdminAPIContext } from '../AdminAPIContext';
 import { FaBroom, FaBug, FaCloudUploadAlt, FaFileExport, FaSync, FaTerminal } from 'react-icons/fa';
 import styles from '../styles';
 import toast from '../../../utils/toast';
+import { useTranslation } from 'react-i18next';
+import css from './AdminTabs.module.css';
 
-const ToolsTab = ({ handleBackup, handleClearCache }) => {
+const ToolsTab = () => {
+    const { handleBackup, handleClearCache } = useAdminAPIContext();
+    const { t } = useTranslation();
     return (
-        <div>
-                    <h2 style={{ color: '#fff', marginBottom: '16px', fontSize: '18px' }}>🔧 Admin Araçları</h2>
+        <div aria-label="tools tab">
+            <h2 className={css.sectionTitle}>{t('admin.panel.tools')}</h2>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
-                        {[
-                            { icon: <FaCloudUploadAlt />, title: 'Yedekleme', desc: 'Veritabanı yedekle', color: '#5865f2', action: handleBackup },
-                            { icon: <FaBroom />, title: 'Cache Temizle', desc: 'Önbellek temizle', color: '#f0b132', action: handleClearCache },
-                            { icon: <FaSync />, title: 'Yeniden Başlat', desc: 'Servisleri yeniden başlat', color: '#e74c3c', action: () => toast.info('🔄 Bu özellik güvenlik nedeniyle sunucu üzerinden yapılmalıdır') },
-                            { icon: <FaTerminal />, title: 'Konsol', desc: 'Admin konsolu', color: '#23a559', action: () => toast.info('🖥️ Konsol erişimi SSH üzerinden yapılmalıdır') },
-                            { icon: <FaBug />, title: 'Debug Modu', desc: 'Hata ayıklama', color: '#5865f2', action: () => toast.info('🐛 Debug modu güvenlik nedeniyle devre dışı') },
-                            { icon: <FaFileExport />, title: 'Export', desc: 'Veri dışa aktar', color: '#1abc9c', action: handleBackup },
-                        ].map((item, idx) => (
-                            <div key={idx} style={{ ...styles.statCard, cursor: 'pointer' }} onClick={item.action}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ fontSize: '24px', color: item.color }}>{item.icon}</div>
-                                    <div>
-                                        <div style={{ color: '#fff', fontWeight: '600', fontSize: '13px' }}>{item.title}</div>
-                                        <div style={{ color: '#6b7280', fontSize: '11px' }}>{item.desc}</div>
-                                    </div>
-                                </div>
+            <div className="grid-3col">
+                {[
+                    {
+                        icon: <FaCloudUploadAlt />,
+                        title: 'Yedekle',
+                        desc: 'Veritabanı Yedekle',
+                        color: '#5865f2',
+                        action: handleBackup,
+                    },
+                    {
+                        icon: <FaBroom />,
+                        title: 'Cache Clear',
+                        desc: t('admin.panel.cacheCleared'),
+                        color: '#f0b132',
+                        action: handleClearCache,
+                    },
+                    {
+                        icon: <FaSync />,
+                        title: 'Restart',
+                        desc: t('admin.panel.restarted'),
+                        color: '#e74c3c',
+                        action: () => toast.info(t('adminTools.restart')),
+                    },
+                    {
+                        icon: <FaTerminal />,
+                        title: 'Console',
+                        desc: t('admin.panel.consoleTodo'),
+                        color: '#23a559',
+                        action: () => toast.info(t('adminTools.console')),
+                    },
+                    {
+                        icon: <FaBug />,
+                        title: 'Debug Mode',
+                        desc: t('admin.panel.debugTodo'),
+                        color: '#5865f2',
+                        action: () => toast.info(t('adminTools.debug')),
+                    },
+                    {
+                        icon: <FaFileExport />,
+                        title: 'Dışa Aktar',
+                        desc: 'Veri Dışa Aktar',
+                        color: '#1abc9c',
+                        action: handleBackup,
+                    },
+                ].map((item, idx) => (
+                    <div
+                        key={`item-${idx}`}
+                        style={styles.statCardBtn}
+                        role="button"
+                        tabIndex={0}
+                        onClick={item.action}
+                        onKeyDown={(e) =>
+                            (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                        }
+                    >
+                        <div className="flex-align-12">
+                            <div style={{ fontSize: '24px', color: item.color }}>{item.icon}</div>
+                            <div>
+                                <div className={css.labelLg}>{item.title}</div>
+                                <div className={css.textGray11}>{item.desc}</div>
                             </div>
-                        ))}
+                        </div>
                     </div>
-                </div>
+                ))}
+            </div>
+        </div>
     );
 };
-
 export default ToolsTab;

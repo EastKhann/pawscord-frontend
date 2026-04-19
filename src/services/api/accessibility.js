@@ -13,9 +13,9 @@ export const viewPreferencesApi = {
     updatePreferences: async (data) => {
         return await apiFetch(`${API_BASE}/api/preferences/view/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -28,9 +28,9 @@ export const accessibilityApi = {
     updateSettings: async (settings) => {
         return await apiFetch(`${API_BASE}/api/preferences/accessibility/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -43,9 +43,9 @@ export const dyslexiaApi = {
     updateSettings: async (settings) => {
         return await apiFetch(`${API_BASE}/api/preferences/dyslexia/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -58,9 +58,9 @@ export const gestureApi = {
     updateSettings: async (settings) => {
         return await apiFetch(`${API_BASE}/api/preferences/gestures/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -73,7 +73,7 @@ export const rtlApi = {
     updateSettings: async (settings) => {
         return await apiFetch(`${API_BASE}/api/preferences/rtl/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };

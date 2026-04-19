@@ -1,10 +1,15 @@
+import { getToken } from '../utils/tokenStorage';
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loadQuestionsByLevel } from '../data/grammarQuestions';
 import { API_BASE_URL } from '../utils/constants';
+import logger from '../utils/logger';
 
 const API_URL_BASE = API_BASE_URL;
-const TIMER_SECONDS = 20; // Per-question timer
+const TIMER_SECONDS = 20; // Thu-question timer
 
 const useGrammarQuiz = () => {
     const navigate = useNavigate();
@@ -27,23 +32,27 @@ const useGrammarQuiz = () => {
     const [isLoading, setIsLoading] = useState(true);
     const timerRef = useRef(null);
 
-    const getToken = () => localStorage.getItem('access_token');
-
-    const fetchWithAuth = useCallback(async (url, options = {}) => {
-        const token = getToken();
-        if (!token) return null;
-        const headers = options.headers || {};
-        headers['Authorization'] = `Bearer ${token}`;
-        headers['Content-Type'] = 'application/json';
-        try {
-            const response = await fetch(url, { ...options, headers });
-            if (response.status === 401) { navigate('/'); return null; }
-            return response;
-        } catch (e) {
-            console.error("API Error:", e);
-            return null;
-        }
-    }, [navigate]);
+    const fetchWithAuth = useCallback(
+        async (url, options = {}) => {
+            const token = getToken();
+            if (!token) return null;
+            const headers = options.headers || {};
+            headers['Authorization'] = `Bearer ${token}`;
+            headers['Content-Type'] = 'application/json';
+            try {
+                const response = await fetch(url, { ...options, headers });
+                if (response.status === 401) {
+                    navigate('/');
+                    return null;
+                }
+                return response;
+            } catch (e) {
+                logger.error('API Error:', e);
+                return null;
+            }
+        },
+        [navigate]
+    );
 
     useEffect(() => {
         const loadKnownQuestions = async () => {
@@ -59,17 +68,22 @@ const useGrammarQuiz = () => {
 
     // Load questions lazily when level is selected
     useEffect(() => {
-        if (!selectedLevel) { setLevelQuestions([]); return; }
+        if (!selectedLevel) {
+            setLevelQuestions([]);
+            return;
+        }
         let cancelled = false;
-        loadQuestionsByLevel(selectedLevel).then(qs => {
+        loadQuestionsByLevel(selectedLevel).then((qs) => {
             if (!cancelled) setLevelQuestions(qs || []);
         });
-        return () => { cancelled = true; };
+        return () => {
+            cancelled = true;
+        };
     }, [selectedLevel]);
 
     const activeQuestions = useMemo(() => {
         if (!selectedLevel || !levelQuestions.length) return [];
-        return levelQuestions.filter(q => !knownQuestions.includes(q.id));
+        return levelQuestions.filter((q) => !knownQuestions.includes(q.id));
     }, [selectedLevel, levelQuestions, knownQuestions]);
 
     const currentQuestion = activeQuestions[currentQuestionIndex];
@@ -96,7 +110,7 @@ const useGrammarQuiz = () => {
         if (!timerMode || view !== 'quiz' || isAnswered) return;
         setTimeLeft(TIMER_SECONDS);
         timerRef.current = setInterval(() => {
-            setTimeLeft(t => {
+            setTimeLeft((t) => {
                 if (t <= 1) {
                     clearInterval(timerRef.current);
                     // Time's up — treat as wrong
@@ -123,10 +137,10 @@ const useGrammarQuiz = () => {
         setResultAnim(correct ? 'correct' : 'wrong');
         setTimeout(() => setResultAnim(null), 600);
         if (correct) {
-            setScore(s => s + 1);
-            setStreak(s => s + 1);
+            setScore((s) => s + 1);
+            setStreak((s) => s + 1);
             const xp = 10 + (streak >= 2 ? 5 : 0); // streak bonus
-            setXpEarned(prev => prev + xp);
+            setXpEarned((prev) => prev + xp);
             try {
                 const cur = parseInt(localStorage.getItem('eng_xp') || '0');
                 localStorage.setItem('eng_xp', cur + xp);
@@ -134,20 +148,20 @@ const useGrammarQuiz = () => {
                 localStorage.setItem('eng_quiz_count', qc + 1);
                 const cc = parseInt(localStorage.getItem('eng_correct_count') || '0');
                 localStorage.setItem('eng_correct_count', cc + 1);
-            } catch { }
+            } catch {}
         } else {
             setStreak(0);
             try {
                 const qc = parseInt(localStorage.getItem('eng_quiz_count') || '0');
                 localStorage.setItem('eng_quiz_count', qc + 1);
-            } catch { }
+            } catch {}
         }
     };
 
     const handleNext = () => {
         setResultAnim(null);
         if (currentQuestionIndex + 1 < totalQuestions) {
-            setCurrentQuestionIndex(prev => prev + 1);
+            setCurrentQuestionIndex((prev) => prev + 1);
             setIsAnswered(false);
             setIsCorrect(null);
             setSelectedOption('');
@@ -163,12 +177,12 @@ const useGrammarQuiz = () => {
         try {
             await fetchWithAuth(`${API_URL_BASE}/eng-learn/grammar/mark-known/`, {
                 method: 'POST',
-                body: JSON.stringify({ question_id: currentQuestion.id })
+                body: JSON.stringify({ question_id: currentQuestion.id }),
             });
-            setKnownQuestions(prev => [...prev, currentQuestion.id]);
+            setKnownQuestions((prev) => [...prev, currentQuestion.id]);
             handleNext();
         } catch (e) {
-            console.error("İşaretleme hatası:", e);
+            logger.error('Marking error:', e);
         }
     };
 
@@ -178,15 +192,31 @@ const useGrammarQuiz = () => {
     };
 
     return {
-        view, isLoading, score, totalQuestions, progress,
-        currentQuestion, currentQuestionIndex,
-        selectedOption, setSelectedOption,
-        inputText, setInputText,
-        isAnswered, isCorrect,
-        knownQuestions, streak, xpEarned,
-        timerMode, timeLeft, TIMER_SECONDS,
+        view,
+        isLoading,
+        score,
+        totalQuestions,
+        progress,
+        currentQuestion,
+        currentQuestionIndex,
+        selectedOption,
+        setSelectedOption,
+        inputText,
+        setInputText,
+        isAnswered,
+        isCorrect,
+        knownQuestions,
+        streak,
+        xpEarned,
+        timerMode,
+        timeLeft,
+        TIMER_SECONDS,
         resultAnim,
-        startQuiz, handleCheck, handleNext, handleMarkKnown, resetQuiz,
+        startQuiz,
+        handleCheck,
+        handleNext,
+        handleMarkKnown,
+        resetQuiz,
     };
 };
 

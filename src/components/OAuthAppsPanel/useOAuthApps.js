@@ -1,16 +1,32 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from '../../utils/toast';
+import confirmDialog from '../../utils/confirmDialog';
 
-const AVAILABLE_SCOPES = ['read_messages', 'send_messages', 'manage_channels', 'manage_roles', 'manage_server', 'read_user', 'modify_user'];
+const AVAILABLE_SCOPES = [
+    'read_messages',
+    'send_messages',
+    'manage_channels',
+    'manage_roles',
+    'manage_server',
+    'read_user',
+    'modify_user',
+];
 
 const useOAuthApps = (fetchWithAuth, apiBaseUrl) => {
+    const { t } = useTranslation();
     const [apps, setApps] = useState([]);
     const [bots, setBots] = useState([]);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('apps');
     const [showCreateApp, setShowCreateApp] = useState(false);
     const [showCreateBot, setShowCreateBot] = useState(false);
-    const [newApp, setNewApp] = useState({ name: '', description: '', redirect_uris: '', scopes: [] });
+    const [newApp, setNewApp] = useState({
+        name: '',
+        description: '',
+        redirect_uris: '',
+        scopes: [],
+    });
     const [newBot, setNewBot] = useState({ name: '', description: '' });
 
     const fetchApps = async () => {
@@ -19,8 +35,11 @@ const useOAuthApps = (fetchWithAuth, apiBaseUrl) => {
             const response = await fetchWithAuth(`${apiBaseUrl}/oauth/apps/list/`);
             const data = await response.json();
             setApps(data.apps || []);
-        } catch (error) { toast.error('Failed to load OAuth apps'); }
-        finally { setLoading(false); }
+        } catch (error) {
+            toast.error(t('oauthApps.appsLoadFailed'));
+        } finally {
+            setLoading(false);
+        }
     };
 
     const fetchBots = async () => {
@@ -28,85 +47,129 @@ const useOAuthApps = (fetchWithAuth, apiBaseUrl) => {
             const response = await fetchWithAuth(`${apiBaseUrl}/bots/list/`);
             const data = await response.json();
             setBots(data.bots || []);
-        } catch (error) { toast.error('Failed to load bots'); }
+        } catch (error) {
+            toast.error(t('oauthApps.botsLoadFailed'));
+        }
     };
 
-    useEffect(() => { fetchApps(); fetchBots(); }, []);
+    useEffect(() => {
+        fetchApps();
+        fetchBots();
+    }, []);
 
     const createApp = async () => {
-        if (!newApp.name) { toast.error('App name is required'); return; }
+        if (!newApp.name) {
+            toast.error(t('oauthApps.nameRequired'));
+            return;
+        }
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/oauth/apps/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...newApp, redirect_uris: newApp.redirect_uris.split('\n').filter(uri => uri.trim()) })
+                body: JSON.stringify({
+                    ...newApp,
+                    redirect_uris: newApp.redirect_uris.split('\n').filter((uri) => uri.trim()),
+                }),
             });
             const data = await response.json();
-            toast.success('OAuth app created successfully');
+            toast.success(t('oauthApps.appCreated'));
             setShowCreateApp(false);
             setNewApp({ name: '', description: '', redirect_uris: '', scopes: [] });
             fetchApps();
             if (data.client_id && data.client_secret) {
-                toast.info(`Client ID: ${data.client_id}\nClient Secret: ${data.client_secret}\n\nSave these credentials securely. The secret will not be shown again.`);
+                toast.info(
+                    t('oauthApps.credentials', {
+                        clientId: data.client_id,
+                        clientSecret: data.client_secret,
+                    })
+                );
             }
-        } catch (error) { toast.error('Failed to create OAuth app'); }
+        } catch (error) {
+            toast.error(t('oauthApps.appCreateFailed'));
+        }
     };
 
     const createBot = async () => {
-        if (!newBot.name) { toast.error('Bot name is required'); return; }
+        if (!newBot.name) {
+            toast.error(t('oauthApps.botNameRequired'));
+            return;
+        }
         try {
             const response = await fetchWithAuth(`${apiBaseUrl}/bots/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newBot)
+                body: JSON.stringify(newBot),
             });
             const data = await response.json();
-            toast.success('Bot created successfully');
+            toast.success(t('oauthApps.botCreated'));
             setShowCreateBot(false);
             setNewBot({ name: '', description: '' });
             fetchBots();
             if (data.token) {
-                toast.info(`Bot Token: ${data.token}\n\nSave this token securely. It will not be shown again.`);
+                toast.info(t('oauthApps.botToken', { token: data.token }));
             }
-        } catch (error) { toast.error('Failed to create bot'); }
+        } catch (error) {
+            toast.error(t('oauthApps.botCreateFailed'));
+        }
     };
 
     const deleteApp = async (appId) => {
-        if (!confirm('Are you sure you want to delete this app? This cannot be undone.')) return;
+        if (!(await confirmDialog(t('oauthApps.deleteAppConfirm')))) return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/oauth/apps/${appId}/delete/`, { method: 'DELETE' });
-            toast.success('App deleted successfully');
+            toast.success(t('oauthApps.appDeleted'));
             fetchApps();
-        } catch (error) { toast.error('Failed to delete app'); }
+        } catch (error) {
+            toast.error(t('oauthApps.appDeleteFailed'));
+        }
     };
 
     const deleteBot = async (botId) => {
-        if (!confirm('Are you sure you want to delete this bot? This cannot be undone.')) return;
+        if (!(await confirmDialog(t('oauthApps.deleteBotConfirm')))) return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/bots/${botId}/delete/`, { method: 'DELETE' });
-            toast.success('Bot deleted successfully');
+            toast.success(t('oauthApps.botDeleted'));
             fetchBots();
-        } catch (error) { toast.error('Failed to delete bot'); }
+        } catch (error) {
+            toast.error(t('oauthApps.botDeleteFailed'));
+        }
     };
 
     const copyToClipboard = (text, label) => {
         navigator.clipboard.writeText(text);
-        toast.success(`${label} copied to clipboard`);
+        toast.success(t('oauthApps.copied', { label }));
     };
 
     const toggleScope = (scope) => {
-        setNewApp(prev => ({
+        setNewApp((prev) => ({
             ...prev,
-            scopes: prev.scopes.includes(scope) ? prev.scopes.filter(s => s !== scope) : [...prev.scopes, scope]
+            scopes: prev.scopes.includes(scope)
+                ? prev.scopes.filter((s) => s !== scope)
+                : [...prev.scopes, scope],
         }));
     };
 
     return {
-        apps, bots, loading, activeTab, setActiveTab,
-        showCreateApp, setShowCreateApp, showCreateBot, setShowCreateBot,
-        newApp, setNewApp, newBot, setNewBot,
-        createApp, createBot, deleteApp, deleteBot,
-        copyToClipboard, toggleScope, availableScopes: AVAILABLE_SCOPES
+        apps,
+        bots,
+        loading,
+        activeTab,
+        setActiveTab,
+        showCreateApp,
+        setShowCreateApp,
+        showCreateBot,
+        setShowCreateBot,
+        newApp,
+        setNewApp,
+        newBot,
+        setNewBot,
+        createApp,
+        createBot,
+        deleteApp,
+        deleteBot,
+        copyToClipboard,
+        toggleScope,
+        availableScopes: AVAILABLE_SCOPES,
     };
 };
 

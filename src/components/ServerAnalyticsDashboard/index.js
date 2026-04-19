@@ -1,3 +1,4 @@
+export { default } from '../server/ServerAnalyticsDashboard';
 // Barrel export for ServerAnalyticsDashboard
-export { default as AnalyticsComponents } from './AnalyticsComponents';
+export * from './AnalyticsComponents';
 export * from './styles';

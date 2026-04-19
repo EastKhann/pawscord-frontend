@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/e2ee.js
 /**
  * E2EE (End-to-End Encryption) Utilities
@@ -15,16 +16,16 @@
 export async function generateIdentityKeyPair() {
     const keyPair = await crypto.subtle.generateKey(
         {
-            name: "ECDH",
-            namedCurve: "P-256"
+            name: 'ECDH',
+            namedCurve: 'P-256',
         },
         true, // extractable
-        ["deriveKey", "deriveBits"]
+        ['deriveKey', 'deriveBits']
     );
 
     return {
         publicKey: await exportPublicKey(keyPair.publicKey),
-        privateKey: await exportPrivateKey(keyPair.privateKey)
+        privateKey: await exportPrivateKey(keyPair.privateKey),
     };
 }
 
@@ -35,11 +36,11 @@ export async function generateIdentityKeyPair() {
 export async function generateSignedPreKeyPair(keyId, identityPrivateKey) {
     const keyPair = await crypto.subtle.generateKey(
         {
-            name: "ECDH",
-            namedCurve: "P-256"
+            name: 'ECDH',
+            namedCurve: 'P-256',
         },
         true,
-        ["deriveKey", "deriveBits"]
+        ['deriveKey', 'deriveBits']
     );
 
     // Sign the public key with identity key
@@ -50,7 +51,7 @@ export async function generateSignedPreKeyPair(keyId, identityPrivateKey) {
         keyId,
         publicKey: await exportPublicKey(keyPair.publicKey),
         privateKey: await exportPrivateKey(keyPair.privateKey),
-        signature: arrayBufferToBase64(signature)
+        signature: arrayBufferToBase64(signature),
     };
 }
 
@@ -63,17 +64,17 @@ export async function generateOneTimePreKeys(count = 100) {
     for (let i = 0; i < count; i++) {
         const keyPair = await crypto.subtle.generateKey(
             {
-                name: "ECDH",
-                namedCurve: "P-256"
+                name: 'ECDH',
+                namedCurve: 'P-256',
             },
             true,
-            ["deriveKey", "deriveBits"]
+            ['deriveKey', 'deriveBits']
         );
 
         keys.push({
             keyId: i,
             publicKey: await exportPublicKey(keyPair.publicKey),
-            privateKey: await exportPrivateKey(keyPair.privateKey)
+            privateKey: await exportPrivateKey(keyPair.privateKey),
         });
     }
 
@@ -83,26 +84,26 @@ export async function generateOneTimePreKeys(count = 100) {
 // === KEY EXPORT/IMPORT ===
 
 async function exportPublicKey(publicKey) {
-    const exported = await crypto.subtle.exportKey("jwk", publicKey);
+    const exported = await crypto.subtle.exportKey('jwk', publicKey);
     return JSON.stringify(exported);
 }
 
 async function exportPrivateKey(privateKey) {
-    const exported = await crypto.subtle.exportKey("jwk", privateKey);
+    const exported = await crypto.subtle.exportKey('jwk', privateKey);
     return JSON.stringify(exported);
 }
 
 async function exportPublicKeyBytes(publicKey) {
-    const exported = await crypto.subtle.exportKey("raw", publicKey);
+    const exported = await crypto.subtle.exportKey('raw', publicKey);
     return exported;
 }
 
 async function importPublicKey(publicKeyJWK) {
     const jwk = JSON.parse(publicKeyJWK);
     return await crypto.subtle.importKey(
-        "jwk",
+        'jwk',
         jwk,
-        { name: "ECDH", namedCurve: "P-256" },
+        { name: 'ECDH', namedCurve: 'P-256' },
         true,
         []
     );
@@ -110,13 +111,10 @@ async function importPublicKey(publicKeyJWK) {
 
 async function importPrivateKey(privateKeyJWK) {
     const jwk = JSON.parse(privateKeyJWK);
-    return await crypto.subtle.importKey(
-        "jwk",
-        jwk,
-        { name: "ECDH", namedCurve: "P-256" },
-        true,
-        ["deriveKey", "deriveBits"]
-    );
+    return await crypto.subtle.importKey('jwk', jwk, { name: 'ECDH', namedCurve: 'P-256' }, true, [
+        'deriveKey',
+        'deriveBits',
+    ]);
 }
 
 // === SIGNING & VERIFICATION ===
@@ -125,17 +123,17 @@ async function signData(data, privateKeyJWK) {
     // For signing, we use ECDSA (not ECDH)
     const signingKeyPair = await crypto.subtle.generateKey(
         {
-            name: "ECDSA",
-            namedCurve: "P-256"
+            name: 'ECDSA',
+            namedCurve: 'P-256',
         },
         false,
-        ["sign", "verify"]
+        ['sign', 'verify']
     );
 
     return await crypto.subtle.sign(
         {
-            name: "ECDSA",
-            hash: { name: "SHA-256" }
+            name: 'ECDSA',
+            hash: { name: 'SHA-256' },
         },
         signingKeyPair.privateKey,
         data
@@ -157,8 +155,8 @@ export async function encryptMessage(plaintext, sharedSecret) {
     // Encrypt
     const ciphertext = await crypto.subtle.encrypt(
         {
-            name: "AES-GCM",
-            iv: iv
+            name: 'AES-GCM',
+            iv: iv,
         },
         encryptionKey,
         stringToArrayBuffer(plaintext)
@@ -166,7 +164,7 @@ export async function encryptMessage(plaintext, sharedSecret) {
 
     return {
         ciphertext: arrayBufferToBase64(ciphertext),
-        iv: arrayBufferToBase64(iv)
+        iv: arrayBufferToBase64(iv),
     };
 }
 
@@ -180,8 +178,8 @@ export async function decryptMessage(ciphertext, iv, sharedSecret) {
     // Decrypt
     const plaintext = await crypto.subtle.decrypt(
         {
-            name: "AES-GCM",
-            iv: base64ToArrayBuffer(iv)
+            name: 'AES-GCM',
+            iv: base64ToArrayBuffer(iv),
         },
         encryptionKey,
         base64ToArrayBuffer(ciphertext)
@@ -201,8 +199,8 @@ export async function deriveSharedSecret(myPrivateKey, theirPublicKey) {
 
     const sharedSecret = await crypto.subtle.deriveBits(
         {
-            name: "ECDH",
-            public: theirPublicKeyCrypto
+            name: 'ECDH',
+            public: theirPublicKeyCrypto,
         },
         myPrivateKeyCrypto,
         256 // 256 bits
@@ -218,29 +216,25 @@ async function deriveEncryptionKey(sharedSecret) {
     const sharedSecretBuffer = base64ToArrayBuffer(sharedSecret);
 
     // Import as raw key material
-    const keyMaterial = await crypto.subtle.importKey(
-        "raw",
-        sharedSecretBuffer,
-        "HKDF",
-        false,
-        ["deriveKey"]
-    );
+    const keyMaterial = await crypto.subtle.importKey('raw', sharedSecretBuffer, 'HKDF', false, [
+        'deriveKey',
+    ]);
 
     // Derive AES-GCM key
     const encryptionKey = await crypto.subtle.deriveKey(
         {
-            name: "HKDF",
-            hash: "SHA-256",
+            name: 'HKDF',
+            hash: 'SHA-256',
             salt: new Uint8Array([]), // No salt for simplicity
-            info: new Uint8Array([])
+            info: new Uint8Array([]),
         },
         keyMaterial,
         {
-            name: "AES-GCM",
-            length: 256
+            name: 'AES-GCM',
+            length: 256,
         },
         false,
-        ["encrypt", "decrypt"]
+        ['encrypt', 'decrypt']
     );
 
     return encryptionKey;
@@ -259,7 +253,7 @@ export function initializeRatchet(myPrivateKey, theirPublicKey, sharedSecret) {
         sendCounter: 0,
         receiveCounter: 0,
         myRatchetPrivateKey: myPrivateKey,
-        theirRatchetPublicKey: theirPublicKey
+        theirRatchetPublicKey: theirPublicKey,
     };
 }
 
@@ -297,7 +291,11 @@ export async function generateSafetyNumber(myIdentityKey, theirIdentityKey) {
 
     // Convert to 60-digit number
     const hex = arrayBufferToHex(hash);
-    const digits = hex.split('').map(c => parseInt(c, 16).toString()).join('').substring(0, 60);
+    const digits = hex
+        .split('')
+        .map((c) => parseInt(c, 16).toString())
+        .join('')
+        .substring(0, 60);
 
     // Format: 12 groups of 5 digits
     return digits.match(/.{1,5}/g).join(' ');
@@ -312,11 +310,11 @@ export async function encryptFile(file) {
     // Generate random file encryption key
     const fileKey = await crypto.subtle.generateKey(
         {
-            name: "AES-GCM",
-            length: 256
+            name: 'AES-GCM',
+            length: 256,
         },
         true,
-        ["encrypt", "decrypt"]
+        ['encrypt', 'decrypt']
     );
 
     // Read file
@@ -326,22 +324,22 @@ export async function encryptFile(file) {
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const encryptedBuffer = await crypto.subtle.encrypt(
         {
-            name: "AES-GCM",
-            iv: iv
+            name: 'AES-GCM',
+            iv: iv,
         },
         fileKey,
         fileBuffer
     );
 
     // Export file key
-    const exportedKey = await crypto.subtle.exportKey("jwk", fileKey);
+    const exportedKey = await crypto.subtle.exportKey('jwk', fileKey);
 
     return {
         encryptedFile: new Blob([encryptedBuffer], { type: 'application/octet-stream' }),
         fileKey: JSON.stringify(exportedKey),
         iv: arrayBufferToBase64(iv),
         originalFilename: file.name,
-        originalMimeType: file.type
+        originalMimeType: file.type,
     };
 }
 
@@ -352,19 +350,19 @@ export async function decryptFile(encryptedBlob, fileKeyJWK, iv, filename, mimeT
     // Import file key
     const jwk = JSON.parse(fileKeyJWK);
     const fileKey = await crypto.subtle.importKey(
-        "jwk",
+        'jwk',
         jwk,
-        { name: "AES-GCM", length: 256 },
+        { name: 'AES-GCM', length: 256 },
         false,
-        ["decrypt"]
+        ['decrypt']
     );
 
     // Decrypt
     const encryptedBuffer = await encryptedBlob.arrayBuffer();
     const decryptedBuffer = await crypto.subtle.decrypt(
         {
-            name: "AES-GCM",
-            iv: base64ToArrayBuffer(iv)
+            name: 'AES-GCM',
+            iv: base64ToArrayBuffer(iv),
         },
         fileKey,
         encryptedBuffer
@@ -405,13 +403,15 @@ function base64ToArrayBuffer(base64) {
 
 function arrayBufferToHex(buffer) {
     const bytes = new Uint8Array(buffer);
-    return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    return Array.from(bytes)
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
 }
 
 async function hashData(data) {
     const encoder = new TextEncoder();
     const dataBuffer = typeof data === 'string' ? encoder.encode(data) : data;
-    return await crypto.subtle.digest("SHA-256", dataBuffer);
+    return await crypto.subtle.digest('SHA-256', dataBuffer);
 }
 
 // === STORAGE (IndexedDB for private keys) ===
@@ -428,7 +428,7 @@ export async function storePrivateKeys(username, identityPrivateKey, signedPreKe
         localStorage.setItem(`e2ee_keys_timestamp_${username}`, Date.now().toString());
         return true;
     } catch (err) {
-        console.error('❌ Failed to store private keys:', err);
+        logger.error('❌ Failed to store private keys:', err);
         throw err;
     }
 }
@@ -439,7 +439,9 @@ export async function storePrivateKeys(username, identityPrivateKey, signedPreKe
 export async function getPrivateKeys(username) {
     try {
         const identityPrivateKey = localStorage.getItem(`e2ee_identity_private_${username}`);
-        const signedPreKeyPrivateKey = localStorage.getItem(`e2ee_signed_pre_key_private_${username}`);
+        const signedPreKeyPrivateKey = localStorage.getItem(
+            `e2ee_signed_pre_key_private_${username}`
+        );
         const timestamp = localStorage.getItem(`e2ee_keys_timestamp_${username}`);
 
         if (!identityPrivateKey || !signedPreKeyPrivateKey) {
@@ -450,10 +452,10 @@ export async function getPrivateKeys(username) {
             username,
             identityPrivateKey,
             signedPreKeyPrivateKey,
-            timestamp: parseInt(timestamp)
+            timestamp: parseInt(timestamp),
         };
     } catch (err) {
-        console.error('❌ Failed to retrieve private keys:', err);
+        logger.error('❌ Failed to retrieve private keys:', err);
         return null;
     }
 }
@@ -463,21 +465,15 @@ export async function getPrivateKeys(username) {
  */
 export async function fetchUserPublicKeys(apiBaseUrl, targetUser, fetchWithAuth) {
     try {
-        const response = await fetchWithAuth(
-            `${apiBaseUrl}/e2ee/pre-key-bundle/${targetUser}/`
-        );
-        
+        const response = await fetchWithAuth(`${apiBaseUrl}/e2ee/pre-key-bundle/${targetUser}/`);
+
         if (!response.ok) {
             throw new Error(`Failed to fetch public keys: ${response.status}`);
         }
-        
+
         return await response.json();
     } catch (err) {
-        console.error('❌ Failed to fetch user public keys:', err);
+        logger.error('❌ Failed to fetch user public keys:', err);
         throw err;
     }
 }
-
-
-
-

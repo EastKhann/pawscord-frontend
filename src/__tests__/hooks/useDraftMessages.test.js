@@ -30,7 +30,10 @@ describe('useDraftMessages', () => {
 
     // ── 2. Loads existing draft from localStorage ──
     it('should load existing draft from localStorage', () => {
-        const saved = JSON.stringify({ content: 'Hello world', timestamp: new Date().toISOString() });
+        const saved = JSON.stringify({
+            content: 'Hello world',
+            timestamp: new Date().toISOString(),
+        });
         localStorage.getItem.mockImplementation((key) => {
             if (key === 'pawscord_draft_room_room-general') return saved;
             return null;
@@ -67,7 +70,7 @@ describe('useDraftMessages', () => {
 
         // Verify setItem was called with the correct key and draft content
         const setItemCalls = localStorage.setItem.mock.calls;
-        const draftCall = setItemCalls.find(c => c[0] === 'pawscord_draft_room_room-general');
+        const draftCall = setItemCalls.find((c) => c[0] === 'pawscord_draft_room_room-general');
         expect(draftCall).toBeDefined();
         const parsed = JSON.parse(draftCall[1]);
         expect(parsed.content).toBe('auto-save test');
@@ -123,16 +126,18 @@ describe('useDraftMessages', () => {
 
     // ── 8. Reloads draft when room changes ──
     it('should reload draft when roomId changes', () => {
-        const room2Data = JSON.stringify({ content: 'Room 2 draft', timestamp: new Date().toISOString() });
+        const room2Data = JSON.stringify({
+            content: 'Room 2 draft',
+            timestamp: new Date().toISOString(),
+        });
         localStorage.getItem.mockImplementation((key) => {
             if (key === 'pawscord_draft_room_room-2') return room2Data;
             return null;
         });
 
-        const { result, rerender } = renderHook(
-            ({ roomId }) => useDraftMessages(roomId),
-            { initialProps: { roomId: 'room-1' } }
-        );
+        const { result, rerender } = renderHook(({ roomId }) => useDraftMessages(roomId), {
+            initialProps: { roomId: 'room-1' },
+        });
 
         expect(result.current.draft).toBe('');
 

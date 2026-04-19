@@ -1,4 +1,7 @@
-﻿// frontend/src/__tests__/components/ServerRail.test.jsx
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/role-supports-aria-props */
+// frontend/src/__tests__/components/ServerRail.test.jsx
 // 🧪 ServerRail Component Tests
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -20,9 +23,10 @@ const MockServerRail = ({
     const [hoveredServerId, setHoveredServerId] = useState(null);
 
     return (
-        <div data-testid="server-rail" role="navigation" aria-label="Sunucu listesi">
+        <div data-testid="server-rail" role="navigation" aria-label="Server list">
             {/* Home Button */}
-            <div data-testid="home-button"
+            <div
+                data-testid="home-button"
                 role="button"
                 tabIndex={0}
                 aria-label="Ana Sayfa"
@@ -31,25 +35,44 @@ const MockServerRail = ({
                 onMouseEnter={() => setHoveredServerId('home')}
                 onMouseLeave={() => setHoveredServerId(null)}
                 style={{
-                    borderRadius: selectedServerId === 'home' || hoveredServerId === 'home' ? '16px' : '50%',
+                    borderRadius:
+                        selectedServerId === 'home' || hoveredServerId === 'home' ? '16px' : '50%',
                     backgroundColor: selectedServerId === 'home' ? '#5865f2' : '#17191c',
                 }}
             >
-                <img src="https://media.pawscord.com/assets/logo.png" alt="Pawscord" data-testid="home-logo" />
+                <img
+                    src="https://media.pawscord.com/assets/logo.png"
+                    alt="Pawscord"
+                    data-testid="home-logo"
+                />
             </div>
 
-            <div data-testid="separator" style={{ height: '2px', background: '#17191c', margin: '8px 12px' }} />
+            <div
+                data-testid="separator"
+                style={{ height: '2px', background: '#17191c', margin: '8px 12px' }}
+            />
 
             {/* Server List */}
             <div role="list" aria-label="Sunucular" data-testid="server-list">
                 {servers.map((server) => {
-                    const initials = (server.name.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || server.name.substring(0, 2)).toUpperCase();
+                    const initials = (
+                        server.name
+                            .split(/\s+/)
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map((w) => w[0])
+                            .join('') || server.name.substring(0, 2)
+                    ).toUpperCase();
                     const isActive = selectedServerId === server.id;
 
                     const unreadCount = Object.keys(safeUnreadCounts)
-                        .filter(k => k.startsWith('room-') && server.categories?.some(
-                            cat => cat.rooms?.some(r => `room-${r.slug}` === k)
-                        ))
+                        .filter(
+                            (k) =>
+                                k.startsWith('room-') &&
+                                server.categories?.some((cat) =>
+                                    cat.rooms?.some((r) => `room-${r.slug}` === k)
+                                )
+                        )
                         .reduce((sum, k) => sum + (safeUnreadCounts[k] || 0), 0);
 
                     return (
@@ -59,7 +82,13 @@ const MockServerRail = ({
                                 data-testid={`pill-${server.id}`}
                                 style={{
                                     width: '4px',
-                                    height: isActive ? '40px' : (hoveredServerId === server.id ? '20px' : (unreadCount > 0 ? '8px' : '0px')),
+                                    height: isActive
+                                        ? '40px'
+                                        : hoveredServerId === server.id
+                                          ? '20px'
+                                          : unreadCount > 0
+                                            ? '8px'
+                                            : '0px',
                                     backgroundColor: '#fff',
                                 }}
                             />
@@ -76,16 +105,25 @@ const MockServerRail = ({
                                 onMouseLeave={() => setHoveredServerId(null)}
                                 style={{
                                     backgroundColor: isActive ? '#5865f2' : '#17191c',
-                                    borderRadius: isActive || hoveredServerId === server.id ? '16px' : '50%',
+                                    borderRadius:
+                                        isActive || hoveredServerId === server.id ? '16px' : '50%',
                                 }}
                             >
                                 {server.icon ? (
-                                    <img src={server.icon} alt={server.name} data-testid={`server-img-${server.id}`} />
+                                    <img
+                                        src={server.icon}
+                                        alt={server.name}
+                                        data-testid={`server-img-${server.id}`}
+                                    />
                                 ) : (
-                                    <span data-testid={`server-initials-${server.id}`}>{initials}</span>
+                                    <span data-testid={`server-initials-${server.id}`}>
+                                        {initials}
+                                    </span>
                                 )}
                                 {unreadCount > 0 && (
-                                    <div data-testid={`badge-${server.id}`}>{unreadCount > 99 ? '99+' : unreadCount}</div>
+                                    <div data-testid={`badge-${server.id}`}>
+                                        {unreadCount > 99 ? '99+' : unreadCount}
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -94,9 +132,33 @@ const MockServerRail = ({
             </div>
 
             {/* Bottom Actions */}
-            <div data-testid="discover-button" role="button" tabIndex={0} aria-label="Sunucu Keşfet" onClick={onDiscoverClick}>🧭</div>
-            <div data-testid="store-button" role="button" tabIndex={0} aria-label="Premium Mağaza" onClick={onOpenStore}>🛒</div>
-            <div data-testid="add-button" role="button" tabIndex={0} aria-label="Sunucu ekle" onClick={onAddClick}>+</div>
+            <div
+                data-testid="discover-button"
+                role="button"
+                tabIndex={0}
+                aria-label="Discover servers"
+                onClick={onDiscoverClick}
+            >
+                🧭
+            </div>
+            <div
+                data-testid="store-button"
+                role="button"
+                tabIndex={0}
+                aria-label="Premium Store"
+                onClick={onOpenStore}
+            >
+                🛒
+            </div>
+            <div
+                data-testid="add-button"
+                role="button"
+                tabIndex={0}
+                aria-label="Add server"
+                onClick={onAddClick}
+            >
+                +
+            </div>
         </div>
     );
 };
@@ -104,16 +166,22 @@ const MockServerRail = ({
 describe('ServerRail Component', () => {
     const mockServers = [
         {
-            id: 1, name: 'Gaming Hub', icon: 'https://example.com/server1.png',
-            categories: [{ rooms: [{ slug: 'general' }, { slug: 'off-topic' }] }]
+            id: 1,
+            name: 'Gaming Hub',
+            icon: 'https://example.com/server1.png',
+            categories: [{ rooms: [{ slug: 'general' }, { slug: 'off-topic' }] }],
         },
         {
-            id: 2, name: 'Study Group', icon: null,
-            categories: [{ rooms: [{ slug: 'homework' }] }]
+            id: 2,
+            name: 'Study Group',
+            icon: null,
+            categories: [{ rooms: [{ slug: 'homework' }] }],
         },
         {
-            id: 3, name: 'Art Corner', icon: 'https://example.com/server3.png',
-            categories: [{ rooms: [{ slug: 'showcase' }] }]
+            id: 3,
+            name: 'Art Corner',
+            icon: 'https://example.com/server3.png',
+            categories: [{ rooms: [{ slug: 'showcase' }] }],
         },
     ];
 
@@ -134,7 +202,7 @@ describe('ServerRail Component', () => {
         it('should render the server rail navigation', () => {
             render(<MockServerRail servers={mockServers} {...handlers} />);
             expect(screen.getByTestId('server-rail')).toBeInTheDocument();
-            expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Sunucu listesi');
+            expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Sunucu listsi');
         });
 
         it('should render home button', () => {
@@ -152,7 +220,10 @@ describe('ServerRail Component', () => {
 
         it('should show server icon image when available', () => {
             render(<MockServerRail servers={mockServers} {...handlers} />);
-            expect(screen.getByTestId('server-img-1')).toHaveAttribute('src', 'https://example.com/server1.png');
+            expect(screen.getByTestId('server-img-1')).toHaveAttribute(
+                'src',
+                'https://example.com/server1.png'
+            );
         });
 
         it('should show initials when no server icon', () => {
@@ -190,13 +261,25 @@ describe('ServerRail Component', () => {
     describe('Unread Badges', () => {
         it('should show unread badge when server has unread messages', () => {
             const unreadCounts = { 'room-general': 5, 'room-off-topic': 3 };
-            render(<MockServerRail servers={mockServers} safeUnreadCounts={unreadCounts} {...handlers} />);
+            render(
+                <MockServerRail
+                    servers={mockServers}
+                    safeUnreadCounts={unreadCounts}
+                    {...handlers}
+                />
+            );
             expect(screen.getByTestId('badge-1')).toHaveTextContent('8');
         });
 
         it('should cap badge at 99+', () => {
             const unreadCounts = { 'room-general': 50, 'room-off-topic': 60 };
-            render(<MockServerRail servers={mockServers} safeUnreadCounts={unreadCounts} {...handlers} />);
+            render(
+                <MockServerRail
+                    servers={mockServers}
+                    safeUnreadCounts={unreadCounts}
+                    {...handlers}
+                />
+            );
             expect(screen.getByTestId('badge-1')).toHaveTextContent('99+');
         });
 
@@ -240,7 +323,10 @@ describe('ServerRail Component', () => {
         it('should call handleServerContextMenu on right-click', () => {
             render(<MockServerRail servers={mockServers} {...handlers} />);
             fireEvent.contextMenu(screen.getByTestId('server-icon-2'));
-            expect(handlers.handleServerContextMenu).toHaveBeenCalledWith(expect.any(Object), mockServers[1]);
+            expect(handlers.handleServerContextMenu).toHaveBeenCalledWith(
+                expect.any(Object),
+                mockServers[1]
+            );
         });
     });
 

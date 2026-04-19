@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // ⚡ OPTIMIZATION: Remove console logs in production
 // This file is for development reference only
 
@@ -8,20 +9,20 @@ export const logger = {
     },
     warn: (...args) => {
         if (import.meta.env.MODE === 'development') {
-            console.warn(...args);
+            logger.warn(...args);
         }
     },
     error: (...args) => {
         // Always log errors
-        console.error(...args);
+        logger.error(...args);
     },
     debug: (...args) => {
         if (import.meta.env.MODE === 'development' && import.meta.env.VITE_DEBUG === 'true') {
-            console.debug(...args);
+            logger.debug(...args);
         }
     },
 };
 
 // Usage:
-// import { logger } from './utils/removeConsoleLogs';
+// import { logger } from './removeConsoleLogs';
 // logger.log('This will only appear in development');

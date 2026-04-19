@@ -15,9 +15,9 @@ export const securityApi = {
     },
     removeDevice: async (deviceId) => {
         return await apiFetch(`${API_BASE}/api/security/devices/${deviceId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
-    }
+    },
 };
 
 // ==========================================
@@ -30,12 +30,12 @@ export const auditRetentionApi = {
     updatePolicy: async (serverId, data) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/audit/policy/`, {
             method: 'PUT',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getArchives: async (serverId) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/audit/archives/`);
-    }
+    },
 };
 
 // ==========================================
@@ -48,12 +48,12 @@ export const e2eeKeysApi = {
     registerKeys: async (data) => {
         return await apiFetch(`${API_BASE}/api/e2ee/keys/`, {
             method: 'POST',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     getUserPublicKey: async (userId) => {
         return await apiFetch(`${API_BASE}/api/e2ee/keys/${userId}/`);
-    }
+    },
 };
 
 // ==========================================
@@ -66,24 +66,24 @@ export const hardwareKeyApi = {
     registerKey: async (keyData) => {
         return await apiFetch(`${API_BASE}/api/auth/2fa/hardware-keys/`, {
             method: 'POST',
-            body: JSON.stringify(keyData)
+            body: JSON.stringify(keyData),
         });
     },
     deleteKey: async (keyId) => {
         return await apiFetch(`${API_BASE}/api/auth/2fa/hardware-keys/`, {
             method: 'DELETE',
-            body: JSON.stringify({ key_id: keyId })
+            body: JSON.stringify({ key_id: keyId }),
         });
     },
     generateBackupCodes: async () => {
         return await apiFetch(`${API_BASE}/api/auth/2fa/backup-codes/`, {
-            method: 'POST'
+            method: 'POST',
         });
     },
     useBackupCode: async (code) => {
         return await apiFetch(`${API_BASE}/api/auth/2fa/backup-codes/`, {
             method: 'PUT',
-            body: JSON.stringify({ code })
+            body: JSON.stringify({ code }),
         });
     },
     getSettings: async () => {
@@ -92,9 +92,9 @@ export const hardwareKeyApi = {
     updateSettings: async (settings) => {
         return await apiFetch(`${API_BASE}/api/auth/2fa/settings/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -104,7 +104,7 @@ export const altAccountApi = {
     recordFingerprint: async (fingerprintData) => {
         return await apiFetch(`${API_BASE}/api/fingerprint/`, {
             method: 'POST',
-            body: JSON.stringify(fingerprintData)
+            body: JSON.stringify(fingerprintData),
         });
     },
     getSuspicions: async (serverId) => {
@@ -113,7 +113,7 @@ export const altAccountApi = {
     reviewSuspicion: async (suspicionId, result) => {
         return await apiFetch(`${API_BASE}/api/alt-accounts/${suspicionId}/review/`, {
             method: 'POST',
-            body: JSON.stringify({ result })
+            body: JSON.stringify({ result }),
         });
-    }
+    },
 };

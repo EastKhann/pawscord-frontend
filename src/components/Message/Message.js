@@ -1,8 +1,9 @@
-// frontend/src/components/Message/Message.js
+﻿// frontend/src/components/Message/Message.js
 // Decomposed: useMessage + messageStyles + sub-components
-import { memo, lazy, Suspense, useCallback } from 'react';
+import { memo, lazy, Suspense, useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { FaChartLine } from 'react-icons/fa';
-import LazyImage from '../LazyImage';
+import LazyImage from '../shared/LazyImage';
 import useMessage from './useMessage';
 import styles from './messageStyles';
 import { MessageHeader } from './MessageHeader';
@@ -12,13 +13,19 @@ import { MessageReactions } from './MessageReactions';
 import { MessageContextMenu } from './MessageContextMenu';
 import { MessageMedia, LazyMount } from './MessageMedia';
 import { MessagePoll } from './MessagePoll';
-import ReadReceipt from '../ReadReceipt';
-import UserCardPopover from '../UserCardPopover';
+import ReadReceipt from '../chat/ReadReceipt';
+import UserCardPopover from '../profile/UserCardPopover';
 
-const LinkPreview = lazy(() => import('../../LinkPreview'));
-const TicTacToe = lazy(() => import('../TicTacToe'));
-const ReminderModal = lazy(() => import('../ReminderModal'));
-const MessageThreads = lazy(() => import('../MessageThreads'));
+const S = {
+  txt: {padding: '12px', color: '#b5bac1'},
+  font: {opacity: 0.7, fontSize: '0.9em'},
+  mar: {fontWeight: 'bold', marginRight: 5},
+};
+
+const LinkPreview = lazy(() => import('./'));
+const TicTacToe = lazy(() => import('../games/TicTacToe'));
+const ReminderModal = lazy(() => import('../shared/ReminderModal'));
+const MessageThreads = lazy(() => import('../chat/MessageThreads'));
 
 const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleReaction, onTogglePin, onSetReply, onImageClick, absoluteHostUrl, onScrollToMessage, onVisible, messageEditHistoryUrl, onViewProfile, onStartForward, fetchWithAuth, isSelectionMode, isSelected, onToggleSelection, allUsers, getDeterministicAvatar, onShowChart, onContentLoad, isGrouped }) => {
   const {
@@ -31,6 +38,8 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
     localTranscription, localIsTranscribing, handleTranscribe, handleQuoteMessage,
   } = useMessage({ msg, currentUser, absoluteHostUrl, fetchWithAuth, onSetReply, onVisible, allUsers, getDeterministicAvatar });
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   // Memoized handlers
   const handleMouseEnter = useCallback(() => setIsHovered(true), []);
   const handleMouseLeave = useCallback(() => { setIsHovered(false); setShowReactionPicker(false); }, []);
@@ -65,8 +74,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           user={{ username: msg.username, avatar: userAvatar, status: msg.user_status, roles: msg.user_roles || [], level: msg.user_level, custom_status: msg.custom_status }}
           currentActivity={allUsers?.find(u => u.username === msg.username)?.current_activity}
           onMessage={handleViewProfile}
-          onProfile={handleViewProfile}
-        >
+          onProfile={handleViewProfile}>
           <div style={styles.avatarContainer}>
             <LazyImage src={userAvatar} alt={msg.username} style={styles.userAvatar} onClick={handleAvatarClick} placeholder={getDeterministicAvatar(msg.username)} />
           </div>
@@ -75,10 +83,10 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
 
       <div style={styles.contentWrapper}>
         {msg.reply_to && (
-          <div style={styles.replyContainer} onClick={handleReplyClick}>
+          <div style={styles.replyContainer} role="button" tabIndex={0} onClick={handleReplyClick} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}>
             <div style={styles.replyLine} />
-            <span style={{ fontWeight: 'bold', marginRight: 5 }}>@{msg.reply_to.username}</span>
-            <span style={{ opacity: 0.7, fontSize: '0.9em' }}>{msg.reply_to.content ? msg.reply_to.content.substring(0, 50) + '...' : 'Bir dosya'}</span>
+            <span style={S.mar}@{msg.reply_to.username}</span>
+            <span style={S.font}>{msg.reply_to.content ? msg.reply_to.content.substring(0, 50) + '...' : 'Bir file'}</span>
           </div>
         )}
 
@@ -103,7 +111,7 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           onClose={handleCloseContextMenu} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
 
         {msg.snippet_data?.type === 'game_xox' ? (
-          <Suspense fallback={<div style={{ padding: '12px', color: '#b5bac1' }}>{'🎮'} Oyun y{'ü'}kleniyor...</div>}>
+          <Suspense fallback={<div style={S.txt}>🎮 Loading game...</div>}>
             <TicTacToe gameData={msg.snippet_data} currentUser={currentUser}
               onMove={handleTicTacToeMove} />
           </Suspense>
@@ -111,24 +119,67 @@ const Message = ({ msg, currentUser, isAdmin, onDelete, onStartEdit, onToggleRea
           <MessageContent displayContent={displayContent} isMessageEncrypted={isMessageEncrypted} snippetData={msg.snippet_data} />
         )}
 
-        {signalCoin && <button onClick={handleShowChart} style={styles.chartBtn}><FaChartLine /> {signalCoin} Grafi{'ğ'}i</button>}
+        {signalCoin && <button
+          aria-label="handle Show Chart" onClick={handleShowChart} style={styles.chartBtn}><FaChartLine /> {signalCoin} Chart</button>}
         {msg.link_preview_data && <LazyMount minHeight={80}><Suspense fallback={null}><LinkPreview data={msg.link_preview_data} /></Suspense></LazyMount>}
         <MessagePoll poll={msg.poll} fetchWithAuth={fetchWithAuth} absoluteHostUrl={absoluteHostUrl} />
         <MessageMedia msg={msg} finalImageUrl={finalImageUrl} finalFileUrl={finalFileUrl} onImageClick={onImageClick} onContentLoad={onContentLoad}
           transcription={localTranscription} isTranscribing={localIsTranscribing} onTranscribe={handleTranscribe}
           galleryGroup={msg._galleryGroup} absoluteHostUrl={absoluteHostUrl} />
 
-        <div style={styles.footerRow}>
-          <MessageReactions reactions={msg.reactions} currentUser={currentUser} onToggleReaction={onToggleReaction} messageId={msg.id} />
-          {isMyMessage && !msg.temp_id && <ReadReceipt status={msg.read_by?.length > 0 ? 'read' : msg.id ? 'delivered' : 'sent'} readBy={msg.read_by || []} />}
-        </div>
+        {(msg.reactions?.length > 0 || (isMyMessage && !msg.temp_id)) && (
+          <div style={styles.footerRow}>
+            <MessageReactions reactions={msg.reactions} currentUser={currentUser} onToggleReaction={onToggleReaction} messageId={msg.id} />
+            {isMyMessage && !msg.temp_id && <ReadReceipt status={msg.read_by?.length > 0 ? 'read' : msg.id ? 'delivered' : 'sent'} readBy={msg.read_by || []} />}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
+Message.propTypes = {
+  msg: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    username: PropTypes.string,
+    content: PropTypes.string,
+    reactions: PropTypes.array,
+    read_by: PropTypes.array,
+    reply_to: PropTypes.object,
+    poll: PropTypes.object,
+    link_preview_data: PropTypes.object,
+    snippet_data: PropTypes.object,
+    temp_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }).isRequired,
+  currentUser: PropTypes.shape({ username: PropTypes.string }).isRequired,
+  isAdmin: PropTypes.bool,
+  onDelete: PropTypes.func.isRequired,
+  onStartEdit: PropTypes.func.isRequired,
+  onToggleReaction: PropTypes.func.isRequired,
+  onTogglePin: PropTypes.func.isRequired,
+  onSetReply: PropTypes.func.isRequired,
+  onImageClick: PropTypes.func,
+  absoluteHostUrl: PropTypes.string.isRequired,
+  onScrollToMessage: PropTypes.func,
+  onVisible: PropTypes.func,
+  messageEditHistoryUrl: PropTypes.string,
+  onViewProfile: PropTypes.func.isRequired,
+  onStartForward: PropTypes.func,
+  fetchWithAuth: PropTypes.func.isRequired,
+  isSelectionMode: PropTypes.bool,
+  isSelected: PropTypes.bool,
+  onToggleSelection: PropTypes.func,
+  allUsers: PropTypes.array,
+  getDeterministicAvatar: PropTypes.func,
+  onShowChart: PropTypes.func,
+  onContentLoad: PropTypes.func,
+  isGrouped: PropTypes.bool,
+};
+
 const areEqual = (prev, next) => {
-  for (const k of ['msg', 'currentUser', 'isAdmin', 'isSelectionMode', 'isSelected', 'isGrouped']) {
+  for (const k of ['msg', 'currentUser', 'isAdmin', 'isSelectionMode', 'isSelected', 'isGrouped',
+    'onDelete', 'onStartEdit', 'onToggleReaction', 'onTogglePin', 'onSetReply',
+    'onImageClick', 'absoluteHostUrl', 'onScrollToMessage', 'onViewProfile', 'onStartForward']) {
     if (prev[k] !== next[k]) return false;
   }
   return true;

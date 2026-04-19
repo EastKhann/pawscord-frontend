@@ -1,0 +1,402 @@
+{
+  "timestamp": "2026-04-14T12:31:05.444Z",
+  "summary": {
+    "apiOk": 5,
+    "apiFail": 9,
+    "pageCount": 38,
+    "pageErrors": 13,
+    "pageWarnings": 14,
+    "consoleErrors": 36,
+    "networkErrors": 36
+  },
+  "apiResults": [
+    {
+      "label": "Message History: ai",
+      "endpoint": "/api/messages/history/room/ai/",
+      "status": 500,
+      "ok": false,
+      "error": "An internal error occurred. Please try again later."
+    },
+    {
+      "label": "Message History: sinyal-bot",
+      "endpoint": "/api/messages/history/room/sinyal-bot/",
+      "status": 500,
+      "ok": false,
+      "error": "An internal error occurred. Please try again later."
+    },
+    {
+      "label": "Message History: genel",
+      "endpoint": "/api/messages/history/room/genel/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "label": "Message History: genel-1",
+      "endpoint": "/api/messages/history/room/genel-1/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "label": "Admin Detailed Stats",
+      "endpoint": "/api/admin/detailed-stats/",
+      "status": 500,
+      "ok": false,
+      "error": "An internal error occurred. Please try again later."
+    },
+    {
+      "label": "Admin Live Activity",
+      "endpoint": "/api/admin/live-activity/",
+      "status": 500,
+      "ok": false,
+      "error": "An internal error occurred. Please try again later."
+    },
+    {
+      "label": "Endorsements",
+      "endpoint": "/api/users/16/endorsements/",
+      "status": 404,
+      "ok": false,
+      "error": "user not found"
+    },
+    {
+      "label": "Profile",
+      "endpoint": "/api/profile/",
+      "status": 404,
+      "ok": false,
+      "error": true
+    },
+    {
+      "label": "Servers List",
+      "endpoint": "/api/servers/",
+      "status": 404,
+      "ok": false,
+      "error": true
+    },
+    {
+      "label": "Notifications",
+      "endpoint": "/api/notifications/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "label": "Friends List",
+      "endpoint": "/api/friends/",
+      "status": 404,
+      "ok": false,
+      "error": true
+    },
+    {
+      "label": "English Words",
+      "endpoint": "/api/eng-learn/words/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "label": "Discover Servers",
+      "endpoint": "/api/discover/servers/",
+      "status": 404,
+      "ok": false,
+      "error": true
+    },
+    {
+      "label": "Premium Status",
+      "endpoint": "/api/premium/status/",
+      "status": 200,
+      "ok": true
+    }
+  ],
+  "pageResults": [
+    {
+      "idx": 1,
+      "label": "login_page",
+      "file": "001_login_page.png"
+    },
+    {
+      "idx": 2,
+      "label": "after_login",
+      "file": "002_after_login.png"
+    },
+    {
+      "idx": 3,
+      "label": "Home",
+      "file": "003_Home.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 4,
+      "label": "Home_scroll",
+      "file": "004_Home_scroll.png"
+    },
+    {
+      "idx": 5,
+      "label": "Discover Servers",
+      "file": "005_Discover_Servers.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 6,
+      "label": "Discover Servers_scroll",
+      "file": "006_Discover_Servers_scroll.png"
+    },
+    {
+      "idx": 7,
+      "label": "Premium Store",
+      "file": "007_Premium_Store.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 8,
+      "label": "Premium Store_scroll",
+      "file": "008_Premium_Store_scroll.png"
+    },
+    {
+      "idx": 9,
+      "label": "Friends",
+      "file": "009_Friends.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 10,
+      "label": "Friends_scroll",
+      "file": "010_Friends_scroll.png"
+    },
+    {
+      "idx": 11,
+      "label": "English Learning",
+      "file": "011_English_Learning.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 12,
+      "label": "English Learning_scroll",
+      "file": "012_English_Learning_scroll.png"
+    },
+    {
+      "idx": 13,
+      "label": "Crypto Dashboard",
+      "file": "013_Crypto_Dashboard.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 14,
+      "label": "Crypto Dashboard_scroll",
+      "file": "014_Crypto_Dashboard_scroll.png"
+    },
+    {
+      "idx": 15,
+      "label": "Settings",
+      "file": "015_Settings.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 16,
+      "label": "Settings_scroll",
+      "file": "016_Settings_scroll.png"
+    },
+    {
+      "idx": 17,
+      "label": "Settings Profile",
+      "file": "017_Settings_Profile.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 18,
+      "label": "Settings Profile_scroll",
+      "file": "018_Settings_Profile_scroll.png"
+    },
+    {
+      "idx": 19,
+      "label": "Settings Appearance",
+      "file": "019_Settings_Appearance.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 20,
+      "label": "Settings Appearance_scroll",
+      "file": "020_Settings_Appearance_scroll.png"
+    },
+    {
+      "idx": 21,
+      "label": "Settings Security",
+      "file": "021_Settings_Security.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 22,
+      "label": "Settings Security_scroll",
+      "file": "022_Settings_Security_scroll.png"
+    },
+    {
+      "idx": 23,
+      "label": "Settings Language",
+      "file": "023_Settings_Language.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 24,
+      "label": "Settings Language_scroll",
+      "file": "024_Settings_Language_scroll.png"
+    },
+    {
+      "idx": 25,
+      "label": "Settings Notifications",
+      "file": "025_Settings_Notifications.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 26,
+      "label": "Settings Notifications_scroll",
+      "file": "026_Settings_Notifications_scroll.png"
+    },
+    {
+      "idx": 27,
+      "label": "Admin Dashboard",
+      "file": "027_Admin_Dashboard.png",
+      "warning": "2 console errors",
+      "error": "2 network errors: 500 https://api.pawscord.com/api/messages/history/dm/4/, 500 https://api.pawscord.com/api/messages/history/dm/8/"
+    },
+    {
+      "idx": 28,
+      "label": "Admin Dashboard_scroll",
+      "file": "028_Admin_Dashboard_scroll.png"
+    },
+    {
+      "idx": 29,
+      "label": "admin_Dashboard",
+      "file": "029_admin_Dashboard.png"
+    },
+    {
+      "idx": 30,
+      "label": "admin_Users",
+      "file": "030_admin_Users.png"
+    },
+    {
+      "idx": 31,
+      "label": "admin_Servers",
+      "file": "031_admin_Servers.png"
+    },
+    {
+      "idx": 32,
+      "label": "admin_Moderation",
+      "file": "032_admin_Moderation.png"
+    },
+    {
+      "idx": 33,
+      "label": "admin_Logs",
+      "file": "033_admin_Logs.png"
+    },
+    {
+      "idx": 34,
+      "label": "admin_Database",
+      "file": "034_admin_Database.png"
+    },
+    {
+      "idx": 35,
+      "label": "admin_System",
+      "file": "035_admin_System.png"
+    },
+    {
+      "idx": 36,
+      "label": "no_server_icons_found",
+      "file": "036_no_server_icons_found.png",
+      "warning": "No server icons in sidebar"
+    },
+    {
+      "idx": 37,
+      "label": "dm_list",
+      "file": "037_dm_list.png"
+    },
+    {
+      "idx": 38,
+      "label": "profile",
+      "file": "038_profile.png"
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()",
+    "Failed to load resource: the server responded with a status of 500 ()"
+  ],
+  "networkErrors": [
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/",
+    "500 https://api.pawscord.com/api/messages/history/dm/4/",
+    "500 https://api.pawscord.com/api/messages/history/dm/8/"
+  ]
+}

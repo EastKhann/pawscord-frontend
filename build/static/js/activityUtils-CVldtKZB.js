@@ -1,1 +1,0 @@
-var t=Object.defineProperty;var r=(e,n)=>t(e,"name",{value:n,configurable:!0});const s=r(e=>{if(!e||typeof e=="object"&&Object.keys(e).length===0)return null;const n=e._received_at;return n&&Date.now()-n>3e5?null:e},"getFreshActivity");export{s as g};

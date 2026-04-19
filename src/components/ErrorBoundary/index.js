@@ -1,4 +1,4 @@
-// frontend/src/components/ErrorBoundary/index.js
+﻿// frontend/src/components/ErrorBoundary/index.js
 // 🛡️ Error Boundary Module Exports
 
 // Legacy ErrorBoundary (class component)
@@ -8,8 +8,8 @@ export { default as ErrorBoundary } from './ErrorBoundary.jsx';
 export {
     default as EnhancedErrorBoundary,
     useError,
-    withErrorBoundary
-} from './EnhancedErrorBoundary.js';
+    withErrorBoundary,
+} from './EnhancedErrorBoundary';
 
 // Default export - Enhanced version
-export { default } from './EnhancedErrorBoundary.js';
+export { default } from './EnhancedErrorBoundary';

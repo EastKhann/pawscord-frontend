@@ -1,0 +1,462 @@
+{
+  "date": "2026-04-15T18:18:28.429Z",
+  "elapsed": "204.8s",
+  "totalScreenshots": 16,
+  "screensWithErrors": 11,
+  "screensWithEnglish": 14,
+  "allConsoleErrors": [
+    "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+    "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+    "Connecting to 'https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4' violates the following Content Security Policy directive: \"connect-src 'self' https://api.pawscord.com wss://api.pawscord.com https://media.pawscord.",
+    "Fetch API cannot load https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4. Refused to connect because it violates the document's Content Security Policy."
+  ],
+  "allApiErrors": [],
+  "screenshots": [
+    {
+      "idx": 1,
+      "label": "01_login_page",
+      "file": "001_01_login_page.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa"
+      ],
+      "apiErrors": [],
+      "englishTexts": [],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:11.077Z"
+    },
+    {
+      "idx": 2,
+      "label": "01b_login_filled",
+      "file": "002_01b_login_filled.png",
+      "errors": [],
+      "apiErrors": [],
+      "englishTexts": [],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:11.311Z"
+    },
+    {
+      "idx": 3,
+      "label": "02_after_login",
+      "file": "003_02_after_login.png",
+      "errors": [
+        "Connecting to 'https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4' violates the following Content Security Policy directive: \"connect-src 'self' https://api.pawscord.com wss://api.pawscord.com https://media.pawscord.",
+        "Fetch API cannot load https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4. Refused to connect because it violates the document's Content Security Policy.",
+        "Connecting to 'https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4' violates the following Content Security Policy directive: \"connect-src 'self' https://api.pawscord.com wss://api.pawscord.com https://media.pawscord.",
+        "Fetch API cannot load https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4. Refused to connect because it violates the document's Content Security Policy.",
+        "Connecting to 'https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4' violates the following Content Security Policy directive: \"connect-src 'self' https://api.pawscord.com wss://api.pawscord.com https://media.pawscord.",
+        "Fetch API cannot load https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4. Refused to connect because it violates the document's Content Security Policy.",
+        "Connecting to 'https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4' violates the following Content Security Policy directive: \"connect-src 'self' https://api.pawscord.com wss://api.pawscord.com https://media.pawscord.",
+        "Fetch API cannot load https://www.google.com/recaptcha/api2/clr?k=6LfhUU0sAAAAALQKKgbT5xKopHIlv2isjdzEKIo4. Refused to connect because it violates the document's Content Security Policy."
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Download",
+          "element": "BUTTON",
+          "className": ""
+        },
+        {
+          "text": "Ready to chat with friends, play games and join communities?",
+          "element": "P",
+          "className": ""
+        },
+        {
+          "text": "Friends",
+          "element": "SPAN",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:21.177Z"
+    },
+    {
+      "idx": 4,
+      "label": "03_home_page",
+      "file": "004_03_home_page.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Download",
+          "element": "BUTTON",
+          "className": ""
+        },
+        {
+          "text": "Ready to chat with friends, play games and join communities?",
+          "element": "P",
+          "className": ""
+        },
+        {
+          "text": "Friends",
+          "element": "SPAN",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:27.074Z"
+    },
+    {
+      "idx": 5,
+      "label": "04_friends_tab",
+      "file": "005_04_friends_tab.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "No friends yet",
+          "element": "P",
+          "className": ""
+        },
+        {
+          "text": "Add Friend",
+          "element": "BUTTON",
+          "className": ""
+        },
+        {
+          "text": "Friends",
+          "element": "SPAN",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:51.293Z"
+    },
+    {
+      "idx": 6,
+      "label": "04_friends_T_m_",
+      "file": "006_04_friends_T_m_.png",
+      "errors": [],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Offline",
+          "element": "DIV",
+          "className": ""
+        },
+        {
+          "text": "Friends",
+          "element": "SPAN",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:52.058Z"
+    },
+    {
+      "idx": 7,
+      "label": "04_friends_All",
+      "file": "007_04_friends_All.png",
+      "errors": [],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Loading crypto data...",
+          "element": "SPAN",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:15:52.768Z"
+    },
+    {
+      "idx": 8,
+      "label": "06_discover_servers",
+      "file": "008_06_discover_servers.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:02.950Z"
+    },
+    {
+      "idx": 9,
+      "label": "06_discover_search",
+      "file": "009_06_discover_search.png",
+      "errors": [],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:04.076Z"
+    },
+    {
+      "idx": 10,
+      "label": "06_discover_scroll",
+      "file": "010_06_discover_scroll.png",
+      "errors": [],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:04.737Z"
+    },
+    {
+      "idx": 11,
+      "label": "07_add_server_menu",
+      "file": "011_07_add_server_menu.png",
+      "errors": [
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:11.109Z"
+    },
+    {
+      "idx": 12,
+      "label": "10_premium_store",
+      "file": "012_10_premium_store.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:27.282Z"
+    },
+    {
+      "idx": 13,
+      "label": "11_admin_NOT_OPENED",
+      "file": "013_11_admin_NOT_OPENED.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:34.581Z"
+    },
+    {
+      "idx": 14,
+      "label": "13_profile_NOT_OPENED",
+      "file": "014_13_profile_NOT_OPENED.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:16:45.719Z"
+    },
+    {
+      "idx": 15,
+      "label": "14_modal_keyboard_shortcuts",
+      "file": "015_14_modal_keyboard_shortcuts.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:17:53.808Z"
+    },
+    {
+      "idx": 16,
+      "label": "99_final_home",
+      "file": "016_99_final_home.png",
+      "errors": [
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either the 'unsa",
+        "Executing inline event handler violates the following Content Security Policy directive 'script-src 'self' 'wasm-unsafe-eval' https://www.google.com https://www.gstatic.com https://accounts.google.com https://static.cloudflareinsights.com'. Either th"
+      ],
+      "apiErrors": [],
+      "englishTexts": [
+        {
+          "text": "Status",
+          "element": "TH",
+          "className": ""
+        }
+      ],
+      "domErrors": [],
+      "timestamp": "2026-04-15T18:18:28.347Z"
+    }
+  ]
+}

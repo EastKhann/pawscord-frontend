@@ -1,11 +1,13 @@
+/* eslint-disable no-useless-escape */
 /**
  * 🛡️ XSS Protection Utility
- * 
- * DOMPurify ile tüm kullanıcı input'larını sanitize eder
+ *
+ * DOMPurify with tüm kullanıcı input'larını sanitize eder
  * HTML injection, Script injection saldırılarını önler
  */
 
 import DOMPurify from 'dompurify';
+import logger from '../utils/logger';
 
 /**
  * HTML içeriğini sanitize et
@@ -19,27 +21,60 @@ export function sanitizeHTML(dirty, config = {}) {
     }
 
     const defaultConfig = {
-        // Varsayılan izin verilen taglar
+        // Default izin verilen taglar
         ALLOWED_TAGS: [
-            'b', 'i', 'em', 'strong', 'a', 'p', 'br',
-            'ul', 'ol', 'li', 'code', 'pre', 'blockquote',
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-            'img', 'div', 'span', 'table', 'thead', 'tbody',
-            'tr', 'td', 'th'
+            'b',
+            'i',
+            'em',
+            'strong',
+            'a',
+            'p',
+            'br',
+            'ul',
+            'ol',
+            'li',
+            'code',
+            'pre',
+            'blockquote',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
+            'img',
+            'div',
+            'span',
+            'table',
+            'thead',
+            'tbody',
+            'tr',
+            'td',
+            'th',
         ],
 
         // İzin verilen attribute'ler
         ALLOWED_ATTR: [
-            'href', 'src', 'alt', 'title', 'class', 'id',
-            'target', 'rel', 'width', 'height', 'style'
+            'href',
+            'src',
+            'alt',
+            'title',
+            'class',
+            'id',
+            'target',
+            'rel',
+            'width',
+            'height',
+            'style',
         ],
 
         // Protokol whitelist (XSS önleme)
-        ALLOWED_URI_REGEXP: /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
+        ALLOWED_URI_REGEXP:
+            /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i,
 
         // İzin verilen style properties
         ALLOWED_STYLES: {
-            '*': ['color', 'background-color', 'font-size', 'font-weight', 'text-align']
+            '*': ['color', 'background-color', 'font-size', 'font-weight', 'text-align'],
         },
 
         // <script> taglarını kaldır
@@ -54,31 +89,47 @@ export function sanitizeHTML(dirty, config = {}) {
         // Boş elementleri kaldır
         KEEP_CONTENT: false,
 
-        ...config
+        ...config,
     };
 
     return DOMPurify.sanitize(dirty, defaultConfig);
 }
 
 /**
- * Markdown mesajları için sanitize
+ * Markdown mesajları for sanitize
  * @param {string} markdown - Markdown içerik
  * @returns {string} Sanitized markdown
  */
 export function sanitizeMarkdown(markdown) {
     return sanitizeHTML(markdown, {
         ALLOWED_TAGS: [
-            'b', 'i', 'em', 'strong', 'a', 'p', 'br',
-            'ul', 'ol', 'li', 'code', 'pre', 'blockquote',
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+            'b',
+            'i',
+            'em',
+            'strong',
+            'a',
+            'p',
+            'br',
+            'ul',
+            'ol',
+            'li',
+            'code',
+            'pre',
+            'blockquote',
+            'h1',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6',
         ],
-        ALLOWED_ATTR: ['href', 'target', 'rel']
+        ALLOWED_ATTR: ['href', 'target', 'rel'],
     });
 }
 
 /**
- * Kullanıcı adı/biyografi için sanitize
- * @param {string} text - Kullanıcı text
+ * Username/biyografi for sanitize
+ * @param {string} text - User text
  * @returns {string} Sanitized text
  */
 export function sanitizeUserInput(text) {
@@ -89,14 +140,14 @@ export function sanitizeUserInput(text) {
     // HTML taglarını komple kaldır
     return DOMPurify.sanitize(text, {
         ALLOWED_TAGS: [],
-        KEEP_CONTENT: true
+        KEEP_CONTENT: true,
     });
 }
 
 /**
  * URL'i sanitize et
  * @param {string} url - Kontrol edilecek URL
- * @returns {string|null} Güvenli URL veya null
+ * @returns {string|null} Güvenli URL or null
  */
 export function sanitizeURL(url) {
     if (!url || typeof url !== 'string') {
@@ -110,19 +161,19 @@ export function sanitizeURL(url) {
         const parsed = new URL(url);
 
         if (!validProtocols.includes(parsed.protocol)) {
-            console.warn('🛡️ [XSS] İzinsiz protokol engellendi:', parsed.protocol);
+            logger.warn('🛡️ [XSS] İzinsiz protokol blocked:', parsed.protocol);
             return null;
         }
 
         // javascript: protokolünü önle
         if (url.toLowerCase().includes('javascript:')) {
-            console.warn('🛡️ [XSS] JavaScript injection engellendi');
+            logger.warn('🛡️ [XSS] JavaScript injection blocked');
             return null;
         }
 
         return url;
     } catch (error) {
-        console.warn('🛡️ [XSS] Geçersiz URL:', url);
+        logger.warn('🛡️ [XSS] Geçersiz URL:', url);
         return null;
     }
 }
@@ -143,19 +194,19 @@ export function sanitizeJSON(jsonString) {
 
         return parsed;
     } catch (error) {
-        console.warn('🛡️ [XSS] Geçersiz JSON:', error);
+        logger.warn('🛡️ [XSS] Geçersiz JSON:', error);
         return null;
     }
 }
 
 /**
- * Object içindeki tüm string'leri sanitize et
+ * Object fordeki tüm string'leri sanitize et
  * @param {Object} obj - Sanitize edilecek object
  * @returns {Object} Sanitized object
  */
 function sanitizeObject(obj) {
     if (Array.isArray(obj)) {
-        return obj.map(item => {
+        return obj.map((item) => {
             if (typeof item === 'string') {
                 return sanitizeUserInput(item);
             } else if (typeof item === 'object' && item !== null) {
@@ -182,7 +233,7 @@ function sanitizeObject(obj) {
 
 /**
  * SQL injection önleme (parameterized queries kullan)
- * @param {string} input - Kullanıcı input
+ * @param {string} input - User input
  * @returns {string} Escaped input
  */
 export function escapeSQLInput(input) {
@@ -238,7 +289,5 @@ export default {
     sanitizeJSON,
     escapeSQLInput,
     escapeHTML,
-    unescapeHTML
+    unescapeHTML,
 };
-
-

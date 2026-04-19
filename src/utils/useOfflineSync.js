@@ -4,12 +4,11 @@
  * Listens for online/offline events and flushes pending messages
  * when the browser comes back online.
  */
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 import { useEffect, useRef, useCallback } from 'react';
-import {
-    flushPendingMessages,
-    enqueuePendingMessage,
-    getPendingMessages,
-} from './offlineDB';
+import { flushPendingMessages, enqueuePendingMessage, getPendingMessages } from './offlineDB';
 
 /**
  * @param {object} opts
@@ -18,12 +17,7 @@ import {
  * @param {Function} [opts.onOffline] — () => void
  * @param {Function} [opts.onOnline] — () => void
  */
-export function useOfflineSync({
-    sendMessageFn,
-    onSyncComplete,
-    onOffline,
-    onOnline,
-} = {}) {
+export function useOfflineSync({ sendMessageFn, onSyncComplete, onOffline, onOnline } = {}) {
     const sendRef = useRef(sendMessageFn);
     sendRef.current = sendMessageFn;
 
@@ -61,22 +55,19 @@ export function useOfflineSync({
     /**
      * Send a message — either directly (online) or queue it (offline).
      */
-    const sendOrQueue = useCallback(
-        async (msg) => {
-            if (navigator.onLine && sendRef.current) {
-                try {
-                    const ok = await sendRef.current(msg);
-                    if (ok) return true;
-                } catch {
-                    // Fall through to queue
-                }
+    const sendOrQueue = useCallback(async (msg) => {
+        if (navigator.onLine && sendRef.current) {
+            try {
+                const ok = await sendRef.current(msg);
+                if (ok) return true;
+            } catch {
+                // Fall through to queue
             }
-            // Offline or send failed → queue
-            await enqueuePendingMessage(msg);
-            return false;
-        },
-        [],
-    );
+        }
+        // Offline or send failed → queue
+        await enqueuePendingMessage(msg);
+        return false;
+    }, []);
 
     return { sendOrQueue, flush, isOnline: () => isOnline.current, getPendingMessages };
 }

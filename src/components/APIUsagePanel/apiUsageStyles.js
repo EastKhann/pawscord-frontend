@@ -23,7 +23,7 @@ export const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 999999
+        zIndex: 999999,
     },
     modal: {
         backgroundColor: '#1e1e1e',
@@ -33,24 +33,24 @@ export const styles = {
         maxHeight: '90vh',
         display: 'flex',
         flexDirection: 'column',
-        color: '#fff'
+        color: '#fff',
     },
     header: {
         padding: '20px',
         borderBottom: '1px solid #444',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     headerLeft: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     headerRight: {
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     timeRangeSelect: {
         padding: '8px 12px',
@@ -59,7 +59,7 @@ export const styles = {
         borderRadius: '6px',
         color: '#fff',
         fontSize: '14px',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     closeBtn: {
         background: 'none',
@@ -67,23 +67,23 @@ export const styles = {
         color: '#fff',
         fontSize: '24px',
         cursor: 'pointer',
-        padding: '8px'
+        padding: '8px',
     },
     content: {
         padding: '20px',
         overflowY: 'auto',
-        flex: 1
+        flex: 1,
     },
     loading: {
         textAlign: 'center',
         padding: '40px',
-        color: '#949ba4'
+        color: '#949ba4',
     },
     statsGrid: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '16px',
-        marginBottom: '32px'
+        marginBottom: '32px',
     },
     statCard: {
         backgroundColor: '#111214',
@@ -91,77 +91,77 @@ export const styles = {
         padding: '20px',
         display: 'flex',
         alignItems: 'center',
-        gap: '16px'
+        gap: '16px',
     },
     statIcon: {
         fontSize: '32px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     statInfo: {
-        flex: 1
+        flex: 1,
     },
     statValue: {
         fontSize: '28px',
         fontWeight: 'bold',
-        marginBottom: '4px'
+        marginBottom: '4px',
     },
     statLabel: {
         fontSize: '12px',
         color: '#949ba4',
         textTransform: 'uppercase',
-        letterSpacing: '1px'
+        letterSpacing: '1px',
     },
     section: {
-        marginBottom: '32px'
+        marginBottom: '32px',
     },
     sectionTitle: {
         fontSize: '16px',
         fontWeight: '600',
-        marginBottom: '16px'
+        marginBottom: '16px',
     },
     rateLimitCard: {
         backgroundColor: '#111214',
         borderRadius: '8px',
         padding: '20px',
-        borderLeft: '4px solid'
+        borderLeft: '4px solid',
     },
     rateLimitInfo: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '12px'
+        marginBottom: '12px',
     },
     rateLimitText: {
         fontSize: '14px',
-        fontWeight: '600'
+        fontWeight: '600',
     },
     rateLimitStatus: {
         fontSize: '14px',
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        letterSpacing: '1px'
+        letterSpacing: '1px',
     },
     rateLimitBar: {
         height: '8px',
         backgroundColor: '#0d0e10',
         borderRadius: '4px',
         overflow: 'hidden',
-        marginBottom: '8px'
+        marginBottom: '8px',
     },
     rateLimitProgress: {
         height: '100%',
-        transition: 'width 0.3s ease'
+        transition: 'width 0.3s ease',
     },
     rateLimitReset: {
         fontSize: '12px',
-        color: '#949ba4'
+        color: '#949ba4',
     },
     endpointsList: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'
+        gap: '8px',
     },
     endpointItem: {
         backgroundColor: '#111214',
@@ -171,22 +171,22 @@ export const styles = {
         transition: 'background 0.2s',
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     endpointRank: {
         fontSize: '20px',
         fontWeight: 'bold',
         color: '#5865f2',
-        minWidth: '40px'
+        minWidth: '40px',
     },
     endpointDetails: {
-        flex: 1
+        flex: 1,
     },
     endpointPath: {
         fontSize: '14px',
         fontWeight: '600',
         marginBottom: '4px',
-        fontFamily: 'monospace'
+        fontFamily: 'monospace',
     },
     endpointMethod: {
         display: 'inline-block',
@@ -195,27 +195,27 @@ export const styles = {
         borderRadius: '4px',
         fontSize: '11px',
         fontWeight: 'bold',
-        marginRight: '8px'
+        marginRight: '8px',
     },
     endpointStats: {
         fontSize: '12px',
-        color: '#949ba4'
+        color: '#949ba4',
     },
     endpointBar: {
         width: '100px',
         height: '6px',
         backgroundColor: '#0d0e10',
         borderRadius: '3px',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     endpointBarFill: {
         height: '100%',
-        transition: 'width 0.3s ease'
+        transition: 'width 0.3s ease',
     },
     timeline: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'
+        gap: '8px',
     },
     timelineItem: {
         backgroundColor: '#111214',
@@ -223,7 +223,7 @@ export const styles = {
         padding: '12px',
         display: 'flex',
         alignItems: 'center',
-        gap: '12px'
+        gap: '12px',
     },
     timelineIcon: {
         width: '32px',
@@ -232,16 +232,16 @@ export const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#fff'
+        color: '#fff',
     },
     timelineContent: {
-        flex: 1
+        flex: 1,
     },
     timelinePath: {
         fontSize: '14px',
         fontWeight: '600',
         fontFamily: 'monospace',
-        marginBottom: '4px'
+        marginBottom: '4px',
     },
     timelineMethod: {
         display: 'inline-block',
@@ -250,15 +250,15 @@ export const styles = {
         borderRadius: '3px',
         fontSize: '10px',
         fontWeight: 'bold',
-        marginRight: '8px'
+        marginRight: '8px',
     },
     timelineMeta: {
         fontSize: '12px',
-        color: '#949ba4'
+        color: '#949ba4',
     },
     empty: {
         textAlign: 'center',
         padding: '40px',
-        color: '#949ba4'
-    }
+        color: '#949ba4',
+    },
 };

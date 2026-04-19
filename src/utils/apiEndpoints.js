@@ -13,7 +13,8 @@ const getApiBaseUrl = () => {
     }
 
     // 2. Capacitor (mobil) detection
-    const isCapacitor = window.Capacitor?.isNativePlatform?.() ||
+    const isCapacitor =
+        window.Capacitor?.isNativePlatform?.() ||
         window.location.protocol === 'capacitor:' ||
         window.location.protocol === 'ionic:';
 
@@ -24,7 +25,8 @@ const getApiBaseUrl = () => {
     // 3. Production detection (Electron or pawscord.com)
     const isElectron = window.navigator?.userAgent?.toLowerCase().includes('electron');
     const isPawscordDomain = window.location.hostname.includes('pawscord.com');
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const isLocalhost =
+        window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     if (isElectron || isPawscordDomain) {
         return 'https://api.pawscord.com';
@@ -66,13 +68,13 @@ export const ENDPOINTS = {
     // 🔐 AUTH
     // ==========================================
     AUTH: {
-        LOGIN: `${API_BASE}/auth/token/`,
+        LOGIN: `${API_BASE}/auth/login/`,
         REGISTER: `${API_BASE}/auth/register/`,
         REFRESH: `${API_BASE}/auth/token/refresh/`,
         LOGOUT: `${API_BASE}/auth/logout/`,
-        PASSWORD_RESET: `${API_BASE}/auth/password/reset/`,
-        PASSWORD_RESET_CONFIRM: `${API_BASE}/auth/password/reset/confirm/`,
-        GOOGLE: `${API_BASE}/auth/google/`,
+        PASSWORD_RESET: `${API_BASE}/auth/request-password-reset/`,
+        PASSWORD_RESET_CONFIRM: `${API_BASE}/auth/reset-password/`,
+        GOOGLE: `${API_BASE}/auth/google/start/`,
         VERIFY_EMAIL: `${API_BASE}/auth/verify-email/`,
     },
 
@@ -412,8 +414,6 @@ export const ENDPOINTS = {
     STATUS: {
         CUSTOM: `${API_BASE}/status/custom/`,
     },
-
-
 };
 
 /**
@@ -421,7 +421,7 @@ export const ENDPOINTS = {
  */
 export const getEndpoint = (path, params = {}) => {
     let endpoint = path;
-    Object.keys(params).forEach(key => {
+    Object.keys(params).forEach((key) => {
         endpoint = endpoint.replace(`:${key}`, params[key]);
     });
     return endpoint;

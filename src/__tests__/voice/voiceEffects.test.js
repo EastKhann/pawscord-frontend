@@ -6,48 +6,48 @@ import { createVoiceEffect } from '../../VoiceContext/voiceEffects';
 function createMockAudioContext() {
     const mockNode = () => ({
         connect: vi.fn().mockReturnThis(),
-        disconnect: vi.fn()
+        disconnect: vi.fn(),
     });
 
     return {
         createMediaStreamSource: vi.fn().mockReturnValue(mockNode()),
         createMediaStreamDestination: vi.fn().mockReturnValue({
             stream: { id: 'mock-output-stream' },
-            ...mockNode()
+            ...mockNode(),
         }),
         createOscillator: vi.fn().mockReturnValue({
             ...mockNode(),
             type: '',
             frequency: { value: 0 },
-            start: vi.fn()
+            start: vi.fn(),
         }),
         createGain: vi.fn().mockReturnValue({
             ...mockNode(),
-            gain: { value: 1 }
+            gain: { value: 1 },
         }),
         createWaveShaper: vi.fn().mockReturnValue({
             ...mockNode(),
-            curve: null
+            curve: null,
         }),
         createDelay: vi.fn().mockReturnValue({
             ...mockNode(),
-            delayTime: { value: 0 }
+            delayTime: { value: 0 },
         }),
         createBiquadFilter: vi.fn().mockReturnValue({
             ...mockNode(),
             type: '',
             frequency: { value: 0 },
             Q: { value: 0 },
-            gain: { value: 0 }
+            gain: { value: 0 },
         }),
         createConvolver: vi.fn().mockReturnValue({
             ...mockNode(),
-            buffer: null
+            buffer: null,
         }),
         createBuffer: vi.fn().mockReturnValue({
-            getChannelData: vi.fn().mockReturnValue(new Float32Array(48000))
+            getChannelData: vi.fn().mockReturnValue(new Float32Array(48000)),
         }),
-        sampleRate: 48000
+        sampleRate: 48000,
     };
 }
 

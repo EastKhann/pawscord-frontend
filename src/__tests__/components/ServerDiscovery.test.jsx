@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-redundant-roles */
 // frontend/src/__tests__/components/ServerDiscovery.test.jsx
 // Tests for server discovery / browse flow
 

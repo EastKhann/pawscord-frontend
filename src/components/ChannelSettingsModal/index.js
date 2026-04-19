@@ -1,3 +1,4 @@
+export { default } from '../server/ChannelSettingsModal';
 // Barrel export for ChannelSettingsModal
 export { default as AdvancedTab } from './AdvancedTab';
 export { default as GeneralTab } from './GeneralTab';

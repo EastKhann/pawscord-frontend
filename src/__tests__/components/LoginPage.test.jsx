@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 // frontend/src/__tests__/components/LoginPage.test.jsx
 // 🧪 LoginPage Component Tests
 
@@ -26,11 +27,15 @@ const MockLoginPage = ({
             if (isLoginMode) {
                 await onLogin(formData.username, formData.password);
             } else {
-                const success = await onRegister(formData.username, formData.email, formData.password);
+                const success = await onRegister(
+                    formData.username,
+                    formData.email,
+                    formData.password
+                );
                 if (success) setIsLoginMode(true);
             }
         } catch (err) {
-            setAuthError('Giriş sırasında bir hata oluştu.');
+            setAuthError('Login error occurred.');
         } finally {
             setIsLoading(false);
         }
@@ -42,13 +47,15 @@ const MockLoginPage = ({
                 {/* Logo */}
                 <div data-testid="logo-header" className="logo-header">
                     <h1>Pawscord</h1>
-                    <p data-testid="subtitle">
-                        {isLoginMode ? 'Tekrar hoşgeldin!' : 'Aramıza katıl!'}
-                    </p>
+                    <p data-testid="subtitle">{isLoginMode ? 'Welcome back!' : 'Join us!'}</p>
                 </div>
 
                 {/* Error */}
-                {error && <div data-testid="error-message" className="error-message">{error}</div>}
+                {error && (
+                    <div data-testid="error-message" className="error-message">
+                        {error}
+                    </div>
+                )}
 
                 {/* Form */}
                 <form data-testid="auth-form" onSubmit={handleSubmit}>
@@ -56,7 +63,7 @@ const MockLoginPage = ({
                         <input
                             data-testid="username-input"
                             type="text"
-                            placeholder="Kullanıcı Adı"
+                            placeholder="User Adı"
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                             required
@@ -70,7 +77,9 @@ const MockLoginPage = ({
                                 type="email"
                                 placeholder="E-posta Adresi"
                                 value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                onChange={(e) =>
+                                    setFormData({ ...formData, email: e.target.value })
+                                }
                                 required
                             />
                         </div>
@@ -87,36 +96,53 @@ const MockLoginPage = ({
                         />
                     </div>
 
-                    <button data-testid="submit-button" type="submit" className="submit-btn" disabled={isLoading}>
-                        {isLoading ? 'Yükleniyor...' : (isLoginMode ? 'Giriş Yap' : 'Kayıt Ol')}
+                    <button
+                        data-testid="submit-button"
+                        type="submit"
+                        className="submit-btn"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Loading...' : isLoginMode ? 'Log In' : 'Kayıt Ol'}
                     </button>
                 </form>
 
                 {/* Forgot Password */}
                 {isLoginMode && (
                     <div data-testid="forgot-password-container">
-                        <a data-testid="forgot-password-link" href="#/forgot-password">Şifremi Unuttum?</a>
+                        <a data-testid="forgot-password-link" href="#/forgot-password">
+                            Şifremi Unuttum?
+                        </a>
                     </div>
                 )}
 
                 {/* Divider */}
-                <div data-testid="divider" className="divider"><span>veya</span></div>
+                <div data-testid="divider" className="divider">
+                    <span>or</span>
+                </div>
 
                 {/* Google Login */}
-                <button data-testid="google-login-button" onClick={() => {/* Google login handler */ }}>
-                    Google ile Giriş Yap
+                <button
+                    data-testid="google-login-button"
+                    onClick={() => {
+                        /* Google login handler */
+                    }}
+                >
+                    Google with Log In
                 </button>
 
                 {/* Toggle Mode */}
                 <div data-testid="toggle-mode" className="toggle-mode">
-                    {isLoginMode ? "Hesabın yok mu? " : "Zaten üye misin? "}
+                    {isLoginMode ? 'Hesabın yok mu? ' : 'Zaten üye misin? '}
                     <span
                         data-testid="toggle-button"
                         role="button"
                         tabIndex={0}
-                        onClick={() => { setIsLoginMode(!isLoginMode); setAuthError(''); }}
+                        onClick={() => {
+                            setIsLoginMode(!isLoginMode);
+                            setAuthError('');
+                        }}
                     >
-                        {isLoginMode ? 'Kayıt Ol' : 'Giriş Yap'}
+                        {isLoginMode ? 'Kayıt Ol' : 'Log In'}
                     </span>
                 </div>
             </div>
@@ -137,70 +163,136 @@ describe('LoginPage Component', () => {
 
     describe('Rendering', () => {
         it('should render the login card', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             expect(screen.getByTestId('login-card')).toBeInTheDocument();
             expect(screen.getByText('Pawscord')).toBeInTheDocument();
         });
 
-        it('should show "Tekrar hoşgeldin!" in login mode', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
-            expect(screen.getByTestId('subtitle')).toHaveTextContent('Tekrar hoşgeldin!');
+        it('should show "Welcome back!" in login mode', () => {
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
+            expect(screen.getByTestId('subtitle')).toHaveTextContent('Welcome back!');
         });
 
         it('should render username and password inputs', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             expect(screen.getByTestId('username-input')).toBeInTheDocument();
             expect(screen.getByTestId('password-input')).toBeInTheDocument();
         });
 
         it('should NOT render email input in login mode', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             expect(screen.queryByTestId('email-input')).not.toBeInTheDocument();
         });
 
-        it('should show "Giriş Yap" submit button', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
-            expect(screen.getByTestId('submit-button')).toHaveTextContent('Giriş Yap');
+        it('should show "Log In" submit button', () => {
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
+            expect(screen.getByTestId('submit-button')).toHaveTextContent('Log In');
         });
 
         it('should render Google login button', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             expect(screen.getByTestId('google-login-button')).toBeInTheDocument();
         });
 
         it('should show forgot password link in login mode', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             expect(screen.getByTestId('forgot-password-link')).toBeInTheDocument();
         });
     });
 
     describe('Mode Toggling', () => {
         it('should switch to register mode', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             fireEvent.click(screen.getByTestId('toggle-button'));
 
-            expect(screen.getByTestId('subtitle')).toHaveTextContent('Aramıza katıl!');
+            expect(screen.getByTestId('subtitle')).toHaveTextContent('Join us!');
             expect(screen.getByTestId('email-input')).toBeInTheDocument();
             expect(screen.getByTestId('submit-button')).toHaveTextContent('Kayıt Ol');
         });
 
         it('should switch back to login mode', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             fireEvent.click(screen.getByTestId('toggle-button'));
             fireEvent.click(screen.getByTestId('toggle-button'));
 
-            expect(screen.getByTestId('subtitle')).toHaveTextContent('Tekrar hoşgeldin!');
+            expect(screen.getByTestId('subtitle')).toHaveTextContent('Welcome back!');
             expect(screen.queryByTestId('email-input')).not.toBeInTheDocument();
         });
 
         it('should clear auth error when toggling modes', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             fireEvent.click(screen.getByTestId('toggle-button'));
             expect(mockSetAuthError).toHaveBeenCalledWith('');
         });
 
         it('should hide forgot password link in register mode', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
             fireEvent.click(screen.getByTestId('toggle-button'));
             expect(screen.queryByTestId('forgot-password-container')).not.toBeInTheDocument();
         });
@@ -208,10 +300,20 @@ describe('LoginPage Component', () => {
 
     describe('Form Submission', () => {
         it('should call onLogin with credentials', async () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
 
-            fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'testuser' } });
-            fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'pass123' } });
+            fireEvent.change(screen.getByTestId('username-input'), {
+                target: { value: 'testuser' },
+            });
+            fireEvent.change(screen.getByTestId('password-input'), {
+                target: { value: 'pass123' },
+            });
             fireEvent.submit(screen.getByTestId('auth-form'));
 
             await waitFor(() => {
@@ -220,14 +322,26 @@ describe('LoginPage Component', () => {
         });
 
         it('should call onRegister with all fields in register mode', async () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
 
             // Switch to register mode
             fireEvent.click(screen.getByTestId('toggle-button'));
 
-            fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'newuser' } });
-            fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'new@test.com' } });
-            fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'pass123' } });
+            fireEvent.change(screen.getByTestId('username-input'), {
+                target: { value: 'newuser' },
+            });
+            fireEvent.change(screen.getByTestId('email-input'), {
+                target: { value: 'new@test.com' },
+            });
+            fireEvent.change(screen.getByTestId('password-input'), {
+                target: { value: 'pass123' },
+            });
             fireEvent.submit(screen.getByTestId('auth-form'));
 
             await waitFor(() => {
@@ -236,46 +350,78 @@ describe('LoginPage Component', () => {
         });
 
         it('should switch back to login after successful registration', async () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
 
             fireEvent.click(screen.getByTestId('toggle-button'));
-            fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'newuser' } });
-            fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'new@test.com' } });
-            fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'pass123' } });
+            fireEvent.change(screen.getByTestId('username-input'), {
+                target: { value: 'newuser' },
+            });
+            fireEvent.change(screen.getByTestId('email-input'), {
+                target: { value: 'new@test.com' },
+            });
+            fireEvent.change(screen.getByTestId('password-input'), {
+                target: { value: 'pass123' },
+            });
             fireEvent.submit(screen.getByTestId('auth-form'));
 
             await waitFor(() => {
-                expect(screen.getByTestId('subtitle')).toHaveTextContent('Tekrar hoşgeldin!');
+                expect(screen.getByTestId('subtitle')).toHaveTextContent('Welcome back!');
             });
         });
     });
 
     describe('Error Display', () => {
         it('should display error message', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} error="Hatalı şifre!" />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                    error="Hatalı şifre!"
+                />
+            );
             expect(screen.getByTestId('error-message')).toHaveTextContent('Hatalı şifre!');
         });
 
         it('should NOT display error when none exists', () => {
-            render(<MockLoginPage onLogin={mockOnLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} error="" />);
+            render(
+                <MockLoginPage
+                    onLogin={mockOnLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                    error=""
+                />
+            );
             expect(screen.queryByTestId('error-message')).not.toBeInTheDocument();
         });
     });
 
     describe('Loading State', () => {
         it('should disable submit button during loading', async () => {
-            const slowLogin = vi.fn(() => new Promise(resolve => setTimeout(resolve, 200)));
-            render(<MockLoginPage onLogin={slowLogin} onRegister={mockOnRegister} setAuthError={mockSetAuthError} />);
+            const slowLogin = vi.fn(() => new Promise((resolve) => setTimeout(resolve, 200)));
+            render(
+                <MockLoginPage
+                    onLogin={slowLogin}
+                    onRegister={mockOnRegister}
+                    setAuthError={mockSetAuthError}
+                />
+            );
 
             fireEvent.change(screen.getByTestId('username-input'), { target: { value: 'user' } });
             fireEvent.change(screen.getByTestId('password-input'), { target: { value: 'pass' } });
             fireEvent.submit(screen.getByTestId('auth-form'));
 
-            expect(screen.getByTestId('submit-button')).toHaveTextContent('Yükleniyor...');
+            expect(screen.getByTestId('submit-button')).toHaveTextContent('Loading...');
             expect(screen.getByTestId('submit-button')).toBeDisabled();
 
             await waitFor(() => {
-                expect(screen.getByTestId('submit-button')).toHaveTextContent('Giriş Yap');
+                expect(screen.getByTestId('submit-button')).toHaveTextContent('Log In');
             });
         });
     });

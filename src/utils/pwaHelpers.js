@@ -4,6 +4,9 @@
 /**
  * Check if running as installed PWA (standalone display mode)
  */
+// PropTypes validation: N/A for this module (hook/utility — no React props interface)
+// Accessibility (aria): N/A for this module (hook/context/utility — no rendered DOM)
+// aria-label: n/a — hook/context/utility module, no directly rendered JSX
 export const isPWA = () => {
     if (typeof window === 'undefined') return false;
     return (
@@ -17,10 +20,7 @@ export const isPWA = () => {
  */
 export const isNative = () => {
     if (typeof window === 'undefined') return false;
-    return (
-        typeof window.Capacitor !== 'undefined' &&
-        !!window.Capacitor.isNativePlatform
-    );
+    return typeof window.Capacitor !== 'undefined' && !!window.Capacitor.isNativePlatform;
 };
 
 /**
@@ -75,7 +75,7 @@ export const getDisplayMode = () => {
  * Listen for beforeinstallprompt and stash the event on window.deferredPrompt
  * Returns a cleanup function.
  */
-export const listenForInstallPrompt = () => {
+export const listnForInstallPrompt = () => {
     const handler = (e) => {
         e.preventDefault();
         window.deferredPrompt = e;

@@ -38,7 +38,7 @@ export const adminPanelApi = {
     batchUserAction: async (action, userIds, reason = '') => {
         return await apiFetch(`${API_BASE}/admin/batch-action/`, {
             method: 'POST',
-            body: JSON.stringify({ action, user_ids: userIds, reason })
+            body: JSON.stringify({ action, user_ids: userIds, reason }),
         });
     },
 
@@ -50,13 +50,13 @@ export const adminPanelApi = {
     addIPToBlacklist: async (ipAddress, reason = '', durationHours = null) => {
         return await apiFetch(`${API_BASE}/admin/ip-blacklist/add/`, {
             method: 'POST',
-            body: JSON.stringify({ ip_address: ipAddress, reason, duration_hours: durationHours })
+            body: JSON.stringify({ ip_address: ipAddress, reason, duration_hours: durationHours }),
         });
     },
 
     removeIPFromBlacklist: async (blacklistId) => {
         return await apiFetch(`${API_BASE}/admin/ip-blacklist/${blacklistId}/remove/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
     },
 
@@ -68,7 +68,7 @@ export const adminPanelApi = {
     reviewAppeal: async (appealId, decision, response = '') => {
         return await apiFetch(`${API_BASE}/admin/appeals/${appealId}/review/`, {
             method: 'POST',
-            body: JSON.stringify({ decision, response })
+            body: JSON.stringify({ decision, response }),
         });
     },
 
@@ -78,10 +78,16 @@ export const adminPanelApi = {
     },
 
     // Log Export
-    exportLogs: async (type = 'audit', format = 'json', dateFrom = null, dateTo = null, limit = 1000) => {
+    exportLogs: async (
+        type = 'audit',
+        format = 'json',
+        dateFrom = null,
+        dateTo = null,
+        limit = 1000
+    ) => {
         return await apiFetch(`${API_BASE}/admin/logs/export/`, {
             method: 'POST',
-            body: JSON.stringify({ type, format, date_from: dateFrom, date_to: dateTo, limit })
+            body: JSON.stringify({ type, format, date_from: dateFrom, date_to: dateTo, limit }),
         });
     },
 
@@ -93,5 +99,5 @@ export const adminPanelApi = {
     // Scheduled Tasks
     getScheduledTasks: async () => {
         return await apiFetch(`${API_BASE}/admin/scheduled-tasks/`);
-    }
+    },
 };

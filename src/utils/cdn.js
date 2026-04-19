@@ -1,5 +1,8 @@
+/* eslint-disable no-undef */
 import { getApiBase } from '../utils/apiEndpoints';
+import { getToken } from './tokenStorage';
 import { MEDIA_BASE_URL } from './constants';
+import logger from '../utils/logger';
 // frontend/src/utils/cdn.js
 // 🌐 CDN (Content Delivery Network) Integration - ENHANCED VERSION
 
@@ -18,7 +21,7 @@ const CDN_CONFIG = {
     enabled: import.meta.env.VITE_CDN_ENABLED === 'true',
     baseUrl: import.meta.env.VITE_CDN_URL || R2_CDN_URL,
     fallbackUrl: import.meta.env.VITE_BACKEND_URL || getApiBase().replace('/api', ''),
-    optimizeImages: true
+    optimizeImages: true,
 };
 
 /**
@@ -67,7 +70,7 @@ export const getCDNUrl = (url, options = {}) => {
  */
 const isImageUrl = (url) => {
     const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
-    return imageExts.some(ext => url.toLowerCase().includes(ext));
+    return imageExts.some((ext) => url.toLowerCase().includes(ext));
 };
 
 /**
@@ -107,9 +110,9 @@ export const uploadToCDN = async (file, folder = 'uploads') => {
         const response = await fetch(`${CDN_CONFIG.fallbackUrl}/api/cdn/upload/`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                Authorization: `Bearer ${getToken()}`,
             },
-            body: formData
+            body: formData,
         });
 
         if (!response.ok) {
@@ -119,7 +122,7 @@ export const uploadToCDN = async (file, folder = 'uploads') => {
         const data = await response.json();
         return data.url; // CDN URL
     } catch (error) {
-        console.error('CDN upload error:', error);
+        logger.error('CDN upload error:', error);
         throw error;
     }
 };
@@ -132,10 +135,10 @@ export const deleteFromCDN = async (fileUrl) => {
         const response = await fetch(`${CDN_CONFIG.fallbackUrl}/api/cdn/delete/`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${getToken()}`,
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ url: fileUrl })
+            body: JSON.stringify({ url: fileUrl }),
         });
 
         if (!response.ok) {
@@ -145,7 +148,7 @@ export const deleteFromCDN = async (fileUrl) => {
         const data = await response.json();
         return data.success;
     } catch (error) {
-        console.error('CDN delete error:', error);
+        logger.error('CDN delete error:', error);
         return false;
     }
 };
@@ -171,7 +174,7 @@ export const getAvatarUrl = (avatarPath, size = 128) => {
         width: size,
         height: size,
         quality: 90,
-        format: 'webp'
+        format: 'webp',
     });
 };
 
@@ -226,7 +229,7 @@ export const getCDNStatus = () => ({
     enabled: CDN_CONFIG.enabled,
     url: CDN_CONFIG.baseUrl,
     provider: import.meta.env.VITE_CDN_PROVIDER || 'cloudfront',
-    optimizeImages: CDN_CONFIG.optimizeImages
+    optimizeImages: CDN_CONFIG.optimizeImages,
 });
 
 export default {
@@ -241,9 +244,5 @@ export default {
     deleteFromCDN,
     isCDNEnabled,
     getCDNStatus,
-    CDN_CONFIG
+    CDN_CONFIG,
 };
-
-
-
-

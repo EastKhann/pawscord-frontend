@@ -28,3 +28,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Build/test output logs (should not be committed)
+*_log.txt
+*_out.txt
+*_err.txt
+*_output.txt
+test_final*.txt
+test_new_output*.txt
+test_out*.txt
+build_craco_log.txt
+build_log_new.txt
+electron_build_err.txt
+electron_build_out.txt

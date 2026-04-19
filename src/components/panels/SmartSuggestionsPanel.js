@@ -2,15 +2,38 @@
 // 🤖 Smart Suggestions - AI-powered message and action suggestions
 
 import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import {
-    FaTimes, FaRobot, FaLightbulb, FaReply, FaSmile,
-    FaHashtag, FaUserPlus, FaCopy, FaMagic, FaHistory,
-    FaChartLine, FaCommentAlt, FaSync, FaStar, FaCheck
+    FaTimes,
+    FaRobot,
+    FaLightbulb,
+    FaReply,
+    FaSmile,
+    FaHashtag,
+    FaUserPlus,
+    FaCopy,
+    FaMagic,
+    FaHistory,
+    FaChartLine,
+    FaCommentAlt,
+    FaSync,
+    FaStar,
+    FaCheck,
 } from 'react-icons/fa';
 import { getApiBase } from '../../utils/apiEndpoints';
 import './SmartSuggestionsPanel.css';
+import { useTranslation } from 'react-i18next';
+import logger from '../../utils/logger';
 
-const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, fetchWithAuth }) => {
+const SmartSuggestionsPanel = ({
+    serverId,
+    channelId,
+    onClose,
+    onUseSuggestion,
+    fetchWithAuth,
+}) => {
+    const { t } = useTranslation();
+
     const [suggestions, setSuggestions] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('replies');
@@ -19,7 +42,9 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
     const loadSuggestions = useCallback(async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${getApiBase()}/channels/${channelId}/suggestions/`);
+            const response = await fetchWithAuth(
+                `${getApiBase()}/channels/${channelId}/suggestions/`
+            );
             if (response.ok) {
                 const data = await response.json();
                 setSuggestions(data);
@@ -27,35 +52,70 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
                 // Fallback smart suggestions
                 setSuggestions({
                     quick_replies: [
-                        { id: 1, text: "That's a great idea! 🎉", confidence: 95, context: "Positive response" },
-                        { id: 2, text: "I'll look into that and get back to you.", confidence: 88, context: "Action commitment" },
-                        { id: 3, text: "Thanks for sharing! Very helpful.", confidence: 85, context: "Appreciation" },
-                        { id: 4, text: "Could you elaborate on that?", confidence: 82, context: "Clarification" },
-                        { id: 5, text: "Let me check the documentation first.", confidence: 78, context: "Investigation" }
+                        {
+                            id: 1,
+                            text: "That's a great idea! 🎉",
+                            confidence: 95,
+                            context: 'Positive response',
+                        },
+                        {
+                            id: 2,
+                            text: "I'll look into that and get back to you.",
+                            confidence: 88,
+                            context: 'Action commitment',
+                        },
+                        {
+                            id: 3,
+                            text: 'Thanks for sharing! Very helpful.',
+                            confidence: 85,
+                            context: 'Appreciation',
+                        },
+                        {
+                            id: 4,
+                            text: 'Could you elaborate on that?',
+                            confidence: 82,
+                            context: 'Clarification',
+                        },
+                        {
+                            id: 5,
+                            text: 'Let me check the documentation first.',
+                            confidence: 78,
+                            context: 'Investigation',
+                        },
                     ],
                     trending_topics: [
-                        { topic: "Server Events", mentions: 45, trend: 'up' },
-                        { topic: "Gaming Night", mentions: 38, trend: 'up' },
-                        { topic: "Music Playlist", mentions: 27, trend: 'stable' },
-                        { topic: "New Members", mentions: 23, trend: 'down' }
+                        { topic: 'Server Events', mentions: 45, trend: 'up' },
+                        { topic: 'Gaming Night', mentions: 38, trend: 'up' },
+                        { topic: 'Music Playlist', mentions: 27, trend: 'stable' },
+                        { topic: 'New Members', mentions: 23, trend: 'down' },
                     ],
                     suggested_emojis: ['👍', '🎉', '❤️', '🔥', '😂', '🙏', '💯', '✨'],
                     conversation_insights: {
                         sentiment: 'positive',
                         activity_level: 'high',
                         response_rate: 87,
-                        avg_response_time: '2.3 min'
+                        avg_response_time: '2.3 min',
                     },
                     smart_actions: [
-                        { id: 1, action: "Create a poll about this topic", icon: "poll", type: "engagement" },
-                        { id: 2, action: "Share relevant resources", icon: "share", type: "helpful" },
-                        { id: 3, action: "Invite related experts", icon: "invite", type: "growth" },
-                        { id: 4, action: "Pin important message", icon: "pin", type: "moderation" }
-                    ]
+                        {
+                            id: 1,
+                            action: 'Create a poll about this topic',
+                            icon: 'poll',
+                            type: 'engagement',
+                        },
+                        {
+                            id: 2,
+                            action: 'Share relevant resources',
+                            icon: 'share',
+                            type: 'helpful',
+                        },
+                        { id: 3, action: 'Invite related experts', icon: 'invite', type: 'growth' },
+                        { id: 4, action: 'Pin important message', icon: 'pin', type: 'moderation' },
+                    ],
                 });
             }
         } catch (error) {
-            console.error('Error loading suggestions:', error);
+            logger.error('Error loading suggestions:', error);
             setSuggestions({ quick_replies: [], trending_topics: [], suggested_emojis: [] });
         }
         setLoading(false);
@@ -80,10 +140,14 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
 
     const getSentimentColor = (sentiment) => {
         switch (sentiment) {
-            case 'positive': return '#10b981';
-            case 'neutral': return '#6b7280';
-            case 'negative': return '#f23f42';
-            default: return '#6b7280';
+            case 'positive':
+                return '#10b981';
+            case 'neutral':
+                return '#6b7280';
+            case 'negative':
+                return '#f23f42';
+            default:
+                return '#6b7280';
         }
     };
 
@@ -95,51 +159,90 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
 
     if (loading) {
         return (
-            <div className="smart-suggestions-overlay" onClick={onClose}>
-                <div className="smart-suggestions-panel" onClick={e => e.stopPropagation()}>
+            <div
+                aria-label="smart suggestions panel"
+                className="smart-suggestions-overlay"
+                role="button"
+                tabIndex={0}
+                onClick={onClose}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            >
+                <div
+                    className="smart-suggestions-panel"
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) =>
+                        (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                    }
+                >
                     <div className="loading-state">
                         <FaRobot className="pulse" />
-                        <span>Analyzing conversation...</span>
+                        <span>{t('analyzing_conversation')}</span>
                     </div>
                 </div>
             </div>
         );
     }
 
+    const sentimentStyle = {
+        color: getSentimentColor(suggestions?.conversation_insights?.sentiment),
+    };
+
     return (
-        <div className="smart-suggestions-overlay" onClick={onClose}>
-            <div className="smart-suggestions-panel" onClick={e => e.stopPropagation()}>
+        <div
+            className="smart-suggestions-overlay"
+            role="button"
+            tabIndex={0}
+            onClick={onClose}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+        >
+            <div
+                className="smart-suggestions-panel"
+                role="button"
+                tabIndex={0}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
+            >
                 {/* Header */}
                 <div className="panel-header">
                     <div className="header-info">
-                        <h2><FaRobot /> Smart Suggestions</h2>
-                        <span className="powered-by">Powered by AI</span>
+                        <h2>
+                            <FaRobot />
+                            {t('smart_suggestions')}
+                        </h2>
+                        <span className="powered-by">{t('powered_by_ai')}</span>
                     </div>
-                    <button className="close-btn" onClick={onClose}><FaTimes /></button>
+                    <button className="close-btn" onClick={onClose}>
+                        <FaTimes />
+                    </button>
                 </div>
 
                 {/* Conversation Insights */}
                 <div className="insights-bar">
                     <div className="insight">
-                        <span className="insight-label">Sentiment</span>
-                        <span
-                            className="insight-value sentiment"
-                            style={{ color: getSentimentColor(suggestions?.conversation_insights?.sentiment) }}
-                        >
+                        <span className="insight-label">{t('sentiment')}</span>
+                        <span className="insight-value sentiment" style={sentimentStyle}>
                             {suggestions?.conversation_insights?.sentiment || 'neutral'}
                         </span>
                     </div>
                     <div className="insight">
-                        <span className="insight-label">Activity</span>
-                        <span className="insight-value">{suggestions?.conversation_insights?.activity_level || 'normal'}</span>
+                        <span className="insight-label">{t('activity_label')}</span>
+                        <span className="insight-value">
+                            {suggestions?.conversation_insights?.activity_level || 'normal'}
+                        </span>
                     </div>
                     <div className="insight">
-                        <span className="insight-label">Response Rate</span>
-                        <span className="insight-value">{suggestions?.conversation_insights?.response_rate || 0}%</span>
+                        <span className="insight-label">{t('response_rate')}</span>
+                        <span className="insight-value">
+                            {suggestions?.conversation_insights?.response_rate || 0}%
+                        </span>
                     </div>
                     <div className="insight">
-                        <span className="insight-label">Avg. Response</span>
-                        <span className="insight-value">{suggestions?.conversation_insights?.avg_response_time || 'N/A'}</span>
+                        <span className="insight-label">{t('avg_response')}</span>
+                        <span className="insight-value">
+                            {suggestions?.conversation_insights?.avg_response_time || 'N/A'}
+                        </span>
                     </div>
                 </div>
 
@@ -171,14 +274,17 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
                         <div className="replies-tab">
                             {/* Quick Emojis */}
                             <div className="emoji-bar">
-                                <span className="emoji-label"><FaSmile /> Quick Reactions:</span>
+                                <span className="emoji-label">
+                                    <FaSmile />
+                                    {t('quick_reactions')}
+                                </span>
                                 <div className="emoji-list">
                                     {(suggestions?.suggested_emojis || []).map((emoji, index) => (
                                         <button
-                                            key={index}
+                                            key={`item-${index}`}
                                             className="emoji-btn"
                                             onClick={() => handleUseSuggestion(emoji)}
-                                            title="Click to use"
+                                            title={t('click_to_use')}
                                         >
                                             {emoji}
                                         </button>
@@ -188,7 +294,10 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
 
                             {/* Quick Replies */}
                             <div className="replies-list">
-                                <h4><FaLightbulb /> Suggested Replies</h4>
+                                <h4>
+                                    <FaLightbulb />
+                                    {t('suggested_replies')}
+                                </h4>
                                 {(suggestions?.quick_replies || []).map((reply) => (
                                     <div key={reply.id} className="reply-item">
                                         <div className="reply-content">
@@ -204,14 +313,14 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
                                             <button
                                                 className="action-btn copy"
                                                 onClick={() => handleCopy(reply.text, reply.id)}
-                                                title="Copy to clipboard"
+                                                title={t('copy_to_clipboard')}
                                             >
                                                 {copiedId === reply.id ? <FaCheck /> : <FaCopy />}
                                             </button>
                                             <button
                                                 className="action-btn use"
                                                 onClick={() => handleUseSuggestion(reply.text)}
-                                                title="Use this reply"
+                                                title={t('use_this_reply')}
                                             >
                                                 <FaReply />
                                             </button>
@@ -224,20 +333,26 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
 
                     {activeTab === 'topics' && (
                         <div className="topics-tab">
-                            <h4><FaHashtag /> Trending Topics in This Channel</h4>
+                            <h4>
+                                <FaHashtag />
+                                {t('trending_topics_in_this_channel')}
+                            </h4>
                             <div className="topics-list">
                                 {(suggestions?.trending_topics || []).map((topic, index) => (
-                                    <div key={index} className="topic-item">
+                                    <div key={`item-${index}`} className="topic-item">
                                         <span className="topic-rank">{index + 1}</span>
                                         <div className="topic-info">
                                             <span className="topic-name">{topic.topic}</span>
-                                            <span className="topic-mentions">{topic.mentions} mentions</span>
+                                            <span className="topic-mentions">
+                                                {topic.mentions} mentions
+                                            </span>
                                         </div>
                                         {getTrendIcon(topic.trend)}
                                     </div>
                                 ))}
-                                {(!suggestions?.trending_topics || suggestions.trending_topics.length === 0) && (
-                                    <div className="empty-state">No trending topics yet</div>
+                                {(!suggestions?.trending_topics ||
+                                    suggestions.trending_topics.length === 0) && (
+                                    <div className="empty-state">{t('no_trending_topics_yet')}</div>
                                 )}
                             </div>
                         </div>
@@ -245,7 +360,10 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
 
                     {activeTab === 'actions' && (
                         <div className="actions-tab">
-                            <h4><FaMagic /> Recommended Actions</h4>
+                            <h4>
+                                <FaMagic />
+                                {t('recommended_actions')}
+                            </h4>
                             <div className="actions-list">
                                 {(suggestions?.smart_actions || []).map((action) => (
                                     <div key={action.id} className={`action-item ${action.type}`}>
@@ -256,14 +374,20 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
                                             {action.icon === 'pin' && <FaStar />}
                                         </div>
                                         <span className="action-text">{action.action}</span>
-                                        <span className={`action-type ${action.type}`}>{action.type}</span>
+                                        <span className={`action-type ${action.type}`}>
+                                            {action.type}
+                                        </span>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="ai-tip">
                                 <FaRobot />
-                                <span>These suggestions are based on conversation patterns and community engagement metrics.</span>
+                                <span>
+                                    {t(
+                                        'these_suggestions_are_based_on_conversation_patterns_and_com'
+                                    )}
+                                </span>
                             </div>
                         </div>
                     )}
@@ -273,4 +397,11 @@ const SmartSuggestionsPanel = ({ serverId, channelId, onClose, onUseSuggestion, 
     );
 };
 
+SmartSuggestionsPanel.propTypes = {
+    serverId: PropTypes.string,
+    channelId: PropTypes.string,
+    onClose: PropTypes.func,
+    onUseSuggestion: PropTypes.func,
+    fetchWithAuth: PropTypes.func,
+};
 export default SmartSuggestionsPanel;

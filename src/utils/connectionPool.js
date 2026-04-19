@@ -1,3 +1,5 @@
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/connectionPool.js
 
 /**
@@ -22,7 +24,7 @@ class ConnectionPoolManager {
             completedRequests: 0,
             failedRequests: 0,
             timeouts: 0,
-            connectionReuses: 0
+            connectionReuses: 0,
         };
     }
 
@@ -34,7 +36,7 @@ class ConnectionPoolManager {
             this.pools.set(origin, {
                 connections: [],
                 activeConnections: 0,
-                lastActivity: Date.now()
+                lastActivity: Date.now(),
             });
         }
         return this.pools.get(origin);
@@ -77,13 +79,13 @@ class ConnectionPoolManager {
             ...options,
             signal: controller.signal,
             // Enable keep-alive
-            keepalive: true
+            keepalive: true,
         };
 
         try {
             this.activeRequests.set(requestId, {
                 url,
-                startTime: Date.now()
+                startTime: Date.now(),
             });
 
             const response = await fetch(url, requestOptions);
@@ -101,12 +103,10 @@ class ConnectionPoolManager {
             }
 
             return response;
-
         } catch (error) {
             clearTimeout(timeoutId);
             this.stats.failedRequests++;
             throw error;
-
         } finally {
             pool.activeConnections--;
             this.stats.activeConnections--;
@@ -129,7 +129,7 @@ class ConnectionPoolManager {
                 options,
                 resolve,
                 reject,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             });
 
             if (import.meta.env.MODE === 'development') {
@@ -161,19 +161,19 @@ class ConnectionPoolManager {
      * Batch requests
      */
     async batchFetch(urls, options = {}) {
-        const promises = urls.map(url => this.fetch(url, options));
+        const promises = urls.map((url) => this.fetch(url, options));
         return Promise.all(promises);
     }
 
     /**
-     * Parallel requests with limit
+     * Pparallel requests with limit
      */
-    async parallelFetch(urls, options = {}, concurrency = 3) {
+    async pparallelFetch(urls, options = {}, concurrency = 3) {
         const results = [];
         const executing = [];
 
         for (const url of urls) {
-            const promise = this.fetch(url, options).then(response => {
+            const promise = this.fetch(url, options).then((response) => {
                 executing.splice(executing.indexOf(promise), 1);
                 return response;
             });
@@ -209,7 +209,7 @@ class ConnectionPoolManager {
                     resolve,
                     reject,
                     timestamp: Date.now(),
-                    priority
+                    priority,
                 });
             });
         }
@@ -221,7 +221,7 @@ class ConnectionPoolManager {
      * Warm up connections
      */
     warmUp(origins = []) {
-        origins.forEach(origin => {
+        origins.forEach((origin) => {
             // Create empty request to establish connection
             const img = new Image();
             img.src = `${origin}/favicon.ico?warm=${Date.now()}`;
@@ -242,11 +242,11 @@ class ConnectionPoolManager {
                 await this.fetch(resource.url, {
                     ...resource.options,
                     // Low priority fetch
-                    priority: 'low'
+                    priority: 'low',
                 });
             } catch (error) {
                 if (import.meta.env.MODE === 'development') {
-                    console.warn(`⚠️ [ConnectionPool] Prefetch failed: ${resource.url}`, error);
+                    logger.warn(`⚠️ [ConnectionPool] Prefetch failed: ${resource.url}`, error);
                 }
             }
         }
@@ -290,7 +290,7 @@ class ConnectionPoolManager {
      * Cancel all pending requests
      */
     cancelAll() {
-        this.requestQueue.forEach(queued => {
+        this.requestQueue.forEach((queued) => {
             queued.reject(new Error('Request cancelled'));
         });
         this.requestQueue = [];
@@ -305,9 +305,12 @@ class ConnectionPoolManager {
             ...this.stats,
             activePools: this.pools.size,
             queueLength: this.requestQueue.length,
-            reuseRate: this.stats.completedRequests > 0
-                ? (this.stats.connectionReuses / this.stats.completedRequests * 100).toFixed(2) + '%'
-                : '0%'
+            reuseRate:
+                this.stats.completedRequests > 0
+                    ? ((this.stats.connectionReuses / this.stats.completedRequests) * 100).toFixed(
+                          2
+                      ) + '%'
+                    : '0%',
         };
     }
 
@@ -322,7 +325,7 @@ class ConnectionPoolManager {
             completedRequests: 0,
             failedRequests: 0,
             timeouts: 0,
-            connectionReuses: 0
+            connectionReuses: 0,
         };
     }
 }
@@ -332,7 +335,7 @@ export const connectionPool = new ConnectionPoolManager({
     maxConnections: 6,
     maxConnectionsPerOrigin: 6,
     keepAliveTimeout: 60000,
-    requestTimeout: 30000
+    requestTimeout: 30000,
 });
 
 // Start periodic cleanup
@@ -388,5 +391,3 @@ export const usePooledFetch = (url, options = {}) => {
 };
 
 export default ConnectionPoolManager;
-
-

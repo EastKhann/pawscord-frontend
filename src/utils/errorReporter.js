@@ -1,3 +1,5 @@
+import logger from '../utils/logger';
+import { API_BASE_URL } from '../utils/apiEndpoints';
 // frontend/src/utils/errorReporter.js
 // 📢 Centralized error reporting — captures, logs, and stores client errors
 
@@ -25,7 +27,7 @@ class ErrorReporter {
         };
 
         // Console output for dev visibility
-        console.error('[ErrorReporter]', entry.message, context);
+        logger.error('[ErrorReporter]', entry.message, context);
 
         this.capturedErrors.push(entry);
 
@@ -76,7 +78,7 @@ class ErrorReporter {
      */
     static _sendToBackend(entry) {
         // Future: POST to /api/client-errors/
-        // fetch('/api/client-errors/', {
+        // fetch(`${API_BASE_URL}/client-errors/`, {
         //   method: 'POST',
         //   headers: { 'Content-Type': 'application/json' },
         //   body: JSON.stringify(entry),

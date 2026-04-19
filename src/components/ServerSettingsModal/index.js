@@ -1,3 +1,4 @@
+export { default } from '../server/ServerSettingsModal';
 // Barrel export for ServerSettingsModal
 export { default as AuditLogTab } from './AuditLogTab';
 export { default as BansTab } from './BansTab';

@@ -1,10 +1,11 @@
 /**
- * 🎣 Custom Performance Hooks
- * 
+ * 🎣 Custom Thuformance Hooks
+ *
  * React hooks for performance optimization
  */
 
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import logger from '../utils/logger';
 
 /**
  * Debounce hook - rapid fire events için
@@ -66,7 +67,7 @@ export function useIntersectionObserver(options = {}) {
             {
                 threshold: 0.1,
                 rootMargin: '50px',
-                ...options
+                ...options,
             }
         );
 
@@ -134,7 +135,7 @@ export function useLocalStorage(key, initialValue) {
             const item = window.localStorage.getItem(key);
             return item ? JSON.parse(item) : initialValue;
         } catch (error) {
-            console.error('useLocalStorage error:', error);
+            logger.error('useLocalStorage error:', error);
             return initialValue;
         }
     });
@@ -146,7 +147,7 @@ export function useLocalStorage(key, initialValue) {
                 setStoredValue(valueToStore);
                 window.localStorage.setItem(key, JSON.stringify(valueToStore));
             } catch (error) {
-                console.error('useLocalStorage setValue error:', error);
+                logger.error('useLocalStorage setValue error:', error);
             }
         },
         [key, storedValue]
@@ -213,14 +214,14 @@ export function useAsyncEffect(effect, deps) {
 export function useWindowSize() {
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
     });
 
     useEffect(() => {
         const handleResize = () => {
             setWindowSize({
                 width: window.innerWidth,
-                height: window.innerHeight
+                height: window.innerHeight,
             });
         };
 
@@ -270,7 +271,7 @@ export function useBatteryStatus() {
                     level: batteryManager.level,
                     charging: batteryManager.charging,
                     chargingTime: batteryManager.chargingTime,
-                    dischargingTime: batteryManager.dischargingTime
+                    dischargingTime: batteryManager.dischargingTime,
                 });
             };
 
@@ -383,7 +384,5 @@ export default {
     useRenderCount,
     useUpdateEffect,
     useTimeout,
-    useInterval
+    useInterval,
 };
-
-

@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/notifications.js
 /**
  * Desktop Push Notifications System
@@ -15,7 +16,7 @@ class NotificationManager {
      */
     async requestPermission() {
         if (!('Notification' in window)) {
-            console.warn('This browser does not support notifications');
+            logger.warn('This browser does not support notifications');
             return false;
         }
 
@@ -39,7 +40,7 @@ class NotificationManager {
      */
     show(title, options = {}) {
         if (!this.enabled || this.permission !== 'granted') {
-            console.warn('Notifications not enabled');
+            logger.warn('Notifications not enabled');
             return null;
         }
 
@@ -51,7 +52,7 @@ class NotificationManager {
             requireInteraction: options.requireInteraction || false,
             silent: options.silent || false,
             data: options.data || {},
-            ...options
+            ...options,
         });
 
         // Auto-close after 5 seconds if not requireInteraction
@@ -80,7 +81,7 @@ class NotificationManager {
             icon: avatar,
             tag: `message-${messageId}`,
             data: { type: 'message', messageId, username, roomName },
-            requireInteraction: false
+            requireInteraction: false,
         });
     }
 
@@ -94,7 +95,7 @@ class NotificationManager {
             tag: `mention-${messageId}`,
             data: { type: 'mention', messageId, username, roomName },
             requireInteraction: true,
-            silent: false
+            silent: false,
         });
     }
 
@@ -107,7 +108,7 @@ class NotificationManager {
             icon: avatar,
             tag: `dm-${username}`,
             data: { type: 'dm', messageId, username },
-            requireInteraction: true
+            requireInteraction: true,
         });
     }
 
@@ -121,7 +122,7 @@ class NotificationManager {
             tag: `call-${roomName}`,
             data: { type: 'call', username, roomName },
             requireInteraction: true,
-            silent: false
+            silent: false,
         });
     }
 
@@ -133,7 +134,7 @@ class NotificationManager {
             body: `"${eventTitle}" starts in ${startsIn}`,
             tag: `event-${eventTitle}`,
             data: { type: 'event', eventTitle },
-            requireInteraction: true
+            requireInteraction: true,
         });
     }
 
@@ -156,6 +157,3 @@ class NotificationManager {
 const notificationManager = new NotificationManager();
 
 export default notificationManager;
-
-
-

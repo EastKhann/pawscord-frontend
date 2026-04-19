@@ -1,0 +1,93 @@
+{
+  "generated": "2026-04-14T10:00:32.248Z",
+  "overall_score": 6.18,
+  "out_of": 10,
+  "total_sections": 11,
+  "total_screenshots": 18,
+  "sections": {
+    "dm_list": {
+      "score": 7,
+      "notes": "0 DM items in list",
+      "screenshots": [
+        "B7_dm_area"
+      ]
+    },
+    "message_context_menu": {
+      "score": 5,
+      "notes": "No messages in view (normal for empty test data)",
+      "screenshots": [
+        "B8_initial"
+      ]
+    },
+    "settings_modal": {
+      "score": 6,
+      "notes": "Settings opened=true, 0 tabs found",
+      "screenshots": [
+        "B9_settings_main"
+      ]
+    },
+    "server_settings": {
+      "score": 5,
+      "notes": "Server settings: opened=false, 0 tabs",
+      "screenshots": [
+        "B10_server_dropdown",
+        "B10_server_settings_modal"
+      ]
+    },
+    "voice_channel": {
+      "score": 5,
+      "notes": "No voice channels (empty test data)",
+      "screenshots": [
+        "B11_no_voice"
+      ]
+    },
+    "notifications": {
+      "score": 5,
+      "notes": "Notification panel opened=false",
+      "screenshots": [
+        "B12_initial",
+        "B12_notifications_panel"
+      ]
+    },
+    "premium_store": {
+      "score": 7,
+      "notes": "Store opened=true",
+      "screenshots": [
+        "B13_premium_store"
+      ]
+    },
+    "mobile_layout": {
+      "score": 8,
+      "notes": "Mobile: 4 bottom nav tabs",
+      "screenshots": [
+        "B14_mobile_layout",
+        "B14_mobile_tab___Chats",
+        "B14_mobile_tab___Servers",
+        "B14_mobile_tab___Friends",
+        "B14_mobile_tab___Profile",
+        "B14_mobile_sidebar_open"
+      ]
+    },
+    "tablet_layout": {
+      "score": 7,
+      "notes": "Tablet viewport screenshot captured",
+      "screenshots": [
+        "B15_tablet_layout"
+      ]
+    },
+    "dark_theme": {
+      "score": 6,
+      "notes": "Background: rgb(11, 14, 27)",
+      "screenshots": [
+        "B16_dark_theme"
+      ]
+    },
+    "error_handling": {
+      "score": 7,
+      "notes": "404=false, errorBoundary=false, redirected=false",
+      "screenshots": [
+        "B17_unknown_route"
+      ]
+    }
+  }
+}

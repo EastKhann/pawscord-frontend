@@ -1,6 +1,17 @@
-import React from 'react';
-import { FaShieldAlt, FaBan, FaCheck, FaExclamationTriangle, FaEye, FaClock, FaLock, FaUnlock } from 'react-icons/fa';
+﻿import React from 'react';
+import PropTypes from 'prop-types';
+import {
+    FaShieldAlt,
+    FaBan,
+    FaCheck,
+    FaExclamationTriangle,
+    FaEye,
+    FaClock,
+    FaLock,
+    FaUnlock,
+} from 'react-icons/fa';
 import { getActivityIcon, getActivityColor, formatTime } from './useRaidProtectionDashboard';
+import { useTranslation } from 'react-i18next';
 
 const OverviewView = ({
     protectionStatus,
@@ -8,24 +19,26 @@ const OverviewView = ({
     recentActivity,
     activityRef,
     handleToggleProtection,
-    handleLockdown
+    handleLockdown,
 }) => {
+    const { t } = useTranslation();
+
     return (
-        <div className="overview-view">
+        <div aria-label="overview view" className="overview-view">
             <div className="quick-actions">
                 <button
                     className={`action-btn ${protectionStatus.enabled ? 'enabled' : ''}`}
                     onClick={handleToggleProtection}
                 >
                     <FaShieldAlt />
-                    {protectionStatus.enabled ? 'Korumayı Kapat' : 'Korumayı Aç'}
+                    {protectionStatus.enabled ? t('ui.korumayi_close') : 'Korumayı Aç'}
                 </button>
                 <button
                     className={`action-btn lockdown ${protectionStatus.lockdown_active ? 'active' : ''}`}
                     onClick={handleLockdown}
                 >
                     {protectionStatus.lockdown_active ? <FaUnlock /> : <FaLock />}
-                    {protectionStatus.lockdown_active ? 'Kilidi Aç' : 'Sunucuyu Kilitle'}
+                    {protectionStatus.lockdown_active ? 'Kilidi Open' : 'Serveryu Kilitle'}
                 </button>
             </div>
 
@@ -36,7 +49,7 @@ const OverviewView = ({
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.blocked_today}</span>
-                        <span className="stat-label">Bugün Engellenen</span>
+                        <span className="stat-label">{t('today_blocknen')}</span>
                     </div>
                 </div>
                 <div className="stat-card">
@@ -45,7 +58,7 @@ const OverviewView = ({
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.verified_today}</span>
-                        <span className="stat-label">Bugün Doğrulanan</span>
+                        <span className="stat-label">{t('today_doğrulanan')}</span>
                     </div>
                 </div>
                 <div className="stat-card">
@@ -54,7 +67,7 @@ const OverviewView = ({
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.raids_detected}</span>
-                        <span className="stat-label">Tespit Edilen Raid</span>
+                        <span className="stat-label">{t('tespit_edilen_raid')}</span>
                     </div>
                 </div>
                 <div className="stat-card">
@@ -63,18 +76,21 @@ const OverviewView = ({
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.suspicious_accounts}</span>
-                        <span className="stat-label">Şüpheli Hesap</span>
+                        <span className="stat-label">{t('şüpheli_hesap')}</span>
                     </div>
                 </div>
             </div>
 
             <div className="activity-section">
-                <h3><FaClock /> Canlı Aktivite</h3>
+                <h3>
+                    <FaClock />
+                    {t('canlı_aktivite')}
+                </h3>
                 <div className="activity-feed" ref={activityRef}>
                     {recentActivity.length > 0 ? (
                         recentActivity.map((activity, idx) => (
                             <div
-                                key={idx}
+                                key={`item-${idx}`}
                                 className="activity-item"
                                 style={{ borderLeftColor: getActivityColor(activity.type) }}
                             >
@@ -92,7 +108,7 @@ const OverviewView = ({
                         ))
                     ) : (
                         <div className="no-activity">
-                            <p>Henüz aktivite yok</p>
+                            <p>{t('not_yet_aktivite_yok')}</p>
                         </div>
                     )}
                 </div>
@@ -101,4 +117,12 @@ const OverviewView = ({
     );
 };
 
+OverviewView.propTypes = {
+    protectionStatus: PropTypes.func,
+    stats: PropTypes.array,
+    recentActivity: PropTypes.object,
+    activityRef: PropTypes.object,
+    handleToggleProtection: PropTypes.func,
+    handleLockdown: PropTypes.func,
+};
 export default OverviewView;

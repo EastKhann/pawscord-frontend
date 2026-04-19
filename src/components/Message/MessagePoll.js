@@ -1,7 +1,19 @@
-// frontend/src/components/Message/MessagePoll.js
+﻿// frontend/src/components/Message/MessagePoll.js
 // 📊 MESSAGE POLL - Poll display and voting
 
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
+import logger from '../../utils/logger';
+
+
+const S = {
+  txt2: {fontSize: '0.75em', color: '#949ba4', marginTop: 5},
+  font: {zIndex: 3, fontWeight: 'bold'},
+  zIndex: {zIndex: 3, textShadow: '0 1px 2px rgba(0,0,0,0.5)'},
+  rel: {position: 'relative', marginBottom: 6},
+  txt: {fontSize: '0.8em', color: '#b5bac1', marginBottom: 8},
+  mar: {marginTop: 0, marginBottom: 10},
+};
 
 export const MessagePoll = memo(({
     poll,
@@ -9,6 +21,7 @@ export const MessagePoll = memo(({
     fetchWithAuth,
     absoluteHostUrl
 }) => {
+    const [isLoading, setIsLoading] = useState(false);
     if (!poll) return null;
 
     const handleVote = useCallback(async (optionId) => {
@@ -18,15 +31,15 @@ export const MessagePoll = memo(({
                 body: JSON.stringify({ option_id: optionId })
             });
         } catch (error) {
-            console.error("Oy hatası:", error);
+            logger.error('Vote error:', error);
         }
     }, [poll.id, fetchWithAuth, absoluteHostUrl]);
 
     return (
         <div style={styles.pollContainer}>
-            <h4 style={{ marginTop: 0, marginBottom: 10 }}>{poll.question}</h4>
-            <div style={{ fontSize: '0.8em', color: '#b5bac1', marginBottom: 8 }}>
-                {poll.allow_multiple_votes ? 'Çoklu Seçim' : 'Tek Seçim'} • {poll.total_votes || 0} Oy
+            <h4 style={S.mar}>{poll.question}</h4>
+            <div style={S.txt}>
+                {poll.allow_multiple_votes ? 'Multiple Choice' : 'Single Choice'} • {poll.total_votes || 0} Votes
             </div>
 
             {poll.options.map(opt => {
@@ -35,8 +48,9 @@ export const MessagePoll = memo(({
                 const percent = total > 0 ? Math.round((opt.vote_count / total) * 100) : 0;
 
                 return (
-                    <div key={opt.id} style={{ position: 'relative', marginBottom: 6 }}>
+                    <div key={opt.id} style={S.rel}>
                         <button
+                            aria-label="Vote"
                             onClick={() => handleVote(opt.id)}
                             style={{
                                 ...styles.pollOption,
@@ -44,10 +58,10 @@ export const MessagePoll = memo(({
                                 border: voted ? '1px solid #5865f2' : '1px solid transparent',
                             }}
                         >
-                            <span style={{ zIndex: 3, textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+                            <span style={S.zIndex}>
                                 {opt.text}
                             </span>
-                            <span style={{ zIndex: 3, fontWeight: 'bold' }}>
+                            <span style={S.font}>
                                 {opt.vote_count} ({percent}%)
                             </span>
 
@@ -63,11 +77,11 @@ export const MessagePoll = memo(({
                         </button>
                     </div>
                 );
-            })}
+            })}>
 
             {poll.expires_at && (
-                <div style={{ fontSize: '0.75em', color: '#949ba4', marginTop: 5 }}>
-                    Bitiş: {new Date(poll.expires_at).toLocaleString()}
+                <div style={S.txt2}>
+                    Ends: {new Date(poll.expires_at).toLocaleString()}
                 </div>
             )}
         </div>
@@ -102,4 +116,10 @@ const styles = {
 };
 
 MessagePoll.displayName = 'MessagePoll';
+MessagePoll.propTypes = {
+    poll: PropTypes.object,
+    onVote: PropTypes.func,
+    fetchWithAuth: PropTypes.func,
+    absoluteHostUrl: PropTypes.string,
+};
 export default MessagePoll;

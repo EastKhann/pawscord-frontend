@@ -1,148 +1,196 @@
-﻿// frontend/src/components/ChannelSettingsModal/PermissionsTab.js
+/* eslint-disable no-irregular-whitespace */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+// frontend/src/components/ChannelSettingsModal/PermissionsTab.js
 
 import { FaUserShield, FaPlus, FaLock } from 'react-icons/fa';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import styles from './styles';
+import css from './ChannelTabs.module.css';
+
+const S = {
+    txt2: { color: '#fff', fontSize: '0.95em' },
+    bg: {
+        background: '#0d0e10',
+        borderRadius: '6px',
+        marginTop: '8px',
+        maxHeight: '200px',
+        overflowY: 'auto',
+        border: '1px solid #4e5058',
+    },
+    txt: { color: '#fff', marginBottom: '15px' },
+    font: { fontSize: '0.85em' },
+    mar: { opacity: 0.3, marginBottom: '10px' },
+};
 
 const PermissionsTab = ({
     permissions,
-    showAddPermission, setShowAddPermission,
-    permissionType, setPermissionType,
-    selectedRoleForPerm, setSelectedRoleForPerm,
-    selectedUserForPerm, setSelectedUserForPerm,
-    searchUser, setSearchUser,
-    searchResults, setSearchResults,
+    showAddPermission,
+    setShowAddPermission,
+    permissionType,
+    setPermissionType,
+    selectedRoleForThum,
+    setSelectedRoleForThum,
+    selectedUserForThum,
+    setSelectedUserForThum,
+    searchUser,
+    setSearchUser,
+    searchResults,
+    setSearchResults,
     searchUsers,
     removePermission,
-    addPermission
+    addPermission,
 }) => {
+    const { t } = useTranslation();
     return (
         <>
             <div style={styles.permissionsHeader}>
-                <h4 style={{ margin: 0, color: '#fff' }}>
-                    <FaUserShield /> Kanal İzinleri
+                <h4 className={css.headingWhite}>
+                    <FaUserShield /> Channel Permissions
                 </h4>
-                <button onClick={() => setShowAddPermission(true)} style={styles.addPermBtn}>
+                <button
+                    aria-label="Add permission"
+                    onClick={() => setShowAddPermission(true)}
+                    style={styles.addThumBtn}
+                >
                     <FaPlus /> İzin Ekle
                 </button>
             </div>
 
-            {/* Rol İzinleri */}
+            {/* Role İzinleri */}
             {permissions.role_permissions?.length > 0 && (
                 <div style={styles.permSection}>
-                    <h5 style={{ color: '#b5bac1', fontSize: '0.9em', marginBottom: '10px' }}>ROL İZİNLERİ</h5>
-                    {permissions.role_permissions.map(perm => (
+                    <h5 className={css.sectionTitle}>{t('role_permissions')}</h5>
+                    {permissions.role_permissions.map((perm) => (
                         <div key={perm.id} style={styles.permissionItem}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: perm.role_color }}></div>
-                                <span style={{ fontWeight: 'bold' }}>{perm.role_name}</span>
+                            <div className={css.flexAlignGap10}>
+                                <div
+                                    style={{
+                                        width: 12,
+                                        height: 12,
+                                        borderRadius: '50%',
+                                        backgroundColor: perm.role_color,
+                                    }}
+                                ></div>
+                                <span className={css.bold}>{perm.role_name}</span>
                             </div>
-                            <div style={{ fontSize: '0.85em', color: '#949ba4', marginTop: '5px' }}>
-                                {perm.can_view && '👁 Görüntüle '}
+                            <div className={css.permissionMeta}>
+                                {perm.can_view && '👁 View '}
                                 {perm.can_send_messages && '✏️ Mesaj '}
-                                {perm.can_connect && '🎤 Bağlan '}
-                                {perm.can_speak && '🔊 Konuş '}
+                                {perm.can_connect && '🎤 Connect '}
+                                {perm.can_speak && t('ui.konus')}
                             </div>
-                            <button onClick={() => removePermission(perm.id)} style={styles.removeBtn}>Kaldır</button>
+                            <button
+                                onClick={() => removePermission(perm.id)}
+                                style={styles.removeBtn}
+                            >
+                                {t('remove')}
+                            </button>
                         </div>
                     ))}
                 </div>
             )}
 
-            {/* Kullanıcı İzinleri */}
+            {/* User İzinleri */}
             {permissions.user_permissions?.length > 0 && (
                 <div style={styles.permSection}>
-                    <h5 style={{ color: '#b5bac1', fontSize: '0.9em', marginBottom: '10px' }}>KULLANICI İZİNLERİ</h5>
-                    {permissions.user_permissions.map(perm => (
+                    <h5 className={css.sectionTitle}>{t('user_permissions')}</h5>
+                    {permissions.user_permissions.map((perm) => (
                         <div key={perm.id} style={styles.permissionItem}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div className={css.flexAlignGap10}>
                                 <img
                                     src={perm.avatar || '/default-avatar.png'}
                                     alt={perm.username}
-                                    style={{ width: 24, height: 24, borderRadius: '50%' }}
+                                    className={css.avatar24}
                                 />
                                 <span>{perm.username}</span>
                             </div>
-                            <div style={{ fontSize: '0.85em', color: '#949ba4', marginTop: '5px' }}>
-                                {perm.can_view && '👁 Görüntüle '}
+                            <div className={css.permissionMeta}>
+                                {perm.can_view && '👁 View '}
                                 {perm.can_send_messages && '✏️ Mesaj '}
-                                {perm.can_connect && '🎤 Bağlan '}
+                                {perm.can_connect && '🎤 Connect '}
                             </div>
-                            <button onClick={() => removePermission(perm.id)} style={styles.removeBtn}>Kaldır</button>
+                            <button
+                                onClick={() => removePermission(perm.id)}
+                                style={styles.removeBtn}
+                            >
+                                {t('remove')}
+                            </button>
                         </div>
                     ))}
                 </div>
             )}
 
-            {permissions.role_permissions?.length === 0 && permissions.user_permissions?.length === 0 && (
-                <div style={{ textAlign: 'center', padding: '40px', color: '#949ba4' }}>
-                    <FaLock size={40} style={{ opacity: 0.3, marginBottom: '10px' }} />
-                    <p>Henüz özel izin tanımlanmamış</p>
-                    <p style={{ fontSize: '0.85em' }}>Belirli roller veya kullanıcılara özel izinler tanımlayabilirsiniz</p>
-                </div>
-            )}
+            {permissions.role_permissions?.length === 0 &&
+                permissions.user_permissions?.length === 0 && (
+                    <div className={css.emptyState}>
+                        <FaLock size={40} style={S.mar} />
+                        <p>{t('no_custom_permissions_defined_yet')}</p>
+                        <p style={S.font}>
+                            {t('you_can_define_custom_permissions_for_specific_roles_or_user')}
+                        </p>
+                    </div>
+                )}
 
-            {/* İzin Ekleme Modalı */}
+            {/* Add Permissionme Modalı */}
             {showAddPermission && (
-                <div style={styles.addPermModal}>
-                    <h5 style={{ color: '#fff', marginBottom: '15px' }}>İzin Ekle</h5>
+                <div style={styles.addThumModal}>
+                    <h5 style={S.txt}>{t('add_permission')}</h5>
 
-                    <div style={{ marginBottom: '15px' }}>
-                        <label style={{ color: '#b5bac1', fontSize: '0.9em' }}>İzin Türü</label>
+                    <div className={css.mb15}>
+                        <label className={css.labelSmall}>{t('permission_type')}</label>
                         <select
                             value={permissionType}
-                            onChange={e => setPermissionType(e.target.value)}
+                            onChange={(e) => setPermissionType(e.target.value)}
                             style={styles.input}
                         >
-                            <option value="role">Rol</option>
-                            <option value="user">Kullanıcı</option>
+                            <option value="role">{t('role')}</option>
+                            <option value="user">{t('user')}</option>
                         </select>
                     </div>
 
                     {permissionType === 'role' && (
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ color: '#b5bac1', fontSize: '0.9em' }}>Rol Seç</label>
+                        <div className={css.mb15}>
+                            <label className={css.labelSmall}>{t('select_role')}</label>
                             <select
-                                value={selectedRoleForPerm || ''}
-                                onChange={e => setSelectedRoleForPerm(e.target.value)}
+                                value={selectedRoleForThum || ''}
+                                onChange={(e) => setSelectedRoleForThum(e.target.value)}
                                 style={styles.input}
                             >
-                                <option value="">Rol seçin...</option>
-                                {permissions.available_roles?.map(role => (
-                                    <option key={role.id} value={role.id}>{role.name}</option>
+                                <option value="">{t('select_role_label')}</option>
+                                {permissions.available_roles?.map((role) => (
+                                    <option key={role.id} value={role.id}>
+                                        {role.name}
+                                    </option>
                                 ))}
                             </select>
                         </div>
                     )}
 
                     {permissionType === 'user' && (
-                        <div style={{ marginBottom: '15px' }}>
-                            <label style={{ color: '#b5bac1', fontSize: '0.9em' }}>Kullanıcı Ara</label>
+                        <div className={css.mb15}>
+                            <label className={css.labelSmall}>{t('user_search')}</label>
                             <input
                                 type="text"
-                                placeholder="Kullanıcı adı yazın... (min 2 karakter)"
+                                placeholder={t('enter_username_min_2_characters')}
                                 value={searchUser}
-                                onChange={e => {
+                                onChange={(e) => {
                                     setSearchUser(e.target.value);
                                     searchUsers(e.target.value);
                                 }}
                                 style={styles.input}
                             />
 
-                            {/* Arama Sonuçları */}
+                            {/* Search Resultsı */}
                             {searchResults.length > 0 && (
-                                <div style={{
-                                    background: '#0d0e10',
-                                    borderRadius: '6px',
-                                    marginTop: '8px',
-                                    maxHeight: '200px',
-                                    overflowY: 'auto',
-                                    border: '1px solid #4e5058'
-                                }}>
-                                    {searchResults.map(user => (
+                                <div style={S.bg}>
+                                    {searchResults.map((user) => (
                                         <div
                                             key={user.id}
+                                            role="button"
+                                            tabIndex={0}
                                             onClick={() => {
-                                                setSelectedUserForPerm(user.id);
+                                                setSelectedUserForThum(user.id);
                                                 setSearchUser(user.username);
                                                 setSearchResults([]);
                                             }}
@@ -153,60 +201,71 @@ const PermissionsTab = ({
                                                 gap: '10px',
                                                 cursor: 'pointer',
                                                 borderBottom: '1px solid #0e1222',
-                                                backgroundColor: selectedUserForPerm === user.id ? '#5865f2' : 'transparent',
-                                                transition: 'background-color 0.2s'
+                                                backgroundColor:
+                                                    selectedUserForThum === user.id
+                                                        ? '#5865f2'
+                                                        : 'transparent',
+                                                transition: 'background-color 0.2s',
                                             }}
-                                            onMouseEnter={e => {
-                                                if (selectedUserForPerm !== user.id) {
-                                                    e.currentTarget.style.backgroundColor = '#111214';
+                                            onMouseEnter={(e) => {
+                                                if (selectedUserForThum !== user.id) {
+                                                    e.currentTarget.style.backgroundColor =
+                                                        '#111214';
                                                 }
                                             }}
-                                            onMouseLeave={e => {
-                                                if (selectedUserForPerm !== user.id) {
-                                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                            onMouseLeave={(e) => {
+                                                if (selectedUserForThum !== user.id) {
+                                                    e.currentTarget.style.backgroundColor =
+                                                        'transparent';
                                                 }
                                             }}
+                                            onKeyDown={(e) =>
+                                                (e.key === 'Enter' || e.key === ' ') &&
+                                                e.currentTarget.click()
+                                            }
                                         >
                                             <img
                                                 src={user.avatar || '/default-avatar.png'}
                                                 alt={user.username}
-                                                style={{ width: 24, height: 24, borderRadius: '50%' }}
+                                                className={css.avatar24}
                                             />
-                                            <span style={{ color: '#fff', fontSize: '0.95em' }}>{user.username}</span>
+                                            <span style={S.txt2}>{user.username}</span>
                                         </div>
                                     ))}
                                 </div>
                             )}
 
                             {searchUser && searchResults.length === 0 && (
-                                <p style={{ fontSize: '0.8em', color: '#949ba4', marginTop: '5px' }}>
+                                <p className={css.textXs}>
                                     {searchUser.length < 2
-                                        ? 'En az 2 karakter girin'
-                                        : 'Kullanıcı bulunamadı'
-                                    }
+                                        ? 'Enter at least 2 characters'
+                                        : 'Kullanıcı bulunamadı'}
                                 </p>
                             )}
 
-                            {selectedUserForPerm && (
-                                <p style={{ fontSize: '0.85em', color: '#23a559', marginTop: '5px' }}>
-                                    ✅ Kullanıcı seçildi: <strong>{searchUser}</strong>
+                            {selectedUserForThum && (
+                                <p className={css.textSuccess}>
+                                    ✅ User selected: <strong>{searchUser}</strong>
                                 </p>
                             )}
                         </div>
                     )}
 
-                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                        <button onClick={() => {
-                            setShowAddPermission(false);
-                            setSearchUser('');
-                            setSearchResults([]);
-                            setSelectedUserForPerm(null);
-                            setSelectedRoleForPerm(null);
-                        }} style={styles.cancelBtn}>
-                            İptal
+                    <div className={css.flexEndGap10}>
+                        <button
+                            onClick={() => {
+                                setShowAddPermission(false);
+                                setSearchUser('');
+                                setSearchResults([]);
+                                setSelectedUserForThum(null);
+                                setSelectedRoleForThum(null);
+                            }}
+                            style={styles.cancelBtn}
+                        >
+                            Cancel
                         </button>
                         <button onClick={addPermission} style={styles.confirmBtn}>
-                            Ekle
+                            Add
                         </button>
                     </div>
                 </div>
@@ -215,4 +274,22 @@ const PermissionsTab = ({
     );
 };
 
+PermissionsTab.propTypes = {
+    permissions: PropTypes.array,
+    showAddPermission: PropTypes.bool,
+    setShowAddPermission: PropTypes.func,
+    permissionType: PropTypes.func,
+    setPermissionType: PropTypes.func,
+    selectedRoleForThum: PropTypes.bool,
+    setSelectedRoleForThum: PropTypes.func,
+    selectedUserForThum: PropTypes.bool,
+    setSelectedUserForThum: PropTypes.func,
+    searchUser: PropTypes.string,
+    setSearchUser: PropTypes.func,
+    searchResults: PropTypes.array,
+    setSearchResults: PropTypes.func,
+    searchUsers: PropTypes.array,
+    removePermission: PropTypes.func,
+    addPermission: PropTypes.func,
+};
 export default PermissionsTab;

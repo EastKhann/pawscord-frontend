@@ -19,7 +19,7 @@ describe('useChatStore', () => {
                 can_manage_channels: false,
                 can_delete_messages: false,
                 can_manage_roles: false,
-                can_ban_members: false
+                can_ban_members: false,
             },
         });
     });
@@ -130,7 +130,9 @@ describe('useChatStore', () => {
         });
 
         it('should update existing message matching temp_id', () => {
-            useChatStore.getState().addMessage({ id: 'temp', temp_id: 'abc123', content: 'Sending...' });
+            useChatStore
+                .getState()
+                .addMessage({ id: 'temp', temp_id: 'abc123', content: 'Sending...' });
             useChatStore.getState().addMessage({ id: 100, temp_id: 'abc123', content: 'Sent!' });
             expect(useChatStore.getState().messages).toHaveLength(1);
             expect(useChatStore.getState().messages[0].id).toBe(100);
@@ -148,7 +150,12 @@ describe('useChatStore', () => {
         });
 
         it('should not modify non-matching messages', () => {
-            useChatStore.setState({ messages: [{ id: 1, content: 'A' }, { id: 2, content: 'B' }] });
+            useChatStore.setState({
+                messages: [
+                    { id: 1, content: 'A' },
+                    { id: 2, content: 'B' },
+                ],
+            });
             useChatStore.getState().updateMessage(1, { content: 'Updated' });
             expect(useChatStore.getState().messages[1].content).toBe('B');
         });
@@ -170,12 +177,14 @@ describe('useChatStore', () => {
         });
 
         it('should filter out invalid entries (no id)', () => {
-            useChatStore.getState().setMessages([
-                { id: 1, content: 'Valid' },
-                { content: 'No ID' },
-                null,
-                { id: 3, content: 'Also valid' }
-            ]);
+            useChatStore
+                .getState()
+                .setMessages([
+                    { id: 1, content: 'Valid' },
+                    { content: 'No ID' },
+                    null,
+                    { id: 3, content: 'Also valid' },
+                ]);
             expect(useChatStore.getState().messages).toHaveLength(2);
         });
     });
@@ -223,7 +232,9 @@ describe('useChatStore', () => {
         it('should not add duplicate username', () => {
             useChatStore.getState().setTypingUser('alice', true);
             useChatStore.getState().setTypingUser('alice', true);
-            expect(useChatStore.getState().typingUsers.filter(u => u === 'alice')).toHaveLength(1);
+            expect(useChatStore.getState().typingUsers.filter((u) => u === 'alice')).toHaveLength(
+                1
+            );
         });
     });
 
@@ -245,7 +256,15 @@ describe('useChatStore', () => {
         });
 
         it('setPermissions sets provided permissions', () => {
-            useChatStore.getState().setPermissions({ is_owner: true, can_manage_channels: true, can_delete_messages: false, can_manage_roles: false, can_ban_members: true });
+            useChatStore
+                .getState()
+                .setPermissions({
+                    is_owner: true,
+                    can_manage_channels: true,
+                    can_delete_messages: false,
+                    can_manage_roles: false,
+                    can_ban_members: true,
+                });
             const perms = useChatStore.getState().currentPermissions;
             expect(perms.is_owner).toBe(true);
             expect(perms.can_ban_members).toBe(true);

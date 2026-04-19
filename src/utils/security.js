@@ -5,14 +5,28 @@ import DOMPurify from 'dompurify';
 
 /**
  * XSS Koruması - HTML içeriği temizler
- * @param {string} dirty - Temizlenecek HTML
- * @returns {string} - Temizlenmiş HTML
+ * @param {string} dirty - Clearnecek HTML
+ * @returns {string} - Clearnmiş HTML
  */
 export const sanitizeHTML = (dirty) => {
     if (!dirty) return '';
 
     const config = {
-        ALLOWED_TAGS: ['b', 'i', 'u', 'strong', 'em', 'a', 'code', 'pre', 'br', 'p', 'ul', 'ol', 'li'],
+        ALLOWED_TAGS: [
+            'b',
+            'i',
+            'u',
+            'strong',
+            'em',
+            'a',
+            'code',
+            'pre',
+            'br',
+            'p',
+            'ul',
+            'ol',
+            'li',
+        ],
         ALLOWED_ATTR: ['href', 'class', 'target'],
         ALLOW_DATA_ATTR: false,
     };
@@ -23,7 +37,7 @@ export const sanitizeHTML = (dirty) => {
 /**
  * Mesaj içeriği temizleme
  * @param {string} content - Mesaj içeriği
- * @returns {string} - Temizlenmiş mesaj
+ * @returns {string} - Clearnmiş message
  */
 export const sanitizeMessage = (content) => {
     if (!content) return '';
@@ -92,10 +106,10 @@ export const checkPasswordStrength = (password) => {
     if (password.length >= 16) score += 10;
 
     // Character variety
-    if (/[a-z]/.test(password)) score += 15;  // Lowercase
-    if (/[A-Z]/.test(password)) score += 15;  // Uppercase
-    if (/[0-9]/.test(password)) score += 15;  // Numbers
-    if (/[^a-zA-Z0-9]/.test(password)) score += 15;  // Special chars
+    if (/[a-z]/.test(password)) score += 15; // Lowercase
+    if (/[A-Z]/.test(password)) score += 15; // Uppercase
+    if (/[0-9]/.test(password)) score += 15; // Numbers
+    if (/[^a-zA-Z0-9]/.test(password)) score += 15; // Special chars
 
     let strength = 'weak';
     if (score >= 70) strength = 'strong';
@@ -109,7 +123,7 @@ export const checkPasswordStrength = (password) => {
  * @param {string} key - Rate limit anahtarı
  * @param {number} maxAttempts - Maksimum deneme
  * @param {number} windowMs - Zaman penceresi (ms)
- * @returns {boolean} - Limit aşıldı mı?
+ * @returns {boolean} - Limit exceeded mı?
  */
 export const checkRateLimit = (key, maxAttempts = 5, windowMs = 60000) => {
     const storageKey = `rateLimit_${key}`;
@@ -118,14 +132,14 @@ export const checkRateLimit = (key, maxAttempts = 5, windowMs = 60000) => {
     let attempts = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
     // Eski denemeleri temizle
-    attempts = attempts.filter(timestamp => now - timestamp < windowMs);
+    attempts = attempts.filter((timestamp) => now - timestamp < windowMs);
 
     // Limit kontrolü
     if (attempts.length >= maxAttempts) {
-        return false; // Limit aşıldı!
+        return false; // Limit exceeded!
     }
 
-    // Yeni deneme ekle
+    // Yeni deneme add
     attempts.push(now);
     localStorage.setItem(storageKey, JSON.stringify(attempts));
 
@@ -135,13 +149,16 @@ export const checkRateLimit = (key, maxAttempts = 5, windowMs = 60000) => {
 /**
  * Token expiry check
  * @param {string} token - JWT token
- * @returns {boolean} - Geçerli mi?
+ * @returns {boolean} - true if token is expired or invalid
  */
 export const isTokenExpired = (token) => {
-    if (!token) return true;
+    if (!token || typeof token !== 'string') return true;
 
     try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
+        const parts = token.split('.');
+        if (parts.length !== 3) return true;
+        const payload = JSON.parse(atob(parts[1]));
+        if (typeof payload.exp !== 'number') return true;
         return payload.exp * 1000 < Date.now();
     } catch {
         return true;
@@ -149,18 +166,22 @@ export const isTokenExpired = (token) => {
 };
 
 /**
- * Dosya tipi kontrolü
- * @param {File} file - Kontrol edilecek dosya
- * @param {Array} allowedTypes - İzin verilen tipler
- * @returns {boolean} - Geçerli mi?
+ * File type check — defence-in-depth (backend MUST also validate via magic bytes)
+ * @param {File} file - File to check
+ * @param {Array} allowedTypes - Allowed MIME types
+ * @returns {boolean} - Valid?
  */
-export const isValidFileType = (file, allowedTypes = ['image/jpeg', 'image/png', 'image/gif']) => {
+export const isValidFileType = (
+    file,
+    allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+) => {
+    if (!file || !file.type) return false;
     return allowedTypes.includes(file.type);
 };
 
 /**
- * Dosya boyutu kontrolü
- * @param {File} file - Kontrol edilecek dosya
+ * File boyutu kontrolü
+ * @param {File} file - Kontrol edilecek file
  * @param {number} maxSizeMB - Maksimum boyut (MB)
  * @returns {boolean} - Geçerli mi?
  */
@@ -170,9 +191,9 @@ export const isValidFileSize = (file, maxSizeMB = 10) => {
 };
 
 /**
- * Input sanitization - Genel temizleme
- * @param {string} input - Kullanıcı input'u
- * @returns {string} - Temizlenmiş input
+ * Input sanitization - General temizleme
+ * @param {string} input - User input'u
+ * @returns {string} - Clearnmiş input
  */
 export const sanitizeInput = (input) => {
     if (!input) return '';
@@ -188,9 +209,7 @@ export const sanitizeInput = (input) => {
  * @returns {string} - CSRF token
  */
 export const getCSRFToken = () => {
-    const cookie = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrftoken='));
+    const cookie = document.cookie.split('; ').find((row) => row.startsWith('csrftoken='));
 
     return cookie ? cookie.split('=')[1] : '';
 };
@@ -207,8 +226,5 @@ export default {
     isValidFileType,
     isValidFileSize,
     sanitizeInput,
-    getCSRFToken
+    getCSRFToken,
 };
-
-
-

@@ -1,9 +1,14 @@
+﻿import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const ActionButton = ({ icon, onClick, title, bgColor = 'rgba(0, 0, 0, 0.7)' }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     return (
         <button
             onClick={onClick}
             title={title}
+            aria-label={title}
             style={{
                 background: bgColor,
                 border: '1px solid rgba(255, 255, 255, 0.3)',
@@ -34,4 +39,10 @@ const ActionButton = ({ icon, onClick, title, bgColor = 'rgba(0, 0, 0, 0.7)' }) 
     );
 };
 
+ActionButton.propTypes = {
+    icon: PropTypes.node,
+    onClick: PropTypes.func,
+    title: PropTypes.string,
+    bgColor: PropTypes.object,
+};
 export default ActionButton;

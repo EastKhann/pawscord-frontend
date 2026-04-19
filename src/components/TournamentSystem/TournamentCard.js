@@ -1,28 +1,35 @@
 import { FaUsers, FaClock } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 import styles from './styles';
 
 const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) => {
-    const isParticipant = tournament.participants?.some(p => p.username === currentUser);
+    const isParticipant = tournament.participants?.some((p) => p.username === currentUser);
     const isFull = tournament.participants?.length >= tournament.max_participants;
     const isCompleted = tournament.status === 'completed';
     const isActive = tournament.status === 'active';
+    const statusBadgeStyle = {
+        ...styles.statusBadge,
+        backgroundColor: isActive ? '#3ba55d' : isCompleted ? '#949ba4' : '#f0b232',
+    };
+    const joinButtonStyle = {
+        ...styles.joinButton,
+        opacity: isFull ? 0.5 : 1,
+        cursor: isFull ? 'not-allowed' : 'pointer',
+    };
 
     return (
-        <div style={styles.tournamentCard}>
+        <div aria-label="tournament card" style={styles.tournamentCard}>
             <div style={styles.cardHeader}>
                 <div style={styles.tournamentName}>{tournament.name}</div>
-                <div style={{
-                    ...styles.statusBadge,
-                    backgroundColor: isActive ? '#3ba55d' : isCompleted ? '#949ba4' : '#f0b232'
-                }}>
-                    {tournament.status}
-                </div>
+                <div style={statusBadgeStyle}>{tournament.status}</div>
             </div>
 
             <div style={styles.cardBody}>
                 <div style={styles.cardInfo}>
                     <FaUsers size={14} />
-                    <span>{tournament.participants?.length || 0}/{tournament.max_participants}</span>
+                    <span>
+                        {tournament.participants?.length || 0}/{tournament.max_participants}
+                    </span>
                 </div>
                 <div style={styles.cardInfo}>
                     <FaClock size={14} />
@@ -34,28 +41,26 @@ const TournamentCard = ({ tournament, currentUser, onJoin, onLeave, onView }) =>
                 <button onClick={onView} style={styles.viewButton}>
                     Detaylar
                 </button>
-                {!isCompleted && (
-                    isParticipant ? (
+                {!isCompleted &&
+                    (isParticipant ? (
                         <button onClick={onLeave} style={styles.leaveButton}>
-                            Ayr{'ı'}l
+                            Ayrıl
                         </button>
                     ) : (
-                        <button
-                            onClick={onJoin}
-                            disabled={isFull}
-                            style={{
-                                ...styles.joinButton,
-                                opacity: isFull ? 0.5 : 1,
-                                cursor: isFull ? 'not-allowed' : 'pointer'
-                            }}
-                        >
-                            {isFull ? 'Dolu' : 'Katıl'}
+                        <button onClick={onJoin} disabled={isFull} style={joinButtonStyle}>
+                            {isFull ? 'Dolu' : 'Join'}
                         </button>
-                    )
-                )}
+                    ))}
             </div>
         </div>
     );
 };
 
+TournamentCard.propTypes = {
+    tournament: PropTypes.object,
+    currentUser: PropTypes.object,
+    onJoin: PropTypes.func,
+    onLeave: PropTypes.func,
+    onView: PropTypes.func,
+};
 export default TournamentCard;

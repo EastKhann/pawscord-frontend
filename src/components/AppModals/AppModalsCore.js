@@ -1,66 +1,93 @@
-import React, { Suspense, useCallback, useMemo } from 'react';
-import LoadingSpinner from '../LoadingSpinner';
+﻿import React, { Suspense, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import LoadingSpinner from '../shared/LoadingSpinner';
+import { useTranslation } from 'react-i18next';
 import {
-    ABSOLUTE_HOST_URL, API_BASE_URL, WS_PROTOCOL, API_HOST,
-    LOCAL_GIF_LIST_URL, UPDATE_PROFILE_URL, CHANGE_USERNAME_URL
+    ABSOLUTE_HOST_URL,
+    API_BASE_URL,
+    WS_PROTOCOL,
+    API_HOST,
+    LOCAL_GIF_LIST_URL,
+    UPDATE_PROFILE_URL,
+    CHANGE_USERNAME_URL,
 } from '../../config/api';
 
 // Lazy imports for Core modals
-const CinemaModal = React.lazy(() => import('../../CinemaModal'));
-const CryptoChartModal = React.lazy(() => import('../../CryptoChartModal'));
-const GifPicker = React.lazy(() => import('../../GifPicker'));
-const StickerPicker = React.lazy(() => import('../../StickerPicker'));
+const CinemaModal = React.lazy(() => import('../../features/CinemaModal'));
+const CryptoChartModal = React.lazy(() => import('../../features/CryptoChartModal'));
+const GifPicker = React.lazy(() => import('../../features/GifPicker'));
+const StickerPicker = React.lazy(() => import('../../features/StickerPicker'));
 const UserProfilePanel = React.lazy(() => import('../../UserProfilePanel'));
 const AdminAnalyticsPanel = React.lazy(() => import('../AdminAnalyticsPanel'));
 const AdminPanelModal = React.lazy(() => import('../AdminPanelModal'));
 const APIUsagePanel = React.lazy(() => import('../APIUsagePanel'));
 const AutoModerationDashboard = React.lazy(() => import('../AutoModerationDashboard'));
-const AuditLogPanel = React.lazy(() => import('../AuditLogPanel'));
+const AuditLogPanel = React.lazy(() => import('../admin/AuditLogPanel'));
 const BookmarkPanel = React.lazy(() => import('../BookmarkPanel'));
-const ChannelPermissionsPanel = React.lazy(() => import('../ChannelPermissionsPanel'));
-const CodeSnippetModal = React.lazy(() => import('../CodeSnippetModal'));
-const ConnectionsPanel = React.lazy(() => import('../ConnectionsPanel'));
-const CreateGroupModal = React.lazy(() => import('../CreateGroupModal'));
-const CustomStatusModal = React.lazy(() => import('../CustomStatusModal'));
-const DJModal = React.lazy(() => import('../DJModal'));
+const ChannelPermissionsPanel = React.lazy(() => import('../server/ChannelPermissionsPanel'));
+const CodeSnippetModal = React.lazy(() => import('../chat/CodeSnippetModal'));
+const ConnectionsPanel = React.lazy(() => import('../profile/ConnectionsPanel'));
+const CreateGroupModal = React.lazy(() => import('../shared/CreateGroupModal'));
+const CustomStatusModal = React.lazy(() => import('../profile/CustomStatusModal'));
+const DJModal = React.lazy(() => import('../media/DJModal'));
 const DailyRewardsModal = React.lazy(() => import('../DailyRewardsModal'));
-const DownloadModal = React.lazy(() => import('../DownloadModal'));
-const EncryptionKeyModal = React.lazy(() => import('../EncryptionKeyModal'));
+const DownloadModal = React.lazy(() => import('../shared/DownloadModal'));
+const EncryptionKeyModal = React.lazy(() => import('../security/EncryptionKeyModal'));
 const ExportJobsPanel = React.lazy(() => import('../ExportJobsPanel'));
-const MentionsInboxPanel = React.lazy(() => import('../MentionsInboxPanel'));
-const PasswordSetupModal = React.lazy(() => import('../PasswordSetupModal'));
+const MentionsInboxPanel = React.lazy(() => import('../chat/MentionsInboxPanel'));
+const PasswordSetupModal = React.lazy(() => import('../security/PasswordSetupModal'));
 const PaymentPanel = React.lazy(() => import('../PaymentPanel'));
-const PollCreateModal = React.lazy(() => import('../PollCreateModal'));
+const PollCreateModal = React.lazy(() => import('../chat/PollCreateModal'));
 const PremiumStoreModal = React.lazy(() => import('../PremiumStoreModal'));
 const RaidProtectionPanel = React.lazy(() => import('../RaidProtectionPanel'));
-const ReadLaterPanel = React.lazy(() => import('../ReadLaterPanel'));
+const ReadLaterPanel = React.lazy(() => import('../chat/ReadLaterPanel'));
 const ReportSystemPanel = React.lazy(() => import('../ReportSystemPanel'));
 const ScheduledAnnouncementsPanel = React.lazy(() => import('../ScheduledAnnouncementsPanel'));
 const ServerSettingsModal = React.lazy(() => import('../ServerSettingsModal'));
-const SoundboardModal = React.lazy(() => import('../SoundboardModal'));
+const SoundboardModal = React.lazy(() => import('../media/SoundboardModal'));
 const StoreModal = React.lazy(() => import('../StoreModal'));
 const UserWarningsPanel = React.lazy(() => import('../UserWarningsPanel'));
-const VanityURLManager = React.lazy(() => import('../VanityURLManager'));
+const VanityURLManager = React.lazy(() => import('../server/VanityURLManager'));
 const WebhooksPanel = React.lazy(() => import('../WebhooksPanel'));
-const WhiteboardModal = React.lazy(() => import('../WhiteboardModal'));
+const WhiteboardModal = React.lazy(() => import('../media/WhiteboardModal'));
 
 /**
  * AppModalsCore — Core/initial modals and inline modals
  * Handles: profile, store, admin, moderation, inline tools (chart, cinema, snippets, etc.)
  */
 const AppModalsCore = ({
-    modals, openModal, closeModal,
-    fetchWithAuth, activeChat, username, sendMessage, sendSignal, ws,
-    currentUserProfile, setCurrentUserProfile,
-    soundSettings, setSoundSettings,
-    encryptionKeys, currentKeyId, setEncryptionKey,
-    chartSymbol, setChartSymbol,
-    serverToEdit, setServerToEdit, serverMembers,
-    friendsList, conversations,
-    zoomedImage, setZoomedImage,
-    logout, getDeterministicAvatar,
-    handleSendSnippet, setActiveChat, setConversations,
+    modals,
+    openModal,
+    closeModal,
+    fetchWithAuth,
+    activeChat,
+    username,
+    sendMessage,
+    sendSignal,
+    ws,
+    currentUserProfile,
+    setCurrentUserProfile,
+    soundSettings,
+    setSoundSettings,
+    encryptionKeys,
+    currentKeyId,
+    setEncryptionKey,
+    chartSymbol,
+    setChartSymbol,
+    serverToEdit,
+    setServerToEdit,
+    serverMembers,
+    friendsList,
+    conversations,
+    zoomedImage,
+    setZoomedImage,
+    logout,
+    getDeterministicAvatar,
+    handleSendSnippet,
+    setActiveChat,
+    setConversations,
 }) => {
+    const { t } = useTranslation();
     // Memoize close handlers for frequently used modals
     const closeProfilePanel = useCallback(() => closeModal('profilePanel'), [closeModal]);
     const closeStore = useCallback(() => closeModal('store'), [closeModal]);
@@ -78,9 +105,15 @@ const AppModalsCore = ({
     const closeDailyRewards = useCallback(() => closeModal('dailyRewards'), [closeModal]);
     const closeAPIUsagePanel = useCallback(() => closeModal('aPIUsagePanel'), [closeModal]);
     const closeExportJobsPanel = useCallback(() => closeModal('exportJobsPanel'), [closeModal]);
-    const closeScheduledAnnouncements = useCallback(() => closeModal('scheduledAnnouncements'), [closeModal]);
+    const closeScheduledAnnouncements = useCallback(
+        () => closeModal('scheduledAnnouncements'),
+        [closeModal]
+    );
     const closeConnectionsPanel = useCallback(() => closeModal('connectionsPanel'), [closeModal]);
-    const closePasswordSetupModal = useCallback(() => closeModal('passwordSetupModal'), [closeModal]);
+    const closePasswordSetupModal = useCallback(
+        () => closeModal('passwordSetupModal'),
+        [closeModal]
+    );
     const closeAutoModeration = useCallback(() => closeModal('autoModeration'), [closeModal]);
     const closeRaidProtection = useCallback(() => closeModal('raidProtection'), [closeModal]);
     const closeReportSystem = useCallback(() => closeModal('reportSystem'), [closeModal]);
@@ -92,7 +125,10 @@ const AppModalsCore = ({
     const closeReadLater = useCallback(() => closeModal('readLater'), [closeModal]);
     const closeMentionsInbox = useCallback(() => closeModal('mentionsInbox'), [closeModal]);
     const closeCustomStatus = useCallback(() => closeModal('customStatus'), [closeModal]);
-    const closeChannelPermissions = useCallback(() => closeModal('channelPermissions'), [closeModal]);
+    const closeChannelPermissions = useCallback(
+        () => closeModal('channelPermissions'),
+        [closeModal]
+    );
     const closeCinema = useCallback(() => closeModal('cinema'), [closeModal]);
     const closeSnippetModal = useCallback(() => closeModal('snippetModal'), [closeModal]);
     const closeEncModal = useCallback(() => closeModal('encModal'), [closeModal]);
@@ -107,67 +143,114 @@ const AppModalsCore = ({
     const clearChartSymbol = useCallback(() => setChartSymbol(null), [setChartSymbol]);
     const clearServerToEdit = useCallback(() => setServerToEdit(null), [setServerToEdit]);
 
-    const handleBookmarkMessageClick = useCallback((msg) => {
-        if (msg.room) {
-            setActiveChat({ type: 'room', slug: msg.room });
-        }
-        closeModal('bookmarks');
-    }, [setActiveChat, closeModal]);
+    const handleBookmarkMessageClick = useCallback(
+        (msg) => {
+            if (msg.room) {
+                setActiveChat({ type: 'room', slug: msg.room });
+            }
+            closeModal('bookmarks');
+        },
+        [setActiveChat, closeModal]
+    );
 
-    const handleReadLaterMessageClick = useCallback((msg) => {
-        if (msg.room) {
-            setActiveChat({ type: 'room', slug: msg.room });
-        } else if (msg.conversation) {
-            setActiveChat({ type: 'dm', slug: msg.conversation });
-        }
-        closeModal('readLater');
-    }, [setActiveChat, closeModal]);
+    const handleReadLaterMessageClick = useCallback(
+        (msg) => {
+            if (msg.room) {
+                setActiveChat({ type: 'room', slug: msg.room });
+            } else if (msg.conversation) {
+                setActiveChat({ type: 'dm', slug: msg.conversation });
+            }
+            closeModal('readLater');
+        },
+        [setActiveChat, closeModal]
+    );
 
-    const handleMentionNavigate = useCallback((msg) => {
-        if (msg.room_id) {
-            setActiveChat({ type: 'room', id: msg.room_id });
-        }
-        closeModal('mentionsInbox');
-    }, [setActiveChat, closeModal]);
+    const handleMentionNavigate = useCallback(
+        (msg) => {
+            if (msg.room_id) {
+                setActiveChat({ type: 'room', id: msg.room_id });
+            }
+            closeModal('mentionsInbox');
+        },
+        [setActiveChat, closeModal]
+    );
 
-    const handleStatusChange = useCallback((status) => {
-        if (currentUserProfile) {
-            setCurrentUserProfile(prev => ({ ...prev, customStatus: status }));
-        }
-    }, [currentUserProfile, setCurrentUserProfile]);
+    const handleStatusChange = useCallback(
+        (status) => {
+            if (currentUserProfile) {
+                setCurrentUserProfile((prev) => ({ ...prev, customStatus: status }));
+            }
+        },
+        [currentUserProfile, setCurrentUserProfile]
+    );
 
-    const handleSetEncKey = useCallback((key) => setEncryptionKey(currentKeyId, key), [setEncryptionKey, currentKeyId]);
+    const handleSetEncKey = useCallback(
+        (key) => setEncryptionKey(currentKeyId, key),
+        [setEncryptionKey, currentKeyId]
+    );
 
-    const handleGroupCreated = useCallback((newConv) => {
-        setConversations(prev => [newConv, ...prev]);
-        setActiveChat('dm', newConv.id, 'Grup Sohbeti');
-    }, [setConversations, setActiveChat]);
+    const handleGroupCreated = useCallback(
+        (newConv) => {
+            setConversations((prev) => [newConv, ...prev]);
+            setActiveChat('dm', newConv.id, 'Group Chat');
+        },
+        [setConversations, setActiveChat]
+    );
 
-    const handleGifSelect = useCallback((url) => {
-        const full = url.startsWith('http') ? url : ABSOLUTE_HOST_URL + url;
-        sendMessage(full);
-        closeModal('gifPicker');
-    }, [sendMessage, closeModal]);
+    const handleGifSelect = useCallback(
+        (url) => {
+            const full = url.startsWith('http') ? url : ABSOLUTE_HOST_URL + url;
+            sendMessage(full);
+            closeModal('gifPicker');
+        },
+        [sendMessage, closeModal]
+    );
 
-    const handleStickerSelect = useCallback((url) => {
-        sendMessage(url);
-        closeModal('stickerPicker');
-    }, [sendMessage, closeModal]);
+    const handleStickerSelect = useCallback(
+        (url) => {
+            sendMessage(url);
+            closeModal('stickerPicker');
+        },
+        [sendMessage, closeModal]
+    );
 
-    const whiteboardRoomSlug = useMemo(() =>
-        activeChat?.type === 'room' ? activeChat.id : `dm_${activeChat?.id}`,
-        [activeChat?.type, activeChat?.id]);
+    const whiteboardRoomSlug = useMemo(
+        () => (activeChat?.type === 'room' ? activeChat.id : `dm_${activeChat?.id}`),
+        [activeChat?.type, activeChat?.id]
+    );
 
-    const serverId = useMemo(() =>
-        activeChat?.type === 'room' ? activeChat.server_id : null,
-        [activeChat?.type, activeChat?.server_id]);
+    const serverId = useMemo(
+        () => (activeChat?.type === 'room' ? activeChat.server_id : null),
+        [activeChat?.type, activeChat?.server_id]
+    );
 
     return (
         <>
-            <Suspense fallback={<LoadingSpinner size="medium" text="Modal yükleniyor..." />}>
-                {modals.profilePanel && <UserProfilePanel user={currentUserProfile} onClose={closeProfilePanel} onProfileUpdate={(updatedUser) => setCurrentUserProfile(updatedUser)} onLogout={logout} fetchWithAuth={fetchWithAuth} getDeterministicAvatar={getDeterministicAvatar} updateProfileUrl={UPDATE_PROFILE_URL} changeUsernameUrl={CHANGE_USERNAME_URL} soundSettings={soundSettings} onUpdateSoundSettings={setSoundSettings} onImageClick={setZoomedImage} apiBaseUrl={ABSOLUTE_HOST_URL} />}
+            <Suspense fallback={<LoadingSpinner size="medium" text={t('ui.modal_yukleniyor')} />}>
+                {modals.profilePanel && (
+                    <UserProfilePanel
+                        user={currentUserProfile}
+                        onClose={closeProfilePanel}
+                        onProfileUpdate={(updatedUser) => setCurrentUserProfile(updatedUser)}
+                        onLogout={logout}
+                        fetchWithAuth={fetchWithAuth}
+                        getDeterministicAvatar={getDeterministicAvatar}
+                        updateProfileUrl={UPDATE_PROFILE_URL}
+                        changeUsernameUrl={CHANGE_USERNAME_URL}
+                        soundSettings={soundSettings}
+                        onUpdateSoundSettings={setSoundSettings}
+                        onImageClick={setZoomedImage}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                    />
+                )}
                 {modals.store && <PremiumStoreModal onClose={closeStore} />}
-                {modals.analytics && <AdminAnalyticsPanel onClose={closeAnalytics} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
+                {modals.analytics && (
+                    <AdminAnalyticsPanel
+                        onClose={closeAnalytics}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                    />
+                )}
                 {modals.adminPanel && (
                     <AdminPanelModal
                         onClose={closeAdminPanel}
@@ -230,11 +313,7 @@ const AppModalsCore = ({
                         serverId={serverId}
                     />
                 )}
-                {modals.connectionsPanel && (
-                    <ConnectionsPanel
-                        onClose={closeConnectionsPanel}
-                    />
-                )}
+                {modals.connectionsPanel && <ConnectionsPanel onClose={closeConnectionsPanel} />}
                 {modals.passwordSetupModal && (
                     <PasswordSetupModal
                         onClose={closePasswordSetupModal}
@@ -305,7 +384,13 @@ const AppModalsCore = ({
                     />
                 )}
                 {modals.readLater && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <Suspense
+                        fallback={
+                            <div role="region" aria-label="App Modals Core">
+                                {t('common.loading')}
+                            </div>
+                        }
+                    >
                         <ReadLaterPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -315,7 +400,7 @@ const AppModalsCore = ({
                     </Suspense>
                 )}
                 {modals.mentionsInbox && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <Suspense fallback={<div>{t('common.loading')}</div>}>
                         <MentionsInboxPanel
                             isOpen={modals.mentionsInbox}
                             onClose={closeMentionsInbox}
@@ -325,7 +410,7 @@ const AppModalsCore = ({
                     </Suspense>
                 )}
                 {modals.customStatus && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <Suspense fallback={<div>{t('common.loading')}</div>}>
                         <CustomStatusModal
                             isOpen={modals.customStatus}
                             onClose={closeCustomStatus}
@@ -334,7 +419,7 @@ const AppModalsCore = ({
                     </Suspense>
                 )}
                 {modals.channelPermissions && activeChat?.type === 'room' && (
-                    <Suspense fallback={<div>Yükleniyor...</div>}>
+                    <Suspense fallback={<div>{t('common.loading')}</div>}>
                         <ChannelPermissionsPanel
                             fetchWithAuth={fetchWithAuth}
                             apiBaseUrl={ABSOLUTE_HOST_URL}
@@ -344,24 +429,120 @@ const AppModalsCore = ({
                     </Suspense>
                 )}
                 {/* Inline modals */}
-                {chartSymbol && <CryptoChartModal symbol={chartSymbol} onClose={clearChartSymbol} />}
-                {modals.cinema && <CinemaModal onClose={closeCinema} ws={ws} username={username} />}
-                {modals.snippetModal && <CodeSnippetModal onClose={closeSnippetModal} onSend={handleSendSnippet} />}
-                {serverToEdit && <ServerSettingsModal onClose={clearServerToEdit} server={serverToEdit} currentUsername={username} fetchWithAuth={fetchWithAuth} apiBaseUrl={API_BASE_URL} serverMembers={serverMembers} />}
-                {modals.encModal && <EncryptionKeyModal onClose={closeEncModal} onSetKey={handleSetEncKey} existingKey={encryptionKeys[currentKeyId]} />}
-                {modals.downloadModal && <DownloadModal onClose={closeDownloadModal} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {modals.groupModal && <CreateGroupModal onClose={closeGroupModal} friendsList={friendsList} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} onGroupCreated={handleGroupCreated} />}
-                {modals.whiteboard && (activeChat.type === 'room' || activeChat.type === 'dm') && (
-                    <WhiteboardModal roomSlug={whiteboardRoomSlug} onClose={closeWhiteboard} wsProtocol={WS_PROTOCOL} apiHost={API_HOST} />
+                {chartSymbol && (
+                    <CryptoChartModal symbol={chartSymbol} onClose={clearChartSymbol} />
                 )}
-                {modals.soundboard && <SoundboardModal onClose={closeSoundboard} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} sendSignal={sendSignal} absoluteHostUrl={ABSOLUTE_HOST_URL} />}
+                {modals.cinema && <CinemaModal onClose={closeCinema} ws={ws} username={username} />}
+                {modals.snippetModal && (
+                    <CodeSnippetModal onClose={closeSnippetModal} onSend={handleSendSnippet} />
+                )}
+                {serverToEdit && (
+                    <ServerSettingsModal
+                        onClose={clearServerToEdit}
+                        server={serverToEdit}
+                        currentUsername={username}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={API_BASE_URL}
+                        serverMembers={serverMembers}
+                    />
+                )}
+                {modals.encModal && (
+                    <EncryptionKeyModal
+                        onClose={closeEncModal}
+                        onSetKey={handleSetEncKey}
+                        existingKey={encryptionKeys[currentKeyId]}
+                    />
+                )}
+                {modals.downloadModal && (
+                    <DownloadModal onClose={closeDownloadModal} apiBaseUrl={ABSOLUTE_HOST_URL} />
+                )}
+                {modals.groupModal && (
+                    <CreateGroupModal
+                        onClose={closeGroupModal}
+                        friendsList={friendsList}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        onGroupCreated={handleGroupCreated}
+                    />
+                )}
+                {modals.whiteboard && (activeChat.type === 'room' || activeChat.type === 'dm') && (
+                    <WhiteboardModal
+                        roomSlug={whiteboardRoomSlug}
+                        onClose={closeWhiteboard}
+                        wsProtocol={WS_PROTOCOL}
+                        apiHost={API_HOST}
+                    />
+                )}
+                {modals.soundboard && (
+                    <SoundboardModal
+                        onClose={closeSoundboard}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        sendSignal={sendSignal}
+                        absoluteHostUrl={ABSOLUTE_HOST_URL}
+                    />
+                )}
                 {modals.dJ && <DJModal onClose={closeDJ} ws={ws} roomSlug={activeChat.id} />}
-                {modals.gifPicker && <GifPicker onSelect={handleGifSelect} onClose={closeGifPicker} localGifListUrl={LOCAL_GIF_LIST_URL} absoluteHostUrl={ABSOLUTE_HOST_URL} fetchWithAuth={fetchWithAuth} />}
-                {modals.stickerPicker && <StickerPicker onClose={closeStickerPicker} onSelect={handleStickerSelect} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} />}
-                {modals.pollModal && <PollCreateModal onClose={closePollModal} fetchWithAuth={fetchWithAuth} apiBaseUrl={ABSOLUTE_HOST_URL} activeRoomSlug={activeChat.id} />}
+                {modals.gifPicker && (
+                    <GifPicker
+                        onSelect={handleGifSelect}
+                        onClose={closeGifPicker}
+                        localGifListUrl={LOCAL_GIF_LIST_URL}
+                        absoluteHostUrl={ABSOLUTE_HOST_URL}
+                        fetchWithAuth={fetchWithAuth}
+                    />
+                )}
+                {modals.stickerPicker && (
+                    <StickerPicker
+                        onClose={closeStickerPicker}
+                        onSelect={handleStickerSelect}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                    />
+                )}
+                {modals.pollModal && (
+                    <PollCreateModal
+                        onClose={closePollModal}
+                        fetchWithAuth={fetchWithAuth}
+                        apiBaseUrl={ABSOLUTE_HOST_URL}
+                        activeRoomSlug={activeChat.id}
+                    />
+                )}
             </Suspense>
         </>
     );
 };
 
+AppModalsCore.propTypes = {
+    modals: PropTypes.object,
+    openModal: PropTypes.func,
+    closeModal: PropTypes.func,
+    fetchWithAuth: PropTypes.func,
+    activeChat: PropTypes.object,
+    username: PropTypes.string,
+    sendMessage: PropTypes.func,
+    sendSignal: PropTypes.func,
+    ws: PropTypes.object,
+    currentUserProfile: PropTypes.object,
+    setCurrentUserProfile: PropTypes.func,
+    soundSettings: PropTypes.object,
+    setSoundSettings: PropTypes.func,
+    encryptionKeys: PropTypes.object,
+    currentKeyId: PropTypes.string,
+    setEncryptionKey: PropTypes.func,
+    chartSymbol: PropTypes.string,
+    setChartSymbol: PropTypes.func,
+    serverToEdit: PropTypes.object,
+    setServerToEdit: PropTypes.func,
+    serverMembers: PropTypes.object,
+    friendsList: PropTypes.object,
+    conversations: PropTypes.object,
+    zoomedImage: PropTypes.string,
+    setZoomedImage: PropTypes.func,
+    logout: PropTypes.func,
+    getDeterministicAvatar: PropTypes.func,
+    handleSendSnippet: PropTypes.func,
+    setActiveChat: PropTypes.func,
+    setConversations: PropTypes.func,
+};
 export default React.memo(AppModalsCore);

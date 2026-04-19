@@ -2,9 +2,9 @@
 // 10/10 Edition: Debounced input, disconnect cleanup, max display, stale pruning
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-const TYPING_TIMEOUT_MS = 5000;   // Auto-expire after 5s of no updates
-const DEBOUNCE_MS = 400;          // Debounce input to avoid flooding WS
-const MAX_DISPLAY = 4;            // Max usernames shown in "typing..." indicator
+const TYPING_TIMEOUT_MS = 5000; // Auto-expire after 5s of no updates
+const DEBOUNCE_MS = 400; // Debounce input to avoid flooding WS
+const MAX_DISPLAY = 4; // Max usernames shown in "typing..." indicator
 
 const useTypingIndicator = (ws, currentRoom, currentUser) => {
     const [typingUsers, setTypingUsers] = useState([]);
@@ -27,7 +27,9 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
                     const isStart = data.action === 'start' || data.is_typing === true;
 
                     // Derive room/conversation match — accept if room matches or conversation_id matches or no room specified
-                    const matchesRoom = !data.room || data.room === currentRoom ||
+                    const matchesRoom =
+                        !data.room ||
+                        data.room === currentRoom ||
                         data.conversation_id === currentRoom;
 
                     // Don't show own typing
@@ -35,7 +37,7 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
                     if (!matchesRoom) return;
 
                     if (isStart) {
-                        setTypingUsers(prev => {
+                        setTypingUsers((prev) => {
                             if (prev.includes(username)) return prev;
                             const next = [...prev, username];
                             return next.length > MAX_DISPLAY ? next.slice(-MAX_DISPLAY) : next;
@@ -48,12 +50,12 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
 
                         // Auto-remove after TYPING_TIMEOUT_MS
                         typingTimeouts.current[username] = setTimeout(() => {
-                            setTypingUsers(prev => prev.filter(u => u !== username));
+                            setTypingUsers((prev) => prev.filter((u) => u !== username));
                             delete typingTimeouts.current[username];
                         }, TYPING_TIMEOUT_MS);
                     } else {
                         // Stop
-                        setTypingUsers(prev => prev.filter(u => u !== username));
+                        setTypingUsers((prev) => prev.filter((u) => u !== username));
                         if (typingTimeouts.current[username]) {
                             clearTimeout(typingTimeouts.current[username]);
                             delete typingTimeouts.current[username];
@@ -63,7 +65,7 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
 
                 // Handle user disconnect — remove from typing list
                 if (data.type === 'user_disconnected' && data.username) {
-                    setTypingUsers(prev => prev.filter(u => u !== data.username));
+                    setTypingUsers((prev) => prev.filter((u) => u !== data.username));
                     if (typingTimeouts.current[data.username]) {
                         clearTimeout(typingTimeouts.current[data.username]);
                         delete typingTimeouts.current[data.username];
@@ -79,7 +81,7 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
         return () => {
             ws.removeEventListener('message', handleMessage);
             // Cleanup all timeouts
-            Object.values(typingTimeouts.current).forEach(timeout => clearTimeout(timeout));
+            Object.values(typingTimeouts.current).forEach((timeout) => clearTimeout(timeout));
             typingTimeouts.current = {};
         };
     }, [ws, currentRoom, currentUser]);
@@ -89,10 +91,12 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
         if (!ws || !currentRoom || ws.readyState !== WebSocket.OPEN) return;
 
         if (!isTyping.current) {
-            ws.send(JSON.stringify({
-                type: 'typing_start',
-                room: currentRoom
-            }));
+            ws.send(
+                JSON.stringify({
+                    type: 'typing_start',
+                    room: currentRoom,
+                })
+            );
             isTyping.current = true;
         }
 
@@ -110,10 +114,12 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
         if (!ws || !currentRoom || ws.readyState !== WebSocket.OPEN) return;
 
         if (isTyping.current) {
-            ws.send(JSON.stringify({
-                type: 'typing_stop',
-                room: currentRoom
-            }));
+            ws.send(
+                JSON.stringify({
+                    type: 'typing_stop',
+                    room: currentRoom,
+                })
+            );
             isTyping.current = false;
         }
 
@@ -133,11 +139,14 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
         if (debounceTimer.current) {
             clearTimeout(debounceTimer.current);
         }
-        debounceTimer.current = setTimeout(() => {
-            _sendTypingStart();
-            debounceTimer.current = null;
-        }, isTyping.current ? 0 : DEBOUNCE_MS);
-        // If already flagged as typing, send immediately; otherwise debounce first keystroke
+        debounceTimer.current = setTimeout(
+            () => {
+                _sendTypingStart();
+                debounceTimer.current = null;
+            },
+            isTyping.current ? 0 : DEBOUNCE_MS
+        );
+        // If already flagged as typing, send immediately; otherwisee debounce first keystroke
         if (isTyping.current) {
             // Already typing — just reset the auto-stop timer
             if (typingTimeout.current) clearTimeout(typingTimeout.current);
@@ -159,11 +168,8 @@ const useTypingIndicator = (ws, currentRoom, currentUser) => {
     return {
         typingUsers,
         handleTyping,
-        sendTypingStop
+        sendTypingStop,
     };
 };
 
 export default useTypingIndicator;
-
-
-

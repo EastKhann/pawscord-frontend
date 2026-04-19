@@ -7,6 +7,40 @@
 
 import React from 'react';
 
+import PropTypes from 'prop-types';
+import logger from '../utils/logger';
+
+// -- extracted inline style constants --
+const _st1 = {
+    padding: '20px',
+    margin: '20px',
+    border: '2px solid #f44336',
+    borderRadius: '8px',
+    backgroundColor: '#ffebee',
+};
+const _st2 = { color: '#c62828', margin: '0 0 10px 0' };
+const _st3 = { color: '#666', margin: '0 0 15px 0' };
+const _st4 = { marginBottom: '15px' };
+const _st5 = { cursor: 'pointer', color: '#666' };
+const _st6 = {
+    fontSize: '12px',
+    overflow: 'auto',
+    padding: '10px',
+    backgroundColor: '#fff',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
+    marginTop: '10px',
+};
+const _st7 = {
+    padding: '10px 20px',
+    backgroundColor: '#2196f3',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '14px',
+};
+
 /**
  * Error Logger
  */
@@ -28,7 +62,7 @@ class ErrorLogger {
             timestamp: new Date().toISOString(),
             url: window.location.href,
             userAgent: navigator.userAgent,
-            ...errorInfo
+            ...errorInfo,
         };
 
         this.errors.push(errorData);
@@ -39,7 +73,7 @@ class ErrorLogger {
         }
 
         if (import.meta.env.MODE === 'development') {
-            console.error('🛡️ [ErrorBoundary]', errorData);
+            logger.error('🛡️ [ErrorBoundary]', errorData);
         }
 
         // Send to server
@@ -58,10 +92,10 @@ class ErrorLogger {
             await fetch(this.endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(errorData)
+                body: JSON.stringify(errorData),
             });
         } catch (err) {
-            console.error('Failed to send error to server:', err);
+            logger.error('Failed to send error to server:', err);
         }
     }
 
@@ -93,7 +127,7 @@ export class ErrorBoundary extends React.Component {
             hasError: false,
             error: null,
             errorInfo: null,
-            errorCount: 0
+            errorCount: 0,
         };
     }
 
@@ -104,13 +138,13 @@ export class ErrorBoundary extends React.Component {
     componentDidCatch(error, errorInfo) {
         const errorData = errorLogger.log(error, {
             componentStack: errorInfo.componentStack,
-            component: this.props.name || 'Unknown'
+            component: this.props.name || 'Unknown',
         });
 
         this.setState({
             error,
             errorInfo,
-            errorCount: this.state.errorCount + 1
+            errorCount: this.state.errorCount + 1,
         });
 
         // Call custom error handler
@@ -123,7 +157,7 @@ export class ErrorBoundary extends React.Component {
         this.setState({
             hasError: false,
             error: null,
-            errorInfo: null
+            errorInfo: null,
         });
 
         if (this.props.onReset) {
@@ -138,58 +172,27 @@ export class ErrorBoundary extends React.Component {
                 return this.props.fallback({
                     error: this.state.error,
                     errorInfo: this.state.errorInfo,
-                    reset: this.handleReset
+                    reset: this.handleReset,
                 });
             }
 
             // Default fallback UI
             return (
-                <div style={{
-                    padding: '20px',
-                    margin: '20px',
-                    border: '2px solid #f44336',
-                    borderRadius: '8px',
-                    backgroundColor: '#ffebee'
-                }}>
-                    <h2 style={{ color: '#c62828', margin: '0 0 10px 0' }}>
-                        ⚠️ Bir Hata Oluştu
-                    </h2>
-                    <p style={{ color: '#666', margin: '0 0 15px 0' }}>
-                        Üzgünüz, bir şeyler ters gitti.
-                    </p>
+                <div aria-label="use error handler" style={_st1}>
+                    <h2 style={_st2}>⚠️ Bir Error Oluştu</h2>
+                    <p style={_st3}>Sorry, something went wrong.</p>
                     {import.meta.env.MODE === 'development' && (
-                        <details style={{ marginBottom: '15px' }}>
-                            <summary style={{ cursor: 'pointer', color: '#666' }}>
-                                Hata Detayları
-                            </summary>
-                            <pre style={{
-                                fontSize: '12px',
-                                overflow: 'auto',
-                                padding: '10px',
-                                backgroundColor: '#fff',
-                                border: '1px solid #ddd',
-                                borderRadius: '4px',
-                                marginTop: '10px'
-                            }}>
+                        <details style={_st4}>
+                            <summary style={_st5}>Error Details</summary>
+                            <pre style={_st6}>
                                 {this.state.error && this.state.error.toString()}
                                 {'\n\n'}
                                 {this.state.errorInfo && this.state.errorInfo.componentStack}
                             </pre>
                         </details>
                     )}
-                    <button
-                        onClick={this.handleReset}
-                        style={{
-                            padding: '10px 20px',
-                            backgroundColor: '#2196f3',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '14px'
-                        }}
-                    >
-                        Tekrar Dene
+                    <button onClick={this.handleReset} style={_st7}>
+                        Try Again
                     </button>
                 </div>
             );
@@ -233,7 +236,7 @@ export const setupGlobalErrorHandlers = () => {
             type: 'uncaught',
             filename: event.filename,
             lineno: event.lineno,
-            colno: event.colno
+            colno: event.colno,
         });
     });
 
@@ -241,7 +244,7 @@ export const setupGlobalErrorHandlers = () => {
     window.addEventListener('unhandledrejection', (event) => {
         errorLogger.log(new Error(event.reason), {
             type: 'unhandledRejection',
-            promise: event.promise
+            promise: event.promise,
         });
     });
 
@@ -271,12 +274,7 @@ export const tryCatch = async (fn, fallback = null) => {
  * Retry wrapper
  */
 export const retry = async (fn, options = {}) => {
-    const {
-        maxAttempts = 3,
-        delay = 1000,
-        backoff = 2,
-        onRetry
-    } = options;
+    const { maxAttempts = 3, delay = 1000, backoff = 2, onRetry } = options;
 
     let lastError;
 
@@ -293,14 +291,14 @@ export const retry = async (fn, options = {}) => {
                     onRetry(attempt, maxAttempts, waitTime);
                 }
 
-                await new Promise(resolve => setTimeout(resolve, waitTime));
+                await new Promise((resolve) => setTimeout(resolve, waitTime));
             }
         }
     }
 
     errorLogger.log(lastError, {
         type: 'retry-failed',
-        attempts: maxAttempts
+        attempts: maxAttempts,
     });
 
     throw lastError;
@@ -334,7 +332,7 @@ export class CircuitBreaker {
                 this.fn(...args),
                 new Promise((_, reject) =>
                     setTimeout(() => reject(new Error('Timeout')), this.timeout)
-                )
+                ),
             ]);
 
             this.onSuccess();
@@ -359,12 +357,12 @@ export class CircuitBreaker {
 
             errorLogger.log(new Error('Circuit breaker opened'), {
                 failures: this.failures,
-                threshold: this.failureThreshold
+                threshold: this.failureThreshold,
             });
         }
     }
 }
 
+ErrorBoundary.propTypes = {};
+
 export default ErrorBoundary;
-
-

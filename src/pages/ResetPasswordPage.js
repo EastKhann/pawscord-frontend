@@ -1,9 +1,29 @@
-// frontend/src/pages/ResetPasswordPage.js
+﻿// frontend/src/pages/ResetPasswordPage.js
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaLock, FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 
+// -- dynamic style helpers (pass 2) --
+const _st1078 = {
+    fontSize: '64px',
+    display: 'block',
+    margin: '0 auto 20px',
+    color: '#23a559',
+    filter: 'drop-shadow(0 4px 20px rgba(35,165,89,0.55))',
+};
+const _st1079 = {
+    fontSize: '64px',
+    display: 'block',
+    margin: '0 auto 20px',
+    color: '#f23f42',
+    filter: 'drop-shadow(0 4px 20px rgba(242,63,66,0.55))',
+};
+const _st1080 = { fontSize: '12px', fontWeight: 'bold', minWidth: '80px' };
+
 const ResetPasswordPage = ({ apiBaseUrl }) => {
+    const { t } = useTranslation();
     const { token } = useParams();
     const navigate = useNavigate();
     const [password, setPassword] = useState('');
@@ -15,11 +35,11 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
 
     const getPasswordStrength = (pass) => {
         if (pass.length === 0) return { score: 0, text: '', color: '' };
-        if (pass.length < 6) return { score: 1, text: 'Çok Zayıf', color: '#da373c' };
-        if (pass.length < 8) return { score: 2, text: 'Zayıf', color: '#f0b132' };
-        if (pass.length < 12) return { score: 3, text: 'Orta', color: '#5865f2' };
-        if (pass.length < 16) return { score: 4, text: 'Güçlü', color: '#23a559' };
-        return { score: 5, text: 'Çok Güçlü', color: '#23a559' };
+        if (pass.length < 6) return { score: 1, text: t('auth.tooWeak'), color: '#da373c' };
+        if (pass.length < 8) return { score: 2, text: t('auth.weak'), color: '#f0b132' };
+        if (pass.length < 12) return { score: 3, text: t('auth.medium'), color: '#5865f2' };
+        if (pass.length < 16) return { score: 4, text: t('auth.strong'), color: '#23a559' };
+        return { score: 5, text: t('auth.veryStrong'), color: '#23a559' };
     };
 
     const strength = getPasswordStrength(password);
@@ -30,12 +50,12 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
 
         // Validation
         if (password.length < 6) {
-            setError('Şifre en az 6 karakter olmalı');
+            setError(t('auth.passwordTooShort'));
             return;
         }
 
         if (password !== confirmPassword) {
-            setError('Şifreler eşleşmiyor');
+            setError(t('auth.passwordsDoNotMatch'));
             return;
         }
 
@@ -47,7 +67,7 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ password })
+                body: JSON.stringify({ password }),
             });
 
             const data = await response.json();
@@ -58,7 +78,7 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                     navigate('/login');
                 }, 3000);
             } else {
-                setError(data.error || 'Şifre sıfırlama başarısız oldu');
+                setError(data.error || t('common.unknownError'));
                 setStatus('error');
             }
         } catch (error) {
@@ -71,16 +91,16 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
         return (
             <div style={styles.container}>
                 <div style={styles.card}>
-                    <FaCheckCircle style={{ ...styles.icon, color: '#23a559' }} />
-                    <h2 style={styles.title}>✅ Şifre Değiştirildi!</h2>
-                    <p style={styles.text}>
-                        Şifreniz başarıyla değiştirildi.
-                    </p>
-                    <p style={styles.redirect}>
-                        3 saniye içinde giriş sayfasına yönlendirileceksiniz...
-                    </p>
-                    <button onClick={() => navigate('/login')} style={styles.button}>
-                        Hemen Giriş Yap
+                    <FaCheckCircle style={_st1078} />
+                    <h2 style={styles.title}>✅ {t('auth.passwordChanged')}</h2>
+                    <p style={styles.text}>{t('auth.passwordChangedDesc')}</p>
+                    <p style={styles.redirect}>{t('auth.redirectingLogin')}</p>
+                    <button
+                        onClick={() => navigate('/login')}
+                        style={styles.button}
+                        aria-label={t('auth.loginNow')}
+                    >
+                        {t('auth.loginNow')}
                     </button>
                 </div>
             </div>
@@ -91,19 +111,23 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
         return (
             <div style={styles.container}>
                 <div style={styles.card}>
-                    <FaTimesCircle style={{ ...styles.icon, color: '#da373c' }} />
-                    <h2 style={styles.title}>❌ Hata</h2>
+                    <FaTimesCircle style={_st1079} />
+                    <h2 style={styles.title}>❌ {t('auth.verifyError')}</h2>
                     <p style={styles.text}>{error}</p>
                     <div style={styles.errorReasons}>
-                        <p style={styles.reasonTitle}>Olası sebepler:</p>
+                        <p style={styles.reasonTitle}>{t('auth.possibleReasons')}:</p>
                         <ul style={styles.reasonList}>
-                            <li>Link süresi dolmuş olabilir (1 saat)</li>
-                            <li>Link daha önce kullanılmış olabilir</li>
-                            <li>Geçersiz bir link olabilir</li>
+                            <li>{t('auth.linkExpired')}</li>
+                            <li>{t('auth.linkAlreadyUsed')}</li>
+                            <li>{t('auth.invalidLink')}</li>
                         </ul>
                     </div>
-                    <button onClick={() => navigate('/forgot-password')} style={styles.button}>
-                        Yeni Link İste
+                    <button
+                        onClick={() => navigate('/forgot-password')}
+                        style={styles.button}
+                        aria-label={t('auth.requestNewLink')}
+                    >
+                        {t('auth.requestNewLink')}
                     </button>
                 </div>
             </div>
@@ -114,17 +138,15 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
         <div style={styles.container}>
             <div style={styles.card}>
                 <FaLock style={styles.icon} />
-                <h2 style={styles.title}>Yeni Şifre Belirle</h2>
-                <p style={styles.text}>
-                    Hesabınız için yeni bir şifre oluşturun.
-                </p>
+                <h2 style={styles.title}>{t('auth.newPassword')}</h2>
+                <p style={styles.text}>{t('auth.createNewPassword')}</p>
 
                 <form onSubmit={handleSubmit} style={styles.form}>
                     {/* Password Input */}
                     <div style={styles.inputContainer}>
                         <input
                             type={showPassword ? 'text' : 'password'}
-                            placeholder="Yeni şifre"
+                            placeholder={t('auth.newPasswordPlaceholder')}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -135,6 +157,11 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
                             style={styles.eyeButton}
+                            aria-label={
+                                showPassword
+                                    ? t('common.hidePassword', 'Hide password')
+                                    : t('common.showPassword', 'Show password')
+                            }
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </button>
@@ -148,13 +175,11 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                                     style={{
                                         ...styles.strengthFill,
                                         width: `${(strength.score / 5) * 100}%`,
-                                        backgroundColor: strength.color
+                                        backgroundColor: strength.color,
                                     }}
                                 />
                             </div>
-                            <span style={{ ...styles.strengthText, color: strength.color }}>
-                                {strength.text}
-                            </span>
+                            <span style={_st1080}>{strength.text}</span>
                         </div>
                     )}
 
@@ -162,7 +187,7 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                     <div style={styles.inputContainer}>
                         <input
                             type={showConfirmPassword ? 'text' : 'password'}
-                            placeholder="Şifre tekrar"
+                            placeholder={t('auth.confirmPasswordPlaceholder')}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
@@ -173,6 +198,11 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             style={styles.eyeButton}
+                            aria-label={
+                                showConfirmPassword
+                                    ? t('common.hidePassword', 'Hide password')
+                                    : t('common.showPassword', 'Show password')
+                            }
                         >
                             {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                         </button>
@@ -180,14 +210,19 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
 
                     {/* Match Indicator */}
                     {confirmPassword && (
-                        <div style={password === confirmPassword ? styles.matchGood : styles.matchBad}>
-                            {password === confirmPassword ? '✅ Şifreler eşleşiyor' : '❌ Şifreler eşleşmiyor'}
+                        <div
+                            style={
+                                password === confirmPassword ? styles.matchGood : styles.matchBad
+                            }
+                        >
+                            {password === confirmPassword
+                                ? `✅ ${t('auth.passwordsMatch')}`
+                                : `❌ ${t('auth.passwordsNoMatch')}`}
                         </div>
                     )}
 
-                    {/* Error */}
                     {error && (
-                        <div style={styles.error}>
+                        <div style={styles.error} role="alert">
                             ❌ {error}
                         </div>
                     )}
@@ -197,18 +232,19 @@ const ResetPasswordPage = ({ apiBaseUrl }) => {
                         type="submit"
                         style={styles.submitButton}
                         disabled={status === 'loading' || password !== confirmPassword}
+                        aria-label={t('auth.changePassword')}
                     >
-                        {status === 'loading' ? 'Kaydediliyor...' : 'Şifreyi Değiştir'}
+                        {status === 'loading' ? t('common.saving') : t('auth.changePassword')}
                     </button>
                 </form>
 
                 <div style={styles.info}>
-                    <p style={styles.infoTitle}>💡 Güçlü Şifre İpuçları:</p>
+                    <p style={styles.infoTitle}>💡 {t('auth.passwordTips')}</p>
                     <ul style={styles.infoList}>
-                        <li>En az 8 karakter kullanın</li>
-                        <li>Büyük ve küçük harf karışımı</li>
-                        <li>Rakam ve özel karakter ekleyin</li>
-                        <li>Kolay tahmin edilebilir şifrelerden kaçının</li>
+                        <li>{t('auth.passwordTip1')}</li>
+                        <li>{t('auth.passwordTip2')}</li>
+                        <li>{t('auth.passwordTip3')}</li>
+                        <li>{t('auth.passwordTip4')}</li>
                     </ul>
                 </div>
             </div>
@@ -222,8 +258,9 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'radial-gradient(ellipse at 15% 20%, rgba(88,101,242,0.16) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(124,58,237,0.10) 0%, transparent 48%), #0d0e10',
-        padding: '20px'
+        background:
+            'radial-gradient(ellipse at 15% 20%, rgba(88,101,242,0.16) 0%, transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(124,58,237,0.10) 0%, transparent 48%), #0d0e10',
+        padding: '20px',
     },
     card: {
         background: 'rgba(30, 31, 35, 0.88)',
@@ -234,15 +271,16 @@ const styles = {
         maxWidth: '500px',
         width: '100%',
         border: '1px solid rgba(255,255,255,0.07)',
-        boxShadow: '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.06)',
-        animation: 'authCardIn 0.5s cubic-bezier(0.22,1,0.36,1)'
+        boxShadow:
+            '0 0 0 1px rgba(88,101,242,0.08), 0 32px 80px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.06)',
+        animation: 'authCardIn 0.5s cubic-bezier(0.22,1,0.36,1)',
     },
     icon: {
         fontSize: '64px',
         color: '#5865f2',
         display: 'block',
         margin: '0 auto 20px',
-        filter: 'drop-shadow(0 4px 20px rgba(88,101,242,0.55))'
+        filter: 'drop-shadow(0 4px 20px rgba(88,101,242,0.55))',
     },
     title: {
         background: 'linear-gradient(135deg, #ffffff 30%, #9ba5ff)',
@@ -252,21 +290,21 @@ const styles = {
         fontSize: '28px',
         fontWeight: '800',
         textAlign: 'center',
-        margin: '0 0 10px 0'
+        margin: '0 0 10px 0',
     },
     text: {
         color: '#b5bac1',
         fontSize: '16px',
         textAlign: 'center',
-        marginBottom: '30px'
+        marginBottom: '30px',
     },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '15px'
+        gap: '15px',
     },
     inputContainer: {
-        position: 'relative'
+        position: 'relative',
     },
     input: {
         background: 'rgba(255,255,255,0.05)',
@@ -278,7 +316,7 @@ const styles = {
         fontSize: '16px',
         outline: 'none',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
     },
     eyeButton: {
         position: 'absolute',
@@ -289,38 +327,38 @@ const styles = {
         border: 'none',
         color: '#b5bac1',
         cursor: 'pointer',
-        fontSize: '18px'
+        fontSize: '18px',
     },
     strengthContainer: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '10px',
     },
     strengthBar: {
         flex: 1,
         height: '6px',
         background: 'rgba(255,255,255,0.07)',
         borderRadius: '3px',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     strengthFill: {
         height: '100%',
-        transition: 'all 0.3s'
+        transition: 'all 0.3s',
     },
     strengthText: {
         fontSize: '12px',
         fontWeight: 'bold',
-        minWidth: '80px'
+        minWidth: '80px',
     },
     matchGood: {
         color: '#23a559',
         fontSize: '14px',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     matchBad: {
         color: '#da373c',
         fontSize: '14px',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     error: {
         backgroundColor: '#da373c',
@@ -328,7 +366,7 @@ const styles = {
         padding: '12px',
         borderRadius: '6px',
         fontSize: '14px',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     submitButton: {
         background: 'linear-gradient(135deg, #5865f2 0%, #4549c4 100%)',
@@ -340,7 +378,7 @@ const styles = {
         fontWeight: 'bold',
         cursor: 'pointer',
         transition: 'opacity 0.2s, transform 0.15s',
-        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
     },
     button: {
         background: 'linear-gradient(135deg, #5865f2 0%, #4549c4 100%)',
@@ -354,33 +392,33 @@ const styles = {
         marginTop: '20px',
         display: 'block',
         width: '100%',
-        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)'
+        boxShadow: '0 4px 0 #3b45c7, 0 8px 24px rgba(88,101,242,0.40)',
     },
     redirect: {
         color: '#80848e',
         fontSize: '14px',
         fontStyle: 'italic',
         textAlign: 'center',
-        marginTop: '10px'
+        marginTop: '10px',
     },
     info: {
         background: 'rgba(88,101,242,0.07)',
         border: '1px solid rgba(88,101,242,0.20)',
         borderRadius: '12px',
         padding: '15px',
-        marginTop: '20px'
+        marginTop: '20px',
     },
     infoTitle: {
         color: '#fff',
         fontSize: '14px',
         fontWeight: 'bold',
-        margin: '0 0 10px 0'
+        margin: '0 0 10px 0',
     },
     infoList: {
         color: '#b5bac1',
         fontSize: '14px',
         margin: 0,
-        paddingLeft: '20px'
+        paddingLeft: '20px',
     },
     errorReasons: {
         background: 'rgba(242,63,66,0.07)',
@@ -388,23 +426,23 @@ const styles = {
         borderRadius: '12px',
         padding: '20px',
         marginTop: '10px',
-        textAlign: 'left'
+        textAlign: 'left',
     },
     reasonTitle: {
         color: '#fff',
         fontSize: '14px',
         fontWeight: 'bold',
-        marginBottom: '10px'
+        marginBottom: '10px',
     },
     reasonList: {
         color: '#b5bac1',
         fontSize: '14px',
         margin: 0,
-        paddingLeft: '20px'
-    }
+        paddingLeft: '20px',
+    },
 };
 
+ResetPasswordPage.propTypes = {
+    apiBaseUrl: PropTypes.string.isRequired,
+};
 export default ResetPasswordPage;
-
-
-

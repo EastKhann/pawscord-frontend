@@ -1,6 +1,12 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
+import { getToken } from '../../utils/tokenStorage';
 import { FaEdit } from 'react-icons/fa';
 import { API_BASE_URL } from '../../utils/constants';
+
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import logger from '../../utils/logger';
 
 const DURATION_OPTIONS = [
   { value: '', label: "Don't clear" },
@@ -14,6 +20,8 @@ const DURATION_OPTIONS = [
 const EMOJI_SUGGESTIONS = ['😀', '😎', '🎮', '💻', '📚', '🎵', '☕', '🌙', '❤️', '🔥'];
 
 export const CustomStatusInput = ({ onSave, currentStatus }) => {
+    const { t } = useTranslation();
+
   const [emoji, setEmoji] = useState(currentStatus?.emoji || '');
   const [text, setText] = useState(currentStatus?.text || '');
   const [expiresIn, setExpiresIn] = useState('');
@@ -23,7 +31,7 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
     if (!text.trim() && !emoji) return;
     setIsSaving(true);
     try {
-      const token = localStorage.getItem('access_token');
+      const token = getToken();
       const response = await fetch(`${API_BASE_URL}/presence/custom-status/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -31,7 +39,7 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
       });
       if (response.ok) onSave?.();
     } catch (error) {
-      console.error('Custom status save error:', error);
+      logger.error('Custom status save error:', error);
     } finally {
       setIsSaving(false);
     }
@@ -39,18 +47,18 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
 
   return (
     <div className="custom-status-input">
-      <div className="csi-header"><FaEdit /><span>Set a custom status</span></div>
+      <div className="csi-header"><FaEdit /><span>{t('set_a_custom_status')}</span></div>
       <div className="csi-content">
         <div className="csi-emoji-row">
-          <input type="text" value={emoji} onChange={e => setEmoji(e.target.value)} placeholder={'😀'} className="csi-emoji-input" maxLength={2} />
-          <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder="What's on your mind?" className="csi-text-input" maxLength={128} />
+          <input type="text" value={emoji} onChange={e => setEmoji(e.target.value)} placeholder=😀 className="csi-emoji-input" maxLength={2} />
+          <input type="text" value={text} onChange={e => setText(e.target.value)} placeholder={t('what_s_on_your_mind')} className="csi-text-input" maxLength={128} />
         </div>
         <div className="csi-emoji-suggestions">
           {EMOJI_SUGGESTIONS.map(e => <button key={e} onClick={() => setEmoji(e)}>{e}</button>)}
         </div>
         <div className="csi-expires">
-          <label>Clear after:</label>
-          <select value={expiresIn} onChange={e => setExpiresIn(e.target.value)}>
+          <label>{t('clear_after')}</label>
+          <select value={expiresIn} onChange={e => setExpiresIn(e.target.value)}
             {DURATION_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
         </div>
@@ -62,4 +70,10 @@ export const CustomStatusInput = ({ onSave, currentStatus }) => {
       </div>
     </div>
   );
+};
+
+
+CustomStatusInput.propTypes = {
+    onSave: PropTypes.func,
+    currentStatus: PropTypes.array,
 };

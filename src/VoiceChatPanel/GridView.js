@@ -1,9 +1,12 @@
-// frontend/src/VoiceChatPanel/GridView.js
+﻿// frontend/src/VoiceChatPanel/GridView.js
 // 🎨 Grid view for voice chat — screen shares + camera cards
 
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import UserVideoCard from './UserVideoCard';
 import { StreamBadge } from './StatusBadges';
+
+// -- extracted inline style constants --
 
 const getGridLayout = (count, isMobile) => {
     if (isMobile) return { cols: 1, rows: count };
@@ -14,168 +17,174 @@ const getGridLayout = (count, isMobile) => {
     return { cols: 4, rows: Math.ceil(count / 4) };
 };
 
-const GridView = React.memo(({
-    combinedUsers,
-    allStreams,
-    screenShares = [],
-    remoteVolumes,
-    setRemoteVolume,
-    talkingIndicators,
-    activeSpeaker,
-    pinnedUser,
-    setPinnedUser,
-    setExpandedUser,
-    setContextMenu,
-    connectionQuality,
-    getUserAvatar,
-    isMobile,
-}) => {
-    const hasScreenShares = screenShares.length > 0;
+const GridView = React.memo(
+    ({
+        combinedUsers,
+        allStreams,
+        screenShares = [],
+        remoteVolumes,
+        setRemoteVolume,
+        talkingIndicators,
+        activeSpeaker,
+        pinnedUser,
+        setPinnedUser,
+        setExpandedUser,
+        setContextMenu,
+        connectionQuality,
+        getUserAvatar,
+        isMobile,
+    }) => {
+        // 🔥 Focused key: user can click to enlarge any frame
+        const [focusedKey, setFocusedKey] = useState(null);
 
-    if (hasScreenShares) {
-        // 🔥 Mixed grid: screen shares + cameras
+        // Build unified list: screen shares + cameras (all equal by default)
         const allItems = [];
 
-        // Önce ekran paylaşımlarını ekle
-        screenShares.forEach(user => {
+        // Screen shares
+        (screenShares || []).forEach((user) => {
             const screenStream = allStreams[`${user.username}_screen`];
             if (screenStream) {
                 allItems.push({
                     key: `${user.username}_screen`,
-                    username: user.username,
-                    type: 'screen',
-                    component: (
-                        <UserVideoCard
-                            key={`${user.username}_screen`}
-                            user={{ ...user, streamType: 'screen' }}
-                            stream={screenStream}
-                            isActive={false}
-                            isPinned={false}
-                            onExpand={() => setExpandedUser({ ...user, streamType: 'screen' })}
-                            onPin={() => { }}
-                            onContextMenu={(data) => setContextMenu(data)}
-                            badge={<StreamBadge user={{ ...user, streamType: 'screen' }} />}
-                            connectionQuality={connectionQuality[user.username]}
-                            getUserAvatar={getUserAvatar}
-                        />
-                    )
+                    user: { ...user, streamType: 'screen' },
+                    stream: screenStream,
                 });
             }
         });
 
-        // Sonra kameraları ekle (sadece aktif stream'ler veya kendim)
-        combinedUsers.forEach(user => {
-            const cameraStream = allStreams[`${user.username}_camera`] || allStreams[user.username];
-            const shouldShow = (cameraStream && cameraStream.active) || user.isLocal;
-
-            if (shouldShow) {
-                allItems.push({
-                    key: `${user.username}_camera`,
-                    username: user.username,
-                    type: 'camera',
-                    component: (
-                        <UserVideoCard
-                            key={`${user.username}_camera`}
-                            user={{
-                                ...user,
-                                streamType: 'camera',
-                                volume: remoteVolumes[user.username] || 100,
-                                onVolumeChange: (vol) => setRemoteVolume(user.username, vol),
-                                isTalking: talkingIndicators[user.username] || false,
-                            }}
-                            stream={cameraStream}
-                            isActive={activeSpeaker === user.username}
-                            isPinned={pinnedUser === user.username}
-                            onExpand={() => setExpandedUser({ ...user, streamType: 'camera' })}
-                            onPin={() => setPinnedUser(pinnedUser === user.username ? null : user.username)}
-                            onContextMenu={(data) => setContextMenu(data)}
-                            badge={<StreamBadge user={user} />}
-                            connectionQuality={connectionQuality[user.username]}
-                            getUserAvatar={getUserAvatar}
-                        />
-                    )
-                });
-            }
+        // Cameras
+        combinedUsers.forEach((user) => {
+            const cameraStream =
+                allStreams[`${user.username}_camera`] ||
+                (user.isLocal ? null : allStreams[user.username]);
+            allItems.push({
+                key: `${user.username}_camera`,
+                user: {
+                    ...user,
+                    streamType: 'camera',
+                    volume: remoteVolumes[user.username] || 100,
+                    onVolumeChange: (vol) => setRemoteVolume(user.username, vol),
+                    isTalking: talkingIndicators?.[user.username] || false,
+                },
+                stream: cameraStream,
+            });
         });
 
-        // Grid layout hesapla
-        const totalItems = allItems.length;
-        let cols, rows;
-        if (totalItems <= 2) { cols = totalItems; rows = 1; }
-        else if (totalItems <= 4) { cols = 2; rows = 2; }
-        else if (totalItems <= 6) { cols = 3; rows = 2; }
-        else { cols = 3; rows = Math.ceil(totalItems / 3); }
+        const toggleFocus = (key) => {
+            setFocusedKey((prev) => (prev === key ? null : key));
+        };
 
-        return (
-            <div style={{
-                width: '100%',
-                height: '100%',
-                display: 'grid',
-                gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                gridTemplateRows: `repeat(${rows}, 1fr)`,
-                gap: '16px',
-                padding: '0',
-                position: 'relative',
-            }}>
-                {allItems.map((item) => (
+        const renderCard = (item) => (
+            <UserVideoCard
+                key={item.key}
+                user={item.user}
+                stream={item.stream}
+                isActive={activeSpeaker === item.user.username}
+                isPinned={pinnedUser === item.user.username}
+                onExpand={() => toggleFocus(item.key)}
+                onPin={() =>
+                    setPinnedUser(pinnedUser === item.user.username ? null : item.user.username)
+                }
+                onContextMenu={(data) => setContextMenu(data)}
+                badge={<StreamBadge user={item.user} />}
+                connectionQuality={connectionQuality[item.user.username]}
+                getUserAvatar={getUserAvatar}
+            />
+        );
+
+        // 🔥 FOCUSED LAYOUT: one item large + others in sidebar
+        if (focusedKey && allItems.length > 1) {
+            const focusedItem = allItems.find((i) => i.key === focusedKey);
+            const otherItems = allItems.filter((i) => i.key !== focusedKey);
+
+            if (focusedItem) {
+                const sidebarItemH = Math.min(
+                    180,
+                    Math.floor(600 / Math.max(otherItems.length, 1))
+                );
+                return (
                     <div
-                        key={item.key}
                         style={{
-                            position: 'relative',
                             width: '100%',
                             height: '100%',
+                            display: 'flex',
+                            gap: '12px',
                             overflow: 'hidden',
-                            zIndex: 1,
-                            isolation: 'isolate',
                         }}
                     >
-                        {item.component}
+                        {/* Focused (large) */}
+                        <div style={{ flex: 1, minWidth: 0, minHeight: 0 }}>
+                            {renderCard(focusedItem)}
+                        </div>
+
+                        {/* Sidebar (small) */}
+                        {otherItems.length > 0 && (
+                            <div
+                                style={{
+                                    width: isMobile ? '160px' : '280px',
+                                    flexShrink: 0,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '8px',
+                                    overflowY: 'auto',
+                                    overflowX: 'hidden',
+                                }}
+                            >
+                                {otherItems.map((item) => (
+                                    <div
+                                        key={item.key}
+                                        style={{
+                                            height: `${sidebarItemH}px`,
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                        {renderCard(item)}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                ))}
+                );
+            }
+        }
+
+        // 🔥 DEFAULT: Equal grid for ALL items (screen shares + cameras)
+        const { cols, rows } = getGridLayout(allItems.length, isMobile);
+
+        return (
+            <div
+                style={{
+                    flex: 1,
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                    gridTemplateRows: `repeat(${rows}, 1fr)`,
+                    gap: '16px',
+                    minHeight: '400px',
+                    height: '100%',
+                }}
+            >
+                {allItems.map((item) => renderCard(item))}
             </div>
         );
     }
-
-    // 🔥 Camera-only grid (no screen shares)
-    const { cols, rows } = getGridLayout(combinedUsers.length, isMobile);
-
-    return (
-        <div style={{
-            flex: 1,
-            display: 'grid',
-            gridTemplateColumns: `repeat(${cols}, 1fr)`,
-            gridTemplateRows: `repeat(${rows}, 1fr)`,
-            gap: '16px',
-            minHeight: '400px',
-            height: '100%',
-        }}>
-            {combinedUsers.map(user => {
-                const cameraStream = allStreams[`${user.username}_camera`] || (user.isLocal ? null : allStreams[user.username]);
-                return (
-                    <UserVideoCard
-                        key={`${user.username}_camera`}
-                        user={{
-                            ...user,
-                            streamType: 'camera',
-                            volume: remoteVolumes[user.username] || 100,
-                            onVolumeChange: (vol) => setRemoteVolume(user.username, vol)
-                        }}
-                        stream={cameraStream}
-                        isActive={activeSpeaker === user.username}
-                        isPinned={pinnedUser === user.username}
-                        onExpand={() => setExpandedUser({ ...user, streamType: 'camera' })}
-                        onPin={() => setPinnedUser(pinnedUser === user.username ? null : user.username)}
-                        onContextMenu={(data) => setContextMenu(data)}
-                        badge={<StreamBadge user={{ ...user, streamType: 'camera' }} />}
-                        connectionQuality={connectionQuality[user.username]}
-                        getUserAvatar={getUserAvatar}
-                    />
-                );
-            })}
-        </div>
-    );
-});
+);
 
 GridView.displayName = 'GridView';
 
+GridView.propTypes = {
+    combinedUsers: PropTypes.array,
+    allStreams: PropTypes.array,
+    screenShares: PropTypes.array,
+    remoteVolumes: PropTypes.array,
+    setRemoteVolume: PropTypes.func,
+    talkingIndicators: PropTypes.array,
+    activeSpeaker: PropTypes.bool,
+    pinnedUser: PropTypes.object,
+    setPinnedUser: PropTypes.func,
+    setExpandedUser: PropTypes.func,
+    setContextMenu: PropTypes.func,
+    connectionQuality: PropTypes.func,
+    getUserAvatar: PropTypes.func,
+    isMobile: PropTypes.bool,
+};
 export default GridView;

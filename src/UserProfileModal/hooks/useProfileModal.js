@@ -1,6 +1,8 @@
 // UserProfileModal/hooks/useProfileModal.js
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../utils/toast';
+import logger from '../../utils/logger';
 
 export const getIconForLink = (key) => {
     if (key.includes('steam')) return 'fab fa-steam';
@@ -20,13 +22,15 @@ export const formatUrl = (url, key) => {
 export const linkDisplayNames = {
     steam_trade: 'Steam Trade URL',
     steam_profile: 'Steam Profili',
-    steam_friend_code: 'Steam Arkadaş Kodu',
+    steam_friend_code: 'Steam Friend Kodu',
     x: 'X (Twitter)',
-    instagram: 'Instagram'
+    instagram: 'Instagram',
 };
 
 export const useProfileModal = ({ user, fetchWithAuth, apiBaseUrl, currentUser, friendsList }) => {
+    const { t } = useTranslation();
     const [requestStatus, setRequestStatus] = useState('idle');
+    const [isLoading, setIsLoading] = useState(false);
     const [showSessionManager, setShowSessionManager] = useState(false);
     const [showNotes, setShowNotes] = useState(false);
     const [activeTab, setActiveTab] = useState('profile');
@@ -36,13 +40,15 @@ export const useProfileModal = ({ user, fetchWithAuth, apiBaseUrl, currentUser, 
         if (activeTab === 'activity' && user?.username) {
             const fetchPresenceHistory = async () => {
                 try {
-                    const response = await fetchWithAuth(`${apiBaseUrl}/presence/${user.username}/`);
+                    const response = await fetchWithAuth(
+                        `${apiBaseUrl}/presence/${user.username}/`
+                    );
                     if (response.ok) {
                         const data = await response.json();
                         setPresenceHistory(data.presence || []);
                     }
                 } catch (error) {
-                    console.error('Failed to fetch presence history:', error);
+                    logger.error('Failed to fetch presence history:', error);
                     setPresenceHistory([]);
                 }
             };
@@ -50,45 +56,85 @@ export const useProfileModal = ({ user, fetchWithAuth, apiBaseUrl, currentUser, 
         }
     }, [activeTab, user?.username, fetchWithAuth, apiBaseUrl]);
 
-    const isFriend = friendsList && Array.isArray(friendsList) && (
-        friendsList.some(f => {
+    const isFriend =
+        friendsList &&
+        Array.isArray(friendsList) &&
+        friendsList.some((f) => {
             if (typeof f === 'string') return f === user?.username;
-            return f.username === user?.username || f.sender_username === user?.username || f.receiver_username === user?.username;
-        })
-    );
+            return (
+                f.username === user?.username ||
+                f.sender_username === user?.username ||
+                f.receiver_username === user?.username
+            );
+        });
     const isSelf = user?.username === currentUser;
 
     const handleAddFriend = async () => {
         setRequestStatus('loading');
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, { method: 'POST', body: JSON.stringify({ username: user.username }) });
-            if (response.ok) { setRequestStatus('success'); }
-            else { toast.error('❌ İstek gönderilemedi. Zaten ekli veya bekliyor olabilir.'); setRequestStatus('idle'); }
-        } catch (error) { console.error('Arkadaş ekleme hatası:', error); setRequestStatus('idle'); }
+            const response = await fetchWithAuth(`${apiBaseUrl}/friends/send/`, {
+                method: 'POST',
+                body: JSON.stringify({ username: user.username }),
+            });
+            if (response.ok) {
+                setRequestStatus('success');
+            } else {
+                toast.error(t('profile.friendRequestFailed'));
+                setRequestStatus('idle');
+            }
+        } catch (error) {
+            logger.error('Friend addme hatası:', error);
+            setRequestStatus('idle');
+        }
     };
 
     const copyToClipboard = (text, key) => {
-        try { navigator.clipboard.writeText(text); toast.success(`✅ '${key}' panoya kopyalandı`); }
-        catch (err) { toast.error('❌ Kopyalama hatası.'); }
+        try {
+            navigator.clipboard.writeText(text);
+            toast.success(t('profile.copied', { key }));
+        } catch (err) {
+            toast.error(t('profile.copyFailed'));
+        }
     };
 
     const handleSendMoney = async () => {
-        const amount = prompt(`Ne kadar Coin göndermek istiyorsun? (${user.username} kişisine)`);
+        const amount = prompt(`How many coins do you want to send to ${user.username}?`);
         if (!amount) return;
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/store/transfer/`, { method: 'POST', body: JSON.stringify({ target_username: user.username, amount }) });
+            const res = await fetchWithAuth(`${apiBaseUrl}/store/transfer/`, {
+                method: 'POST',
+                body: JSON.stringify({ target_username: user.username, amount }),
+            });
             const data = await res.json();
-            if (res.ok) { toast.success(data.message); } else { toast.error(data.error); }
-        } catch (e) { toast.error('❌ Hata.'); }
+            if (res.ok) {
+                toast.success(data.message);
+            } else {
+                toast.error(data.error);
+            }
+        } catch (e) {
+            toast.error(t('profile.actionError'));
+        }
     };
 
     const socialLinks = user?.social_links || {};
-    const validLinks = Object.entries(socialLinks).filter(([, value]) => value && value.trim() !== '');
+    const validLinks = Object.entries(socialLinks).filter(
+        ([, value]) => value && value.trim() !== ''
+    );
 
     return {
-        requestStatus, showSessionManager, setShowSessionManager,
-        showNotes, setShowNotes, activeTab, setActiveTab,
-        presenceHistory, isFriend, isSelf,
-        handleAddFriend, copyToClipboard, handleSendMoney, validLinks
+        requestStatus,
+        showSessionManager,
+        setShowSessionManager,
+        showNotes,
+        setShowNotes,
+        activeTab,
+        setActiveTab,
+        presenceHistory,
+        isFriend,
+        isSelf,
+        handleAddFriend,
+        copyToClipboard,
+        handleSendMoney,
+        validLinks,
     };
 };

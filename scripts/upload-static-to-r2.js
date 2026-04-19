@@ -14,11 +14,16 @@ const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 const VERSION = packageJson.version || '1.0.0';
 const BUILD_PREFIX = `builds/v${VERSION}`; // örn: builds/v2.0.0
 
-// R2 Credentials
-const R2_ACCOUNT_ID = '5bb213c024f3265f952492efcc1ddf9d';
-const R2_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || '5fb83d914e5b83fbb67b4b35af12d058';
-const R2_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || '7cbaa11813832c061efc7f2839f3a7c8518e0cba9bf4daeb8f6f0f659853a9cd';
+// R2 Credentials (env vars ZORUNLU - hardcoded secret YASAK)
+const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
+const R2_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const R2_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const R2_BUCKET_NAME = process.env.AWS_STORAGE_BUCKET_NAME || 'pawscord-media';
+
+if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY) {
+    console.error('❌ R2 credentials missing! Set R2_ACCOUNT_ID, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY env vars.');
+    process.exit(1);
+}
 
 // S3 Client (R2 compatible)
 const s3Client = new S3Client({

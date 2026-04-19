@@ -3,48 +3,91 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 // Mock the hook
 const mockApi = {
-    activeTab: 'dashboard', setActiveTab: vi.fn(),
+    activeTab: 'dashboard',
+    setActiveTab: vi.fn(),
     loading: false,
-    stats: {}, detailedStats: {}, liveActivities: [], securityAlerts: [],
-    users: [], servers: [], logs: [], systemHealth: {},
-    bannedUsers: [], dbStats: {}, realtimeStats: { online: 5, messages: 10, voice: 2 },
-    systemLogs: [], logStats: null,
-    searchQuery: '', setSearchQuery: vi.fn(),
-    currentPage: 1, setCurrentPage: vi.fn(), totalPages: 1,
-    sortField: 'created', setSortField: vi.fn(),
-    sortOrder: 'desc', setSortOrder: vi.fn(),
-    filterStatus: 'all', setFilterStatus: vi.fn(),
-    logType: 'all', setLogType: vi.fn(),
-    logSearch: '', setLogSearch: vi.fn(),
-    logSeverity: '', setLogSeverity: vi.fn(),
-    logDateFrom: '', setLogDateFrom: vi.fn(),
-    logDateTo: '', setLogDateTo: vi.fn(),
+    stats: {},
+    detailedStats: {},
+    liveActivities: [],
+    securityAlerts: [],
+    users: [],
+    servers: [],
+    logs: [],
+    systemHealth: {},
+    bannedUsers: [],
+    dbStats: {},
+    realtimeStats: { online: 5, messages: 10, voice: 2 },
+    systemLogs: [],
+    logStats: null,
+    searchQuery: '',
+    setSearchQuery: vi.fn(),
+    currentPage: 1,
+    setCurrentPage: vi.fn(),
+    totalPages: 1,
+    sortField: 'created',
+    setSortField: vi.fn(),
+    sortOrder: 'desc',
+    setSortOrder: vi.fn(),
+    filterStatus: 'all',
+    setFilterStatus: vi.fn(),
+    logType: 'all',
+    setLogType: vi.fn(),
+    logSearch: '',
+    setLogSearch: vi.fn(),
+    logSeverity: '',
+    setLogSeverity: vi.fn(),
+    logDateFrom: '',
+    setLogDateFrom: vi.fn(),
+    logDateTo: '',
+    setLogDateTo: vi.fn(),
     logLoading: false,
-    userActivityModal: null, setUserActivityModal: vi.fn(),
-    selectedUser: null, setSelectedUser: vi.fn(),
-    actionModal: null, setActionModal: vi.fn(),
-    editUserModal: null, setEditUserModal: vi.fn(),
-    editUserForm: {}, setEditUserForm: vi.fn(),
+    userActivityModal: null,
+    setUserActivityModal: vi.fn(),
+    selectedUser: null,
+    setSelectedUser: vi.fn(),
+    actionModal: null,
+    setActionModal: vi.fn(),
+    editUserModal: null,
+    setEditUserModal: vi.fn(),
+    editUserForm: {},
+    setEditUserForm: vi.fn(),
     editUserLoading: false,
-    selectedServer: null, setSelectedServer: vi.fn(),
-    deleteConfirm: null, setDeleteConfirm: vi.fn(),
-    broadcastModal: false, setBroadcastModal: vi.fn(),
-    passwordResetModal: null, setPasswordResetModal: vi.fn(),
-    newPassword: '', setNewPassword: vi.fn(),
-    backupStatus: null, maintenanceMode: false,
-    announceText: '', setAnnounceText: vi.fn(),
-    fetchUsers: vi.fn(), fetchServers: vi.fn(), fetchDetailedStats: vi.fn(),
-    fetchLiveActivity: vi.fn(), fetchSecurityAlerts: vi.fn(), fetchSystemLogs: vi.fn(),
-    handleUserAction: vi.fn(), handleBroadcast: vi.fn(), handleBackup: vi.fn(),
-    handleClearCache: vi.fn(), toggleMaintenance: vi.fn(),
-    openEditUserModal: vi.fn(), handleUpdateUser: vi.fn(),
-    handleServerDetails: vi.fn(), handleServerDelete: vi.fn(),
-    handleDeleteOldLogs: vi.fn(), handleExportLogs: vi.fn(),
+    selectedServer: null,
+    setSelectedServer: vi.fn(),
+    deleteConfirm: null,
+    setDeleteConfirm: vi.fn(),
+    broadcastModal: false,
+    setBroadcastModal: vi.fn(),
+    passwordResetModal: null,
+    setPasswordResetModal: vi.fn(),
+    newPassword: '',
+    setNewPassword: vi.fn(),
+    backupStatus: null,
+    maintenanceMode: false,
+    announceText: '',
+    setAnnounceText: vi.fn(),
+    fetchUsers: vi.fn(),
+    fetchServers: vi.fn(),
+    fetchDetailedStats: vi.fn(),
+    fetchLiveActivity: vi.fn(),
+    fetchSecurityAlerts: vi.fn(),
+    fetchSystemLogs: vi.fn(),
+    handleUserAction: vi.fn(),
+    handleBroadcast: vi.fn(),
+    handleBackup: vi.fn(),
+    handleClearCache: vi.fn(),
+    toggleMaintenance: vi.fn(),
+    openEditUserModal: vi.fn(),
+    handleUpdateUser: vi.fn(),
+    handleServerDetails: vi.fn(),
+    handleServerDelete: vi.fn(),
+    handleDeleteOldLogs: vi.fn(),
+    handleExportLogs: vi.fn(),
     fetchUserActivity: vi.fn(),
 };
 
 vi.mock('../../components/AdminPanelModal/hooks/useAdminAPI', () => ({
-    default: () => mockApi
+    default: () => mockApi,
 }));
 
 // Mock tab components
@@ -75,13 +118,21 @@ vi.mock('../../components/AdminPanelModal/modals', () => ({
 
 vi.mock('../../components/AdminPanelModal/styles', () => ({
     default: {
-        overlay: {}, modal: {}, header: {}, headerLeft: {},
-        title: {}, closeButton: {}, body: {}, sidebar: {},
-        sidebarButton: () => ({}), content: {}, badge: () => ({})
-    }
+        overlay: {},
+        modal: {},
+        header: {},
+        headerLeft: {},
+        title: {},
+        closeButton: {},
+        body: {},
+        sidebar: {},
+        sidebarButton: () => ({}),
+        content: {},
+        badge: () => ({}),
+    },
 }));
 
-import AdminPanelModal from '../../components/AdminPanelModal';
+import AdminPanelModal from '../../components/admin/AdminPanelModal';
 
 describe('AdminPanelModal Orchestrator', () => {
     const defaultProps = {
@@ -94,7 +145,7 @@ describe('AdminPanelModal Orchestrator', () => {
         onOpenVanityURL: vi.fn(),
         onOpenAutoResponder: vi.fn(),
         fetchWithAuth: vi.fn(),
-        apiBaseUrl: 'http://localhost'
+        apiBaseUrl: 'http://localhost',
     };
 
     beforeEach(() => {
@@ -127,28 +178,30 @@ describe('AdminPanelModal Orchestrator', () => {
     it('should render all 11 sidebar menu items', () => {
         render(<AdminPanelModal {...defaultProps} />);
         expect(screen.getByText('Dashboard')).toBeInTheDocument();
-        expect(screen.getByText('Kullanıcılar')).toBeInTheDocument();
+        expect(screen.getByText('Userlar')).toBeInTheDocument();
         expect(screen.getByText('Sunucular')).toBeInTheDocument();
         expect(screen.getByText('Moderasyon')).toBeInTheDocument();
         expect(screen.getByText('Loglar')).toBeInTheDocument();
         expect(screen.getByText('Veritabanı')).toBeInTheDocument();
         expect(screen.getByText('Sistem')).toBeInTheDocument();
-        expect(screen.getByText('Güvenlik')).toBeInTheDocument();
+        expect(screen.getByText('Security')).toBeInTheDocument();
         expect(screen.getByText('Duyuru')).toBeInTheDocument();
-        expect(screen.getByText('Araçlar')).toBeInTheDocument();
+        expect(screen.getByText('Aropenlar')).toBeInTheDocument();
         expect(screen.getByText('Hızlı İşlem')).toBeInTheDocument();
     });
 
     it('should switch tabs when sidebar button clicked', () => {
         render(<AdminPanelModal {...defaultProps} />);
-        fireEvent.click(screen.getByText('Kullanıcılar'));
+        fireEvent.click(screen.getByText('Userlar'));
         expect(mockApi.setActiveTab).toHaveBeenCalledWith('users');
     });
 
     it('should call onClose when close button clicked', () => {
         render(<AdminPanelModal {...defaultProps} />);
         const buttons = document.querySelectorAll('button');
-        const closeBtn = Array.from(buttons).find(b => b.querySelector('svg') && !b.textContent.trim());
+        const closeBtn = Array.from(buttons).find(
+            (b) => b.querySelector('svg') && !b.textContent.trim()
+        );
         if (closeBtn) {
             fireEvent.click(closeBtn);
             expect(defaultProps.onClose).toHaveBeenCalled();

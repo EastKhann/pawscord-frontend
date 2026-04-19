@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import logger from '../../../utils/logger';
 
 export const useServerAnalytics = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
     const [analytics, setAnalytics] = useState(null);
@@ -13,7 +14,7 @@ export const useServerAnalytics = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
         try {
             const [analyticsRes, comparisonRes] = await Promise.all([
                 fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/analytics/?period=${period}`),
-                fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/analytics/compare/`)
+                fetchWithAuth(`${apiBaseUrl}/servers/${serverId}/analytics/compare/`),
             ]);
 
             if (analyticsRes.ok) {
@@ -26,7 +27,7 @@ export const useServerAnalytics = ({ serverId, fetchWithAuth, apiBaseUrl }) => {
                 setComparison(data);
             }
         } catch (e) {
-            console.error('Analytics fetch error:', e);
+            logger.error('Analytics fetch error:', e);
         } finally {
             setLoading(false);
         }

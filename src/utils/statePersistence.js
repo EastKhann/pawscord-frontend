@@ -1,3 +1,6 @@
+/* eslint-disable no-prototype-builtins */
+import React from 'react';
+import logger from '../utils/logger';
 // frontend/src/utils/statePersistence.js
 
 /**
@@ -47,17 +50,13 @@ class StatePersistenceManager {
      * Set item
      */
     set(key, value, options = {}) {
-        const {
-            ttl = this.ttl,
-            storage = this.storage,
-            encrypt = this.encrypt
-        } = options;
+        const { ttl = this.ttl, storage = this.storage, encrypt = this.encrypt } = options;
 
         const data = {
             value,
             timestamp: Date.now(),
             ttl,
-            version: this.version
+            version: this.version,
         };
 
         const serialized = JSON.stringify(encrypt ? this.encryptData(data) : data);
@@ -75,7 +74,7 @@ class StatePersistenceManager {
 
             return true;
         } catch (error) {
-            console.error('Storage quota exceeded:', error);
+            logger.error('Storage quota exceeded:', error);
             this.cleanup(storage);
             return false;
         }
@@ -85,11 +84,7 @@ class StatePersistenceManager {
      * Get item
      */
     get(key, options = {}) {
-        const {
-            storage = this.storage,
-            encrypt = this.encrypt,
-            defaultValue = null
-        } = options;
+        const { storage = this.storage, encrypt = this.encrypt, defaultValue = null } = options;
 
         const fullKey = this.prefix + key;
 
@@ -121,7 +116,7 @@ class StatePersistenceManager {
 
             return decrypted.value;
         } catch (error) {
-            console.error('Failed to get item:', error);
+            logger.error('Failed to get item:', error);
             return defaultValue;
         }
     }
@@ -147,13 +142,13 @@ class StatePersistenceManager {
         const { storage = this.storage } = options;
 
         if (storage === 'localStorage') {
-            Object.keys(localStorage).forEach(key => {
+            Object.keys(localStorage).forEach((key) => {
                 if (key.startsWith(this.prefix)) {
                     localStorage.removeItem(key);
                 }
             });
         } else if (storage === 'sessionStorage') {
-            Object.keys(sessionStorage).forEach(key => {
+            Object.keys(sessionStorage).forEach((key) => {
                 if (key.startsWith(this.prefix)) {
                     sessionStorage.removeItem(key);
                 }
@@ -211,7 +206,7 @@ class StatePersistenceManager {
     cleanup(storage = this.storage) {
         const keys = this.keys({ storage });
 
-        keys.forEach(key => {
+        keys.forEach((key) => {
             const value = this.get(key, { storage });
             if (value === null) {
                 // Already removed by TTL check
@@ -237,7 +232,7 @@ class StatePersistenceManager {
                 value,
                 timestamp: Date.now(),
                 ttl,
-                version: this.version
+                version: this.version,
             };
 
             const request = store.put(data);
@@ -312,7 +307,7 @@ class StatePersistenceManager {
         const raw = (window.location.origin || 'pawscord') + navigator.userAgent.slice(0, 32);
         let hash = 0;
         for (let i = 0; i < raw.length; i++) {
-            hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+            hash = (hash << 5) - hash + raw.charCodeAt(i);
             hash |= 0;
         }
         return 'pws_' + Math.abs(hash).toString(36) + '_state';
@@ -364,7 +359,7 @@ class StatePersistenceManager {
                     const newValue = e.newValue ? JSON.parse(e.newValue).value : null;
                     callback(newValue);
                 } catch (error) {
-                    console.error('Failed to parse storage event:', error);
+                    logger.error('Failed to parse storage event:', error);
                 }
             }
         };
@@ -382,7 +377,7 @@ export const statePersistence = new StatePersistenceManager({
     prefix: 'pawscord_',
     storage: 'localStorage',
     encrypt: false,
-    ttl: 7 * 24 * 60 * 60 * 1000 // 7 days
+    ttl: 7 * 24 * 60 * 60 * 1000, // 7 days
 });
 
 /**
@@ -415,7 +410,7 @@ export const usePersistedStateDB = (key, initialValue, options = {}) => {
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        statePersistence.getDB(key, initialValue).then(value => {
+        statePersistence.getDB(key, initialValue).then((value) => {
             setState(value);
             setLoading(false);
         });
@@ -431,5 +426,3 @@ export const usePersistedStateDB = (key, initialValue, options = {}) => {
 };
 
 export default StatePersistenceManager;
-
-

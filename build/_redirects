@@ -1,7 +1,9 @@
 # Cloudflare Pages SPA Redirects
-# Static files should be served directly
+# Note: Cloudflare Pages serves static assets BEFORE checking these rules.
+# The /assets/* pass-through rule is omitted because it can interfere with
+# CORS-mode requests (Sec-Fetch-Mode: cors), causing Cloudflare to return
+# index.html instead of the actual JS/CSS files.
 /static/*  /static/:splat  200
-/assets/*  /assets/:splat  200
 /icons/*   /icons/:splat   200
 /service-worker.js  /service-worker.js  200
 /sw.js  /sw.js  200

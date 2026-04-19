@@ -14,8 +14,8 @@ export const THEMES = {
             '--text-link': '#00a8fc',
             '--button-primary': '#5865f2',
             '--button-secondary': '#4e5058',
-            '--border-primary': '#1f2023'
-        }
+            '--border-primary': '#1f2023',
+        },
     },
     midnight: {
         name: 'Midnight AMOLED',
@@ -30,8 +30,8 @@ export const THEMES = {
             '--text-link': '#3ea6ff',
             '--button-primary': '#3ea6ff',
             '--button-secondary': '#333333',
-            '--border-primary': '#333333'
-        }
+            '--border-primary': '#333333',
+        },
     },
     dracula: {
         name: 'Dracula',
@@ -46,8 +46,8 @@ export const THEMES = {
             '--text-link': '#8be9fd',
             '--button-primary': '#bd93f9',
             '--button-secondary': '#44475a',
-            '--border-primary': '#44475a'
-        }
+            '--border-primary': '#44475a',
+        },
     },
     ocean: {
         name: 'Deep Ocean',
@@ -62,8 +62,8 @@ export const THEMES = {
             '--text-link': '#38bdf8',
             '--button-primary': '#0ea5e9',
             '--button-secondary': '#334155',
-            '--border-primary': '#1e293b'
-        }
+            '--border-primary': '#1e293b',
+        },
     },
     forest: {
         name: 'Enchanted Forest',
@@ -78,8 +78,8 @@ export const THEMES = {
             '--text-link': '#4caf50',
             '--button-primary': '#4caf50',
             '--button-secondary': '#2f4b2f',
-            '--border-primary': '#2f4b2f'
-        }
+            '--border-primary': '#2f4b2f',
+        },
     },
     matrix: {
         name: 'The Matrix',
@@ -94,8 +94,8 @@ export const THEMES = {
             '--text-link': '#00ff41',
             '--button-primary': '#008f11',
             '--button-secondary': '#003b00',
-            '--border-primary': '#003b00'
-        }
+            '--border-primary': '#003b00',
+        },
     },
     sunset: {
         name: 'Sunset Vibes',
@@ -110,9 +110,9 @@ export const THEMES = {
             '--text-link': '#ffbd69',
             '--button-primary': '#ff6b6b',
             '--button-secondary': '#5a3450',
-            '--border-primary': '#5a3450'
-        }
-    }
+            '--border-primary': '#5a3450',
+        },
+    },
 };
 
 export const applyTheme = (themeKey) => {
@@ -134,5 +134,3 @@ export const loadSavedTheme = () => {
     }
     return 'default';
 };
-
-

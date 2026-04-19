@@ -56,48 +56,31 @@ export {
 } from 'react-icons/fa';
 
 // TbIcons
-export {
-    TbHeadphonesOff,
-} from 'react-icons/tb';
+export { TbHeadphonesOff } from 'react-icons/tb';
 
 // MdIcons (Material Design)
-export {
-    MdSend,
-    MdAttachFile,
-    MdEmojiEmotions,
-    MdGif,
-    MdClose,
-    MdSettings,
-} from 'react-icons/md';
+export { MdSend, MdAttachFile, MdEmojiEmotions, MdGif, MdClose, MdSettings } from 'react-icons/md';
 
 // BiIcons (BoxIcons)
-export {
-    BiMicrophone,
-    BiMicrophoneOff,
-} from 'react-icons/bi';
+export { BiMicrophone, BiMicrophoneOff } from 'react-icons/bi';
 
 // HiIcons (Heroicons)
-export {
-    HiOutlineStatusOnline,
-    HiOutlineStatusOffline,
-} from 'react-icons/hi';
+export { HiOutlineStatusOnline, HiOutlineStatusOffline } from 'react-icons/hi';
 
 /**
  * KULLANIM:
- * 
- * Öncesi (❌ Tüm icon library yüklenir):
+ *
+ * Öncesi (❌ Entire icon library loads):
  * import { FaPaperPlane, FaLink } from 'react-icons/fa';
- * 
+ *
  * Sonrası (✅ Sadece gerekli iconlar):
- * import { FaPaperPlane, FaLink } from './utils/iconOptimization';
- * 
+ * import { FaPaperPlane, FaLink } from './iconOptimization';
+ *
  * Bundle Etkisi:
  * - 180KB → 50KB (react-icons chunk size)
- * - Tree shaking ile otomatik optimize
+ * - Tree shaking with otomatik optimize
  */
 
 export default {
-    // Gelecekte başka icon setleri eklenebilir
+    // Gelecekte başka icon setleri addnebilir
 };
-
-

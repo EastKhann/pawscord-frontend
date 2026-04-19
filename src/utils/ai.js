@@ -1,3 +1,4 @@
+import logger from '../utils/logger';
 // frontend/src/utils/ai.js
 /**
  * 🤖 AI CHATBOT UTILITIES
@@ -9,26 +10,26 @@
  */
 export async function askAI(question, apiBaseUrl, fetchWithAuth) {
     try {
-
         const response = await fetchWithAuth(`${apiBaseUrl}/ai/ask/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question })
+            body: JSON.stringify({ question }),
         });
 
         const data = await response.json();
 
         if (!response.ok) {
             if (response.status === 429) {
-                throw new Error(data.message || 'Daily limit reached. Upgrade to Premium for unlimited access.');
+                throw new Error(
+                    data.message || 'Daily limit reached. Upgrade to Premium for unlimited access.'
+                );
             }
             throw new Error(data.error || 'AI request failed');
         }
 
         return data;
-
     } catch (error) {
-        console.error('❌ [AI] Error:', error);
+        logger.error('❌ [AI] Error:', error);
         throw error;
     }
 }
@@ -38,14 +39,13 @@ export async function askAI(question, apiBaseUrl, fetchWithAuth) {
  */
 export async function summarizeChannel(roomId, count, apiBaseUrl, fetchWithAuth) {
     try {
-
         const response = await fetchWithAuth(`${apiBaseUrl}/ai/summarize/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 room_id: roomId,
-                count: count || 50
-            })
+                count: count || 50,
+            }),
         });
 
         const data = await response.json();
@@ -55,9 +55,8 @@ export async function summarizeChannel(roomId, count, apiBaseUrl, fetchWithAuth)
         }
 
         return data;
-
     } catch (error) {
-        console.error('❌ [AI] Summarize error:', error);
+        logger.error('❌ [AI] Summarize error:', error);
         throw error;
     }
 }
@@ -72,8 +71,8 @@ export async function getSmartReplies(lastMessage, context, apiBaseUrl, fetchWit
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 message: lastMessage,
-                context: context || []
-            })
+                context: context || [],
+            }),
         });
 
         if (!response.ok) {
@@ -82,9 +81,8 @@ export async function getSmartReplies(lastMessage, context, apiBaseUrl, fetchWit
 
         const data = await response.json();
         return data.suggestions || [];
-
     } catch (error) {
-        console.error('❌ [AI] Smart reply error:', error);
+        logger.error('❌ [AI] Smart reply error:', error);
         return [];
     }
 }
@@ -97,7 +95,7 @@ export async function explainConcept(text, apiBaseUrl, fetchWithAuth) {
         const response = await fetchWithAuth(`${apiBaseUrl}/ai/explain/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text })
+            body: JSON.stringify({ text }),
         });
 
         const data = await response.json();
@@ -107,9 +105,8 @@ export async function explainConcept(text, apiBaseUrl, fetchWithAuth) {
         }
 
         return data;
-
     } catch (error) {
-        console.error('❌ [AI] Explain error:', error);
+        logger.error('❌ [AI] Explain error:', error);
         throw error;
     }
 }
@@ -124,8 +121,8 @@ export async function generateCode(description, language, apiBaseUrl, fetchWithA
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 description,
-                language: language || 'python'
-            })
+                language: language || 'python',
+            }),
         });
 
         const data = await response.json();
@@ -135,9 +132,8 @@ export async function generateCode(description, language, apiBaseUrl, fetchWithA
         }
 
         return data;
-
     } catch (error) {
-        console.error('❌ [AI] Code generation error:', error);
+        logger.error('❌ [AI] Code generation error:', error);
         throw error;
     }
 }
@@ -155,9 +151,8 @@ export async function getAIQuota(apiBaseUrl, fetchWithAuth) {
 
         const data = await response.json();
         return data;
-
     } catch (error) {
-        console.error('❌ [AI] Quota error:', error);
+        logger.error('❌ [AI] Quota error:', error);
         return { remaining: 0, used_today: 0, unlimited: false };
     }
 }
@@ -176,7 +171,7 @@ export function parseSlashCommand(text) {
         // No arguments
         return {
             command: trimmed.substring(1).toLowerCase(),
-            args: ''
+            args: '',
         };
     }
 
@@ -202,29 +197,25 @@ export function getAICommands() {
             command: '/ask',
             description: 'Ask ChatGPT anything',
             example: '/ask What is the meaning of life?',
-            icon: '🤖'
+            icon: '🤖',
         },
         {
             command: '/summarize',
             description: 'Summarize channel messages',
             example: '/summarize',
-            icon: '📝'
+            icon: '📝',
         },
         {
             command: '/explain',
             description: 'Explain a concept',
             example: '/explain quantum computing',
-            icon: '💡'
+            icon: '💡',
         },
         {
             command: '/code',
             description: 'Generate code',
             example: '/code fibonacci function in python',
-            icon: '💻'
-        }
+            icon: '💻',
+        },
     ];
 }
-
-
-
-

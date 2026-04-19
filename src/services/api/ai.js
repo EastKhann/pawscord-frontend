@@ -13,7 +13,7 @@ export const botBuilderApi = {
     createBot: async (serverId, botData) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/bots/`, {
             method: 'POST',
-            body: JSON.stringify(botData)
+            body: JSON.stringify(botData),
         });
     },
     getBot: async (botId) => {
@@ -22,23 +22,23 @@ export const botBuilderApi = {
     updateBot: async (botId, data) => {
         return await apiFetch(`${API_BASE}/api/bots/${botId}/`, {
             method: 'PATCH',
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
     },
     deleteBot: async (botId) => {
         return await apiFetch(`${API_BASE}/api/bots/${botId}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
         });
     },
     addTrigger: async (botId, triggerData) => {
         return await apiFetch(`${API_BASE}/api/bots/${botId}/triggers/`, {
             method: 'POST',
-            body: JSON.stringify(triggerData)
+            body: JSON.stringify(triggerData),
         });
     },
     getLogs: async (botId, limit = 50) => {
         return await apiFetch(`${API_BASE}/api/bots/${botId}/logs/?limit=${limit}`);
-    }
+    },
 };
 
 // ==========================================
@@ -48,7 +48,7 @@ export const chatSummaryApi = {
     generateSummary: async (roomId, options = {}) => {
         return await apiFetch(`${API_BASE}/api/summaries/generate/`, {
             method: 'POST',
-            body: JSON.stringify({ room_id: roomId, ...options })
+            body: JSON.stringify({ room_id: roomId, ...options }),
         });
     },
     getSummaries: async (roomId) => {
@@ -56,7 +56,7 @@ export const chatSummaryApi = {
     },
     getSharedSummary: async (shareToken) => {
         return await apiFetch(`${API_BASE}/api/summaries/shared/${shareToken}/`);
-    }
+    },
 };
 
 // ==========================================
@@ -66,7 +66,7 @@ export const aiImageApi = {
     generate: async (prompt, options = {}) => {
         return await apiFetch(`${API_BASE}/api/ai/generate-image/`, {
             method: 'POST',
-            body: JSON.stringify({ prompt, ...options })
+            body: JSON.stringify({ prompt, ...options }),
         });
     },
     getHistory: async () => {
@@ -78,9 +78,9 @@ export const aiImageApi = {
     updateSettings: async (serverId, settings) => {
         return await apiFetch(`${API_BASE}/api/servers/${serverId}/ai-image/settings/`, {
             method: 'PATCH',
-            body: JSON.stringify(settings)
+            body: JSON.stringify(settings),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -93,9 +93,9 @@ export const recommendationApi = {
     feedback: async (recId, action) => {
         return await apiFetch(`${API_BASE}/api/recommendations/${recId}/feedback/`, {
             method: 'POST',
-            body: JSON.stringify({ action })
+            body: JSON.stringify({ action }),
         });
-    }
+    },
 };
 
 // ==========================================
@@ -105,16 +105,20 @@ export const languageLearningApi = {
     startSession: async (nativeLanguage, targetLanguage, level = 'beginner') => {
         return await apiFetch(`${API_BASE}/api/language-learning/start/`, {
             method: 'POST',
-            body: JSON.stringify({ native_language: nativeLanguage, target_language: targetLanguage, proficiency_level: level })
+            body: JSON.stringify({
+                native_language: nativeLanguage,
+                target_language: targetLanguage,
+                proficiency_level: level,
+            }),
         });
     },
     chat: async (sessionId, message) => {
         return await apiFetch(`${API_BASE}/api/language-learning/sessions/${sessionId}/chat/`, {
             method: 'POST',
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ message }),
         });
     },
     getProgress: async (language) => {
         return await apiFetch(`${API_BASE}/api/language-learning/progress/${language}/`);
-    }
+    },
 };

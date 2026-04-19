@@ -1,4 +1,5 @@
+export { default } from '../profile/ProfileCard';
 // Barrel export for ProfileCard
-export { default as ProfileCardEditor } from './ProfileCardEditor';
+export * from './ProfileCardEditor';
 export { default as useProfileCardEditor } from './useProfileCardEditor';
 export * from './profileCardData';

@@ -1,0 +1,742 @@
+/* BotDeveloperPortal.css */
+.bot-portal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.bot-portal-panel {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    width: 95%;
+    max-width: 1100px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.portal-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary));
+    border-bottom: 1px solid var(--bg-input);
+}
+
+.portal-header h2 {
+    color: var(--color-white);
+    font-size: 18px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--color-white);
+}
+
+.nav-btn.active {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--color-white);
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: var(--color-danger-dark);
+}
+
+.portal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* Bots Grid */
+.bots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+}
+
+.bot-card {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.bot-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.bot-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.bot-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--color-primary);
+}
+
+.bot-info {
+    flex: 1;
+}
+
+.bot-info h3 {
+    color: var(--color-white);
+    font-size: 16px;
+    margin: 0 0 4px 0;
+}
+
+.bot-status {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.bot-status.online {
+    color: var(--color-success);
+}
+
+.bot-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--bg-input);
+    color: var(--color-white);
+}
+
+.action-btn.delete:hover {
+    background: var(--color-danger-dark);
+}
+
+.bot-description {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin: 0 0 16px 0;
+    line-height: 1.4;
+}
+
+.bot-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--bg-input);
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.stat svg {
+    color: var(--color-primary);
+}
+
+.bot-token-section {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.token-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.toggle-token {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.toggle-token:hover {
+    color: var(--color-white);
+}
+
+.token-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.token-value code {
+    flex: 1;
+    background: var(--bg-primary);
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-family: 'Consolas', monospace;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.copy-btn {
+    padding: 8px;
+    background: var(--bg-input);
+    border: none;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.regenerate-btn {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid var(--color-danger-dark);
+    border-radius: 6px;
+    color: var(--color-danger-dark);
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.regenerate-btn:hover {
+    background: var(--color-danger-dark);
+    color: var(--color-white);
+}
+
+.bot-footer {
+    display: flex;
+    gap: 8px;
+}
+
+.webhook-btn,
+.analytics-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.webhook-btn {
+    background: var(--bg-input);
+    color: var(--color-white);
+}
+
+.webhook-btn:hover {
+    background: var(--text-disabled);
+}
+
+.analytics-btn {
+    background: var(--color-primary);
+    color: var(--color-white);
+}
+
+.analytics-btn:hover {
+    background: var(--color-primary-hover);
+}
+
+/* No Bots */
+.no-bots {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-muted);
+}
+
+.no-bots .empty-icon {
+    font-size: 64px;
+    color: var(--bg-neutral-dark);
+    margin-bottom: 16px;
+}
+
+.no-bots button {
+    margin-top: 16px;
+    padding: 12px 24px;
+    background: var(--color-primary);
+    border: none;
+    border-radius: 8px;
+    color: var(--color-white);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+/* Bot Form */
+.bot-form-view {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.bot-form-view h3 {
+    color: var(--color-white);
+    margin: 0 0 24px 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.form-group input[type='text'],
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--bg-input);
+    border-radius: 6px;
+    color: var(--color-white);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--color-primary);
+}
+
+.intents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.intent-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.intent-checkbox:hover {
+    background: var(--bg-secondary);
+}
+
+.intent-checkbox input {
+    accent-color: var(--color-primary);
+}
+
+.form-group.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-transform: none;
+    font-weight: normal;
+    color: var(--color-white);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.submit-btn {
+    flex: 1;
+    padding: 14px;
+    background: var(--color-primary);
+    border: none;
+    border-radius: 8px;
+    color: var(--color-white);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.submit-btn:hover {
+    background: var(--color-primary-hover);
+}
+
+.cancel-btn {
+    padding: 14px 28px;
+    background: var(--bg-input);
+    border: none;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background: var(--text-disabled);
+}
+
+/* Analytics View */
+.analytics-view {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.back-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+.analytics-view h3 {
+    color: var(--color-white);
+    margin: 0 0 24px 0;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.analytics-card {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+.analytics-value {
+    color: var(--color-white);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.analytics-label {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.analytics-chart-placeholder {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 60px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* Documentation */
+.docs-view h3 {
+    color: var(--color-white);
+    margin: 0 0 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.docs-section {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.docs-section h4 {
+    color: var(--color-white);
+    font-size: 16px;
+    margin: 0 0 12px 0;
+}
+
+.docs-section p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0 0 16px 0;
+}
+
+.code-block {
+    background: #0d1117;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+}
+
+.code-header span {
+    color: #8b949e;
+    font-size: 12px;
+}
+
+.code-header button {
+    padding: 4px 8px;
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    cursor: pointer;
+}
+
+.code-header button:hover {
+    color: var(--color-white);
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 16px;
+    color: #c9d1d9;
+    font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+.endpoint-list,
+.event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.endpoint,
+.event {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+}
+
+.method {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.method.get {
+    background: #238636;
+    color: var(--color-white);
+}
+
+.method.post {
+    background: #1f6feb;
+    color: var(--color-white);
+}
+
+.endpoint code,
+.event code {
+    color: var(--color-white);
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+}
+
+.endpoint span:last-child,
+.event span:last-child {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-left: auto;
+}
+
+/* Webhook Modal */
+.webhook-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.webhook-modal {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.webhook-modal h3 {
+    color: var(--color-white);
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.webhook-events {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.event-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .bot-portal-panel {
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+    }
+
+    .header-actions {
+        display: none;
+    }
+
+    .bots-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

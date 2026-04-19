@@ -17,7 +17,7 @@ afterEach(() => {
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: vi.fn().mockImplementation(query => ({
+    value: vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
@@ -34,9 +34,15 @@ class MockIntersectionObserver {
     constructor(callback) {
         this.callback = callback;
     }
-    observe() { return null; }
-    unobserve() { return null; }
-    disconnect() { return null; }
+    observe() {
+        return null;
+    }
+    unobserve() {
+        return null;
+    }
+    disconnect() {
+        return null;
+    }
 }
 window.IntersectionObserver = MockIntersectionObserver;
 
@@ -45,9 +51,15 @@ class MockResizeObserver {
     constructor(callback) {
         this.callback = callback;
     }
-    observe() { return null; }
-    unobserve() { return null; }
-    disconnect() { return null; }
+    observe() {
+        return null;
+    }
+    unobserve() {
+        return null;
+    }
+    disconnect() {
+        return null;
+    }
 }
 window.ResizeObserver = MockResizeObserver;
 
@@ -82,20 +94,65 @@ global.fetch = vi.fn(() =>
     })
 );
 
-// Mock WebSocket
+// Mock WebSocket (enhanced with full event API)
 class MockWebSocket {
-    constructor(url) {
+    static CONNECTING = 0;
+    static OPEN = 1;
+    static CLOSING = 2;
+    static CLOSED = 3;
+
+    constructor(url, protocols) {
         this.url = url;
-        this.readyState = 0; // CONNECTING
+        this.protocol = protocols?.[0] || '';
+        this.readyState = MockWebSocket.CONNECTING;
+        this.bufferedAmount = 0;
+        this.extensions = '';
+        this._listeners = {};
+        this._messageQueue = [];
+
         setTimeout(() => {
-            this.readyState = 1; // OPEN
-            if (this.onopen) this.onopen({});
+            this.readyState = MockWebSocket.OPEN;
+            this._emit('open', {});
         }, 0);
     }
-    send(data) { }
-    close() {
-        this.readyState = 3; // CLOSED
-        if (this.onclose) this.onclose({});
+
+    addEventListener(type, listener) {
+        if (!this._listeners[type]) this._listeners[type] = [];
+        this._listeners[type].push(listener);
+    }
+
+    removeEventListener(type, listener) {
+        if (!this._listeners[type]) return;
+        this._listeners[type] = this._listeners[type].filter((l) => l !== listener);
+    }
+
+    send(data) {
+        if (this.readyState !== MockWebSocket.OPEN) {
+            throw new DOMException('WebSocket is not open', 'InvalidStateError');
+        }
+        this._messageQueue.push(data);
+    }
+
+    close(code = 1000, reason = '') {
+        this.readyState = MockWebSocket.CLOSING;
+        setTimeout(() => {
+            this.readyState = MockWebSocket.CLOSED;
+            this._emit('close', { code, reason, wasClean: true });
+        }, 0);
+    }
+
+    // Simulate receiving a message from server (for tests)
+    _simulateMessage(data) {
+        this._emit('message', { data: typeof data === 'string' ? data : JSON.stringify(data) });
+    }
+
+    _simulateError(error) {
+        this._emit('error', { error });
+    }
+
+    _emit(type, event) {
+        if (this[`on${type}`]) this[`on${type}`](event);
+        (this._listeners[type] || []).forEach((fn) => fn(event));
     }
 }
 window.WebSocket = MockWebSocket;
@@ -108,38 +165,46 @@ const createMockAudioNode = () => ({
 window.AudioContext = vi.fn().mockImplementation(() => ({
     createGain: () => ({
         ...createMockAudioNode(),
-        gain: { value: 1, setTargetAtTime: vi.fn() }
+        gain: { value: 1, setTargetAtTime: vi.fn() },
     }),
     createAnalyser: () => ({
         ...createMockAudioNode(),
         fftSize: 256,
         frequencyBinCount: 128,
         smoothingTimeConstant: 0.8,
-        getByteFrequencyData: vi.fn()
+        getByteFrequencyData: vi.fn(),
     }),
     createMediaStreamSource: vi.fn().mockReturnValue(createMockAudioNode()),
     createMediaStreamDestination: vi.fn().mockReturnValue({
         stream: new MediaStream(),
-        ...createMockAudioNode()
+        ...createMockAudioNode(),
     }),
     createBiquadFilter: () => ({
         ...createMockAudioNode(),
-        type: '', frequency: { value: 0 }, Q: { value: 0 }, gain: { value: 0 }
+        type: '',
+        frequency: { value: 0 },
+        Q: { value: 0 },
+        gain: { value: 0 },
     }),
     createDynamicsCompressor: () => ({
         ...createMockAudioNode(),
-        threshold: { value: 0 }, knee: { value: 0 }, ratio: { value: 0 },
-        attack: { value: 0 }, release: { value: 0 }
+        threshold: { value: 0 },
+        knee: { value: 0 },
+        ratio: { value: 0 },
+        attack: { value: 0 },
+        release: { value: 0 },
     }),
     createOscillator: () => ({
         ...createMockAudioNode(),
-        type: '', frequency: { value: 0 }, start: vi.fn()
+        type: '',
+        frequency: { value: 0 },
+        start: vi.fn(),
     }),
     createDelay: () => ({ ...createMockAudioNode(), delayTime: { value: 0 } }),
     createConvolver: () => ({ ...createMockAudioNode(), buffer: null }),
     createWaveShaper: () => ({ ...createMockAudioNode(), curve: null }),
     createBuffer: vi.fn().mockReturnValue({
-        getChannelData: vi.fn().mockReturnValue(new Float32Array(48000))
+        getChannelData: vi.fn().mockReturnValue(new Float32Array(48000)),
     }),
     destination: {},
     sampleRate: 48000,
@@ -147,7 +212,7 @@ window.AudioContext = vi.fn().mockImplementation(() => ({
     state: 'running',
     suspend: vi.fn().mockResolvedValue(undefined),
     resume: vi.fn().mockResolvedValue(undefined),
-    close: vi.fn().mockResolvedValue(undefined)
+    close: vi.fn().mockResolvedValue(undefined),
 }));
 window.webkitAudioContext = window.AudioContext;
 
@@ -157,18 +222,18 @@ Object.defineProperty(navigator, 'mediaDevices', {
         getUserMedia: vi.fn().mockResolvedValue({
             getTracks: () => [],
             getAudioTracks: () => [],
-            getVideoTracks: () => []
+            getVideoTracks: () => [],
         }),
-        enumerateDevices: vi.fn().mockResolvedValue([])
-    }
+        enumerateDevices: vi.fn().mockResolvedValue([]),
+    },
 });
 
 // Mock clipboard API
 Object.defineProperty(navigator, 'clipboard', {
     value: {
         writeText: vi.fn().mockResolvedValue(undefined),
-        readText: vi.fn().mockResolvedValue('')
-    }
+        readText: vi.fn().mockResolvedValue(''),
+    },
 });
 
 // Suppress console errors in tests (optional)
@@ -176,6 +241,6 @@ Object.defineProperty(navigator, 'clipboard', {
 // console.warn = vi.fn();
 
 // Global test utilities
-global.sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+global.sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 console.log('🧪 Test setup complete!');

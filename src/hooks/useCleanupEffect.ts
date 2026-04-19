@@ -16,10 +16,10 @@ export const useCleanupEffect = () => {
     useEffect(() => {
         return () => {
             // Clear all timers
-            timers.current.forEach(timer => clearTimeout(timer));
+            timers.current.forEach((timer) => clearTimeout(timer));
 
             // Clear all intervals
-            intervals.current.forEach(interval => clearInterval(interval));
+            intervals.current.forEach((interval) => clearInterval(interval));
 
             // Remove all event listeners
             listeners.current.forEach(({ element, event, handler }) => {
@@ -27,7 +27,7 @@ export const useCleanupEffect = () => {
             });
 
             // Close all WebSockets
-            webSockets.current.forEach(ws => {
+            webSockets.current.forEach((ws) => {
                 if (ws.readyState === WebSocket.OPEN) {
                     ws.close();
                 }
@@ -65,13 +65,13 @@ export const useCleanupEffect = () => {
         // Manual cleanup
         clearTimer: (timer) => {
             clearTimeout(timer);
-            timers.current = timers.current.filter(t => t !== timer);
+            timers.current = timers.current.filter((t) => t !== timer);
         },
 
         clearInterval: (interval) => {
             clearInterval(interval);
-            intervals.current = intervals.current.filter(i => i !== interval);
-        }
+            intervals.current = intervals.current.filter((i) => i !== interval);
+        },
     };
 };
 
@@ -99,15 +99,15 @@ export const useDebounce = (value, delay) => {
 export const useThrottle = (callback, delay) => {
     const lastRun = useRef(Date.now());
 
-    return React.useCallback((...args) => {
-        const now = Date.now();
+    return React.useCallback(
+        (...args) => {
+            const now = Date.now();
 
-        if (now - lastRun.current >= delay) {
-            callback(...args);
-            lastRun.current = now;
-        }
-    }, [callback, delay]);
+            if (now - lastRun.current >= delay) {
+                callback(...args);
+                lastRun.current = now;
+            }
+        },
+        [callback, delay]
+    );
 };
-
-
-

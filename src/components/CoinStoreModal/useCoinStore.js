@@ -1,20 +1,24 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getToken } from '../../utils/tokenStorage';
 import { FaCoins, FaStar, FaCrown } from 'react-icons/fa';
 import { GiSparkles } from 'react-icons/gi';
 import toast from '../../utils/toast';
 import { getApiBase } from '../../utils/apiEndpoints';
+import logger from '../../utils/logger';
 
 const ICON_MAP = { '💰': FaCoins, '💎': GiSparkles, '👑': FaCrown, '🌟': FaStar };
 
 export const getPackageIcon = (icon) => ICON_MAP[icon] || FaCoins;
 
 export default function useCoinStore(onPurchaseComplete, onClose) {
+    const { t } = useTranslation();
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState(null);
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || getApiBase();
-    const token = localStorage.getItem('access_token');
+    const token = getToken();
 
     useEffect(() => {
         (async () => {
@@ -23,7 +27,7 @@ export default function useCoinStore(onPurchaseComplete, onClose) {
                 const data = await res.json();
                 if (data.success) setPackages(data.packages);
             } catch (err) {
-                console.error('❌ Coin paketleri yüklenemedi:', err);
+                logger.error('❌ Coin packages could not be loaded:', err);
             }
         })();
     }, []);
@@ -34,13 +38,15 @@ export default function useCoinStore(onPurchaseComplete, onClose) {
         try {
             const res = await fetch(`${API_BASE_URL}/coins/checkout/`, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ package_id: pkg.id, payment_method: 'stripe' })
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ package_id: pkg.id, payment_method: 'stripe' }),
             });
             const data = await res.json();
             if (data.success) {
                 if (data.test_mode) {
-                    toast.success(`✅ ${pkg.coins + (pkg.bonus || 0)} coin eklendi!\n\nYeni bakiye: ${data.new_balance} coin`, { duration: 4000 });
+                    toast.success(t('coinStore.coinAdded', { balance: data.new_balance }), {
+                        duration: 4000,
+                    });
                     if (onPurchaseComplete) onPurchaseComplete(data.new_balance);
                     onClose();
                 } else {
@@ -48,8 +54,8 @@ export default function useCoinStore(onPurchaseComplete, onClose) {
                 }
             }
         } catch (err) {
-            console.error('❌ Satın alma hatası:', err);
-            toast.error('Satın alma başarısız oldu. Lütfen tekrar deneyin.');
+            logger.error('❌ Purchase error:', err);
+            toast.error(t('coinStore.purchaseFailed'));
         } finally {
             setLoading(false);
             setSelectedPackage(null);

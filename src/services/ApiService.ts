@@ -4,6 +4,7 @@
 
 import { API_URL_BASE_STRING } from '../utils/constants';
 import toast from '../utils/toast';
+import logger from '../utils/logger';
 
 /**
  * API Error class with detailed error information
@@ -30,7 +31,7 @@ export class ApiError extends Error {
             status: this.status,
             code: this.code,
             data: this.data,
-            timestamp: this.timestamp
+            timestamp: this.timestamp,
         };
     }
 }
@@ -39,7 +40,11 @@ export class ApiError extends Error {
  * Request Queue for rate limiting
  */
 class RequestQueue {
-    queue: Array<{ fn: () => Promise<unknown>; resolve: (value: unknown) => void; reject: (reason?: unknown) => void }>;
+    queue: Array<{
+        fn: () => Promise<unknown>;
+        resolve: (value: unknown) => void;
+        reject: (reason?: unknown) => void;
+    }>;
     running: number;
     maxConcurrent: number;
     rateLimit: number;
@@ -65,7 +70,7 @@ class RequestQueue {
 
         // Rate limiting check
         const now = Date.now();
-        this.requestTimes = this.requestTimes.filter(t => now - t < 60000);
+        this.requestTimes = this.requestTimes.filter((t) => now - t < 60000);
         if (this.requestTimes.length >= this.rateLimit) {
             setTimeout(() => this.process(), 1000);
             return;
@@ -100,10 +105,16 @@ class SmartCache {
     }
 
     generateKey(url, params) {
-        const sortedParams = params ? JSON.stringify(Object.keys(params).sort().reduce((obj, key) => {
-            obj[key] = params[key];
-            return obj;
-        }, {})) : '';
+        const sortedParams = params
+            ? JSON.stringify(
+                  Object.keys(params)
+                      .sort()
+                      .reduce((obj, key) => {
+                          obj[key] = params[key];
+                          return obj;
+                      }, {})
+              )
+            : '';
         return `${url}:${sortedParams}`;
     }
 
@@ -134,7 +145,7 @@ class SmartCache {
         this.cache.set(key, {
             data,
             expiry: Date.now() + ttl,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         });
     }
 
@@ -164,9 +175,10 @@ class SmartCache {
             maxSize: this.maxSize,
             hits: this.hits,
             misses: this.misses,
-            hitRate: this.hits + this.misses > 0
-                ? ((this.hits / (this.hits + this.misses)) * 100).toFixed(2) + '%'
-                : '0%'
+            hitRate:
+                this.hits + this.misses > 0
+                    ? ((this.hits / (this.hits + this.misses)) * 100).toFixed(2) + '%'
+                    : '0%',
         };
     }
 }
@@ -183,7 +195,7 @@ class ApiService {
         this.interceptors = {
             request: [],
             response: [],
-            error: []
+            error: [],
         };
 
         // Default configuration
@@ -193,10 +205,10 @@ class ApiService {
             retryDelay: 1000,
             retryMultiplier: 2,
             cacheTTL: {
-                short: 30 * 1000,      // 30 seconds
-                medium: 5 * 60 * 1000,  // 5 minutes
-                long: 30 * 60 * 1000    // 30 minutes
-            }
+                short: 30 * 1000, // 30 seconds
+                medium: 5 * 60 * 1000, // 5 minutes
+                long: 30 * 60 * 1000, // 30 minutes
+            },
         };
 
         // Setup default interceptors
@@ -210,7 +222,7 @@ class ApiService {
             if (token) {
                 config.headers = {
                     ...config.headers,
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 };
             }
             return config;
@@ -300,10 +312,10 @@ class ApiService {
             method,
             headers: {
                 'Content-Type': 'application/json',
-                ...headers
+                ...headers,
             },
             body: body ? JSON.stringify(body) : undefined,
-            ...fetchOptions
+            ...fetchOptions,
         };
 
         for (const interceptor of this.interceptors.request) {
@@ -318,7 +330,7 @@ class ApiService {
             cacheKey,
             cacheTTL,
             useCache,
-            method
+            method,
         });
 
         // Track pending request for deduplication
@@ -343,11 +355,15 @@ class ApiService {
             try {
                 // Add to queue for rate limiting
                 const response = await this.queue.add(() =>
-                    this.fetchWithTimeout(config.url, {
-                        method: config.method,
-                        headers: config.headers,
-                        body: config.body
-                    }, timeout)
+                    this.fetchWithTimeout(
+                        config.url,
+                        {
+                            method: config.method,
+                            headers: config.headers,
+                            body: config.body,
+                        },
+                        timeout
+                    )
                 );
 
                 if (!response.ok) {
@@ -379,7 +395,6 @@ class ApiService {
                 }
 
                 return { data, fromCache: false };
-
             } catch (error) {
                 lastError = error;
 
@@ -390,7 +405,8 @@ class ApiService {
 
                 // Wait before retry with exponential backoff
                 if (attempt < this.config.retryAttempts) {
-                    const delay = this.config.retryDelay * Math.pow(this.config.retryMultiplier, attempt);
+                    const delay =
+                        this.config.retryDelay * Math.pow(this.config.retryMultiplier, attempt);
                     await this.sleep(delay);
                 }
             }
@@ -408,7 +424,7 @@ class ApiService {
 
         // Show error toast if enabled
         if (showError) {
-            toast.error(lastError.message || 'Bir hata oluştu');
+            toast.error(lastError.message || 'An error occurred');
         }
 
         throw lastError;
@@ -424,7 +440,7 @@ class ApiService {
         try {
             const response = await fetch(url, {
                 ...options,
-                signal: controller.signal
+                signal: controller.signal,
             });
             return response;
         } finally {
@@ -441,7 +457,7 @@ class ApiService {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({})
+                body: JSON.stringify({}),
             });
 
             if (response.ok) {
@@ -450,7 +466,7 @@ class ApiService {
                 return true;
             }
         } catch (e) {
-            console.error('Token refresh failed:', e);
+            logger.error('Token refresh failed:', e);
         }
 
         // Clear access token on failure
@@ -459,7 +475,7 @@ class ApiService {
     }
 
     sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     // =====================
@@ -505,11 +521,11 @@ class ApiService {
         updateProfile: (userId, data) => this.patch(`/api/users/${userId}/`, data),
         getSettings: () => this.get('/api/users/settings/'),
         updateSettings: (data) => this.patch('/api/users/settings/', data),
-        getFriends: () => this.get('/api/friends/', { cacheTTL: this.config.cacheTTL.short }),
+        getFriends: () => this.get('/api/friends/list/', { cacheTTL: this.config.cacheTTL.short }),
         sendFriendRequest: (userId) => this.post('/api/friends/send/', { user_id: userId }),
-        getBlocked: () => this.get('/api/blocked-users/'),
-        blockUser: (userId) => this.post('/api/blocked-users/', { user_id: userId }),
-        unblockUser: (userId) => this.delete(`/api/blocked-users/${userId}/`)
+        getBlocked: () => this.get('/api/blocks/list/'),
+        blockUser: (userId) => this.post('/api/blocks/block/', { user_id: userId }),
+        unblockUser: (userId) => this.post('/api/blocks/unblock/', { user_id: userId }),
     };
 
     // Server APIs
@@ -521,7 +537,7 @@ class ApiService {
         delete: (serverId) => this.delete(`/api/servers/${serverId}/`),
         getMembers: (serverId) => this.get(`/api/servers/${serverId}/members/`),
         getRoles: (serverId) => this.get(`/api/servers/${serverId}/roles/`),
-        getBoostStats: (serverId) => this.get(`/api/servers/${serverId}/boost-stats/`)
+        getBoostStats: (serverId) => this.get(`/api/servers/${serverId}/boost-stats/`),
     };
 
     // Room/Channel APIs
@@ -531,21 +547,23 @@ class ApiService {
         create: (serverId, data) => this.post(`/api/servers/${serverId}/rooms/`, data),
         update: (roomId, data) => this.patch(`/api/rooms/${roomId}/`, data),
         delete: (roomId) => this.delete(`/api/rooms/${roomId}/`),
-        getMessages: (roomId, params) => this.get(`/api/rooms/${roomId}/messages/`, {
-            params,
-            cacheTTL: this.config.cacheTTL.short
-        })
+        getMessages: (roomId, params) =>
+            this.get(`/api/rooms/${roomId}/messages/`, {
+                params,
+                cacheTTL: this.config.cacheTTL.short,
+            }),
     };
 
     // Message APIs
     messages = {
         send: (roomId, data) => this.post(`/api/rooms/${roomId}/messages/`, data),
-        edit: (messageId, content) => this.patch(`/api/messages/${messageId}/`, { content }),
-        delete: (messageId) => this.delete(`/api/messages/${messageId}/`),
+        edit: (messageId, content) => this.patch(`/api/messages/${messageId}/edit/`, { content }),
+        delete: (messageId) => this.delete(`/api/messages/${messageId}/delete/`),
+
         pin: (messageId) => this.post(`/api/messages/${messageId}/pin/`),
         unpin: (messageId) => this.post(`/api/messages/${messageId}/unpin/`),
         react: (messageId, emoji) => this.post(`/api/messages/${messageId}/react/`, { emoji }),
-        search: (params) => this.get('/api/messages/search/', { params })
+        search: (params) => this.get('/api/messages/search/', { params }),
     };
 
     // Auth APIs
@@ -554,34 +572,43 @@ class ApiService {
         register: (data) => this.post('/api/auth/register/', data),
         logout: () => this.post('/api/auth/logout/'),
         refreshToken: () => this.refreshToken(),
-        verifyEmail: (token) => this.post('/api/auth/verify-email/', { token }),
-        resetPassword: (email) => this.post('/api/auth/reset-password/', { email }),
+        verifyEmail: (token) => this.post(`/api/auth/verify-email/${token}/`),
+        resetPassword: (email) => this.post('/api/auth/request-password-reset/', { email }),
         enable2FA: () => this.post('/api/auth/2fa/enable/'),
-        verify2FA: (code) => this.post('/api/auth/2fa/verify/', { code })
+        verify2FA: (code) => this.post('/api/auth/2fa/verify-login/', { code }),
     };
 
     // Moderation APIs
     moderation = {
-        ban: (serverId, userId, reason) => this.post(`/api/servers/${serverId}/bans/`, { user_id: userId, reason }),
+        ban: (serverId, userId, reason) =>
+            this.post(`/api/servers/${serverId}/bans/`, { user_id: userId, reason }),
         unban: (serverId, banId) => this.delete(`/api/servers/${serverId}/bans/${banId}/`),
-        kick: (serverId, userId, reason) => this.post(`/api/servers/${serverId}/kicks/`, { user_id: userId, reason }),
-        warn: (serverId, userId, reason) => this.post(`/api/servers/${serverId}/warnings/`, { user_id: userId, reason }),
-        getAuditLogs: (serverId, params) => this.get(`/api/servers/${serverId}/audit-logs/`, { params })
+        kick: (serverId, userId, reason) =>
+            this.post(`/api/servers/${serverId}/kicks/`, { user_id: userId, reason }),
+        warn: (serverId, userId, reason) =>
+            this.post(`/api/servers/${serverId}/warnings/`, { user_id: userId, reason }),
+        getAuditLogs: (serverId, params) =>
+            this.get(`/api/servers/${serverId}/audit-logs/`, { params }),
     };
 
     // Premium/Payment APIs
     premium = {
         getPlans: () => this.get('/api/premium/plans/', { cacheTTL: this.config.cacheTTL.long }),
-        subscribe: (planId, paymentMethod) => this.post('/api/premium/subscribe/', { plan_id: planId, payment_method: paymentMethod }),
+        subscribe: (planId, paymentMethod) =>
+            this.post('/api/premium/subscribe/', {
+                plan_id: planId,
+                payment_method: paymentMethod,
+            }),
         cancelSubscription: () => this.post('/api/premium/cancel/'),
-        getStatus: () => this.get('/api/premium/status/')
+        getStatus: () => this.get('/api/premium/status/'),
     };
 
     // Analytics APIs
     analytics = {
         getServerStats: (serverId) => this.get(`/api/servers/${serverId}/analytics/`),
         getUserActivity: () => this.get('/api/users/analytics/'),
-        trackEvent: (event, data) => this.post('/api/analytics/events/', { event, data }, { showError: false })
+        trackEvent: (event, data) =>
+            this.post('/api/analytics/track/', { event, data }, { showError: false }),
     };
 
     // Utility methods

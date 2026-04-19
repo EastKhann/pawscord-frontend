@@ -3,19 +3,25 @@ import { render, screen, fireEvent } from '@testing-library/react';
 
 // Mock sub-components
 vi.mock('../../components/PremiumStoreModal/PremiumTab', () => ({
-    default: (props) => <div data-testid="premium-tab" data-has-styles={!!props.styles} data-has-purchase={!!props.handlePurchase} />
+    default: (props) => (
+        <div
+            data-testid="premium-tab"
+            data-has-styles={!!props.styles}
+            data-has-purchase={!!props.handlePurchase}
+        />
+    ),
 }));
 vi.mock('../../components/PremiumStoreModal/StoreTab', () => ({
-    default: (props) => <div data-testid="store-tab" data-has-items={!!props.storeItems} />
+    default: (props) => <div data-testid="store-tab" data-has-items={!!props.storeItems} />,
 }));
 vi.mock('../../components/PremiumStoreModal/BoostTab', () => ({
-    default: (props) => <div data-testid="boost-tab" data-has-token={!!props.token} />
+    default: (props) => <div data-testid="boost-tab" data-has-token={!!props.token} />,
 }));
 vi.mock('../../components/CoinStoreModal', () => ({
-    default: () => <div data-testid="coin-store-modal" />
+    default: () => <div data-testid="coin-store-modal" />,
 }));
 vi.mock('../../AuthContext', () => ({
-    useAuth: () => ({ user: { id: 1, username: 'testuser' }, token: 'test-token' })
+    useAuth: () => ({ user: { id: 1, username: 'testuser' }, token: 'test-token' }),
 }));
 vi.mock('../../utils/toast', () => ({ default: { success: vi.fn(), error: vi.fn() } }));
 vi.mock('../../utils/apiEndpoints', () => ({ getApiBase: () => 'http://localhost' }));
@@ -24,7 +30,7 @@ vi.mock('../../utils/confirmDialog', () => ({ default: vi.fn() }));
 // Mock fetch
 global.fetch = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
 
-import PremiumStoreModal from '../../components/PremiumStoreModal';
+import PremiumStoreModal from '../../components/premium/PremiumStoreModal';
 
 describe('PremiumStoreModal Orchestrator', () => {
     const onClose = vi.fn();
@@ -47,7 +53,7 @@ describe('PremiumStoreModal Orchestrator', () => {
         render(<PremiumStoreModal onClose={onClose} />);
         // Find the tab button specifically (not the header title)
         const tabButtons = screen.getAllByRole('button');
-        const storeTabBtn = tabButtons.find(b => b.textContent.trim() === 'Magaza');
+        const storeTabBtn = tabButtons.find((b) => b.textContent.trim() === 'Magaza');
         fireEvent.click(storeTabBtn);
         expect(screen.getByTestId('store-tab')).toBeInTheDocument();
         expect(screen.queryByTestId('premium-tab')).not.toBeInTheDocument();
@@ -70,7 +76,7 @@ describe('PremiumStoreModal Orchestrator', () => {
         render(<PremiumStoreModal onClose={onClose} />);
         // Find the close button (FaTimes icon inside a button)
         const buttons = document.querySelectorAll('button');
-        const closeBtn = Array.from(buttons).find(b => b.querySelector('svg'));
+        const closeBtn = Array.from(buttons).find((b) => b.querySelector('svg'));
         if (closeBtn) {
             fireEvent.click(closeBtn);
             expect(onClose).toHaveBeenCalledTimes(1);

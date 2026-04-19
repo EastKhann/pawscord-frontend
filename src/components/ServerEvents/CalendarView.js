@@ -1,15 +1,32 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { EVENT_COLORS } from './eventConstants';
 import { EventCard } from './EventCard';
 
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+
 export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
+    const { t } = useTranslation();
+
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(null);
 
-    const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-        'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-    const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+    const monthNames = [
+        'Ocak',
+        'February',
+        'Mart',
+        'Nisan',
+        'May',
+        'Haziran',
+        'Temmuz',
+        t('ui.agustos'),
+        'September',
+        'Ekim',
+        'November',
+        'Search',
+    ];
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     const getDaysInMonth = (year, month) => {
         return new Date(year, month + 1, 0).getDate();
@@ -46,9 +63,9 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
 
     const today = new Date();
     const isToday = (day) => {
-        return day === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear();
+        return (
+            day === today.getDate() && month === today.getMonth() && year === today.getFullYear()
+        );
     };
 
     const calendarDays = [];
@@ -60,15 +77,21 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
     }
 
     return (
-        <div className="calendar-view">
+        <div aria-label="calendar view" className="calendar-view">
             <div className="cv-header">
-                <button onClick={prevMonth}><FaChevronLeft /></button>
-                <h3>{monthNames[month]} {year}</h3>
-                <button onClick={nextMonth}><FaChevronRight /></button>
+                <button aria-label="Previous month" onClick={prevMonth}>
+                    <FaChevronLeft />
+                </button>
+                <h3>
+                    {monthNames[month]} {year}
+                </h3>
+                <button aria-label="Next month" onClick={nextMonth}>
+                    <FaChevronRight />
+                </button>
             </div>
 
             <div className="cv-day-names">
-                {dayNames.map(day => (
+                {dayNames.map((day) => (
                     <span key={day}>{day}</span>
                 ))}
             </div>
@@ -76,7 +99,7 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
             <div className="cv-grid">
                 {calendarDays.map((day, idx) => {
                     if (!day) {
-                        return <div key={idx} className="cv-day empty" />;
+                        return <div key={`item-${idx}`} className="cv-day empty" />;
                     }
 
                     const dayEvents = getEventsForDay(day);
@@ -84,16 +107,21 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
 
                     return (
                         <div
-                            key={idx}
+                            key={`item-${idx}`}
                             className={`cv-day ${isToday(day) ? 'today' : ''} ${hasEvents ? 'has-events' : ''}`}
+                            role="button"
+                            tabIndex={0}
                             onClick={() => handleDayClick(day)}
+                            onKeyDown={(e) =>
+                                (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()
+                            }
                         >
                             <span className="cv-day-number">{day}</span>
                             {hasEvents && (
                                 <div className="cv-day-events">
                                     {dayEvents.slice(0, 3).map((e, i) => (
                                         <div
-                                            key={i}
+                                            key={`item-${i}`}
                                             className="cv-event-dot"
                                             style={{ backgroundColor: EVENT_COLORS[e.event_type] }}
                                             title={e.name}
@@ -111,10 +139,16 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
 
             {selectedDate && (
                 <div className="cv-selected-events">
-                    <h4>{selectedDate.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' })}</h4>
+                    <h4>
+                        {selectedDate.toLocaleDateString('tr-TR', {
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long',
+                        })}
+                    </h4>
                     {getEventsForDay(selectedDate.getDate()).map((event, idx) => (
                         <EventCard
-                            key={idx}
+                            key={`item-${idx}`}
                             event={event}
                             compact
                             onView={onEventClick}
@@ -124,4 +158,10 @@ export const CalendarView = ({ events, onSelectDate, onEventClick }) => {
             )}
         </div>
     );
+};
+
+CalendarView.propTypes = {
+    events: PropTypes.array,
+    onSelectDate: PropTypes.func,
+    onEventClick: PropTypes.func,
 };

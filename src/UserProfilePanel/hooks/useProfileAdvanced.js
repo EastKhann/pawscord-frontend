@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import toast from '../../utils/toast';
 import { authGet, authPost } from './profileApiUtils';
+import logger from '../../utils/logger';
+import { useTranslation } from 'react-i18next';
 
 const useProfileAdvanced = ({ user }) => {
+    const { t } = useTranslation();
     const [richPresence, setRichPresence] = useState(null);
     const [endorsements, setEndorsements] = useState([]);
     const [inventory, setInventory] = useState([]);
@@ -17,7 +20,9 @@ const useProfileAdvanced = ({ user }) => {
         try {
             const response = await authGet(`/api/users/rich_presence/${user.username}/`);
             setRichPresence(response.data);
-        } catch (err) { /* Silent fail */ }
+        } catch (err) {
+            /* Swithnt fail */
+        }
     };
 
     const fetchEndorsements = async () => {
@@ -25,74 +30,110 @@ const useProfileAdvanced = ({ user }) => {
             const response = await authGet(`/api/users/${user.username}/endorsements/`);
             const data = response.data?.endorsements || response.data || [];
             setEndorsements(Array.isArray(data) ? data : []);
-        } catch (err) { console.error('Endorsements fetch failed:', err); setEndorsements([]); }
+        } catch (err) {
+            logger.error('Endorsements fetch failed:', err);
+            setEndorsements([]);
+        }
     };
 
     const fetchInventory = async () => {
         try {
             const response = await authGet('/api/store/inventory/');
             setInventory(response.data || []);
-            setEquippedItems(response.data?.filter(item => item.is_equipped) || []);
-        } catch (err) { setInventory([]); setEquippedItems([]); }
+            setEquippedItems(response.data?.filter((item) => item.is_equipped) || []);
+        } catch (err) {
+            setInventory([]);
+            setEquippedItems([]);
+        }
     };
 
     const equipItem = async (inventoryId) => {
         try {
             await authPost(`/api/store/equip/${inventoryId}/`);
-            toast.success('✅ Item equipped!');
+            toast.success(t('profile.itemEquipped'));
             fetchInventory();
-        } catch (err) { toast.error('❌ Failed to equip item'); }
+        } catch (err) {
+            toast.error(t('profile.itemEquipFailed'));
+        }
     };
 
     const unequipItem = async (inventoryId) => {
         try {
             await authPost(`/api/store/unequip/${inventoryId}/`);
-            toast.success('✅ Item unequipped!');
+            toast.success(t('profile.itemUnequipped'));
             fetchInventory();
-        } catch (err) { toast.error('❌ Failed to unequip item'); }
+        } catch (err) {
+            toast.error(t('profile.itemUnequipFailed'));
+        }
     };
 
     const fetchNicknameHistory = async () => {
         try {
             const response = await authGet(`/api/users/${user.username}/nicknames/history/`);
             setNicknameHistory(Array.isArray(response.data) ? response.data : []);
-        } catch (err) { console.error('Nickname history fetch failed:', err); setNicknameHistory([]); }
+        } catch (err) {
+            logger.error('Nickname history fetch failed:', err);
+            setNicknameHistory([]);
+        }
     };
 
     const fetchServerOrder = async () => {
         try {
             const response = await authGet('/api/user/server-order/');
             setServerOrder(response.data || []);
-        } catch (err) { /* Silent fail */ }
+        } catch (err) {
+            /* Swithnt fail */
+        }
     };
 
     const fetchOAuthApps = async () => {
         try {
             const response = await authGet('/oauth/apps/list/');
             setOauthApps(Array.isArray(response.data) ? response.data : []);
-        } catch (err) { console.error('OAuth apps fetch failed:', err); setOauthApps([]); }
+        } catch (err) {
+            logger.error('OAuth apps fetch failed:', err);
+            setOauthApps([]);
+        }
     };
 
     const fetchWebhooks = async () => {
         try {
             const response = await authGet('/webhooks/list/');
             setWebhooks(Array.isArray(response.data) ? response.data : []);
-        } catch (err) { setWebhooks([]); }
+        } catch (err) {
+            setWebhooks([]);
+        }
     };
 
     const fetchBotAccounts = async () => {
         try {
             const response = await authGet('/bots/list/');
             setBotAccounts(Array.isArray(response.data) ? response.data : []);
-        } catch (err) { setBotAccounts([]); }
+        } catch (err) {
+            setBotAccounts([]);
+        }
     };
 
     return {
-        richPresence, endorsements, inventory, equippedItems,
-        nicknameHistory, serverOrder, oauthApps, webhooks, botAccounts,
-        fetchRichPresence, fetchEndorsements, fetchInventory, equipItem,
-        unequipItem, fetchNicknameHistory, fetchServerOrder,
-        fetchOAuthApps, fetchWebhooks, fetchBotAccounts,
+        richPresence,
+        endorsements,
+        inventory,
+        equippedItems,
+        nicknameHistory,
+        serverOrder,
+        oauthApps,
+        webhooks,
+        botAccounts,
+        fetchRichPresence,
+        fetchEndorsements,
+        fetchInventory,
+        equipItem,
+        unequipItem,
+        fetchNicknameHistory,
+        fetchServerOrder,
+        fetchOAuthApps,
+        fetchWebhooks,
+        fetchBotAccounts,
     };
 };
 

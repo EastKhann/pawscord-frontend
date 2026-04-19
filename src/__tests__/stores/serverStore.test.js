@@ -13,8 +13,8 @@ const mockServers = [
         member_count: 10,
         channels: [
             { id: 1, name: 'general', type: 'text' },
-            { id: 2, name: 'voice', type: 'voice' }
-        ]
+            { id: 2, name: 'voice', type: 'voice' },
+        ],
     },
     {
         id: 2,
@@ -22,10 +22,8 @@ const mockServers = [
         icon: 'server2.png',
         owner_id: 2,
         member_count: 25,
-        channels: [
-            { id: 3, name: 'chat', type: 'text' }
-        ]
-    }
+        channels: [{ id: 3, name: 'chat', type: 'text' }],
+    },
 ];
 
 const mockServerStore = {
@@ -44,12 +42,12 @@ const mockServerStore = {
     leaveServer: vi.fn(),
     createChannel: vi.fn(),
     deleteChannel: vi.fn(),
-    updateServer: vi.fn()
+    updateServer: vi.fn(),
 };
 
 vi.mock('../../stores/serverStore', () => ({
     default: () => mockServerStore,
-    useServerStore: () => mockServerStore
+    useServerStore: () => mockServerStore,
 }));
 
 describe('Server Store', () => {
@@ -105,7 +103,7 @@ describe('Server Store', () => {
             mockServerStore.servers = mockServers;
 
             mockServerStore.selectServer.mockImplementationOnce((serverId) => {
-                mockServerStore.currentServer = mockServers.find(s => s.id === serverId);
+                mockServerStore.currentServer = mockServers.find((s) => s.id === serverId);
             });
 
             mockServerStore.selectServer(1);
@@ -118,7 +116,7 @@ describe('Server Store', () => {
             mockServerStore.servers = mockServers;
 
             mockServerStore.selectServer.mockImplementationOnce((serverId) => {
-                const server = mockServers.find(s => s.id === serverId);
+                const server = mockServers.find((s) => s.id === serverId);
                 mockServerStore.currentServer = server;
                 mockServerStore.currentChannel = server.channels[0];
             });
@@ -135,7 +133,9 @@ describe('Server Store', () => {
             mockServerStore.currentServer = mockServers[0];
 
             mockServerStore.selectChannel.mockImplementationOnce((channelId) => {
-                mockServerStore.currentChannel = mockServers[0].channels.find(c => c.id === channelId);
+                mockServerStore.currentChannel = mockServers[0].channels.find(
+                    (c) => c.id === channelId
+                );
             });
 
             mockServerStore.selectChannel(2);
@@ -149,7 +149,7 @@ describe('Server Store', () => {
         it('should create a new server', async () => {
             const newServer = {
                 name: 'New Server',
-                icon: null
+                icon: null,
             };
 
             const createdServer = {
@@ -157,7 +157,7 @@ describe('Server Store', () => {
                 ...newServer,
                 owner_id: 1,
                 member_count: 1,
-                channels: []
+                channels: [],
             };
 
             mockServerStore.createServer.mockImplementationOnce((data) => {
@@ -177,7 +177,7 @@ describe('Server Store', () => {
             mockServerStore.servers = mockServers;
 
             mockServerStore.deleteServer.mockImplementationOnce((serverId) => {
-                mockServerStore.servers = mockServerStore.servers.filter(s => s.id !== serverId);
+                mockServerStore.servers = mockServerStore.servers.filter((s) => s.id !== serverId);
             });
 
             await mockServerStore.deleteServer(1);
@@ -192,7 +192,7 @@ describe('Server Store', () => {
             mockServerStore.currentServer = mockServers[0];
 
             mockServerStore.deleteServer.mockImplementationOnce((serverId) => {
-                mockServerStore.servers = mockServerStore.servers.filter(s => s.id !== serverId);
+                mockServerStore.servers = mockServerStore.servers.filter((s) => s.id !== serverId);
                 if (mockServerStore.currentServer?.id === serverId) {
                     mockServerStore.currentServer = null;
                     mockServerStore.currentChannel = null;
@@ -211,7 +211,7 @@ describe('Server Store', () => {
             const joinedServer = {
                 id: 4,
                 name: 'Joined Server',
-                invite_code: inviteCode
+                invite_code: inviteCode,
             };
 
             mockServerStore.joinServer.mockImplementationOnce(() => {
@@ -228,7 +228,7 @@ describe('Server Store', () => {
             mockServerStore.servers = mockServers;
 
             mockServerStore.leaveServer.mockImplementationOnce((serverId) => {
-                mockServerStore.servers = mockServerStore.servers.filter(s => s.id !== serverId);
+                mockServerStore.servers = mockServerStore.servers.filter((s) => s.id !== serverId);
             });
 
             await mockServerStore.leaveServer(2);
@@ -245,7 +245,7 @@ describe('Server Store', () => {
 
             const newChannel = {
                 name: 'new-channel',
-                type: 'text'
+                type: 'text',
             };
 
             mockServerStore.createChannel.mockImplementationOnce((serverId, data) => {
@@ -275,15 +275,15 @@ describe('Server Store', () => {
 
             const updates = {
                 name: 'Updated Server Name',
-                icon: 'new-icon.png'
+                icon: 'new-icon.png',
             };
 
             mockServerStore.updateServer.mockImplementationOnce((serverId, data) => {
-                const index = mockServerStore.servers.findIndex(s => s.id === serverId);
+                const index = mockServerStore.servers.findIndex((s) => s.id === serverId);
                 if (index !== -1) {
                     mockServerStore.servers[index] = {
                         ...mockServerStore.servers[index],
-                        ...data
+                        ...data,
                     };
                 }
             });

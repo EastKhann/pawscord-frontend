@@ -25,13 +25,22 @@ vi.mock('spark-md5', () => ({
 
 // After mock, import the module under test
 import {
-    API_BASE_URL, API_URL_BASE_STRING, MEDIA_BASE_URL,
-    WS_PROTOCOL, API_HOST, ABSOLUTE_HOST_URL,
-    LOGIN_URL, REGISTER_URL, UPLOAD_FILE_URL,
-    MESSAGE_HISTORY_ROOM_URL, MESSAGE_HISTORY_DM_URL,
-    ROOM_LIST_URL, CONVERSATION_LIST_URL,
+    API_BASE_URL,
+    API_URL_BASE_STRING,
+    MEDIA_BASE_URL,
+    WS_PROTOCOL,
+    API_HOST,
+    ABSOLUTE_HOST_URL,
+    LOGIN_URL,
+    REGISTER_URL,
+    UPLOAD_FILE_URL,
+    MESSAGE_HISTORY_ROOM_URL,
+    MESSAGE_HISTORY_DM_URL,
+    ROOM_LIST_URL,
+    CONVERSATION_LIST_URL,
     DRAFT_STORAGE_KEY,
-    getTemporaryId, calculateFileHash,
+    getTemporaryId,
+    calculateFileHash,
 } from '../../config/api';
 
 describe('API Configuration', () => {

@@ -8,9 +8,15 @@ const localStorageMock = (() => {
     let store = {};
     return {
         getItem: vi.fn((key) => store[key] ?? null),
-        setItem: vi.fn((key, value) => { store[key] = value; }),
-        removeItem: vi.fn((key) => { delete store[key]; }),
-        clear: vi.fn(() => { store = {}; }),
+        setItem: vi.fn((key, value) => {
+            store[key] = value;
+        }),
+        removeItem: vi.fn((key) => {
+            delete store[key];
+        }),
+        clear: vi.fn(() => {
+            store = {};
+        }),
     };
 })();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
@@ -85,7 +91,9 @@ describe('useChatStore – Comprehensive', () => {
         it('should accept positional arguments (type, id, targetUser)', () => {
             useChatStore.getState().setActiveChat('room', 'general', null);
             expect(useChatStore.getState().activeChat).toEqual({
-                type: 'room', id: 'general', targetUser: null,
+                type: 'room',
+                id: 'general',
+                targetUser: null,
             });
         });
 
@@ -186,11 +194,9 @@ describe('useChatStore – Comprehensive', () => {
         });
 
         it('should filter out invalid messages in batch', () => {
-            useChatStore.getState().addMessagesBatch([
-                { id: 1, content: 'ok' },
-                null,
-                { content: 'no id' },
-            ]);
+            useChatStore
+                .getState()
+                .addMessagesBatch([{ id: 1, content: 'ok' }, null, { content: 'no id' }]);
             expect(useChatStore.getState().messages).toHaveLength(1);
         });
     });
@@ -208,7 +214,12 @@ describe('useChatStore – Comprehensive', () => {
         });
 
         it('should not affect non-matching messages', () => {
-            useChatStore.setState({ messages: [{ id: 1, content: 'A' }, { id: 2, content: 'B' }] });
+            useChatStore.setState({
+                messages: [
+                    { id: 1, content: 'A' },
+                    { id: 2, content: 'B' },
+                ],
+            });
             useChatStore.getState().updateMessage(1, { content: 'X' });
             expect(useChatStore.getState().messages[1].content).toBe('B');
         });
@@ -218,7 +229,7 @@ describe('useChatStore – Comprehensive', () => {
         it('should remove message by id', () => {
             useChatStore.setState({ messages: [{ id: 1 }, { id: 2 }, { id: 3 }] });
             useChatStore.getState().removeMessage(2);
-            expect(useChatStore.getState().messages.map(m => m.id)).toEqual([1, 3]);
+            expect(useChatStore.getState().messages.map((m) => m.id)).toEqual([1, 3]);
         });
 
         it('should be no-op if id not found', () => {
@@ -241,7 +252,7 @@ describe('useChatStore – Comprehensive', () => {
 
         it('should accept function updater', () => {
             useChatStore.setState({ messages: [{ id: 1, content: 'a' }] });
-            useChatStore.getState().setMessages(prev => [...prev, { id: 2, content: 'b' }]);
+            useChatStore.getState().setMessages((prev) => [...prev, { id: 2, content: 'b' }]);
             expect(useChatStore.getState().messages).toHaveLength(2);
         });
 
@@ -260,7 +271,7 @@ describe('useChatStore – Comprehensive', () => {
         it('should prepend older messages to front', () => {
             useChatStore.setState({ messages: [{ id: 10 }] });
             useChatStore.getState().prependMessages([{ id: 1 }, { id: 2 }]);
-            const ids = useChatStore.getState().messages.map(m => m.id);
+            const ids = useChatStore.getState().messages.map((m) => m.id);
             expect(ids).toEqual([1, 2, 10]);
         });
 
@@ -311,7 +322,7 @@ describe('useChatStore – Comprehensive', () => {
         it('should not duplicate on repeated typing=true', () => {
             useChatStore.getState().setTypingUser('bob', true);
             useChatStore.getState().setTypingUser('bob', true);
-            const count = useChatStore.getState().typingUsers.filter(u => u === 'bob').length;
+            const count = useChatStore.getState().typingUsers.filter((u) => u === 'bob').length;
             expect(count).toBe(1);
         });
 
@@ -366,11 +377,22 @@ describe('useChatStore – Comprehensive', () => {
         it('setEncryptionKey stores key per chatId', () => {
             useChatStore.getState().setEncryptionKey('room-1', 'key123');
             useChatStore.getState().setEncryptionKey('room-2', 'key456');
-            expect(useChatStore.getState().encryptionKeys).toEqual({ 'room-1': 'key123', 'room-2': 'key456' });
+            expect(useChatStore.getState().encryptionKeys).toEqual({
+                'room-1': 'key123',
+                'room-2': 'key456',
+            });
         });
 
         it('setPermissions sets provided permissions', () => {
-            useChatStore.getState().setPermissions({ is_owner: true, can_manage_channels: true, can_delete_messages: false, can_manage_roles: false, can_ban_members: true });
+            useChatStore
+                .getState()
+                .setPermissions({
+                    is_owner: true,
+                    can_manage_channels: true,
+                    can_delete_messages: false,
+                    can_manage_roles: false,
+                    can_ban_members: true,
+                });
             expect(useChatStore.getState().currentPermissions.is_owner).toBe(true);
         });
 
@@ -381,9 +403,14 @@ describe('useChatStore – Comprehensive', () => {
         });
 
         it('updateUserStatus updates user status in onlineUsers', () => {
-            useChatStore.setState({ onlineUsers: [{ id: 1, status: 'online' }, { id: 2, status: 'idle' }] });
+            useChatStore.setState({
+                onlineUsers: [
+                    { id: 1, status: 'online' },
+                    { id: 2, status: 'idle' },
+                ],
+            });
             useChatStore.getState().updateUserStatus(1, 'dnd');
-            const user = useChatStore.getState().onlineUsers.find(u => u.id === 1);
+            const user = useChatStore.getState().onlineUsers.find((u) => u.id === 1);
             expect(user.status).toBe('dnd');
         });
     });

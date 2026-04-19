@@ -1,238 +1,336 @@
-import { useCallback, memo } from 'react';
-import { FaShieldAlt, FaUsers, FaExclamationTriangle, FaBan, FaRobot, FaCog, FaGavel, FaFileAlt, FaHistory, FaClock, FaUserSlash, FaTrash, FaBell, FaLock } from 'react-icons/fa';
+﻿import { useCallback, memo } from 'react';
+import PropTypes from 'prop-types';
+import {
+    FaShieldAlt,
+    FaUsers,
+    FaExclamationTriangle,
+    FaBan,
+    FaRobot,
+    FaCog,
+    FaGavel,
+    FaFileAlt,
+    FaHistory,
+    FaClock,
+    FaUserSlash,
+    FaTrash,
+    FaBell,
+    FaLock,
+} from 'react-icons/fa';
 import confirmDialog from '../../utils/confirmDialog';
 import toast from '../../utils/toast';
 import styles from './styles';
+import { useTranslation } from 'react-i18next';
+import css from './ServerTabs.module.css';
+
+const S = {
+    txt5: { color: '#949ba4', fontSize: '20px' },
+    txt4: { color: '#f23f42', fontSize: '20px' },
+    txt3: { fontSize: '20px', color: '#f23f42' },
+    txt2: { fontSize: '20px', color: '#23a559' },
+    txt: { fontSize: '28px', color: '#5865f2' },
+};
 
 const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, onClose }) => {
-    const handleAutoModeration = useCallback(() => { onClose(); window.showAutoModeration?.(); }, [onClose]);
-    const handleRaidProtection = useCallback(() => { onClose(); window.showRaidProtection?.(); }, [onClose]);
-    const handleUserWarnings = useCallback(() => { onClose(); window.showUserWarnings?.(); }, [onClose]);
-    const handleReportSystem = useCallback(() => { onClose(); window.showReportSystem?.(); }, [onClose]);
-    const handleAuditLog = useCallback(() => { onClose(); window.showAuditLog?.(); }, [onClose]);
-    const handleSlowMode = useCallback(() => { onClose(); window.showSlowMode?.(); }, [onClose]);
+    const { t } = useTranslation();
+    const handleAutoModeration = useCallback(() => {
+        onClose();
+        window.showAutoModeration?.();
+    }, [onClose]);
+    const handleRaidProtection = useCallback(() => {
+        onClose();
+        window.showRaidProtection?.();
+    }, [onClose]);
+    const handleUserWarnings = useCallback(() => {
+        onClose();
+        window.showUserWarnings?.();
+    }, [onClose]);
+    const handleReportSystem = useCallback(() => {
+        onClose();
+        window.showReportSystem?.();
+    }, [onClose]);
+    const handleAuditLog = useCallback(() => {
+        onClose();
+        window.showAuditLog?.();
+    }, [onClose]);
+    const handleSlowMode = useCallback(() => {
+        onClose();
+        window.showSlowMode?.();
+    }, [onClose]);
     const handleLockdown = useCallback(async () => {
-        if (!await confirmDialog('Sunucuyu kilitlemek istediğinize emin misiniz? Sadece yöneticiler mesaj yazabilir.')) return;
+        if (
+            !(await confirmDialog(
+                'Sunucuyu kilitlemek istediğinizden emin misiniz? Yalnızca yöneticiler mesaj gönderebilir.'
+            ))
+        )
+            return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ metadata: { ...server.metadata, lockdown: true } })
+                body: JSON.stringify({ metadata: { ...server.metadata, lockdown: true } }),
             });
-            toast.success('🔒 Sunucu lockdown moduna alındı!');
-        } catch (e) { toast.error('İşlem başarısız'); }
+            toast.success(t('moderation.lockdownActivated'));
+        } catch (e) {
+            toast.error(t('moderation.operationFailed'));
+        }
     }, [fetchWithAuth, apiBaseUrl, server]);
-    const handleClearMessages = useCallback(() => toast.info('🚧 Bu özellik yakında eklenecek'), []);
+    const handleClearMessages = useCallback(() => toast.info(t('common.comingSoon')), []);
     const handleDisableJoin = useCallback(async () => {
-        if (!await confirmDialog('Yeni üyelikleri durdurmak istediğinize emin misiniz?')) return;
+        if (!(await confirmDialog('Yeni üyelikleri duraklatmak istediğinizden emin misiniz?')))
+            return;
         try {
             await fetchWithAuth(`${apiBaseUrl}/servers/${server.id}/update/`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ metadata: { ...server.metadata, join_disabled: true } })
+                body: JSON.stringify({ metadata: { ...server.metadata, join_disabled: true } }),
             });
-            toast.success('🚫 Yeni üyelikler durduruldu!');
-        } catch (e) { toast.error('İşlem başarısız'); }
+            toast.success(t('moderation.joinDisabled'));
+        } catch (e) {
+            toast.error(t('moderation.operationFailed'));
+        }
     }, [fetchWithAuth, apiBaseUrl, server]);
-    const handleAnnouncement = useCallback(() => toast.info('🚧 Bu özellik yakında eklenecek'), []);
+    const handleAnnouncement = useCallback(() => toast.info(t('common.comingSoon')), []);
 
     return (
         <div style={styles.moderationTab}>
             {/* HEADER */}
             <div style={styles.moderationHeader}>
                 <div style={styles.moderationTitleSection}>
-                    <FaShieldAlt style={{ fontSize: '28px', color: '#5865f2' }} />
+                    <FaShieldAlt style={S.txt} />
                     <div>
-                        <h3 style={{ margin: 0, color: '#fff', fontSize: '18px' }}>Moderasyon Merkezi</h3>
-                        <p style={{ margin: '4px 0 0', color: '#b5bac1', fontSize: '13px' }}>
-                            Sunucunuzu güvende tutmak için gelişmiş araçlar
-                        </p>
+                        <h3 className={css.headerWhite18}>{t('moderation_center')}</h3>
+                        <p className={css.chatText13}>Advanced tools to keep your server safe</p>
                     </div>
                 </div>
                 <div style={styles.serverStats}>
                     <div style={styles.statItem}>
                         <span style={styles.statNumber}>{serverMembers?.length || 0}</span>
-                        <span style={styles.statLabel}>Üye</span>
+                        <span style={styles.statLabel}>{t('member')}</span>
                     </div>
                     <div style={styles.statItem}>
-                        <span style={styles.statNumber}>{server.categories?.reduce((acc, cat) => acc + (cat.rooms?.length || 0), 0) || 0}</span>
-                        <span style={styles.statLabel}>Kanal</span>
+                        <span style={styles.statNumber}>
+                            {server.categories?.reduce(
+                                (acc, cat) => acc + (cat.rooms?.length || 0),
+                                0
+                            ) || 0}
+                        </span>
+                        <span style={styles.statLabel}>{t('channel')}</span>
                     </div>
                 </div>
             </div>
 
-            {/* HIZLI İSTATİSTİKLER */}
+            {/* QUICK STATS */}
             <div style={styles.quickStatsGrid}>
-                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #23a559' }}>
-                    <FaUsers style={{ fontSize: '20px', color: '#23a559' }} />
+                <div className={css.quickStatSuccess}>
+                    <FaUsers style={S.txt2} />
                     <div>
-                        <div style={styles.quickStatValue}>Aktif</div>
-                        <div style={styles.quickStatLabel}>Moderasyon Durumu</div>
+                        <div style={styles.quickStatValue}>{t('active')}</div>
+                        <div style={styles.quickStatLabel}>{t('moderation_status')}</div>
                     </div>
                 </div>
-                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #f0b232' }}>
-                    <FaExclamationTriangle style={{ fontSize: '20px', color: '#f0b232' }} />
+                <div className={css.quickStatWarning}>
+                    <FaExclamationTriangle className="text-f0b-20" />
                     <div>
                         <div style={styles.quickStatValue}>0</div>
-                        <div style={styles.quickStatLabel}>Bekleyen Rapor</div>
+                        <div style={styles.quickStatLabel}>{t('pending_reports')}</div>
                     </div>
                 </div>
-                <div style={{ ...styles.quickStatCard, borderLeft: '4px solid #f23f42' }}>
-                    <FaBan style={{ fontSize: '20px', color: '#f23f42' }} />
+                <div className={css.quickStatDanger}>
+                    <FaBan style={S.txt3} />
                     <div>
                         <div style={styles.quickStatValue}>0</div>
-                        <div style={styles.quickStatLabel}>Yasaklı Kullanıcı</div>
+                        <div style={styles.quickStatLabel}>{t('banned_users')}</div>
                     </div>
                 </div>
             </div>
 
             {/* MODERASYON KARTLARI */}
             <div style={styles.moderationCardsGrid}>
-                {/* Otomatik Moderasyon */}
+                {/* Auto Moderation */}
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
-                        <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(88, 101, 242, 0.2)' }}>
-                            <FaRobot style={{ color: '#5865f2', fontSize: '20px' }} />
+                        <div className={css.modIconPrimary}>
+                            <FaRobot className={css.primaryIcon20} />
                         </div>
-                        <div style={styles.modCardBadge}>AI Destekli</div>
+                        <div style={styles.modCardBadge}>{t('ai_powered')}</div>
                     </div>
-                    <h4 style={styles.modCardTitle}>Otomatik Moderasyon</h4>
+                    <h4 style={styles.modCardTitle}>{t('auto_moderation')}</h4>
                     <p style={styles.modCardDesc}>
-                        Spam, küfür, toxic içerik ve zararlı linkleri otomatik tespit edip aksiyonlar alır.
+                        Automatically detects spam, profanity, toxic content and harmful links.
                     </p>
                     <div style={styles.modCardFeatures}>
-                        <span style={styles.modCardFeature}>🚫 Spam Filtresi</span>
-                        <span style={styles.modCardFeature}>🔗 Link Koruması</span>
-                        <span style={styles.modCardFeature}>💬 Toxic Algılama</span>
+                        <span style={styles.modCardFeature}>{t('🚫_spam_filtresi')}</span>
+                        <span style={styles.modCardFeature}>{t('🔗_link_koruması')}</span>
+                        <span style={styles.modCardFeature}>{t('💬_toxic_algılama')}</span>
                     </div>
-                    <button style={styles.modCardBtn} onClick={handleAutoModeration}>
-                        <FaCog /> Ayarları Yapılandır
+                    <button
+                        aria-label="Configure Auto Moderation"
+                        style={styles.modCardBtn}
+                        onClick={handleAutoModeration}
+                    >
+                        <FaCog /> Configure Settings
                     </button>
                 </div>
 
-                {/* Raid Koruması */}
+                {/* Raid Protection */}
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
-                        <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(237, 66, 69, 0.2)' }}>
-                            <FaShieldAlt style={{ color: '#f23f42', fontSize: '20px' }} />
+                        <div className={css.modIconDanger}>
+                            <FaShieldAlt style={S.txt4} />
                         </div>
-                        <div style={{ ...styles.modCardBadge, backgroundColor: 'rgba(237, 66, 69, 0.2)', color: '#f23f42' }}>Kritik</div>
+                        <div className={css.modBadgeDanger}>{t('critical')}</div>
                     </div>
-                    <h4 style={styles.modCardTitle}>Raid Koruması</h4>
+                    <h4 style={styles.modCardTitle}>{t('raid_protection')}</h4>
                     <p style={styles.modCardDesc}>
-                        Toplu katılım saldırılarını tespit eder, otomatik lockdown modunu aktifleştirir.
+                        Detects mass join attacks and automatically activates lockdown mode.
                     </p>
                     <div style={styles.modCardFeatures}>
-                        <span style={styles.modCardFeature}>🔒 Lockdown Modu</span>
-                        <span style={styles.modCardFeature}>⏱️ Join Limiti</span>
-                        <span style={styles.modCardFeature}>🛡️ Anti-Bot</span>
+                        <span style={styles.modCardFeature}>{t('🔒_lockdown_modu')}</span>
+                        <span style={styles.modCardFeature}>{t('⏱️_join_limiti')}</span>
+                        <span style={styles.modCardFeature}>{t('🛡️_anti-bot')}</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#f23f42' }} onClick={handleRaidProtection}>
-                        <FaShieldAlt /> Korumayı Yönet
+                    <button
+                        aria-label="Configure Raid Protection"
+                        className={css.modBtnDanger}
+                        onClick={handleRaidProtection}
+                    >
+                        <FaShieldAlt /> Manage Protection
                     </button>
                 </div>
 
-                {/* Kullanıcı Uyarıları */}
+                {/* User Warnings */}
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
-                        <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(250, 166, 26, 0.2)' }}>
-                            <FaGavel style={{ color: '#f0b232', fontSize: '20px' }} />
+                        <div className={css.modIconWarning}>
+                            <FaGavel className="text-f0b-20" />
                         </div>
                     </div>
-                    <h4 style={styles.modCardTitle}>Uyarı Sistemi</h4>
+                    <h4 style={styles.modCardTitle}>{t('warning_system')}</h4>
                     <p style={styles.modCardDesc}>
-                        3 aşamalı uyarı sistemi. Otomatik mute ve ban aksiyonları.
+                        3-stage warning system. Automatic mute and ban actions.
                     </p>
                     <div style={styles.modCardFeatures}>
-                        <span style={styles.modCardFeature}>⚠️ 3-Strike Sistem</span>
-                        <span style={styles.modCardFeature}>🔇 Otomatik Mute</span>
-                        <span style={styles.modCardFeature}>📝 Uyarı Geçmişi</span>
+                        <span style={styles.modCardFeature}>{t('⚠️_3-strike_sistem')}</span>
+                        <span style={styles.modCardFeature}>{t('🔇_otomatik_mute')}</span>
+                        <span style={styles.modCardFeature}>{t('📝_uyarı_geçmişi')}</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#f0b232' }} onClick={handleUserWarnings}>
-                        <FaGavel /> Uyarıları Yönet
+                    <button
+                        aria-label="Manage Warnings"
+                        className={css.modBtnWarning}
+                        onClick={handleUserWarnings}
+                    >
+                        <FaGavel /> Manage Warnings
                     </button>
                 </div>
 
                 {/* Rapor Sistemi */}
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
-                        <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(67, 181, 129, 0.2)' }}>
-                            <FaFileAlt style={{ color: '#23a559', fontSize: '20px' }} />
+                        <div className={css.modIconSuccess}>
+                            <FaFileAlt className="icon-success" />
                         </div>
                     </div>
-                    <h4 style={styles.modCardTitle}>Rapor Merkezi</h4>
+                    <h4 style={styles.modCardTitle}>{t('report_center')}</h4>
                     <p style={styles.modCardDesc}>
-                        Kullanıcı raporlarını incele, aksiyonları takip et ve istatistikleri görüntüle.
+                        Review user reports, track actions and view statistics.
                     </p>
                     <div style={styles.modCardFeatures}>
-                        <span style={styles.modCardFeature}>📋 Rapor Listesi</span>
-                        <span style={styles.modCardFeature}>✅ Çözüm Takibi</span>
-                        <span style={styles.modCardFeature}>📊 İstatistikler</span>
+                        <span style={styles.modCardFeature}>{t('📋_rapor_listesi')}</span>
+                        <span style={styles.modCardFeature}>{t('✅_züm_takibi')}</span>
+                        <span style={styles.modCardFeature}>{t('📊_i̇statistikler')}</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#23a559' }} onClick={handleReportSystem}>
-                        <FaFileAlt /> Raporları Görüntüle
+                    <button
+                        aria-label="View Reports"
+                        className={css.modBtnSuccess}
+                        onClick={handleReportSystem}
+                    >
+                        <FaFileAlt /> View Reports
                     </button>
                 </div>
 
                 {/* Audit Log */}
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
-                        <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(114, 137, 218, 0.2)' }}>
-                            <FaHistory style={{ color: '#5865f2', fontSize: '20px' }} />
+                        <div className={css.modIconBlue}>
+                            <FaHistory className={css.primaryIcon20} />
                         </div>
                     </div>
-                    <h4 style={styles.modCardTitle}>Audit Log</h4>
+                    <h4 style={styles.modCardTitle}>{t('audit_log')}</h4>
                     <p style={styles.modCardDesc}>
-                        Tüm admin ve moderatör aksiyonlarını kronolojik olarak görüntüle.
+                        View all admin and moderator actions chronologically.
                     </p>
                     <div style={styles.modCardFeatures}>
-                        <span style={styles.modCardFeature}>📜 Aksiyon Geçmişi</span>
-                        <span style={styles.modCardFeature}>🔍 Filtreleme</span>
-                        <span style={styles.modCardFeature}>📥 Dışa Aktar</span>
+                        <span style={styles.modCardFeature}>{t('📜_aksiyon_geçmişi')}</span>
+                        <span style={styles.modCardFeature}>{t('🔍_filtreleme')}</span>
+                        <span style={styles.modCardFeature}>{t('📥_export')}</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#5865f2' }} onClick={handleAuditLog}>
-                        <FaHistory /> Logları Görüntüle
+                    <button
+                        aria-label="View Audit Logs"
+                        className={css.modBtnPrimary}
+                        onClick={handleAuditLog}
+                    >
+                        <FaHistory /> View Logs
                     </button>
                 </div>
 
                 {/* Slow Mode / Timeout */}
                 <div style={styles.modCard}>
                     <div style={styles.modCardHeader}>
-                        <div style={{ ...styles.modCardIcon, backgroundColor: 'rgba(153, 170, 181, 0.2)' }}>
-                            <FaClock style={{ color: '#949ba4', fontSize: '20px' }} />
+                        <div className={css.modIconMuted}>
+                            <FaClock style={S.txt5} />
                         </div>
                     </div>
-                    <h4 style={styles.modCardTitle}>Slow Mode & Timeout</h4>
+                    <h4 style={styles.modCardTitle}>{t('slow_mode_timeout')}</h4>
                     <p style={styles.modCardDesc}>
-                        Kanal bazlı slow mode ve kullanıcı timeout yönetimi.
+                        Channel-level slow mode and user timeout management.
                     </p>
                     <div style={styles.modCardFeatures}>
-                        <span style={styles.modCardFeature}>⏳ Slow Mode</span>
-                        <span style={styles.modCardFeature}>🔇 Timeout</span>
-                        <span style={styles.modCardFeature}>⏰ Süre Yönetimi</span>
+                        <span style={styles.modCardFeature}>{t('⏳_slow_mode')}</span>
+                        <span style={styles.modCardFeature}>{t('🔇_timeout')}</span>
+                        <span style={styles.modCardFeature}>{t('⏰_duration_yönetimi')}</span>
                     </div>
-                    <button style={{ ...styles.modCardBtn, backgroundColor: '#949ba4' }} onClick={handleSlowMode}>
-                        <FaClock /> Ayarları Yapılandır
+                    <button
+                        aria-label="Configure Slow Mode"
+                        className={css.modBtnMuted}
+                        onClick={handleSlowMode}
+                    >
+                        <FaClock /> Configure Settings
                     </button>
                 </div>
             </div>
 
-            {/* HIZLI AKSİYONLAR */}
+            {/* QUICK ACTIONS */}
             <div style={styles.quickActionsSection}>
                 <h4 style={styles.quickActionsTitle}>
-                    <FaGavel /> Hızlı Aksiyonlar
+                    <FaGavel /> Quick Actions
                 </h4>
                 <div style={styles.quickActionsGrid}>
-                    <button style={styles.quickActionBtn} onClick={handleLockdown}>
-                        <FaLock /> Sunucuyu Kilitle
+                    <button
+                        aria-label="Lock server"
+                        style={styles.quickActionBtn}
+                        onClick={handleLockdown}
+                    >
+                        <FaLock /> Lock Server
                     </button>
-                    <button style={styles.quickActionBtn} onClick={handleClearMessages}>
-                        <FaTrash /> Tüm Mesajları Temizle
+                    <button
+                        aria-label="Clear all messages"
+                        style={styles.quickActionBtn}
+                        onClick={handleClearMessages}
+                    >
+                        <FaTrash /> Clear All Messages
                     </button>
-                    <button style={styles.quickActionBtn} onClick={handleDisableJoin}>
-                        <FaUserSlash /> Yeni Üyeliği Durdur
+                    <button
+                        aria-label="Pause new memberships"
+                        style={styles.quickActionBtn}
+                        onClick={handleDisableJoin}
+                    >
+                        <FaUserSlash /> Yeni Üyelikleri Durdur
                     </button>
-                    <button style={styles.quickActionBtn} onClick={handleAnnouncement}>
+                    <button
+                        aria-label="Send announcement"
+                        style={styles.quickActionBtn}
+                        onClick={handleAnnouncement}
+                    >
                         <FaBell /> Duyuru Gönder
                     </button>
                 </div>
@@ -242,4 +340,11 @@ const ModerationTab = memo(({ server, serverMembers, fetchWithAuth, apiBaseUrl, 
 });
 
 ModerationTab.displayName = 'ModerationTab';
+ModerationTab.propTypes = {
+    server: PropTypes.string,
+    serverMembers: PropTypes.object,
+    fetchWithAuth: PropTypes.func,
+    apiBaseUrl: PropTypes.string,
+    onClose: PropTypes.func,
+};
 export default ModerationTab;

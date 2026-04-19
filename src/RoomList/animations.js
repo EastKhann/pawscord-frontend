@@ -1,12 +1,12 @@
-// 🎨 CSS Animasyonları ve Hover Efektleri
+// 🎨 CSS Animations and Hover Effects
 export function injectRoomListAnimations() {
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined' || !document.head) return;
 
     if (document.head.querySelector('style[data-roomlist-animations]')) return;
 
     const styleSheet = document.createElement('style');
     styleSheet.textContent = `
-        /* Kanal Hover Efektleri */
+        /* Channel Hover Efektleri */
         .channel-item {
             position: relative;
             overflow: hidden;
@@ -40,7 +40,7 @@ export function injectRoomListAnimations() {
             box-shadow: 0 2px 8px rgba(88, 101, 242, 0.2);
         }
         
-        /* Voice Channel Özel Animasyonlar */
+        /* Voice Channel Special Animations */
         .voice-channel.active {
             background: linear-gradient(90deg, rgba(67, 181, 129, 0.15), rgba(88, 101, 242, 0.1)) !important;
         }
@@ -49,7 +49,7 @@ export function injectRoomListAnimations() {
             background: rgba(67, 181, 129, 0.08) !important;
         }
         
-        /* Kullanıcı Listesi Fade-in Animasyonu */
+        /* User List Fade-in Animasyonu */
         .channel-wrapper {
             animation: channelFadeIn 0.3s ease;
         }
@@ -65,7 +65,7 @@ export function injectRoomListAnimations() {
             }
         }
         
-        /* Kanal İkon Pulse Animasyonu (Aktif Sesli Kanal için) */
+        /* Channel Icon Pulse Animation (for active voice channel) */
         
     /* 💝 Developer Support Heart Animation */
     @keyframes heartPulse {
@@ -90,7 +90,7 @@ export function injectRoomListAnimations() {
             }
         }
         
-        /* Kullanıcı Sayısı Badge Pulse */
+        /* User Count Badge Pulse */
         .voice-channel.active > div > div:last-child {
             animation: badgePulse 1.5s infinite;
         }
@@ -120,6 +120,3 @@ export function injectRoomListAnimations() {
     styleSheet.setAttribute('data-roomlist-animations', 'true');
     document.head.appendChild(styleSheet);
 }
-
-// Auto-execute on import
-injectRoomListAnimations();

@@ -1,14 +1,5 @@
+export { default } from '../admin/AdminPanelModal';
 // Barrel export for AdminPanelModal
-export * from './renderBroadcast';
-export * from './renderContent';
-export * from './renderDashboard';
-export * from './renderDatabase';
-export * from './renderLogs';
-export * from './renderModeration';
-export * from './renderQuickActions';
-export * from './renderSecurity';
-export * from './renderServers';
-export * from './renderSystemHealth';
-export * from './renderTools';
-export * from './renderUsers';
+// NOTE: Legacy render*.js files removed — they reference undefined variables
+// and crash the chunk. The active admin panel uses tabs/ sub-components.
 export * from './styles';

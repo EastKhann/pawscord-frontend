@@ -22,7 +22,8 @@ describe('useFetchWithAuth', () => {
         vi.clearAllMocks();
         global.fetch.mockReset();
         global.fetch.mockResolvedValue({
-            ok: true, status: 200,
+            ok: true,
+            status: 200,
             json: () => Promise.resolve({ data: 'test' }),
             text: () => Promise.resolve('ok'),
         });
@@ -113,7 +114,11 @@ describe('useFetchWithAuth', () => {
         it('should refresh token and retry on 401 for normal URLs', async () => {
             global.fetch
                 .mockResolvedValueOnce({ ok: false, status: 401 }) // first call fails
-                .mockResolvedValueOnce({ ok: true, status: 200, json: () => Promise.resolve({ retried: true }) }); // retry succeeds
+                .mockResolvedValueOnce({
+                    ok: true,
+                    status: 200,
+                    json: () => Promise.resolve({ retried: true }),
+                }); // retry succeeds
 
             const { result } = renderHook(() => useFetchWithAuth());
             let response;

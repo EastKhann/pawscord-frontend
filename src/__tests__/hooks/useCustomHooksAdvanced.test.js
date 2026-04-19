@@ -103,12 +103,12 @@ describe('useKeyPress', () => {
         expect(result.current).toBe(false);
     });
 
-    it('should cleanup listeners on unmount', () => {
+    it('should cleanup listners on unmount', () => {
         const spy = vi.spyOn(window, 'removeEventListener');
         const { unmount } = renderHook(() => useKeyPress('Enter'));
         unmount();
 
-        const removed = spy.mock.calls.map(c => c[0]);
+        const removed = spy.mock.calls.map((c) => c[0]);
         expect(removed).toContain('keydown');
         expect(removed).toContain('keyup');
         spy.mockRestore();
@@ -123,10 +123,9 @@ describe('usePrevious', () => {
     });
 
     it('should return previous value after rerender', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => usePrevious(value),
-            { initialProps: { value: 'first' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => usePrevious(value), {
+            initialProps: { value: 'first' },
+        });
 
         rerender({ value: 'second' });
         expect(result.current).toBe('first');
@@ -136,10 +135,9 @@ describe('usePrevious', () => {
     });
 
     it('should track numeric values', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => usePrevious(value),
-            { initialProps: { value: 1 } }
-        );
+        const { result, rerender } = renderHook(({ value }) => usePrevious(value), {
+            initialProps: { value: 1 },
+        });
 
         rerender({ value: 2 });
         expect(result.current).toBe(1);
@@ -337,10 +335,9 @@ describe('useThrottle', () => {
     });
 
     it('should throttle value updates', () => {
-        const { result, rerender } = renderHook(
-            ({ value }) => useThrottle(value, 300),
-            { initialProps: { value: 'a' } }
-        );
+        const { result, rerender } = renderHook(({ value }) => useThrottle(value, 300), {
+            initialProps: { value: 'a' },
+        });
 
         rerender({ value: 'b' });
         act(() => vi.advanceTimersByTime(300));

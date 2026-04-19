@@ -22,19 +22,26 @@ export interface UseWebSocketResult {
     error: Error | null;
     connect: () => Promise<void>;
     disconnect: () => void;
-    send: (type: string, payload: Record<string, unknown>, sendOptions?: Record<string, unknown>) => unknown;
+    send: (
+        type: string,
+        payload: Record<string, unknown>,
+        sendOptions?: Record<string, unknown>
+    ) => unknown;
     sendMessage: (content: string, options?: Record<string, unknown>) => unknown;
     sendTyping: (isTyping?: boolean) => unknown;
 }
 
-export function useWebSocket(channel: string, options: UseWebSocketOptions = {}): UseWebSocketResult {
+export function useWebSocket(
+    channel: string,
+    options: UseWebSocketOptions = {}
+): UseWebSocketResult {
     const {
         autoConnect = true,
         onMessage,
         onConnect,
         onDisconnect,
         onError,
-        reconnectOnMount = true
+        reconnectOnMount = true,
     } = options;
 
     const [state, setState] = useState(WS_STATES.DISCONNECTED);
@@ -72,19 +79,28 @@ export function useWebSocket(channel: string, options: UseWebSocketOptions = {})
     }, [channel]);
 
     // Send message
-    const send = useCallback((type, payload, sendOptions = {}) => {
-        return wsService.send(channel, type, payload, sendOptions);
-    }, [channel]);
+    const send = useCallback(
+        (type, payload, sendOptions = {}) => {
+            return wsService.send(channel, type, payload, sendOptions);
+        },
+        [channel]
+    );
 
     // Send chat message
-    const sendMessage = useCallback((content, options = {}) => {
-        return wsService.send(channel, MESSAGE_TYPES.CHAT, { content, ...options });
-    }, [channel]);
+    const sendMessage = useCallback(
+        (content, options = {}) => {
+            return wsService.send(channel, MESSAGE_TYPES.CHAT, { content, ...options });
+        },
+        [channel]
+    );
 
     // Send typing indicator
-    const sendTyping = useCallback((isTyping = true) => {
-        return wsService.send(channel, MESSAGE_TYPES.TYPING, { typing: isTyping });
-    }, [channel]);
+    const sendTyping = useCallback(
+        (isTyping = true) => {
+            return wsService.send(channel, MESSAGE_TYPES.TYPING, { typing: isTyping });
+        },
+        [channel]
+    );
 
     // Effect: Setup connection and message handler
     useEffect(() => {
@@ -111,7 +127,7 @@ export function useWebSocket(channel: string, options: UseWebSocketOptions = {})
                 wsService.disconnect(channel);
             }
         };
-    }, [channel, autoConnect]); // eslint-disable-line
+    }, [channel, autoConnect]); // INTENTIONAL: connect/wsService/options accessed via refs, not reactive deps
 
     // Listen to WebSocket events
     useEffect(() => {
@@ -156,7 +172,7 @@ export function useWebSocket(channel: string, options: UseWebSocketOptions = {})
         disconnect,
         send,
         sendMessage,
-        sendTyping
+        sendTyping,
     };
 }
 
@@ -169,30 +185,33 @@ export function useChatRoom(roomId, options = {}) {
     const typingUsers = useRef(new Map());
     const [typing, setTyping] = useState([]);
 
-    const handleMessage = useCallback((data) => {
-        switch (data.type) {
-            case MESSAGE_TYPES.CHAT:
-                onNewMessage?.(data);
-                break;
-            case MESSAGE_TYPES.TYPING:
-                if (data.typing) {
-                    typingUsers.current.set(data.user_id, {
-                        username: data.username,
-                        timestamp: Date.now()
-                    });
-                } else {
-                    typingUsers.current.delete(data.user_id);
-                }
-                setTyping(Array.from(typingUsers.current.values()).map(u => u.username));
-                onTyping?.(data);
-                break;
-            case MESSAGE_TYPES.REACTION:
-                onReaction?.(data);
-                break;
-            default:
-                break;
-        }
-    }, [onNewMessage, onTyping, onReaction]);
+    const handleMessage = useCallback(
+        (data) => {
+            switch (data.type) {
+                case MESSAGE_TYPES.CHAT:
+                    onNewMessage?.(data);
+                    break;
+                case MESSAGE_TYPES.TYPING:
+                    if (data.typing) {
+                        typingUsers.current.set(data.user_id, {
+                            username: data.username,
+                            timestamp: Date.now(),
+                        });
+                    } else {
+                        typingUsers.current.delete(data.user_id);
+                    }
+                    setTyping(Array.from(typingUsers.current.values()).map((u) => u.username));
+                    onTyping?.(data);
+                    break;
+                case MESSAGE_TYPES.REACTION:
+                    onReaction?.(data);
+                    break;
+                default:
+                    break;
+            }
+        },
+        [onNewMessage, onTyping, onReaction]
+    );
 
     // Clear stale typing indicators
     useEffect(() => {
@@ -206,7 +225,7 @@ export function useChatRoom(roomId, options = {}) {
                 }
             });
             if (changed) {
-                setTyping(Array.from(typingUsers.current.values()).map(u => u.username));
+                setTyping(Array.from(typingUsers.current.values()).map((u) => u.username));
             }
         }, 1000);
 
@@ -215,17 +234,20 @@ export function useChatRoom(roomId, options = {}) {
 
     const ws = useWebSocket(`chat/${roomId}`, {
         ...restOptions,
-        onMessage: handleMessage
+        onMessage: handleMessage,
     });
 
-    const sendReaction = useCallback((messageId, emoji) => {
-        return ws.send(MESSAGE_TYPES.REACTION, { message_id: messageId, emoji });
-    }, [ws]);
+    const sendReaction = useCallback(
+        (messageId, emoji) => {
+            return ws.send(MESSAGE_TYPES.REACTION, { message_id: messageId, emoji });
+        },
+        [ws]
+    );
 
     return {
         ...ws,
         typing,
-        sendReaction
+        sendReaction,
     };
 }
 
@@ -237,40 +259,46 @@ export function useVoiceChannel(roomId, options = {}) {
 
     const [participants, setParticipants] = useState([]);
 
-    const handleMessage = useCallback((data) => {
-        switch (data.type) {
-            case 'user_joined':
-                setParticipants(prev => [...prev, data.user]);
-                onUserJoin?.(data.user);
-                break;
-            case 'user_left':
-                setParticipants(prev => prev.filter(u => u.id !== data.user_id));
-                onUserLeave?.(data.user_id);
-                break;
-            case MESSAGE_TYPES.VOICE_SIGNAL:
-                onSignal?.(data);
-                break;
-            default:
-                break;
-        }
-    }, [onUserJoin, onUserLeave, onSignal]);
+    const handleMessage = useCallback(
+        (data) => {
+            switch (data.type) {
+                case 'user_joined':
+                    setParticipants((prev) => [...prev, data.user]);
+                    onUserJoin?.(data.user);
+                    break;
+                case 'user_left':
+                    setParticipants((prev) => prev.filter((u) => u.id !== data.user_id));
+                    onUserLeave?.(data.user_id);
+                    break;
+                case MESSAGE_TYPES.VOICE_SIGNAL:
+                    onSignal?.(data);
+                    break;
+                default:
+                    break;
+            }
+        },
+        [onUserJoin, onUserLeave, onSignal]
+    );
 
     const ws = useWebSocket(`voice/${roomId}`, {
         ...restOptions,
-        onMessage: handleMessage
+        onMessage: handleMessage,
     });
 
-    const sendSignal = useCallback((targetUserId, signal) => {
-        return ws.send(MESSAGE_TYPES.VOICE_SIGNAL, {
-            target_user_id: targetUserId,
-            signal
-        });
-    }, [ws]);
+    const sendSignal = useCallback(
+        (targetUserId, signal) => {
+            return ws.send(MESSAGE_TYPES.VOICE_SIGNAL, {
+                target_user_id: targetUserId,
+                signal,
+            });
+        },
+        [ws]
+    );
 
     return {
         ...ws,
         participants,
-        sendSignal
+        sendSignal,
     };
 }
 
@@ -282,39 +310,45 @@ export function usePresence(options = {}) {
 
     const [onlineUsers, setOnlineUsers] = useState(new Map());
 
-    const handleMessage = useCallback((data) => {
-        if (data.type === MESSAGE_TYPES.PRESENCE) {
-            setOnlineUsers(prev => {
-                const newMap = new Map(prev);
-                newMap.set(data.user_id, {
-                    status: data.status,
-                    activity: data.activity,
-                    lastSeen: Date.now()
+    const handleMessage = useCallback(
+        (data) => {
+            if (data.type === MESSAGE_TYPES.PRESENCE) {
+                setOnlineUsers((prev) => {
+                    const newMap = new Map(prev);
+                    newMap.set(data.user_id, {
+                        status: data.status,
+                        activity: data.activity,
+                        lastSeen: Date.now(),
+                    });
+                    return newMap;
                 });
-                return newMap;
-            });
-            onStatusChange?.(data);
-        }
-    }, [onStatusChange]);
+                onStatusChange?.(data);
+            }
+        },
+        [onStatusChange]
+    );
 
     const ws = useWebSocket('status', {
         ...restOptions,
-        onMessage: handleMessage
+        onMessage: handleMessage,
     });
 
-    const setStatus = useCallback((status, activity = null) => {
-        return ws.send(MESSAGE_TYPES.PRESENCE, { status, activity });
-    }, [ws]);
+    const setStatus = useCallback(
+        (status, activity = null) => {
+            return ws.send(MESSAGE_TYPES.PRESENCE, { status, activity });
+        },
+        [ws]
+    );
 
     const getOnlineCount = useCallback(() => {
-        return Array.from(onlineUsers.values()).filter(u => u.status === 'online').length;
+        return Array.from(onlineUsers.values()).filter((u) => u.status === 'online').length;
     }, [onlineUsers]);
 
     return {
         ...ws,
         onlineUsers,
         setStatus,
-        getOnlineCount
+        getOnlineCount,
     };
 }
 
@@ -327,41 +361,47 @@ export function useNotifications(options = {}) {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
 
-    const handleMessage = useCallback((data) => {
-        if (data.type === MESSAGE_TYPES.NOTIFICATION) {
-            setNotifications(prev => [data, ...prev].slice(0, 100));
-            if (!data.read) {
-                setUnreadCount(prev => prev + 1);
-            }
-            onNotification?.(data);
+    const handleMessage = useCallback(
+        (data) => {
+            if (data.type === MESSAGE_TYPES.NOTIFICATION) {
+                setNotifications((prev) => [data, ...prev].slice(0, 100));
+                if (!data.read) {
+                    setUnreadCount((prev) => prev + 1);
+                }
+                onNotification?.(data);
 
-            // Browser notification
-            if (Notification.permission === 'granted' && document.hidden) {
-                new Notification(data.title || 'Yeni Bildirim', {
-                    body: data.body,
-                    icon: '/logo192.png',
-                    tag: data.id
-                });
+                // Browser notification
+                if (Notification.permission === 'granted' && document.hidden) {
+                    new Notification(data.title || 'Yeni Bildirim', {
+                        body: data.body,
+                        icon: '/logo192.png',
+                        tag: data.id,
+                    });
+                }
             }
-        }
-    }, [onNotification]);
+        },
+        [onNotification]
+    );
 
     const ws = useWebSocket('notifications', {
         ...restOptions,
-        onMessage: handleMessage
+        onMessage: handleMessage,
     });
 
-    const markAsRead = useCallback((notificationId) => {
-        setNotifications(prev =>
-            prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
-        );
-        setUnreadCount(prev => Math.max(0, prev - 1));
-        // Optionally send to server
-        ws.send('mark_read', { notification_id: notificationId });
-    }, [ws]);
+    const markAsRead = useCallback(
+        (notificationId) => {
+            setNotifications((prev) =>
+                prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n))
+            );
+            setUnreadCount((prev) => Math.max(0, prev - 1));
+            // Optionally send to server
+            ws.send('mark_read', { notification_id: notificationId });
+        },
+        [ws]
+    );
 
     const markAllAsRead = useCallback(() => {
-        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+        setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
         setUnreadCount(0);
         ws.send('mark_all_read', {});
     }, [ws]);
@@ -377,7 +417,7 @@ export function useNotifications(options = {}) {
         unreadCount,
         markAsRead,
         markAllAsRead,
-        clearAll
+        clearAll,
     };
 }
 

@@ -9,7 +9,7 @@ let autoUpdater = null;
 try {
     const { autoUpdater: updater } = require('electron-updater');
     autoUpdater = updater;
-    autoUpdater.autoDownload = false; // Ask user before downloading
+    autoUpdater.autoDownload = false; // Ask user before downloadg
     autoUpdater.autoInstallOnAppQuit = true;
 } catch (e) {
     console.log('ℹ️ electron-updater not available (dev mode)');
@@ -47,7 +47,7 @@ const KNOWN_GAMES = {
     'stardewvalley.exe': { name: 'Stardew Valley', id: 'stardew' },
     'amongus.exe': { name: 'Among Us', id: 'amongus' },
     'fallguys_client.exe': { name: 'Fall Guys', id: 'fallguys' },
-    'deadbydaylight.exe': { name: 'Dead by Daylight', id: 'dbd' },
+    'deadbygünlight.exe': { name: 'Dead by Daylight', id: 'dbd' },
     'phasmophobia.exe': { name: 'Phasmophobia', id: 'phasmo' },
     'lethalcompany.exe': { name: 'Lethal Company', id: 'lethal' },
     'palworld.exe': { name: 'Palworld', id: 'palworld' },
@@ -426,7 +426,7 @@ function setupAutoUpdater() {
         console.log(`⬇️ Download progress: ${Math.round(progress.percent)}%`);
         if (mainWindow) {
             mainWindow.webContents.send('update-status', {
-                status: 'downloading',
+                status: 'downloadg',
                 percent: Math.round(progress.percent)
             });
         }

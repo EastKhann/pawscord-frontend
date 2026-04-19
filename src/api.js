@@ -10,17 +10,16 @@ const api = {
     async post(url, data, config = {}) {
         const headers = {
             'Content-Type': 'application/json',
-            ...config.headers
+            ...config.headers,
         };
 
-
         try {
-            // 🔥 authFetch ile otomatik token refresh
+            // 🔥 authFetch with otomatik token refresh
             const response = await authFetch(url, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(data),
-                credentials: 'include'
+                credentials: 'include',
             });
 
             const responseData = await response.json();
@@ -39,7 +38,7 @@ const api = {
                     method: 'POST',
                     headers,
                     body: JSON.stringify(data),
-                    credentials: 'include'
+                    credentials: 'include',
                 });
                 const responseData = await response.json();
                 if (!response.ok) {
@@ -56,16 +55,15 @@ const api = {
     async get(url, config = {}) {
         const headers = {
             'Content-Type': 'application/json',
-            ...config.headers
+            ...config.headers,
         };
 
-
         try {
-            // 🔥 authFetch ile otomatik token refresh
+            // 🔥 authFetch with otomatik token refresh
             const response = await authFetch(url, {
                 method: 'GET',
                 headers,
-                credentials: 'include'
+                credentials: 'include',
             });
 
             const responseData = await response.json();
@@ -83,7 +81,7 @@ const api = {
                 const response = await fetch(url, {
                     method: 'GET',
                     headers,
-                    credentials: 'include'
+                    credentials: 'include',
                 });
                 const responseData = await response.json();
                 if (!response.ok) {
@@ -95,7 +93,7 @@ const api = {
             }
             throw error;
         }
-    }
+    },
 };
 
 export default api;

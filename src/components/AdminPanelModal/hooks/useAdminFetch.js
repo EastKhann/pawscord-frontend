@@ -1,7 +1,10 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from '../../../utils/toast';
+import logger from '../../../utils/logger';
 
 const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [stats, setStats] = useState(null);
     const [detailedStats, setDetailedStats] = useState(null);
@@ -24,7 +27,15 @@ const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
     const [filterStatus, setFilterStatus] = useState('all');
 
     // Visitor logs
-    const [visitorLogs, setVisitorLogs] = useState({ logs: [], total: 0, page: 1, total_pages: 1, ip_summary: [], top_paths: [], stats: null });
+    const [visitorLogs, setVisitorLogs] = useState({
+        logs: [],
+        total: 0,
+        page: 1,
+        total_pages: 1,
+        ip_summary: [],
+        top_paths: [],
+        stats: null,
+    });
     const [visitorIpFilter, setVisitorIpFilter] = useState('');
     const [visitorUsernameFilter, setVisitorUsernameFilter] = useState('');
     const [visitorPathFilter, setVisitorPathFilter] = useState('');
@@ -47,87 +58,193 @@ const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
             if (res.ok) {
                 const data = await res.json();
                 setDetailedStats(data);
-                setRealtimeStats({ online: data.users?.online || 0, messages: data.messages?.last_1h || 0, voice: 0 });
+                setRealtimeStats({
+                    online: data.users?.online || 0,
+                    messages: data.messages?.last_1h || 0,
+                    voice: 0,
+                });
             }
-        } catch (err) { console.error('Detailed stats fetch error:', err); }
+        } catch (err) {
+            logger.error('Detailed stats fetch error:', err);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchLiveActivity = useCallback(async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/live-activity/`);
-            if (res.ok) { const data = await res.json(); setLiveActivities(data.activities || []); }
-        } catch (err) { console.error('Live activity fetch error:', err); }
+            if (res.ok) {
+                const data = await res.json();
+                setLiveActivities(data.activities || []);
+            }
+        } catch (err) {
+            logger.error('Live activity fetch error:', err);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchSecurityAlerts = useCallback(async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/security-alerts/`);
-            if (res.ok) { const data = await res.json(); setSecurityAlerts(data.alerts || []); }
-        } catch (err) { console.error('Security alerts fetch error:', err); }
+            if (res.ok) {
+                const data = await res.json();
+                setSecurityAlerts(data.alerts || []);
+            }
+        } catch (err) {
+            logger.error('Security alerts fetch error:', err);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchStats = useCallback(async () => {
         setLoading(true);
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/stats/`);
-            if (res.ok) { setStats(await res.json()); }
-            else {
-                console.error('Admin stats API error:', res.status);
-                toast.error('İstatistikler yüklenemedi');
-                setStats({ totalUsers: 0, onlineUsers: 0, totalServers: 0, totalMessages: 0, activeVoiceCalls: 0, premiumUsers: 0, newUsersToday: 0, messagesToday: 0, voiceMinutesToday: 0, reportsToday: 0, storageUsed: '0 GB', bandwidthToday: '0 GB', apiCalls: 0, avgResponseTime: 0, errorRate: '0', weeklyGrowth: '0', monthlyRevenue: 0 });
+            if (res.ok) {
+                setStats(await res.json());
+            } else {
+                logger.error('Admin stats API error:', res.status);
+                toast.error(t('admin.panel.statsLoadFailed'));
+                setStats({
+                    totalUsers: 0,
+                    onlineUsers: 0,
+                    totalServers: 0,
+                    totalMessages: 0,
+                    activeVoiceCalls: 0,
+                    premiumUsers: 0,
+                    newUsersToday: 0,
+                    messagesToday: 0,
+                    voiceMinutesToday: 0,
+                    reportsToday: 0,
+                    storageUsed: '0 GB',
+                    bandwidthToday: '0 GB',
+                    apiCalls: 0,
+                    avgResponseTime: 0,
+                    errorRate: '0',
+                    weeklyGrowth: '0',
+                    monthlyRevenue: 0,
+                });
             }
-        } catch (err) { console.error('Stats fetch error:', err); toast.error('İstatistikler yüklenemedi'); }
+        } catch (err) {
+            logger.error('Stats fetch error:', err);
+            toast.error(t('admin.panel.statsLoadFailed'));
+        }
         setLoading(false);
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchUsers = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/users/?search=${searchQuery}&page=${currentPage}&sort=${sortField}&order=${sortOrder}&status=${filterStatus}`);
-            if (res.ok) { const data = await res.json(); setUsers(data.users || data.results || []); setTotalPages(data.total_pages || Math.ceil((data.count || 1) / 20)); }
-            else { console.error('Admin users API error:', res.status); setUsers([]); }
-        } catch (err) { console.error('Users fetch error:', err); setUsers([]); }
+            const res = await fetchWithAuth(
+                `${apiBaseUrl}/api/admin/users/?search=${searchQuery}&page=${currentPage}&sort=${sortField}&order=${sortOrder}&status=${filterStatus}`
+            );
+            if (res.ok) {
+                const data = await res.json();
+                setUsers(data.users || data.results || []);
+                setTotalPages(data.total_pages || Math.ceil((data.count || 1) / 20));
+            } else {
+                logger.error('Admin users API error:', res.status);
+                setUsers([]);
+            }
+        } catch (err) {
+            logger.error('Users fetch error:', err);
+            setUsers([]);
+        }
         setLoading(false);
     }, [fetchWithAuth, apiBaseUrl, searchQuery, currentPage, sortField, sortOrder, filterStatus]);
 
     const fetchServers = useCallback(async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/servers/`);
-            if (res.ok) { const data = await res.json(); setServers(data.servers || data || []); }
-            else { console.error('Admin servers API error:', res.status); setServers([]); }
-        } catch (err) { console.error('Servers fetch error:', err); setServers([]); }
+            if (res.ok) {
+                const data = await res.json();
+                setServers(data.servers || data || []);
+            } else {
+                logger.error('Admin servers API error:', res.status);
+                setServers([]);
+            }
+        } catch (err) {
+            logger.error('Servers fetch error:', err);
+            setServers([]);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchLogs = useCallback(async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/logs/`);
-            if (res.ok) { const data = await res.json(); setLogs(data.logs || data || []); }
-            else { console.error('Admin logs API error:', res.status); setLogs([]); }
-        } catch (err) { console.error('Logs fetch error:', err); setLogs([]); }
+            if (res.ok) {
+                const data = await res.json();
+                setLogs(data.logs || data || []);
+            } else {
+                logger.error('Admin logs API error:', res.status);
+                setLogs([]);
+            }
+        } catch (err) {
+            logger.error('Logs fetch error:', err);
+            setLogs([]);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchSystemHealth = useCallback(async () => {
-        const fallback = { cpu: 0, memory: 0, disk: 0, uptime: 'Bilinmiyor', activeConnections: 0, requestsPerMinute: 0, dbConnections: 0, cacheHitRate: '0', wsConnections: 0 };
+        const fallback = {
+            cpu: 0,
+            memory: 0,
+            disk: 0,
+            uptime: 'Bilinmiyor',
+            activeConnections: 0,
+            requestsThuMinute: 0,
+            dbConnections: 0,
+            cacheHitRate: '0',
+            wsConnections: 0,
+        };
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/health/`);
-            if (res.ok) { setSystemHealth(await res.json()); } else { console.error('Admin health API error:', res.status); setSystemHealth(fallback); }
-        } catch (err) { console.error('Health fetch error:', err); setSystemHealth(fallback); }
+            if (res.ok) {
+                setSystemHealth(await res.json());
+            } else {
+                logger.error('Admin health API error:', res.status);
+                setSystemHealth(fallback);
+            }
+        } catch (err) {
+            logger.error('Health fetch error:', err);
+            setSystemHealth(fallback);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchBannedUsers = useCallback(async () => {
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/banned-users/`);
-            if (res.ok) { const data = await res.json(); setBannedUsers(data.users || data || []); }
-            else { console.error('Admin banned-users API error:', res.status); setBannedUsers([]); }
-        } catch (err) { console.error('Banned users fetch error:', err); setBannedUsers([]); }
+            if (res.ok) {
+                const data = await res.json();
+                setBannedUsers(data.users || data || []);
+            } else {
+                logger.error('Admin banned-users API error:', res.status);
+                setBannedUsers([]);
+            }
+        } catch (err) {
+            logger.error('Banned users fetch error:', err);
+            setBannedUsers([]);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchDbStats = useCallback(async () => {
-        const fallback = { users: { count: 0, size: '0 MB' }, messages: { count: 0, size: '0 MB' }, servers: { count: 0, size: '0 MB' }, attachments: { count: 0, size: '0 GB' }, voice_logs: { count: 0, size: '0 MB' }, total_size: '0 GB' };
+        const fallback = {
+            users: { count: 0, size: '0 MB' },
+            messages: { count: 0, size: '0 MB' },
+            servers: { count: 0, size: '0 MB' },
+            attachments: { count: 0, size: '0 GB' },
+            voice_logs: { count: 0, size: '0 MB' },
+            total_size: '0 GB',
+        };
         try {
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/db-stats/`);
-            if (res.ok) { setDbStats(await res.json()); } else { console.error('Admin db-stats API error:', res.status); setDbStats(fallback); }
-        } catch (err) { console.error('DB stats fetch error:', err); setDbStats(fallback); }
+            if (res.ok) {
+                setDbStats(await res.json());
+            } else {
+                logger.error('Admin db-stats API error:', res.status);
+                setDbStats(fallback);
+            }
+        } catch (err) {
+            logger.error('DB stats fetch error:', err);
+            setDbStats(fallback);
+        }
     }, [fetchWithAuth, apiBaseUrl]);
 
     const fetchSystemLogs = useCallback(async () => {
@@ -141,38 +258,105 @@ const useAdminFetch = ({ fetchWithAuth, apiBaseUrl }) => {
             if (logDateFrom) params.append('date_from', logDateFrom);
             if (logDateTo) params.append('date_to', logDateTo);
             const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/system-logs/?${params}`);
-            if (res.ok) { const data = await res.json(); setSystemLogs(data.logs || []); setLogStats(data.stats); }
-        } catch (err) { console.error('System logs fetch error:', err); }
+            if (res.ok) {
+                const data = await res.json();
+                setSystemLogs(data.logs || []);
+                setLogStats(data.stats);
+            }
+        } catch (err) {
+            logger.error('System logs fetch error:', err);
+        }
         setLogLoading(false);
     }, [fetchWithAuth, apiBaseUrl, logType, logSearch, logSeverity, logDateFrom, logDateTo]);
 
-    const fetchVisitorLogs = useCallback(async ({ ip, username, path, page } = {}) => {
-        setVisitorLoading(true);
-        try {
-            const params = new URLSearchParams();
-            if (ip ?? visitorIpFilter) params.append('ip', ip ?? visitorIpFilter);
-            if (username ?? visitorUsernameFilter) params.append('username', username ?? visitorUsernameFilter);
-            if (path ?? visitorPathFilter) params.append('path', path ?? visitorPathFilter);
-            params.append('page', page ?? visitorPage);
-            const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/visitor-logs/?${params}`);
-            if (res.ok) { setVisitorLogs(await res.json()); }
-        } catch (err) { console.error('Visitor logs fetch error:', err); }
-        setVisitorLoading(false);
-    }, [fetchWithAuth, apiBaseUrl, visitorIpFilter, visitorUsernameFilter, visitorPathFilter, visitorPage]);
+    const fetchVisitorLogs = useCallback(
+        async ({ ip, username, path, page } = {}) => {
+            setVisitorLoading(true);
+            try {
+                const params = new URLSearchParams();
+                if (ip ?? visitorIpFilter) params.append('ip', ip ?? visitorIpFilter);
+                if (username ?? visitorUsernameFilter)
+                    params.append('username', username ?? visitorUsernameFilter);
+                if (path ?? visitorPathFilter) params.append('path', path ?? visitorPathFilter);
+                params.append('page', page ?? visitorPage);
+                const res = await fetchWithAuth(`${apiBaseUrl}/api/admin/visitor-logs/?${params}`);
+                if (res.ok) {
+                    setVisitorLogs(await res.json());
+                }
+            } catch (err) {
+                logger.error('Visitor logs fetch error:', err);
+            }
+            setVisitorLoading(false);
+        },
+        [
+            fetchWithAuth,
+            apiBaseUrl,
+            visitorIpFilter,
+            visitorUsernameFilter,
+            visitorPathFilter,
+            visitorPage,
+        ]
+    );
 
     return {
-        loading, stats, detailedStats, liveActivities, securityAlerts,
-        users, servers, logs, systemHealth, bannedUsers, dbStats, realtimeStats,
-        systemLogs, logStats, logLoading,
-        visitorLogs, visitorIpFilter, setVisitorIpFilter, visitorUsernameFilter, setVisitorUsernameFilter,
-        visitorPathFilter, setVisitorPathFilter, visitorPage, setVisitorPage, visitorLoading,
-        searchQuery, setSearchQuery, currentPage, setCurrentPage, totalPages,
-        sortField, setSortField, sortOrder, setSortOrder, filterStatus, setFilterStatus,
-        logType, setLogType, logSearch, setLogSearch, logSeverity, setLogSeverity,
-        logDateFrom, setLogDateFrom, logDateTo, setLogDateTo,
-        fetchDetailedStats, fetchLiveActivity, fetchSecurityAlerts, fetchStats,
-        fetchUsers, fetchServers, fetchLogs, fetchSystemHealth,
-        fetchBannedUsers, fetchDbStats, fetchSystemLogs, fetchVisitorLogs,
+        loading,
+        stats,
+        detailedStats,
+        liveActivities,
+        securityAlerts,
+        users,
+        servers,
+        logs,
+        systemHealth,
+        bannedUsers,
+        dbStats,
+        realtimeStats,
+        systemLogs,
+        logStats,
+        logLoading,
+        visitorLogs,
+        visitorIpFilter,
+        setVisitorIpFilter,
+        visitorUsernameFilter,
+        setVisitorUsernameFilter,
+        visitorPathFilter,
+        setVisitorPathFilter,
+        visitorPage,
+        setVisitorPage,
+        visitorLoading,
+        searchQuery,
+        setSearchQuery,
+        currentPage,
+        setCurrentPage,
+        totalPages,
+        sortField,
+        setSortField,
+        sortOrder,
+        setSortOrder,
+        filterStatus,
+        setFilterStatus,
+        logType,
+        setLogType,
+        logSearch,
+        setLogSearch,
+        logSeverity,
+        setLogSeverity,
+        logDateFrom,
+        setLogDateFrom,
+        logDateTo,
+        setLogDateTo,
+        fetchDetailedStats,
+        fetchLiveActivity,
+        fetchSecurityAlerts,
+        fetchStats,
+        fetchUsers,
+        fetchServers,
+        fetchLogs,
+        fetchSystemHealth,
+        fetchBannedUsers,
+        fetchDbStats,
+        fetchSystemLogs,
+        fetchVisitorLogs,
     };
 };
 

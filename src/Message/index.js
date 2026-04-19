@@ -1,3 +1,4 @@
+export { default } from './Message';
 // Barrel export for Message
 export { default as MessageContextMenu } from './MessageContextMenu';
 export { default as MessageMedia } from './MessageMedia';

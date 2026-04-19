@@ -16,10 +16,19 @@ export { default as logger } from './logger';
 
 // ─── CDN & Media ───
 export {
-    getCDNUrl, getMediaUrl, getAvatarUrl, getFileUrl,
-    getOptimizedImageUrl, getThumbnailUrl, preloadImage,
-    R2_CDN_URL, R2_ASSETS_URL, R2_AVATARS_URL, R2_UPLOADS_URL,
-    LOGO_URL, LOGO_WEBP_URL,
+    getCDNUrl,
+    getMediaUrl,
+    getAvatarUrl,
+    getFileUrl,
+    getOptimizedImageUrl,
+    getThumbnailUrl,
+    preloadImage,
+    R2_CDN_URL,
+    R2_ASSETS_URL,
+    R2_AVATARS_URL,
+    R2_UPLOADS_URL,
+    LOGO_URL,
+    LOGO_WEBP_URL,
 } from './cdn';
 
 // ─── Performance ───
@@ -36,7 +45,7 @@ export { smoothScrollTo, rafThrottle, fadeIn, fadeOut, Easing } from './animatio
 
 // ─── Code Splitting & Lazy Loading ───
 export { default as lazyWithRetry } from './lazyWithRetry';
-export { default as lazyWithPreload } from './lazyWithPreload';
+export * from './lazyWithPreload';
 
 // ─── Notifications & Toast ───
 export { default as toast } from './toast';

@@ -1,0 +1,174 @@
+/* ── English Learning Page — Extracted Styles ──────────────────────────────── */
+
+/* Keyframe animations */
+@keyframes eng-shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-8px);
+    }
+
+    40% {
+        transform: translateX(8px);
+    }
+
+    60% {
+        transform: translateX(-6px);
+    }
+
+    80% {
+        transform: translateX(6px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes eng-slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes eng-xpPop {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.5);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translateY(-20px) scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) scale(0.8);
+    }
+}
+
+@keyframes eng-confetti {
+    0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(720deg);
+    }
+}
+
+@keyframes eng-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Flashcard 3-D flip */
+.flashcard-scene {
+    perspective: 900px;
+    width: 100%;
+}
+
+.flashcard {
+    width: 100%;
+    min-height: 220px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    cursor: pointer;
+}
+
+.flashcard.flipped {
+    transform: rotateY(180deg);
+}
+
+.flashcard-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 28px;
+    box-sizing: border-box;
+}
+
+.flashcard-front {
+    background: linear-gradient(160deg, #0d143a 0%, #131e50 40%, #0e1838 100%);
+    border: 1px solid rgba(88, 101, 242, 0.2);
+    box-shadow:
+        0 12px 40px rgba(88, 101, 242, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.flashcard-back {
+    background: linear-gradient(160deg, #071a10 0%, #0e2d1a 40%, #0a1e12 100%);
+    border: 1px solid rgba(35, 165, 89, 0.2);
+    transform: rotateY(180deg);
+    box-shadow:
+        0 12px 40px rgba(35, 165, 89, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Interactive button / chip helpers */
+.eng-btn {
+    transition:
+        transform 0.1s,
+        filter 0.1s;
+}
+
+.eng-btn:active {
+    transform: scale(0.95) !important;
+}
+
+.eng-btn:hover:not(:disabled) {
+    filter: brightness(1.12);
+}
+
+.eng-level-chip {
+    transition: all 0.15s !important;
+}
+
+.eng-level-chip:hover {
+    transform: scale(1.05) !important;
+}
+
+/* Session count badge (green) */
+.eng-session-count {
+    background-color: rgba(35, 165, 89, 0.08);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(35, 165, 89, 0.25);
+    color: #23a559;
+}

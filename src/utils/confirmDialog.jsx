@@ -1,28 +1,94 @@
-﻿// frontend/src/utils/confirmDialog.js
+/* eslint-disable jsx-a11y/no-autofocus */
+// frontend/src/utils/confirmDialog.js
 // 🎯 Global Promise-based Confirm Dialog
 // window.confirm() yerine kullan - Styled modal gösterir
 // Kullanım: const ok = await confirmDialog('Emin misiniz?');
 //           const ok = await confirmDialog({ title: '...', message: '...', type: 'danger' });
 
 import { createRoot } from 'react-dom/client';
-import { FaExclamationTriangle, FaTimes, FaTrash, FaCheck, FaSignOutAlt, FaQuestionCircle } from 'react-icons/fa';
+import {
+    FaExclamationTriangle,
+    FaTimes,
+    FaTrash,
+    FaCheck,
+    FaSignOutAlt,
+    FaQuestionCircle,
+} from 'react-icons/fa';
+import PropTypes from 'prop-types';
+
+// -- extracted inline style constants --
+const _st1 = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'rgba(0,0,0,0.7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10000,
+};
+const _st2 = {
+    background: '#111214',
+    borderRadius: '12px',
+    boxShadow: '0 8px 30px rgba(0,0,0,0.6)',
+    border: '1px solid #0b0e1b',
+    minWidth: '320px',
+    maxWidth: '500px',
+};
+const _st3 = { fontSize: '2em', flexShrink: 0 };
+const _st4 = { margin: 0, fontSize: '1.15em', fontWeight: 600, color: '#fff' };
+const _st5 = {
+    background: 'rgba(255,255,255,0.1)',
+    border: 'none',
+    borderRadius: '6px',
+    color: '#949ba4',
+    cursor: 'pointer',
+    padding: '8px',
+};
+const _st6 = { padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' };
+const _st7 = { margin: 0, color: '#dbdee1', lineHeight: '1.5' };
+const _st8 = {
+    marginTop: '16px',
+    background: 'rgba(255,255,255,0.02)',
+    padding: '12px',
+    borderRadius: '6px',
+};
+const _st9 = { color: '#f59e0b', fontWeight: 600, marginBottom: '8px' };
+const _st10 = {
+    display: 'flex',
+    gap: '8px',
+    color: '#949ba4',
+    fontSize: '0.9em',
+    marginBottom: '6px',
+};
+const _st11 = { display: 'flex', gap: '12px', justifyContent: 'flex-end', padding: '16px 24px' };
+const _st12 = {
+    padding: '10px 16px',
+    background: 'transparent',
+    color: '#b5bac1',
+    border: '1px solid #404249',
+    borderRadius: '6px',
+    cursor: 'pointer',
+};
 
 let dialogContainer = null;
 
 /**
  * Promise tabanlı confirm dialog
- * @param {string|object} options - Mesaj string veya options objesi
- * @returns {Promise<boolean>} - Kullanıcı onayladıysa true, iptal ettiyse false
- * 
+ * @param {string|object} options - Mesaj string or options objesi
+ * @returns {Promise<boolean>} - User confirmdıysa true, cancel ettiyse false
+ *
  * Basit kullanım:
- *   const ok = await confirmDialog('Bu mesajı silmek istediğinize emin misiniz?');
- * 
+ *   const ok = await confirmDialog('Are you sure you want to delete this message?');
+ *
  * Gelişmiş kullanım:
  *   const ok = await confirmDialog({
- *     title: 'Mesajı Sil',
- *     message: 'Bu işlem geri alınamaz!',
- *     confirmText: 'Sil',
- *     cancelText: 'Vazgeç',
+ *     title: 'Delete Message',
+ *     message: 'Bu işlem undoınamaz!',
+ *     confirmText: 'Delete',
+ *     cancelText: 'Cancel',
  *     type: 'danger', // 'warning' | 'danger' | 'info'
  *     details: ['Mesaj kalıcı olarak silinecek', 'Geri alınamaz']
  *   });
@@ -30,15 +96,13 @@ let dialogContainer = null;
 export function confirmDialog(options) {
     return new Promise((resolve) => {
         // Options normalize
-        const config = typeof options === 'string'
-            ? { message: options }
-            : { ...options };
+        const config = typeof options === 'string' ? { message: options } : { ...options };
 
         const {
             title = 'Emin misiniz?',
-            message = 'Bu işlemi gerçekleştirmek istediğinizden emin misiniz?',
+            message = 'Are you sure you want to perform this action?',
             confirmText = 'Evet',
-            cancelText = 'Vazgeç',
+            cancelText = 'Cancel',
             type = 'warning', // 'warning', 'danger', 'info'
             details = null,
         } = config;
@@ -84,16 +148,13 @@ export function confirmDialog(options) {
         root.render(
             <div
                 role="presentation"
-                style={{
-                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: 'rgba(0,0,0,0.7)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    zIndex: 100000,
-                    animation: 'confirmFadeIn 0.2s ease-out',
-                    backdropFilter: 'blur(4px)',
+                style={_st1}
+                onClick={(e) => {
+                    if (e.target === e.currentTarget) cleanup(false);
                 }}
-                onClick={(e) => { if (e.target === e.currentTarget) cleanup(false); }}
-                onKeyDown={(e) => { if (e.key === 'Escape') cleanup(false); }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Escape') cleanup(false);
+                }}
             >
                 <style>{`
                     @keyframes confirmFadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -105,83 +166,47 @@ export function confirmDialog(options) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="confirm-dialog-title"
-                    style={{
-                        background: '#111214',
-                        borderRadius: '16px',
-                        width: '420px',
-                        maxWidth: '90vw',
-                        boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
-                        overflow: 'hidden',
-                        animation: 'confirmSlideIn 0.25s ease-out',
-                    }}>
+                    style={_st2}
+                >
                     {/* Header */}
-                    <div style={{
-                        background: tc.gradient,
-                        padding: '20px 24px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                    }}>
-                        <div style={{
-                            width: '40px', height: '40px', borderRadius: '12px',
-                            background: 'rgba(255,255,255,0.2)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '18px', color: '#fff', flexShrink: 0,
-                        }}>
-                            {tc.icon}
-                        </div>
-                        <h3 id="confirm-dialog-title" style={{
-                            margin: 0, color: '#fff', fontSize: '16px',
-                            fontWeight: 600, flex: 1,
-                        }}>
+                    <div
+                        style={_s({
+                            background: tc.gradient,
+                            padding: '20px 24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                        })}
+                    >
+                        <div style={_st3}>{tc.icon}</div>
+                        <h3 id="confirm-dialog-title" style={_st4}>
                             {title}
                         </h3>
                         <button
                             onClick={() => cleanup(false)}
-                            style={{
-                                background: 'rgba(255,255,255,0.15)',
-                                border: 'none', color: '#fff',
-                                width: '32px', height: '32px', borderRadius: '8px',
-                                cursor: 'pointer', display: 'flex',
-                                alignItems: 'center', justifyContent: 'center',
-                                fontSize: '14px', flexShrink: 0,
-                                transition: 'background 0.15s',
-                            }}
-                            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.25)'}
-                            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.15)'}
+                            style={_st5}
+                            onMouseEnter={(e) =>
+                                (e.target.style.background = 'rgba(255,255,255,0.25)')
+                            }
+                            onMouseLeave={(e) =>
+                                (e.target.style.background = 'rgba(255,255,255,0.15)')
+                            }
                         >
                             <FaTimes />
                         </button>
                     </div>
 
                     {/* Body */}
-                    <div style={{ padding: '20px 24px' }}>
-                        <p style={{
-                            color: '#dbdee1', fontSize: '14px',
-                            lineHeight: '1.6', margin: '0 0 16px 0',
-                            whiteSpace: 'pre-line',
-                        }}>
-                            {message}
-                        </p>
+                    <div style={_st6}>
+                        <p style={_st7}>{message}</p>
 
                         {/* Details */}
                         {details && details.length > 0 && (
-                            <div style={{
-                                background: 'rgba(255,255,255,0.03)',
-                                border: '1px solid rgba(255,255,255,0.06)',
-                                borderRadius: '10px',
-                                padding: '12px 16px',
-                                marginBottom: '16px',
-                            }}>
-                                <div style={{ color: '#f59e0b', fontSize: '12px', fontWeight: 600, marginBottom: '8px' }}>
-                                    ⚠️ Bu işlem:
-                                </div>
+                            <div style={_st8}>
+                                <div style={_st9}>⚠️ Bu işlem:</div>
                                 {details.map((d, i) => (
-                                    <div key={i} style={{
-                                        color: '#b5bac1', fontSize: '13px',
-                                        padding: '3px 0', display: 'flex', gap: '8px',
-                                    }}>
-                                        <span style={{ color: tc.color }}>•</span>
+                                    <div key={`item-${i}`} style={_st10}>
+                                        <span style={_s({ color: tc.color })}>•</span>
                                         <span>{d}</span>
                                     </div>
                                 ))}
@@ -190,29 +215,19 @@ export function confirmDialog(options) {
                     </div>
 
                     {/* Footer */}
-                    <div style={{
-                        padding: '16px 24px',
-                        background: 'rgba(0,0,0,0.15)',
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        gap: '10px',
-                    }}>
+                    <div style={_st11}>
                         <button
                             className="confirm-btn"
                             onClick={() => cleanup(false)}
-                            style={{
-                                background: 'transparent',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                color: '#b5bac1',
-                                padding: '10px 20px',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontSize: '14px',
-                                fontWeight: 500,
-                                transition: 'all 0.15s',
+                            style={_st12}
+                            onMouseEnter={(e) => {
+                                e.target.style.background = 'rgba(255,255,255,0.05)';
+                                e.target.style.color = '#fff';
                             }}
-                            onMouseEnter={(e) => { e.target.style.background = 'rgba(255,255,255,0.05)'; e.target.style.color = '#fff'; }}
-                            onMouseLeave={(e) => { e.target.style.background = 'transparent'; e.target.style.color = '#b5bac1'; }}
+                            onMouseLeave={(e) => {
+                                e.target.style.background = 'transparent';
+                                e.target.style.color = '#b5bac1';
+                            }}
                         >
                             {cancelText}
                         </button>
@@ -220,7 +235,7 @@ export function confirmDialog(options) {
                             className="confirm-btn"
                             onClick={() => cleanup(true)}
                             autoFocus
-                            style={{
+                            style={_s({
                                 background: tc.btnColor,
                                 border: 'none',
                                 color: '#fff',
@@ -231,7 +246,7 @@ export function confirmDialog(options) {
                                 fontWeight: 600,
                                 transition: 'all 0.15s',
                                 boxShadow: `0 2px 8px ${tc.btnColor}40`,
-                            }}
+                            })}
                         >
                             {confirmText}
                         </button>

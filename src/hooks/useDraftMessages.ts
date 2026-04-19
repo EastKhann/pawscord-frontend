@@ -39,7 +39,7 @@ export const useDraftMessages = (roomId, conversationId = null) => {
                     content: draft,
                     timestamp: new Date().toISOString(),
                     roomId,
-                    conversationId
+                    conversationId,
                 };
                 localStorage.setItem(draftKey, JSON.stringify(draftData));
                 setLastSaved(new Date());
@@ -66,7 +66,7 @@ export const useDraftMessages = (roomId, conversationId = null) => {
         setDraft,
         clearDraft,
         hasDraft,
-        lastSaved
+        lastSaved,
     };
 };
 
@@ -80,7 +80,7 @@ export const getAllDrafts = () => {
                 const draft = JSON.parse(localStorage.getItem(key));
                 drafts.push({
                     key,
-                    ...draft
+                    ...draft,
                 });
             } catch (e) {
                 // Skip invalid drafts
@@ -99,10 +99,7 @@ export const clearAllDrafts = () => {
             keys.push(key);
         }
     }
-    keys.forEach(key => localStorage.removeItem(key));
+    keys.forEach((key) => localStorage.removeItem(key));
 };
 
 export default useDraftMessages;
-
-
-

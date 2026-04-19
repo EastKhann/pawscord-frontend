@@ -1,65 +1,78 @@
-import { useState, useCallback, useEffect } from 'react';
+﻿import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import logger from '../utils/logger';
 
 export function useVoiceSettings() {
     // 🎚️ Noise Gate State
+    const { t } = useTranslation();
     const [noiseGateThreshold, setNoiseGateThreshold] = useState(() => {
         try {
             return parseInt(localStorage.getItem('pawscord_noise_gate')) || -50;
-        } catch { return -50; }
+        } catch {
+            return -50;
+        }
     });
     const [isNoiseGateEnabled, setIsNoiseGateEnabled] = useState(() => {
         try {
             return localStorage.getItem('pawscord_noise_gate_enabled') !== 'false';
-        } catch { return true; }
+        } catch {
+            return true;
+        }
     });
 
     // 📊 Audio Visualizer Toggle
     const [isVisualizerEnabled, setIsVisualizerEnabled] = useState(() => {
         try {
             return localStorage.getItem('pawscord_visualizer') === 'true';
-        } catch { return false; }
-    });
-
-    // Ses Seviyeleri & Mute
-    const [remoteVolumes, setRemoteVolumes] = useState(() => {
-        try { return JSON.parse(localStorage.getItem('pawscord_user_volumes')) || {}; } catch { return {}; }
-    });
-    const [mutedUsers, setMutedUsers] = useState(new Set());
-    const [isSpatialAudioEnabled, setIsSpatialAudioEnabled] = useState(() => {
-        // 🔥 YENİ: Spatial audio ayarını localStorage'dan yükle
-        try {
-            return localStorage.getItem('pawscord_spatial_audio') === 'true';
         } catch {
-            return false; // Varsayılan kapalı (yeni kullanıcılar için)
+            return false;
         }
     });
 
-    // 🔥 YENİ: VAD Sensitivity ve Noise Suppression ayarları
+    // Ses Levelleri & Mute
+    const [remoteVolumes, setRemoteVolumes] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem('pawscord_user_volumes')) || {};
+        } catch {
+            return {};
+        }
+    });
+    const [mutedUsers, setMutedUsers] = useState(new Set());
+    const [isSpatialAudioEnabled, setIsSpatialAudioEnabled] = useState(() => {
+        // 🔥 YENİ: Spatial audio atomorrowı localStorage'dan upload
+        try {
+            return localStorage.getItem('pawscord_spatial_audio') === 'true';
+        } catch {
+            return false; // Default kapalı (yeni kullanıcılar for)
+        }
+    });
+
+    // 🔥 YENİ: VAD Sensitivity ve Noise Suppression settingsı
     const [vadSensitivity, setVadSensitivity] = useState(() => {
         try {
             return parseInt(localStorage.getItem('pawscord_vad_sensitivity')) || 45;
         } catch {
-            return 45; // Varsayılan threshold
+            return 45; // Default threshold
         }
     });
 
     const [isNoiseSuppressionEnabled, setIsNoiseSuppressionEnabled] = useState(() => {
         try {
             const saved = localStorage.getItem('pawscord_noise_suppression');
-            // 🔥 FIX: Varsayılan AÇIK - gürültü engelleme aktif olsun
+            // 🔥 FIX: Default AÇIK - gürültü engelleme aktif olsun
             return saved === null ? true : saved === 'true';
         } catch {
-            return true; // 🔥 FIX: Varsayılan AÇIK
+            return true; // 🔥 FIX: Default AÇIK
         }
     });
 
-    // 🔥 YENİ: Gürültü Engelleme Seviyesi - Varsayılan 'medium' (ses kısılmasın)
+    // 🔥 YENİ: Gürültü Blockme Seviyesi - Default 'medium' (audio kısılmasın)
     const [noiseSuppressionLevel, setNoiseSuppressionLevel] = useState(() => {
         try {
             const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
-            return voiceSettings.audio?.noiseSuppressionLevel || 'medium';  // 🔥 Varsayılan ORTA
+            return voiceSettings.audio?.noiseSuppressionLevel || 'medium'; // 🔥 Default ORTA
         } catch {
-            return 'medium';  // 🔥 Varsayılan ORTA
+            return 'medium'; // 🔥 Default ORTA
         }
     });
 
@@ -80,7 +93,7 @@ export function useVoiceSettings() {
         }
     });
 
-    // 🔥 YENİ: System Audio (Ekran paylaşımında sistem sesi)
+    // 🔥 YENİ: System Audio (Ekran shareında sistem sesi)
     const [includeSystemAudio, setIncludeSystemAudio] = useState(() => {
         try {
             return localStorage.getItem('pawscord_system_audio') !== 'false';
@@ -110,12 +123,18 @@ export function useVoiceSettings() {
 
     // 🔥 YENİ: Mikrofon ve hoparlör cihaz seçimi
     const [inputDeviceId, setInputDeviceId] = useState(() => {
-        try { return localStorage.getItem('pawscord_input_device') || 'default'; }
-        catch { return 'default'; }
+        try {
+            return localStorage.getItem('pawscord_input_device') || 'default';
+        } catch {
+            return 'default';
+        }
     });
     const [outputDeviceId, setOutputDeviceId] = useState(() => {
-        try { return localStorage.getItem('pawscord_output_device') || 'default'; }
-        catch { return 'default'; }
+        try {
+            return localStorage.getItem('pawscord_output_device') || 'default';
+        } catch {
+            return 'default';
+        }
     });
 
     // 🔥 YENİ: Echo cancellation toggle (bazı kulaklıklarda gereksiz)
@@ -123,7 +142,9 @@ export function useVoiceSettings() {
         try {
             const saved = localStorage.getItem('pawscord_echo_cancel');
             return saved === null ? true : saved === 'true';
-        } catch { return true; }
+        } catch {
+            return true;
+        }
     });
 
     // 🔥 YENİ: Auto gain control toggle
@@ -131,10 +152,12 @@ export function useVoiceSettings() {
         try {
             const saved = localStorage.getItem('pawscord_auto_gain');
             return saved === null ? true : saved === 'true';
-        } catch { return true; }
+        } catch {
+            return true;
+        }
     });
 
-    // Ses Ayarlarını Kaydet
+    // Voice Settingsnı Save
     useEffect(() => {
         localStorage.setItem('pawscord_user_volumes', JSON.stringify(remoteVolumes));
     }, [remoteVolumes]);
@@ -142,32 +165,32 @@ export function useVoiceSettings() {
     // --- Update / Toggle Functions (pure state + localStorage) ---
 
     const setRemoteVolume = useCallback((targetUsername, volume) => {
-        setRemoteVolumes(prev => ({
+        setRemoteVolumes((prev) => ({
             ...prev,
-            [targetUsername]: Math.max(0, Math.min(200, volume))
+            [targetUsername]: Math.max(0, Math.min(200, volume)),
         }));
     }, []);
 
-    // 🔥 YENİ: VAD Sensitivity Güncelleme
+    // 🔥 YENİ: VAD Sensitivity Currentleme
     const updateVadSensitivity = useCallback((newSensitivity) => {
-        const clamped = Math.max(20, Math.min(80, newSensitivity)); // 20-80 arası
+        const clamped = Math.max(20, Math.min(80, newSensitivity)); // 20-80 searchsı
         setVadSensitivity(clamped);
         localStorage.setItem('pawscord_vad_sensitivity', clamped.toString());
     }, []);
 
-    // 🔥 YENİ: Gürültü Engelleme Seviyesini Güncelle
+    // 🔥 YENİ: Gürültü Blockme Seviyesini Currentle
     const updateNoiseSuppressionLevel = useCallback((level) => {
         const validLevels = ['low', 'medium', 'high', 'aggressive'];
         const newLevel = validLevels.includes(level) ? level : 'high';
         setNoiseSuppressionLevel(newLevel);
 
-        // LocalStorage'a kaydet
+        // LocalStorage'a save
         try {
             const voiceSettings = JSON.parse(localStorage.getItem('voice_settings') || '{}');
             voiceSettings.audio = { ...voiceSettings.audio, noiseSuppressionLevel: newLevel };
             localStorage.setItem('voice_settings', JSON.stringify(voiceSettings));
         } catch (e) {
-            console.error('[Noise Level] Storage error:', e);
+            logger.error('[Noise Level] Storage error:', e);
         }
     }, []);
 
@@ -184,7 +207,7 @@ export function useVoiceSettings() {
         localStorage.setItem('pawscord_screen_fps', fpsInt.toString());
     }, []);
 
-    // 🔥 YENİ: System Audio Toggle (Ekran paylaşımında)
+    // 🔥 YENİ: System Audio Toggle (Ekran shareında)
     const toggleSystemAudio = useCallback((enabled) => {
         setIncludeSystemAudio(enabled);
         localStorage.setItem('pawscord_system_audio', enabled.toString());
@@ -196,7 +219,7 @@ export function useVoiceSettings() {
         localStorage.setItem('pawscord_noise_gate_enabled', enabled.toString());
     }, []);
 
-    // 🎚️ YENİ: Noise Gate Threshold Güncelleme
+    // 🎚️ YENİ: Noise Gate Threshold Currentleme
     const updateNoiseGateThreshold = useCallback((threshold) => {
         const clamped = Math.max(-80, Math.min(-20, threshold));
         setNoiseGateThreshold(clamped);

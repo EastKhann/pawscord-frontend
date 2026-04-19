@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import logger from '../../utils/logger';
 
 const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
     const [stats, setStats] = useState(null);
@@ -15,7 +16,9 @@ const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
     const loadAPIUsage = async () => {
         setLoading(true);
         try {
-            const response = await fetchWithAuth(`${apiBaseUrl}/analytics/usage/?range=${timeRange}`);
+            const response = await fetchWithAuth(
+                `${apiBaseUrl}/analytics/usage/?range=${timeRange}`
+            );
             if (!response.ok) return;
             const data = await response.json();
 
@@ -23,7 +26,7 @@ const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
             setEndpoints(data.endpoints || []);
             setTimeline(data.timeline || []);
         } catch (error) {
-            console.error('Failed to load API usage:', error);
+            logger.error('Failed to load API usage:', error);
         } finally {
             setLoading(false);
         }
@@ -40,7 +43,13 @@ const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
         return { color: '#23a559', text: 'Normal' };
     };
 
-    const safeStats = stats || { requests_made: 0, rate_limit: 10000, success_rate: 0, avg_response_time: 0, errors: 0 };
+    const safeStats = stats || {
+        requests_made: 0,
+        rate_limit: 10000,
+        success_rate: 0,
+        avg_response_time: 0,
+        errors: 0,
+    };
     const rateLimitStatus = getRateLimitStatus();
 
     return {
@@ -48,9 +57,11 @@ const useAPIUsage = (fetchWithAuth, apiBaseUrl) => {
         endpoints,
         timeline,
         loading,
-        timeRange, setTimeRange,
-        selectedEndpoint, setSelectedEndpoint,
-        rateLimitStatus
+        timeRange,
+        setTimeRange,
+        selectedEndpoint,
+        setSelectedEndpoint,
+        rateLimitStatus,
     };
 };
 

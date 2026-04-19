@@ -1,29 +1,39 @@
 ﻿// frontend/src/components/Message/MessageContent.js
 // 📝 MESSAGE CONTENT - Text, Markdown, Code blocks
 
-import React, { memo, lazy, Suspense } from 'react';
+import React, { memo, lazy, Suspense, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FaLock } from 'react-icons/fa';
 
+const S = {
+    txt: { color: '#23a559', marginRight: 5 },
+};
+
+
 // Lazy load heavy components
-const CodeBlock = lazy(() => import('../CodeBlock'));
-const Spoiler = lazy(() => import('../Spoiler'));
+const CodeBlock = lazy(() => import('../chat/CodeBlock'));
+const Spoiler = lazy(() => import('./'));
 
 export const MessageContent = memo(({
     displayContent,
     isMessageEncrypted,
     snippetData
 }) => {
+    const { t } = useTranslation();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     // Kod snippet'i varsa
     if (snippetData && snippetData.type !== 'game_xox') {
         return (
-            <div style={styles.snippetContainer}>
+            <div aria-label="message content" style={styles.snippetContainer}>
                 <div style={styles.snippetHeader}>
-                    <span>💻 {snippetData.title || 'Kod Parçası'}</span>
+                    <span>💻 {snippetData.title || 'Code Snippet'}</span>
                     <span style={styles.langBadge}>{snippetData.language}</span>
                 </div>
-                <Suspense fallback={<div style={styles.loadingCode}>Kod yükleniyor...</div>}>
+                <Suspense fallback={<div style={styles.loadingCode}>{t('loading_code')}</div>}>
                     <CodeBlock language={snippetData.language}>{snippetData.code}</CodeBlock>
                 </Suspense>
             </div>
@@ -36,7 +46,7 @@ export const MessageContent = memo(({
     return (
         <div style={styles.messageContent}>
             {isMessageEncrypted && (
-                <span style={{ color: '#23a559', marginRight: 5 }} title="Uçtan Uca Şifreli">
+                <span style={S.txt}>title={t('end-to-end_encrypted')}>
                     <FaLock />
                 </span>
             )}
@@ -53,7 +63,7 @@ export const MessageContent = memo(({
                             // Spoiler Kontrolü (||gizli||)
                             const kids = React.Children.toArray(children);
                             return (
-                                <p style={{ margin: 0 }}>
+                                <p className="m-0">
                                     {kids.map((child, i) => {
                                         if (typeof child === 'string') {
                                             const parts = child.split(/(\|\|.*?\|\|)/g);
@@ -125,4 +135,9 @@ const styles = {
 };
 
 MessageContent.displayName = 'MessageContent';
+MessageContent.propTypes = {
+    displayContent: PropTypes.object,
+    isMessageEncrypted: PropTypes.bool,
+    snippetData: PropTypes.array,
+};
 export default MessageContent;

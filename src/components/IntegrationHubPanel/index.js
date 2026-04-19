@@ -1,3 +1,4 @@
+export { default } from '../bot/IntegrationHubPanel';
 // Barrel export for IntegrationHubPanel
 export { default as AvailableIntegrations } from './AvailableIntegrations';
 export { default as ConfigurationModal } from './ConfigurationModal';

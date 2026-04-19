@@ -41,7 +41,7 @@ const MockMessage = ({ message, onReact, onEdit, onDelete, onReply }) => {
                 </span>
                 {message.edited && (
                     <span data-testid="edited-badge" className="edited">
-                        (düzenlendi)
+                        (editndi)
                     </span>
                 )}
             </div>
@@ -54,7 +54,7 @@ const MockMessage = ({ message, onReact, onEdit, onDelete, onReply }) => {
             {/* Attachments */}
             {message.attachments?.length > 0 && (
                 <div data-testid="attachments" className="attachments">
-                    {message.attachments.map(att => (
+                    {message.attachments.map((att) => (
                         <div key={att.id} data-testid={`attachment-${att.id}`}>
                             {att.filename}
                         </div>
@@ -65,7 +65,7 @@ const MockMessage = ({ message, onReact, onEdit, onDelete, onReply }) => {
             {/* Reactions */}
             {message.reactions?.length > 0 && (
                 <div data-testid="reactions" className="reactions">
-                    {message.reactions.map(reaction => (
+                    {message.reactions.map((reaction) => (
                         <button
                             key={reaction.emoji}
                             data-testid={`reaction-${reaction.emoji}`}
@@ -81,24 +81,15 @@ const MockMessage = ({ message, onReact, onEdit, onDelete, onReply }) => {
             {/* Hover Actions */}
             {showActions && (
                 <div data-testid="message-actions" className="actions">
-                    <button
-                        data-testid="action-react"
-                        onClick={() => onReact?.(message.id, '👍')}
-                    >
+                    <button data-testid="action-react" onClick={() => onReact?.(message.id, '👍')}>
                         React
                     </button>
-                    <button
-                        data-testid="action-reply"
-                        onClick={() => onReply?.(message)}
-                    >
+                    <button data-testid="action-reply" onClick={() => onReply?.(message)}>
                         Reply
                     </button>
                     {message.isOwn && (
                         <>
-                            <button
-                                data-testid="action-edit"
-                                onClick={() => onEdit?.(message)}
-                            >
+                            <button data-testid="action-edit" onClick={() => onEdit?.(message)}>
                                 Edit
                             </button>
                             <button
@@ -122,11 +113,11 @@ const MockMessage = ({ message, onReact, onEdit, onDelete, onReply }) => {
                     <button onClick={() => navigator.clipboard.writeText(message.content)}>
                         Metni Kopyala
                     </button>
-                    <button onClick={() => onReply?.(message)}>Yanıtla</button>
+                    <button onClick={() => onReply?.(message)}>Reply</button>
                     <button onClick={() => onReact?.(message.id, '👍')}>Tepki Ekle</button>
                     {message.isOwn && (
                         <>
-                            <button onClick={() => onEdit?.(message)}>Düzenle</button>
+                            <button onClick={() => onEdit?.(message)}>Edit</button>
                             <button onClick={() => onDelete?.(message.id)}>Sil</button>
                         </>
                     )}
@@ -143,24 +134,24 @@ describe('Message Component', () => {
         author: {
             id: 1,
             username: 'TestUser',
-            avatar: 'https://example.com/avatar.png'
+            avatar: 'https://example.com/avatar.png',
         },
         channel_id: 1,
         created_at: '2024-01-15T10:30:00Z',
         reactions: [
             { emoji: '👍', count: 5 },
-            { emoji: '❤️', count: 3 }
+            { emoji: '❤️', count: 3 },
         ],
         attachments: [],
         edited: false,
-        isOwn: true
+        isOwn: true,
     };
 
     const mockHandlers = {
         onReact: vi.fn(),
         onEdit: vi.fn(),
         onDelete: vi.fn(),
-        onReply: vi.fn()
+        onReply: vi.fn(),
     };
 
     beforeEach(() => {
@@ -171,14 +162,19 @@ describe('Message Component', () => {
         it('should render message content', () => {
             render(<MockMessage message={mockMessage} {...mockHandlers} />);
 
-            expect(screen.getByTestId('message-content')).toHaveTextContent('Hello, this is a test message!');
+            expect(screen.getByTestId('message-content')).toHaveTextContent(
+                'Hello, this is a test message!'
+            );
         });
 
         it('should render author information', () => {
             render(<MockMessage message={mockMessage} {...mockHandlers} />);
 
             expect(screen.getByTestId('author-name')).toHaveTextContent('TestUser');
-            expect(screen.getByTestId('author-avatar')).toHaveAttribute('src', 'https://example.com/avatar.png');
+            expect(screen.getByTestId('author-avatar')).toHaveAttribute(
+                'src',
+                'https://example.com/avatar.png'
+            );
         });
 
         it('should render timestamp', () => {
@@ -206,8 +202,8 @@ describe('Message Component', () => {
             const messageWithAttachments = {
                 ...mockMessage,
                 attachments: [
-                    { id: 1, filename: 'image.png', url: 'http://example.com/image.png' }
-                ]
+                    { id: 1, filename: 'image.png', url: 'http://example.com/image.png' },
+                ],
             };
             render(<MockMessage message={messageWithAttachments} {...mockHandlers} />);
 
@@ -338,7 +334,7 @@ describe('Message Component', () => {
         it('should handle message with long content', () => {
             const longMessage = {
                 ...mockMessage,
-                content: 'A'.repeat(2000)
+                content: 'A'.repeat(2000),
             };
             render(<MockMessage message={longMessage} {...mockHandlers} />);
 
@@ -348,7 +344,7 @@ describe('Message Component', () => {
         it('should handle message with special characters', () => {
             const specialMessage = {
                 ...mockMessage,
-                content: '<script>alert("xss")</script> & " \' < >'
+                content: '<script>alert("xss")</script> & " \' < >',
             };
             render(<MockMessage message={specialMessage} {...mockHandlers} />);
 

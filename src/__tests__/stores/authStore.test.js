@@ -18,13 +18,13 @@ const mockAuthStore = {
     updateProfile: vi.fn(),
     setUser: vi.fn(),
     setToken: vi.fn(),
-    clearError: vi.fn()
+    clearError: vi.fn(),
 };
 
 // Mock the actual store
 vi.mock('../../stores/authStore', () => ({
     default: () => mockAuthStore,
-    useAuthStore: () => mockAuthStore
+    useAuthStore: () => mockAuthStore,
 }));
 
 describe('Auth Store', () => {
@@ -54,7 +54,7 @@ describe('Auth Store', () => {
         it('should call login with credentials', async () => {
             const credentials = {
                 email: 'test@example.com',
-                password: 'password123'
+                password: 'password123',
             };
 
             await mockAuthStore.login(credentials);
@@ -67,7 +67,7 @@ describe('Auth Store', () => {
                 id: 1,
                 username: 'testuser',
                 email: 'test@example.com',
-                avatar: 'avatar.png'
+                avatar: 'avatar.png',
             };
 
             mockAuthStore.login.mockImplementationOnce(() => {
@@ -78,7 +78,7 @@ describe('Auth Store', () => {
 
             await mockAuthStore.login({
                 email: 'test@example.com',
-                password: 'password123'
+                password: 'password123',
             });
 
             expect(mockAuthStore.user).toEqual(mockUser);
@@ -94,7 +94,7 @@ describe('Auth Store', () => {
 
             await mockAuthStore.login({
                 email: 'wrong@example.com',
-                password: 'wrongpass'
+                password: 'wrongpass',
             });
 
             expect(mockAuthStore.error).toBe('Invalid credentials');
@@ -129,7 +129,7 @@ describe('Auth Store', () => {
                 username: 'newuser',
                 email: 'new@example.com',
                 password: 'password123',
-                password2: 'password123'
+                password2: 'password123',
             };
 
             await mockAuthStore.register(userData);
@@ -143,13 +143,13 @@ describe('Auth Store', () => {
             const profileData = {
                 username: 'updateduser',
                 bio: 'New bio',
-                avatar: 'new-avatar.png'
+                avatar: 'new-avatar.png',
             };
 
             mockAuthStore.updateProfile.mockImplementationOnce(() => {
                 mockAuthStore.user = {
                     ...mockAuthStore.user,
-                    ...profileData
+                    ...profileData,
                 };
             });
 

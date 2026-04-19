@@ -8,7 +8,7 @@ const styles = {
         padding: '4px 0',
         minHeight: '30px',
         maxHeight: '400px',
-        overflowY: 'auto'
+        overflowY: 'auto',
     },
     header: {
         fontSize: '0.7em',

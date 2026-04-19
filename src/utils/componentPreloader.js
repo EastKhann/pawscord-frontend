@@ -1,9 +1,10 @@
+import logger from '../utils/logger';
 // frontend/src/utils/componentPreloader.js
 
 /**
  * 🚀 Component Preloader
- * Kritik componentleri idle time'da önceden yükler
- * Kullanıcı deneyimini iyileştirir
+ * Kritik componentleri idle time'da önceden uploadr
+ * User deneyimini iyleştirir
  */
 
 class ComponentPreloader {
@@ -22,20 +23,23 @@ class ComponentPreloader {
      * Idle callback setup
      */
     setupIdleCallback() {
-        window.requestIdleCallback(() => {
-            this.isIdle = true;
-        }, { timeout: 2000 });
+        window.requestIdleCallback(
+            () => {
+                this.isIdle = true;
+            },
+            { timeout: 2000 }
+        );
     }
 
     /**
      * Component'i preload et
      * @param {Function} importFn - Dynamic import fonksiyonu
      * @param {string} name - Component adı
-     * @param {number} priority - Öncelik (0-10, 10 en yüksek)
+     * @param {number} priority - Priority (0-10, 10 en yüksek)
      * @returns {Promise}
      */
     async preload(importFn, name, priority = 5) {
-        // Zaten yüklenmiş
+        // Zaten uploadnmiş
         if (this.preloaded.has(name)) {
             return;
         }
@@ -45,21 +49,24 @@ class ComponentPreloader {
             return;
         }
 
-        // Yüksek öncelikli componentler hemen yüklensin
+        // High öncelikli componentler hemen uploadnsin
         if (priority >= 8) {
             return this.loadNow(importFn, name);
         }
 
-        // Düşük öncelikli componentler idle time'da yüklensin
+        // Low öncelikli componentler idle time'da uploadnsin
         if (this.isIdle) {
             return this.loadNow(importFn, name);
         }
 
         // Idle olmadıysa bekle
         if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-            window.requestIdleCallback(() => {
-                this.loadNow(importFn, name);
-            }, { timeout: 5000 });
+            window.requestIdleCallback(
+                () => {
+                    this.loadNow(importFn, name);
+                },
+                { timeout: 5000 }
+            );
         } else {
             // requestIdleCallback yoksa setTimeout kullan
             setTimeout(() => {
@@ -69,7 +76,7 @@ class ComponentPreloader {
     }
 
     /**
-     * Hemen yükle
+     * Hemen upload
      */
     async loadNow(importFn, name) {
         this.loading.add(name);
@@ -81,9 +88,8 @@ class ComponentPreloader {
 
             this.preloaded.add(name);
             this.loading.delete(name);
-
         } catch (error) {
-            console.error(`❌ [Preload] ${name} failed:`, error);
+            logger.error(`❌ [Preload] ${name} failed:`, error);
             this.loading.delete(name);
         }
     }
@@ -97,19 +103,19 @@ class ComponentPreloader {
 
         for (const { importFn, name, priority } of sorted) {
             await this.preload(importFn, name, priority);
-            // Her yükleme arasında kısa bir bekleme
-            await new Promise(resolve => setTimeout(resolve, 100));
+            // Her load searchsında kısa bir bekleme
+            await new Promise((resolve) => setTimeout(resolve, 100));
         }
     }
 
     /**
-     * Durum bilgisi
+     * Status bilgisi
      */
     getStatus() {
         return {
             preloaded: Array.from(this.preloaded),
             loading: Array.from(this.loading),
-            total: this.preloaded.size + this.loading.size
+            total: this.preloaded.size + this.loading.size,
         };
     }
 
@@ -129,58 +135,57 @@ export const componentPreloader = new ComponentPreloader();
  * Kritik componentleri preload et
  */
 export const preloadCriticalComponents = () => {
-
     const components = [
-        // Yüksek öncelik (8-10) - Sık kullanılan
+        // High öncelik (8-10) - Sık kullanılan
         {
             name: 'ChatUserList',
             importFn: () => import('../ChatUserList'),
-            priority: 10
+            priority: 10,
         },
         {
             name: 'UserProfilePanel',
             importFn: () => import('../UserProfilePanel'),
-            priority: 9
+            priority: 9,
         },
         {
             name: 'VoiceChatPanel',
             importFn: () => import('../VoiceChatPanel'),
-            priority: 9
+            priority: 9,
         },
 
-        // Orta öncelik (5-7) - Ara sıra kullanılan
+        // Orta öncelik (5-7) - Search sıra kullanılan
         {
             name: 'CodeSnippetModal',
-            importFn: () => import('../CodeSnippetModal'),
-            priority: 6
+            importFn: () => import('../components/chat/CodeSnippetModal'),
+            priority: 6,
         },
         {
             name: 'ImageModal',
             importFn: () => import('../ImageModal'),
-            priority: 6
+            priority: 6,
         },
         {
             name: 'UserProfileModal',
             importFn: () => import('../UserProfileModal'),
-            priority: 7
+            priority: 7,
         },
 
-        // Düşük öncelik (0-4) - Nadiren kullanılan
+        // Low öncelik (0-4) - Nadiren kullanılan
         {
             name: 'PollCreateModal',
-            importFn: () => import('../PollCreateModal'),
-            priority: 3
+            importFn: () => import('../components/chat/PollCreateModal'),
+            priority: 3,
         },
         {
             name: 'ThemeStoreModal',
-            importFn: () => import('../ThemeStoreModal'),
-            priority: 2
+            importFn: () => import('../components/premium/ThemeStoreModal'),
+            priority: 2,
         },
         {
             name: 'CryptoStoreModal',
-            importFn: () => import('../CryptoStoreModal'),
-            priority: 1
-        }
+            importFn: () => import('../components/premium/CryptoStoreModal'),
+            priority: 1,
+        },
     ];
 
     componentPreloader.preloadBatch(components);
@@ -191,15 +196,17 @@ export const preloadCriticalComponents = () => {
  */
 export const preloadRouteComponents = (route) => {
     const routeMap = {
-        '/friends': [
-            { name: 'FriendsTab', importFn: () => import('../FriendsTab'), priority: 10 }
-        ],
+        '/friends': [{ name: 'FriendsTab', importFn: () => import('../FriendsTab'), priority: 10 }],
         '/analytics': [
-            { name: 'AnalyticsDashboard', importFn: () => import('../AnalyticsDashboard'), priority: 10 }
+            {
+                name: 'AnalyticsDashboard',
+                importFn: () => import('../AnalyticsDashboard'),
+                priority: 10,
+            },
         ],
         '/crypto': [
-            { name: 'CryptoDashboard', importFn: () => import('../CryptoDashboard'), priority: 10 }
-        ]
+            { name: 'CryptoDashboard', importFn: () => import('../CryptoDashboard'), priority: 10 },
+        ],
     };
 
     const components = routeMap[route];
@@ -215,7 +222,7 @@ export const preloadOnHover = (importFn, name) => {
     return {
         onMouseEnter: () => {
             componentPreloader.preload(importFn, name, 8);
-        }
+        },
     };
 };
 
@@ -225,20 +232,23 @@ export const preloadOnHover = (importFn, name) => {
 export const preloadOnVisible = (importFn, name, element) => {
     if (!element || !('IntersectionObserver' in window)) return;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                componentPreloader.preload(importFn, name, 7);
-                observer.disconnect();
-            }
-        });
-    }, { rootMargin: '50px' });
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    componentPreloader.preload(importFn, name, 7);
+                    observer.disconnect();
+                }
+            });
+        },
+        { rootMargin: '50px' }
+    );
 
     observer.observe(element);
 };
 
 /**
- * User intent preloading (mousemove ile tahmin)
+ * User intent preloading (mousemove with tahmin)
  */
 export const setupIntentPreloading = () => {
     if (typeof window === 'undefined') return;
@@ -254,8 +264,7 @@ export const setupIntentPreloading = () => {
     // Mouse movement tracking
     window.addEventListener('mousemove', (e) => {
         const movementSpeed = Math.sqrt(
-            Math.pow(e.clientX - lastMousePos.x, 2) +
-            Math.pow(e.clientY - lastMousePos.y, 2)
+            Math.pow(e.clientX - lastMousePos.x, 2) + Math.pow(e.clientY - lastMousePos.y, 2)
         );
 
         lastMousePos = { x: e.clientX, y: e.clientY };
@@ -274,5 +283,3 @@ export const setupIntentPreloading = () => {
 };
 
 export default ComponentPreloader;
-
-
