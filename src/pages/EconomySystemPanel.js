@@ -426,86 +426,86 @@ const EconomySystemPanel = ({ currentUser, serverId, onClose }) => {
             <div className="filter-buttons">
               <button
                 className={`filter-btn ${filterType === 'all' ? 'active' : ''}`}
-                onClick={() => setFilterType('all')}
+                onClick={() => setFilterType('all')}>
                 {t('economy.all', 'All')}
               </button>
-            <button
-              className={`filter-btn ${filterType === 'sent' ? 'active' : ''}`}
-              onClick={() => setFilterType('sent')}>
-              {t('economy.sent', 'Sent')}
-            </button>
-            <button
-              className={`filter-btn ${filterType === 'received' ? 'active' : ''}`}
-              onClick={() => setFilterType('received')}>
-              {t('economy.received', 'Received')}
-            </button>
-          </div>
-        </div>
-
-        <div className="transactions-list">
-          {getFilteredTransactions().length === 0 ? (
-            <div className="empty-state">
-              <i className="fas fa-receipt"></i>
-              <p>{t('economy.noTransactions', 'No transactions yet')}</p>
-              <p className="hint">{t('economy.transferHint', 'Transfer coins to see your history')}</p>
+              <button
+                className={`filter-btn ${filterType === 'sent' ? 'active' : ''}`}
+                onClick={() => setFilterType('sent')}>
+                {t('economy.sent', 'Sent')}
+              </button>
+              <button
+                className={`filter-btn ${filterType === 'received' ? 'active' : ''}`}
+                onClick={() => setFilterType('received')}>
+                {t('economy.received', 'Received')}
+              </button>
             </div>
-          ) : (
-            getFilteredTransactions().map((transaction) => (
-              <div
-                key={transaction.id}
-                className={`transaction-item ${getTransactionColor(transaction)}`}>
-                <div className="transaction-icon">
-                  <i className={`fas fa-${getTransactionIcon(transaction)}`}></i>
-                </div>
+          </div>
 
-                <div className="transaction-info">
-                  <div className="transaction-title">
-                    {transaction.sender_id === currentUser?.id ? (
-                      <>{t('economy.sentTo', 'Sent to')} <strong>{transaction.recipient?.username}</strong></>
-                    ) : (
-                      <>{t('economy.receivedFrom', 'Received from')} <strong>{transaction.sender?.username}</strong></>
-                    )}
-                  </div>
-
-                  {transaction.note && (
-                    <div className="transaction-note">{transaction.note}</div>
-                  )}
-
-                  <div className="transaction-time">
-                    {new Date(transaction.timestamp).toLocaleString()}
-                  </div>
-                </div>
-
-                <div className="transaction-amount">
-                  <span className="sign">
-                    {transaction.sender_id === currentUser?.id ? '-' : '+'}
-                  </span>
-                  <i className="fas fa-coins"></i>
-                  {formatNumber(transaction.amount)}
-                </div>
+          <div className="transactions-list">
+            {getFilteredTransactions().length === 0 ? (
+              <div className="empty-state">
+                <i className="fas fa-receipt"></i>
+                <p>{t('economy.noTransactions', 'No transactions yet')}</p>
+                <p className="hint">{t('economy.transferHint', 'Transfer coins to see your history')}</p>
               </div>
-            ))
-          )}
-        </div>
-      </div >
+            ) : (
+              getFilteredTransactions().map((transaction) => (
+                <div
+                  key={transaction.id}
+                  className={`transaction-item ${getTransactionColor(transaction)}`}>
+                  <div className="transaction-icon">
+                    <i className={`fas fa-${getTransactionIcon(transaction)}`}></i>
+                  </div>
 
-      {/* Economy Info */}
-      < div className="info-section" >
-        <div className="info-card">
-          <i className="fas fa-info-circle"></i>
-          <div>
-            <strong>{t('economy.howToEarn', 'How to Earn Coins:')}</strong>
-            <ul>
-              <li>{t('economy.earnDaily', 'Daily login rewards')}</li>
-              <li>{t('economy.earnActivities', 'Participating in server activities')}</li>
-              <li>{t('economy.earnContests', 'Winning contests and events')}</li>
-              <li>{t('economy.earnGifts', 'Receiving gifts from other users')}</li>
-            </ul>
+                  <div className="transaction-info">
+                    <div className="transaction-title">
+                      {transaction.sender_id === currentUser?.id ? (
+                        <>{t('economy.sentTo', 'Sent to')} <strong>{transaction.recipient?.username}</strong></>
+                      ) : (
+                        <>{t('economy.receivedFrom', 'Received from')} <strong>{transaction.sender?.username}</strong></>
+                      )}
+                    </div>
+
+                    {transaction.note && (
+                      <div className="transaction-note">{transaction.note}</div>
+                    )}
+
+                    <div className="transaction-time">
+                      {new Date(transaction.timestamp).toLocaleString()}
+                    </div>
+                  </div>
+
+                  <div className="transaction-amount">
+                    <span className="sign">
+                      {transaction.sender_id === currentUser?.id ? '-' : '+'}
+                    </span>
+                    <i className="fas fa-coins"></i>
+                    {formatNumber(transaction.amount)}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
-      </div >
-    </div >
-    </div >
+
+        {/* Economy Info */}
+        <div className="info-section">
+          <div className="info-card">
+            <i className="fas fa-info-circle"></i>
+            <div>
+              <strong>{t('economy.howToEarn', 'How to Earn Coins:')}</strong>
+              <ul>
+                <li>{t('economy.earnDaily', 'Daily login rewards')}</li>
+                <li>{t('economy.earnActivities', 'Participating in server activities')}</li>
+                <li>{t('economy.earnContests', 'Winning contests and events')}</li>
+                <li>{t('economy.earnGifts', 'Receiving gifts from other users')}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

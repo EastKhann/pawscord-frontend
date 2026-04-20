@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
 // frontend/src/components/Message/MessageContextMenu.js
 // 📋 MESSAGE CONTEXT MENU - Right-click menu

@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-// frontend/src/components/E2EESettingsPanel.js
+﻿// frontend/src/components/E2EESettingsPanel.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import toast from '../../utils/toast';

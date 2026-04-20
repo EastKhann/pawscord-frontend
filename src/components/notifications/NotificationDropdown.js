@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // frontend/src/components/NotificationDropdown.js
@@ -9,6 +8,7 @@ import confirmDialog from '../../utils/confirmDialog';
 
 import { useTranslation } from 'react-i18next';
 import logger from '../../utils/logger';
+import { useUIStore } from '../../stores/useUIStore';
 
 /**
  * @param {Object} props
@@ -22,6 +22,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const dropdownRef = useRef(null);
+    const setUnreadNotifCount = useUIStore((s) => s.setUnreadNotifCount);
 
     useEffect(() => {
         loadNotifications();
@@ -44,7 +45,10 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
             const response = await fetchWithAuth(`${apiBaseUrl}/notifications/`);
             if (response.ok) {
                 const data = await response.json();
-                setNotifications(data.results || data);
+                const items = data.results || data;
+                setNotifications(items);
+                const unread = items.filter((n) => !n.is_read).length;
+                setUnreadNotifCount(unread);
             }
         } catch (error) {
             logger.error(t('ui.notification_load_hatasi'), error);
@@ -74,6 +78,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
             });
 
             setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+            setUnreadNotifCount(0);
         } catch (error) {
             logger.error(t('ui.mark_all_as_read_hatasi'), error);
         }
@@ -100,6 +105,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
             });
 
             setNotifications([]);
+            setUnreadNotifCount(0);
         } catch (error) {
             logger.error(t('ui.clear_all_hatasi'), error);
         }
@@ -159,7 +165,7 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
                 <button
                     onClick={onClose}
                     style={styles.closeButton}
-                    aria-label="Notificationsi close"
+                    aria-label={t('common.close')}
                 >
                     <FaTimes />
                 </button>
@@ -170,17 +176,17 @@ const NotificationDropdown = ({ fetchWithAuth, apiBaseUrl, currentUser, onClose 
                 <div style={styles.actions}>
                     {unreadCount > 0 && (
                         <button onClick={markAllAsRead} style={styles.actionButton}>
-                            <FaCheckDouble /> Allnü okundu işaretle
+                            <FaCheckDouble /> {t('notifications.markAllRead', 'Tümünü okundu işaretle')}
                         </button>
                     )}
                     <button onClick={clearAll} style={S.txt}>
-                        <FaTrash /> Allnü temizle
+                        <FaTrash /> {t('notifications.clearAll', 'Tümünü temizle')}
                     </button>
                 </div>
             )}
 
             {/* Notifications List */}
-            <div style={styles.list} role="list" aria-label="Reportim listsi">
+            <div style={styles.list} role="list" aria-live="polite" aria-label={t('notifications')}>
                 {loading ? (
                     <div style={styles.loading}>{t('common.loading')}</div>
                 ) : notifications.length === 0 ? (

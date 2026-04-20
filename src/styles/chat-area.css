@@ -87,23 +87,19 @@
 .chat-date-divider-line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(
-        to right,
-        transparent 0%,
-        rgba(88, 101, 242, 0.16) 25%,
-        rgba(255, 255, 255, 0.05) 70%,
-        transparent 100%
-    );
+    background: linear-gradient(to right,
+            transparent 0%,
+            rgba(88, 101, 242, 0.16) 25%,
+            rgba(255, 255, 255, 0.05) 70%,
+            transparent 100%);
 }
 
 .chat-date-divider-line:last-child {
-    background: linear-gradient(
-        to left,
-        transparent 0%,
-        rgba(88, 101, 242, 0.16) 25%,
-        rgba(255, 255, 255, 0.05) 70%,
-        transparent 100%
-    );
+    background: linear-gradient(to left,
+            transparent 0%,
+            rgba(88, 101, 242, 0.16) 25%,
+            rgba(255, 255, 255, 0.05) 70%,
+            transparent 100%);
 }
 
 .chat-date-divider-label {
@@ -213,6 +209,7 @@
 }
 
 @keyframes emptyIconFloat {
+
     0%,
     100% {
         transform: translateY(0px);
@@ -375,3 +372,17 @@
 }
 
 /* @keyframes spin is defined here for pull-refresh; critical.css may also have it */
+
+@keyframes notifPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.85;
+    }
+}

@@ -68,6 +68,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDis
     if (isCreatingServer) {
         return createPortal(
             <div style={styles.modalOverlay}>
+                <style>{`@keyframes sideFadeIn { from{opacity:0} to{opacity:1} }`}</style>
                 <form onSubmit={handleCreateServer} style={styles.addCategoryForm}>
                     <div style={_st1}>
                         <h3 style={_st2}>{t('server.createServer', 'Create Server')}</h3>
@@ -128,6 +129,7 @@ const AddServerModal = ({ isOpen, onClose, onCreateServer, onFriendsClick, onDis
     // Selection menu
     return createPortal(
         <div style={styles.modalOverlay} {...overlayProps}>
+            <style>{`@keyframes sideFadeIn { from{opacity:0} to{opacity:1} }`}</style>
             <div style={styles.selectionModalContent} {...dialogProps}>
                 <h3
                     style={{

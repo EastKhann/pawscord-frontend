@@ -666,7 +666,7 @@ select option {
     }
 
     .mobile-menu-button {
-        display: flex !important;
+        display: flex;
         align-items: center;
         justify-content: center;
         width: 44px;
@@ -998,26 +998,26 @@ div:hover>div>.delete-chat-btn {
 .voice-island,
 [class*='floating'],
 [class*='FloatingVoiceIsland'] {
-    z-index: var(--z-floating-voice, var(--z-popover)) !important;
+    z-index: var(--z-floating-voice, var(--z-popover));
 }
 
 /* Sidebars stay under overlays and menus. */
 .sidebar-wrapper,
 .chat-user-list-panel,
 [class*='sidebar'] {
-    z-index: var(--z-dropdown, 100) !important;
+    z-index: var(--z-dropdown, 100);
 }
 
 /* Modals remain below the global portal root. */
 [class*='modal'],
 [role='dialog'] {
-    z-index: var(--z-modal, 1000) !important;
+    z-index: var(--z-modal, 1000);
 }
 
 /* Voice panels remain above modals but below context menus. */
 [class*='VoiceChat'],
 [class*='voicePanel'] {
-    z-index: var(--z-tooltip, 9999) !important;
+    z-index: var(--z-tooltip, 9999);
 }
 
 /* ================================================ */
@@ -1067,14 +1067,16 @@ div:hover>div>.delete-chat-btn {
 @media (hover: none) and (pointer: coarse) {
 
     .skip-to-content,
-    .skip-nav {
+    .skip-nav,
+    .skip-link {
         display: none !important;
     }
 }
 
 /* Also hide when running inside Capacitor native WebView */
 html.capacitor-native .skip-to-content,
-html.capacitor-native .skip-nav {
+html.capacitor-native .skip-nav,
+html.capacitor-native .skip-link {
     display: none !important;
 }
 

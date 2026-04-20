@@ -2,10 +2,11 @@
 // 🔥 FEATURE 10: Unified User Settings Modal
 // Discord-style settings with sidebar navigation
 
-import { useState, useEffect, memo } from 'react';
+import { useState, useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import { FaSignOutAlt, FaTimes } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import confirmDialog from '../../utils/confirmDialog';
 import TABS from '../UserSettingsModal/constants';
 import S from '../UserSettingsModal/styles';
 import AccountTab from '../UserSettingsModal/tabs/AccountTab';
@@ -53,6 +54,33 @@ const UserSettingsModal = ({ onClose, user }) => {
     const [activeTab, setActiveTab] = useState('account');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isDirty, setIsDirty] = useState(false);
+
+    const handleDirtyChange = useCallback((dirty) => setIsDirty(dirty), []);
+
+    const handleTabChange = useCallback(
+        async (tabId) => {
+            if (isDirty) {
+                const ok = await confirmDialog(
+                    t('settings.unsavedChanges', 'You have unsaved changes. Discard them?')
+                );
+                if (!ok) return;
+                setIsDirty(false);
+            }
+            setActiveTab(tabId);
+        },
+        [isDirty, t]
+    );
+
+    const handleClose = useCallback(async () => {
+        if (isDirty) {
+            const ok = await confirmDialog(
+                t('settings.unsavedChanges', 'You have unsaved changes. Discard them?')
+            );
+            if (!ok) return;
+        }
+        onClose?.();
+    }, [isDirty, onClose, t]);
 
     const ActiveComponent = TAB_COMPONENTS[activeTab] || AccountTab;
 
@@ -91,7 +119,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                                                     : 'transparent',
                                                 color: isActive ? '#fff' : '#949ba4',
                                             }}
-                                            onClick={() => setActiveTab(tab.id)}
+                                            onClick={() => handleTabChange(tab.id)}
                                             onMouseEnter={(e) => {
                                                 if (!isActive)
                                                     e.currentTarget.style.backgroundColor =
@@ -111,7 +139,7 @@ const UserSettingsModal = ({ onClose, user }) => {
                                 <div style={S.divider} />
                             </div>
                         ))}
-                        <button aria-label="on Close" type="button" style={M.txt} onClick={onClose}>
+                        <button aria-label="on Close" type="button" style={M.txt} onClick={handleClose}>
                             <FaSignOutAlt className="fs-14" />
                             <span>{t('common.logout', 'Log Out')}</span>
                         </button>
@@ -131,14 +159,14 @@ const UserSettingsModal = ({ onClose, user }) => {
                             aria-label="on Close"
                             type="button"
                             style={S.closeBtn}
-                            onClick={onClose}
+                            onClick={handleClose}
                         >
                             <FaTimes />
                             <span style={M.txt3}>ESC</span>
                         </button>
                     </div>
                     <div style={S.contentBody}>
-                        <ActiveComponent user={user} />
+                        <ActiveComponent user={user} onDirtyChange={handleDirtyChange} />
                     </div>
                 </div>
             </div>

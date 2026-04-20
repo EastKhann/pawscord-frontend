@@ -58,6 +58,9 @@ export const useUIStore = create<UIStore>()(
                         ),
                     })),
                 clearNotifications: () => set({ toastNotifications: [] }),
+                // Unread system notifications count (shown as badge on bell)
+                unreadNotifCount: 0,
+                setUnreadNotifCount: (val: number) => set({ unreadNotifCount: val }),
                 updateStatusText: '',
                 setUpdateStatusText: (val) =>
                     set({

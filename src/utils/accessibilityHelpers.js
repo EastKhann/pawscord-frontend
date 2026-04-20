@@ -83,6 +83,14 @@ class AccessibilityManager {
      * Create skip to main content link
      */
     createSkipLink() {
+        // Skip link is keyboard-only UX — not useful on touch-only devices or Capacitor native
+        const isNative =
+            typeof window !== 'undefined' &&
+            window.Capacitor &&
+            (typeof window.Capacitor.isNativePlatform === 'function'
+                ? window.Capacitor.isNativePlatform()
+                : window.Capacitor.isNative);
+        if (isNative) return;
         const skip = document.createElement('a');
         skip.href = '#main-content';
         skip.className = 'skip-link';
@@ -328,10 +336,10 @@ class AccessibilityManager {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result
             ? {
-                  r: parseInt(result[1], 16),
-                  g: parseInt(result[2], 16),
-                  b: parseInt(result[3], 16),
-              }
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16),
+            }
             : null;
     }
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 import { useState } from 'react';
 import PropTypes from 'prop-types'; // frontend/src/components/PageWrapper.js
 import { Capacitor } from '@capacitor/core';

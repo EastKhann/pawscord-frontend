@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import React from 'react';
+﻿import React from 'react';
 import PropTypes from 'prop-types';
 import profileStyles from '../styles';
 const _s = (o) => o;

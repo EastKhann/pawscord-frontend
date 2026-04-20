@@ -1,6 +1,5 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FaUserFriends, FaPaperPlane, FaTimes, FaBell } from '../utils/iconOptimization';
 import useFriendsAPI from './useFriendsAPI';
@@ -26,6 +25,21 @@ const FriendsTab = ({
     const api = useFriendsAPI({ fetchWithAuth, apiBaseUrl, onPendingCountChange });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const tabBarRef = useRef(null);
+
+    const handleTabBarKeyDown = useCallback((e) => {
+        if (!tabBarRef.current) return;
+        const tabs = Array.from(tabBarRef.current.querySelectorAll('button'));
+        const idx = tabs.indexOf(document.activeElement);
+        if (idx === -1) return;
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            tabs[(idx + 1) % tabs.length]?.focus();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            tabs[(idx - 1 + tabs.length) % tabs.length]?.focus();
+        }
+    }, []);
 
     return (
         <div style={styles.container}>
@@ -35,7 +49,7 @@ const FriendsTab = ({
                         <FaUserFriends />
                         {t('friends.title', 'Arkadaşlar')}
                     </div>
-                    <div style={styles.tabButtons}>
+                    <div style={styles.tabButtons} ref={tabBarRef} role="tablist" onKeyDown={handleTabBarKeyDown}>
                         <button
                             style={{
                                 ...styles.tabBtn,
@@ -93,14 +107,14 @@ const FriendsTab = ({
                                 api.statusMsg.type === 'success'
                                     ? 'rgba(67, 181, 129, 0.2)'
                                     : api.statusMsg.type === 'info'
-                                      ? 'rgba(88, 101, 242, 0.2)'
-                                      : 'rgba(240, 71, 71, 0.2)',
+                                        ? 'rgba(88, 101, 242, 0.2)'
+                                        : 'rgba(240, 71, 71, 0.2)',
                             color:
                                 api.statusMsg.type === 'success'
                                     ? '#23a559'
                                     : api.statusMsg.type === 'info'
-                                      ? '#dee0fc'
-                                      : '#f23f42',
+                                        ? '#dee0fc'
+                                        : '#f23f42',
                             border: `1px solid ${api.statusMsg.type === 'success' ? '#23a559' : api.statusMsg.type === 'info' ? '#5865f2' : '#f23f42'}`,
                             display: 'flex',
                             alignItems: 'center',

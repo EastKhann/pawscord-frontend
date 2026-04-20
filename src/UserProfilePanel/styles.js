@@ -16,6 +16,7 @@ const styles = {
     },
     panel: {
         width: '920px',
+        maxWidth: '100vw',
         maxHeight: '92vh',
         background: '#0d0e10',
         borderRadius: '20px',
@@ -177,8 +178,8 @@ const styles = {
             variant === 'primary'
                 ? 'linear-gradient(135deg, #5865f2 0%, #5865f2 100%)'
                 : variant === 'danger'
-                  ? 'linear-gradient(135deg, #f23f42 0%, #c9302c 100%)'
-                  : 'rgba(255, 255, 255, 0.1)',
+                    ? 'linear-gradient(135deg, #f23f42 0%, #c9302c 100%)'
+                    : 'rgba(255, 255, 255, 0.1)',
         border: 'none',
         borderRadius: '8px',
         color: '#fff',

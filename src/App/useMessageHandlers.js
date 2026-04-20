@@ -10,6 +10,7 @@ import confirmDialog from '../utils/confirmDialog';
 import { getTemporaryId } from '../config/api';
 import { offlineQueue } from '../utils/offlineMessageQueue';
 import logger from '../utils/logger';
+import { hapticLight } from '../utils/haptics';
 
 // 🚀 Debounced sessionStorage persist — keeps last 8 channels cached across page refreshes
 let _persistTimer = null;
@@ -81,7 +82,7 @@ export default function useMessageHandlers({
             const trimmed = content.trim();
             if (!trimmed) return;
 
-            // Slash commands
+            hapticLight();
             if (trimmed === '/tema') {
                 openModal('themeStore');
                 setEditingMessage(null);
@@ -201,15 +202,15 @@ export default function useMessageHandlers({
                     const httpPayload =
                         activeChat.type === 'dm'
                             ? {
-                                  conversation_id: activeChat.id,
-                                  content: finalContent,
-                                  temp_id: payload.temp_id,
-                              }
+                                conversation_id: activeChat.id,
+                                content: finalContent,
+                                temp_id: payload.temp_id,
+                            }
                             : {
-                                  room: activeChat.id,
-                                  content: finalContent,
-                                  temp_id: payload.temp_id,
-                              };
+                                room: activeChat.id,
+                                content: finalContent,
+                                temp_id: payload.temp_id,
+                            };
                     const response = await fetchWithAuth(endpoint, {
                         method: 'POST',
                         body: JSON.stringify(httpPayload),
@@ -324,17 +325,17 @@ export default function useMessageHandlers({
                     const httpPayload =
                         activeChat.type === 'dm'
                             ? {
-                                  conversation_id: activeChat.id,
-                                  content: '',
-                                  temp_id: payload.temp_id,
-                                  snippet_data: data,
-                              }
+                                conversation_id: activeChat.id,
+                                content: '',
+                                temp_id: payload.temp_id,
+                                snippet_data: data,
+                            }
                             : {
-                                  room: activeChat.id,
-                                  content: '',
-                                  temp_id: payload.temp_id,
-                                  snippet_data: data,
-                              };
+                                room: activeChat.id,
+                                content: '',
+                                temp_id: payload.temp_id,
+                                snippet_data: data,
+                            };
                     await fetchWithAuth(endpoint, {
                         method: 'POST',
                         body: JSON.stringify(httpPayload),
@@ -744,7 +745,7 @@ export default function useMessageHandlers({
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message_ids: remaining }),
                             keepalive: true, // survives page unload like sendBeacon
-                        }).catch(() => {});
+                        }).catch(() => { });
                     } catch (e) {
                         /* ignore unmount errors */
                     }

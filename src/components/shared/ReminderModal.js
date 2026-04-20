@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/ReminderModal.js
 
@@ -79,6 +78,10 @@ const ReminderModal = ({ messageId, messageContent, onClose, fetchWithAuth, apiB
 
     return (
         <div style={styles.overlay} {...overlayProps}>
+            <style>{`
+                @keyframes rmFadeIn { from{opacity:0} to{opacity:1} }
+                @keyframes rmSlideUp { from{opacity:0;transform:translateY(14px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+            `}</style>
             <div style={styles.modal} {...dialogProps}>
                 <div style={styles.header}>
                     <h3 style={styles.title}>
@@ -188,6 +191,8 @@ const styles = {
         justifyContent: 'center',
 
         zIndex: 10000,
+
+        animation: 'rmFadeIn 0.18s ease-out',
     },
 
     modal: {
@@ -200,6 +205,8 @@ const styles = {
         maxWidth: '500px',
 
         boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
+
+        animation: 'rmSlideUp 0.25s cubic-bezier(0.22,1,0.36,1)',
     },
 
     header: {

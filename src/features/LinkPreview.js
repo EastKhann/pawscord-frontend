@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-useless-escape */
 // frontend/src/LinkPreview.js (DISCORD-STYLE ÖNİZLEME - V2.0)
 

@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { FaPlus, FaCopy, FaTrash } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import { styles } from './oauthStyles';

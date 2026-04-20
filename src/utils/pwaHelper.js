@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-useless-escape */
 // frontend/src/utils/pwaHelper.js
 // 🚀 PWA HELPER UTILITIES

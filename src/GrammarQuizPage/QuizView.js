@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types';
 

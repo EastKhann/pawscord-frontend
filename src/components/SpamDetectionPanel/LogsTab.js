@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import { getActionColor } from './constants';
+﻿import { getActionColor } from './constants';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import { useTranslation } from 'react-i18next';

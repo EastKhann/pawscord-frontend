@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { FaTimes, FaCoins, FaCreditCard, FaHistory, FaWallet } from 'react-icons/fa';
+import { FaTimes, FaCoins, FaCreditCard, FaHistory, FaWallet, FaCheckCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import styles from '../PaymentPanel/styles';
 import usePayment from '../PaymentPanel/hooks/usePayment';
@@ -28,6 +28,7 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
         setTransferNote,
         handlePurchase,
         handleTransfer,
+        successCoins,
     } = usePayment(fetchWithAuth, apiBaseUrl);
 
     return (
@@ -38,6 +39,10 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
             onClick={onClose}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
         >
+            <style>{`
+                @keyframes ppOverlayIn { from{opacity:0} to{opacity:1} }
+                @keyframes ppModalIn { from{opacity:0;transform:scale(0.94) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+            `}</style>
             <div
                 style={styles.modal}
                 role="button"
@@ -45,6 +50,38 @@ const PaymentPanel = ({ fetchWithAuth, apiBaseUrl, onClose, username }) => {
                 onClick={(event) => event.stopPropagation()}
                 onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
             >
+                {/* ── Success animation overlay ── */}
+                {successCoins && (
+                    <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '8px',
+                        background: 'rgba(10,20,10,0.92)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 10,
+                        gap: '16px',
+                        animation: 'paySuccessIn 0.4s cubic-bezier(0.22,1,0.36,1) both',
+                    }}>
+                        <style>{`
+                            @keyframes paySuccessIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+                            @keyframes checkBounce { 0%{transform:scale(0)} 60%{transform:scale(1.25)} 100%{transform:scale(1)} }
+                            @keyframes coinSpin { from{transform:rotateY(0deg)} to{transform:rotateY(720deg)} }
+                        `}</style>
+                        <FaCheckCircle size={72} color="#23a559" style={{ animation: 'checkBounce 0.5s ease 0.1s both' }} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', animation: 'coinSpin 0.8s ease 0.3s both' }}>
+                            <FaCoins size={32} color="#f0b232" />
+                        </div>
+                        <div style={{ fontSize: '28px', fontWeight: 800, color: '#23a559', letterSpacing: '-0.5px' }}>
+                            +{successCoins.toLocaleString()} 💰
+                        </div>
+                        <div style={{ color: '#b5bac1', fontSize: '15px' }}>
+                            {t('payment.transferSuccess', 'Transfer successful!')}
+                        </div>
+                    </div>
+                )}
                 <div style={styles.header}>
                     <div style={styles.headerLeft}>
                         <FaWallet className="text-f0b-24" />

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useState, useEffect } from 'react';
@@ -64,6 +63,19 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
     const styles = profileStyles;
     const { t } = useTranslation();
 
+    // Mobile-responsive panel sizing
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 480;
+    const panelStyle = isMobile
+        ? {
+            ...styles.panel,
+            width: '100vw',
+            maxWidth: '100vw',
+            height: '100dvh',
+            maxHeight: '100dvh',
+            borderRadius: 0,
+        }
+        : styles.panel;
+
     try {
         return (
             <div
@@ -78,7 +90,7 @@ const UserProfilePanel = ({ user, onClose, onUpdate, onLogout }) => {
                     role="dialog"
                     aria-modal="true"
                     aria-label="User Profile"
-                    style={styles.panel}
+                    style={panelStyle}
                     onClick={(e) => e.stopPropagation()}
                     onKeyDown={(e) => e.stopPropagation()}
                 >

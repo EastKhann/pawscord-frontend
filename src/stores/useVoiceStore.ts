@@ -3,6 +3,7 @@
 
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { shallow } from 'zustand/shallow';
 import type { VoiceStore } from '../types/store';
 
 export const useVoiceStore = create<VoiceStore>()(

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
 // frontend/src/UserProfileModal.js
 // Decomposed: styles.js + hooks/useProfileModal.js

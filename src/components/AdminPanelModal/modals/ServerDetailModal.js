@@ -12,7 +12,6 @@ const S = {
     txt: { fontSize: '20px', fontWeight: '700', color: '#5865f2' },
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '12px',
         marginBottom: '16px',
     },
@@ -49,7 +48,7 @@ const ServerDetailModal = ({ selectedServer, setSelectedServer }) => {
                 </div>
 
                 {/* Server Info */}
-                <div style={S.grid}>
+                <div className="admin-grid-3" style={S.grid}>
                     <div style={styles.miniCard}>
                         <div style={S.txt}>{selectedServer.member_count}</div>
                         <div className="text-gray6b-10">{t('member')}</div>

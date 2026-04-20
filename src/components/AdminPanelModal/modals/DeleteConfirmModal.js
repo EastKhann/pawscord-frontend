@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import React, { useCallback } from 'react';
+﻿import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../styles';
 import useModalA11y from '../../../hooks/useModalA11y';

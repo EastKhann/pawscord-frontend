@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/ErrorReportingPanel.js

@@ -73,6 +73,7 @@ const FileManagerPanel = ({ serverId, apiBaseUrl, fetchWithAuth }) => {
 
     return (
         <div style={styles.container}>
+            <style>{`@keyframes fmpFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }`}</style>
             <div style={styles.header}>
                 <h2 style={styles.title}>
                     <FaFolder /> File Administratorsi
@@ -169,6 +170,7 @@ const styles = {
         padding: '20px',
         backgroundColor: '#111214',
         borderRadius: '8px',
+        animation: 'fmpFadeIn 0.22s ease-out',
     },
     header: {
         display: 'flex',

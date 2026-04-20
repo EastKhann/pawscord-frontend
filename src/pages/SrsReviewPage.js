@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import { getToken } from '../utils/tokenStorage';
+﻿import { getToken } from '../utils/tokenStorage';
 // frontend/src/SrsReviewPage.js
 // Spaced Repetition Review — uses /srs/due/, /srs/review/, /srs/add/ endpoints
 

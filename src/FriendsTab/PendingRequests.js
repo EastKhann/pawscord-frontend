@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FaCheck, FaTimes } from '../utils/iconOptimization';
 import LazyImage from '../components/shared/LazyImage';
 import styles from './friendsTabStyles';
+import { hapticSuccess, hapticLight } from '../utils/haptics';
 
 // -- dynamic style helpers (pass 2) --
 
@@ -46,18 +47,22 @@ const PendingRequests = ({ requests, outgoing, getDeterministicAvatar, handleRes
                         </div>
                         <div style={styles.actions}>
                             <button
-                                onClick={() => handleRespond(req.id, 'accept')}
+                                onClick={() => { hapticSuccess(); handleRespond(req.id, 'accept'); }}
                                 style={styles.acceptBtn}
                                 title={t('friends.acceptRequest')}
                                 aria-label={t('friends.acceptRequest')}
+                                onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.15)')}
+                                onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                             >
                                 <FaCheck />
                             </button>
                             <button
-                                onClick={() => handleRespond(req.id, 'reject')}
+                                onClick={() => { hapticLight(); handleRespond(req.id, 'reject'); }}
                                 style={styles.rejectBtn}
                                 title={t('friends.declineRequest')}
                                 aria-label={t('friends.declineRequest')}
+                                onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.15)')}
+                                onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                             >
                                 <FaTimes />
                             </button>

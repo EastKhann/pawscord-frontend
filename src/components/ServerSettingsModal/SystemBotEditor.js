@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable no-undef */
-/* eslint-disable react/no-unescaped-entities */
+﻿/* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';

@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 import { getToken } from '../../utils/tokenStorage';
 // frontend/src/components/StageChannelPanel.js
 import { useState, useEffect, useCallback, useMemo, memo } from 'react';

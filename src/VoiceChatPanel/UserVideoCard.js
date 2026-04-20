@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 // frontend/src/VoiceChatPanel/UserVideoCard.js

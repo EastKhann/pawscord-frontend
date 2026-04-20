@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-// frontend/src/components/SafetyNumberModal.js
+﻿// frontend/src/components/SafetyNumberModal.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import toast from '../../utils/toast';

@@ -112,6 +112,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10000,
+        animation: 'qamFadeIn 0.18s ease-out',
     },
     menu: {
         backgroundColor: '#111214',
@@ -120,6 +121,7 @@ const styles = {
         width: '90%',
         maxWidth: '400px',
         boxShadow: '0 8px 16px rgba(0,0,0,0.4)',
+        animation: 'qamSlideUp 0.22s cubic-bezier(0.22,1,0.36,1)',
     },
     title: {
         color: 'white',
@@ -150,6 +152,17 @@ const styles = {
         },
     },
 };
+
+// Inject keyframes once
+if (typeof document !== 'undefined' && !document.getElementById('qam-keyframes')) {
+    const s = document.createElement('style');
+    s.id = 'qam-keyframes';
+    s.textContent = `
+        @keyframes qamFadeIn { from{opacity:0} to{opacity:1} }
+        @keyframes qamSlideUp { from{opacity:0;transform:translateY(12px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+    `;
+    document.head.appendChild(s);
+}
 
 QuickActionsMenu.propTypes = {
     onClose: PropTypes.func,

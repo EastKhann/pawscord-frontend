@@ -333,6 +333,7 @@ export const styles = {
         justifyContent: 'center',
         zIndex: 99999,
         backdropFilter: 'blur(8px)',
+        animation: 'sideFadeIn 0.18s ease-out',
     },
     selectionModalContent: {
         background: 'rgba(17, 18, 20, 0.95)',

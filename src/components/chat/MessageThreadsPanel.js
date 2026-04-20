@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable jsx-a11y/no-autofocus */
+﻿/* eslint-disable jsx-a11y/no-autofocus */
 // frontend/src/components/MessageThreadsPanel.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';

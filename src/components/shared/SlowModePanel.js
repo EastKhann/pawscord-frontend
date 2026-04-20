@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+﻿/* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/SlowModePanel.js
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -84,6 +82,10 @@ const SlowModePanel = ({ fetchWithAuth, apiBaseUrl, roomSlug, onClose }) => {
             onClick={onClose}
             onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && e.currentTarget.click()}
         >
+            <style>{`
+                @keyframes smpFadeIn { from{opacity:0} to{opacity:1} }
+                @keyframes smpSlideUp { from{opacity:0;transform:translateY(14px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+            `}</style>
             <div
                 style={styles.modal}
                 role="button"
@@ -205,6 +207,7 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 999999,
+        animation: 'smpFadeIn 0.18s ease-out',
     },
     modal: {
         backgroundColor: '#1e1e1e',
@@ -215,6 +218,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         color: '#fff',
+        animation: 'smpSlideUp 0.24s cubic-bezier(0.22,1,0.36,1)',
     },
     header: {
         display: 'flex',

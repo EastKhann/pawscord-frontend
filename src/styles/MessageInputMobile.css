@@ -2,11 +2,11 @@
 
 /* Mobil menÃ¼ hover efekti */
 .mobile-menu-item:hover {
-    background-color: rgba(88, 101, 242, 0.1) !important;
+    background-color: rgba(88, 101, 242, 0.1);
 }
 
 .mobile-menu-item:active {
-    background-color: rgba(88, 101, 242, 0.2) !important;
+    background-color: rgba(88, 101, 242, 0.2);
     transform: scale(0.98);
 }
 
@@ -29,20 +29,20 @@
 
 /* Mobil buton aktif durumu */
 .mobile-plus-button-active {
-    background-color: rgba(88, 101, 242, 0.2) !important;
-    color: var(--color-primary) !important;
+    background-color: rgba(88, 101, 242, 0.2);
+    color: var(--color-primary);
 }
 
 /* Desktop'ta gizle */
 @media (min-width: 769px) {
     .mobile-only {
-        display: none !important;
+        display: none;
     }
 }
 
 /* Mobilde gizle */
 @media (max-width: 768px) {
     .desktop-only {
-        display: none !important;
+        display: none;
     }
 }

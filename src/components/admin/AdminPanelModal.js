@@ -217,7 +217,7 @@ const AdminPanelModal = ({
                             <h2 style={styles.title} className="admin-panel-title">
                                 👑 {t('admin.adminPanel', 'Yönetici Paneli')}
                             </h2>
-                            <span style={styles.badge('#23a559')} className="admin-panel-badge">
+                            <span className="admin-panel-badge">
                                 v2.0
                             </span>
                         </div>

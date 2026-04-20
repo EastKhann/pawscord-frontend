@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/TimeoutMutePanel.js
 import { useState } from 'react';

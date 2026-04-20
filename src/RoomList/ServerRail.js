@@ -1,10 +1,11 @@
 ﻿// frontend/src/RoomList/ServerRail.js
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { FaCompass, FaPlus } from '../utils/iconOptimization';
 import LazyImage from '../components/shared/LazyImage';
 import { styles } from '../styles/SidebarStyles';
+import { hapticLight } from '../utils/haptics';
 
 // -- extracted inline style constants --
 
@@ -41,6 +42,21 @@ const ServerRail = ({
     onAddClick,
 }) => {
     const { t } = useTranslation();
+    const serverListRef = useRef(null);
+
+    const handleServerListKeyDown = useCallback((e) => {
+        if (!serverListRef.current) return;
+        const items = Array.from(serverListRef.current.querySelectorAll('[role="button"][tabindex="0"]'));
+        const idx = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            items[(idx + 1) % items.length]?.focus();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            items[(idx - 1 + items.length) % items.length]?.focus();
+        }
+    }, []);
+
     const handleHomeHover = useCallback(() => setHoveredServerId('home'), [setHoveredServerId]);
     const handleHomeLeave = useCallback(() => setHoveredServerId(null), [setHoveredServerId]);
     const handleDiscoverHover = useCallback(
@@ -71,8 +87,8 @@ const ServerRail = ({
                             selectedServerId === 'home'
                                 ? '40px'
                                 : hoveredServerId === 'home'
-                                  ? '20px'
-                                  : '0px',
+                                    ? '20px'
+                                    : '0px',
                         backgroundColor: '#fff',
                         borderRadius: '0 4px 4px 0',
                         transition: 'height 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
@@ -111,7 +127,7 @@ const ServerRail = ({
             <div style={styles.separator} />
 
             {/* Server Icons */}
-            <div role="list" aria-label="Serverlar">
+            <div role="list" aria-label="Serverlar" ref={serverListRef} onKeyDown={handleServerListKeyDown}>
                 {servers &&
                     servers.map((server, index) => {
                         const serverName = server.name || '';
@@ -162,10 +178,10 @@ const ServerRail = ({
                                         height: isActive
                                             ? '40px'
                                             : hoveredServerId === server.id
-                                              ? '20px'
-                                              : serverUnread > 0
-                                                ? '8px'
-                                                : '0px',
+                                                ? '20px'
+                                                : serverUnread > 0
+                                                    ? '8px'
+                                                    : '0px',
                                         backgroundColor: '#fff',
                                         borderRadius: '0 4px 4px 0',
                                         transition:
@@ -189,8 +205,8 @@ const ServerRail = ({
                                         backgroundColor: isActive
                                             ? '#5865f2'
                                             : hoveredServerId === server.id
-                                              ? '#5865f2'
-                                              : '#1a1c1f',
+                                                ? '#5865f2'
+                                                : '#1a1c1f',
                                         borderRadius:
                                             isActive || hoveredServerId === server.id
                                                 ? '16px'
@@ -202,7 +218,7 @@ const ServerRail = ({
                                         opacity: isDragging ? 0.4 : 1,
                                         marginBottom: 0,
                                     }}
-                                    onClick={() => handleServerClick(server)}
+                                    onClick={() => { hapticLight(); handleServerClick(server); }}
                                     onContextMenu={(e) => handleServerContextMenu(e, server)}
                                     onMouseEnter={() => setHoveredServerId(server.id)}
                                     onMouseLeave={() => setHoveredServerId(null)}

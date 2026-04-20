@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-undef */
 // frontend/src/components/UserWarningsPanel.js
 import { useState, useMemo } from 'react';

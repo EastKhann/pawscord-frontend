@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 // frontend/src/components/ImageLightbox.js
 // 🖼️ FEATURE 2: Enhanced Image Lightbox

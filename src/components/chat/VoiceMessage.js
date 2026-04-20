@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/media-has-caption */
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';

@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+﻿/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { useAdminAPIContext } from '../AdminAPIContext';

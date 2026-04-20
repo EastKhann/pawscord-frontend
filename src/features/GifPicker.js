@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-// frontend/src/GifPicker.js (Mutlak URL with �alisan cutin ��z�m)
+﻿// frontend/src/GifPicker.js (Mutlak URL with �alisan cutin ��z�m)
 
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';

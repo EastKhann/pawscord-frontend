@@ -150,6 +150,7 @@ export interface UIState {
     isDownloading: boolean;
     searchQuery: string;
     dropTarget: unknown;
+    unreadNotifCount: number;
 }
 
 export interface UIActions {
@@ -172,6 +173,7 @@ export interface UIActions {
     setIsDownloading: (val: boolean | ((prev: boolean) => boolean)) => void;
     setSearchQuery: (val: string | ((prev: string) => string)) => void;
     setDropTarget: (val: unknown) => void;
+    setUnreadNotifCount: (val: number) => void;
 }
 
 export type UIStore = UIState & UIActions;

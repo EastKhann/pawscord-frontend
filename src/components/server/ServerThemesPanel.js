@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/ServerThemesPanel.js
 import { useState, useEffect, useCallback, memo } from 'react';

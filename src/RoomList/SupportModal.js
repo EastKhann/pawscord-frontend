@@ -82,6 +82,33 @@ const SupportModal = ({ isOpen, onClose }) => {
                     </button>
                 </div>
 
+                {/* Donation tier presets */}
+                <div style={S.tierSection}>
+                    <p style={S.tierLabel}>{t('support.chooseTier', 'Bir miktar seç:')}</p>
+                    <div style={S.tierRow}>
+                        {[5, 20, 50, 100].map((amount) => (
+                            <button
+                                key={amount}
+                                aria-label={`${amount}₺ ${t('support.donate', 'bağış yap')}`}
+                                onClick={() => window.open(`${cryptoAddresses.coffee}?amount=${amount}`, '_blank')}
+                                style={S.tierBtn}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.background = 'rgba(255,221,0,0.2)';
+                                    e.currentTarget.style.borderColor = '#FFDD00';
+                                    e.currentTarget.style.color = '#FFDD00';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.background = 'transparent';
+                                    e.currentTarget.style.borderColor = 'rgba(255,221,0,0.3)';
+                                    e.currentTarget.style.color = '#b5bac1';
+                                }}
+                            >
+                                {amount}₺
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Crypto Section */}
                 <div style={S.cryptoSection} className="support-crypto-section">
                     <h4 style={S.cryptoTitle}>
@@ -244,6 +271,21 @@ const S = {
         whiteSpace: 'nowrap',
     },
     cryptoSection: { padding: '20px' },
+    tierSection: { padding: '0 20px 16px 20px' },
+    tierLabel: { margin: '0 0 8px 0', color: '#949ba4', fontSize: '0.82em', fontWeight: 600 },
+    tierRow: { display: 'flex', gap: '8px' },
+    tierBtn: {
+        flex: 1,
+        padding: '8px 4px',
+        border: '1px solid rgba(255,221,0,0.3)',
+        borderRadius: '8px',
+        background: 'transparent',
+        color: '#b5bac1',
+        cursor: 'pointer',
+        fontWeight: 700,
+        fontSize: '0.9em',
+        transition: 'all 0.15s ease',
+    },
     cryptoTitle: {
         margin: '0 0 14px 0',
         color: '#dbdee1',

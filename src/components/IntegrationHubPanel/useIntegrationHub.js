@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-undef */
 import { useState, useEffect } from 'react';
 import { getToken } from '../../utils/tokenStorage';

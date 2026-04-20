@@ -18,6 +18,7 @@ import '../styles/chat-area.css';
 
 import { useTranslation } from 'react-i18next';
 import logger from '../utils/logger';
+import { useUIStore } from '../stores/useUIStore';
 
 // -- dynamic style helpers (pass 2) --
 
@@ -127,6 +128,7 @@ const ChatArea = memo(function ChatArea({
     ws = null,
 }) {
     const { t } = useTranslation();
+    const unreadNotifCount = useUIStore((s) => s.unreadNotifCount);
     // Stable callback references
     const handleDragOver = useCallback((e) => e.preventDefault(), []);
 
@@ -175,7 +177,7 @@ const ChatArea = memo(function ChatArea({
             setIsPullRefreshing(true);
             try {
                 await messageHandlers.fetchMessageHistory?.();
-            } catch (_) {}
+            } catch (_) { }
             setIsPullRefreshing(false);
         }
         setPullDistance(0);
@@ -234,17 +236,17 @@ const ChatArea = memo(function ChatArea({
                     );
                     const optimisticR = existing
                         ? reactions.filter(
-                              (r) => !(r.emoji === emoji && r.user_id === msg._currentUserId)
-                          )
+                            (r) => !(r.emoji === emoji && r.user_id === msg._currentUserId)
+                        )
                         : [
-                              ...reactions,
-                              {
-                                  emoji,
-                                  user_id: username,
-                                  username,
-                                  user: { username, display_name: username },
-                              },
-                          ];
+                            ...reactions,
+                            {
+                                emoji,
+                                user_id: username,
+                                username,
+                                user: { username, display_name: username },
+                            },
+                        ];
                     return { ...msg, reactions: optimisticR };
                 })
             );
@@ -301,7 +303,7 @@ const ChatArea = memo(function ChatArea({
                 msg.timestamp &&
                 prevMsg.timestamp &&
                 new Date(msg.timestamp).toDateString() ===
-                    new Date(prevMsg.timestamp).toDateString();
+                new Date(prevMsg.timestamp).toDateString();
             const withinGroupTime =
                 sameDay &&
                 msg.timestamp &&
@@ -373,7 +375,7 @@ const ChatArea = memo(function ChatArea({
                 (msg.timestamp &&
                     prevMsg.timestamp &&
                     new Date(msg.timestamp).toDateString() !==
-                        new Date(prevMsg.timestamp).toDateString());
+                    new Date(prevMsg.timestamp).toDateString());
             // Grouping: same user, same day, within 5 min, no date divider, no reply, no pin
             const isGrouped =
                 !showDateDivider &&
@@ -395,7 +397,7 @@ const ChatArea = memo(function ChatArea({
                     msg.timestamp &&
                     optimizedMessages[j].timestamp &&
                     Math.abs(new Date(optimizedMessages[j].timestamp) - new Date(msg.timestamp)) <
-                        300000
+                    300000
                 ) {
                     galleryMsgs.push(optimizedMessages[j]);
                     j++;
@@ -563,6 +565,31 @@ const ChatArea = memo(function ChatArea({
                         aria-expanded={!!modals.notifications}
                     >
                         <FaBell />
+                        {unreadNotifCount > 0 && (
+                            <span
+                                aria-label={t('notifications.unreadCount', { count: unreadNotifCount })}
+                                style={{
+                                    position: 'absolute',
+                                    top: -4,
+                                    right: -4,
+                                    minWidth: 16,
+                                    height: 16,
+                                    borderRadius: '50%',
+                                    background: '#ed4245',
+                                    color: '#fff',
+                                    fontSize: 10,
+                                    fontWeight: 700,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '0 3px',
+                                    animation: 'notifPulse 1.5s ease-in-out infinite',
+                                    pointerEvents: 'none',
+                                }}
+                            >
+                                {unreadNotifCount > 99 ? '99+' : unreadNotifCount}
+                            </span>
+                        )}
                     </button>
                     {modals.notifications && (
                         <div>
@@ -649,8 +676,8 @@ const ChatArea = memo(function ChatArea({
                         {isPullRefreshing
                             ? t('chat.pullRefreshing')
                             : pullDistance >= MAX_PULL * 0.85
-                              ? t('chat.pullRelease')
-                              : t('chat.pullDrag')}
+                                ? t('chat.pullRelease')
+                                : t('chat.pullDrag')}
                     </div>
                 )}
                 <Suspense
@@ -713,8 +740,8 @@ const ChatArea = memo(function ChatArea({
                     paddingBottom: isNative
                         ? `calc(16px + ${safeAreaBottom})`
                         : isMobile
-                          ? '25px'
-                          : '20px',
+                            ? '25px'
+                            : '20px',
                 }}
                 className="chat-input-outer"
             >

@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import { getToken } from '../utils/tokenStorage';
+﻿import { getToken } from '../utils/tokenStorage';
 // frontend/src/EnglishHub.js
 
 import { useState, useEffect, useRef, useMemo } from 'react';

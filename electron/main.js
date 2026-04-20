@@ -1,5 +1,5 @@
 // ⚡ ELECTRON MAIN PROCESS - Production Ready
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const { exec } = require('child_process');
 const isDev = process.env.NODE_ENV === 'development';
@@ -151,107 +151,26 @@ ipcMain.handle('get-app-version', () => {
     return app.getVersion();
 });
 
-// 🔵 GOOGLE AUTH: Popup window handler
-ipcMain.on('start-google-login', (event, authUrl) => {
-    console.log('🔵 [Electron] Opening Google Auth popup:', authUrl);
-
-    const authWindow = new BrowserWindow({
-        width: 600,
-        height: 700,
-        show: true,
-        modal: true,
-        parent: mainWindow,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true
-        }
-    });
-
-    authWindow.loadURL(authUrl);
-
-    // Listen for all navigation events
-    authWindow.webContents.on('will-redirect', (event, url) => {
-        console.log('🔀 [Electron] will-redirect:', url.substring(0, 100));
-        handleAuthCallback(url, authWindow);
-    });
-
-    authWindow.webContents.on('did-navigate', (event, url) => {
-        console.log('🔀 [Electron] did-navigate:', url.substring(0, 100));
-        handleAuthCallback(url, authWindow);
-    });
-
-    authWindow.webContents.on('will-navigate', (event, url) => {
-        console.log('🔀 [Electron] will-navigate:', url.substring(0, 100));
-        handleAuthCallback(url, authWindow);
-    });
-
-    // Catch window close
-    authWindow.on('closed', () => {
-        console.log('❌ [Electron] Auth window closed by user');
-    });
-
-    // Safety timeout - close window after 60 seconds if still open
-    setTimeout(() => {
-        if (authWindow && !authWindow.isDestroyed()) {
-            console.log('⏱️ [Electron] Auth window timeout, closing...');
-            authWindow.close();
-        }
-    }, 60000);
+// Focus the main window (called after deep-link auth completes)
+ipcMain.on('focus-window', () => {
+    if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.show();
+        mainWindow.focus();
+    }
 });
 
-// Auth callback handler
-function handleAuthCallback(url, authWindow) {
-    console.log('🔍 [Electron] Checking URL:', url);
-
-    // Deep link captured (pawscord://auth?access=...&refresh=...)
-    if (url.startsWith('pawscord://auth')) {
-        console.log('✅ [Electron] Deep link detected:', url.substring(0, 50) + '...');
-
-        try {
-            const urlObj = new URL(url);
-            const access = urlObj.searchParams.get('access');
-            const refresh = urlObj.searchParams.get('refresh');
-
-            if (access && refresh) {
-                console.log('✅ [Electron] Tokens extracted from deep link');
-                // Send tokens to main window via IPC
-                mainWindow.webContents.send('google-auth-success', { access, refresh });
-
-                // Close auth window after a short delay
-                setTimeout(() => {
-                    if (authWindow && !authWindow.isDestroyed()) {
-                        authWindow.close();
-                    }
-                }, 500);
-            } else {
-                console.error('❌ [Electron] Tokens missing from deep link');
-            }
-        } catch (e) {
-            console.error('❌ [Electron] Deep link parse error:', e);
-        }
-        return;
-    }
-
-    // Google callback URL (backend processing)
-    if (url.includes('api/auth/google/callback') && url.includes('code=')) {
-        console.log('🔄 [Electron] Google callback detected, waiting for backend redirect...');
-        // Backend will create HTML page with deep link, we'll catch it on next navigation
-        return;
-    }
-
-    // Error handling
-    if (url.includes('error=')) {
-        console.error('❌ [Electron] OAuth error detected in URL');
-        try {
-            const urlObj = new URL(url);
-            const error = urlObj.searchParams.get('error');
-            mainWindow.webContents.send('google-auth-error', { error });
-            authWindow.close();
-        } catch (e) {
-            console.error('❌ [Electron] Error URL parse failed:', e);
-        }
-    }
-}
+// 🔵 GOOGLE AUTH: Open system browser for OAuth (NOT an embedded BrowserWindow)
+// This avoids Google's webview/embedded browser restrictions and gives the user
+// their trusted browser with saved passwords/sessions.
+ipcMain.on('start-google-login', (event, authUrl) => {
+    console.log('🔵 [Electron] Opening system browser for Google Auth:', authUrl.substring(0, 80));
+    // shell.openExternal opens the URL in the OS default browser (Chrome, Edge, Firefox…)
+    shell.openExternal(authUrl).catch((err) => {
+        console.error('❌ [Electron] shell.openExternal failed:', err);
+    });
+    // Tokens will return via pawscord:// deep link → second-instance / open-url handler below
+});
 
 // 🔗 DEEP LINK PROTOCOL HANDLER
 // Protocol: pawscord://auth?access=...&refresh=...

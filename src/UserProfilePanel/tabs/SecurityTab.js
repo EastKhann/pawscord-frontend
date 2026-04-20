@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';

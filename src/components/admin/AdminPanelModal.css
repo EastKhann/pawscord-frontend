@@ -1,28 +1,90 @@
+﻿/* ====================================================
+   ADMIN PANEL MODAL — BASE STYLES
+   These properties were previously in JS inline style
+   objects; defining them in CSS lets media queries
+   override them without !important.
+   ==================================================== */
+
+.admin-panel-modal {
+    width: 96%;
+    max-width: 1600px;
+    height: 94vh;
+    border-radius: 16px;
+    border: 1px solid #16203a;
+}
+
+.admin-panel-header {
+    padding: 14px 24px;
+}
+
+.admin-panel-title {
+    font-size: 18px;
+}
+
+.admin-panel-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    background-color: rgba(35, 165, 89, 0.125);
+    color: #23a559;
+}
+
+.admin-panel-sidebar {
+    width: 200px;
+    overflow-y: auto;
+    padding: 10px 8px;
+    border-right: 1px solid #16203a;
+}
+
+.admin-panel-sidebar-btn {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    text-align: left;
+    transition: all 0.15s;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-panel-content {
+    padding: 20px;
+}
+
+/* Grid utility classes — replace inline gridTemplateColumns */
+.admin-grid-2 { display: grid; grid-template-columns: 1fr 1fr; }
+.admin-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); }
+.admin-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+
 /* ====================================================
    ADMIN PANEL MODAL — MOBILE RESPONSIVE
-   Uses !important to override React inline styles
    ==================================================== */
 
 /* ── 768 px: tablet / telefon (landscape + portrait) ─ */
 @media (max-width: 768px) {
     /* Full-screen modal */
     .admin-panel-modal {
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100dvh !important;
-        height: 100vh !important;
-        /* fallback */
-        border-radius: 0 !important;
-        border: none !important;
+        width: 100%;
+        max-width: 100%;
+        height: 100vh; /* fallback */
+        height: 100dvh;
+        border-radius: 0;
+        border: none;
     }
 
     /* Compact header */
     .admin-panel-header {
-        padding: 10px 14px !important;
+        padding: 10px 14px;
     }
 
     .admin-panel-title {
-        font-size: 14px !important;
+        font-size: 14px;
         max-width: 140px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -32,7 +94,7 @@
     /* Hide v2.0 badge & online count on small screens */
     .admin-panel-badge,
     .admin-panel-online-info {
-        display: none !important;
+        display: none;
     }
 
     /* Body: stack sidebar above content */
@@ -43,14 +105,14 @@
 
     /* Sidebar → horizontal scrollable pill nav */
     .admin-panel-sidebar {
-        width: 100% !important;
+        width: 100%;
         min-width: unset;
         max-height: 48px;
         flex-direction: row;
         overflow-x: auto;
-        overflow-y: hidden !important;
-        padding: 6px 8px !important;
-        border-right: none !important;
+        overflow-y: hidden;
+        padding: 6px 8px;
+        border-right: none;
         border-bottom: 1px solid #16203a;
         display: flex;
         gap: 3px;
@@ -65,21 +127,21 @@
     /* Sidebar buttons: compact horizontal pills */
     .admin-panel-sidebar-btn {
         white-space: nowrap;
-        width: auto !important;
+        width: auto;
         min-width: unset;
-        padding: 6px 10px !important;
-        font-size: 11px !important;
+        padding: 6px 10px;
+        font-size: 11px;
         flex-shrink: 0;
-        margin-bottom: 0 !important;
-        border-radius: 6px !important;
+        margin-bottom: 0;
+        border-radius: 6px;
         height: 32px;
-        display: inline-flex !important;
+        display: inline-flex;
         align-items: center;
     }
 
     /* Content area: full width, less padding */
     .admin-panel-content {
-        padding: 10px !important;
+        padding: 10px;
         overflow-x: hidden;
     }
 
@@ -91,29 +153,10 @@
         max-width: 100%;
     }
 
-    /* ── Grid overrides: collapse fixed multi-column grids ── */
-    /* These selectors match inline style values React writes to the DOM */
-
-    /* 6-col and 5-col → 2-col */
-    .admin-panel-content div[style*='repeat(6,'],
-    .admin-panel-content div[style*='repeat(5,'] {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-
-    /* 4-col → 2-col */
-    .admin-panel-content div[style*='repeat(4,'] {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-
-    /* 3-col → 2-col */
-    .admin-panel-content div[style*='repeat(3,'] {
-        grid-template-columns: repeat(2, 1fr) !important;
-    }
-
-    /* Asymmetric 2-col (1fr 2fr) and 2fr side-by-side → 1-col */
-    .admin-panel-content div[style*='1fr 2fr'],
-    .admin-panel-content div[style*='2fr 1fr'] {
-        grid-template-columns: 1fr !important;
+    /* Grid classes collapse on tablet */
+    .admin-grid-3,
+    .admin-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     /* ── Visitor logs 2-col summary row ── */
@@ -131,21 +174,17 @@
 
 /* ── 480 px: small phones ─────────────────────────── */
 @media (max-width: 480px) {
-    /* Single column for everything */
-    .admin-panel-content div[style*='repeat(2,'],
-    .admin-panel-content div[style*='repeat(3,'],
-    .admin-panel-content div[style*='repeat(4,'],
-    .admin-panel-content div[style*='repeat(5,'],
-    .admin-panel-content div[style*='repeat(6,'],
-    .admin-panel-content div[style*='1fr 1fr'] {
-        grid-template-columns: 1fr !important;
+    .admin-grid-2,
+    .admin-grid-3,
+    .admin-grid-4 {
+        grid-template-columns: 1fr;
     }
 
     .admin-panel-header {
-        padding: 8px 10px !important;
+        padding: 8px 10px;
     }
 
     .admin-panel-content {
-        padding: 8px !important;
+        padding: 8px;
     }
 }

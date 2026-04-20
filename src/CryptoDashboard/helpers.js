@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
 // PropTypes validation: N/A for this module (hook/utility — no React props interface)
 import { useState, useEffect } from 'react';

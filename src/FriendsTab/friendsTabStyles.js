@@ -195,7 +195,7 @@
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'background-color 0.15s ease',
+        transition: 'background-color 0.15s ease, transform 0.15s ease',
     },
     rejectBtn: {
         padding: '8px',
@@ -207,7 +207,7 @@
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: 'background-color 0.15s ease',
+        transition: 'background-color 0.15s ease, transform 0.15s ease',
     },
     badgePulse: {
         backgroundColor: '#f23f42',

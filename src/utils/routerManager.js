@@ -460,7 +460,7 @@ export const Link = ({ to, prefetch = true, children, className, ...props }) => 
             data-route={to}
             data-prefetch={prefetch}
             className={className}
-            onMouseEnter={handleMouseEnter}>
+            onMouseEnter={handleMouseEnter}
             {...props}
         >
             {children}

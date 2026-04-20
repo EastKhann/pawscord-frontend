@@ -726,6 +726,42 @@ export default function useAppEffects({
     // =========================================================================
     usePageTracking();
 
+    // =========================================================================
+    // ANDROID BACK BUTTON: Close open modals / navigate back
+    // =========================================================================
+    useEffect(() => {
+        if (!isNative) return;
+
+        let listener = null;
+        const setupBackButton = async () => {
+            try {
+                const { App: CapApp } = await import('@capacitor/app');
+                listener = await CapApp.addListener('backButton', ({ canGoBack }) => {
+                    // If a modal is open, close it first
+                    const openModals = Object.entries(modals || {}).filter(([, v]) => v);
+                    if (openModals.length > 0) {
+                        closeModalRef.current(openModals[openModals.length - 1][0]);
+                        return;
+                    }
+                    // If browser can go back, do so
+                    if (canGoBack) {
+                        window.history.back();
+                    } else {
+                        // Minimize app instead of closing (UX best-practice)
+                        CapApp.minimizeApp?.();
+                    }
+                });
+            } catch (e) {
+                logger.warn('Back button listener setup failed:', e);
+            }
+        };
+
+        setupBackButton();
+        return () => {
+            listener?.remove?.();
+        };
+    }, [isNative, modals]); // eslint-disable-line react-hooks/exhaustive-deps
+
     // --- RETURN ---
     return { safeAreaTop };
 }

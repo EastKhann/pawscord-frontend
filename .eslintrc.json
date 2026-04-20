@@ -98,6 +98,7 @@
         ],
         "jsx-a11y/media-has-caption": "warn",
         "jsx-a11y/no-autofocus": "warn",
+        "react/no-unescaped-entities": "off",
         "react-hooks/preserve-manual-memoization": "off",
         "react-hooks/immutability": "off",
         "react-hooks/purity": "off",

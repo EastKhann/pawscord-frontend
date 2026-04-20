@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 // frontend/src/RoomList/ServerPanel.js
@@ -464,6 +463,14 @@ const CategorySection = React.memo(
                     }}
                     role="group"
                     aria-label={`${cat.name} channels`}
+                    onKeyDown={(e) => {
+                        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+                        e.preventDefault();
+                        const items = Array.from(e.currentTarget.querySelectorAll('[role="treeitem"]'));
+                        const idx = items.indexOf(document.activeElement);
+                        if (e.key === 'ArrowDown') items[(idx + 1) % items.length]?.focus();
+                        else items[(idx - 1 + items.length) % items.length]?.focus();
+                    }}
                 >
                     {cat.rooms &&
                         cat.rooms
@@ -566,9 +573,9 @@ const ChannelItem = React.memo(
             !rawUsersInRoom.some((u) => u && u.username === currentUsername);
         const effectiveVoiceUsers = isSelfMissing
             ? {
-                  ...activeVoiceUsers,
-                  [room.slug]: [...rawUsersInRoom, { username: currentUsername, isLocal: true }],
-              }
+                ...activeVoiceUsers,
+                [room.slug]: [...rawUsersInRoom, { username: currentUsername, isLocal: true }],
+            }
             : activeVoiceUsers;
         const userCount = isVoice ? effectiveVoiceUsers[room.slug]?.length || 0 : 0;
         const hoverTimerRef = useRef(null);
@@ -665,15 +672,15 @@ const ChannelItem = React.memo(
                             dropTargetChannel === room.slug
                                 ? 'rgba(88, 101, 242, 0.2)'
                                 : isActive
-                                  ? 'rgba(88, 101, 242, 0.15)'
-                                  : 'transparent',
+                                    ? 'rgba(88, 101, 242, 0.15)'
+                                    : 'transparent',
                         color: isActive ? '#fff' : '#949ba4',
                         borderLeft:
                             dropTargetChannel === room.slug
                                 ? '3px solid #5865f2'
                                 : isActive
-                                  ? '3px solid #5865f2'
-                                  : '3px solid transparent',
+                                    ? '3px solid #5865f2'
+                                    : '3px solid transparent',
                         paddingLeft: isActive ? '5px' : '8px',
                         transition: 'all 0.2s ease',
                         borderRadius: '6px',
@@ -681,10 +688,10 @@ const ChannelItem = React.memo(
                         position: 'relative',
                         ...(dropTargetChannel === room.slug
                             ? {
-                                  boxShadow:
-                                      'inset 0 0 12px rgba(88, 101, 242, 0.15), 0 0 8px rgba(88, 101, 242, 0.2)',
-                                  border: '1px dashed rgba(88, 101, 242, 0.5)',
-                              }
+                                boxShadow:
+                                    'inset 0 0 12px rgba(88, 101, 242, 0.15), 0 0 8px rgba(88, 101, 242, 0.2)',
+                                border: '1px dashed rgba(88, 101, 242, 0.5)',
+                            }
                             : {}),
                     }}
                     onClick={handleChannelClick}

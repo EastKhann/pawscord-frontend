@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-undef */
 import { getToken } from '../../../utils/tokenStorage';
 // PropTypes validation: N/A for this module (hook/utility — no React props interface)

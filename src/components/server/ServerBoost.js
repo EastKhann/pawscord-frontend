@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { getToken } from '../../utils/tokenStorage';
 import PropTypes from 'prop-types';
 import './ServerBoost.css';

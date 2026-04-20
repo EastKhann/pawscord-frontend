@@ -182,7 +182,7 @@ export const selectBlockedUsers = (state: UserStore) => state.blockedUsers;
 export const selectFriendCount = (state: UserStore) => state.friends.length;
 
 // Hook selectors
-export const useCurrentUser = () => useUserStore((s) => s.currentUser);
+export const useCurrentUser = () => useUserStore((s) => s.currentUser, shallow);
 export const useIsAuthenticated = () => useUserStore((s) => s.isAuthenticated);
 export const useProfile = () => useUserStore((s) => s.profile, shallow);
 export const useFriends = () => useUserStore((s) => s.friends, shallow);

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-undef */
 // components/JoinLeaveLogs.js
 // 📊 Server Join/Leave Activity Logs

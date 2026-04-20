@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable jsx-a11y/no-autofocus */
+﻿/* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // components/ConfirmModal.js
 // 🎯 Modern Confirmation Dialog - alert() ve confirm() yerine kullanılır

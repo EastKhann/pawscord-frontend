@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/media-has-caption */
 // frontend/src/components/VoiceMessagePlayer.js
 import React, { useState, useRef, useEffect, useCallback } from 'react';

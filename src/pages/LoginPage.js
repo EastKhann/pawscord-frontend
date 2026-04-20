@@ -10,48 +10,17 @@ import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import toast from '../utils/toast';
 import { useRecaptcha } from '../utils/recaptcha';
 import { jwtDecode } from 'jwt-decode'; // 🔥 FIX: Import jwtDecode for user extraction
-import {
-    API_URL_BASE_STRING,
-    API_BASE_URL,
-    isElectron,
-    isNative,
-    GOOGLE_WEB_CLIENT_ID,
-} from '../utils/constants';
+import { API_BASE_URL, isElectron, GOOGLE_WEB_CLIENT_ID } from '../utils/constants';
 import logger from '../utils/logger';
 
-// -- extracted inline style constants --
-const _st1 = { textAlign: 'center', marginTop: '12px' };
-const _st2 = { color: '#5865f2', textDecoration: 'none', fontSize: '0.9em', cursor: 'pointer' };
-const _st3 = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '12px',
-    width: '100%',
-    padding: '12px 16px',
-    backgroundColor: '#fff',
-    color: '#3c4043',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '14px',
-    fontWeight: '500',
-    cursor: 'pointer',
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-    transition: 'all 0.2s',
-};
-const _st4 = { width: '20px', height: '20px' };
-const _st5 = { color: '#5865f2', cursor: 'pointer', fontWeight: '600' };
-
 // LoginPage.css is imported in main.jsx (main bundle) to prevent FOUC
-
-// --- ORTAM AYARLARI (Centralized from constants.js) ---
-const API_URL = API_BASE_URL;
 
 const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
     const { t } = useTranslation();
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const [isLoading, setIsLoading] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const { getToken: getRecaptchaToken } = useRecaptcha();
 
@@ -113,6 +82,13 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                         localStorage.setItem('access_token', accessToken);
                         localStorage.removeItem('refresh_token');
                         localStorage.setItem('chat_username', decoded.username);
+
+                        // Bring the Electron window to front and reload
+                        if (window.require) {
+                            const { ipcRenderer } = window.require('electron');
+                            ipcRenderer.send('focus-window');
+                        }
+                        setTimeout(() => window.location.reload(), 300);
                     }
                 } catch (e) {
                     logger.error('Deep link error:', e);
@@ -123,7 +99,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                                 const access = parts[1].split('&')[0];
                                 const refreshParts = url.split('refresh=');
                                 if (refreshParts.length > 1) {
-                                    const refresh = refreshParts[1];
+                                    const _refresh = refreshParts[1]; // stored for potential future use
 
                                     // 🔥 FIX: Decode and save username here too
                                     const decoded = jwtDecode(access);
@@ -161,7 +137,7 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 ipcRenderer.removeListener('oauth-tokens', handleOAuthTokens);
             };
         }
-    }, [setAuthError]);
+    }, [setAuthError, t]);
 
     // ✅ 2. WEB SİTESİ URL DİNLEYİCİSİ (OAuth Callback for)
     useEffect(() => {
@@ -203,10 +179,13 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 }
             }
         }
+        // Intentionally run once on mount to handle OAuth redirect params
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // ✅ 3. AKILLI GOOGLE GİRİŞ BUTONU
     const handleGoogleLogin = async () => {
+        setIsGoogleLoading(true);
         try {
             if (Capacitor.isNativePlatform()) {
                 // MOBILE: Capacitor Google Auth kullan
@@ -295,6 +274,8 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
         } catch (error) {
             logger.error('❌ [Google] Unexpected error:', error);
             setAuthError(t('auth.googleError') + ': ' + error.message);
+        } finally {
+            setIsGoogleLoading(false);
         }
     };
 
@@ -395,7 +376,11 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                             type="button"
                             className="password-toggle-btn"
                             onClick={() => setShowPassword((v) => !v)}
-                            aria-label={showPassword ? t('login.hidePassword', 'Hide password') : t('login.showPassword', 'Show password')}
+                            aria-label={
+                                showPassword
+                                    ? t('login.hidePassword', 'Hide password')
+                                    : t('login.showPassword', 'Show password')
+                            }
                             tabIndex={0}
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -415,15 +400,8 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
 
                 {/* 🔐 ROADMAP: Passwordmi Unuttum Linki */}
                 {isLoginMode && (
-                    <div style={_st1}>
-                        <a
-                            href="#/forgot-password"
-                            style={_st2}
-                            onMouseEnter={(e) => (e.target.style.opacity = '0.8')}
-                            onMouseLeave={(e) => (e.target.style.opacity = '1')}
-                        >
-                            {t('login.forgotPassword')}
-                        </a>
+                    <div className="login-forgot-wrap">
+                        <a href="#/forgot-password">{t('login.forgotPassword')}</a>
                     </div>
                 )}
 
@@ -434,25 +412,23 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                 <div className="google-btn-wrapper">
                     {/* Özel Google Butonu */}
                     <button
+                        className="google-custom-btn"
                         onClick={handleGoogleLogin}
                         aria-label={t('auth.signInWithGoogle')}
-                        style={_st3}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#f7f8f8';
-                            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.2)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#ffffff';
-                            e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.1)';
-                        }}
-                        onMouseDown={(e) => (e.currentTarget.style.backgroundColor = '#eff2f5')}
+                        disabled={isGoogleLoading}
                     >
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                            alt="G"
-                            style={_st4}
-                        />
-                        <span>{t('login.loginWithGoogle')}</span>
+                        {isGoogleLoading ? (
+                            <span className="google-btn-spinner" aria-label="Loading" />
+                        ) : (
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                                alt="G"
+                                className="google-btn-logo"
+                            />
+                        )}
+                        <span>
+                            {isGoogleLoading ? t('common.loading') : t('login.loginWithGoogle')}
+                        </span>
                     </button>
                 </div>
 
@@ -471,7 +447,6 @@ const LoginPage = ({ onLogin, onRegister, error, setAuthError }) => {
                                 setAuthError('');
                             }
                         }}
-                        style={_st5}
                     >
                         {isLoginMode ? t('login.signUp') : t('login.login')}
                     </span>

@@ -380,12 +380,12 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-switch input:checked + .slider {
+.toggle-switch input:checked+.slider {
     background: linear-gradient(135deg, var(--color-neon-green) 0%, #00cc6a 100%);
     box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
 }
 
-.toggle-switch input:checked + .slider:before {
+.toggle-switch input:checked+.slider:before {
     transform: translateX(22px);
 }
 
@@ -403,15 +403,15 @@
     font-size: 14px;
 }
 
-.toggle-row > div {
+.toggle-row>div {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
 .option-desc {
-    font-size: 11px !important;
-    color: var(--text-muted) !important;
+    font-size: 11px;
+    color: var(--text-muted);
 }
 
 /* Noise Level Buttons */
@@ -775,6 +775,7 @@
 }
 
 @keyframes pulse {
+
     0%,
     100% {
         border-color: rgba(0, 255, 136, 0.3);
@@ -834,13 +835,11 @@
     left: 0;
     top: 0;
     bottom: 0;
-    background: linear-gradient(
-        90deg,
-        var(--color-neon-green) 0%,
-        #00cc6a 50%,
-        #ff9500 80%,
-        #ff4d4d 100%
-    );
+    background: linear-gradient(90deg,
+            var(--color-neon-green) 0%,
+            #00cc6a 50%,
+            #ff9500 80%,
+            #ff4d4d 100%);
     transition: width 0.05s ease;
     border-radius: 6px;
 }
@@ -896,6 +895,7 @@
 }
 
 @keyframes warningPulse {
+
     0%,
     100% {
         opacity: 1;
@@ -1107,6 +1107,7 @@
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
+
 .loading-state span {
     color: var(--text-cloud);
     font-size: 14px;

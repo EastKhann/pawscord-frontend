@@ -121,24 +121,38 @@ const MessageContextMenu = ({
         },
     ];
 
+    const visibleItems = menuItems.filter((item) => item.show);
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            const next = menuRef.current?.querySelectorAll('[role="menuitem"]')[index + 1];
+            next?.focus();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            const prev = menuRef.current?.querySelectorAll('[role="menuitem"]')[index - 1];
+            prev?.focus();
+        }
+    };
+
     return (
-        <div ref={menuRef} style={styles.menu}>
-            {menuItems
-                .filter((item) => item.show)
-                .map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                        <button
-                            aria-label="Action button"
-                            key={`item-${index}`}
-                            onClick={() => handleAction(item.action)}
-                            style={{ ...styles.menuItem, ...(item.danger && styles.dangerItem) }}
-                        >
-                            <Icon style={styles.icon} />
-                            <span>{item.label}</span>
-                        </button>
-                    );
-                })}
+        <div ref={menuRef} role="menu" aria-label="Message actions" style={styles.menu}>
+            {visibleItems.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                    <button
+                        role="menuitem"
+                        aria-label={item.label}
+                        key={`item-${index}`}
+                        onClick={() => handleAction(item.action)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        style={{ ...styles.menuItem, ...(item.danger && styles.dangerItem) }}
+                    >
+                        <Icon style={styles.icon} />
+                        <span>{item.label}</span>
+                    </button>
+                );
+            })}
         </div>
     );
 };

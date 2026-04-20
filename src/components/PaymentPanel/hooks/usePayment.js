@@ -23,6 +23,7 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
     const [transferRecipient, setTransferRecipient] = useState('');
     const [transferAmount, setTransferAmount] = useState('');
     const [transferNote, setTransferNote] = useState('');
+    const [successCoins, setSuccessCoins] = useState(null);
 
     const loadBalance = useCallback(async () => {
         try {
@@ -124,6 +125,8 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
             });
             const data = await response.json();
             if (data.success) {
+                setSuccessCoins(amt);
+                setTimeout(() => setSuccessCoins(null), 3200);
                 toast.success(
                     t('payment.transferred', { amount: amt, recipient: transferRecipient })
                 );
@@ -160,6 +163,7 @@ const usePayment = (fetchWithAuth, apiBaseUrl) => {
         setTransferNote,
         handlePurchase,
         handleTransfer,
+        successCoins,
     };
 };
 

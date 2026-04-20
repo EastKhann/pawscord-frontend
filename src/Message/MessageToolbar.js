@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-duplicate-imports */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';

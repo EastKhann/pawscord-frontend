@@ -1,6 +1,5 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { FaCommentDots, FaTimes, FaSearch } from 'react-icons/fa';
@@ -109,6 +108,20 @@ const FriendsList = ({
     const { t } = useTranslation();
     const [search, setSearch] = useState('');
     const myUsername = localStorage.getItem('chat_username') || '';
+    const listRef = useRef(null);
+
+    const handleListKeyDown = useCallback((e) => {
+        if (!listRef.current) return;
+        const items = Array.from(listRef.current.querySelectorAll('[role="button"][tabindex="0"]'));
+        const idx = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            items[(idx + 1) % items.length]?.focus();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            items[(idx - 1 + items.length) % items.length]?.focus();
+        }
+    }, []);
 
     if (isLoading) return <div>{t('common.loading')}</div>;
     if (error) return <div role="alert">{error}</div>;
@@ -125,7 +138,7 @@ const FriendsList = ({
                 const liveUser = allUsers.find((u) => u.username === friendUsername);
                 const friendActivity = getFreshActivity(
                     liveUser?.current_activity ||
-                        (iAmSender ? friend.receiver_activity : friend.sender_activity)
+                    (iAmSender ? friend.receiver_activity : friend.sender_activity)
                 );
                 const isReallyOnline =
                     Array.isArray(onlineUsers) && onlineUsers.includes(friendUsername);
@@ -162,7 +175,7 @@ const FriendsList = ({
     }
 
     return (
-        <div>
+        <div ref={listRef} onKeyDown={handleListKeyDown}>
             {/* Header with search + online count */}
             <div>
                 <div>

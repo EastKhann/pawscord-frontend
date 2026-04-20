@@ -830,7 +830,7 @@ form .input-group:nth-child(4) {
 
 /* ─── Slide-down animation (register email field) ─── */
 .slide-down {
-    animation: slideDown 0.32s cubic-bezier(0.22, 1, 0.36, 1) both !important;
+    animation: slideDown 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes slideDown {
@@ -889,6 +889,64 @@ form .input-group:nth-child(4) {
         opacity: 1 !important;
         transform: none !important;
     }
+}
+
+/* ─── Forgot password wrapper ─── */
+.login-forgot-wrap {
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* ─── Google custom button ─── */
+.google-custom-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 13px;
+    color: var(--text-primary);
+    font-size: 14.5px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: none;
+}
+
+.google-custom-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+    transform: translateY(-1px);
+}
+
+.google-custom-btn:active {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(0);
+}
+
+.google-custom-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.google-btn-logo {
+    width: 20px;
+    height: 20px;
+}
+
+.google-btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(88, 101, 242, 0.3);
+    border-top-color: #5865f2;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spinW 0.7s linear infinite;
 }
 
 /* ─── Mobile ─── */

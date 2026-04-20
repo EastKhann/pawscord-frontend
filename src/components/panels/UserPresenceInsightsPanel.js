@@ -1,6 +1,4 @@
-/* eslint-disable no-irregular-whitespace */
-/* eslint-disable react/no-unescaped-entities */
-// frontend/src/components/panels/UserPresenceInsightsPanel.js
+﻿// frontend/src/components/panels/UserPresenceInsightsPanel.js
 // 👤 User Presence Insights - Activity patterns and engagement analytics
 
 import { useState, useEffect, useCallback } from 'react';

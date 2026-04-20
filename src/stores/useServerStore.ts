@@ -179,7 +179,7 @@ export const selectVoiceChannels = (state: ServerStore) =>
 export const selectServerCount = (state: ServerStore) => state.servers.length;
 
 // Hook selectors (shallow prevents re-renders when object/array ref changes but content is same)
-export const useCurrentServer = () => useServerStore((s) => s.selectedServer);
+export const useCurrentServer = () => useServerStore((s) => s.selectedServer, shallow);
 export const useServers = () => useServerStore((s) => s.servers, shallow);
 export const useChannels = () => useServerStore((s) => s.channels, shallow);
 export const useMembers = () => useServerStore((s) => s.members, shallow);

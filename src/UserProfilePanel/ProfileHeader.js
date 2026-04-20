@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { ABSOLUTE_HOST_URL } from '../utils/constants';

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 import React from 'react'; // frontend/src/utils/deviceDetection.js
 /**
  * 📱 Device Detection Utility

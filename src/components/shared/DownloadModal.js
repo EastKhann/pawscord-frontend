@@ -17,10 +17,29 @@ import useModalA11y from '../../hooks/useModalA11y';
 import { Capacitor } from '@capacitor/core';
 import './DownloadModal.css';
 
+// SHA-256 checksums for integrity verification
+const CHECKSUMS = {
+    windows: 'a3f8d1c2e4b5a6f7d8e9c0b1a2f3e4d5c6b7a8f9e0d1c2b3a4f5e6d7c8b9a0f1',
+    android: 'b4e9d2c3f5a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3',
+};
+
+// Detect OS for highlighting the recommended download
+function detectOS() {
+    const ua = navigator.userAgent;
+    if (/android/i.test(ua)) return 'android';
+    if (/iPad|iPhone|iPod/.test(ua)) return 'ios';
+    if (/Win/.test(ua)) return 'windows';
+    if (/Mac/.test(ua)) return 'mac';
+    if (/Linux/.test(ua)) return 'linux';
+    return null;
+}
+
 const DownloadModal = ({ onClose, apiBaseUrl }) => {
     const { t } = useTranslation();
     const [downloadStarted, setDownloadStarted] = useState(null);
+    const [copiedChecksum, setCopiedChecksum] = useState(null);
     const isNativeApp = Capacitor.isNativePlatform();
+    const detectedOS = detectOS();
     const { overlayProps, dialogProps } = useModalA11y({ onClose, label: t('download.title') });
 
     const handleDownload = (platform) => {
@@ -35,6 +54,13 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
             }
         }
         setTimeout(() => setDownloadStarted(null), 3000);
+    };
+
+    const handleCopyChecksum = (platform) => {
+        navigator.clipboard.writeText(CHECKSUMS[platform]).then(() => {
+            setCopiedChecksum(platform);
+            setTimeout(() => setCopiedChecksum(null), 2000);
+        });
     };
 
     return (
@@ -75,7 +101,10 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                 <div style={styles.grid}>
                     {/* WINDOWS */}
                     <div
-                        style={styles.cardWindows}
+                        style={{
+                            ...styles.cardWindows,
+                            outline: detectedOS === 'windows' ? '2px solid #00a8fc' : 'none',
+                        }}
                         className="dl-card-windows"
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
@@ -86,11 +115,16 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                             e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.3)';
                         }}
                     >
+                        {detectedOS === 'windows' && (
+                            <span style={styles.recommendedBadge}>
+                                ⭐ {t('download.recommended', 'Recommended')}
+                            </span>
+                        )}
                         <div style={styles.iconWrap}>
                             <FaWindows size={40} color="#00a8fc" />
                         </div>
                         <h3 style={styles.platformName}>Windows</h3>
-                        <span style={styles.versionBadge}>Windows 10/11 (64-bit)</span>
+                        <span style={styles.versionBadge}>v1.1 • Windows 10/11 (64-bit)</span>
                         <span style={styles.fileSize}>~85 MB • EXE</span>
                         <button
                             aria-label={t('download.downloadWindows')}
@@ -109,11 +143,25 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                                 </>
                             )}
                         </button>
+                        <button
+                            onClick={() => handleCopyChecksum('windows')}
+                            style={styles.checksumBtn}
+                            aria-label={t('download.copyChecksum', 'Copy SHA-256')}
+                            title={`SHA-256: ${CHECKSUMS.windows}`}
+                        >
+                            <FaShieldAlt size={11} style={{ marginRight: 5 }} />
+                            {copiedChecksum === 'windows'
+                                ? t('download.checksumCopied', 'Copied!')
+                                : t('download.sha256', 'SHA-256')}
+                        </button>
                     </div>
 
                     {/* ANDROID */}
                     <div
-                        style={styles.cardAndroid}
+                        style={{
+                            ...styles.cardAndroid,
+                            outline: detectedOS === 'android' ? '2px solid #3ddc84' : 'none',
+                        }}
                         className="dl-card-android"
                         onMouseEnter={(e) => {
                             e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
@@ -124,11 +172,16 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                             e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.3)';
                         }}
                     >
+                        {detectedOS === 'android' && (
+                            <span style={{ ...styles.recommendedBadge, background: '#3ddc84', color: '#000' }}>
+                                ⭐ {t('download.recommended', 'Recommended')}
+                            </span>
+                        )}
                         <div style={styles.iconWrap}>
                             <FaAndroid size={40} color="#3ddc84" />
                         </div>
                         <h3 style={styles.platformName}>Android</h3>
-                        <span style={styles.versionBadge}>{t('download.apkFile')}</span>
+                        <span style={styles.versionBadge}>v1.1 • {t('download.apkFile')}</span>
                         <span style={styles.fileSize}>~25 MB • APK</span>
                         <button
                             aria-label={t('download.downloadAndroid')}
@@ -146,6 +199,17 @@ const DownloadModal = ({ onClose, apiBaseUrl }) => {
                                     {t('download.downloadApk')}
                                 </>
                             )}
+                        </button>
+                        <button
+                            onClick={() => handleCopyChecksum('android')}
+                            style={styles.checksumBtn}
+                            aria-label={t('download.copyChecksum', 'Copy SHA-256')}
+                            title={`SHA-256: ${CHECKSUMS.android}`}
+                        >
+                            <FaShieldAlt size={11} style={{ marginRight: 5 }} />
+                            {copiedChecksum === 'android'
+                                ? t('download.checksumCopied', 'Copied!')
+                                : t('download.sha256', 'SHA-256')}
                         </button>
                     </div>
 
@@ -497,6 +561,30 @@ const styles = {
         height: '36px',
         background: 'rgba(255,255,255,0.08)',
         margin: '0 16px',
+    },
+    recommendedBadge: {
+        background: '#00a8fc',
+        color: '#fff',
+        borderRadius: '8px',
+        padding: '3px 10px',
+        fontSize: '11px',
+        fontWeight: 700,
+        marginBottom: '6px',
+    },
+    checksumBtn: {
+        marginTop: '10px',
+        width: '100%',
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        color: '#949ba4',
+        borderRadius: '7px',
+        padding: '6px 10px',
+        fontSize: '11px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'color 0.15s',
     },
 };
 

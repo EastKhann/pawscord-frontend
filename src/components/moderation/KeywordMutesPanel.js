@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 // frontend/src/components/KeywordMutesPanel.js
 
 import { useState, useEffect } from 'react';

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/InviteLinkManager.js
 // 🔥 FEATURE 42: Invite link manager

@@ -451,18 +451,18 @@ export const ProgressiveImage = ({ src, placeholder, alt, className, ...props })
         <img
             src={currentSrc}
             alt={alt}
-            className={`progressive-image ${loading ? 'loading' : 'loaded'} ${className || ''}`}>
+            className={`progressive-image ${loading ? 'loading' : 'loaded'} ${className || ''}`}
             {...props}
         />
-            );
+    );
 };
 
-            ImageOptimizer.propTypes = {
-                src: PropTypes.string,
-            placeholder: PropTypes.string,
-            alt: PropTypes.string,
-            className: PropTypes.string,
+ImageOptimizer.propTypes = {
+    src: PropTypes.string,
+    placeholder: PropTypes.string,
+    alt: PropTypes.string,
+    className: PropTypes.string,
 };
-            export default ImageOptimizer;
+export default ImageOptimizer;
 
 

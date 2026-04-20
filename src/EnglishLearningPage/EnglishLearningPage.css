@@ -69,6 +69,7 @@
 }
 
 @keyframes eng-float {
+
     0%,
     100% {
         transform: translateY(0);
@@ -147,7 +148,7 @@
 }
 
 .eng-btn:active {
-    transform: scale(0.95) !important;
+    transform: scale(0.95);
 }
 
 .eng-btn:hover:not(:disabled) {
@@ -155,11 +156,11 @@
 }
 
 .eng-level-chip {
-    transition: all 0.15s !important;
+    transition: all 0.15s;
 }
 
 .eng-level-chip:hover {
-    transform: scale(1.05) !important;
+    transform: scale(1.05);
 }
 
 /* Session count badge (green) */

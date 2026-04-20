@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 // frontend/src/components/BotDeveloperPortal.js - Decomposed
 import React, { useState, useCallback, memo } from 'react';

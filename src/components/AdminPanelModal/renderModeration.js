@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-undef */
 import React from 'react';
@@ -11,7 +10,6 @@ import styles from './styles';
 const S = {
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
         gap: '12px',
         marginBottom: '20px',
     },
@@ -25,7 +23,7 @@ const renderModeration = () => {
             <h2 className="white-18-mb16">{t('🛡️_moderasyon_merkezi')}</h2>
 
             {/* Quick Actions */}
-            <div style={S.grid}>
+            <div className="admin-grid-4" style={S.grid}>
                 {[
                     {
                         icon: <FaShieldAlt />,

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-undef */
 import React from 'react';
@@ -11,7 +10,6 @@ import styles from './styles';
 const S = {
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '12px',
         marginBottom: '20px',
     },
@@ -25,7 +23,7 @@ const renderSystemHealth = () => {
             <h2 className="white-18-mb16">{t('💚_sistem_sağlığı')}</h2>
 
             {/* Health Bars */}
-            <div style={S.grid}>
+            <div className="admin-grid-3" style={S.grid}>
                 {[
                     {
                         label: t('admin.health.cpu', 'CPU'),

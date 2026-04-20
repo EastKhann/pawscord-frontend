@@ -8,6 +8,7 @@ import { setRtcIceServers } from './constants';
 import { applyProfessionalAudioFilters } from './audioProcessing';
 import toast from '../utils/toast';
 import logger from '../utils/logger';
+import { hapticMedium } from '../utils/haptics';
 
 /**
  * Connect a WebSocket with retry logic.
@@ -142,6 +143,7 @@ export function useVoiceConnection({
     const leaveVoiceRoom = useCallback(() => {
         if (isLeavingRef.current) return;
         isLeavingRef.current = true;
+        hapticMedium();
 
         // CRITICAL: Send leave signal BEFORE closing WebSocket
         if (voiceWsRef.current && voiceWsRef.current.readyState === WebSocket.OPEN) {
@@ -223,6 +225,7 @@ export function useVoiceConnection({
                 logger.warn('[VoiceWS] No auth token, skipping voice join');
                 return;
             }
+            hapticMedium();
 
             // 🔄 Channel switch: eski kanaldan hızlı çık
             if (isInVoice && currentRoom && currentRoom !== roomSlug && !isSwitchingRef.current) {
@@ -336,7 +339,7 @@ export function useVoiceConnection({
                         if (!isInVoiceRef.current || isLeavingRef.current) return;
 
                         if (audioContextRef.current?.state === 'suspended') {
-                            await audioContextRef.current.resume().catch(() => {});
+                            await audioContextRef.current.resume().catch(() => { });
                         }
 
                         // Use refs to get current values — closure would be stale
@@ -393,7 +396,7 @@ export function useVoiceConnection({
                                     pc.getSenders()
                                         .filter((s) => s.track?.kind === 'audio')
                                         .forEach((sender) =>
-                                            sender.replaceTrack(newTrack).catch(() => {})
+                                            sender.replaceTrack(newTrack).catch(() => { })
                                         );
                                 });
                             } catch (err) {

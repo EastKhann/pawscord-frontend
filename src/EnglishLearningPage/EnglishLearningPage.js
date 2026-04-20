@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { getToken } from '../utils/tokenStorage';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';

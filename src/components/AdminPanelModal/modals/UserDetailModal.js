@@ -1,5 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
-import React, { useCallback, memo } from 'react';
+﻿import React, { useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import {
     FaBan,
@@ -23,14 +22,12 @@ import css from '../tabs/AdminTabs.module.css';
 const S = {
     grid2: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
         gap: '12px',
         marginBottom: '20px',
         fontSize: '13px',
     },
     grid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
         gap: '12px',
         marginBottom: '20px',
         padding: '16px',
@@ -172,7 +169,7 @@ const UserDetailModal = ({
                 </div>
 
                 {/* Stats Grid */}
-                <div style={S.grid}>
+                <div className="admin-grid-4" style={S.grid}>
                     <div className={css.textCenter}>
                         <div className={css.valueLgGreen24}>{selectedUser.level || 1}</div>
                         <div className="text-gray6b-11">{t('level')}</div>
@@ -198,7 +195,7 @@ const UserDetailModal = ({
                 </div>
 
                 {/* Detail Grid */}
-                <div style={S.grid2}>
+                <div className="admin-grid-2" style={S.grid2}>
                     <div className={css.cardPad10}>
                         <span className="icon-gray6b">{t('🆔_id')}</span>
                         <span className="white-ml8">{selectedUser.id}</span>
